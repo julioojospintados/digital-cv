@@ -7,6 +7,33 @@
 
 ---
 
+## ⚡ Carica sempre all'inizio della sessione
+
+Prima di rispondere a **qualsiasi richiesta** su questo progetto (UI, animazioni, componenti, dati, layout, design, MCP), leggi obbligatoriamente:
+
+- **`.github/skills/knolling-cv/SKILL.md`** — design system completo, GO concept, gamification, standard Awwwards, scopo professionale
+
+---
+
+## Scopo professionale del sito
+
+Questo è il **CV digitale di Giulio Occhipinti per trovare lavoro** — non un portfolio sperimentale.
+Target: **Recruiter** (leggibilità, seniorità), **CTO/Tech Lead** (architettura, AI workflow, Angular/Lit), **Art Director** (estetica, knolling, storytelling).
+Ogni decisione UI/UX deve rispettare la regola: **l'esperienza dimostra le competenze, non si limita ad elencarle**.
+
+---
+
+## GO: Viaggio e Gamification
+
+"GO" non è un logo — è un **invito al viaggio**. Il sito è strutturato come un gioco narrativo:
+- **Preloader**: `G` e `O` volano verso il nome (G→Giulio, O→Occhipinti) — rituale iniziatico
+- **Landing `/`**: scegliere TECH / CREATIVE / HUMAN è come **scegliere il proprio personaggio**
+- **`/cv`**: le card passive diventano sussurri — l'utente esplora senza mai ricominciare da zero
+- **`<go-logo>`**: sempre visibile, click = Master Reset a `/` — mode-reactivo (cyan/orange/gold)
+- **CTA semantica**: sempre `GO Tech`, `GO Creative`, `GO Human` — mai "Scopri", "Vedi", "Leggi"
+
+---
+
 ## Comportamento Copilot — domande extra-progetto
 
 Quando l'utente fa una domanda **non direttamente legata al codice o al progetto corrente**

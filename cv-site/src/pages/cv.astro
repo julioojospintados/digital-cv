@@ -157,9 +157,7 @@ const projectsData = cvData.projects.slice(0, 6).map(p => {
 
   <!-- ────────────────────────────────────────────────────────── NAV -->
   <nav class="cv-nav" id="cv-nav" aria-label="Navigazione principale">
-    <a href="/" class="cv-nav__logo" aria-label="Torna all'ingresso">
-      <span class="logo-initials">GO</span>
-    </a>
+    <go-logo></go-logo>
     <div class="mode-buttons" role="group" aria-label="Scegli modalità di visualizzazione">
       <button class="mode-btn" data-nav-mode="tech" type="button" aria-pressed="false">Tech</button>
       <button class="mode-btn" data-nav-mode="creative" type="button" aria-pressed="false">Creative</button>
@@ -399,6 +397,20 @@ const projectsData = cvData.projects.slice(0, 6).map(p => {
 
   .cv-nav__logo {
     text-decoration: none;
+  }
+
+  /* go-logo web component in navbar */
+  go-logo {
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  /* Placeholder mentre l'elemento non è ancora definito (evita layout shift) */
+  go-logo:not(:defined) {
+    display: inline-block;
+    width: 1.8rem;
+    height: 1.2rem;
   }
 
   .logo-initials {
@@ -1133,23 +1145,52 @@ const projectsData = cvData.projects.slice(0, 6).map(p => {
       transform 0.7s var(--ease-standard);
   }
 
-  /* ── Card passive/active states (driven by JS) ───────────────── */
+  /* ── Card passive/active states (driven by JS + GSAP Flip) ─────────── */
+
+  /* Passive: sussurrio visivo — presente ma in ombra */
   .cv-card[data-state='passive'] {
-    opacity: var(--card-opacity-passive);
-    transform: scale(var(--card-scale-passive));
+    opacity: 0.4;
+    transform: scale(var(--card-scale-passive, 0.97));
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    border-color: var(--color-border) !important;
+    box-shadow: none !important;
   }
 
+  /* Active: card in primo piano con bordo colorato e glow leggero */
   .cv-card[data-state='active'] {
     opacity: 1;
+    border-color: color-mix(in srgb, var(--color-accent) 55%, transparent);
+    box-shadow:
+      0 0 16px color-mix(in srgb, var(--color-accent) 12%, transparent),
+      inset 0 0 24px color-mix(in srgb, var(--color-accent) 4%, transparent);
+  }
+
+  /* Mobile: lista verticale con bordo sinistro luminoso sulla card attiva */
+  @media (max-width: 639px) {
+    .cv-card[data-state='active'] {
+      border-left-width: 3px;
+      border-left-color: var(--color-accent);
+      box-shadow:
+        -4px 0 20px color-mix(in srgb, var(--color-accent) 30%, transparent);
+    }
+
+    /* Su mobile non serve blur sulle passive (layout verticale, meno noise) */
+    .cv-card[data-state='passive'] {
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+    }
   }
 </style>
 
 <script>
   import { gsap } from 'gsap';
   import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  import { Flip } from 'gsap/Flip';
   import { modeStore, setMode } from '../islands/stores/modeStore.ts';
+  import '../islands/GoLogo.lit.ts';
 
-  gsap.registerPlugin(ScrollTrigger);
+  gsap.registerPlugin(ScrollTrigger, Flip);
 
   // ── Scroll progress bar ───────────────────────────────────────────────
   const progressBar = document.createElement('div');
@@ -1162,12 +1203,31 @@ const projectsData = cvData.projects.slice(0, 6).map(p => {
     onUpdate: ({ progress }) => { progressBar.style.width = `${progress * 100}%`; },
   });
 
-  // ── Apply mode: set data-state on all cv-cards ─────────────────────────
+  // ── Apply mode: GSAP Flip "Yes, And..." logic ─────────────────────────
+  // Le card attive si ingrandiscono con bordo glow. Le passive diventano
+  // sussurri (opacity 0.4 + blur). GSAP Flip anima la transizione di layout.
   function applyMode(mode: string) {
-    document.querySelectorAll<HTMLElement>('.cv-card[data-tags]').forEach(card => {
+    const allCards = document.querySelectorAll<HTMLElement>('.cv-card[data-tags]');
+
+    // 1. Cattura lo stato visivo corrente (posizione, dimensione, opacity)
+    const flipState = Flip.getState(allCards, {
+      props: 'opacity,boxShadow,borderColor,backdropFilter',
+    });
+
+    // 2. Applica i nuovi data-state → CSS gestisce opacity/blur/glow
+    allCards.forEach(card => {
       const tags = card.dataset.tags?.split(' ') ?? [];
       card.dataset.state = tags.includes(mode) ? 'active' : 'passive';
     });
+
+    // 3. Anima dalla snapshot "prima" allo stato "dopo" (Flip interpola)
+    Flip.from(flipState, {
+      duration: 0.45,
+      ease: 'power2.inOut',
+      stagger: { amount: 0.08, from: 'start' },
+      absolute: false,
+    });
+
     updateNavButtons(mode);
   }
 

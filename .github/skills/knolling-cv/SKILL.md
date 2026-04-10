@@ -1,6 +1,6 @@
 ---
 name: knolling-cv
-description: "Regole concettuali e strategia del Digital CV di Giulio Occhipinti. Carica quando: devi costruire una nuova sezione, aggiungere animazioni, decidere il comportamento delle card, scegliere colori o layout, gestire i 3 mode (tech/creative/human), capire come i dati in cv.ts si traducono in UI, o ragionare sull'esperienza utente complessiva del sito."
+description: "CARICA SEMPRE per qualsiasi richiesta su questo progetto. Regole concettuali, design system e strategia del Digital CV di Giulio Occhipinti per trovare lavoro. Carica quando: animazioni, preloader, GO, logo, gamification, journey, knolling, card, mode tech/creative/human, skill grid, bento, GSAP, Flip, Lit, GoLogo, NavBar, colori, tipografia, layout, /cv, /index, mobile, responsive, Awwwards, job hunting, recruiter, CTO, art director, nuova sezione, dati cv.ts, UI, UX, esperienza utente, ottanio, accent, modeStore, ModeSwitcher, islands, animazione, interazione, componente, sezione, pagina."
 ---
 
 # Giulio Occhipinti Digital CV — "The Explorer's Journey"
@@ -227,3 +227,98 @@ Questi pattern differenziano un sito "buono" da uno che vince premi. **Tutti dev
 - Non modificare la struttura dei tipi in `cv.ts` senza aggiornare `cv.en.ts`
 - Non scrivere su `stdout` nel layer MCP (`src/`) — usare il logger
 - Non fare `git commit` o `git push` senza richiesta esplicita dell'utente
+
+---
+
+## 10. Regole per i Test
+
+I test esistono **solo per il corretto funzionamento del codice in sviluppo** — non vengono mai deployati.
+
+### Principi
+
+- **Mai committare test rotti.** Se un test fallisce, correggi il codice o il test prima di pushare.
+- **I test non sono documentazione** — non aggiungere docstring ai test se non esistevano.
+- **I test non modificano i dati di produzione** (`cv.ts`, `cv.en.ts`) — li leggono e ne verificano l'integrità.
+- **Nessun file di test viene incluso nel build di produzione.**
+
+### Struttura dei test
+
+| Layer | Tool | Cartella | Env |
+|---|---|---|---|
+| MCP/HTTP (`src/`) | Vitest | `src/**/*.test.ts` | Node |
+| cv-site logic (stores) | Vitest + jsdom | `cv-site/src/**/*.test.ts` | jsdom |
+
+### Regola `.gitignore` e build
+- I file `*.test.ts` sono esclusi dal `tsconfig.json` build output (`dist/`)
+- Il `vitest.config.ts` di root include solo `src/**/*.test.ts`
+- Il build Astro non include test (Astro ignora i file `.test.ts` per default)
+
+### Cosa testare (priorità)
+1. **Error classes** (`src/http/errors.ts`) — costruttori, statusCode, toJSON
+2. **HTTP routes** (`src/http/app.ts`) — health, openapi.json, 404, error handler
+3. **MCP tools** (`src/tools/*.ts`) — registrazione e handler logica
+4. **CV data integrity** (`src/data/cv.ts`) — campi required, formati date, valori enum
+5. **CV parity EN/IT** (`src/data/cv.en.ts`) — stessa struttura dell'italiano
+6. **modeStore logic** (`cv-site/src/islands/stores/modeStore.ts`) — setMode, initMode, guardie
+
+### Cosa NON testare
+- Componenti Lit (GoLogo, ModeSwitcher) — dipendono dal browser reale
+- Pagine Astro (index.astro, cv.astro) — dipendono dal build Astro
+- Animazioni GSAP — impossibili da testare in unit test
+
+---
+
+## 8. Scopo Professionale — Job Hunting
+
+Il sito **non è un portfolio sperimentale**: è uno strumento attivo di ricerca lavoro.
+Giulio Occhipinti è un Senior Frontend Developer con ~12 anni di esperienza.
+
+**Il sito deve convincere questi tre profili in ≤ 3 secondi:**
+
+| Profilo | Cosa cerca | Cosa deve vedere subito |
+|---|---|---|
+| **Recruiter generalista** | Affidabilità, seniorità, comunicazione | Label "Digital CV", layout pulito, leggibile |
+| **CTO / Tech Lead** | Architettura, AI workflow, stack moderno | Angular, Lit, microfrontend, impactScore |
+| **Art Director / Agenzia** | Estetica, storytelling, "X-Factor" | Fotografia, teatro, audio/video, knolling |
+
+**Regola d'oro:** ogni elemento UI deve essere sia **bello** che **argomentabile in un colloquio**.
+- Se un recruiter chiede "perché knolling?": "visualizzazione come inventario intenzionale — trasparenza radicale sul profilo"
+- Se chiede "perché 3 mode?": "lo stesso profilo, tre frame narrativi — rispetto per il tempo di chi guarda"
+- Se chiede "perché il preloader con GO?": "il brand si fonde con la persona prima che l'utente interagisca — coerenza narrativa"
+
+---
+
+## 9. GO come Journey — Struttura Gamification
+
+### La Narrativa in 3 Atti
+
+**Atto 0 — Inizializzazione (Preloader)**
+Le lettere `G` e `O` appaiono grandi a schermo. Mentre la barra cresce, volano verso il nome:
+`G` → si unisce a "**G**iulio", `O` → si unisce a "**O**cchipinti".
+È il **rituale iniziatico**: il brand fagocita la persona. Il viaggio ha già inizio.
+
+**Atto 1 — La Scelta (Landing `/`)**
+8 oggetti knolling su sfondo ottanio, 3 card mode, nessuna istruzione esplicita.
+L'utente è curioso, non guidato. Scegliere TECH / CREATIVE / HUMAN è come **scegliere il proprio personaggio** in un RPG — la scelta rivela chi è chi guarda, non solo chi è Giulio.
+
+**Atto 2 — Il Viaggio (`/cv`)**
+Le card passive diventano **sussurri** (opacity bassa, blur): non spariscono ma si fanno da parte.
+L'utente esplora o torna senza mai ricominciare da zero. Il `<go-logo>` è il portale di ritorno.
+
+### Componenti Gamification e Responsabilità Narrativa
+
+| Componente | Ruolo narrativo |
+|---|---|
+| `<go-logo>` | Ancora universale — click = Master Reset a `/`. Mode-reactivo (cyan/orange/gold) |
+| Mode cards (`index.astro`) | Non pulsanti: **portali**. Devono dare sensazione di "entrare in un mondo" |
+| GSAP Flip bento (`cv.astro`) | Ribilanciamento dello spazio al cambio mode — "Yes, And..." della griglia |
+| Knolling objects | "Risposta ambientale" alla scelta: `is-hero` / `is-dim` (come un ambiente che reagisce) |
+| Preloader GO animation | Rituale iniziatico — non animazione decorativa, ma evento narrativo fondante |
+
+### Regole di Coerenza Narrativa
+
+1. Non usare "Vedi", "Scopri", "Leggi" come CTA — usa `GO`, "Esplora", "Entra"
+2. Ogni sezione di `/cv` deve avere un **micro-dettaglio con cui giocare** (hover, reveal, glow)
+3. Il mode cambia il **focus e l'umore** della pagina — mai la struttura o il template
+4. Il `<go-logo>` deve essere sempre visibile e sempre cliccabile — è l'ancora narrativa
+5. Le card passive sono **susurri**, non silenzi — mai `display:none`, sempre `opacity` ridotta
