@@ -1,0 +1,32 @@
+{
+  // TypeScript
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.preferences.importModuleSpecifierEnding": "js",
+  // Editor
+  "editor.formatOnSave": true,
+  "editor.insertSpaces": true,
+  "editor.tabSize": 2,
+  "files.insertFinalNewline": true,
+  "files.trimTrailingWhitespace": true,
+  // Terminal
+  "terminal.integrated.defaultProfile.windows": "Git Bash",
+  "terminal.integrated.profiles.windows": {
+    "Git Bash": {
+      "source": "Git Bash"
+    }
+  },
+  // Copilot — enable instruction files (.instructions.md) and prompt files
+  "github.copilot.chat.codeGeneration.useInstructionFiles": true,
+  "chat.promptFiles.enabled": true,
+  "chat.promptFilesLocations": {
+    ".vscode/prompts": true
+  },
+  // Hide compiled output from Explorer and search
+  "files.exclude": {
+    "dist/": true
+  },
+  "search.exclude": {
+    "dist/": true,
+    "node_modules/": true
+  }
+}

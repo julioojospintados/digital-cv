@@ -1,0 +1,42 @@
+{
+  "name": "mcp-base-template",
+  "version": "1.0.0",
+  "description": "Base template for MCP server projects with modular tools, resources and prompts.",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "tsc --watch",
+    "build:start": "tsc && node dist/index.js",
+    "http:start": "node dist/http.js",
+    "http:build:start": "tsc && node dist/http.js",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "parse-cv": "node --import tsx/esm scripts/parse-cv.ts"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "template"
+  ],
+  "author": "",
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "@hono/node-server": "^1.19.13",
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "hono": "^4.12.12",
+    "pdf-parse": "^1.1.1",
+    "zod": "^4.3.6",
+    "zod-to-json-schema": "^3.25.2"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.2",
+    "@types/pdf-parse": "^1.1.5",
+    "@vitest/coverage-v8": "^4.1.4",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.2",
+    "vitest": "^4.1.4"
+  }
+}

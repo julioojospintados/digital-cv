@@ -1,0 +1,70 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navbar from '../components/Navbar.astro';
+import HeroSection from '../components/HeroSection.astro';
+import ExperienceSection from '../components/ExperienceSection.astro';
+import SkillsSection from '../components/SkillsSection.astro';
+import EducationSection from '../components/EducationSection.astro';
+import ProjectsSection from '../components/ProjectsSection.astro';
+import { cvData } from '@cv-data';
+
+const { personal, social, languages, experience, education, certifications, technicalSkills, softSkills, transversalSkills, projects, interests } = cvData;
+---
+
+<Layout
+  title={personal.name ? `${personal.name} — CV` : 'Digital CV'}
+  description={personal.summary || `Digital CV di ${personal.name}`}
+>
+  <Navbar />
+
+  <main>
+    <HeroSection
+      personal={personal}
+      languages={languages}
+      social={social}
+    />
+
+    <ExperienceSection experience={experience} />
+
+    <SkillsSection
+      technicalSkills={technicalSkills}
+      softSkills={softSkills}
+      transversalSkills={transversalSkills}
+    />
+
+    <EducationSection
+      education={education}
+      certifications={certifications}
+    />
+
+    <ProjectsSection
+      projects={projects}
+      interests={interests}
+    />
+  </main>
+
+  <!-- Footer -->
+  <footer class="py-12 text-center text-xs text-neutral-700 border-t border-neutral-900">
+    <p>
+      {personal.name && <span>{personal.name} · </span>}
+      Aggiornato {new Date().toLocaleDateString('it-IT', { month: 'long', year: 'numeric' })}
+    </p>
+  </footer>
+</Layout>
+
+<!-- Scroll reveal observer -->
+<script>
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+  );
+
+  document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+</script>

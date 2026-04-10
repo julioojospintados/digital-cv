@@ -1,0 +1,125 @@
+---
+import type { CvData } from '@cv-data';
+
+interface Props {
+  personal: CvData['personal'];
+  languages: CvData['languages'];
+  social: CvData['social'];
+}
+
+const { personal, languages, social } = Astro.props;
+
+const availabilityConfig = {
+  available: { label: 'Disponibile subito', color: 'text-emerald-400', dot: 'bg-emerald-400' },
+  open: { label: 'Aperto ad opportunità', color: 'text-amber-400', dot: 'bg-amber-400' },
+  'not-available': { label: 'Non disponibile', color: 'text-neutral-500', dot: 'bg-neutral-500' },
+};
+
+const avail = availabilityConfig[personal.availability];
+---
+
+<!-- Hero Section -->
+<header class="min-h-screen flex flex-col justify-center relative overflow-hidden px-6">
+  <!-- Ambient glow -->
+  <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-indigo-600/10 blur-[120px] pointer-events-none" aria-hidden="true"></div>
+  <div class="absolute bottom-1/4 right-1/4 w-[300px] h-[300px] rounded-full bg-purple-600/8 blur-[100px] pointer-events-none" aria-hidden="true"></div>
+
+  <div class="max-w-4xl mx-auto w-full relative z-10">
+    <!-- Availability badge -->
+    <div class="hero-item opacity-0 flex items-center gap-2 mb-8">
+      <span class={`w-2 h-2 rounded-full ${avail.dot} animate-pulse`}></span>
+      <span class={`text-sm ${avail.color}`}>{avail.label}</span>
+    </div>
+
+    <!-- Avatar + name -->
+    <div class="hero-item opacity-0 flex items-center gap-6 mb-6">
+      {personal.avatar && (
+        <img
+          src={personal.avatar}
+          alt={personal.name}
+          class="w-16 h-16 rounded-full border-2 border-indigo-500/40 object-cover"
+          loading="eager"
+        />
+      )}
+      <div>
+        <h1 class="text-4xl sm:text-6xl font-bold text-neutral-100 tracking-tight">
+          {personal.name}
+        </h1>
+        {personal.age > 0 && <span class="text-neutral-600 text-sm ml-1">· {personal.age} anni</span>}
+      </div>
+    </div>
+
+    <!-- Title -->
+    <p class="hero-item opacity-0 text-xl sm:text-2xl text-indigo-400 font-medium mb-6">
+      {personal.title}
+    </p>
+
+    <!-- Summary -->
+    {personal.summary && (
+      <p class="hero-item opacity-0 text-neutral-400 text-lg leading-relaxed max-w-2xl mb-8">
+        {personal.summary}
+      </p>
+    )}
+
+    <!-- Location -->
+    {personal.location && (
+      <p class="hero-item opacity-0 text-sm text-neutral-600 mb-8">
+        📍 {personal.location}
+      </p>
+    )}
+
+    <!-- Social links -->
+    {social.length > 0 && (
+      <div class="hero-item opacity-0 flex flex-wrap gap-3">
+        {social.map(s => (
+          <a
+            href={s.url}
+            target={s.platform !== 'Email' ? '_blank' : undefined}
+            rel="noopener noreferrer"
+            class="flex items-center gap-2 bg-neutral-900 border border-neutral-800 text-neutral-300 hover:text-indigo-400 hover:border-indigo-500/50 px-4 py-2 rounded-full text-sm transition-all duration-200"
+          >
+            {s.label ?? s.platform}
+          </a>
+        ))}
+      </div>
+    )}
+
+    <!-- Languages -->
+    {languages.length > 0 && (
+      <div class="hero-item opacity-0 mt-10 flex flex-wrap gap-2">
+        {languages.map(lang => (
+          <span class="text-xs bg-neutral-900/80 border border-neutral-800 text-neutral-400 px-3 py-1.5 rounded-full">
+            {lang.name}
+            <span class="ml-1 text-neutral-600">·</span>
+            <span class="ml-1 text-indigo-400">{lang.level}</span>
+          </span>
+        ))}
+      </div>
+    )}
+
+    <!-- Scroll cue -->
+    <div class="hero-item opacity-0 mt-20 flex justify-start">
+      <a href="#experience" aria-label="Scorri verso il basso" class="text-neutral-600 hover:text-neutral-400 transition-colors animate-bounce">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path d="M10 4v12M4 10l6 6 6-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+</header>
+
+<script>
+  // Hero entrance animation with stagger
+  document.addEventListener('DOMContentLoaded', () => {
+    const items = document.querySelectorAll('.hero-item');
+    items.forEach((el, i) => {
+      const elem = el as HTMLElement;
+      elem.style.transform = 'translateY(20px)';
+      setTimeout(() => {
+        elem.style.transition = 'opacity 0.7s ease, transform 0.7s ease';
+        elem.style.opacity = '1';
+        elem.style.transform = 'translateY(0)';
+      }, 150 + i * 120);
+    });
+  });
+</script>

@@ -1,0 +1,263 @@
+{
+  // ─── SECRETS ──────────────────────────────────────────────────────────────
+  // VS Code asks once per session and stores the value securely in the keychain.
+  "inputs": [
+    {
+      "id": "github-token",
+      "type": "promptString",
+      "description": "GitHub Personal Access Token (scopes: repo, read:org, read:user)",
+      "password": true
+    },
+    {
+      "id": "gitlab-token",
+      "type": "promptString",
+      "description": "GitLab Personal Access Token (scope: api)",
+      "password": true
+    },
+    {
+      "id": "brave-api-key",
+      "type": "promptString",
+      "description": "Brave Search API Key — get one at https://api.search.brave.com/",
+      "password": true
+    }
+  ],
+  "servers": {
+    // ─── LOCAL PROJECT SERVER ──────────────────────────────────────────────
+    "mcp-base-template": {
+      "type": "stdio",
+      "command": "node",
+      "args": [
+        "${workspaceFolder}/dist/index.js"
+      ]
+    },
+    // ─── GITHUB ───────────────────────────────────────────────────────────
+    // Capabilities: repos, issues, PRs, branches, commits, file search, gists
+    // Create token: https://github.com/settings/tokens
+    "github": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-github"
+      ],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${input:github-token}"
+      }
+    },
+    // ─── GITLAB ───────────────────────────────────────────────────────────
+    // Capabilities: repos, MRs, issues, pipelines, groups
+    // Create token: https://gitlab.com/-/profile/personal_access_tokens
+    "gitlab": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-gitlab"
+      ],
+      "env": {
+        "GITLAB_PERSONAL_ACCESS_TOKEN": "${input:gitlab-token}",
+        "GITLAB_API_URL": "https://gitlab.com"
+      }
+    },
+    // ─── OTHER RECOMMENDED SERVERS (uncomment to activate) ────────────────
+    // FILESYSTEM — read/write files outside the workspace
+    "filesystem": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "${workspaceFolder}"
+      ]
+    },
+    // SEQUENTIAL THINKING — structured multi-step reasoning chains
+    "sequential-thinking": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking"
+      ]
+    },
+    // BRAVE SEARCH — real-time web search
+    // Get your free API key at: https://api.search.brave.com/
+    "brave-search": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-brave-search"
+      ],
+      "env": {
+        "BRAVE_API_KEY": "${input:brave-api-key}"
+      }
+    },
+    // MEMORY — persistent knowledge graph across sessions (great for context)
+    // "memory": {
+    //   "type": "stdio",
+    //   "command": "npx",
+    //   "args": ["-y", "@modelcontextprotocol/server-memory"]
+    // },
+    // FETCH — fetch any URL, scrape web content, call REST APIs
+    // "fetch": {
+    //   "type": "stdio",
+    //   "command": "npx",
+    //   "args": ["-y", "@modelcontextprotocol/server-fetch"]
+    // },
+    // POSTGRES — query a PostgreSQL database
+    // "postgres": {
+    //   "type": "stdio",
+    //   "command": "npx",
+    //   "args": ["-y", "@modelcontextprotocol/server-postgres", "${input:db-connection-url}"]
+    // },
+    // SQLITE — query a local SQLite file
+    // "sqlite": {
+    //   "type": "stdio",
+    //   "command": "npx",
+    //   "args": ["-y", "@modelcontextprotocol/server-sqlite", "--db-path", "${workspaceFolder}/data.db"]
+    // },
+    // PUPPETEER — browser automation, screenshots, E2E tests
+    // "puppeteer": {
+    //   "type": "stdio",
+    //   "command": "npx",
+    //   "args": ["-y", "@modelcontextprotocol/server-puppeteer"]
+    // },
+    // PLAYWRIGHT (Microsoft, ufficiale) — #1 per browser automation (3.1M user/sett.)
+    // Supera Puppeteer: multi-browser, intercettazione rete, test E2E, login flows, screenshot
+    // Docs: https://github.com/microsoft/playwright-mcp
+    "playwright": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@playwright/mcp@latest"
+      ]
+    },
+    // GIT LOCALE (Anthropic reference) — operazioni git sul repo locale senza API key
+    // diff, log, blame, commit, branch, merge — diverso da GitHub MCP che usa le API remote
+    // "git": {
+    //   "type": "stdio",
+    //   "command": "npx",
+    //   "args": ["-y", "@modelcontextprotocol/server-git", "--repository", "${workspaceFolder}"]
+    // },
+    // CONTEXT7 (Upstash) — documentazione aggiornata di 9000+ librerie in chat (652k user/sett.)
+    // Quando scrivi codice, l'AI ha sempre i docs giusti (React, TypeScript, Node, ecc.)
+    // "context7": {
+    //   "type": "stdio",
+    //   "command": "npx",
+    //   "args": ["-y", "@upstash/context7-mcp"]
+    // },
+    // TAVILY SEARCH — ricerca AI-first, alternativa/complemento a Brave (47k user/sett.)
+    // Ottimizzata per risposte strutturate, include snippets e fonti autorevoli
+    // Get API key: https://tavily.com/
+    // "tavily": {
+    //   "type": "stdio",
+    //   "command": "npx",
+    //   "args": ["-y", "tavily-mcp@0.1.2"],
+    //   "env": { "TAVILY_API_KEY": "${input:tavily-api-key}" }
+    // },
+    // N8N — automazione workflow con 525+ integrazioni (Slack, Gmail, Notion, Airtable, ecc.)
+    // "n8n": {
+    //   "type": "stdio",
+    //   "command": "npx",
+    //   "args": ["-y", "n8n-mcp"],
+    //   "env": { "N8N_URL": "http://localhost:5678", "N8N_API_KEY": "${input:n8n-api-key}" }
+    // },
+    // NOTION (ufficiale) — integrazione con Notion per pagine, database e contenuti
+    // Ottimo per organizzare il CV, note, knowledge base
+    // Get token: https://www.notion.so/my-integrations
+    // "notion": {
+    //   "type": "stdio",
+    //   "command": "npx",
+    //   "args": ["-y", "@notionhq/notion-mcp-server"],
+    //   "env": { "OPENAPI_MCP_HEADERS": "{\"Authorization\": \"Bearer ${input:notion-token}\", \"Notion-Version\": \"2022-06-28\"}" }
+    // },
+    // OFFICE WORD — creazione e modifica documenti Word (675k user/sett.)
+    // "office-word": {
+    //   "type": "stdio",
+    //   "command": "npx",
+    //   "args": ["-y", "office-word-mcp-server"]
+    // },
+    // OFFICE EXCEL — manipolazione fogli Excel senza installare Office (1.1M user/sett.)
+    // "office-excel": {
+    //   "type": "stdio",
+    //   "command": "npx",
+    //   "args": ["-y", "@haris-musa/excel-mcp-server"]
+    // },
+    // OFFICE POWERPOINT — creazione presentazioni PowerPoint (333k user/sett.)
+    // "office-powerpoint": {
+    //   "type": "stdio",
+    //   "command": "npx",
+    //   "args": ["-y", "office-powerpoint-mcp-server"]
+    // },
+    // TASK MASTER — gestione task per workflow di sviluppo, parsing PRD, CRUD task (47k user/sett.)
+    // "task-master": {
+    //   "type": "stdio",
+    //   "command": "npx",
+    //   "args": ["-y", "task-master-ai"],
+    //   "env": { "ANTHROPIC_API_KEY": "${input:anthropic-api-key}" }
+    // }
+    // ─── UX / UI ──────────────────────────────────────────────────────────
+    // FIGMA (official) — read design files, provide layout info to AI for code generation
+    // Docs: https://github.com/figma/mcp-server-guide
+    // "figma": {
+    //   "type": "stdio",
+    //   "command": "npx",
+    //   "args": ["-y", "figma-developer-mcp", "--figma-api-key", "${input:figma-api-key}", "--stdio"]
+    // },
+    // FIGMA CONTEXT MCP (Framelink/GLips) — optimized for Cursor / coding agents
+    // "figma-context": {
+    //   "type": "stdio",
+    //   "command": "npx",
+    //   "args": ["-y", "@gleissonricardo/figma-context-mcp", "${input:figma-api-key}"]
+    // },
+    // 21ST.DEV MAGIC — generate crafted UI components with AI
+    // "21st-magic": {
+    //   "type": "stdio",
+    //   "command": "npx",
+    //   "args": ["-y", "@21st-dev/magic-mcp"],
+    //   "env": { "API_KEY": "${input:21st-api-key}" }
+    // },
+    // STORYBOOK — UI component testing and documentation
+    // "storybook": {
+    //   "type": "stdio",
+    //   "command": "npx",
+    //   "args": ["-y", "@storybook/mcp-server"]
+    // },
+    // ─── ECONOMIA / FINANZA ───────────────────────────────────────────────
+    // TAM MCP — market research with 8 sources: FRED, IMF, World Bank, OECD, BLS, Census, Alpha Vantage, Nasdaq
+    // "tam": {
+    //   "type": "stdio",
+    //   "command": "npx",
+    //   "args": ["-y", "tam-mcp-server"]
+    // },
+    // FRED (Federal Reserve Economic Data) — economic indicators
+    // "fred": {
+    //   "type": "stdio",
+    //   "command": "npx",
+    //   "args": ["-y", "fred-mcp-server"]
+    // },
+    // WORLD BANK — global economic indicators
+    // "world-bank": {
+    //   "type": "stdio",
+    //   "command": "npx",
+    //   "args": ["-y", "world-bank-mcp-server"]
+    // },
+    // SEC EDGAR — US financial filings and balance sheets
+    // "sec-edgar": {
+    //   "type": "stdio",
+    //   "command": "npx",
+    //   "args": ["-y", "sec-edgar-mcp"]
+    // },
+    // ─── PSICOLOGIA APPLICATA ─────────────────────────────────────────────
+    // PERSONA SESSIONS — structured coaching, interview prep, personal reflection with timer
+    "persona-sessions": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-persona-sessions"
+      ]
+    }
+  }
+}
