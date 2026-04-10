@@ -6,26 +6,27 @@ import Layout from '../layouts/Layout.astro';
 
   <!-- ── PRELOADER ──────────────────────────────────────────── -->
   <div id="preloader" aria-hidden="true">
-    <p class="pre-name">GO</p>
+    <div class="pre-logo">
+      <span id="pre-G" class="pre-go-letter">G</span>
+      <span id="pre-O" class="pre-go-letter">O</span>
+    </div>
     <div class="pre-bar"></div>
   </div>
-
-  <!-- ── SCROLL PROGRESS ────────────────────────────────────── -->
-  <div class="scroll-progress" id="scroll-progress" aria-hidden="true"></div>
 
   <div class="entry-root" id="entry-root">
 
     <!-- ── KNOLLING STAGE (immagini sullo sfondo) ──────────── -->
     <div class="knolling-stage" id="knolling-stage" aria-hidden="true">
       <!-- Ogni oggetto ha: data-modes (spazio-separati), posizione CSS fissa, rotazione fissa -->
-      <img class="knoll-item" data-modes="tech"           src="/knolling/laptop.png"     alt="" loading="eager" style="--kx:50%;--ky:74%;--kr:-1deg;--ks:0.9;">
-      <img class="knoll-item" data-modes="tech"           src="/knolling/flashlight.png" alt="" loading="eager" style="--kx:14%;--ky:28%;--kr:0deg;--ks:1.3;--kfx:-1;">
-      <img class="knoll-item" data-modes="tech creative"  src="/knolling/multitool.png"  alt="" loading="eager" style="--kx:82%;--ky:32%;--kr:-14deg;--ks:0.75;">
-      <img class="knoll-item" data-modes="creative"       src="/knolling/camera.png"     alt="" loading="eager" style="--kx:18%;--ky:68%;--kr:7deg;--ks:0.9;">
-      <img class="knoll-item" data-modes="creative human" src="/knolling/megaphone.png"  alt="" loading="eager" style="--kx:78%;--ky:70%;--kr:-8deg;--ks:0.8;">
-      <img class="knoll-item" data-modes="human"          src="/knolling/chess.png"      alt="" loading="eager" style="--kx:12%;--ky:20%;--kr:-12deg;--ks:0.3;">
-      <img class="knoll-item" data-modes="human"          src="/knolling/plant.png"      alt="" loading="eager" style="--kx:10%;--ky:82%;--kr:-4deg;--ks:0.7;">
-      <img class="knoll-item" data-modes="creative human" src="/knolling/compass.png"    alt="" loading="eager" style="--kx:88%;--ky:13%;--kr:18deg;--ks:0.62;">
+      <!-- Flat-lay border frame: items live in the LEFT and RIGHT margins, never over content -->
+      <img class="knoll-item" data-modes="tech"           src="/knolling/laptop.png"     alt="" loading="eager" style="--kx:91%;--ky:84%;--kr:-3deg;--ks:1.1;">
+      <img class="knoll-item" data-modes="tech"           src="/knolling/flashlight.webp" alt="" loading="eager" style="--kx:9%;--ky:20%;--kr:0deg;--ks:1.2;--kfx:-1;">
+      <img class="knoll-item" data-modes="tech creative"  src="/knolling/multitool.png"  alt="" loading="eager" style="--kx:91%;--ky:18%;--kr:-14deg;--ks:0.85;">
+      <img class="knoll-item" data-modes="creative"       src="/knolling/camera.png"     alt="" loading="eager" style="--kx:7%;--ky:60%;--kr:7deg;--ks:0.8;">
+      <img class="knoll-item" data-modes="creative human" src="/knolling/megaphone.png"  alt="" loading="eager" style="--kx:92%;--ky:60%;--kr:-8deg;--ks:0.82;">
+      <img class="knoll-item" data-modes="human"          src="/knolling/chess.png"      alt="" loading="eager" style="--kx:8%;--ky:84%;--kr:-10deg;--ks:0.38;">
+      <img class="knoll-item" data-modes="human"          src="/knolling/plant.png"      alt="" loading="eager" style="--kx:10%;--ky:38%;--kr:-4deg;--ks:0.72;">
+      <img class="knoll-item" data-modes="creative human" src="/knolling/compass.png"    alt="" loading="eager" style="--kx:89%;--ky:38%;--kr:12deg;--ks:0.65;">
     </div>
 
     <!-- ── CONTENUTO PRINCIPALE ────────────────────────────── -->
@@ -79,6 +80,9 @@ import Layout from '../layouts/Layout.astro';
     </main>
   </div>
 
+  <!-- ── LAUNCH OVERLAY ── -->
+  <div id="launch-overlay" aria-hidden="true"></div>
+
 </Layout>
 
 <style>
@@ -117,19 +121,19 @@ import Layout from '../layouts/Layout.astro';
 
   .knoll-item.is-dim {
     filter: brightness(0.3) saturate(0.4);
-    opacity: 0.05 !important;
-    scale: 0.9;
+    opacity: 0.18 !important;
+    scale: 0.92;
   }
 
   .knoll-item.is-hero {
-    filter: brightness(1.15) drop-shadow(0 8px 24px rgba(0,0,0,0.5));
+    filter: brightness(1.25) drop-shadow(0 8px 32px rgba(0,0,0,0.6)) saturate(1.1);
     z-index: 1;
-    scale: 1.06;
+    scale: 1.08;
   }
 
   @keyframes knollLand {
     0%   { opacity: 0; filter: blur(6px) brightness(0.4); }
-    100% { opacity: 0.18; filter: none; }
+    100% { opacity: 0.4; filter: none; }
   }
 
   .knoll-item.do-enter {
@@ -137,57 +141,47 @@ import Layout from '../layouts/Layout.astro';
     animation-delay: var(--knoll-delay, 0ms);
   }
 
-  /* ── Mobile: reposition all knoll items into safe corner zones ── */
+  /* Mobile: strict 2-column border frame — all items at extreme x, tiny scale */
   @media (max-width: 639px) {
-    /* Safe zones: corners + edges, away from the centered card content */
-
-    /* 1. laptop — bottom center-right, hero size */
+    /* 1. laptop — bottom-right corner */
     .knolling-stage .knoll-item:nth-child(1) {
-      left: 76%;
-      top: 88%;
-      transform: translate(-50%, -50%) rotate(-2deg) scale(0.7);
+      left: 88%; top: 90%;
+      transform: translate(-50%, -50%) rotate(-2deg) scale(0.4);
     }
-    /* 2. flashlight — top left edge */
+    /* 2. flashlight — top-left, pointing right */
     .knolling-stage .knoll-item:nth-child(2) {
-      left: 7%;
-      top: 17%;
-      transform: translate(-50%, -50%) rotate(0deg) scaleX(-1) scale(0.6);
+      left: 8%; top: 10%;
+      transform: translate(-50%, -50%) rotate(0deg) scaleX(-1) scale(0.42);
     }
-    /* 3. multitool — right edge, middle height */
+    /* 3. multitool — top-right */
     .knolling-stage .knoll-item:nth-child(3) {
-      left: 94%;
-      top: 50%;
-      transform: translate(-50%, -50%) rotate(-12deg) scale(0.42);
+      left: 90%; top: 14%;
+      transform: translate(-50%, -50%) rotate(-12deg) scale(0.3);
     }
-    /* 4. camera — bottom left */
+    /* 4. camera — left mid */
     .knolling-stage .knoll-item:nth-child(4) {
-      left: 10%;
-      top: 78%;
-      transform: translate(-50%, -50%) rotate(5deg) scale(0.58);
+      left: 6%; top: 50%;
+      transform: translate(-50%, -50%) rotate(5deg) scale(0.32);
     }
-    /* 5. megaphone — bottom right */
+    /* 5. megaphone — right mid */
     .knolling-stage .knoll-item:nth-child(5) {
-      left: 92%;
-      top: 74%;
-      transform: translate(-50%, -50%) rotate(-7deg) scale(0.48);
+      left: 92%; top: 52%;
+      transform: translate(-50%, -50%) rotate(-7deg) scale(0.3);
     }
-    /* 6. chess — top left, small */
+    /* 6. chess — bottom-left */
     .knolling-stage .knoll-item:nth-child(6) {
-      left: 10%;
-      top: 20%;
-      transform: translate(-50%, -50%) rotate(-14deg) scale(0.44);
+      left: 8%; top: 90%;
+      transform: translate(-50%, -50%) rotate(-14deg) scale(0.24);
     }
-    /* 7. plant — extreme bottom left */
+    /* 7. plant — left upper */
     .knolling-stage .knoll-item:nth-child(7) {
-      left: 6%;
-      top: 91%;
-      transform: translate(-50%, -50%) rotate(-3deg) scale(0.48);
+      left: 7%; top: 30%;
+      transform: translate(-50%, -50%) rotate(-3deg) scale(0.3);
     }
-    /* 8. compass — top right, prominent */
+    /* 8. compass — right upper */
     .knolling-stage .knoll-item:nth-child(8) {
-      left: 87%;
-      top: 11%;
-      transform: translate(-50%, -50%) rotate(18deg) scale(0.55);
+      left: 91%; top: 32%;
+      transform: translate(-50%, -50%) rotate(18deg) scale(0.32);
     }
   }
 
@@ -294,6 +288,30 @@ import Layout from '../layouts/Layout.astro';
     opacity: 0;
     transition: opacity 0.3s ease;
     background: radial-gradient(ellipse at 50% 120%, var(--card-glow, transparent) 0%, transparent 70%);
+  }
+
+  /* "Launch" light sweep on hover — GO concept */
+  .mode-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -80%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.08) 50%,
+      transparent 100%
+    );
+    transform: skewX(-14deg);
+    pointer-events: none;
+    transition: left 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    will-change: left;
+  }
+
+  .mode-card:hover::after {
+    left: 180%;
   }
 
   .mode-card:hover::before,
@@ -430,76 +448,97 @@ import Layout from '../layouts/Layout.astro';
 
   let selectedMode: string | null = null;
 
-  // ── Split text: wrap each char in a span ─────────────────
-  document.querySelectorAll<HTMLElement>('.name-word').forEach(word => {
+  // ── Split text: track G (Giulio) and O (Occhipinti) as brand initials ───────────
+  let firstGChar: HTMLElement | null = null;
+  let firstOChar: HTMLElement | null = null;
+
+  document.querySelectorAll<HTMLElement>('.name-word').forEach((word, wi) => {
     const text = word.textContent ?? '';
     word.textContent = '';
-    text.split('').forEach(char => {
+    text.split('').forEach((char, ci) => {
       const s = document.createElement('span');
       s.className = 'name-char';
       s.textContent = char === ' ' ? '\u00A0' : char;
+      if (wi === 0 && ci === 0) firstGChar = s;
+      if (wi === 1 && ci === 0) firstOChar = s;
       word.appendChild(s);
     });
   });
-  const chars = nameEl.querySelectorAll<HTMLElement>('.name-char');
 
-  // ── Set initial hidden states (prevent flash pre-GSAP) ────
-  gsap.set(['#entry-label', '#entry-tagline'], { opacity: 0, y: 12 });
+  const allChars   = Array.from(nameEl.querySelectorAll<HTMLElement>('.name-char'));
+  const otherChars = allChars.filter(c => c !== firstGChar && c !== firstOChar);
 
-  // ── Preloader → Main timeline ─────────────────────────────
-  const master = gsap.timeline();
+  // ── Initial hidden states ─────────────────────────────────
+  // G and O initials: in natural position but invisible (will scale-pop in)
+  gsap.set([firstGChar, firstOChar],            { y: '0%', opacity: 0 });
+  // Other name chars: clipped below (slide-up via .name-word overflow:hidden)
+  gsap.set(otherChars,                          { y: '110%' });
+  gsap.set(['#entry-label', '#entry-tagline'],  { opacity: 0, y: 12 });
 
-  // Hide preloader after bar completes (1.6s)
-  master.to(preloader, {
-    opacity: 0,
-    duration: 0.5,
-    ease: 'power2.inOut',
-    delay: 1.5,
+  // ── GO concept: G + O split apart → become name initials ──
+  const preGEl = document.getElementById('pre-G')!;
+  const preOEl = document.getElementById('pre-O')!;
+
+  const goTl = gsap.timeline({ delay: 1.3 });
+
+  // Phase 0: glow pulse on G and O (bar-complete signal)
+  goTl
+    .to([preGEl, preOEl], {
+      textShadow: '0 0 35px rgba(255,255,255,0.55)',
+      duration: 0.18, ease: 'power2.out', stagger: 0.06,
+    })
+    .to([preGEl, preOEl], { textShadow: 'none', duration: 0.12 });
+
+  // Phase 1: G flies LEFT, O flies RIGHT — the brand splits into the name
+  goTl
+    .to(preGEl, { x: -90, opacity: 0, duration: 0.38, ease: 'power3.in' }, '+=0.08')
+    .to(preOEl, { x:  90, opacity: 0, duration: 0.38, ease: 'power3.in' }, '<+0.04');
+
+  // Phase 2: preloader fades
+  goTl.to(preloader, {
+    opacity: 0, duration: 0.3, ease: 'power2.out',
     onComplete: () => { preloader.style.display = 'none'; },
-  });
+  }, '-=0.18');
 
-  const tl = gsap.timeline({ defaults: { ease: 'power3.out' }, delay: 1.6 });
+  // Phase 3: G lands into "Giulio", O into "Occhipinti" — name assembles
+  goTl.call(() => {
+    gsap.set(header, { opacity: 1 });
 
-  // 0. Reveal header container (CSS mantiene opacity:0 durante il preloader)
-  tl.set(header, { opacity: 1 });
+    if (firstGChar) gsap.fromTo(firstGChar,
+      { scale: 1.55, opacity: 0 },
+      { scale: 1, opacity: 1, duration: 0.58, ease: 'back.out(2.5)' }
+    );
+    if (firstOChar) gsap.fromTo(firstOChar,
+      { scale: 1.55, opacity: 0 },
+      { scale: 1, opacity: 1, duration: 0.58, ease: 'back.out(2.5)', delay: 0.09 }
+    );
+    if (otherChars.length) gsap.fromTo(otherChars,
+      { y: '110%' },
+      { y: '0%', duration: 0.52, stagger: 0.02, ease: 'power4.out', delay: 0.15 }
+    );
+  }, [], '-=0.05');
 
-  // 1. Name chars drop in with stagger (Awwwards-signature)
-  tl.fromTo(chars,
-    { y: '110%', opacity: 0 },
-    {
-      y: '0%', opacity: 1,
-      duration: 0.8,
-      stagger: { each: 0.03, from: 'start' },
-      ease: 'power4.out',
-    }
-  );
-
-  // 2. Label + tagline
-  tl.fromTo('#entry-label, #entry-tagline',
+  // Phase 4: label + tagline
+  goTl.fromTo('#entry-label, #entry-tagline',
     { opacity: 0, y: 12 },
-    { opacity: 1, y: 0, duration: 0.5, stagger: 0.1 },
-    '-=0.4'
+    { opacity: 1, y: 0, duration: 0.5, stagger: 0.12, ease: 'power3.out' },
+    '+=0.18'
   );
 
-  // 3. Cards drop with knolling stagger
-  tl.fromTo(cards,
-    { y: -40, opacity: 0, rotation: (i) => [-3, 2, -2][i] ?? 0, scale: 0.94 },
-    {
-      y: 0, opacity: 1, rotation: 0, scale: 1,
-      duration: 0.7,
-      stagger: 0.1,
-      ease: 'back.out(1.4)',
-    },
-    '-=0.2'
+  // Phase 5: cards launch (GO concept — cards "take off")
+  goTl.fromTo(cards,
+    { y: -48, opacity: 0, rotation: (i) => [-3, 2, -2][i] ?? 0, scale: 0.92 },
+    { y: 0, opacity: 1, rotation: 0, scale: 1, duration: 0.7, stagger: 0.1, ease: 'back.out(1.4)' },
+    '-=0.1'
   );
 
-  // 4. Knolling items land — CSS animation per non sovrascrivere --kfx/--kr/--ks
-  tl.call(() => {
+  // Phase 6: knolling objects land on the "table" around the content
+  goTl.call(() => {
     knolls.forEach((knoll, i) => {
-      knoll.style.setProperty('--knoll-delay', `${i * 75}ms`);
+      knoll.style.setProperty('--knoll-delay', `${i * 65}ms`);
       knoll.classList.add('do-enter');
     });
-  }, [], '-=0.3');
+  }, [], '-=0.25');
 
   // ── Magnetic effect on mode cards ────────────────────────
   cards.forEach((card) => {
@@ -654,7 +693,7 @@ import Layout from '../layouts/Layout.astro';
         const isRelated = modes.includes(mode);
         img.classList.toggle('is-hero', isRelated);
         img.classList.toggle('is-dim', !isRelated);
-        gsap.to(img, { opacity: isRelated ? 0.7 : 0.05, duration: 0.5, ease: 'power2.out' });
+        gsap.to(img, { opacity: isRelated ? 0.9 : 0.18, duration: 0.5, ease: 'power2.out' });
         // scale gestito via CSS class is-hero/is-dim (no conflitto con CSS transform --kfx)
       });
     });

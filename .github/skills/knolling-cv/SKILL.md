@@ -154,7 +154,20 @@ Quando scrivi codice per questo progetto:
 
 ---
 
-## 6. Standard Awwwards — Checklist Tecnica
+## 6. THE "GO" CONCEPT (Giulio Occhipinti)
+Il brand "GO" è il filo conduttore dell'interfaccia e della logica:
+- **GO come Azione:** Ogni interazione deve trasmettere velocità e reattività (Performance First).
+- **GO come Interfaccia:** Il logo "GO" funge da pulsante di reset o "Home" universale.
+- **GO come Stato:** - [G] = Grounded (L'esperienza solida, il Tech).
+    - [O] = Open (L'apertura mentale, la Creatività e l'Umano).
+- **CTA Semantica:** Non usare "Scopri di più", usa "GO Tech", "GO Creative", "GO Human".
+
+### Istruzione per il Codice:
+Ogni volta che generi un componente di navigazione, usa il prefisso `go-` (es. `<go-button>`, `<go-card>`) e implementa micro-interazioni che diano la sensazione di "partenza/lancio".
+
+---
+
+## 7. Standard Awwwards — Checklist Tecnica
 
 Questi pattern differenziano un sito "buono" da uno che vince premi. **Tutti devono essere presenti.**
 
