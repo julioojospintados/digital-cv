@@ -104,6 +104,12 @@ export interface Project {
   date?: string;
 }
 
+export interface SocialImpactItem {
+  name: string;
+  description: string;
+  tags?: string[];
+}
+
 export interface Social {
   platform: "LinkedIn" | "GitHub" | "Twitter" | "Website" | "Email" | "Behance" | "Dribbble" | string;
   url: string;
@@ -147,23 +153,20 @@ export const cvData = {
   experience: [
     {
       company: "ALTEN Italia",
-      role: "Frontend Developer",
+      role: "Senior Frontend Developer",
       startDate: "2019-07",
       endDate: "present",
       location: "Torino, Italia",
       remote: false,
-      description: "Sviluppo Frontend per clienti enterprise in ambito bancario, media e tecnologico. Progettazione e implementazione di interfacce modulari, design system e WebComponents ad alta scalabilità, adottati da prodotti con milioni di utenti attivi.",
+      description: "I sistemi enterprise in ambito bancario e tecnologico operano a scala e richiedono interfacce architetturalmente solide e usabili da milioni di persone. Ho progettato design system, librerie WebComponents e architetture a microfrontend per Intesa San Paolo e Aruba — ogni soluzione pensata per sopravvivere nel tempo, ai cambi di stack e alla crescita non prevista.",
       highlights: [
-        "Progettazione e sviluppo di interfacce modulari per i prodotti digitali di Intesa San Paolo, garantendo scalabilità e coerenza del codice con Angular, RXJS, HTML e SCSS",
-        "Architettura e sviluppo di una libreria grafica WebComponents per Aruba (Lit, HTML, SASS), adottata trasversalmente su più prodotti aziendali",
-        "Realizzazione di un'applicazione enterprise con architettura a microfrontend e microservizi, con state management avanzato tramite NGRX (Angular + Lit)",
-        "Implementazione di test unitari con Jest, con impatto diretto sulla copertura del codice e sulla stabilità dei rilasci",
-        "Sviluppo di applicativi gestionali interni per Rai Pubblicità con Angular, Spring e Bootstrap (tramite Consoft)",
-        "Sviluppo di un tool interno per la gestione documentale e revisionale in Intesa San Paolo (JSF), ottimizzando i flussi operativi a uso degli operatori",
-        "Sviluppo di un'app React per la gestione e visualizzazione dei dati Covid-19 in strutture ospedaliere negli USA (client ForgeLab)",
-        "Sviluppo di un'interfaccia brand in Angular con integrazione GraphQL per l'accesso e la visualizzazione dati da database",
+        "Architettura e sviluppo di una libreria grafica WebComponents per Aruba (Lit, HTML, SASS), adottata cross-prodotto su scala aziendale",
+        "Progettazione di interfacce modulari per i prodotti digitali di Intesa San Paolo con Angular, RXJS, HTML e SCSS",
+        "Realizzazione di un'applicazione enterprise con architettura a microfrontend e microservizi, con gestione dello stato avanzata via NGRX",
+        "Introduzione di test unitari sistematici con Jest, con impatto diretto sulla stabilità dei rilasci e sulla code coverage",
+        "Sviluppo di un'interfaccia brand in Angular con integrazione GraphQL per accesso dinamico ai dati",
       ],
-      skills: ["Angular", "Lit", "TypeScript", "HTML5", "SCSS", "RXJS", "NGRX", "WebComponents", "React", "GraphQL", "Bootstrap", "Material Design", "Jest", "Spring", "JSF"],
+      skills: ["Angular", "Lit", "TypeScript", "HTML5", "SCSS", "RXJS", "NGRX", "WebComponents", "GraphQL", "Bootstrap", "Material Design", "Jest"],
     },
     {
       company: "Music Agency (collaborazione)",
@@ -196,6 +199,47 @@ export const cvData = {
       skills: ["Videomaking", "Regia", "Post-produzione", "Color grading", "Gestione logistica"],
     },
     {
+      company: "ForgeLab",
+      role: "Frontend Developer",
+      startDate: "2021-04",
+      endDate: "2022-03",
+      location: "Los Angeles, USA",
+      remote: true,
+      description: "In piena emergenza pandemica i sistemi sanitari statunitensi avevano bisogno di strumenti digitali capaci di nascere in settimane, non in anni. Ho contribuito in full remote — da Torino con un team di Los Angeles — allo sviluppo di un'applicazione per la gestione e visualizzazione dei dati Covid-19 in strutture ospedaliere USA. La prova concreta che un frontend efficace può diventare infrastruttura critica in una crisi globale.",
+      highlights: [
+        "Sviluppo di dashboard React per il monitoraggio e la gestione dei dati Covid-19 in ospedali statunitensi",
+        "Integrazione con API REST e backend per la visualizzazione di dati clinici in tempo reale",
+        "Collaborazione in full remote con team cross-culturale USA/Italia in metodologia Agile",
+      ],
+      skills: ["React", "Angular", "GraphQL", "Bootstrap", "Material Design", "REST API", "Agile"],
+    },
+    {
+      company: "Consoft",
+      role: "Frontend Developer",
+      startDate: "2019-07",
+      endDate: "2021-03",
+      location: "Torino, Italia",
+      remote: false,
+      description: "I processi interni di organizzazioni media e bancarie spesso vivono in sistemi legacy rigidi e poco ergonomici. Ho progettato e sviluppato applicativi gestionali per Rai Pubblicità e Intesa San Paolo — ogni tool consegnato ha ridotto l'attrito operativo quotidiano per gli utenti finali, trasformando procedure lente in flussi fluidi.",
+      highlights: [
+        "Sviluppo di applicativi gestionali interni per Rai Pubblicità con Angular, Spring e Bootstrap",
+        "Sviluppo di un tool per la gestione documentale e revisionale in Intesa San Paolo tramite JSF",
+        "Traduzione di requisiti di business complessi in interfacce usabili da operatori non tecnici",
+      ],
+      skills: ["Angular", "Spring", "JSF", "Java", "SQL", "Bootstrap", "HTML5", "SCSS"],
+    },
+    {
+      company: "Satispay",
+      role: "Collaboratore Esterno",
+      startDate: "2018-06",
+      endDate: "2019-06",
+      location: "Milano, Italia",
+      remote: false,
+      description: "Collaborazione esterna con Satispay, una delle scale-up fintech più rilevanti del panorama italiano. Un contesto di rapida crescita in cui ogni contributo doveva essere immediato e orientato all'impatto — e in cui ho consolidato l'abitudine a lavorare in ambienti ad alta velocità con processi ancora in evoluzione.",
+      highlights: [],
+      skills: ["Fintech", "Startup mindset", "Comunicazione digitale"],
+    },
+    {
       company: "Festival ed eventi culturali",
       role: "Presentatore & Live Host",
       startDate: "2015-01",
@@ -222,6 +266,17 @@ export const cvData = {
       skills: ["Fotografia", "Editing", "Post-produzione"],
     },
     {
+      company: "Corriere di Chieri",
+      role: "Collaboratore Giornalista",
+      startDate: "2014-09",
+      endDate: "2017-06",
+      location: "Chieri, Torino",
+      remote: false,
+      description: "Ogni articolo è un esercizio di ascolto, sintesi e narrazione con vincoli precisi. Ho collaborato come redattore per il Corriere di Chieri, coprendo eventi culturali e cronaca locale — e ho affinato la capacità di trasformare informazioni grezze in storie che le persone vogliono leggere, un'abilità che ritrovo ogni giorno nel copy, nella documentazione tecnica e nello storytelling di prodotto.",
+      highlights: [],
+      skills: ["Giornalismo", "Scrittura", "Editing", "Redazione"],
+    },
+    {
       company: "Artiversum – Associazione Culturale",
       role: "Organizzatore di eventi",
       startDate: "2017-01",
@@ -235,6 +290,20 @@ export const cvData = {
       skills: ["Event management", "Comunicazione", "Coordinamento"],
     },
     {
+      company: "FreeGinevro / Immaginazione e Lavoro",
+      role: "Grafico Pubblicitario",
+      startDate: "2017-06",
+      endDate: "2018-10",
+      location: "Torino, Italia",
+      remote: false,
+      description: "La comunicazione visiva è problem solving applicato all'estetica: ogni brief è un problema di attenzione da risolvere in pochi secondi. Ho creato visual e materiali di brand identity per clienti locali, integrando la formazione tecnica in graphic design con una sensibilità estetica maturata in anni di fotografia — e ogni progetto ha rafforzato il collegamento tra pensiero strategico e produzione creativa.",
+      highlights: [
+        "Progettazione di materiali grafici e brand identity per clienti nel settore locale e culturale",
+        "Applicazione dei principi di visual hierarchy e typography per massimizzare l'impatto comunicativo",
+      ],
+      skills: ["Graphic design", "Brand identity", "Adobe Suite", "Typography", "Visual design"],
+    },
+    {
       company: "Gruppo Mondadori",
       role: "Commesso",
       startDate: "2015-04",
@@ -244,6 +313,20 @@ export const cvData = {
       description: "Vendita e consulenza clienti presso Mondadori Store, Area 12, Torino. Gestione del reparto libri e supporto alla clientela.",
       highlights: [],
       skills: ["Customer service", "Vendita", "Gestione del reparto"],
+    },
+    {
+      company: "None Teatro",
+      role: "Insegnante di Teatro e Improvvisazione",
+      startDate: "2016-09",
+      endDate: "2020-02",
+      location: "None, Torino",
+      remote: false,
+      description: "L'improvvisazione teatrale si insegna solo se chi la insegna sa già abitare l'incertezza. Ho condotto corsi per allievi di None Teatro trasmettendo il metodo 'Yes, and...' come pratica di ascolto attivo e costruzione collettiva — e ogni sessione ha affinato la mia capacità di leggere velocemente i bisogni delle persone e adattare il registro comunicativo in tempo reale.",
+      highlights: [
+        "Conduzione di corsi di improvvisazione e teatro per allievi di livelli diversi",
+        "Applicazione del metodo 'Yes, and...' come strumento didattico per sviluppare creatività e problem solving",
+      ],
+      skills: ["Insegnamento", "Improvvisazione teatrale", "Public speaking", "Facilitazione", "Pedagogia creativa"],
     },
     {
       company: "B-Teatro",
@@ -270,6 +353,17 @@ export const cvData = {
       skills: ["Accoglienza", "Inglese", "Spagnolo", "Customer service"],
     },
     {
+      company: "UCI Cinemas",
+      role: "Operatore Cinematografico",
+      startDate: "2013-07",
+      endDate: "2015-03",
+      location: "Torino, Italia",
+      remote: false,
+      description: "In uno dei circuiti cinematografici più frequentati d'Italia, ogni giornata portava centinaia di spettatori con aspettative diverse. Ho gestito operazioni di sala, biglietteria e accoglienza — e ho imparato che ogni punto di contatto col pubblico, anche il più breve, costruisce (o distrugge) un'esperienza. Una lezione che porto in ogni progetto UX.",
+      highlights: [],
+      skills: ["Customer service", "Gestione del pubblico", "Operazioni di sala"],
+    },
+    {
       company: "Starbucks Coffee",
       role: "Barista",
       startDate: "2011-01",
@@ -290,6 +384,31 @@ export const cvData = {
       description: "Responsabile centro fotografico presso struttura di animazione turistica a Zanzibar.",
       highlights: [],
       skills: ["Fotografia", "Animazione turistica"],
+    },
+    {
+      company: "Metamorfosi / Fun Factory",
+      role: "Responsabile Animazione Turistica",
+      startDate: "2010-05",
+      endDate: "2012-09",
+      location: "Ravenna e Crotone, Italia",
+      remote: false,
+      description: "Gestire un team di animatori in strutture balneari ad alta stagionalità significa fare leadership nell'imprevedibile, ogni giorno. Ho coordinato programmi di intrattenimento e gestione staff per strutture a Ravenna e Crotone — e ho scoperto che la leadership si costruisce nell'improvvisazione, non nel controllo: una convinzione che oggi informa il mio approccio a qualsiasi lavoro di team.",
+      highlights: [
+        "Coordinamento di team di animatori in contesti ad alta variabilità e pressione stagionale",
+        "Progettazione e conduzione di programmi di intrattenimento per ospiti internazionali",
+      ],
+      skills: ["Leadership", "Team management", "Event management", "Animazione", "Comunicazione interpersonale"],
+    },
+    {
+      company: "Caveja srl",
+      role: "Aiuto Cucina e Banconiere",
+      startDate: "2008-06",
+      endDate: "2010-04",
+      location: "Torino, Italia",
+      remote: false,
+      description: "Ritmo operativo intenso, margini di errore minimi e clientela esigente: la cucina e il banco insegnano a lavorare sotto pressione con precisione e senza scuse. Ho gestito il banco e supportato la cucina in orari spesso notturni — e ho portato questa disciplina operativa in ogni contesto successivo, da Londra a Zanzibar, dal palco alle architetture software.",
+      highlights: [],
+      skills: ["Lavoro in team", "Gestione operativa", "Servizio clienti", "Precisione sotto pressione"],
     },
   ] as WorkExperience[],
 
@@ -485,6 +604,22 @@ export const cvData = {
       date: "2017-05",
       tags: ["Event management", "Cultura", "Torino"],
     },
+    {
+      name: "Invenzione di una parola — Salone Internazionale del Libro (Torino)",
+      description: "Ho creato e presentato pubblicamente una parola nuova — con radici, suono e significato — al Salone Internazionale del Libro di Torino. Un esercizio estremo di sintesi linguistica e poetica: la stessa capacità di dire il massimo con il minimo che applico ogni giorno nella scrittura di codice pulito e nella comunicazione di prodotto.",
+      date: "2019-05",
+      tags: ["Poesia", "Linguistica", "Creatività", "Salone del Libro"],
+    },
+    {
+      name: "Poesia premiata a livello internazionale",
+      description: "Autore di poesie premiate in concorsi nazionali e internazionali (Italia e Australia). La scrittura creativa e lo sviluppo software condividono una radice comune: entrambi richiedono sintesi, precisione formale e la capacità di generare significato con vincoli espliciti.",
+      tags: ["Poesia", "Scrittura creativa", "Premi internazionali"],
+    },
+    {
+      name: "La 'Tesina sui Baffi' — articolo su La Stampa",
+      description: "Una tesina scolastica sui baffi, caso involontario di marketing e curiosità antropologica, finisce sulle pagine de 'La Stampa'. La dimostrazione pratica che l'originalità del pensiero, anche in contesti giovanili e apparentemente marginali, può generare attenzione pubblica imprevista — e che la narrativa conta più del formato.",
+      tags: ["Storytelling", "Marketing involontario", "Media", "Scrittura"],
+    },
   ] as Project[],
 
   // ── Interests ─────────────────────────────────────────────────────────────
@@ -496,6 +631,25 @@ export const cvData = {
     "Viaggi e culture internazionali",
     "Open source",
   ] as string[],
+
+  // ── Social impact ─────────────────────────────────────────────────────────
+  socialImpact: [
+    {
+      name: "Prevenzione in situazione di crisi",
+      description: "Intervento diretto in una situazione di rischio suicidio: riconoscimento dei segnali, ascolto attivo e accompagnamento verso supporto professionale. Una delle esperienze più formative in termini di presenza piena e capacità di stare nell'imprevisto senza fuggire dalla complessità emotiva. 'Yes, and...' nella sua forma più radicale: accettare la realtà dell'altro e aggiungere presenza.",
+      tags: ["Empatia", "Ascolto attivo", "Gestione della crisi", "Human skills"],
+    },
+    {
+      name: "Assistenza legale a immigrato in difficoltà",
+      description: "Supporto concreto a un ragazzo bangladese in difficoltà con il sistema legale italiano: orientamento nel labirinto burocratico, traduzione del contesto normativo e raccordo con le risorse disponibili. Il 'Yes, and...' applicato alla vita reale: accettare la situazione senza tirarsi fuori e aggiungere valore dove gli altri passano oltre.",
+      tags: ["Solidarietà", "Interculturalità", "Assistenza", "Civic engagement"],
+    },
+    {
+      name: "Intervento in difesa di terzi in spazio pubblico",
+      description: "Pronto intervento in una situazione di pericolo in strada per la tutela di terzi. L'improvvisazione teatrale insegna a stare nel momento senza paralizzarsi: questa capacità, applicata fuori dal palco, si traduce in lucidità e azione quando gli altri esitano. Una forma di leadership situazionale che non si impara nei libri.",
+      tags: ["Coraggio civile", "Leadership situazionale", "Pensiero rapido"],
+    },
+  ] as SocialImpactItem[],
 
 } as const satisfies Record<string, unknown>;
 
