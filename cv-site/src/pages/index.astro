@@ -19,11 +19,11 @@ import Layout from '../layouts/Layout.astro';
     <div class="knolling-stage" id="knolling-stage" aria-hidden="true">
       <!-- Ogni oggetto ha: data-modes (spazio-separati), posizione CSS fissa, rotazione fissa -->
       <img class="knoll-item" data-modes="tech"           src="/knolling/laptop.png"     alt="" loading="eager" style="--kx:50%;--ky:74%;--kr:-1deg;--ks:0.9;">
-      <img class="knoll-item" data-modes="tech"           src="/knolling/flashlight.png" alt="" loading="eager" style="--kx:14%;--ky:28%;--kr:92deg;--ks:0.6;">
+      <img class="knoll-item" data-modes="tech"           src="/knolling/flashlight.png" alt="" loading="eager" style="--kx:14%;--ky:28%;--kr:0deg;--ks:0.88;">
       <img class="knoll-item" data-modes="tech creative"  src="/knolling/multitool.png"  alt="" loading="eager" style="--kx:82%;--ky:32%;--kr:-14deg;--ks:0.75;">
       <img class="knoll-item" data-modes="creative"       src="/knolling/camera.png"     alt="" loading="eager" style="--kx:18%;--ky:68%;--kr:7deg;--ks:0.9;">
       <img class="knoll-item" data-modes="creative human" src="/knolling/megaphone.png"  alt="" loading="eager" style="--kx:78%;--ky:70%;--kr:-8deg;--ks:0.8;">
-      <img class="knoll-item" data-modes="human"          src="/knolling/chess.png"      alt="" loading="eager" style="--kx:12%;--ky:20%;--kr:-12deg;--ks:0.55;">
+      <img class="knoll-item" data-modes="human"          src="/knolling/chess.png"      alt="" loading="eager" style="--kx:12%;--ky:20%;--kr:-12deg;--ks:0.3;">
       <img class="knoll-item" data-modes="human"          src="/knolling/plant.png"      alt="" loading="eager" style="--kx:10%;--ky:82%;--kr:-4deg;--ks:0.7;">
       <img class="knoll-item" data-modes="creative human" src="/knolling/compass.png"    alt="" loading="eager" style="--kx:88%;--ky:13%;--kr:18deg;--ks:0.62;">
     </div>
@@ -49,31 +49,32 @@ import Layout from '../layouts/Layout.astro';
           <span class="mode-card__accent">01</span>
           <span class="mode-card__label">Tech</span>
           <span class="mode-card__desc">Architetture, codice, sistemi</span>
-          <span class="mode-card__arrow">→</span>
+          <span class="mode-card__go" data-href="/cv?mode=tech" role="link" tabindex="-1" aria-hidden="true">
+            <span class="go-text">GO to Tech</span>
+            <span class="go-icon">↗</span>
+          </span>
         </button>
 
         <button class="mode-card" data-mode="creative" id="card-creative" type="button">
           <span class="mode-card__accent">02</span>
           <span class="mode-card__label">Creative</span>
           <span class="mode-card__desc">Racconto, immagine, suono</span>
-          <span class="mode-card__arrow">→</span>
+          <span class="mode-card__go" data-href="/cv?mode=creative" role="link" tabindex="-1" aria-hidden="true">
+            <span class="go-text">GO to Creative</span>
+            <span class="go-icon">↗</span>
+          </span>
         </button>
 
         <button class="mode-card" data-mode="human" id="card-human" type="button">
           <span class="mode-card__accent">03</span>
           <span class="mode-card__label">Human</span>
           <span class="mode-card__desc">Impatto, relazione, presenza</span>
-          <span class="mode-card__arrow">→</span>
+          <span class="mode-card__go" data-href="/cv?mode=human" role="link" tabindex="-1" aria-hidden="true">
+            <span class="go-text">GO to Human</span>
+            <span class="go-icon">↗</span>
+          </span>
         </button>
       </section>
-
-      <!-- CTA dopo selezione -->
-      <div class="entry-cta" id="entry-cta" aria-live="polite">
-        <a class="entry-cta__link" id="entry-cta-link" href="/cv">
-          Entra nella prospettiva <span id="cta-mode-label"></span>
-          <span>↗</span>
-        </a>
-      </div>
 
     </main>
   </div>
@@ -331,55 +332,6 @@ import Layout from '../layouts/Layout.astro';
     line-height: 1.4;
   }
 
-  .mode-card__arrow {
-    margin-top: 0.5rem;
-    font-size: 1rem;
-    color: var(--color-text-muted);
-    display: inline-block;
-    transition: transform 0.2s ease, color 0.2s ease;
-  }
-
-  .mode-card:hover .mode-card__arrow,
-  .mode-card.is-selected .mode-card__arrow {
-    transform: translateX(4px);
-    color: var(--color-text-primary);
-  }
-
-  /* ── CTA ── */
-  .entry-cta {
-    opacity: 0;
-    transform: translateY(10px);
-    transition: opacity 0.4s ease, transform 0.4s ease;
-    pointer-events: none;
-  }
-
-  .entry-cta.is-visible {
-    opacity: 1;
-    transform: translateY(0);
-    pointer-events: auto;
-  }
-
-  .entry-cta__link {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.8rem;
-    font-weight: 500;
-    letter-spacing: 0.05em;
-    color: var(--color-text-primary);
-    text-decoration: none;
-    padding: 0.6rem 1.2rem;
-    border: 1px solid rgba(255,255,255,0.2);
-    border-radius: 1px;
-    background: rgba(255,255,255,0.05);
-    transition: background 0.2s ease, border-color 0.2s ease;
-  }
-
-  .entry-cta__link:hover {
-    background: rgba(255,255,255,0.1);
-    border-color: rgba(255,255,255,0.4);
-  }
-
   /* Ripple effect su card */
   @keyframes ripple {
     from { transform: scale(0); opacity: 0.4; }
@@ -396,6 +348,60 @@ import Layout from '../layouts/Layout.astro';
     animation: ripple 0.6s ease-out forwards;
     transform-origin: center;
   }
+
+  /* ── GO button inside card ── */
+  .mode-card__go {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1.1rem;
+    padding: 0.55rem 0.8rem;
+    border: 1px solid rgba(212, 168, 55, 0.45);
+    border-radius: 2px;
+    background: rgba(212, 168, 55, 0.07);
+    width: 100%;
+    color: #D4A837;
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+    user-select: none;
+    transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .mode-card__go.is-ready {
+    pointer-events: auto;
+  }
+
+  .mode-card__go.is-ready:hover {
+    background: rgba(212, 168, 55, 0.16);
+    border-color: rgba(212, 168, 55, 0.75);
+    box-shadow: 0 0 16px rgba(212, 168, 55, 0.28);
+  }
+
+  .go-icon {
+    display: inline-block;
+    margin-left: auto;
+    font-size: 0.95rem;
+    transition: transform 0.22s ease;
+  }
+
+  .mode-card__go.is-ready:hover .go-icon {
+    transform: translate(4px, -4px);
+  }
+
+  /* ── Launch journey overlay ── */
+  #launch-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100000;
+    pointer-events: none;
+    opacity: 0;
+    background: rgba(8, 73, 67, 1);
+  }
 </style>
 
 <script>
@@ -408,10 +414,6 @@ import Layout from '../layouts/Layout.astro';
   const nameEl       = document.getElementById('entry-name')!;
   const cards        = document.querySelectorAll<HTMLButtonElement>('.mode-card');
   const knolls       = document.querySelectorAll<HTMLImageElement>('.knoll-item');
-  const cta          = document.getElementById('entry-cta')!;
-  const ctaLink      = document.getElementById('entry-cta-link') as HTMLAnchorElement;
-  const ctaModeLabel = document.getElementById('cta-mode-label')!;
-  const progressBar  = document.getElementById('scroll-progress');
 
   let selectedMode: string | null = null;
 
@@ -428,6 +430,9 @@ import Layout from '../layouts/Layout.astro';
   });
   const chars = nameEl.querySelectorAll<HTMLElement>('.name-char');
 
+  // ── Set initial hidden states (prevent flash pre-GSAP) ────
+  gsap.set(['#entry-label', '#entry-tagline'], { opacity: 0, y: 12 });
+
   // ── Preloader → Main timeline ─────────────────────────────
   const master = gsap.timeline();
 
@@ -441,6 +446,9 @@ import Layout from '../layouts/Layout.astro';
   });
 
   const tl = gsap.timeline({ defaults: { ease: 'power3.out' }, delay: 1.6 });
+
+  // 0. Reveal header container (CSS mantiene opacity:0 durante il preloader)
+  tl.set(header, { opacity: 1 });
 
   // 1. Name chars drop in with stagger (Awwwards-signature)
   tl.fromTo(chars,
@@ -484,14 +492,6 @@ import Layout from '../layouts/Layout.astro';
     '-=0.4'
   );
 
-  // ── Scroll progress bar ───────────────────────────────────
-  if (progressBar) {
-    window.addEventListener('scroll', () => {
-      const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
-      progressBar.style.width = `${Math.min(pct, 100)}%`;
-    }, { passive: true });
-  }
-
   // ── Magnetic effect on mode cards ────────────────────────
   cards.forEach((card) => {
     const strength = 12;
@@ -517,9 +517,75 @@ import Layout from '../layouts/Layout.astro';
     });
   });
 
+  // ── Launch journey animation ──────────────────────────────
+  function launchJourney(href: string) {
+    document.body.style.pointerEvents = 'none';
+    const overlay = document.getElementById('launch-overlay')!;
+    const cx = window.innerWidth / 2;
+    const cy = window.innerHeight / 2;
+    const lineCount = 28;
+    const lineEls: HTMLElement[] = [];
+
+    for (let i = 0; i < lineCount; i++) {
+      const angle = (i / lineCount) * 360;
+      const rad   = (angle * Math.PI) / 180;
+      const dist  = Math.random() * 60 + 10;
+      const len   = Math.random() * 200 + 80;
+      const thick = Math.random() * 1.5 + 0.5;
+      const line  = document.createElement('div');
+      Object.assign(line.style, {
+        position:        'fixed',
+        left:            `${cx + Math.cos(rad) * dist}px`,
+        top:             `${cy + Math.sin(rad) * dist}px`,
+        width:           `${len}px`,
+        height:          `${thick}px`,
+        background:      'rgba(255,255,255,0.12)',
+        transform:       `rotate(${angle}deg)`,
+        transformOrigin: 'left center',
+        opacity:         '0',
+        zIndex:          '99997',
+        pointerEvents:   'none',
+      });
+      document.body.appendChild(line);
+      lineEls.push(line);
+    }
+
+    const journey = gsap.timeline({
+      onComplete: () => {
+        lineEls.forEach(l => l.remove());
+        window.location.href = href;
+      },
+    });
+
+    // Speed lines sparano verso l'esterno (warp speed)
+    journey.fromTo(lineEls,
+      { scaleX: 0, opacity: 0 },
+      { scaleX: 1, opacity: 0.8, duration: 0.25, stagger: { each: 0.008, from: 'random' }, ease: 'power2.out' }
+    );
+    journey.to(lineEls,
+      { scaleX: 6, opacity: 0, duration: 0.45, stagger: { each: 0.006, from: 'random' }, ease: 'power4.in' },
+      '-=0.05'
+    );
+
+    // Il mondo si allontana mentre acceleri
+    journey.to([header, cards, knolls],
+      { opacity: 0, scale: 0.85, filter: 'blur(10px)', duration: 0.45, ease: 'power3.in' },
+      0.05
+    );
+
+    // Vignette scura chiude la scena
+    journey.to(overlay,
+      { opacity: 1, duration: 0.4, ease: 'power2.inOut' },
+      0.2
+    );
+  }
+
   // ── Click card: selezione mode ────────────────────────────
   cards.forEach((card) => {
     card.addEventListener('click', (e) => {
+      // Se il click viene dal go button, ignora (gestito separatamente)
+      if ((e.target as HTMLElement).closest('.mode-card__go')) return;
+
       const mode = card.dataset.mode as string;
       selectedMode = mode;
 
@@ -532,19 +598,40 @@ import Layout from '../layouts/Layout.astro';
       card.appendChild(ripple);
       ripple.addEventListener('animationend', () => ripple.remove());
 
-      // Aggiorna store / dataset
       setMode(mode as 'tech' | 'creative' | 'human');
 
-      // Animazione card: selected vs passive
+      // Animazione card: selected vs passive + GO button
       cards.forEach((c) => {
+        const goBtn = c.querySelector<HTMLElement>('.mode-card__go');
         if (c === card) {
           c.classList.add('is-selected');
           c.classList.remove('is-passive');
           gsap.to(c, { scale: 1.04, duration: 0.3, ease: 'back.out(2)' });
+          if (goBtn) {
+            goBtn.setAttribute('tabindex', '0');
+            goBtn.removeAttribute('aria-hidden');
+            gsap.timeline({ delay: 0.2 })
+              .fromTo(goBtn,
+                { opacity: 0, y: 28, scale: 0.82 },
+                { opacity: 1, y: 0, scale: 1, duration: 0.6, ease: 'back.out(3)',
+                  onStart: () => goBtn.classList.add('is-ready') }
+              )
+              .to(goBtn,
+                { boxShadow: '0 0 24px 4px rgba(212,168,55,0.45)', duration: 0.28,
+                  ease: 'power2.out', yoyo: true, repeat: 1 },
+                0.5
+              );
+          }
         } else {
           c.classList.add('is-passive');
           c.classList.remove('is-selected');
           gsap.to(c, { scale: 0.96, duration: 0.25, ease: 'power2.out' });
+          if (goBtn && goBtn.classList.contains('is-ready')) {
+            goBtn.setAttribute('tabindex', '-1');
+            goBtn.setAttribute('aria-hidden', 'true');
+            gsap.to(goBtn, { opacity: 0, y: 5, duration: 0.2, ease: 'power2.in',
+              onComplete: () => goBtn.classList.remove('is-ready') });
+          }
         }
       });
 
@@ -554,24 +641,17 @@ import Layout from '../layouts/Layout.astro';
         const isRelated = modes.includes(mode);
         img.classList.toggle('is-hero', isRelated);
         img.classList.toggle('is-dim', !isRelated);
-
-        gsap.to(img, {
-          opacity: isRelated ? 0.7 : 0.05,
-          scale: isRelated ? 1.06 : 0.9,
-          duration: 0.5,
-          ease: 'power2.out',
-        });
+        gsap.to(img, { opacity: isRelated ? 0.7 : 0.05, scale: isRelated ? 1.06 : 0.9, duration: 0.5, ease: 'power2.out' });
       });
+    });
+  });
 
-      // Mostra CTA
-      const modeLabels: Record<string, string> = {
-        tech: 'Tech',
-        creative: 'Creative',
-        human: 'Human',
-      };
-      ctaModeLabel.textContent = modeLabels[mode] ?? mode;
-      ctaLink.href = `/cv?mode=${mode}`;
-      cta.classList.add('is-visible');
+  // ── GO button: lancia il journey ─────────────────────────
+  document.querySelectorAll<HTMLElement>('.mode-card__go').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const href = btn.dataset.href ?? '/cv';
+      launchJourney(href);
     });
   });
 </script>
