@@ -1,54 +1,13 @@
-/* Gilroy — self-hosted. File .woff2/.woff vanno in public/fonts/Gilroy/ */
-@font-face {
-  font-family: 'Gilroy';
-  src: url('/fonts/Gilroy/Gilroy-Regular.woff2') format('woff2'),
-    url('/fonts/Gilroy/Gilroy-Regular.woff') format('woff');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Gilroy';
-  src: url('/fonts/Gilroy/Gilroy-Medium.woff2') format('woff2'),
-    url('/fonts/Gilroy/Gilroy-Medium.woff') format('woff');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Gilroy';
-  src: url('/fonts/Gilroy/Gilroy-SemiBold.woff2') format('woff2'),
-    url('/fonts/Gilroy/Gilroy-SemiBold.woff') format('woff');
-  font-weight: 600;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Gilroy';
-  src: url('/fonts/Gilroy/Gilroy-Bold.woff2') format('woff2'),
-    url('/fonts/Gilroy/Gilroy-Bold.woff') format('woff');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Gilroy';
-  src: url('/fonts/Gilroy/Gilroy-ExtraBold.woff2') format('woff2'),
-    url('/fonts/Gilroy/Gilroy-ExtraBold.woff') format('woff');
-  font-weight: 800;
-  font-style: normal;
-  font-display: swap;
-}
+/* Onest — stesso designer di Gilroy (Radomir Tinkov), free via Google Fonts.
+   Per usare Gilroy self-hosted, aggiungi i .woff2 in public/fonts/Gilroy/
+   e ripristina le @font-face con font-family:'Gilroy' al posto di 'Onest'. */
+@import url('https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&display=swap');
 
 @import "tailwindcss";
 
 @theme {
-  --font-sans: 'Gilroy', ui-sans-serif, system-ui, sans-serif;
-  --font-display: 'Gilroy', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Onest', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Onest', ui-sans-serif, system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
 }
 

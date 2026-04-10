@@ -109,19 +109,32 @@ import Layout from '../layouts/Layout.astro';
     transform: translate(-50%, -50%) rotate(var(--kr)) scaleX(var(--kfx, 1)) scale(var(--ks));
     width: clamp(80px, 12vw, 200px);
     object-fit: contain;
-    opacity: 0; /* GSAP gestisce */
-    will-change: transform, opacity;
-    transition: filter 0.4s ease, opacity 0.4s ease;
+    opacity: 0;
+    scale: 1; /* CSS scale — separato da transform, no conflitto GSAP */
+    will-change: transform, opacity, scale;
+    transition: filter 0.4s ease, opacity 0.5s ease, scale 0.5s ease;
   }
 
   .knoll-item.is-dim {
     filter: brightness(0.3) saturate(0.4);
-    opacity: 0.15 !important;
+    opacity: 0.05 !important;
+    scale: 0.9;
   }
 
   .knoll-item.is-hero {
     filter: brightness(1.15) drop-shadow(0 8px 24px rgba(0,0,0,0.5));
     z-index: 1;
+    scale: 1.06;
+  }
+
+  @keyframes knollLand {
+    0%   { opacity: 0; filter: blur(6px) brightness(0.4); }
+    100% { opacity: 0.18; filter: none; }
+  }
+
+  .knoll-item.do-enter {
+    animation: knollLand 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    animation-delay: var(--knoll-delay, 0ms);
   }
 
   /* ── Mobile: reposition all knoll items into safe corner zones ── */
@@ -480,17 +493,13 @@ import Layout from '../layouts/Layout.astro';
     '-=0.2'
   );
 
-  // 4. Knolling items land
-  tl.fromTo(knolls,
-    { scale: 0, opacity: 0, rotation: () => (Math.random() - 0.5) * 60, y: () => (Math.random() - 0.5) * 80 },
-    {
-      scale: 1, opacity: 0.18, rotation: 0, y: 0,
-      duration: 0.7,
-      stagger: { each: 0.07, from: 'random' },
-      ease: 'back.out(1.8)',
-    },
-    '-=0.4'
-  );
+  // 4. Knolling items land — CSS animation per non sovrascrivere --kfx/--kr/--ks
+  tl.call(() => {
+    knolls.forEach((knoll, i) => {
+      knoll.style.setProperty('--knoll-delay', `${i * 75}ms`);
+      knoll.classList.add('do-enter');
+    });
+  }, [], '-=0.3');
 
   // ── Magnetic effect on mode cards ────────────────────────
   cards.forEach((card) => {
@@ -568,8 +577,12 @@ import Layout from '../layouts/Layout.astro';
     );
 
     // Il mondo si allontana mentre acceleri
-    journey.to([header, cards, knolls],
+    journey.to([header, cards],
       { opacity: 0, scale: 0.85, filter: 'blur(10px)', duration: 0.45, ease: 'power3.in' },
+      0.05
+    );
+    journey.to(knolls,
+      { opacity: 0, filter: 'blur(10px)', duration: 0.45, ease: 'power3.in' },
       0.05
     );
 
@@ -641,7 +654,8 @@ import Layout from '../layouts/Layout.astro';
         const isRelated = modes.includes(mode);
         img.classList.toggle('is-hero', isRelated);
         img.classList.toggle('is-dim', !isRelated);
-        gsap.to(img, { opacity: isRelated ? 0.7 : 0.05, scale: isRelated ? 1.06 : 0.9, duration: 0.5, ease: 'power2.out' });
+        gsap.to(img, { opacity: isRelated ? 0.7 : 0.05, duration: 0.5, ease: 'power2.out' });
+        // scale gestito via CSS class is-hero/is-dim (no conflitto con CSS transform --kfx)
       });
     });
   });
