@@ -1,0 +1,347 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { cvData } from '@cv-data';
+
+const { personal, experience, technicalSkills, projects, socialImpact } = cvData;
+
+// Read mode from URL (SSR-safe fallback to 'tech')
+const urlMode = Astro.url.searchParams.get('mode');
+const validModes = ['tech', 'creative', 'human'] as const;
+type Mode = typeof validModes[number];
+const mode: Mode = validModes.includes(urlMode as Mode) ? (urlMode as Mode) : 'tech';
+
+// Top experiences (for hero + primary cards)
+const primaryExp = experience.filter(e => e.company === 'ALTEN Italia')[0];
+const otherExp = experience.filter(e => e.company !== 'ALTEN Italia').slice(0, 6);
+
+// Skill border widths by level
+const levelBorder: Record<string, string> = {
+  'Base': '1px',
+  'Intermedio': '2px',
+  'Avanzato': '3px',
+  'Esperto': '4px',
+};
+
+// Pre-process skills for template
+const processedSkills = technicalSkills.map((skill) => ({
+  ...skill,
+  borderWidth: levelBorder[skill.level] ?? '1px',
+  size: skill.level === 'Esperto' ? 'w-20 h-20' : 'w-16 h-16',
+  hasGlow: skill.level === 'Avanzato' || skill.level === 'Esperto',
+  glowStrength: skill.level === 'Esperto' ? '35%' : '15%',
+}));
+
+// AI workflow items
+const aiWorkflowItems = [
+  {
+    tool: 'GitHub Copilot',
+    title: 'Accelerazione sviluppo Angular enterprise',
+    description: 'Generazione di boilerplate NGRX, testing Jest e pattern architetturali ripetitivi, con validazione critica dell\'output.',
+    impactScore: '-87% tempo boilerplate',
+    tags: ['tech', 'agile'],
+  },
+  {
+    tool: 'ChatGPT / Claude',
+    title: 'Prompt Engineering per prototipazione UX rapida',
+    description: 'Generazione di user personas, flussi e scenari di test a partire da brief testuali.',
+    impactScore: '-90% tempo fase discovery',
+    tags: ['creative', 'tech'],
+  },
+  {
+    tool: 'Claude / GPT-4',
+    title: 'Ottimizzazione architetture Angular tramite LLM',
+    description: 'Analisi di code smell, refactoring suggerito e revisione architetture a microfrontend con LLM come pair reviewer.',
+    impactScore: '-60% tempo debug',
+    tags: ['tech', 'logic'],
+  },
+  {
+    tool: 'Midjourney',
+    title: 'Esplorazione visiva per brief UX/UI',
+    description: 'Moodboard e concept visivi prima del wireframing per allineare stakeholder senza iterazioni costose.',
+    impactScore: '-70% cicli di allineamento',
+    tags: ['creative', 'tech'],
+  },
+  {
+    tool: 'AI Tools (vari)',
+    title: 'Copywriting e storytelling di prodotto',
+    description: 'SEO copy, varianti A/B per landing page e documentazione tecnica accessibile.',
+    impactScore: '+3x velocità contenuti',
+    tags: ['creative', 'marketing'],
+  },
+];
+---
+
+<Layout
+  title={`${personal.name} — CV`}
+  description={personal.summary || `CV interattivo di ${personal.name}`}
+  mode={mode}
+>
+  <!-- Sticky Navbar -->
+  <nav
+    class="sticky top-0 z-50 flex items-center justify-between px-6 py-3 border-b text-xs"
+    style="background-color: var(--color-surface); border-color: var(--color-border);"
+  >
+    <a
+      href="/"
+      class="font-bold tracking-widest uppercase text-xs"
+      style="color: var(--color-text-primary);"
+    >
+      {personal.name.split(' ')[0]}
+    </a>
+
+    <mode-switcher></mode-switcher>
+
+    <a
+      href="/en/"
+      class="uppercase tracking-widest text-xs"
+      style="color: var(--color-text-muted);"
+      aria-label="Switch to English version"
+    >
+      EN
+    </a>
+  </nav>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 py-10 space-y-10">
+
+    <!-- ── HERO ROW ────────────────────────────────── -->
+    <section class="grid grid-cols-12 gap-4">
+
+      <!-- Hero card (4 col) -->
+      <div
+        class="col-span-12 sm:col-span-4 row-span-2 p-6 border space-y-4"
+        style="background-color: var(--color-surface); border-color: var(--color-border);"
+      >
+        {personal.avatar && (
+          <img
+            src={personal.avatar}
+            alt={personal.name}
+            class="w-12 h-12 rounded-full object-cover"
+            loading="eager"
+          />
+        )}
+        <div>
+          <h1 class="text-2xl font-bold" style="color: var(--color-text-primary);">{personal.name}</h1>
+          <p class="text-sm mt-1" style="color: var(--color-text-muted);">{personal.title}</p>
+        </div>
+        <p class="text-sm leading-relaxed" style="color: var(--color-text-muted);">{personal.summary}</p>
+        <div class="flex items-center gap-2 text-xs">
+          <span
+            class={`w-2 h-2 rounded-full ${personal.availability === 'available' ? 'bg-green-500' : personal.availability === 'open' ? 'bg-amber-500' : 'bg-neutral-500'}`}
+          ></span>
+          <span style="color: var(--color-accent);">
+            {personal.availability === 'available' ? 'Disponibile' : personal.availability === 'open' ? 'Aperto a opportunità' : 'Non disponibile'}
+          </span>
+        </div>
+      </div>
+
+      <!-- Summary card (4 col) -->
+      <div
+        class="col-span-12 sm:col-span-5 p-6 border space-y-3"
+        style="background-color: var(--color-surface); border-color: var(--color-border);"
+      >
+        <p class="text-xs font-semibold uppercase tracking-widest" style="color: var(--color-accent);">Highlights</p>
+        <ul class="space-y-2 text-sm" style="color: var(--color-text-primary);">
+          {primaryExp?.highlights?.slice(0, 4).map((h) => (
+            <li class="flex gap-2">
+              <span style="color: var(--color-accent);">→</span>
+              <span>{h}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      <!-- Availability / location card (3 col) -->
+      <div
+        class="col-span-12 sm:col-span-3 p-6 border space-y-3"
+        style="background-color: var(--color-surface); border-color: var(--color-border);"
+      >
+        <p class="text-xs font-semibold uppercase tracking-widest" style="color: var(--color-accent);">Posizione</p>
+        <p class="text-sm" style="color: var(--color-text-primary);">{personal.location}</p>
+
+        {personal.email && (
+          <a
+            href={`mailto:${personal.email}`}
+            class="block text-xs truncate"
+            style="color: var(--color-text-muted);"
+          >
+            {personal.email}
+          </a>
+        )}
+        {personal.phone && (
+          <p class="text-xs" style="color: var(--color-text-muted);">{personal.phone}</p>
+        )}
+      </div>
+    </section>
+
+    <!-- ── EXPERIENCE + SKILLS ────────────────────── -->
+    <section class="grid grid-cols-12 gap-4">
+
+      <!-- Experience cards (8 col) -->
+      <div class="col-span-12 sm:col-span-8 space-y-4">
+        <p class="text-xs font-semibold uppercase tracking-widest" style="color: var(--color-text-muted);">Esperienza</p>
+
+        {/* Primary experience */}
+        {primaryExp && (
+          <div
+            class="cv-card p-5 border space-y-3"
+            data-tags={primaryExp.tags?.join(',')}
+            style="background-color: var(--color-surface); border-color: var(--color-border);"
+          >
+            <div class="flex items-start justify-between gap-4">
+              <div>
+                <p class="font-semibold text-sm" style="color: var(--color-text-primary);">{primaryExp.role}</p>
+                <p class="text-xs mt-0.5" style="color: var(--color-accent);">{primaryExp.company}</p>
+              </div>
+              <p class="text-xs shrink-0" style="color: var(--color-text-muted);">
+                {primaryExp.startDate} — {primaryExp.endDate ?? 'oggi'}
+              </p>
+            </div>
+            {primaryExp.description && (
+              <p class="text-xs leading-relaxed" style="color: var(--color-text-muted);">{primaryExp.description}</p>
+            )}
+          </div>
+        )}
+
+        {/* Other experiences (grid) */}
+        <div class="grid grid-cols-2 gap-3">
+          {otherExp.map((exp) => (
+            <div
+              class="cv-card p-4 border space-y-1"
+              data-tags={exp.tags?.join(',')}
+              style="background-color: var(--color-surface); border-color: var(--color-border);"
+            >
+              <p class="font-semibold text-xs" style="color: var(--color-text-primary);">{exp.role}</p>
+              <p class="text-xs" style="color: var(--color-accent);">{exp.company}</p>
+              <p class="text-xs" style="color: var(--color-text-muted);">{exp.startDate} — {exp.endDate ?? 'oggi'}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Skills Bento (4 col) -->
+      <div class="col-span-12 sm:col-span-4 space-y-4">
+        <p class="text-xs font-semibold uppercase tracking-widest" style="color: var(--color-text-muted);">Skills</p>
+        <div class="flex flex-wrap gap-2">
+          {processedSkills.map((skill) => (
+              <div
+                class={`cv-card ${skill.size} flex flex-col items-center justify-center text-center p-1 border cursor-default`}
+                data-tags={skill.tags?.join(',')}
+                style={`background-color: var(--color-surface); border-color: var(--color-border); border-width: ${skill.borderWidth};${skill.hasGlow ? ` box-shadow: 0 0 8px color-mix(in srgb, var(--color-accent) ${skill.glowStrength}, transparent);` : ''}`}
+                title={`${skill.name} — ${skill.level}`}
+              >
+                <span class="text-xs font-medium leading-tight" style="color: var(--color-text-primary);">{skill.name}</span>
+              </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ── AI-ENHANCED WORKFLOW ────────────────────── -->
+    <section class="space-y-4">
+      <p class="text-xs font-semibold uppercase tracking-widest" style="color: var(--color-text-muted);">
+        AI-Enhanced Workflow
+      </p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {aiWorkflowItems.map((item) => (
+          <div
+            class="p-5 border space-y-3"
+            style="background-color: var(--color-surface); border-color: var(--color-border);"
+          >
+            <div class="flex items-start justify-between gap-2">
+              <p class="text-xs font-medium uppercase tracking-wider" style="color: var(--color-text-muted);">{item.tool}</p>
+              <span
+                class="text-xs font-bold px-2 py-0.5 rounded-sm shrink-0"
+                style="background-color: color-mix(in srgb, var(--color-accent) 15%, transparent); color: var(--color-accent);"
+              >
+                {item.impactScore}
+              </span>
+            </div>
+            <p class="font-semibold text-sm" style="color: var(--color-text-primary);">{item.title}</p>
+            <p class="text-xs leading-relaxed" style="color: var(--color-text-muted);">{item.description}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <!-- ── PROJECTS + SOCIAL IMPACT ───────────────── -->
+    <section class="grid grid-cols-12 gap-4">
+
+      <div class="col-span-12 sm:col-span-6 space-y-4">
+        <p class="text-xs font-semibold uppercase tracking-widest" style="color: var(--color-text-muted);">Progetti</p>
+        <div class="space-y-3">
+          {projects.slice(0, 4).map((p) => (
+            <div
+              class="cv-card p-4 border space-y-1"
+              data-tags={p.tags?.join(',')}
+              style="background-color: var(--color-surface); border-color: var(--color-border);"
+            >
+              <div class="flex items-start justify-between gap-2">
+                <p class="font-semibold text-sm" style="color: var(--color-text-primary);">{p.name}</p>
+                {p.url && (
+                  <a
+                    href={p.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="text-xs shrink-0"
+                    style="color: var(--color-accent);"
+                  >↗</a>
+                )}
+              </div>
+              <p class="text-xs leading-relaxed" style="color: var(--color-text-muted);">{p.description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div class="col-span-12 sm:col-span-6 space-y-4">
+        <p class="text-xs font-semibold uppercase tracking-widest" style="color: var(--color-text-muted);">Social Impact</p>
+        <div class="space-y-3">
+          {socialImpact?.map((item) => (
+            <div
+              class="p-4 border space-y-1"
+              style="background-color: var(--color-surface); border-color: var(--color-border);"
+            >
+              <div class="flex items-center gap-2">
+                <p class="font-semibold text-sm" style="color: var(--color-text-primary);">{item.name}</p>
+                <span
+                  class="text-xs px-1.5 py-0.5"
+                  style="background-color: color-mix(in srgb, var(--color-accent) 12%, transparent); color: var(--color-accent);"
+                >X</span>
+              </div>
+              <p class="text-xs leading-relaxed" style="color: var(--color-text-muted);">{item.description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ── FOOTER ─────────────────────────────────── -->
+    <footer
+      class="py-8 text-center text-xs border-t"
+      style="border-color: var(--color-border); color: var(--color-text-muted);"
+    >
+      {personal.name} · Aggiornato {new Date().toLocaleDateString('it-IT', { month: 'long', year: 'numeric' })}
+    </footer>
+  </main>
+</Layout>
+
+<script>
+  import '../islands/ModeSwitcher.ts';
+  import { modeStore } from '../islands/stores/modeStore.js';
+
+  // Apply card states reactively when mode changes
+  function applyCardStates(mode: string) {
+    document.querySelectorAll<HTMLElement>('.cv-card').forEach((card) => {
+      const tags = card.dataset.tags?.split(',') ?? [];
+      const isActive =
+        (mode === 'tech' && tags.some((t) => ['tech', 'logic', 'agile'].includes(t))) ||
+        (mode === 'creative' && tags.some((t) => ['creative', 'storytelling', 'marketing'].includes(t))) ||
+        (mode === 'human' && tags.some((t) => ['human', 'solving', 'international'].includes(t)));
+
+      card.dataset.state = isActive ? 'active' : 'passive';
+    });
+  }
+
+  modeStore.subscribe((mode) => applyCardStates(mode));
+  applyCardStates(modeStore.get());
+</script>

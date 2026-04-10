@@ -6,36 +6,150 @@
 
 @theme {
   --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
 }
 
-/* Smooth scroll padding for anchor links */
+/* ─── CSS Custom Properties — Knolling Design System ─── */
+
+:root {
+  --color-bg: #fafaf8;
+  --color-surface: #ffffff;
+  --color-border: #e2e2dc;
+  --color-text-primary: #1a1a18;
+  --color-text-muted: #6b6b65;
+  --color-accent: #1a1a18;
+  --color-accent-2: #6b6b65;
+  --card-opacity-active: 1;
+  --card-opacity-passive: 0.28;
+  --card-scale-passive: 1;
+
+  /* Animation durations */
+  --duration-micro: 150ms;
+  --duration-state: 300ms;
+  --duration-page: 500ms;
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-mode="tech"] {
+  --color-bg: #0a0a0f;
+  --color-surface: #12121a;
+  --color-border: #1e1e2e;
+  --color-text-primary: #e8e8f0;
+  --color-text-muted: #6b6b88;
+  --color-accent: #00ff88;
+  --color-accent-2: #0066ff;
+  --card-opacity-passive: 0.2;
+  --card-scale-passive: 1;
+}
+
+[data-mode="creative"] {
+  --color-bg: #fdfaf5;
+  --color-surface: #ffffff;
+  --color-border: #e8ddd0;
+  --color-text-primary: #2c1810;
+  --color-text-muted: #8b7355;
+  --color-accent: #e85d04;
+  --color-accent-2: #9b2226;
+  --card-opacity-passive: 0.35;
+  --card-scale-passive: 0.95;
+}
+
+[data-mode="human"] {
+  --color-bg: #f5f0eb;
+  --color-surface: #faf7f2;
+  --color-border: #d4c9b8;
+  --color-text-primary: #2d2926;
+  --color-text-muted: #7a6e62;
+  --color-accent: #2d6a4f;
+  --color-accent-2: #403d39;
+  --card-opacity-passive: 0.3;
+  --card-scale-passive: 0.97;
+}
+
+/* ─── Base styles ─── */
+
 html {
+  scroll-behavior: smooth;
   scroll-padding-top: 5rem;
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+  transition:
+    background-color var(--duration-state) var(--ease-standard),
+    color var(--duration-state) var(--ease-standard);
 }
 
-/* Custom scrollbar */
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─── Reduced motion ─── */
+
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0ms !important;
+    transition-duration: 0ms !important;
+  }
+}
+
+/* ─── Custom scrollbar ─── */
+
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 4px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0a0a0a;
+  background: var(--color-bg);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #3730a3;
-  border-radius: 3px;
+  background: var(--color-border);
+  border-radius: 2px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #6366f1;
+  background: var(--color-text-muted);
 }
 
-/* Animate-in utility (triggered by JS) */
+/* ─── Selection ─── */
+
+::selection {
+  background-color: color-mix(in srgb, var(--color-accent) 30%, transparent);
+}
+
+/* ─── Card state transitions ─── */
+
+.cv-card {
+  transition:
+    opacity var(--duration-state) var(--ease-standard),
+    transform var(--duration-state) var(--ease-standard),
+    border-color var(--duration-state) var(--ease-standard);
+}
+
+.cv-card[data-state="passive"] {
+  opacity: var(--card-opacity-passive);
+  transform: scale(var(--card-scale-passive));
+}
+
+.cv-card[data-state="active"] {
+  opacity: var(--card-opacity-active);
+  transform: translateY(-2px);
+}
+
+/* ─── Reveal animation ─── */
+
 .reveal {
   opacity: 0;
-  transform: translateY(28px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  transform: translateY(20px);
+  transition:
+    opacity var(--duration-state) var(--ease-standard),
+    transform var(--duration-state) var(--ease-standard);
 }
 
 .reveal.visible {
@@ -43,10 +157,18 @@ html {
   transform: translateY(0);
 }
 
-/* Stagger delay helpers */
 .delay-100 {
   transition-delay: 100ms;
 }
+
+.delay-200 {
+  transition-delay: 200ms;
+}
+
+.delay-300 {
+  transition-delay: 300ms;
+}
+
 
 .delay-200 {
   transition-delay: 200ms;

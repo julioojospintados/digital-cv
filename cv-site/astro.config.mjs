@@ -4,17 +4,19 @@ import { fileURLToPath } from 'url';
 import { resolve } from 'path';
 
 import tailwindcss from '@tailwindcss/vite';
+import lit from '@astrojs/lit';
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
 // https://astro.build/config
 export default defineConfig({
+  integrations: [lit()],
   vite: {
     plugins: [tailwindcss()],
     resolve: {
       alias: {
-        // Points to the root src/data/cv.ts — single source of truth
         '@cv-data': resolve(__dirname, '../src/data/cv.ts'),
+        '@cv-data-en': resolve(__dirname, '../src/data/cv.en.ts'),
       },
     },
   },

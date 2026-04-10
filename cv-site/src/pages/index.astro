@@ -1,70 +1,47 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Navbar from '../components/Navbar.astro';
-import HeroSection from '../components/HeroSection.astro';
-import ExperienceSection from '../components/ExperienceSection.astro';
-import SkillsSection from '../components/SkillsSection.astro';
-import EducationSection from '../components/EducationSection.astro';
-import ProjectsSection from '../components/ProjectsSection.astro';
 import { cvData } from '@cv-data';
 
-const { personal, social, languages, experience, education, certifications, technicalSkills, softSkills, transversalSkills, projects, interests } = cvData;
+const { personal } = cvData;
 ---
 
 <Layout
-  title={personal.name ? `${personal.name} — CV` : 'Digital CV'}
-  description={personal.summary || `Digital CV di ${personal.name}`}
+  title={`${personal.name} — Digital CV`}
+  description="Scegli come vuoi scoprire il CV di Giulio Occhipinti: modalità Tech, Creative o Human."
 >
-  <Navbar />
+  <main
+    class="min-h-screen flex flex-col items-center justify-center px-6 py-16 gap-12"
+    style="background-color: var(--color-bg); color: var(--color-text-primary);"
+  >
+    <!-- Header -->
+    <header class="text-center space-y-3 reveal visible">
+      <h1
+        class="text-4xl sm:text-5xl font-bold tracking-tight"
+        style="color: var(--color-text-primary);"
+      >
+        {personal.name}
+      </h1>
+      <p
+        class="text-base sm:text-lg italic"
+        style="color: var(--color-text-muted);"
+      >
+        "Chi sei, dipende da come mi guardi."
+      </p>
+    </header>
 
-  <main>
-    <HeroSection
-      personal={personal}
-      languages={languages}
-      social={social}
-    />
+    <!-- Mode selection (Lit island) -->
+    <entry-portal></entry-portal>
 
-    <ExperienceSection experience={experience} />
-
-    <SkillsSection
-      technicalSkills={technicalSkills}
-      softSkills={softSkills}
-      transversalSkills={transversalSkills}
-    />
-
-    <EducationSection
-      education={education}
-      certifications={certifications}
-    />
-
-    <ProjectsSection
-      projects={projects}
-      interests={interests}
-    />
-  </main>
-
-  <!-- Footer -->
-  <footer class="py-12 text-center text-xs text-neutral-700 border-t border-neutral-900">
-    <p>
-      {personal.name && <span>{personal.name} · </span>}
-      Aggiornato {new Date().toLocaleDateString('it-IT', { month: 'long', year: 'numeric' })}
+    <!-- Footer hint -->
+    <p
+      class="text-xs tracking-widest uppercase reveal visible delay-200"
+      style="color: var(--color-text-muted); opacity: 0.5;"
+    >
+      Scegli una prospettiva
     </p>
-  </footer>
+  </main>
 </Layout>
 
-<!-- Scroll reveal observer -->
 <script>
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    },
-    { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
-  );
-
-  document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+  import '../islands/EntryPortal.ts';
 </script>
