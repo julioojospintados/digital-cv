@@ -1,0 +1,555 @@
+/**
+ * cv.en.ts — English version of the CV data.
+ *
+ * Mirrors the structure of cv.ts exactly.
+ * Import cvDataEn wherever an English locale is needed.
+ */
+
+import type {
+  Social,
+  Language,
+  WorkExperience,
+  Education,
+  Certification,
+  Skill,
+  SoftSkill,
+  TransversalSkill,
+  MethodologyItem,
+  GrowthArea,
+  Project,
+  SocialImpactItem,
+} from "./cv.js";
+
+export const cvDataEn = {
+
+  // ── Personal info ──────────────────────────────────────────────────────────
+  personal: {
+    name: "Giulio Occhipinti",
+    title: "Frontend Developer · UX/UI · Digital Strategist",
+    summary: "Frontend Developer with 6+ years of experience on high-traffic enterprise systems (Intesa San Paolo, Aruba, Rai Pubblicità). T-shaped profile with deep expertise in Angular, WebComponents and microfrontend architectures, and broad competencies across UX/UI Design, digital strategy and creative arts. Framework-agnostic, impact-driven, with hands-on experience across 5 countries.",
+    location: "Turin, Italy",
+    age: 36,
+    avatar: "",
+    availability: "open" as "available" | "open" | "not-available",
+  },
+
+  // ── Contact & social ───────────────────────────────────────────────────────
+  social: [
+    { platform: "LinkedIn", url: "https://www.linkedin.com/in/giulio-occhipinti", label: "/in/giulio-occhipinti" },
+    { platform: "GitHub", url: "https://github.com/julioojospintados", label: "julioojospintados" },
+    { platform: "Email", url: "mailto:giulio.occhipinti.g@gmail.com", label: "giulio.occhipinti.g@gmail.com" },
+  ] as Social[],
+
+  // ── Languages ─────────────────────────────────────────────────────────────
+  languages: [
+    { name: "Italian", level: "Native" },
+    { name: "English", level: "B2", note: "Intensive course at Callan School, London" },
+    { name: "Spanish", level: "B1", note: "Work experience in Tulum, Mexico" },
+    { name: "French", level: "A2" },
+  ] as Language[],
+
+  // ── Work experience (most recent first) ───────────────────────────────────
+  experience: [
+    {
+      company: "ALTEN Italia",
+      role: "Senior Frontend Developer",
+      startDate: "2019-07",
+      endDate: "present",
+      location: "Turin, Italy",
+      remote: false,
+      description: "Enterprise systems in banking and technology operate at scale and demand interfaces that are both architecturally solid and usable by millions of people. I designed design systems, WebComponent libraries and microfrontend architectures for Intesa San Paolo and Aruba — every solution built to withstand time, stack changes and unexpected growth.",
+      highlights: [
+        "Architecture and development of a WebComponents UI library for Aruba (Lit, HTML, SASS), adopted cross-product at enterprise scale",
+        "Design of modular interfaces for Intesa San Paolo digital products with Angular, RXJS, HTML and SCSS",
+        "Delivery of an enterprise application with microfrontend and microservices architecture, with advanced state management via NGRX",
+        "Systematic introduction of unit testing with Jest, with direct impact on release stability and code coverage",
+        "Development of a brand interface in Angular with GraphQL integration for dynamic data access",
+      ],
+      skills: ["Angular", "Lit", "TypeScript", "HTML5", "SCSS", "RXJS", "NGRX", "WebComponents", "GraphQL", "Bootstrap", "Material Design", "Jest"],
+    },
+    {
+      company: "Music Agency (collaboration)",
+      role: "Operations & Strategy Support",
+      startDate: "2023-01",
+      endDate: "2024-12",
+      location: "Italy",
+      remote: true,
+      description: "Operational and strategic support for a music agency: communication management, coordination of projects between artists and digital platforms, editorial planning and interface with distributors.",
+      highlights: [
+        "Coordination between artists and digital platforms (Spotify, YouTube, distribution aggregators)",
+        "Management of institutional and social media communications for the agency",
+        "Project management of releases and promotional campaigns",
+      ],
+      skills: ["Project management", "Digital communication", "Social media", "Music business"],
+    },
+    {
+      company: "Freelance",
+      role: "Videographer – High-End Weddings",
+      startDate: "2022-01",
+      endDate: "present",
+      location: "Tuscany, Italy",
+      remote: false,
+      description: "Video production and direction for high-end Indian weddings in Tuscany. A sector demanding extreme attention to detail, complex logistics management and international aesthetic sensibility.",
+      highlights: [
+        "Video direction for ceremonies with hundreds of international guests",
+        "Crew management in multicultural and multi-day event contexts",
+        "Full post-production: color grading, narrative editing, delivery in premium formats",
+      ],
+      skills: ["Videography", "Direction", "Post-production", "Color grading", "Logistics management"],
+    },
+    {
+      company: "ForgeLab",
+      role: "Frontend Developer",
+      startDate: "2021-04",
+      endDate: "2022-03",
+      location: "Los Angeles, USA",
+      remote: true,
+      description: "At the height of the pandemic, US healthcare systems needed digital tools that could be built in weeks, not years. I contributed fully remotely — from Turin with a Los Angeles-based team — to an application for managing and visualising Covid-19 data in US hospital facilities. Concrete proof that an effective frontend can become critical infrastructure in a global crisis.",
+      highlights: [
+        "Development of React dashboards for monitoring and managing Covid-19 data in US hospitals",
+        "Integration with REST APIs and backend systems for real-time clinical data visualisation",
+        "Full remote collaboration with cross-cultural USA/Italy team using Agile methodology",
+      ],
+      skills: ["React", "Angular", "GraphQL", "Bootstrap", "Material Design", "REST API", "Agile"],
+    },
+    {
+      company: "Consoft",
+      role: "Frontend Developer",
+      startDate: "2019-07",
+      endDate: "2021-03",
+      location: "Turin, Italy",
+      remote: false,
+      description: "Internal processes at media and banking organisations often live inside rigid, poorly ergonomic legacy systems. I designed and developed management applications for Rai Pubblicità and Intesa San Paolo — every tool delivered reduced daily operational friction for end users, transforming slow procedures into fluid workflows.",
+      highlights: [
+        "Development of internal management applications for Rai Pubblicità with Angular, Spring and Bootstrap",
+        "Development of a document and revision management tool for Intesa San Paolo via JSF",
+        "Translation of complex business requirements into interfaces usable by non-technical operators",
+      ],
+      skills: ["Angular", "Spring", "JSF", "Java", "SQL", "Bootstrap", "HTML5", "SCSS"],
+    },
+    {
+      company: "Satispay",
+      role: "External Collaborator",
+      startDate: "2018-06",
+      endDate: "2019-06",
+      location: "Milan, Italy",
+      remote: false,
+      description: "External collaboration with Satispay, one of the most relevant fintech scale-ups in the Italian market. A fast-growth context where every contribution had to be immediate and impact-oriented — and where I consolidated the habit of working in high-velocity environments with still-evolving processes.",
+      highlights: [],
+      skills: ["Fintech", "Startup mindset", "Digital communication"],
+    },
+    {
+      company: "Cultural festivals and events",
+      role: "MC & Live Host",
+      startDate: "2015-01",
+      endDate: "present",
+      location: "Italy",
+      remote: false,
+      description: "Presenter and moderator for events, cultural festivals and live shows across Italy. Theatre improvisation skills applied to manage the stage, the audience and unexpected situations with composure and authority.",
+      highlights: [
+        "Hosting of multidisciplinary cultural festivals (music, art, theatre)",
+        "Moderation of panels and talks with international guests",
+        "Real-time crisis management on stage thanks to applied improvisation training",
+      ],
+      skills: ["Public speaking", "Improvisation", "Moderation", "Hosting", "Audience management"],
+    },
+    {
+      company: "Freelance",
+      role: "Photographer",
+      startDate: "2009-10",
+      endDate: "present",
+      location: "Turin, Italy",
+      remote: false,
+      description: "Continuous freelance photography practice alongside professional roles, with projects in Italy, Tanzania and beyond.",
+      highlights: [],
+      skills: ["Photography", "Editing", "Post-production"],
+    },
+    {
+      company: "Corriere di Chieri",
+      role: "Freelance Journalist",
+      startDate: "2014-09",
+      endDate: "2017-06",
+      location: "Chieri, Turin",
+      remote: false,
+      description: "Every article is an exercise in listening, synthesis and storytelling within strict constraints. I collaborated as a writer for the Corriere di Chieri, covering cultural events and local news — and I refined the ability to transform raw information into stories people want to read. A skill I apply daily in copy, technical documentation and product storytelling.",
+      highlights: [],
+      skills: ["Journalism", "Writing", "Editing", "Editorial work"],
+    },
+    {
+      company: "Artiversum – Cultural Association",
+      role: "Event Organiser",
+      startDate: "2017-01",
+      endDate: "2018-05",
+      location: "Turin, Italy",
+      remote: false,
+      description: "Organisation of cultural festivals in the Quadrilatero Romano district of Turin, including the Square Festival. Coordination of artists, logistics and communications.",
+      highlights: [
+        "Co-organiser of the Square Festival at Artiversum – Quadrilatero Romano, Turin",
+      ],
+      skills: ["Event management", "Communication", "Coordination"],
+    },
+    {
+      company: "FreeGinevro / Immaginazione e Lavoro",
+      role: "Graphic Designer",
+      startDate: "2017-06",
+      endDate: "2018-10",
+      location: "Turin, Italy",
+      remote: false,
+      description: "Visual communication is problem solving applied to aesthetics: every brief is an attention problem to solve in seconds. I created visual materials and brand identity assets for local clients, combining technical graphic design training with an aesthetic sensibility developed through years of photography — and each project reinforced the link between strategic thinking and creative production.",
+      highlights: [
+        "Design of graphic materials and brand identity for clients in the local and cultural sector",
+        "Application of visual hierarchy and typography principles to maximise communicative impact",
+      ],
+      skills: ["Graphic design", "Brand identity", "Adobe Suite", "Typography", "Visual design"],
+    },
+    {
+      company: "Mondadori Group",
+      role: "Sales Assistant",
+      startDate: "2015-04",
+      endDate: "2018-04",
+      location: "Turin, Italy",
+      remote: false,
+      description: "Sales and customer consultancy at Mondadori Store, Area 12, Turin. Management of the books section and customer support.",
+      highlights: [],
+      skills: ["Customer service", "Sales", "Department management"],
+    },
+    {
+      company: "None Teatro",
+      role: "Theatre and Improvisation Teacher",
+      startDate: "2016-09",
+      endDate: "2020-02",
+      location: "None, Turin",
+      remote: false,
+      description: "Theatre improvisation can only be taught by someone who already knows how to inhabit uncertainty. I led courses for None Teatro students, transmitting the 'Yes, and...' method as a practice of active listening and collective building — and each session sharpened my ability to read people's needs quickly and adapt my communication register in real time.",
+      highlights: [
+        "Delivery of improvisation and theatre courses for students at different levels",
+        "Application of the 'Yes, and...' method as a pedagogical tool to develop creativity and problem solving",
+      ],
+      skills: ["Teaching", "Theatre improvisation", "Public speaking", "Facilitation", "Creative pedagogy"],
+    },
+    {
+      company: "B-Teatro",
+      role: "AV Technician and Actor",
+      startDate: "2014-10",
+      endDate: "2018-02",
+      location: "Turin, Italy",
+      remote: false,
+      description: "Technical management of audio and lighting for theatrical productions. Participation as actor and improviser in shows in Italy and Luxembourg.",
+      highlights: [
+        "Theatre improvisation performances in Italy and Luxembourg",
+      ],
+      skills: ["Technical direction", "Audio", "Lighting", "Acting", "Theatre improvisation"],
+    },
+    {
+      company: "Bestar Hotel",
+      role: "Front Desk Receptionist",
+      startDate: "2012-12",
+      endDate: "2013-06",
+      location: "Tulum, Mexico",
+      remote: false,
+      description: "Front desk management at an international resort in Tulum, serving a predominantly English- and Spanish-speaking clientele.",
+      highlights: [],
+      skills: ["Hospitality", "English", "Spanish", "Customer service"],
+    },
+    {
+      company: "UCI Cinemas",
+      role: "Cinema Operator",
+      startDate: "2013-07",
+      endDate: "2015-03",
+      location: "Turin, Italy",
+      remote: false,
+      description: "At one of Italy's most-visited cinema chains, every day brought hundreds of guests with different expectations. I managed theatre operations, box office and front-of-house — and learned that every touchpoint with the public, however brief, builds or breaks an experience. A lesson I carry into every UX project.",
+      highlights: [],
+      skills: ["Customer service", "Audience management", "Theatre operations"],
+    },
+    {
+      company: "Starbucks Coffee",
+      role: "Barista",
+      startDate: "2011-01",
+      endDate: "2011-06",
+      location: "London, United Kingdom",
+      remote: false,
+      description: "Operational role at a Starbucks location in London, serving an international clientele.",
+      highlights: [],
+      skills: ["English", "Teamwork", "Customer service"],
+    },
+    {
+      company: "Sogni Animazione",
+      role: "Photographer",
+      startDate: "2009-11",
+      endDate: "2010-04",
+      location: "Zanzibar, Tanzania",
+      remote: false,
+      description: "Head of the photography centre at a tourist entertainment facility in Zanzibar.",
+      highlights: [],
+      skills: ["Photography", "Tourist entertainment"],
+    },
+    {
+      company: "Metamorfosi / Fun Factory",
+      role: "Head of Tourist Entertainment",
+      startDate: "2010-05",
+      endDate: "2012-09",
+      location: "Ravenna and Crotone, Italy",
+      remote: false,
+      description: "Managing an entertainment team at highly seasonal beach resorts means leading in the unpredictable, every single day. I coordinated entertainment programmes and staff management at facilities in Ravenna and Crotone — and discovered that leadership is built through improvisation, not control: a conviction that now shapes my approach to any team effort.",
+      highlights: [
+        "Coordination of entertainment teams in high-variability, high-pressure seasonal contexts",
+        "Design and delivery of entertainment programmes for international guests",
+      ],
+      skills: ["Leadership", "Team management", "Event management", "Entertainment", "Interpersonal communication"],
+    },
+    {
+      company: "Caveja srl",
+      role: "Kitchen Assistant and Bar Operator",
+      startDate: "2008-06",
+      endDate: "2010-04",
+      location: "Turin, Italy",
+      remote: false,
+      description: "Intense operational pace, minimal margin for error and demanding clientele: the kitchen and the bar teach you to work under pressure with precision and no excuses. I managed the counter and supported the kitchen on often late-night shifts — and I carried this operational discipline into every subsequent context, from London to Zanzibar, from the stage to software architecture.",
+      highlights: [],
+      skills: ["Teamwork", "Operational management", "Customer service", "Precision under pressure"],
+    },
+  ] as WorkExperience[],
+
+  // ── Education ─────────────────────────────────────────────────────────────
+  education: [
+    {
+      institution: "Istituto Europeo di Design (IED)",
+      degree: "Master's Degree",
+      field: "Digital Communication and Media/Multimedia",
+      startDate: "2022-11",
+      endDate: "2023-05",
+      location: "Turin, Italy",
+    },
+    {
+      institution: "Immaginazione e Lavoro",
+      degree: "Specialisation Course",
+      field: "Software Development",
+      startDate: "2018-11",
+      endDate: "2019-04",
+      location: "Turin, Italy",
+    },
+    {
+      institution: "Immaginazione e Lavoro",
+      degree: "Certificate",
+      field: "Graphic Design",
+      startDate: "2018-06",
+      endDate: "2018-07",
+      location: "Turin, Italy",
+    },
+    {
+      institution: "Immaginazione e Lavoro",
+      degree: "Certificate",
+      field: "Social Media Management",
+      startDate: "2018-01",
+      endDate: "2018-06",
+      location: "Turin, Italy",
+    },
+    {
+      institution: "Istituto Tecnico Turistico Boselli",
+      degree: "High School Diploma",
+      field: "Tourism and Hospitality",
+      startDate: "2011-09",
+      endDate: "2016-06",
+      location: "Turin, Italy",
+      grade: "80/100",
+    },
+    {
+      institution: "Callan School",
+      degree: "Intensive English Course",
+      field: "English Language",
+      startDate: "2010-01",
+      endDate: "2010-06",
+      location: "Oxford Street, London",
+    },
+  ] as Education[],
+
+  // ── Certifications ────────────────────────────────────────────────────────
+  certifications: [
+    {
+      name: "UX Design Professional Certificate",
+      issuer: "IBM",
+      date: "2025-01",
+      inProgress: true,
+    },
+    {
+      name: "Digital Marketing Specialist",
+      issuer: "Istituto Europeo di Design (IED)",
+      date: "2023-05",
+    },
+    {
+      name: "Bartending Course",
+      issuer: "Ateneo di Bartending Planet One",
+      date: "2018-01",
+    },
+    {
+      name: "Theatre Improvisation Course",
+      issuer: "B-Teatro",
+      date: "2013-01",
+    },
+  ] as Certification[],
+
+  // ── Technical skills ──────────────────────────────────────────────────────
+  technicalSkills: [
+    { name: "Angular", level: "Esperto", icon: "angular" },
+    { name: "HTML5", level: "Esperto", icon: "html5" },
+    { name: "CSS / SCSS", level: "Esperto", icon: "css3" },
+    { name: "TypeScript", level: "Avanzato", icon: "typescript" },
+    { name: "JavaScript", level: "Avanzato", icon: "javascript" },
+    { name: "Lit", level: "Avanzato", icon: "lit" },
+    { name: "RXJS", level: "Avanzato" },
+    { name: "NGRX", level: "Intermedio" },
+    { name: "WebComponents", level: "Avanzato" },
+    { name: "React", level: "Intermedio", icon: "react" },
+    { name: "Git", level: "Avanzato", icon: "git" },
+    { name: "Bootstrap", level: "Avanzato", icon: "bootstrap" },
+    { name: "Material Design", level: "Intermedio" },
+    { name: "GraphQL", level: "Base", icon: "graphql" },
+    { name: "SQL", level: "Intermedio" },
+    { name: "Jest", level: "Intermedio", icon: "jest" },
+    { name: "Wordpress", level: "Base", icon: "wordpress" },
+    { name: "Figma", level: "Intermedio", icon: "figma" },
+    { name: "SEO", level: "Intermedio" },
+    { name: "SEM", level: "Base" },
+    { name: "UX Research", level: "Intermedio" },
+    { name: "Wireframing", level: "Intermedio" },
+    { name: "Node.js", level: "Avanzato", icon: "nodedotjs" },
+    { name: "REST API", level: "Avanzato" },
+    { name: "Accessibility / WCAG", level: "Intermedio" },
+    { name: "Video editing", level: "Intermedio" },
+  ] as Skill[],
+
+  // ── Soft skills ───────────────────────────────────────────────────────────
+  softSkills: [
+    { name: "Effective communication", description: "Over 10 years of public event hosting and theatre training: ability to convey complex messages clearly, engagingly and calibrated to any type of audience." },
+    { name: "Applied creativity", description: "Multidisciplinary background (software development, photography, theatre, writing, events) that generates original approaches and unexpected solutions even in technical contexts." },
+    { name: "Cultural adaptability", description: "Work experience across 5 countries (Italy, UK, Mexico, Tanzania, Luxembourg), each with a profoundly different organisational, linguistic and cultural context." },
+    { name: "Relational intelligence", description: "Natural ability to build trust with colleagues, clients and stakeholders, developed in high-variability environments: from international customer service to cross-functional team management." },
+    { name: "Lateral problem solving", description: "Analytical and cross-domain approach to problems: experience in complex enterprise environments (microfrontend architectures, legacy systems) and high-stress live situations (technical direction, event hosting)." },
+    { name: "Autonomy and ownership", description: "Independent management of parallel projects (freelance photography, videography, strategic consultancy) with the ability to set priorities, meet deadlines and deliver results without direct supervision." },
+    { name: "Resilience and adaptive thinking", description: "Clarity under pressure trained through theatre technical direction, live event hosting and the management of enterprise systems in production. The unexpected is treated as data to learn from." },
+    { name: "Aesthetic sensibility", description: "Over 15 years of photographic practice and visual production translate into more effective UI choices, with a direct impact on brand perception and the quality of the user experience." },
+    { name: "T-shaped thinking", description: "Ability to bridge engineering (Frontend), design (UX/UI) and marketing (SEO/SEM), reducing communication silos and accelerating the time-to-market of digital products." },
+  ] as SoftSkill[],
+
+  // ── Transversal skills ────────────────────────────────────────────────────
+  transversalSkills: [
+    { name: "Event management", description: "Conception and production of multidisciplinary cultural festivals (Square Festival, Artiversum – Quadrilatero Romano, Turin): artist coordination, logistics and institutional communications." },
+    { name: "Photography", description: "Continuous freelance practice since 2009, with an international portfolio (Tanzania, Mexico, Italy). Specialisation in reportage and portraiture." },
+    { name: "Theatre and improvisation", description: "Training and stage work with B-Teatro (2013–2020), performances in Italy and Luxembourg. Improvisation trains active listening, rapid thinking and the ability to turn failure into a resource." },
+    { name: "Public speaking", description: "Hosting of festivals, panels and talks with international guests since 2015. Ability to manage diverse audiences and unexpected live situations with composure and authority." },
+    { name: "Graphic design", description: "Specialist training (Immaginazione e Lavoro, 2018) with ongoing application in the production of visual materials for events, brand and digital communications." },
+    { name: "Social media management", description: "Specialist training (Immaginazione e Lavoro, 2018) and practical application in editorial management for cultural event channels and the music agency." },
+    { name: "Digital marketing", description: "IED Master in Digital Communication (2022–2023): content strategy, SEO/SEM, analytics, campaign management and brand storytelling in B2C and B2B contexts." },
+    { name: "UX / UI Design", description: "IBM UX Design Professional Certificate in progress: User Research, Information Architecture, Wireframing and high-fidelity prototyping with Figma." },
+    { name: "Videography", description: "Direction and video production for high-end weddings in Tuscany: crew management in multicultural contexts, color grading and narrative editing for an international premium market." },
+    { name: "Agile Methodology", description: "Scrum and Kanban applied in distributed enterprise teams (ALTEN, Intesa San Paolo, Aruba) and in personal creative projects. Hands-on experience in sprint planning, retrospectives and backlog management." },
+    { name: "AI-Augmented Productivity", description: "Systematic integration of GitHub Copilot, ChatGPT and Midjourney into development, UX research and content production workflows. AI expands quality and speed without replacing critical judgement." },
+    { name: "Writing and poetry", description: "Award-winning author at international level (Italy and Australia). Creative writing practice translates into more effective copy, product storytelling and strategic synthesis skills." },
+    { name: "Music industry", description: "Coordination between artists, digital aggregators and streaming platforms (Spotify, YouTube Music). Experience in release management, strategic communication and editorial project management (2023–2024)." },
+  ] as TransversalSkill[],
+
+  // ── Methodology & Mindset ─────────────────────────────────────────────────
+  methodology: [
+    {
+      name: "Agile & Iterative Development",
+      description: "Every project is an opportunity for incremental learning. Short delivery cycles reduce risk, keep focus on business objectives and allow rapid adaptation to feedback. I have applied this mindset on enterprise systems with distributed teams and on creative projects managed independently.",
+    },
+    {
+      name: "AI as a Value Multiplier",
+      description: "Artificial intelligence is integrated as an extension of the cognitive process, not a shortcut. GitHub Copilot for development velocity, ChatGPT for rapid conceptual prototyping, Midjourney for visual exploration. The goal is to reduce time on repetitive tasks and expand the solution space during creative phases.",
+    },
+    {
+      name: "T-shaped Problem Solving",
+      description: "A background spanning engineering, design and marketing makes it possible to identify solution patterns that mono-disciplinary teams cannot see. This cross-domain perspective is the key professional differentiator: not just executing, but identifying the right problem to solve.",
+    },
+    {
+      name: "Framework-Agnostic Thinking",
+      description: "Exposure to Angular, React, Lit, WebComponents, Astro and heterogeneous creative paradigms has developed the ability to choose the tool based on the problem — not the other way around. This avoids technological solutionism and ensures more solid, maintainable architectures oriented towards long-term value.",
+    },
+  ] as MethodologyItem[],
+
+  // ── Growth areas (presented as evolution paths) ────────────────────────────
+  growthAreas: [
+    {
+      name: "Multifaceted curiosity",
+      reframe: "The natural tendency to explore diverse fields, while requiring conscious focus management, is the root of a genuinely framework-agnostic profile. It is not about scattering attention, but an adaptive strategy: every skill acquired becomes a new angle from which to read technical and creative problems. It is the source of the lateral thinking that generates solutions those with only one domain cannot see.",
+    },
+  ] as GrowthArea[],
+
+  // ── Personal projects ─────────────────────────────────────────────────────
+  projects: [
+    {
+      name: 'Film "Double"',
+      description: 'Deuteragonist in the short film "Double", presented at the Independent Film Festival in San Francisco in 2022.',
+      date: "2022-01",
+      tags: ["Cinema", "Acting"],
+    },
+    {
+      name: "Covid-19 Data Management App",
+      description: "Development with React of an application for the management and visualisation of Covid-19 data across multiple US hospitals.",
+      date: "2022-01",
+      tags: ["React", "Healthcare", "USA"],
+    },
+    {
+      name: "WebComponents Design System for Aruba",
+      description: "WebComponents UI library built with Lit, HTML and SASS for Aruba, reusable across products.",
+      date: "2022-06",
+      tags: ["Lit", "WebComponents", "Design System", "Aruba"],
+    },
+    {
+      name: "Square Festival – Artiversum",
+      description: "Co-founder and organiser of the Square Festival in the Quadrilatero Romano district of Turin, a multidisciplinary cultural event.",
+      date: "2017-05",
+      tags: ["Event management", "Culture", "Turin"],
+    },
+    {
+      name: "Invented word — Turin International Book Fair",
+      description: "I created and publicly presented a new word — with its roots, sound and meaning — at the Turin International Book Fair. An extreme exercise in linguistic and poetic synthesis: the same capacity for maximum impact with minimum means that I apply every day in clean code and product communication.",
+      date: "2019-05",
+      tags: ["Poetry", "Linguistics", "Creativity", "Book Fair"],
+    },
+    {
+      name: "Internationally awarded poetry",
+      description: "Author of poems awarded in national and international competitions (Italy and Australia). Creative writing and software development share a common root: both require synthesis, formal precision and the ability to generate meaning within explicit constraints.",
+      tags: ["Poetry", "Creative writing", "International awards"],
+    },
+    {
+      name: "The 'Moustache Paper' — featured in La Stampa",
+      description: "A school paper on moustaches, an involuntary case of marketing and anthropological curiosity, ends up on the pages of La Stampa. Practical proof that originality of thought, even in youth and seemingly marginal contexts, can generate unexpected public attention — and that narrative matters more than format.",
+      tags: ["Storytelling", "Involuntary marketing", "Media", "Writing"],
+    },
+  ] as Project[],
+
+  // ── Interests ─────────────────────────────────────────────────────────────
+  interests: [
+    "Photography",
+    "Theatre and improvisation",
+    "Writing and poetry",
+    "Independent cinema",
+    "Travel and international cultures",
+    "Open source",
+  ] as string[],
+
+  // ── Social impact ─────────────────────────────────────────────────────────
+  socialImpact: [
+    {
+      name: "Crisis intervention",
+      description: "Direct intervention in a suicide risk situation: signal recognition, active listening and guidance towards professional support. One of the most formative experiences in terms of full presence and the capacity to sit with the unexpected without fleeing from emotional complexity. 'Yes, and...' in its most radical form: accepting the other person's reality and adding presence.",
+      tags: ["Empathy", "Active listening", "Crisis management", "Human skills"],
+    },
+    {
+      name: "Legal assistance for an immigrant in difficulty",
+      description: "Concrete support for a Bangladeshi young man struggling with the Italian legal system: navigation through the bureaucratic maze, translation of the normative context and connection with available resources. The 'Yes, and...' applied to real life: accepting the situation without stepping back and adding value where others walk past.",
+      tags: ["Solidarity", "Interculturalism", "Assistance", "Civic engagement"],
+    },
+    {
+      name: "Public intervention in defence of a third party",
+      description: "Prompt intervention in a street danger situation in defence of a third party. Theatre improvisation teaches you to stay in the moment without being paralysed: this capability, applied off-stage, translates into clarity and action when others hesitate. A form of situational leadership that cannot be learned from books.",
+      tags: ["Civic courage", "Situational leadership", "Rapid thinking"],
+    },
+  ] as SocialImpactItem[],
+
+} as const satisfies Record<string, unknown>;
+
+export type CvDataEn = typeof cvDataEn;
