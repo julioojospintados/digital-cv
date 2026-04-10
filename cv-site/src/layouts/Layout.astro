@@ -36,12 +36,85 @@ const {
   </head>
 
   <body>
+    <!-- Custom cursor -->
+    <div id="cursor-dot" aria-hidden="true"></div>
+    <div id="cursor-ring" aria-hidden="true"></div>
+
     <slot />
 
     <!-- Init mode from store on client -->
     <script>
       import { initMode } from '../islands/stores/modeStore';
       initMode();
+    </script>
+
+    <!-- Lenis smooth scroll + GSAP ScrollTrigger wiring -->
+    <script>
+      import Lenis from 'lenis';
+      import { gsap } from 'gsap';
+      import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+      gsap.registerPlugin(ScrollTrigger);
+
+      const lenis = new Lenis({ lerp: 0.08, syncTouch: true });
+      lenis.on('scroll', ScrollTrigger.update);
+      gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+      gsap.ticker.lagSmoothing(0);
+
+      // Expose for pages that need direct access
+      (window as any).__lenis = lenis;
+    </script>
+
+    <!-- Custom cursor script -->
+    <script>
+      import { gsap } from 'gsap';
+
+      const dot  = document.getElementById('cursor-dot')!;
+      const ring = document.getElementById('cursor-ring')!;
+
+      let mouseX = window.innerWidth / 2;
+      let mouseY = window.innerHeight / 2;
+      let ringX  = mouseX;
+      let ringY  = mouseY;
+
+      // Hide default cursor on interactive elements
+      document.querySelectorAll('a, button, [role="button"], input, textarea, select').forEach(el => {
+        (el as HTMLElement).style.cursor = 'none';
+      });
+
+      window.addEventListener('mousemove', (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+        gsap.to(dot, { x: mouseX - 4, y: mouseY - 4, duration: 0.05, ease: 'none' });
+      });
+
+      // Ring follows with lag
+      gsap.ticker.add(() => {
+        ringX += (mouseX - ringX) * 0.12;
+        ringY += (mouseY - ringY) * 0.12;
+        gsap.set(ring, { x: ringX - 20, y: ringY - 20 });
+      });
+
+      // Hover states
+      const interactives = document.querySelectorAll('a, button, [role="button"], .cv-card, .knoll-item');
+      interactives.forEach(el => {
+        el.addEventListener('mouseenter', () => {
+          dot.classList.add('cursor--hover');
+          ring.classList.add('cursor--hover');
+        });
+        el.addEventListener('mouseleave', () => {
+          dot.classList.remove('cursor--hover');
+          ring.classList.remove('cursor--hover');
+        });
+      });
+
+      // Hide on leave, show on enter
+      document.addEventListener('mouseleave', () => {
+        gsap.to([dot, ring], { opacity: 0, duration: 0.3 });
+      });
+      document.addEventListener('mouseenter', () => {
+        gsap.to([dot, ring], { opacity: 1, duration: 0.3 });
+      });
     </script>
   </body>
 </html>

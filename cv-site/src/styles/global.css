@@ -1,24 +1,72 @@
+/* Gilroy — self-hosted. File .woff2/.woff vanno in public/fonts/Gilroy/ */
+@font-face {
+  font-family: 'Gilroy';
+  src: url('/fonts/Gilroy/Gilroy-Regular.woff2') format('woff2'),
+    url('/fonts/Gilroy/Gilroy-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gilroy';
+  src: url('/fonts/Gilroy/Gilroy-Medium.woff2') format('woff2'),
+    url('/fonts/Gilroy/Gilroy-Medium.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gilroy';
+  src: url('/fonts/Gilroy/Gilroy-SemiBold.woff2') format('woff2'),
+    url('/fonts/Gilroy/Gilroy-SemiBold.woff') format('woff');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gilroy';
+  src: url('/fonts/Gilroy/Gilroy-Bold.woff2') format('woff2'),
+    url('/fonts/Gilroy/Gilroy-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Gilroy';
+  src: url('/fonts/Gilroy/Gilroy-ExtraBold.woff2') format('woff2'),
+    url('/fonts/Gilroy/Gilroy-ExtraBold.woff') format('woff');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
 @import "tailwindcss";
-@import "@fontsource/inter/400.css";
-@import "@fontsource/inter/500.css";
-@import "@fontsource/inter/600.css";
-@import "@fontsource/inter/700.css";
 
 @theme {
-  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Gilroy', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Gilroy', ui-sans-serif, system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
 }
 
 /* ─── CSS Custom Properties — Knolling Design System ─── */
 
 :root {
-  --color-bg: #fafaf8;
-  --color-surface: #ffffff;
-  --color-border: #e2e2dc;
-  --color-text-primary: #1a1a18;
-  --color-text-muted: #6b6b65;
-  --color-accent: #1a1a18;
-  --color-accent-2: #6b6b65;
+  /* Base ottanio — colore di sfondo primario del progetto */
+  --color-ottanio: rgba(8, 73, 67, 1);
+  --color-ottanio-dark: rgba(5, 50, 45, 1);
+  --color-ottanio-light: rgba(12, 100, 91, 1);
+
+  --color-bg: rgba(8, 73, 67, 1);
+  --color-surface: rgba(12, 95, 87, 0.5);
+  --color-border: rgba(255, 255, 255, 0.12);
+  --color-text-primary: rgba(245, 240, 230, 1);
+  --color-text-muted: rgba(180, 210, 205, 0.7);
+  --color-accent: rgba(255, 255, 255, 0.9);
+  --color-accent-2: rgba(180, 210, 205, 0.5);
   --card-opacity-active: 1;
   --card-opacity-passive: 0.28;
   --card-scale-passive: 1;
@@ -30,39 +78,40 @@
   --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Mode overrides — mantengono sfondo ottanio, cambiano solo accent */
 [data-mode="tech"] {
-  --color-bg: #0a0a0f;
-  --color-surface: #12121a;
-  --color-border: #1e1e2e;
-  --color-text-primary: #e8e8f0;
-  --color-text-muted: #6b6b88;
-  --color-accent: #00ff88;
-  --color-accent-2: #0066ff;
+  --color-bg: rgba(8, 73, 67, 1);
+  --color-surface: rgba(5, 50, 45, 0.6);
+  --color-border: rgba(0, 255, 200, 0.2);
+  --color-text-primary: rgba(220, 255, 245, 1);
+  --color-text-muted: rgba(0, 255, 200, 0.5);
+  --color-accent: rgba(0, 255, 200, 1);
+  --color-accent-2: rgba(0, 180, 140, 1);
   --card-opacity-passive: 0.2;
   --card-scale-passive: 1;
 }
 
 [data-mode="creative"] {
-  --color-bg: #fdfaf5;
-  --color-surface: #ffffff;
-  --color-border: #e8ddd0;
-  --color-text-primary: #2c1810;
-  --color-text-muted: #8b7355;
-  --color-accent: #e85d04;
-  --color-accent-2: #9b2226;
-  --card-opacity-passive: 0.35;
+  --color-bg: rgba(8, 73, 67, 1);
+  --color-surface: rgba(50, 30, 10, 0.4);
+  --color-border: rgba(255, 107, 53, 0.25);
+  --color-text-primary: rgba(255, 240, 220, 1);
+  --color-text-muted: rgba(255, 180, 130, 0.6);
+  --color-accent: rgba(255, 107, 53, 1);
+  --color-accent-2: rgba(255, 60, 0, 1);
+  --card-opacity-passive: 0.2;
   --card-scale-passive: 0.95;
 }
 
 [data-mode="human"] {
-  --color-bg: #f5f0eb;
-  --color-surface: #faf7f2;
-  --color-border: #d4c9b8;
-  --color-text-primary: #2d2926;
-  --color-text-muted: #7a6e62;
-  --color-accent: #2d6a4f;
-  --color-accent-2: #403d39;
-  --card-opacity-passive: 0.3;
+  --color-bg: rgba(8, 73, 67, 1);
+  --color-surface: rgba(20, 60, 30, 0.4);
+  --color-border: rgba(240, 200, 127, 0.25);
+  --color-text-primary: rgba(250, 240, 215, 1);
+  --color-text-muted: rgba(240, 200, 127, 0.6);
+  --color-accent: rgba(240, 200, 127, 1);
+  --color-accent-2: rgba(200, 155, 70, 1);
+  --card-opacity-passive: 0.2;
   --card-scale-passive: 0.97;
 }
 
@@ -121,6 +170,190 @@ body {
 
 ::selection {
   background-color: color-mix(in srgb, var(--color-accent) 30%, transparent);
+}
+
+/* ─── Hide default cursor globally ─── */
+
+* {
+  cursor: none !important;
+}
+
+/* ─── Custom Cursor ─── */
+
+#cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 8px;
+  height: 8px;
+  background: var(--color-accent);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99999;
+  mix-blend-mode: difference;
+  transition: width 0.25s ease, height 0.25s ease, opacity 0.25s ease;
+  will-change: transform;
+}
+
+#cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 40px;
+  height: 40px;
+  border: 1.5px solid var(--color-accent);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 99998;
+  opacity: 0.5;
+  transition: width 0.3s ease, height 0.3s ease, border-color 0.3s ease, opacity 0.3s ease;
+  will-change: transform;
+}
+
+#cursor-dot.cursor--hover {
+  width: 12px;
+  height: 12px;
+}
+
+#cursor-ring.cursor--hover {
+  width: 56px;
+  height: 56px;
+  opacity: 0.8;
+  border-color: var(--color-accent);
+}
+
+@media (hover: none),
+(pointer: coarse) {
+
+  #cursor-dot,
+  #cursor-ring {
+    display: none;
+  }
+
+  * {
+    cursor: auto !important;
+  }
+}
+
+/* ─── Noise grain overlay ─── */
+
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9998;
+  opacity: 0.04;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+}
+
+/* ─── Display typography utilities ─── */
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.text-display-hero {
+  font-family: var(--font-display);
+  font-size: clamp(3.5rem, 10vw, 9rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 0.92;
+}
+
+.text-display-section {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 4.5rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.text-label-caps {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+/* ─── Magnetic button base ─── */
+
+.magnetic {
+  transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* ─── Scroll reveal ─── */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.7s var(--ease-standard), transform 0.7s var(--ease-standard);
+}
+
+/* ─── Scroll progress bar ─── */
+
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  background: var(--color-accent);
+  z-index: 9997;
+  width: 0%;
+  transition: width 0.1s linear;
+}
+
+/* ─── Preloader ─── */
+
+#preloader {
+  position: fixed;
+  inset: 0;
+  background: var(--color-bg);
+  z-index: 99997;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+#preloader .pre-name {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 6vw, 5rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: var(--color-text-primary);
+  overflow: hidden;
+}
+
+#preloader .pre-bar {
+  width: 120px;
+  height: 1px;
+  background: var(--color-border);
+  position: relative;
+  overflow: hidden;
+}
+
+#preloader .pre-bar::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--color-accent);
+  transform: translateX(-100%);
+  animation: pre-progress 1.4s cubic-bezier(0.76, 0, 0.24, 1) forwards;
+}
+
+@keyframes pre-progress {
+  to {
+    transform: translateX(0);
+  }
 }
 
 /* ─── Card state transitions ─── */

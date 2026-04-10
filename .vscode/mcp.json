@@ -92,12 +92,25 @@
         "BRAVE_API_KEY": "${input:brave-api-key}"
       }
     },
-    // MEMORY — persistent knowledge graph across sessions (great for context)
-    // "memory": {
+    // ─── PSICOLOGIA APPLICATA ─────────────────────────────────────────────
+    // PERSONA SESSIONS — structured coaching, interview prep, personal reflection with timer
+    // "persona-sessions": {
     //   "type": "stdio",
     //   "command": "npx",
-    //   "args": ["-y", "@modelcontextprotocol/server-memory"]
+    //   "args": [
+    //     "-y",
+    //     "mcp-persona-sessions"
+    //   ]
     // },
+    // MEMORY — persistent knowledge graph across sessions (great for context)
+    "memory": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-memory"
+      ]
+    },
     // FETCH — fetch any URL, scrape web content, call REST APIs
     // "fetch": {
     //   "type": "stdio",
@@ -249,15 +262,5 @@
     //   "command": "npx",
     //   "args": ["-y", "sec-edgar-mcp"]
     // },
-    // ─── PSICOLOGIA APPLICATA ─────────────────────────────────────────────
-    // PERSONA SESSIONS — structured coaching, interview prep, personal reflection with timer
-    "persona-sessions": {
-      "type": "stdio",
-      "command": "npx",
-      "args": [
-        "-y",
-        "mcp-persona-sessions"
-      ]
-    }
   }
 }
