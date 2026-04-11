@@ -22,7 +22,14 @@
     }
   ],
   "servers": {
-    // ─── LOCAL PROJECT SERVER ──────────────────────────────────────────────
+    // ═══════════════════════════════════════════════════════════════════════
+    // ■ CORE — SEMPRE ATTIVI
+    //   Nessun token richiesto. Si avviano automaticamente con il progetto
+    //   grazie al task "MCP: Auto-build server" in tasks.json (runOn: folderOpen).
+    //   Se uno di questi mostra "stopped", usa Ctrl+Shift+P → "MCP: Restart Server".
+    // ═══════════════════════════════════════════════════════════════════════
+    // SERVER LOCALE CV — espone cv.ts come tool/resource leggibili dall'AI
+    // Dipende da dist/index.js → tasks.json fa npm run build al folder open
     "mcp-base-template": {
       "type": "stdio",
       "command": "node",
@@ -30,56 +37,34 @@
         "${workspaceFolder}/dist/index.js"
       ]
     },
-    // ─── GITHUB ───────────────────────────────────────────────────────────
-    // Capabilities: repos, issues, PRs, branches, commits, file search, gists
-    // Create token: https://github.com/settings/tokens
-    "github": {
+    // MEMORY — grafo di conoscenza persistente tra sessioni
+    // Ricorda decisioni, pattern, nomi, regole senza ripartire da zero ogni chat
+    // Installato globalmente: npm i -g @modelcontextprotocol/server-memory
+    "memory": {
       "type": "stdio",
-      "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-github"
-      ],
-      "env": {
-        "GITHUB_PERSONAL_ACCESS_TOKEN": "${input:github-token}"
-      }
+      "command": "mcp-server-memory"
     },
-    // ─── GITLAB ───────────────────────────────────────────────────────────
-    // Capabilities: repos, MRs, issues, pipelines, groups
-    // Create token: https://gitlab.com/-/profile/personal_access_tokens
-    "gitlab": {
+    // SEQUENTIAL THINKING — ragionamento strutturato step-by-step
+    // Attivare per decisioni architetturali, copy complesso, UX analysis
+    // Installato globalmente: npm i -g @modelcontextprotocol/server-sequential-thinking
+    "sequential-thinking": {
       "type": "stdio",
-      "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-gitlab"
-      ],
-      "env": {
-        "GITLAB_PERSONAL_ACCESS_TOKEN": "${input:gitlab-token}",
-        "GITLAB_API_URL": "https://gitlab.com"
-      }
+      "command": "mcp-server-sequential-thinking"
     },
-    // ─── OTHER RECOMMENDED SERVERS (uncomment to activate) ────────────────
-    // FILESYSTEM — read/write files outside the workspace
+    // FILESYSTEM — accesso completo al workspace (anche fuori dalla finestra contesto)
+    // Legge file grandi, cartelle, strutture senza copy-paste manuale
+    // Installato globalmente: npm i -g @modelcontextprotocol/server-filesystem
     "filesystem": {
       "type": "stdio",
-      "command": "npx",
+      "command": "mcp-server-filesystem",
       "args": [
-        "-y",
-        "@modelcontextprotocol/server-filesystem",
         "${workspaceFolder}"
       ]
     },
-    // SEQUENTIAL THINKING — structured multi-step reasoning chains
-    "sequential-thinking": {
-      "type": "stdio",
-      "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-sequential-thinking"
-      ]
-    },
-    // BRAVE SEARCH — real-time web search
+    // ═══════════════════════════════════════════════════════════════════════
+    // ○ ON-DEMAND — attivare solo quando servono (richiedono token/auth)
+    // ═══════════════════════════════════════════════════════════════════════
+    // BRAVE SEARCH — ricerca web in tempo reale
     // Get your free API key at: https://api.search.brave.com/
     "brave-search": {
       "type": "stdio",
@@ -92,24 +77,32 @@
         "BRAVE_API_KEY": "${input:brave-api-key}"
       }
     },
-    // ─── PSICOLOGIA APPLICATA ─────────────────────────────────────────────
-    // PERSONA SESSIONS — structured coaching, interview prep, personal reflection with timer
-    // "persona-sessions": {
-    //   "type": "stdio",
-    //   "command": "npx",
-    //   "args": [
-    //     "-y",
-    //     "mcp-persona-sessions"
-    //   ]
-    // },
-    // MEMORY — persistent knowledge graph across sessions (great for context)
-    "memory": {
+    // GITHUB — repos, issues, PRs, branches, commits, file search
+    // Create token: https://github.com/settings/tokens
+    "github": {
       "type": "stdio",
       "command": "npx",
       "args": [
         "-y",
-        "@modelcontextprotocol/server-memory"
-      ]
+        "@modelcontextprotocol/server-github"
+      ],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${input:github-token}"
+      }
+    },
+    // GITLAB — repos, MRs, issues, pipelines, groups
+    // Create token: https://gitlab.com/-/profile/personal_access_tokens
+    "gitlab": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-gitlab"
+      ],
+      "env": {
+        "GITLAB_PERSONAL_ACCESS_TOKEN": "${input:gitlab-token}",
+        "GITLAB_API_URL": "https://gitlab.com"
+      }
     },
     // FETCH — fetch any URL, scrape web content, call REST APIs
     // "fetch": {

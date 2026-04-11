@@ -31,11 +31,18 @@ const {
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
 
+    <!-- Preload critical font — weight 800 used by preloader & entry name -->
+    <!-- font-display: block in global.css prevents FOUC during the preloader animation -->
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/Lexend/lexend-latin-800-normal.woff2" crossorigin />
+
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
   </head>
 
   <body>
+    <!-- Skip to main content — keyboard/screen reader accessibility -->
+    <a href="#main-content" class="skip-link">Vai al contenuto principale</a>
+
     <!-- Custom cursor -->
     <div id="cursor-dot" aria-hidden="true"></div>
     <div id="cursor-ring" aria-hidden="true"></div>

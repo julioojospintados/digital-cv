@@ -19,22 +19,29 @@ class GoLogo extends LitElement {
     }
 
     button {
-      background: none;
-      border: none;
-      padding: 0;
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 1px;
+      padding: 0.25rem 0.4rem;
       /* cursor: none segue il cursore custom globale */
       cursor: none;
       display: inline-flex;
       align-items: baseline;
       gap: 0;
-      font-family: var(--font-display, 'Onest', ui-sans-serif, sans-serif);
+      font-family: var(--font-display, 'Lexend', ui-sans-serif, sans-serif);
       line-height: 1;
+      transition: border-color 0.2s ease, background-color 0.2s ease;
+    }
+
+    button:hover {
+      border-color: var(--color-accent, rgba(0, 255, 200, 1));
+      background-color: rgba(255, 255, 255, 0.06);
     }
 
     .go-g,
     .go-o {
       display: inline-block;
-      font-size: 0.88rem;
+      font-size: clamp(1.1rem, 2.5vw, 1.5rem);
       font-weight: 800;
       letter-spacing: -0.03em;
       color: var(--color-text-primary, rgba(245, 240, 230, 1));

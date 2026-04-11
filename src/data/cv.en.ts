@@ -51,6 +51,25 @@ export const cvDataEn = {
   // ── Work experience (most recent first) ───────────────────────────────────
   experience: [
     {
+      company: "Internal Project — SME Management Software (Operational Partnering case study)",
+      role: "Digital Innovation Consultant & Lead Developer",
+      startDate: "2025-09",
+      endDate: "present",
+      location: "Turin, Italy",
+      remote: true,
+      description: "Complete Operational Partnering case study across three integrated pillars: Technology, Design and Method. Phase 1 — Strategic analysis: mapping business processes and identifying operational bottlenecks before writing a single line of code. Phase 2 — Engine build: MCP (Model Context Protocol) architecture with tools, resources and prompts as APIs for AI agents, natively integrated with VS Code Copilot and Cursor. Phase 3 — Design for non-technical users: simplified UX for internal operators, designed to reduce onboarding time and operational error. Phase 4 — Agile delivery: Cursor → GitLab CI/CD → automated deploy pipeline, 1–2 week sprints with a measured impactScore at every release, team autonomous at end of engagement.",
+      highlights: [
+        "Strategic analysis of business processes as the starting point — zero code written before understanding the real problem",
+        "MCP architecture with tools, resources and prompts as APIs for AI agents — native integration with VS Code Copilot and Cursor",
+        "Simplified UX for non-technical operators: 40% reduction in onboarding time for new workflows",
+        "Automated pipeline Cursor → GitLab CI/CD → deploy with no manual intervention",
+        "Lean Agile applied to the SME context: 1–2 week sprints, business-oriented backlog, retrospectives with a real impactScore measured at every release",
+        "60% reduction in average feature development time through AI-augmented workflow",
+      ],
+      skills: ["MCP", "TypeScript", "Node.js", "Hono", "Zod", "GitLab CI/CD", "Scrum", "AI Orchestration", "Cursor", "GitHub Copilot"],
+      tags: ["tech", "human", "ai-orchestration"],
+    },
+    {
       company: "ALTEN Italia",
       role: "Senior Frontend Developer",
       startDate: "2019-07",
@@ -366,6 +385,24 @@ export const cvDataEn = {
 
   // ── Certifications ────────────────────────────────────────────────────────
   certifications: [
+    {
+      name: "Introduction to Agile Development and Scrum",
+      issuer: "IBM",
+      date: "2026-02",
+      credentialId: "L7GZFSYJYMAC",
+    },
+    {
+      name: "UX/UI Design Fundamentals: Usability and Visual Principles",
+      issuer: "SkillUp",
+      date: "2026-02",
+      credentialId: "VELSWBCO2YEL",
+    },
+    {
+      name: "Introduction to UX/UI Design",
+      issuer: "IBM",
+      date: "2026-01",
+      credentialId: "LUL4LSALE01X",
+    },
     {
       name: "UX Design Professional Certificate",
       issuer: "IBM",

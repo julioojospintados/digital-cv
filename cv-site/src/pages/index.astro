@@ -28,7 +28,7 @@ import Layout from '../layouts/Layout.astro';
     </div>
 
 
-    <main class="entry-main" id="entry-main">
+<main class="entry-main" id="main-content">
 
       <header class="entry-header" id="entry-header">
         <p class="entry-label" id="entry-label">Digital CV</p>
@@ -269,12 +269,62 @@ import Layout from '../layouts/Layout.astro';
 
   .name-word {
     display: block;
-    overflow: hidden;
   }
 
   .name-char {
     display: inline-block;
     will-change: transform;
+  }
+
+  /* ── GO initials nel nome — stessa logica di <go-logo> ── */
+  .name-go-g,
+  .name-go-o {
+    transition:
+      color 0.35s ease,
+      text-shadow 0.35s ease,
+      filter 0.35s ease,
+      background 0.35s ease;
+    will-change: color, text-shadow, filter;
+  }
+
+  /* TECH: G brilla cyan */
+  #entry-name[data-mode-preview="tech"] .name-go-g {
+    color: rgba(0, 255, 200, 1);
+    text-shadow:
+      0 0 6px rgba(0, 255, 200, 1),
+      0 0 18px rgba(0, 255, 200, 0.55),
+      0 0 36px rgba(0, 255, 200, 0.2);
+  }
+
+  /* CREATIVE: O con gradiente orange animato */
+  #entry-name[data-mode-preview="creative"] .name-go-o {
+    color: transparent;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 107, 53, 1) 0%,
+      rgba(255, 200, 50, 1) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    animation: go-orange-pulse 2.2s ease-in-out infinite;
+  }
+
+  /* HUMAN: G e O entrambe gold */
+  #entry-name[data-mode-preview="human"] .name-go-g,
+  #entry-name[data-mode-preview="human"] .name-go-o {
+    color: rgba(240, 200, 127, 1);
+    text-shadow:
+      0 0 5px rgba(240, 200, 127, 0.6),
+      0 0 14px rgba(240, 200, 127, 0.3);
+  }
+
+  @keyframes go-orange-pulse {
+    0%, 100% {
+      filter: brightness(1) drop-shadow(0 0 0px rgba(255, 107, 53, 0));
+    }
+    50% {
+      filter: brightness(1.3) drop-shadow(0 0 8px rgba(255, 107, 53, 0.75));
+    }
   }
 
   .entry-tagline {
@@ -487,7 +537,7 @@ import Layout from '../layouts/Layout.astro';
 
   let selectedMode: string | null = null;
 
-  // ── Split text: track G (Giulio) and O (Occhipinti) as brand initials ───────────
+  // ── Split nome in chars individuali — G di Giulio e O di Occhipinti sono le iniziali GO ──
   let firstGChar: HTMLElement | null = null;
   let firstOChar: HTMLElement | null = null;
 
@@ -505,95 +555,94 @@ import Layout from '../layouts/Layout.astro';
   });
 
   const allChars   = Array.from(nameEl.querySelectorAll<HTMLElement>('.name-char'));
-  const otherChars = allChars.filter(c => c !== firstGChar && c !== firstOChar);
+  const goChars    = [firstGChar, firstOChar].filter((c): c is HTMLElement => c !== null);
+  const otherChars = allChars.filter(c => !goChars.includes(c));
 
-  // ── Initial hidden states ─────────────────────────────────
-  // G and O initials: in natural position but invisible (will scale-pop in)
-  gsap.set([firstGChar, firstOChar],            { y: '0%', opacity: 0 });
-  // Other name chars: clipped below (slide-up via .name-word overflow:hidden)
-  gsap.set(otherChars,                          { y: '110%' });
-  gsap.set(['#entry-label', '#entry-tagline'],  { opacity: 0, y: 12 });
+  // ── Stato iniziale: tutto nascosto — GSAP gestisce la rivelazione ──────────
+  // G e O: partono grandi e in alto (stessa fromTo della hero di cv.astro)
+  gsap.set(goChars,   { opacity: 0, scale: 1.8, y: -20 });
+  // Resto del nome: 18px sotto (semplice fade-up, senza clip)
+  gsap.set(otherChars, { opacity: 0, y: 18 });
+  // Label e tagline
+  gsap.set(['#entry-label', '#entry-tagline'], { opacity: 0, y: 10 });
 
-  // ── GO concept: G e O volano verso le iniziali del nome ──
+  // ── Preloader refs ────────────────────────────────────────────────────────
   const preGEl = document.getElementById('pre-G')!;
   const preOEl = document.getElementById('pre-O')!;
 
   // La barra CSS impiega 0.2s (delay) + 1.0s (fill) = 1.2s. Partiamo a 1.25s.
   gsap.delayedCall(1.25, () => {
-    const glowTl = gsap.timeline();
-    glowTl
-      .to([preGEl, preOEl], {
-        textShadow: '0 0 35px rgba(255,255,255,0.55)',
-        duration: 0.18, stagger: 0.06, ease: 'power2.out',
-      })
-      .to([preGEl, preOEl], { textShadow: 'none', duration: 0.14 })
-      .call(() => {
-        // Misura le posizioni RUNTIME: pre-G/O e firstGChar/firstOChar
-        const preGRect = preGEl.getBoundingClientRect();
-        const preORect = preOEl.getBoundingClientRect();
-        const gRect    = firstGChar!.getBoundingClientRect();
-        const oRect    = firstOChar!.getBoundingClientRect();
+    const tl = gsap.timeline();
 
-        // Delta per portare il centro di pre-G sul centro di firstGChar
-        const gDx    = (gRect.left + gRect.width  / 2) - (preGRect.left + preGRect.width  / 2);
-        const gDy    = (gRect.top  + gRect.height / 2) - (preGRect.top  + preGRect.height / 2);
-        const gScale = gRect.height / preGRect.height;
+    // 1. Glow flash sulle lettere del preloader — identità rivelata
+    tl.to([preGEl, preOEl], {
+      textShadow: '0 0 40px rgba(255,255,255,0.75)',
+      duration: 0.2, stagger: 0.08, ease: 'power2.out',
+    });
+    tl.to([preGEl, preOEl], {
+      textShadow: '0 0 0px transparent',
+      duration: 0.15, ease: 'power2.in',
+    });
 
-        const oDx    = (oRect.left + oRect.width  / 2) - (preORect.left + preORect.width  / 2);
-        const oDy    = (oRect.top  + oRect.height / 2) - (preORect.top  + preORect.height / 2);
-        const oScale = oRect.height / preORect.height;
+    // 2. Preloader sfuma — G e O si "trasformano" nel nome
+    tl.to(preloader, {
+      opacity: 0, duration: 0.45, ease: 'power2.inOut',
+      onComplete: () => { preloader.style.display = 'none'; },
+    });
 
-        // G vola verso la "G" di "Giulio"
-        gsap.to(preGEl, {
-          x: gDx, y: gDy, scale: gScale, duration: 0.52, ease: 'power3.inOut',
-          onComplete: () => {
-            gsap.set(header, { opacity: 1 });
-            if (firstGChar) gsap.set(firstGChar, { opacity: 1 });
-            gsap.set(preGEl, { opacity: 0 });
-          },
-        });
+    // 3. Header torna visibile (era opacity:0 via CSS)
+    tl.set(header, { opacity: 1 });
 
-        // O vola verso la "O" di "Occhipinti" (lieve ritardo)
-        gsap.to(preOEl, {
-          x: oDx, y: oDy, scale: oScale, duration: 0.52, ease: 'power3.inOut', delay: 0.07,
-          onComplete: () => {
-            if (firstOChar) gsap.set(firstOChar, { opacity: 1 });
-            gsap.set(preOEl, { opacity: 0 });
-          },
-        });
+    // 4. G e O "atterrano" nel nome — punch identico alla hero di cv.astro
+    tl.fromTo(goChars,
+      { opacity: 0, scale: 1.8, y: -20 },
+      { opacity: 1, scale: 1, y: 0, duration: 0.55, stagger: 0.18, ease: 'back.out(1.7)' },
+      '+=0.02'
+    );
 
-        // Overlay preloader sfuma mentre le lettere volano
-        gsap.to(preloader, {
-          opacity: 0, duration: 0.38, delay: 0.22, ease: 'power2.out',
-          onComplete: () => { preloader.style.display = 'none'; },
-        });
+    // 5. Glow pulse su G e O nel nome (identico cv.astro)
+    tl.to(goChars, {
+      textShadow: '0 0 28px rgba(255,255,255,0.65), 0 0 12px rgba(255,255,255,0.4)',
+      duration: 0.3, ease: 'power2.out',
+    }, '-=0.1');
+    tl.to(goChars, {
+      textShadow: '0 0 0px transparent',
+      duration: 0.65, ease: 'power2.in',
+    });
 
-        // Restanti caratteri del nome scivolano su (dopo l'atterraggio di G)
-        if (otherChars.length) {
-          gsap.fromTo(otherChars, { y: '110%' }, {
-            y: '0%', duration: 0.52, stagger: 0.018, ease: 'power4.out', delay: 0.62,
-          });
-        }
+    // 6. "iulio" e "cchipinti" — stagger identico cv.astro hero
+    tl.to(otherChars, {
+      opacity: 1, y: 0,
+      duration: 0.55,
+      stagger: { each: 0.05, from: 'start' },
+      ease: 'power3.out',
+    }, '-=0.55');
 
-        // Label + tagline
-        gsap.fromTo(['#entry-label', '#entry-tagline'], { opacity: 0, y: 12 }, {
-          opacity: 1, y: 0, duration: 0.5, stagger: 0.1, ease: 'power3.out', delay: 0.85,
-        });
+    // 7. Tag G e O per il glow mode-reactive (hover sulle card)
+    tl.call(() => {
+      if (firstGChar) firstGChar.classList.add('name-go-g');
+      if (firstOChar) firstOChar.classList.add('name-go-o');
+    });
 
-        // Cards lanciate verso l'alto (GO concept)
-        gsap.fromTo(Array.from(cards),
-          { y: -40, opacity: 0, scale: 0.94 },
-          { y: 0, opacity: 1, scale: 1, duration: 0.65, stagger: 0.08, ease: 'back.out(1.4)', delay: 1.05 }
-        );
+    // 8. Label + tagline
+    tl.to(['#entry-label', '#entry-tagline'], {
+      opacity: 1, y: 0, duration: 0.5, stagger: 0.1, ease: 'power3.out',
+    }, '-=0.3');
 
-        // Oggetti knolling atterrano sul tavolo
-        gsap.delayedCall(1.25, () => {
-          knolls.forEach((knoll, i) => {
-            knoll.style.setProperty('--knoll-delay', `${i * 65}ms`);
-            knoll.classList.add('do-enter');
-          });
-        });
+    // 9. Mode cards (GO concept — entrano dal basso)
+    tl.fromTo(Array.from(cards),
+      { y: 30, opacity: 0, scale: 0.94 },
+      { y: 0, opacity: 1, scale: 1, duration: 0.65, stagger: 0.08, ease: 'back.out(1.4)' },
+      '-=0.2'
+    );
+
+    // 10. Oggetti knolling atterrano sul tavolo
+    tl.call(() => {
+      knolls.forEach((knoll, i) => {
+        knoll.style.setProperty('--knoll-delay', `${i * 65}ms`);
+        knoll.classList.add('do-enter');
       });
+    });
   });
 
   // ── Magnetic effect on mode cards ────────────────────────
@@ -613,11 +662,15 @@ import Layout from '../layouts/Layout.astro';
       if (!card.classList.contains('is-selected')) {
         gsap.to(card, { x: 0, y: 0, scale: 1, duration: 0.5, ease: 'elastic.out(1, 0.4)' });
       }
+      // Rimuovi preview mode solo se nessuna card è stata selezionata
+      if (!selectedMode) nameEl.removeAttribute('data-mode-preview');
     });
 
     card.addEventListener('mouseenter', () => {
       if (selectedMode && card.dataset.mode !== selectedMode) return;
       gsap.to(card, { scale: 1.03, duration: 0.3, ease: 'power2.out' });
+      // Anteprima: G e O del nome reagiscono come GoLogo
+      nameEl.setAttribute('data-mode-preview', card.dataset.mode!);
     });
   });
 
@@ -662,29 +715,36 @@ import Layout from '../layouts/Layout.astro';
     });
 
     // Speed lines sparano verso l'esterno (warp speed)
+    // Fase 1: comparsa in 0.5s — rimangono visibili per ~1s totale
     journey.fromTo(lineEls,
       { scaleX: 0, opacity: 0 },
-      { scaleX: 1, opacity: 0.8, duration: 0.25, stagger: { each: 0.008, from: 'random' }, ease: 'power2.out' }
+      { scaleX: 1, opacity: 0.85, duration: 0.6, stagger: { each: 0.018, from: 'random' }, ease: 'power2.out' }
     );
+    // Fase 2: hold visibile (opacity stabile) per 0.5s prima di sparire
     journey.to(lineEls,
-      { scaleX: 6, opacity: 0, duration: 0.45, stagger: { each: 0.006, from: 'random' }, ease: 'power4.in' },
-      '-=0.05'
+      { opacity: 0.85, duration: 0.5, ease: 'none' },
+      '-=0'
+    );
+    // Fase 3: allontanamento warp e dissolvenza
+    journey.to(lineEls,
+      { scaleX: 6, opacity: 0, duration: 0.35, stagger: { each: 0.009, from: 'random' }, ease: 'power4.in' },
+      '-=0'
     );
 
-    // Il mondo si allontana mentre acceleri
+    // Il mondo si allontana mentre acceleri (parte dopo che le lines sono pienamente visibili)
     journey.to([header, cards],
-      { opacity: 0, scale: 0.85, filter: 'blur(10px)', duration: 0.45, ease: 'power3.in' },
-      0.05
+      { opacity: 0, scale: 0.85, filter: 'blur(10px)', duration: 0.35, ease: 'power3.in' },
+      0.5
     );
     journey.to(knolls,
-      { opacity: 0, filter: 'blur(10px)', duration: 0.45, ease: 'power3.in' },
-      0.05
+      { opacity: 0, filter: 'blur(10px)', duration: 0.35, ease: 'power3.in' },
+      0.5
     );
 
     // Vignette scura chiude la scena
     journey.to(overlay,
-      { opacity: 1, duration: 0.4, ease: 'power2.inOut' },
-      0.2
+      { opacity: 1, duration: 0.5, ease: 'power2.inOut' },
+      0.9
     );
   }
 
@@ -707,6 +767,8 @@ import Layout from '../layouts/Layout.astro';
       ripple.addEventListener('animationend', () => ripple.remove());
 
       setMode(mode as 'tech' | 'creative' | 'human');
+      // G e O del nome bloccano il glow sul mode scelto
+      nameEl.setAttribute('data-mode-preview', mode);
 
       // Animazione card: selected vs passive + GO button
       cards.forEach((c) => {

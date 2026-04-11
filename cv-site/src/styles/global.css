@@ -1,13 +1,35 @@
-/* Onest — stesso designer di Gilroy (Radomir Tinkov), free via Google Fonts.
-   Per usare Gilroy self-hosted, aggiungi i .woff2 in public/fonts/Gilroy/
-   e ripristina le @font-face con font-family:'Gilroy' al posto di 'Onest'. */
-@import url('https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&display=swap');
+/* ── Fonts self-hosted via Fontsource — no Google CDN, GDPR compliant ──
+   Lexend: testo e titoli (chiarezza + facilitazione)
+   JetBrains Mono: tag, label, numeri, dati tecnici */
+
+/* Peso 800 — font critico del preloader e del nome hero.
+   font-display: block previene il FOUC durante l'animazione iniziale:
+   il browser trattiene il testo invisible (max 3s) invece di fare swap.
+   Il file è anche preloadato in Layout.astro per caricarlo prima del primo paint. */
+@font-face {
+  font-family: 'Lexend';
+  font-style: normal;
+  font-display: block;
+  font-weight: 800;
+  src: url('/fonts/Lexend/lexend-latin-800-normal.woff2') format('woff2');
+  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+/* Pesi secondari via Fontsource — font-display: swap (default), non critici per il primo frame */
+@import '@fontsource/lexend/400.css';
+@import '@fontsource/lexend/500.css';
+@import '@fontsource/lexend/600.css';
+@import '@fontsource/lexend/700.css';
+@import '@fontsource/jetbrains-mono/400.css';
+@import '@fontsource/jetbrains-mono/500.css';
+@import '@fontsource/jetbrains-mono/600.css';
+@import '@fontsource/jetbrains-mono/700.css';
 
 @import "tailwindcss";
 
 @theme {
-  --font-sans: 'Onest', ui-sans-serif, system-ui, sans-serif;
-  --font-display: 'Onest', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Lexend', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Lexend', ui-sans-serif, system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
 }
 
@@ -16,16 +38,14 @@
 :root {
   /* Base ottanio — colore di sfondo primario del progetto */
   --color-ottanio: rgba(8, 73, 67, 1);
-  --color-ottanio-dark: rgba(5, 50, 45, 1);
-  --color-ottanio-light: rgba(12, 100, 91, 1);
 
   --color-bg: rgba(8, 73, 67, 1);
   --color-surface: rgba(12, 95, 87, 0.5);
   --color-border: rgba(255, 255, 255, 0.12);
   --color-text-primary: rgba(245, 240, 230, 1);
-  --color-text-muted: rgba(180, 210, 205, 0.7);
+  /* WCAG AA ≥ 4.5:1 — ~5.7:1 su bg ottanio */
+  --color-text-muted: rgba(192, 220, 215, 0.85);
   --color-accent: rgba(255, 255, 255, 0.9);
-  --color-accent-2: rgba(180, 210, 205, 0.5);
   --card-opacity-active: 1;
   --card-opacity-passive: 0.28;
   --card-scale-passive: 1;
@@ -43,21 +63,21 @@
   --color-surface: rgba(5, 50, 45, 0.6);
   --color-border: rgba(0, 255, 200, 0.2);
   --color-text-primary: rgba(220, 255, 245, 1);
-  --color-text-muted: rgba(0, 255, 200, 0.5);
+  /* WCAG AA — ~4.8:1 su bg ottanio */
+  --color-text-muted: rgba(0, 255, 200, 0.70);
   --color-accent: rgba(0, 255, 200, 1);
-  --color-accent-2: rgba(0, 180, 140, 1);
   --card-opacity-passive: 0.2;
   --card-scale-passive: 1;
 }
 
 [data-mode="creative"] {
   --color-bg: rgba(8, 73, 67, 1);
-  --color-surface: rgba(50, 30, 10, 0.4);
+  --color-surface: rgba(40, 20, 5, 0.5);
   --color-border: rgba(255, 107, 53, 0.25);
   --color-text-primary: rgba(255, 240, 220, 1);
-  --color-text-muted: rgba(255, 180, 130, 0.6);
+  /* WCAG AA — ~4.9:1 su bg ottanio */
+  --color-text-muted: rgba(255, 195, 155, 0.82);
   --color-accent: rgba(255, 107, 53, 1);
-  --color-accent-2: rgba(255, 60, 0, 1);
   --card-opacity-passive: 0.2;
   --card-scale-passive: 0.95;
 }
@@ -67,9 +87,9 @@
   --color-surface: rgba(20, 60, 30, 0.4);
   --color-border: rgba(240, 200, 127, 0.25);
   --color-text-primary: rgba(250, 240, 215, 1);
-  --color-text-muted: rgba(240, 200, 127, 0.6);
+  /* WCAG AA — ~4.6:1 su bg ottanio */
+  --color-text-muted: rgba(240, 210, 148, 0.75);
   --color-accent: rgba(240, 200, 127, 1);
-  --color-accent-2: rgba(200, 155, 70, 1);
   --card-opacity-passive: 0.2;
   --card-scale-passive: 0.97;
 }
@@ -125,14 +145,48 @@ body {
   background: var(--color-text-muted);
 }
 
+/* ─── Skip link — keyboard navigation (WCAG 2.4.1) ─── */
+
+.skip-link {
+  position: fixed;
+  top: -100%;
+  left: 1rem;
+  z-index: 999999;
+  padding: 0.5rem 1rem;
+  background: var(--color-text-primary);
+  color: var(--color-bg);
+  font-size: 0.85rem;
+  font-weight: 600;
+  border-radius: 2px;
+  text-decoration: none;
+  transition: top 0.2s ease;
+}
+
+.skip-link:focus-visible {
+  top: 1rem;
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
 /* ─── Selection ─── */
 
 ::selection {
   background-color: color-mix(in srgb, var(--color-accent) 30%, transparent);
 }
 
-/* ─── Hide default cursor globally ─── */
+/* ─── Focus visible — keyboard accessibility (WCAG 2.4.7) ─── */
 
+:focus {
+  outline: none; /* rimosso solo visivamente — gestiamo con focus-visible */
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Cursore personalizzato attivo: il focus-visible rimane ugualmente visibile */
 * {
   cursor: none !important;
 }
@@ -247,13 +301,17 @@ body::after {
 
 .reveal {
   opacity: 0;
-  transform: translateY(32px);
+  transform: translateY(28px);
+  transition:
+    opacity 0.7s var(--ease-standard),
+    transform 0.7s var(--ease-standard);
 }
 
-.reveal.is-visible {
+/* Supporta sia .is-visible (cv.astro / GSAP) che .visible (componenti statici) */
+.reveal.is-visible,
+.reveal.visible {
   opacity: 1;
   transform: translateY(0);
-  transition: opacity 0.7s var(--ease-standard), transform 0.7s var(--ease-standard);
 }
 
 /* ─── Scroll progress bar ─── */
@@ -343,31 +401,9 @@ body::after {
 
 /* ─── Reveal animation ─── */
 
-.reveal {
-  opacity: 0;
-  transform: translateY(20px);
-  transition:
-    opacity var(--duration-state) var(--ease-standard),
-    transform var(--duration-state) var(--ease-standard);
-}
-
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
 .delay-100 {
   transition-delay: 100ms;
 }
-
-.delay-200 {
-  transition-delay: 200ms;
-}
-
-.delay-300 {
-  transition-delay: 300ms;
-}
-
 
 .delay-200 {
   transition-delay: 200ms;

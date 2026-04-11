@@ -167,15 +167,21 @@ const projectsData = cvData.projects.slice(0, 6).map(p => {
   </nav>
 
   <!-- ────────────────────────────────────────────────────────── MAIN -->
-  <main class="cv-main" id="cv-main">
+  <main class="cv-main" id="main-content">
 
     <!-- ── HERO ────────────────────────────────────────────────────── -->
-    <section class="hero-section reveal" id="hero">
+    <section class="hero-section" id="hero">
       <div class="hero-badges">
         <span class={`avail-badge ${availClass}`}>{availLabel}</span>
         <span class="loc-badge">{cvData.personal.location}</span>
       </div>
-      <h1 class="hero-name">{cvData.personal.name}</h1>
+      <h1 class="hero-name" id="hero-name" aria-label={cvData.personal.name}>
+        {cvData.personal.name.split('').map((char, i) => (
+          <span
+            class:list={['hero-char', { 'hero-char--go': i === 0 || i === 7 }]}
+          >{char === ' ' ? '\u00A0' : char}</span>
+        ))}
+      </h1>
       <p class="hero-title">{cvData.personal.title}</p>
       <p class="hero-summary">{cvData.personal.summary}</p>
 
@@ -452,17 +458,23 @@ const projectsData = cvData.projects.slice(0, 6).map(p => {
   }
 
   .cv-nav__lang {
+    padding: 0.3rem 0.75rem;
     font-size: 0.65rem;
     font-weight: 600;
     letter-spacing: 0.1em;
     text-transform: uppercase;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 1px;
     color: var(--color-text-muted);
     text-decoration: none;
-    transition: color 0.2s ease;
+    transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
   }
 
   .cv-nav__lang:hover {
     color: var(--color-text-primary);
+    border-color: var(--color-accent);
+    background: rgba(255, 255, 255, 0.06);
   }
 
   /* ── Main layout ─────────────────────────────────────────────── */
@@ -505,9 +517,19 @@ const projectsData = cvData.projects.slice(0, 6).map(p => {
   }
 
   /* ── Hero ────────────────────────────────────────────────────── */
+  /* ── Hero initial state (pre-JS) — prevents flash of visible content ── */
   .hero-section {
     border-bottom: 1px solid var(--color-border);
     padding-bottom: 3rem;
+    opacity: 0; /* GSAP animates to 1 */
+  }
+
+  .hero-badges,
+  .hero-title,
+  .hero-summary,
+  .hero-footer {
+    opacity: 0; /* GSAP animates to 1 */
+    transform: translateY(14px);
   }
 
   .hero-badges {
@@ -564,6 +586,19 @@ const projectsData = cvData.projects.slice(0, 6).map(p => {
     line-height: 0.92;
     color: var(--color-text-primary);
     margin: 0 0 0.75rem 0;
+  }
+
+  /* ── Hero name — char animation ─────────── */
+  .hero-char {
+    display: inline-block;
+    white-space: pre;
+    opacity: 0;           /* GSAP animates to 1 */
+    transform: translateY(18px);
+    will-change: transform, opacity;
+  }
+
+  .hero-char--go {
+    color: var(--color-accent);
   }
 
   .hero-title {
@@ -1192,6 +1227,57 @@ const projectsData = cvData.projects.slice(0, 6).map(p => {
 
   gsap.registerPlugin(ScrollTrigger, Flip);
 
+  // ── Hero entrance — G and O first, then the rest ──────────────────────
+  const heroEl      = document.querySelector<HTMLElement>('.hero-section')!;
+  const allChars    = document.querySelectorAll<HTMLElement>('.hero-char');
+  const goChars     = document.querySelectorAll<HTMLElement>('.hero-char--go');
+  const restChars   = [...allChars].filter(el => !el.classList.contains('hero-char--go'));
+  const heroBadges  = heroEl.querySelector<HTMLElement>('.hero-badges');
+  const heroTitle   = heroEl.querySelector<HTMLElement>('.hero-title');
+  const heroSummary = heroEl.querySelector<HTMLElement>('.hero-summary');
+  const heroFooter  = heroEl.querySelector<HTMLElement>('.hero-footer');
+
+  // Initial states are set in CSS (.hero-section, .hero-char, .hero-badges etc.)
+  // GSAP only needs to animate: opacity → 1, y → 0
+
+  const heroTl = gsap.timeline({ delay: 0 });
+
+  // 1. Hero section surfaces
+  heroTl.to(heroEl, { opacity: 1, duration: 0.4, ease: 'power2.out' });
+
+  // 2. G and O arrivano per primi — punch + scala (come volano verso il nome nel preloader)
+  heroTl.fromTo(goChars,
+    { opacity: 0, scale: 1.5, y: -12 },
+    { opacity: 1, scale: 1, y: 0, duration: 0.55, stagger: 0.18, ease: 'back.out(1.7)' },
+    '+=0.05'
+  );
+
+  // 3. Glow pulse accent su G e O
+  heroTl.to(goChars, {
+    textShadow: '0 0 28px var(--color-accent), 0 0 10px var(--color-accent)',
+    duration: 0.3, ease: 'power2.out',
+  }, '-=0.15');
+  heroTl.to(goChars, {
+    textShadow: '0 0 0px transparent',
+    duration: 0.7, ease: 'power2.in',
+  });
+
+  // 4. Le altre lettere scorrono in sequenza — stagger simile alle speed lines
+  heroTl.to(restChars, {
+    opacity: 1, y: 0,
+    duration: 0.55,
+    stagger: { each: 0.05, from: 'start' },
+    ease: 'power3.out',
+  }, '-=0.5');
+
+  // 5. Resto della sezione hero (badges, titolo, summary, footer)
+  heroTl.to([heroBadges, heroTitle, heroSummary, heroFooter], {
+    opacity: 1, y: 0,
+    duration: 0.55,
+    stagger: 0.09,
+    ease: 'power2.out',
+  }, '-=0.25');
+
   // ── Scroll progress bar ───────────────────────────────────────────────
   const progressBar = document.createElement('div');
   progressBar.className = 'scroll-progress';
@@ -1258,6 +1344,23 @@ const projectsData = cvData.projects.slice(0, 6).map(p => {
 
     btn.addEventListener('mouseleave', () => {
       gsap.to(btn, { x: 0, y: 0, duration: 0.5, ease: 'elastic.out(1, 0.4)' });
+    });
+  });
+
+  // ── Magnetic hover on GO logo + lang switcher ────────────────────────
+  ([
+    document.querySelector<HTMLElement>('go-logo'),
+    document.querySelector<HTMLElement>('.cv-nav__lang'),
+  ] as (HTMLElement | null)[]).forEach(el => {
+    if (!el) return;
+    el.addEventListener('mousemove', (e) => {
+      const rect = el.getBoundingClientRect();
+      const dx = (e.clientX - rect.left - rect.width / 2) / rect.width * 6;
+      const dy = (e.clientY - rect.top - rect.height / 2) / rect.height * 6;
+      gsap.to(el, { x: dx, y: dy, duration: 0.3, ease: 'power2.out' });
+    });
+    el.addEventListener('mouseleave', () => {
+      gsap.to(el, { x: 0, y: 0, duration: 0.5, ease: 'elastic.out(1, 0.4)' });
     });
   });
 

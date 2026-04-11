@@ -55,6 +55,8 @@ export interface WorkExperience {
   /** Key achievements or bullet points */
   highlights?: string[];
   skills?: string[];
+  /** Mode tags for visual priority: "tech" | "creative" | "human" | "agile" | "ai-orchestration" | ... */
+  tags?: string[];
 }
 
 export interface Education {
@@ -77,6 +79,8 @@ export interface Certification {
   date: string;
   /** URL to credential */
   url?: string;
+  /** Credential / certificate ID issued by the provider */
+  credentialId?: string;
   expiryDate?: string;
   /** true if certification is still in progress */
   inProgress?: boolean;
@@ -126,8 +130,8 @@ export const cvData = {
   // ── Personal info ──────────────────────────────────────────────────────────
   personal: {
     name: "Giulio Occhipinti",
-    title: "Frontend Developer · UX/UI · Digital Strategist",
-    summary: "Frontend Developer con 6+ anni di esperienza su sistemi enterprise ad alto traffico (Intesa San Paolo, Aruba, Rai Pubblicità). Profilo T-shaped con expertise verticale in Angular, WebComponents e architetture a microfrontend, e competenze orizzontali in UX/UI Design, digital strategy e arti creative. Framework-agnostic, orientato all'impatto, con esperienze dirette in 5 paesi.",
+    title: "Consulente per l'Innovazione Digitale & Partner Tecnico per PMI",
+    summary: "Generalista esperto che supporta le PMI orchestrando tre pilastri integrati: Tecnologia (Angular, Lit, MCP, Node.js), Design (UX/UI — cert. IBM + SkillUp) e Metodo (Agile snello, sprint brevi, autonomia del team). 6+ anni su sistemi enterprise ad alto traffico (Intesa San Paolo, Aruba, Rai Pubblicità). Framework-agnostic, orientato all'impatto, con esperienze dirette in 5 paesi. Non consegna slide — entra in azienda, capisce il problema reale, costruisce la soluzione e la fa girare.",
     location: "Torino, Italia",
     age: 36,
     avatar: "",
@@ -151,6 +155,25 @@ export const cvData = {
 
   // ── Work experience (most recent first) ───────────────────────────────────
   experience: [
+    {
+      company: "Progetto Interno — Gestionale PMI (caso studio di Partnering Operativo)",
+      role: "Consulente per l'Innovazione Digitale & Lead Developer",
+      startDate: "2025-09",
+      endDate: "present",
+      location: "Torino, Italia",
+      remote: true,
+      description: "Caso studio completo di Partnering Operativo su tre pilastri integrati: Tecnologia, Design e Metodo. Fase 1 — Analisi strategica: mappatura dei processi aziendali e identificazione dei colli di bottiglia operativi prima di scrivere una riga di codice. Fase 2 — Costruzione del motore: architettura MCP (Model Context Protocol) con tool, resource e prompt come API per agenti AI, integrata nativamente con VS Code Copilot e Cursor. Fase 3 — Design per non tecnici: UX semplificata per operatori interni, progettata per ridurre i tempi di formazione e l'errore operativo. Fase 4 — Consegna Agile: pipeline Cursor → GitLab CI/CD → deploy automatizzata, sprint da 1–2 settimane con impactScore misurato a ogni rilascio, team autonomo alla fine dell'ingaggio.",
+      highlights: [
+        "Analisi strategica dei processi aziendali come punto di partenza — zero codice scritto prima di capire il problema reale",
+        "Architettura MCP con tool, resource e prompt come API per agenti AI — integrazione nativa con VS Code Copilot e Cursor",
+        "UX semplificata per operatori non tecnici: riduzione del 40% del tempo di formazione sui nuovi flussi",
+        "Pipeline automatizzata Cursor → GitLab CI/CD → deploy senza intervento manuale",
+        "Agile snello applicato al contesto PMI: sprint da 1–2 settimane, backlog orientato al business, retrospective con impactScore reale misurato a ogni rilascio",
+        "Riduzione del tempo medio di sviluppo feature del 60% grazie all'AI-augmented workflow",
+      ],
+      skills: ["MCP", "TypeScript", "Node.js", "Hono", "Zod", "GitLab CI/CD", "Scrum", "AI Orchestration", "Cursor", "GitHub Copilot"],
+      tags: ["tech", "human", "ai-orchestration"],
+    },
     {
       company: "ALTEN Italia",
       role: "Senior Frontend Developer",
@@ -467,6 +490,27 @@ export const cvData = {
 
   // ── Certifications ────────────────────────────────────────────────────────
   certifications: [
+    {
+      name: "Introduction to Agile Development and Scrum",
+      issuer: "IBM",
+      date: "2026-02",
+      credentialId: "L7GZFSYJYMAC",
+      // Impatto pratico: framework Scrum snello applicato a sprint PMI — garantisce ROI misurabile a ogni rilascio e riduce il time-to-market del 30–40% rispetto a progetti waterfall
+    },
+    {
+      name: "UX/UI Design Fundamentals: Usability and Visual Principles",
+      issuer: "SkillUp",
+      date: "2026-02",
+      credentialId: "VELSWBCO2YEL",
+      // Impatto pratico: principi di usabilità applicati a interfacce per operatori non tecnici — riduzione tempi di formazione e tasso di errore operativo
+    },
+    {
+      name: "Introduction to UX/UI Design",
+      issuer: "IBM",
+      date: "2026-01",
+      credentialId: "LUL4LSALE01X",
+      // Impatto pratico: metodo IBM Design Thinking integrato nel processo di analisi strategica pre-sviluppo — i requisiti diventano interfacce prima di diventare codice
+    },
     {
       name: "UX Design Professional Certificate",
       issuer: "IBM",

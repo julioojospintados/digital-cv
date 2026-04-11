@@ -9,28 +9,101 @@
 
 ## ⚡ Carica sempre all'inizio della sessione
 
-Prima di rispondere a **qualsiasi richiesta** su questo progetto (UI, animazioni, componenti, dati, layout, design, MCP), leggi obbligatoriamente:
+Prima di rispondere a **qualsiasi richiesta** su questo progetto, leggi:
 
-- **`.github/skills/knolling-cv/SKILL.md`** — design system completo, GO concept, gamification, standard Awwwards, scopo professionale
+- **`.github/skills/knolling-cv/SKILL.md`** — regole trasversali obbligatorie (carica sempre)
+
+Poi carica la skill specializzata pertinente alla richiesta:
+
+- **`.github/skills/identity/SKILL.md`** — testi, bio, tone of voice, narrativa GO, job hunting
+- **`.github/skills/design-system/SKILL.md`** — UI, animazioni, card, knolling, GSAP, Tailwind 4, Awwwards
+- **`.github/skills/agile-methodology/SKILL.md`** — esperienze, Agile, UX/UI, certificazioni, sprint
+- **`.github/skills/mcp-architecture/SKILL.md`** — backend, MCP tools, Hono, test, cv.ts
+
+---
+
+## Identità professionale
+
+**Giulio Occhipinti** — **Consulente per l'Innovazione Digitale & Partner Tecnico per PMI**.
+
+È un **generalista esperto** che supporta le PMI a 360°, orchestrando tre pilastri integrati:
+
+| Pilastro       | Cosa include                                                                          |
+| -------------- | ------------------------------------------------------------------------------------- |
+| **Tecnologia** | Sviluppo software gestionale, architetture MCP, automazione, Angular/Lit/Node.js      |
+| **Design**     | UX/UI (cert. IBM + SkillUp), comunicazione del brand, esperienza utente operativa     |
+| **Metodo**     | Agile snello (Scrum), sprint brevi, backlog orientato al business, autonomia del team |
+
+Nessuno dei tre pilastri funziona da solo. Giulio li porta **tutti e tre in ogni ingaggio**.
+
+**Regola Ferrea — Visione Multidisciplinare:**
+Ogni risposta che descrive Giulio deve riflettere questa visione integrata, mai solo tecnica.
+Non dire "sviluppatore" o "esperto AI": di' **Facilitatore che orchestra Tecnologia, Design e Metodo**.
+
+Il flusso tipo di un suo intervento:
+
+1. **Analisi Strategica** — comprensione del processo aziendale e dei colli di bottiglia reali
+2. **Design della soluzione** — architettura tecnica + UX prima di scrivere codice
+3. **Build iterativo Agile** — sprint brevi, rilasci frequenti, impactScore misurato
+4. **Autonomia del team** — il team continua senza dipendere dal consulente
+
+Non un manager da organigramma, non un consulente che consegna slide: qualcuno che **entra nell'azienda, capisce il problema reale, costruisce la soluzione e la fa girare** — con le proprie mani e con l'AI come moltiplicatore.
+Il target non sono le multinazionali con team di 50 persone. Sono le **PMI che vogliono scalare senza assumere 10 persone** — usando Tecnologia, Design e Metodo Agile per fare in 2 quello che altri fanno in 8.
+
+**Vocabolario — Regola Ferrea:** Evita sempre gergo corporate come "alignment", "stakeholder management", "vertical growth", "ownership", "KPI-driven". Usa: **risoluzione**, **automazione**, **velocità di rilascio**, **impatto sul business**, **autonomia strategica**, **Tecnologia**, **Design**, **Metodo**.
 
 ---
 
 ## Scopo professionale del sito
 
 Questo è il **CV digitale di Giulio Occhipinti per trovare lavoro** — non un portfolio sperimentale.
-Target: **Recruiter** (leggibilità, seniorità), **CTO/Tech Lead** (architettura, AI workflow, Angular/Lit), **Art Director** (estetica, knolling, storytelling).
+Target: **Recruiter** (leggibilità, seniorità), **CTO/Tech Lead** (architettura, AI workflow, MCP, Angular/Lit), **Art Director** (estetica, knolling, storytelling).
 Ogni decisione UI/UX deve rispettare la regola: **l'esperienza dimostra le competenze, non si limita ad elencarle**.
 
 ---
 
-## GO: Viaggio e Gamification
+## Focus Progettuale Attuale
 
-"GO" non è un logo — è un **invito al viaggio**. Il sito è strutturato come un gioco narrativo:
+Giulio sta guidando lo sviluppo di un **software gestionale interno** come caso studio di Partnering Operativo:
+
+- **Analisi del bisogno aziendale** — mappatura dei processi prima di toccare il codice
+- **Architettura MCP** (Model Context Protocol) — tool, resource, prompt come API per agenti AI
+- **UX per operatori non tecnici** — interfacce semplici che riducono i tempi di formazione
+- **Workflow automatizzati** — pipeline Cursor → GitLab CI/CD → deploy senza intervento manuale
+- **Agile snello** — sprint da 1–2 settimane con impactScore reale a ogni rilascio
+
+Questo progetto è la dimostrazione live dei tre pilastri (Tecnologia + Design + Metodo) in un unico ingaggio.
+
+---
+
+## Metodologia — Hands-on & Agile snello per PMI
+
+- **Operativo prima di tutto**: non delega, esegue. Progetta l'architettura e scrive il codice — spesso nella stessa giornata.
+- **Agile senza burocrazia**: sprint corti (1–2 settimane), nessun documento che non serve a rilasciare domani. Backlog = lista di problemi aziendali concreti, non requisiti astratti.
+- **Velocità misurabile**: ogni ciclo di lavoro produce un `impactScore` reale — tempo risparmiato, costo evitato, funzionalità consegnata.
+- **Autonomia al team**: l'obiettivo è rendere il team indipendente, non creare dipendenza dal consulente. I workflow AI rimangono all'azienda.
+- **Regola**: ogni decisione tecnica deve rispondere a "Cosa sblocca il business domani mattina?"
+
+---
+
+## GO: Viaggio, Gamification e Velocità
+
+"GO" non è un logo — è un **invito al viaggio** e una **dichiarazione di metodo**.
+Il sito è strutturato come un gioco narrativo, ma il GO si estende anche al workflow professionale:
+
+### GO nel sito (narrativa utente)
+
 - **Preloader**: `G` e `O` volano verso il nome (G→Giulio, O→Occhipinti) — rituale iniziatico
 - **Landing `/`**: scegliere TECH / CREATIVE / HUMAN è come **scegliere il proprio personaggio**
 - **`/cv`**: le card passive diventano sussurri — l'utente esplora senza mai ricominciare da zero
 - **`<go-logo>`**: sempre visibile, click = Master Reset a `/` — mode-reactivo (cyan/orange/gold)
 - **CTA semantica**: sempre `GO Tech`, `GO Creative`, `GO Human` — mai "Scopri", "Vedi", "Leggi"
+
+### GO nel metodo (identità professionale)
+
+- **GO Automated** — ogni task ripetibile diventa un workflow AI. Se lo fai due volte, automatizzalo.
+- **GO Agile** — sprint corti, feedback rapido, nessun documento che non serve domani mattina.
+- La velocità di esecuzione AI-aumentata non è un vantaggio competitivo: è il **nuovo standard**.
 
 ---
 
@@ -40,6 +113,7 @@ Quando l'utente fa una domanda **non direttamente legata al codice o al progetto
 (es. domande generali, ricerche, analisi, decisioni, confronti), chiedi **prima di rispondere**:
 
 > "Vuoi che usi:
+>
 > - 🔍 **Brave Search** — per cercare informazioni aggiornate online
 > - 🧠 **Sequential Thinking** — per ragionare la risposta in modo strutturato step-by-step?
 > - Sì / Solo Brave o solo Sequential Thinking/SQ?"
@@ -52,13 +126,14 @@ Quando l'utente fa una domanda **non direttamente legata al codice o al progetto
 
 **Digital CV di Giulio Occhipinti** — un CV interattivo con due sistemi indipendenti:
 
-| Entry point | Scopo |
-|---|---|
-| `cv-site/` | Sito Astro statico — il CV visuale e interattivo |
+| Entry point    | Scopo                                                  |
+| -------------- | ------------------------------------------------------ |
+| `cv-site/`     | Sito Astro statico — il CV visuale e interattivo       |
 | `src/index.ts` | Server MCP (stdio) — AI tooling per accesso ai dati CV |
-| `src/http.ts` | Server HTTP (Hono) — REST API |
+| `src/http.ts`  | Server HTTP (Hono) — REST API                          |
 
 Il **sito principale** (`cv-site/`) usa:
+
 - **Astro** (shell statica, routing)
 - **Lit** (web components interattivi — "islands")
 - **Tailwind CSS** (grid, spacing, utilities)
@@ -69,10 +144,10 @@ Il **sito principale** (`cv-site/`) usa:
 
 ## File dati CV — source of truth
 
-| File | Contenuto |
-|---|---|
-| `src/data/cv.ts` | Dati CV completi in **italiano** — unica fonte di verità |
-| `src/data/cv.en.ts` | Traduzione in **inglese** — importa i tipi da `cv.ts` |
+| File                | Contenuto                                                |
+| ------------------- | -------------------------------------------------------- |
+| `src/data/cv.ts`    | Dati CV completi in **italiano** — unica fonte di verità |
+| `src/data/cv.en.ts` | Traduzione in **inglese** — importa i tipi da `cv.ts`    |
 
 Entrambi esportano `cvData` / `cvDataEn` con le sezioni:
 `personal`, `social`, `languages`, `experience`, `education`, `certifications`,
@@ -90,11 +165,11 @@ Il sito si chiama **Knolling / Flat Lay CV**: ogni elemento (esperienza, skill, 
 
 **3 modalità globali** (impostabili via URL `?mode=...` e `localStorage`):
 
-| Mode | URL param | Focus |
-|---|---|---|
-| TECH | `?mode=tech` | Architetture, codice, sistemi. Tema scuro, neon verde/blu |
-| CREATIVE | `?mode=creative` | Racconto, immagine, suono. Tema caldo, editoriale |
-| HUMAN | `?mode=human` | Impatto, relazione, presenza. Tema neutro carta |
+| Mode     | URL param        | Focus                                                     |
+| -------- | ---------------- | --------------------------------------------------------- |
+| TECH     | `?mode=tech`     | Architetture, codice, sistemi. Tema scuro, neon verde/blu |
+| CREATIVE | `?mode=creative` | Racconto, immagine, suono. Tema caldo, editoriale         |
+| HUMAN    | `?mode=human`    | Impatto, relazione, presenza. Tema neutro carta           |
 
 **Regola card**: ogni card ha tag (`tech`, `creative`, `human`, `logic`, `agile`, ecc.).
 Il mode attivo porta le card con tag corrispondenti a `opacity: 1`, le altre a `opacity: var(--card-opacity-passive)`.
@@ -155,12 +230,12 @@ AGENTS.md                 ← Guida per agenti AI (struttura e convenzioni)
 
 ## Comandi utili
 
-| Comando | Azione |
-|---|---|
-| `npm run build` | Compila TypeScript → `dist/` |
-| `npm run dev` | Watch mode (ricompila in automatico) |
-| `npm start` | Avvia il server compilato |
-| `npm run build:start` | Build + avvio in un comando |
+| Comando               | Azione                               |
+| --------------------- | ------------------------------------ |
+| `npm run build`       | Compila TypeScript → `dist/`         |
+| `npm run dev`         | Watch mode (ricompila in automatico) |
+| `npm start`           | Avvia il server compilato            |
+| `npm run build:start` | Build + avvio in un comando          |
 
 ## Come aggiungere un nuovo tool
 

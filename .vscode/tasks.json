@@ -1,0 +1,61 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    // ─── AUTO-BUILD MCP SERVER ON FOLDER OPEN ─────────────────────────────
+    // Garantisce che dist/index.js esista sempre quando VS Code apre il progetto.
+    // Senza questo, mcp-base-template mostra "stopped" perché il file non esiste.
+    {
+      "label": "MCP: Auto-build server",
+      "type": "shell",
+      "command": "npm run build",
+      "group": "build",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "presentation": {
+        "reveal": "silent",
+        "close": true,
+        "panel": "dedicated",
+        "showReuseMessage": false
+      },
+      "runOptions": {
+        "runOn": "folderOpen"
+      },
+      "problemMatcher": "$tsc"
+    },
+    // ─── BUILD MANUALE (alias comodo) ─────────────────────────────────────
+    {
+      "label": "MCP: Build",
+      "type": "shell",
+      "command": "npm run build",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": "$tsc"
+    },
+    // ─── BUILD + START (debug manuale) ────────────────────────────────────
+    {
+      "label": "MCP: Build & Start",
+      "type": "shell",
+      "command": "npm run build:start",
+      "group": "none",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      },
+      "isBackground": false,
+      "problemMatcher": []
+    }
+  ]
+}
