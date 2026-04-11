@@ -112,7 +112,7 @@ Digital_CV/
 │   └── extracted-text.txt          ← Testo grezzo estratto dal CV originale (sorgente dati)
 │
 ├── .vscode/                        ← Configurazione VS Code e Copilot AI
-│   ├── mcp.json                    ← Server MCP attivi in VS Code (GitHub, Brave Search, ecc.)
+│   ├── mcp.json                    ← Server MCP attivi in VS Code (GitHub, Sequential Thinking, ecc.)
 │   ├── settings.json               ← Impostazioni progetto + Copilot
 │   │
 │   ├── design.instructions.md      ← [COPILOT] Regole design auto-iniettate su cv-site/src/**
@@ -229,7 +229,7 @@ Configurati in `.vscode/mcp.json`:
 | `filesystem`          | 💤 commentato | Lettura/scrittura file su disco          |
 | `memory`              | 💤 commentato | Knowledge graph persistente tra sessioni |
 | `sequential-thinking` | 💤 commentato | Ragionamento multi-step strutturato      |
-| `brave-search`        | 💤 commentato | Ricerca web in tempo reale               |
+
 
 Per attivare un server commentato: rimuovi i `//` nel blocco corrispondente in `.vscode/mcp.json`.
 

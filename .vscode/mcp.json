@@ -13,12 +13,6 @@
       "type": "promptString",
       "description": "GitLab Personal Access Token (scope: api)",
       "password": true
-    },
-    {
-      "id": "brave-api-key",
-      "type": "promptString",
-      "description": "Brave Search API Key — get one at https://api.search.brave.com/",
-      "password": true
     }
   ],
   "servers": {
@@ -64,19 +58,7 @@
     // ═══════════════════════════════════════════════════════════════════════
     // ○ ON-DEMAND — attivare solo quando servono (richiedono token/auth)
     // ═══════════════════════════════════════════════════════════════════════
-    // BRAVE SEARCH — ricerca web in tempo reale
-    // Get your free API key at: https://api.search.brave.com/
-    "brave-search": {
-      "type": "stdio",
-      "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-brave-search"
-      ],
-      "env": {
-        "BRAVE_API_KEY": "${input:brave-api-key}"
-      }
-    },
+
     // GITHUB — repos, issues, PRs, branches, commits, file search
     // Create token: https://github.com/settings/tokens
     "github": {

@@ -185,7 +185,7 @@ src/
   utils/
     logger.ts         ← stderr-only logger (stdout reserved for MCP JSON-RPC)
 .vscode/
-  mcp.json            ← External MCP servers active in VS Code (GitHub, Brave, etc.)
+  mcp.json            ← External MCP servers active in VS Code (GitHub, Sequential Thinking, etc.)
   prompts/            ← Reusable /slash prompts for Copilot
   typescript.instructions.md  ← TypeScript conventions auto-injected into Copilot
   http.instructions.md        ← Hono/HTTP conventions auto-injected into Copilot

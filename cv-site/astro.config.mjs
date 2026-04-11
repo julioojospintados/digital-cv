@@ -10,6 +10,8 @@ const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
 // https://astro.build/config
 export default defineConfig({
+  // Comprime l'HTML in output: rimuove commenti <!-- -->, spazi ridondanti, newline
+  compressHTML: true,
   integrations: [lit()],
   vite: {
     plugins: [tailwindcss()],

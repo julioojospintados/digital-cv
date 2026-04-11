@@ -112,11 +112,7 @@ Il sito è strutturato come un gioco narrativo, ma il GO si estende anche al wor
 Quando l'utente fa una domanda **non direttamente legata al codice o al progetto corrente**
 (es. domande generali, ricerche, analisi, decisioni, confronti), chiedi **prima di rispondere**:
 
-> "Vuoi che usi:
->
-> - 🔍 **Brave Search** — per cercare informazioni aggiornate online
-> - 🧠 **Sequential Thinking** — per ragionare la risposta in modo strutturato step-by-step?
-> - Sì / Solo Brave o solo Sequential Thinking/SQ?"
+> "Vuoi che usi **Sequential Thinking** — per ragionare la risposta in modo strutturato step-by-step?"
 
 **Non fare questa domanda** per operazioni di codice, build, file, git o MCP — procedi direttamente.
 

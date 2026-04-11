@@ -626,7 +626,7 @@ export const cvData = {
   projects: [
     {
       name: 'Film "Double"',
-      description: 'Deuteragonista nel cortometraggio "Double", presentato all\'Independent Film Festival di San Francisco nel 2022.',
+      description: 'Deuteragonista nel film "Double", presentato all\'Independent Film Festival di San Francisco nel 2022.',
       date: "2022-01",
       tags: ["Cinema", "Recitazione"],
     },

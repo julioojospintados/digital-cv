@@ -5,6 +5,23 @@ description: "Regole visual e tecniche del Digital CV. Carica quando: crei compo
 
 # Design System — Knolling CV
 
+## Riferimento Visivo Knolling — CARICA SEMPRE
+
+**BLOCKING:** Prima di qualsiasi lavoro su layout, card, griglia o mobile — usa `view_image` per caricare:
+`.github/skills/design-system/knolling-reference.jpg`
+
+Questa foto mostra i TUOI oggetti (megafono, laptop, bussola, fotocamera, torcia, scacchi, pianta, multitool)
+disposti in una fotografia knolling reale. È la **referenza visiva assoluta** per ogni decisione di layout.
+
+**Regole estratte dalla foto:**
+
+- Tutti gli oggetti sono **paralleli o perpendicolari** al bordo — zero angolature casuali
+- **Gap costante** tra ogni oggetto — identico in tutte le direzioni
+- Gli oggetti grandi (laptop) dominano il centro, i piccoli ai bordi
+- Il **bianco (o sfondo) tra gli oggetti è parte del design**, non spazio vuoto
+- Nessun oggetto si tocca, nessuno si sovrappone
+- La percezione di "ordine" deriva dalla **ripetizione ritmica dello spazio**
+
 ## Colori — Sistema Fisso
 
 Lo sfondo è **sempre ottanio** `rgba(8,73,67,1)` in tutti e 3 i mode. Solo `--color-accent` cambia.
