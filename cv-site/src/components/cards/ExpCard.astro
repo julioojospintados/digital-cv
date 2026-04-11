@@ -1,0 +1,165 @@
+---
+interface Props {
+  company: string;
+  role: string;
+  startYear: string;
+  endYear: string;
+  location?: string;
+  remote?: boolean;
+  description: string;
+  highlights?: string[];
+  skills?: string[];
+  modeTags: string;
+}
+
+const {
+  company,
+  role,
+  startYear,
+  endYear,
+  location,
+  remote = false,
+  description,
+  highlights = [],
+  skills = [],
+  modeTags,
+} = Astro.props;
+---
+
+<article class="exp-card cv-card" data-tags={modeTags}>
+  <header class="exp-card__header">
+    <div class="exp-card__top">
+      <span class="exp-card__company">{company}</span>
+      <span class="exp-card__dates">{startYear} — {endYear}</span>
+    </div>
+    <h3 class="exp-card__role">{role}</h3>
+    {location && (
+      <p class="exp-card__location">{location}{remote ? ' · Remote' : ''}</p>
+    )}
+  </header>
+  <p class="exp-card__desc">{description}</p>
+  {highlights.length > 0 && (
+    <ul class="exp-card__highlights">
+      {highlights.slice(0, 3).map(h => (
+        <li>{h}</li>
+      ))}
+    </ul>
+  )}
+  {skills.length > 0 && (
+    <div class="exp-card__skills">
+      {skills.slice(0, 7).map(s => (
+        <span class="skill-chip">{s}</span>
+      ))}
+    </div>
+  )}
+</article>
+
+<style>
+  .exp-card {
+    padding: 1.25rem;
+    border: 1px solid var(--color-border);
+    border-radius: 2px;
+    background: rgba(255, 255, 255, 0.03);
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    transition:
+      opacity var(--duration-state) var(--ease-standard),
+      transform var(--duration-state) var(--ease-standard),
+      border-color var(--duration-state) var(--ease-standard);
+  }
+
+  .exp-card[data-state='active'] {
+    border-color: color-mix(in srgb, var(--color-accent) 35%, transparent);
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  .exp-card__header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+
+  .exp-card__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .exp-card__company {
+    font-size: 0.62rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+  }
+
+  .exp-card__dates {
+    font-size: 0.6rem;
+    font-weight: 500;
+    color: rgba(192, 220, 215, 0.85);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .exp-card__role {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+
+  .exp-card__location {
+    font-size: 0.62rem;
+    color: rgba(192, 220, 215, 0.85);
+    margin: 0;
+  }
+
+  .exp-card__desc {
+    font-size: 0.78rem;
+    line-height: 1.65;
+    color: rgba(192, 220, 215, 0.85);
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .exp-card[data-state='active'] .exp-card__desc {
+    -webkit-line-clamp: 10;
+  }
+
+  .exp-card__highlights {
+    margin: 0;
+    padding: 0 0 0 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+
+  .exp-card__highlights li {
+    font-size: 0.72rem;
+    line-height: 1.5;
+    color: rgba(192, 220, 215, 0.85);
+  }
+
+  .exp-card__skills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    margin-top: auto;
+  }
+
+  .skill-chip {
+    font-size: 0.58rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: rgba(192, 220, 215, 0.85);
+    padding: 0.15rem 0.4rem;
+    border: 1px solid var(--color-border);
+    border-radius: 1px;
+  }
+</style>
