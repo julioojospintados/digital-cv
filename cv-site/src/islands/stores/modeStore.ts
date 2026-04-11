@@ -1,8 +1,8 @@
 import { persistentAtom } from '@nanostores/persistent';
 
-export type Mode = 'tech' | 'creative' | 'human';
+export type Mode = 'tech' | 'creative' | 'human' | 'management';
 
-const VALID_MODES: Mode[] = ['tech', 'creative', 'human'];
+const VALID_MODES: Mode[] = ['tech', 'creative', 'human', 'management'];
 
 function getInitialMode(): Mode {
   if (typeof window !== 'undefined') {
@@ -30,7 +30,10 @@ export function setMode(mode: Mode): void {
   };
 
   if ('startViewTransition' in document) {
-    document.startViewTransition(run);
+    // Non usiamo ViewTransition per il cambio mode:
+    // avvolgerebbe ogni click in un crossfade dell'intera pagina (~300ms di lock)
+    // invece di aggiornare CSS variables + card states immediatamente.
+    run();
   } else {
     run();
   }

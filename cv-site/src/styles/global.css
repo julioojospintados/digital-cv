@@ -94,6 +94,18 @@
   --card-scale-passive: 0.97;
 }
 
+[data-mode="management"] {
+  --color-bg: rgba(8, 73, 67, 1);
+  --color-surface: rgba(30, 10, 60, 0.4);
+  --color-border: rgba(180, 100, 255, 0.25);
+  --color-text-primary: rgba(240, 230, 255, 1);
+  /* WCAG AA — ~4.6:1 su bg ottanio */
+  --color-text-muted: rgba(200, 170, 255, 0.78);
+  --color-accent: rgba(180, 100, 255, 1);
+  --card-opacity-passive: 0.2;
+  --card-scale-passive: 0.97;
+}
+
 /* ─── Base styles ─── */
 
 html {
@@ -101,9 +113,9 @@ html {
   scroll-padding-top: 5rem;
   background-color: var(--color-bg);
   color: var(--color-text-primary);
-  transition:
-    background-color var(--duration-state) var(--ease-standard),
-    color var(--duration-state) var(--ease-standard);
+  /* Nessuna transition su html: causerebbe repaint in cascata su tutti gli elementi
+     al cambio di CSS custom properties (--color-bg, --color-text-primary).
+     Le singole card e componenti gestiscono le proprie transition. */
 }
 
 body {
@@ -295,6 +307,43 @@ body::after {
 
 .magnetic {
   transition: transform 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* ─── CV card — stato passivo / attivo (mode system) ─── */
+/* Globali perché le card sono in sub-component Astro con hash diverso */
+
+/* Passive: sussurro visivo — presente ma in ombra */
+.cv-card[data-state='passive'] {
+  opacity: 0.4;
+  transform: scale(var(--card-scale-passive, 0.97));
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border-color: var(--color-border) !important;
+  box-shadow: none !important;
+}
+
+/* Active: card in primo piano con bordo colorato e glow leggero */
+.cv-card[data-state='active'] {
+  opacity: 1;
+  border-color: color-mix(in srgb, var(--color-accent) 55%, transparent);
+  box-shadow:
+    0 0 16px color-mix(in srgb, var(--color-accent) 12%, transparent),
+    inset 0 0 24px color-mix(in srgb, var(--color-accent) 4%, transparent);
+}
+
+/* Mobile: bordo sinistro luminoso sulla card attiva */
+@media (max-width: 639px) {
+  .cv-card[data-state='active'] {
+    border-left-width: 3px;
+    border-left-color: var(--color-accent);
+    box-shadow:
+      -4px 0 20px color-mix(in srgb, var(--color-accent) 30%, transparent);
+  }
+
+  .cv-card[data-state='passive'] {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
 }
 
 /* ─── Scroll reveal ─── */

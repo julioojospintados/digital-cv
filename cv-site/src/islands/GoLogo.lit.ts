@@ -5,9 +5,10 @@ import { modeStore, type Mode } from './stores/modeStore.js';
  * <go-logo>
  *
  * Brand logo "GO" (Giulio Occhipinti) che reagisce al mode attivo:
- *  - TECH     → G con bagliore cyan
- *  - CREATIVE → O con gradiente orange animato
- *  - HUMAN    → entrambe le lettere con glow gold
+ *  - TECH       → G con bagliore cyan
+ *  - CREATIVE   → O con gradiente orange animato
+ *  - HUMAN      → entrambe le lettere con glow gold
+ *  - MANAGEMENT → entrambe le lettere con glow violet
  *
  * Click → Master Reset: torna alla landing / con gli oggetti knolling in stato neutro.
  */
@@ -41,7 +42,7 @@ class GoLogo extends LitElement {
     .go-g,
     .go-o {
       display: inline-block;
-      font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+      font-size: 1.5rem;
       font-weight: 800;
       letter-spacing: -0.03em;
       color: var(--color-text-primary, rgba(245, 240, 230, 1));
@@ -92,6 +93,16 @@ class GoLogo extends LitElement {
       text-shadow:
         0 0 5px rgba(240, 200, 127, 0.6),
         0 0 14px rgba(240, 200, 127, 0.3);
+    }
+
+    /* ── MANAGEMENT: G e O entrambe violet ──────────────────── */
+    :host([data-mode='management']) .go-g,
+    :host([data-mode='management']) .go-o {
+      color: rgba(180, 100, 255, 1);
+      text-shadow:
+        0 0 6px rgba(180, 100, 255, 1),
+        0 0 18px rgba(180, 100, 255, 0.55),
+        0 0 36px rgba(180, 100, 255, 0.2);
     }
   `;
 
