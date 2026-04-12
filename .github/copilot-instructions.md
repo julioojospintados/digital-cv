@@ -116,6 +116,8 @@ Quando l'utente fa una domanda **non direttamente legata al codice o al progetto
 
 **Non fare questa domanda** per operazioni di codice, build, file, git o MCP — procedi direttamente.
 
+Quando leggi il file `.todo.md` depenna i punti completati, ma non sentirti obbligato a completare tutto in una volta. Se ci sono punti che richiedono ulteriori chiarimenti o discussioni, sentiti libero di commentarli o chiedere all'utente prima di procedere.
+
 ---
 
 ## Panoramica progetto

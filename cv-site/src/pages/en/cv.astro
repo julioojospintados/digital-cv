@@ -1,0 +1,413 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { cvDataEn } from '@cv-data-en';
+import '../../styles/cv-page.css';
+import ExpCard     from '../../components/cards/ExpCard.astro';
+import AiCard      from '../../components/cards/AiCard.astro';
+import ProjectCard from '../../components/cards/ProjectCard.astro';
+import SkillSquare from '../../components/cards/SkillSquare.astro';
+import SoftItem    from '../../components/cards/SoftItem.astro';
+
+// ── Skill level labels (English) ───────────────────────────────────────────
+const LEVEL_EN: Record<string, string> = {
+  'Base': 'Basic', 'Intermedio': 'Intermediate', 'Avanzato': 'Advanced', 'Esperto': 'Expert',
+};
+
+// ── Skill mode-tag sets ────────────────────────────────────────────────────
+const TECH_SKILL_SET = new Set([
+  'Angular', 'HTML5', 'CSS / SCSS', 'TypeScript', 'JavaScript', 'Lit',
+  'RXJS', 'NGRX', 'WebComponents', 'React', 'Git', 'Bootstrap',
+  'Material Design', 'GraphQL', 'SQL', 'Jest', 'Node.js', 'REST API', 'Spring', 'JSF',
+  'MCP Protocol', 'Prompt Engineering', 'GSAP', 'Astro', 'Hono',
+]);
+const CREATIVE_SKILL_SET = new Set([
+  'Figma', 'SEO', 'SEM', 'UX Research', 'Wireframing', 'Video editing',
+  'Wordpress', 'Adobe Suite', 'Typography',
+]);
+const DUAL_SKILL_SET = new Set(['Accessibility / WCAG', 'UX Research', 'Wireframing', 'Figma']);
+
+function skillModeTags(name: string): string {
+  const isT = TECH_SKILL_SET.has(name);
+  const isC = CREATIVE_SKILL_SET.has(name) || DUAL_SKILL_SET.has(name);
+  if (isT && isC) return 'tech creative';
+  if (isT) return 'tech';
+  if (isC) return 'creative';
+  return 'tech creative human';
+}
+
+const LEVEL_BORDERS: Record<string, number> = {
+  'Base': 1, 'Intermedio': 2, 'Avanzato': 3, 'Esperto': 4,
+};
+const skillSquares = cvDataEn.technicalSkills.map(skill => ({
+  name: skill.name,
+  level: LEVEL_EN[skill.level] ?? skill.level,
+  borderPx: LEVEL_BORDERS[skill.level] ?? 1,
+  isGlow: skill.level === 'Avanzato' || skill.level === 'Esperto',
+  isLarge: skill.level === 'Esperto',
+  modeTags: skillModeTags(skill.name),
+}));
+
+// ── Experience mode tags ───────────────────────────────────────────────────
+const EXP_MODE_TAGS = [
+  'tech management',       // 0 — PMI Gestionale Internal Project
+  'tech',                   // 1 — Digital CV AI-Augmented
+  'tech management',        // 2 — ALTEN Italia (Angular/WebComponents enterprise)
+  'creative human',         // 3 — Music Agency
+  'creative',               // 4 — Freelance Videomaker
+  'tech human',             // 5 — ForgeLab (React/Covid dashboard)
+  'tech management',        // 6 — Consoft (Angular gestionali)
+  'tech management',        // 7 — Satispay
+  'human creative',         // 8 — Festival & Cultural Events
+  'creative human',         // 9 — Freelance Photographer
+  'creative human',         // 10 — Corriere di Chieri
+  'creative human',         // 11 — Artiversum
+  'creative',               // 12 — FreeGinevro / Graphic Designer
+  'human',                  // 13 — Gruppo Mondadori
+  'human creative',         // 14 — None Teatro
+  'human creative',         // 15 — B-Teatro
+  'human',                  // 16 — Bestar Hotel
+  'human',                  // 17 — UCI Cinemas
+  'human',                  // 18 — Starbucks Coffee
+  'creative human',         // 19 — Sogni Animazione
+  'human management',       // 20 — Metamorfosi / Fun Factory
+  'human',                  // 21 — Caveja srl
+];
+
+const featuredExpData = cvDataEn.experience.map((exp, i) => ({
+  company: exp.company,
+  role: exp.role,
+  startYear: exp.startDate.substring(0, 4),
+  endYear: exp.endDate === 'present' ? 'present' : exp.endDate.substring(0, 4),
+  location: exp.location ?? '',
+  remote: exp.remote ?? false,
+  description: exp.description,
+  highlights: exp.highlights ?? [],
+  skills: exp.skills ?? [],
+  modeTags: EXP_MODE_TAGS[i] ?? 'tech creative human',
+}));
+
+// ── Soft skills mode tags ─────────────────────────────────────────────────
+const SOFT_MODE_TAGS = [
+  'human creative',
+  'creative human',
+  'human',
+  'human management',
+  'tech human management',
+  'tech human management',
+  'human management',
+  'creative',
+  'tech creative human management',
+];
+
+const softSkillsData = cvDataEn.softSkills.map((skill, i) => ({
+  name: skill.name,
+  description: skill.description ?? '',
+  modeTags: SOFT_MODE_TAGS[i] ?? 'tech creative human',
+}));
+
+// ── AI Workflow items (English) ────────────────────────────────────────────
+const aiItems = [
+  {
+    tool: 'GitHub Copilot',
+    title: 'Angular enterprise development acceleration',
+    desc: 'NGRX boilerplate generation, Jest testing and repetitive architectural patterns, with critical validation of output.',
+    impact: '-87% boilerplate',
+    tags: 'tech',
+  },
+  {
+    tool: 'ChatGPT / Claude',
+    title: 'Prompt Engineering for UX prototyping',
+    desc: 'User personas, navigation flows and test scenarios from text briefs. Applied during the IBM UX Research phase.',
+    impact: '-90% discovery time',
+    tags: 'creative tech',
+  },
+  {
+    tool: 'Claude / GPT-4',
+    title: 'Code review and Angular architecture',
+    desc: 'Code smell analysis, refactoring and microfrontend architecture review with LLMs as pair reviewers.',
+    impact: '-60% debug time',
+    tags: 'tech',
+  },
+  {
+    tool: 'Midjourney',
+    title: 'Visual exploration for UX/UI briefs',
+    desc: 'Fast moodboards and visual concepts to align stakeholders before wireframing, avoiding costly iterations.',
+    impact: '-70% alignment cycles',
+    tags: 'creative',
+  },
+  {
+    tool: 'AI Tools',
+    title: 'Copywriting and technical documentation',
+    desc: 'SEO copy, A/B variants for landing pages and technical documentation from annotated code.',
+    impact: '+3x content velocity',
+    tags: 'creative',
+  },
+];
+
+// ── Availability badge ─────────────────────────────────────────────────────
+const availLabel =
+  cvDataEn.personal.availability === 'available' ? 'Available immediately' :
+  cvDataEn.personal.availability === 'open' ? 'Open to opportunities' :
+  'Not available';
+
+const availClass =
+  cvDataEn.personal.availability === 'available' ? 'badge--green' :
+  cvDataEn.personal.availability === 'open' ? 'badge--amber' :
+  'badge--gray';
+
+// ── Timeline ───────────────────────────────────────────────────────────────
+const MONTHS_EN = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+function isoToLabel(iso: string): string {
+  const [y, m] = iso.split('-');
+  return m ? `${MONTHS_EN[parseInt(m, 10) - 1]} ${y}` : y;
+}
+const timelineItems = [
+  ...cvDataEn.education.map(e => ({
+    date: e.endDate,
+    dateLabel: isoToLabel(e.endDate),
+    title: `${e.degree}${e.field ? ` — ${e.field}` : ''}`,
+    institution: e.institution,
+    type: 'edu' as const,
+    inProgress: false,
+    credentialId: undefined as string | undefined,
+  })),
+  ...cvDataEn.certifications.map(c => ({
+    date: c.date,
+    dateLabel: isoToLabel(c.date),
+    title: c.name,
+    institution: c.issuer,
+    type: 'cert' as const,
+    inProgress: c.inProgress ?? false,
+    credentialId: c.credentialId,
+  })),
+].sort((a, b) => b.date.localeCompare(a.date));
+
+// ── CEFR steps ─────────────────────────────────────────────────────────────
+const CEFR_STEPS: Record<string, number> = {
+  'Madrelingua': 6, 'Native': 6,
+  'C2': 6, 'C1': 5, 'B2': 4, 'B1': 3, 'A2': 2, 'A1': 1,
+};
+const langsWithSteps = cvDataEn.languages.map(l => ({
+  ...l,
+  steps: CEFR_STEPS[l.level] ?? 3,
+}));
+
+// ── Projects ───────────────────────────────────────────────────────────────
+const PROJECT_TAGS_MAP: Record<string, string> = {
+  'Cinema': 'creative',
+  'React': 'tech',
+  'Lit': 'tech',
+  'WebComponents': 'tech',
+  'Event management': 'human',
+  'Poetry': 'creative human',
+  'Poesia': 'creative human',
+  'Creativity': 'creative',
+};
+
+const projectsData = cvDataEn.projects.slice(0, 6).map(p => {
+  const tags = p.tags ?? [];
+  const modes = new Set<string>();
+  tags.forEach(t => {
+    const mapped = PROJECT_TAGS_MAP[t];
+    if (mapped) mapped.split(' ').forEach(m => modes.add(m));
+  });
+  const modeTags = modes.size > 0 ? Array.from(modes).join(' ') : 'tech creative human';
+  return { name: p.name, description: p.description, tags, modeTags };
+});
+---
+
+<Layout
+  title="CV — Giulio Occhipinti"
+  description="Interactive CV: Senior Frontend Developer, UX Designer, Creative Technologist."
+  lang="en"
+>
+
+  <!-- ────────────────────────────────────────────────────────── NAV -->
+  <nav class="cv-nav" id="cv-nav" aria-label="Main navigation">
+    <go-logo></go-logo>
+    <div class="mode-buttons" role="group" aria-label="Choose display mode">
+      <button class="mode-btn" data-nav-mode="tech" type="button" aria-pressed="false">
+        <span class="mode-btn__abbr" aria-hidden="true">TC</span>
+        <span class="mode-btn__label">Tech</span>
+      </button>
+      <button class="mode-btn" data-nav-mode="creative" type="button" aria-pressed="false">
+        <span class="mode-btn__abbr" aria-hidden="true">CR</span>
+        <span class="mode-btn__label">Creative</span>
+      </button>
+      <button class="mode-btn" data-nav-mode="human" type="button" aria-pressed="false">
+        <span class="mode-btn__abbr" aria-hidden="true">HU</span>
+        <span class="mode-btn__label">Human</span>
+      </button>
+      <button class="mode-btn" data-nav-mode="management" type="button" aria-pressed="false">
+        <span class="mode-btn__abbr" aria-hidden="true">MG</span>
+        <span class="mode-btn__label">Management</span>
+      </button>
+    </div>
+    <a href="/tech" class="cv-nav__lang" aria-label="Versione italiana">IT</a>
+  </nav>
+
+  <!-- ────────────────────────────────────────────────────────── MAIN -->
+  <main class="cv-main" id="main-content">
+
+    <!-- ── HERO ────────────────────────────────────────────────────── -->
+    <section class="hero-section" id="hero">
+      <div class="hero-badges">
+        <span class={`avail-badge ${availClass}`}>{availLabel}</span>
+      </div>
+      <h1 class="hero-name" id="hero-name" aria-label={cvDataEn.personal.name}>
+        {cvDataEn.personal.name.split('').map((char, i) => (
+          <span
+            class:list={['hero-char', { 'hero-char--go': i === 0 || i === 7 }, { 'hero-char--space': char === ' ' }]}
+          >{char === ' ' ? '\u00A0' : char}</span>
+        ))}
+      </h1>
+      <p class="hero-title">{cvDataEn.personal.title}</p>
+      <p class="hero-summary">{cvDataEn.personal.summary}</p>
+
+      <div class="hero-footer">
+        <div class="hero-socials">
+          {cvDataEn.social.map(s => (
+            <a href={s.url} class="social-link" target="_blank" rel="noopener noreferrer">
+              {s.platform}
+            </a>
+          ))}
+        </div>
+        <div class="hero-langs">
+          {langsWithSteps.map(l => (
+            <span class="lang-chip">
+              <b>{l.name}</b>
+              <span class="lang-cefr" aria-label={l.level} title={l.level}>
+                {Array.from({ length: 6 }, (_, i) => (
+                  <span class:list={[
+                    'lang-dot',
+                    { 'lang-dot--filled': i < l.steps },
+                    { 'lang-dot--native': l.steps === 6 },
+                  ]}></span>
+                ))}
+              </span>
+            </span>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- ── SKILLS BENTO ─────────────────────────────────────────────── -->
+    <section class="skills-section reveal delay-100" aria-label="Technical skills">
+      <h2 class="section-title">
+        <span>Skills</span>
+        <span class="section-subtitle">Size and glow proportional to level</span>
+      </h2>
+      <div class="skills-grid">
+        {skillSquares.map(skill => (
+          <SkillSquare {...skill} />
+        ))}
+      </div>
+    </section>
+
+    <!-- ── EXPERIENCE ─────────────────────────────────────────────── -->
+    <section class="exp-section reveal delay-200" aria-label="Work experience">
+      <h2 class="section-title">
+        <span>Experience</span>
+        <span class="section-subtitle">{cvDataEn.experience.length} roles across 5 countries</span>
+      </h2>
+      <div class="exp-grid">
+        {featuredExpData.map(exp => (
+          <ExpCard {...exp} />
+        ))}
+      </div>
+    </section>
+
+    <!-- ── AI WORKFLOW ─────────────────────────────────────────────── -->
+    <section class="ai-section reveal delay-300" aria-label="AI-Enhanced Workflow">
+      <h2 class="section-title">
+        <span>AI-Enhanced Workflow</span>
+        <span class="section-subtitle">How AI multiplies output without replacing judgement</span>
+      </h2>
+      <div class="ai-grid">
+        {aiItems.map(item => (
+          <AiCard {...item} />
+        ))}
+      </div>
+    </section>
+
+    <!-- ── SOFT SKILLS + METHODOLOGY ───────────────────────────────── -->
+    <section class="soft-section reveal" aria-label="Soft skills and methodology">
+      <div class="two-col-grid">
+        <div class="soft-block">
+          <h2 class="section-title"><span>Soft Skills</span></h2>
+          <ul class="soft-list">
+            {softSkillsData.map(skill => (
+              <SoftItem name={skill.name} description={skill.description} modeTags={skill.modeTags} variant="soft" />
+            ))}
+          </ul>
+        </div>
+        <div class="method-block">
+          <h2 class="section-title"><span>Mindset</span></h2>
+          <ul class="method-list">
+            {cvDataEn.methodology.map(m => (
+              <SoftItem name={m.name} description={m.description ?? ''} modeTags="tech creative human management" variant="method" />
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── PROJECTS ────────────────────────────────────────────────── -->
+    <section class="projects-section reveal" aria-label="Personal projects">
+      <h2 class="section-title"><span>Projects</span></h2>
+      <div class="projects-grid">
+        {projectsData.map(project => (
+          <ProjectCard {...project} />
+        ))}
+      </div>
+    </section>
+
+    <!-- ── EDUCATION & CERTIFICATIONS ─────────────────────────────── -->
+    <section class="edu-section reveal" aria-label="Education and certifications">
+      <div class="edu-header">
+        <h2 class="section-title">
+          <span>Education &amp; Certifications</span>
+          <span class="section-subtitle">completion timeline</span>
+        </h2>
+        <div class="timeline-legend" aria-hidden="true">
+          <span class="tl-legend-chip tl-legend-chip--cert">Certification</span>
+          <span class="tl-legend-chip tl-legend-chip--edu">Education</span>
+        </div>
+      </div>
+      <ol class="timeline" role="list">
+        {timelineItems.map(item => (
+          <li class="tl-item" data-type={item.type}>
+            <time class="tl-date" datetime={item.date} title={item.date}>{item.dateLabel}</time>
+            <span class="tl-dot-col" aria-hidden="true">
+              <span class="tl-dot"></span>
+            </span>
+            <div class="tl-body">
+              <p class="tl-title">
+                {item.title}
+                {item.inProgress && <span class="tl-wip">in progress</span>}
+              </p>
+              <p class="tl-inst">{item.institution}</p>
+              {item.credentialId && (
+                <p class="tl-cred">ID: {item.credentialId}</p>
+              )}
+            </div>
+          </li>
+        ))}
+      </ol>
+    </section>
+
+  </main>
+
+  <!-- ────────────────────────────────────────────────────────── FOOTER -->
+  <footer class="cv-footer">
+    <p class="cv-footer__credit">
+      Giulio Occhipinti · <a href="mailto:giulio.occhipinti.g@gmail.com">giulio.occhipinti.g@gmail.com</a>
+    </p>
+  </footer>
+
+</Layout>
+
+
+<script>
+  import '../../scripts/cv-init.ts';
+</script>

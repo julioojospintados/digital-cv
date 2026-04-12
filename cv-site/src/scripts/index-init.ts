@@ -314,12 +314,13 @@ cards.forEach(c => tappedOnce.set(c, false));
 
 cards.forEach((card) => {
   const mode = card.dataset.mode ?? 'tech';
-  const href = `/cv?mode=${mode}`;
+  const href = `/${mode}`;
   const color = HOLD_ACCENT[mode] ?? 'rgba(255,255,255,1)';
   const indicator = card.querySelector<HTMLElement>('.hold-indicator');
   const tapHint   = card.querySelector<HTMLElement>('.tap-hint');
   let cancelFn: (() => void) | null = null;
   let holdCompleted = false;
+  let holdJustCancelled = false;
 
   // ── Mostra/nasconde il tap-hint su mobile ───────────────────────────────
   function showTapHint() {
@@ -350,6 +351,8 @@ cards.forEach((card) => {
       const wasAlreadyTapped = tappedOnce.get(card) ?? false;
 
       if (wasAlreadyTapped) {
+        // Secondo tap deliberato → animate + navigate solo se il hold non è stato appena annullato
+        if (holdJustCancelled) { holdJustCancelled = false; return; }
         // Secondo tap deliberato → animate + navigate
         tappedOnce.set(card, false);
         hideTapHint();
@@ -394,25 +397,41 @@ cards.forEach((card) => {
     holdCompleted = false;
     hideTapHint();
 
+    // ── Aquatic background tint on card ─────────────────────────────────────
+    const origBg = card.style.background;
+    gsap.to(card, {
+      background: color.replace('1)', '0.12)'),
+      duration: HOLD_DURATION / 1000 * 0.6,
+      ease: 'power1.in',
+    });
+
     // ── Water container: translateY 100%→0% (sale dal basso) ──────────────
     const waterInner = document.createElement('div');
     waterInner.style.cssText = 'position:absolute;bottom:0;left:0;right:0;height:100%;pointer-events:none;z-index:1;overflow:visible;';
     gsap.set(waterInner, { y: '100%' });
     card.appendChild(waterInner);
 
+    // ── Solid fill layer: garantisce nessun gap in cima quando piena ────────
+    // Questo rettangolo solido a bassa opacità riempie dal basso dell'onda
+    // fino al fondo, mentre la waterInner risale tutta di y=100%→0%.
+    // Posizionato SOTTO l'SVG (z-index basso), copre l'area già "allagata".
+    const solidFill = document.createElement('div');
+    solidFill.style.cssText = `position:absolute;top:20px;left:0;right:0;bottom:0;background:${color.replace('1)', '0.55)')};pointer-events:none;z-index:0;`;
+    waterInner.appendChild(solidFill);
+
     // ── SVG unico: onda + riempimento — stessa opacità, nessuna riga ───────
     // height: calc(100%+20px) → SVG bottom = waterInner bottom (card bottom).
     // viewBox 400×1000: wave midpoint vb y=133 → ~20px da SVG top → waterline.
     // Riempie fino a vb y=1000 → nessun elemento separato, nessuna seam.
     const svgEl = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    svgEl.style.cssText = 'position:absolute;top:-20px;left:0;width:200%;height:calc(100% + 20px);display:block;overflow:visible;';
+    svgEl.style.cssText = 'position:absolute;top:-20px;left:0;width:200%;height:calc(100% + 20px);display:block;overflow:visible;z-index:1;';
     svgEl.setAttribute('viewBox', '0 0 400 1000');
     svgEl.setAttribute('preserveAspectRatio', 'none');
     const wavePathEl = document.createElementNS('http://www.w3.org/2000/svg', 'path');
     // Midpoint vb y=133, creste y=88, valli y=178 — ampiezza ~6px su card 130px
     wavePathEl.setAttribute('d', 'M0,133 C25,88 75,88 100,133 C125,178 175,178 200,133 C225,88 275,88 300,133 C325,178 375,178 400,133 L400,1000 L0,1000 Z');
     wavePathEl.setAttribute('fill', color);
-    wavePathEl.setAttribute('opacity', '0.25');
+    wavePathEl.setAttribute('opacity', '0.55');
     svgEl.appendChild(wavePathEl);
     waterInner.appendChild(svgEl);
 
@@ -503,7 +522,8 @@ cards.forEach((card) => {
         onComplete: () => waterInner.remove() });
       gsap.to(borderEl, { clipPath: 'inset(100% 0 0 0)', duration: 0.3, ease: 'power2.in',
         onComplete: () => borderEl.remove() });
-      gsap.to(card, { scale: 1.04, duration: 0.35, ease: 'back.out(1.5)' });
+      // Ripristina background della card
+      gsap.to(card, { background: origBg || '', scale: 1.04, duration: 0.35, ease: 'back.out(1.5)' });
       cancelFn = null;
     };
   }
@@ -511,6 +531,7 @@ cards.forEach((card) => {
   function endHold() {
     if (cancelFn && !holdCompleted) {
       cancelFn();
+      holdJustCancelled = true;
       const isMobile = !window.matchMedia('(min-width: 640px)').matches;
       if (isMobile && tappedOnce.get(card)) showTapHint();
     }

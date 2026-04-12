@@ -3,7 +3,8 @@
   "include": [
     ".astro/types.d.ts",
     "**/*",
-    "../src/data/cv.ts"
+    "../src/data/cv.ts",
+    "../src/data/cv.en.ts"
   ],
   "exclude": [
     "dist"
@@ -12,6 +13,9 @@
     "paths": {
       "@cv-data": [
         "../src/data/cv.ts"
+      ],
+      "@cv-data-en": [
+        "../src/data/cv.en.ts"
       ]
     }
   }

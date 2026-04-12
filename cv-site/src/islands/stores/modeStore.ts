@@ -10,6 +10,11 @@ function getInitialMode(): Mode {
     if (urlParam && VALID_MODES.includes(urlParam as Mode)) {
       return urlParam as Mode;
     }
+    // Check URL path for /tech, /creative, /human, /management
+    const pathSegment = window.location.pathname.split('/').filter(Boolean)[0] ?? '';
+    if (VALID_MODES.includes(pathSegment as Mode)) {
+      return pathSegment as Mode;
+    }
   }
   return 'tech';
 }
@@ -25,7 +30,14 @@ export function setMode(mode: Mode): void {
     modeStore.set(mode);
     document.documentElement.dataset.mode = mode;
     const url = new URL(window.location.href);
-    url.searchParams.set('mode', mode);
+    const pathSegment = url.pathname.split('/').filter(Boolean)[0] ?? '';
+    if (VALID_MODES.includes(pathSegment as Mode)) {
+      // On a path-based mode page — update the path instead of query param
+      url.pathname = `/${mode}`;
+      url.searchParams.delete('mode');
+    } else {
+      url.searchParams.set('mode', mode);
+    }
     window.history.replaceState({}, '', url.toString());
   };
 

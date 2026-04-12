@@ -515,25 +515,47 @@ go-logo:not(:defined) {
 }
 
 .tl-legend-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
   font-size: 0.58rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
+  font-weight: 600;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  padding: 0.15rem 0.5rem;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: default;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Dot indicator — mirrors the tl-dot shape */
+.tl-legend-chip::before {
+  content: '';
+  display: inline-block;
+  width: 7px;
+  height: 7px;
   border-radius: 1px;
-  border: 1px solid;
+  flex-shrink: 0;
 }
 
 .tl-legend-chip--cert {
   color: var(--color-accent);
-  border-color: color-mix(in srgb, var(--color-accent) 35%, transparent);
-  background: color-mix(in srgb, var(--color-accent) 8%, transparent);
+}
+
+.tl-legend-chip--cert::before {
+  background: var(--color-accent);
+  box-shadow: 0 0 4px 1px color-mix(in srgb, var(--color-accent) 40%, transparent);
 }
 
 .tl-legend-chip--edu {
-  color: rgba(192, 220, 215, 0.85);
-  border-color: var(--color-border);
+  color: rgba(192, 220, 215, 0.65);
+}
+
+.tl-legend-chip--edu::before {
   background: transparent;
+  border: 2px solid rgba(192, 220, 215, 0.45);
 }
 
 .timeline {

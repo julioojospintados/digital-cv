@@ -4,18 +4,20 @@ import '../styles/global.css';
 interface Props {
   title?: string;
   description?: string;
-  mode?: 'tech' | 'creative' | 'human';
+  mode?: 'tech' | 'creative' | 'human' | 'management';
+  lang?: 'it' | 'en';
 }
 
 const {
   title = 'Giulio Occhipinti — Digital CV',
   description = 'CV interattivo di Giulio Occhipinti: Senior Frontend Developer, UX Designer, Creative Technologist.',
   mode,
+  lang = 'it',
 } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="it" class="scroll-smooth" data-mode={mode ?? 'tech'}>
+<html lang={lang} class="scroll-smooth" data-mode={mode ?? 'tech'}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />

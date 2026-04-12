@@ -128,7 +128,7 @@ class GoLogo extends LitElement {
 
   private _handleClick() {
     // Master Reset: torna alla landing con stato neutro
-    window.location.href = '/';
+    window.location.href = '/home';
   }
 
   render() {

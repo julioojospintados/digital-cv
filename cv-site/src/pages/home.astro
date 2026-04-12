@@ -1,5 +1,6 @@
 ---
-return Astro.redirect('/home', 301);
+import Layout from '../layouts/Layout.astro';
+import '../styles/index-page.css';
 ---
 
 <Layout title="Giulio Occhipinti — Digital CV" description="CV interattivo di Giulio Occhipinti">
@@ -42,8 +43,6 @@ return Astro.redirect('/home', 301);
       </header>
 
       <!-- Mobile knolling zone — grid 15 col, 3+5, visible only below 640px -->
-      <!-- Riga 1 (4+7+4): Megafono · Laptop · Bussola -->
-      <!-- Riga 2 (3×5):   Pianta · Torcia(120°→laptop) · Scacchi · Camera · Multitool -->
       <div class="knolling-mob" aria-hidden="true">
         <div class="knoll-wrap"><img class="knoll-m" data-modes="creative human management" src="/knolling/megaphone.png"   alt="" loading="eager"></div>
         <div class="knoll-wrap"><img class="knoll-m" data-modes="tech management"           src="/knolling/laptop.png"      alt="" loading="eager"></div>
@@ -59,7 +58,7 @@ return Astro.redirect('/home', 301);
         <button class="mode-card" data-mode="tech" id="card-tech" type="button">
           <span class="mode-card__label">Tech</span>
           <span class="mode-card__desc">Architetture, codice, sistemi</span>
-          <span class="mode-card__go" data-href="/cv?mode=tech" role="link" tabindex="-1" aria-hidden="true"><span class="go-text">GO to Tech</span><span class="go-icon">↗</span></span>
+          <span class="mode-card__go" data-href="/tech" role="link" tabindex="-1" aria-hidden="true"><span class="go-text">GO to Tech</span><span class="go-icon">↗</span></span>
           <span class="tap-hint" aria-hidden="true">tieni premuto</span>
           <span class="hold-indicator" aria-hidden="true"></span>
         </button>
@@ -67,7 +66,7 @@ return Astro.redirect('/home', 301);
         <button class="mode-card" data-mode="creative" id="card-creative" type="button">
           <span class="mode-card__label">Creative</span>
           <span class="mode-card__desc">Racconto, immagine, suono</span>
-          <span class="mode-card__go" data-href="/cv?mode=creative" role="link" tabindex="-1" aria-hidden="true"><span class="go-text">GO to Creative</span><span class="go-icon">↗</span></span>
+          <span class="mode-card__go" data-href="/creative" role="link" tabindex="-1" aria-hidden="true"><span class="go-text">GO to Creative</span><span class="go-icon">↗</span></span>
           <span class="tap-hint" aria-hidden="true">tieni premuto</span>
           <span class="hold-indicator" aria-hidden="true"></span>
         </button>
@@ -75,7 +74,7 @@ return Astro.redirect('/home', 301);
         <button class="mode-card" data-mode="human" id="card-human" type="button">
           <span class="mode-card__label">Human</span>
           <span class="mode-card__desc">Impatto, relazione, presenza</span>
-          <span class="mode-card__go" data-href="/cv?mode=human" role="link" tabindex="-1" aria-hidden="true"><span class="go-text">GO to Human</span><span class="go-icon">↗</span></span>
+          <span class="mode-card__go" data-href="/human" role="link" tabindex="-1" aria-hidden="true"><span class="go-text">GO to Human</span><span class="go-icon">↗</span></span>
           <span class="tap-hint" aria-hidden="true">tieni premuto</span>
           <span class="hold-indicator" aria-hidden="true"></span>
         </button>
@@ -83,7 +82,7 @@ return Astro.redirect('/home', 301);
         <button class="mode-card" data-mode="management" id="card-management" type="button">
           <span class="mode-card__label">Management</span>
           <span class="mode-card__desc">Tradurre la visione in risultati concreti.</span>
-          <span class="mode-card__go" data-href="/cv?mode=management" role="link" tabindex="-1" aria-hidden="true"><span class="go-text">GO to Management</span><span class="go-icon">↗</span></span>
+          <span class="mode-card__go" data-href="/management" role="link" tabindex="-1" aria-hidden="true"><span class="go-text">GO to Management</span><span class="go-icon">↗</span></span>
           <span class="tap-hint" aria-hidden="true">tieni premuto</span>
           <span class="hold-indicator" aria-hidden="true"></span>
         </button>
@@ -100,4 +99,3 @@ return Astro.redirect('/home', 301);
 <script>
   import '../scripts/index-init.ts';
 </script>
-
