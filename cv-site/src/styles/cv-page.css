@@ -67,12 +67,12 @@ html[data-mode='management'] .bg-knoll--flashlight { opacity: 0.06; }
   .bg-knoll { opacity: 0.025 !important; width: 120px; }
 }
 
-/* ── Skill domain bubbles wrapper ───────────────────────────── */
+/* ── Skill chart wrapper ───────────────────────────── */
 skill-constellation,
-skill-domain-bubbles {
+skill-scatter-plot {
   display: block;
   margin-bottom: 2rem;
-  overflow-x: auto; /* horizontal scroll on tiny viewports */
+  overflow-x: auto;
 }
 
 .skills-sub-title {

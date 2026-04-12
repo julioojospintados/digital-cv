@@ -299,13 +299,13 @@ const projectsData = cvDataEn.projects.slice(0, 6).map(p => {
         <span>Skills</span>
         <span class="section-subtitle">Skill map by domain — hover to explore</span>
       </h2>
-      <skill-domain-bubbles></skill-domain-bubbles>
       <h3 class="skills-sub-title">Technical skills — tile size &amp; glow proportional to weight</h3>
       <div class="skills-grid">
         {skillSquares.map(skill => (
           <SkillSquare {...skill} />
         ))}
       </div>
+      <skill-scatter-plot></skill-scatter-plot>
     </section>
 
     <!-- ── EXPERIENCE ─────────────────────────────────────────────── -->
@@ -417,6 +417,6 @@ const projectsData = cvDataEn.projects.slice(0, 6).map(p => {
 
 <script>
   import '../../scripts/cv-init.ts';
-  import '../../islands/SkillDomainBubbles.lit.ts';
   import '../../islands/FloatingMenu.lit.ts';
+  import '../../islands/SkillScatterPlot.lit.ts';
 </script>
