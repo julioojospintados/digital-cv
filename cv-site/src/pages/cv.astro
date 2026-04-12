@@ -14,6 +14,7 @@ const TECH_SKILL_SET = new Set([
   'Angular', 'HTML5', 'CSS / SCSS', 'TypeScript', 'JavaScript', 'Lit',
   'RXJS', 'NGRX', 'WebComponents', 'React', 'Git', 'Bootstrap',
   'Material Design', 'GraphQL', 'SQL', 'Jest', 'Node.js', 'REST API', 'Spring', 'JSF',
+  'MCP Protocol', 'Prompt Engineering', 'GSAP', 'Astro', 'Hono',
 ]);
 const CREATIVE_SKILL_SET = new Set([
   'Figma', 'SEO', 'SEM', 'UX Research', 'Wireframing', 'Video editing',
@@ -45,17 +46,18 @@ const skillSquares = cvData.technicalSkills.map(skill => ({
 
 // ── Experience mode tags (indexed to match cv.ts order) ──────────────────
 const EXP_MODE_TAGS = [
-  'tech management',           // 0 ALTEN Italia
-  'creative human',            // 1 Music Agency
-  'creative',                  // 2 Freelance (Videomaker)
-  'tech human management',     // 3 ForgeLab
-  'tech management',           // 4 Consoft
-  'tech human management',     // 5 Satispay
-  'human creative',            // 6 Festival ed eventi
-  'creative',                  // 7 Freelance (Fotografo)
+  'tech management',           // 0 Progetto Interno — Gestionale PMI
+  'tech',                      // 1 Digital CV — AI-Augmented (NEW)
+  'tech management',           // 2 ALTEN Italia
+  'creative human',            // 3 Music Agency
+  'creative',                  // 4 Freelance (Videomaker)
+  'tech human',                // 5 ForgeLab
+  'tech management',           // 6 Consoft
+  'human creative',            // 7 Satispay
+  'creative human',            // 8 Festival ed eventi
 ];
 
-const featuredExpData = cvData.experience.slice(0, 8).map((exp, i) => ({
+const featuredExpData = cvData.experience.slice(0, 9).map((exp, i) => ({
   company: exp.company,
   role: exp.role,
   startYear: exp.startDate.substring(0, 4),

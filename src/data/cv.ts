@@ -175,6 +175,25 @@ export const cvData = {
       tags: ["tech", "human", "ai-orchestration"],
     },
     {
+      company: "Digital CV — Progetto Open Source AI-Augmented",
+      role: "AI Workflow Designer & Full-Stack Developer",
+      startDate: "2024-11",
+      endDate: "present",
+      location: "Torino, Italia",
+      remote: true,
+      description: "Progettazione e sviluppo di un CV interattivo come banco di prova sistematico per un workflow AI-augmented end-to-end. L'intero ciclo — architettura, UI, animazioni GSAP, server MCP, API HTTP con Hono — è stato costruito con GitHub Copilot e Claude come copiloti operativi, applicando Prompt Engineering strutturato per ogni fase: specifica, revisione, debug, refactoring. Il risultato è un sistema a due livelli: sito Astro + Lit per il CV visuale, e un server MCP che espone i dati CV come API per agenti AI. Il progetto è anche la dimostrazione live che un developer singolo, con l'AI come moltiplicatore, può produrre in settimane ciò che richiederebbe un team in mesi.",
+      highlights: [
+        "Architettura MCP con tool, resource e prompt template che espongono i dati CV come API per agenti AI (VS Code Copilot, Claude Desktop)",
+        "Sito Astro + Lit con animazioni GSAP avanzate: preloader narrativo, wave hold effect con SVG sine wave, distortion filter sott'acqua via feTurbulence",
+        "Workflow AI-augmented completo: GitHub Copilot + Claude per architettura, codice, debug e refactoring — zero boilerplate scritto a mano",
+        "Server HTTP Hono con OpenAPI spec, validazione Zod, route tipizzate e test automatizzati con Vitest",
+        "Prompt Engineering strutturato: skill file, agent instructions, prompt slash riutilizzabili — l'AI conosce il progetto come un membro senior del team",
+        "Riduzione del 70% del tempo di sviluppo rispetto a un approccio tradizionale, mantenendo qualità Awwwards-level sull'UI",
+      ],
+      skills: ["MCP Protocol", "Prompt Engineering", "GitHub Copilot", "Claude", "Cursor", "Astro", "Lit", "GSAP", "TypeScript", "Hono", "Zod", "Vitest"],
+      tags: ["tech", "ai-orchestration"],
+    },
+    {
       company: "ALTEN Italia",
       role: "Senior Frontend Developer",
       startDate: "2019-07",
@@ -562,6 +581,11 @@ export const cvData = {
     { name: "REST API", level: "Avanzato" },
     { name: "Accessibility / WCAG", level: "Intermedio" },
     { name: "Video editing", level: "Intermedio" },
+    { name: "MCP Protocol", level: "Avanzato" },
+    { name: "Prompt Engineering", level: "Avanzato" },
+    { name: "GSAP", level: "Avanzato", icon: "greensock" },
+    { name: "Astro", level: "Intermedio", icon: "astro" },
+    { name: "Hono", level: "Intermedio" },
   ] as Skill[],
 
   // ── Soft skills ───────────────────────────────────────────────────────────
@@ -624,6 +648,14 @@ export const cvData = {
 
   // ── Personal projects ─────────────────────────────────────────────────────
   projects: [
+    {
+      name: "Digital CV — Progetto Open Source AI-Augmented",
+      description: "CV interattivo open source costruito interamente con un workflow AI-augmented (GitHub Copilot + Claude). Sistema a due livelli: sito Astro + Lit con animazioni GSAP avanzate e wave effect SVG, e server MCP che espone i dati CV come API per agenti AI. La dimostrazione live del metodo: un developer che produce in settimane ciò che un team produrrebbe in mesi.",
+      url: "https://github.com/julioojospintados/digital-cv",
+      repoUrl: "https://github.com/julioojospintados/digital-cv",
+      date: "2024-11",
+      tags: ["Astro", "Lit", "GSAP", "MCP Protocol", "TypeScript", "Hono", "Prompt Engineering", "GitHub Copilot"],
+    },
     {
       name: 'Film "Double"',
       description: 'Deuteragonista nel film "Double", presentato all\'Independent Film Festival di San Francisco nel 2022.',
