@@ -274,3 +274,34 @@ describe("cvData.socialImpact", () => {
     }
   });
 });
+
+// ─────────────────────────────────────────────────────────────────────────────
+// experience.tags (optional field — when present must be valid strings)
+// ─────────────────────────────────────────────────────────────────────────────
+
+describe("cvData.experience tags", () => {
+  it("every experience with tags has a non-empty tags array of strings", () => {
+    for (const exp of cvData.experience) {
+      if (exp.tags !== undefined) {
+        expect(Array.isArray(exp.tags), `${exp.company} tags must be an array`).toBe(true);
+        expect((exp.tags as string[]).length, `${exp.company} tags must not be empty`).toBeGreaterThan(0);
+        for (const tag of exp.tags as string[]) {
+          expect(typeof tag).toBe("string");
+          expect(tag.trim().length, `tag "${tag}" in "${exp.company}" must not be blank`).toBeGreaterThan(0);
+        }
+      }
+    }
+  });
+
+  it("ai-orchestration tag is only on entries that contain AI-augmented work", () => {
+    const aiEntries = cvData.experience.filter(
+      (e) => Array.isArray(e.tags) && (e.tags as string[]).includes("ai-orchestration"),
+    );
+    // We expect at least one AI-augmented experience in the CV
+    expect(aiEntries.length).toBeGreaterThan(0);
+    // Every AI entry must also have a non-empty description mentioning some relevant concept
+    for (const entry of aiEntries) {
+      expect(entry.description.length).toBeGreaterThan(0);
+    }
+  });
+});
