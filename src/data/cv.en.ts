@@ -452,7 +452,7 @@ export const cvDataEn = {
 
   // ── Technical skills ──────────────────────────────────────────────────────
   technicalSkills: [
-    { name: "Angular", level: "Avanzato", icon: "angular", links: [
+    { name: "Angular", level: "Avanzato", icon: "angular", mastery: 82, links: [
       { target: "TypeScript",              type: "technical" },
       { target: "RXJS",                   type: "technical" },
       { target: "WebComponents",          type: "technical" },
@@ -460,41 +460,41 @@ export const cvDataEn = {
       { target: "Jest",                   type: "workflow" },
       { target: "Agile Methodology",      type: "cross-domain" },
     ]},
-    { name: "HTML5", level: "Esperto", icon: "html5", links: [
+    { name: "HTML5", level: "Esperto", icon: "html5", mastery: 95, links: [
       { target: "CSS / SCSS",             type: "technical" },
       { target: "JavaScript",             type: "technical" },
       { target: "Accessibility / WCAG",  type: "workflow" },
       { target: "WebComponents",          type: "technical" },
     ]},
-    { name: "CSS / SCSS", level: "Esperto", icon: "css3", links: [
+    { name: "CSS / SCSS", level: "Esperto", icon: "css3", mastery: 92, links: [
       { target: "HTML5",                  type: "technical" },
       { target: "Bootstrap",              type: "technical" },
       { target: "GSAP",                   type: "workflow" },
       { target: "UX / UI Design",        type: "cross-domain" },
       { target: "Aesthetic sensibility",  type: "cross-domain" },
     ]},
-    { name: "TypeScript", level: "Avanzato", icon: "typescript", links: [
+    { name: "TypeScript", level: "Avanzato", icon: "typescript", mastery: 85, links: [
       { target: "JavaScript",             type: "technical" },
       { target: "Angular",                type: "technical" },
       { target: "Lit",                    type: "technical" },
       { target: "Node.js",                type: "technical" },
       { target: "MCP Protocol",           type: "workflow" },
     ]},
-    { name: "JavaScript", level: "Avanzato", icon: "javascript", links: [
+    { name: "JavaScript", level: "Avanzato", icon: "javascript", mastery: 80, links: [
       { target: "TypeScript",             type: "technical" },
       { target: "React",                  type: "technical" },
       { target: "GSAP",                   type: "workflow" },
       { target: "Node.js",                type: "technical" },
       { target: "WebComponents",          type: "technical" },
     ]},
-    { name: "Lit", level: "Avanzato", icon: "lit", links: [
+    { name: "Lit", level: "Avanzato", icon: "lit", mastery: 80, links: [
       { target: "WebComponents",          type: "technical" },
       { target: "TypeScript",             type: "technical" },
       { target: "Angular",                type: "technical" },
       { target: "GSAP",                   type: "workflow" },
       { target: "Astro",                  type: "workflow" },
     ]},
-    { name: "RXJS", level: "Avanzato", links: [
+    { name: "RXJS", level: "Avanzato", mastery: 76, links: [
       { target: "Angular",                type: "technical" },
       { target: "JavaScript",             type: "technical" },
       { target: "Node.js",                type: "technical" },
@@ -505,141 +505,141 @@ export const cvDataEn = {
       { target: "RXJS",                   type: "technical" },
       { target: "TypeScript",             type: "technical" },
     ]},
-    { name: "WebComponents", level: "Avanzato", links: [
+    { name: "WebComponents", level: "Avanzato", mastery: 82, links: [
       { target: "Lit",                    type: "technical" },
       { target: "HTML5",                  type: "technical" },
       { target: "JavaScript",             type: "technical" },
       { target: "Angular",                type: "technical" },
     ]},
-    { name: "React", level: "Intermedio", icon: "react", links: [
+    { name: "React", level: "Intermedio", icon: "react", mastery: 65, links: [
       { target: "JavaScript",             type: "technical" },
       { target: "GraphQL",                type: "workflow" },
       { target: "Bootstrap",              type: "technical" },
       { target: "REST API",               type: "workflow" },
     ]},
-    { name: "Git", level: "Avanzato", icon: "git", links: [
+    { name: "Git", level: "Avanzato", icon: "git", mastery: 82, links: [
       { target: "Node.js",                type: "workflow" },
       { target: "REST API",               type: "workflow" },
       { target: "Agile Methodology",      type: "cross-domain" },
       { target: "Autonomy and ownership", type: "cross-domain" },
     ]},
-    { name: "Bootstrap", level: "Avanzato", icon: "bootstrap", links: [
+    { name: "Bootstrap", level: "Avanzato", icon: "bootstrap", mastery: 78, links: [
       { target: "CSS / SCSS",             type: "technical" },
       { target: "HTML5",                  type: "technical" },
       { target: "Material Design",        type: "conceptual" },
       { target: "React",                  type: "technical" },
     ]},
-    { name: "Material Design", level: "Intermedio", links: [
+    { name: "Material Design", level: "Intermedio", mastery: 58, links: [
       { target: "Bootstrap",              type: "technical" },
       { target: "Figma",                  type: "workflow" },
       { target: "UX Research",            type: "conceptual" },
       { target: "UX / UI Design",        type: "cross-domain" },
     ]},
-    { name: "GraphQL", level: "Base", icon: "graphql", links: [
+    { name: "GraphQL", level: "Base", icon: "graphql", mastery: 38, links: [
       { target: "REST API",               type: "technical" },
       { target: "Node.js",                type: "technical" },
       { target: "React",                  type: "workflow" },
       { target: "SQL",                    type: "conceptual" },
     ]},
-    { name: "SQL", level: "Intermedio", links: [
+    { name: "SQL", level: "Intermedio", mastery: 55, links: [
       { target: "REST API",               type: "workflow" },
       { target: "Node.js",                type: "workflow" },
       { target: "GraphQL",                type: "technical" },
     ]},
-    { name: "Jest", level: "Intermedio", icon: "jest", links: [
+    { name: "Jest", level: "Intermedio", icon: "jest", mastery: 62, links: [
       { target: "TypeScript",             type: "technical" },
       { target: "Angular",                type: "technical" },
       { target: "Node.js",                type: "workflow" },
       { target: "Agile Methodology",      type: "cross-domain" },
     ]},
-    { name: "Wordpress", level: "Base", icon: "wordpress", links: [
+    { name: "Wordpress", level: "Base", icon: "wordpress", mastery: 35, links: [
       { target: "SEO",                    type: "workflow" },
       { target: "CSS / SCSS",             type: "technical" },
       { target: "HTML5",                  type: "technical" },
       { target: "Social media management", type: "cross-domain" },
     ]},
-    { name: "Figma", level: "Intermedio", icon: "figma", links: [
+    { name: "Figma", level: "Intermedio", icon: "figma", mastery: 60, links: [
       { target: "UX Research",            type: "workflow" },
       { target: "Wireframing",            type: "workflow" },
       { target: "Material Design",        type: "technical" },
       { target: "UX / UI Design",        type: "workflow" },
       { target: "Graphic design",         type: "cross-domain" },
     ]},
-    { name: "SEO", level: "Intermedio", links: [
+    { name: "SEO", level: "Intermedio", mastery: 58, links: [
       { target: "SEM",                    type: "technical" },
       { target: "Digital marketing",      type: "cross-domain" },
       { target: "Wordpress",              type: "workflow" },
     ]},
-    { name: "SEM", level: "Base", links: [
+    { name: "SEM", level: "Base", mastery: 32, links: [
       { target: "SEO",                    type: "technical" },
       { target: "Digital marketing",      type: "cross-domain" },
     ]},
-    { name: "UX Research", level: "Intermedio", links: [
+    { name: "UX Research", level: "Intermedio", mastery: 65, links: [
       { target: "Figma",                  type: "workflow" },
       { target: "Wireframing",            type: "workflow" },
       { target: "Accessibility / WCAG",  type: "conceptual" },
       { target: "UX / UI Design",        type: "workflow" },
       { target: "Aesthetic sensibility",  type: "cross-domain" },
     ]},
-    { name: "Wireframing", level: "Intermedio", links: [
+    { name: "Wireframing", level: "Intermedio", mastery: 62, links: [
       { target: "Figma",                  type: "workflow" },
       { target: "UX Research",            type: "workflow" },
       { target: "UX / UI Design",        type: "workflow" },
     ]},
-    { name: "Node.js", level: "Avanzato", icon: "nodedotjs", links: [
+    { name: "Node.js", level: "Avanzato", icon: "nodedotjs", mastery: 80, links: [
       { target: "TypeScript",             type: "technical" },
       { target: "REST API",               type: "technical" },
       { target: "MCP Protocol",           type: "workflow" },
       { target: "Hono",                   type: "technical" },
       { target: "GraphQL",                type: "technical" },
     ]},
-    { name: "REST API", level: "Avanzato", links: [
+    { name: "REST API", level: "Avanzato", mastery: 82, links: [
       { target: "Node.js",                type: "technical" },
       { target: "GraphQL",                type: "technical" },
       { target: "MCP Protocol",           type: "workflow" },
       { target: "Hono",                   type: "technical" },
       { target: "SQL",                    type: "workflow" },
     ]},
-    { name: "Accessibility / WCAG", level: "Intermedio", links: [
+    { name: "Accessibility / WCAG", level: "Intermedio", mastery: 65, links: [
       { target: "HTML5",                  type: "technical" },
       { target: "UX Research",            type: "workflow" },
       { target: "CSS / SCSS",             type: "technical" },
       { target: "UX / UI Design",        type: "cross-domain" },
     ]},
-    { name: "Video editing", level: "Intermedio", links: [
+    { name: "Video editing", level: "Intermedio", mastery: 55, links: [
       { target: "Videography",            type: "workflow" },
       { target: "Aesthetic sensibility",  type: "cross-domain" },
       { target: "Photography",            type: "cross-domain" },
       { target: "Applied creativity",     type: "cross-domain" },
     ]},
-    { name: "MCP Protocol", level: "Avanzato", links: [
+    { name: "MCP Protocol", level: "Avanzato", mastery: 88, links: [
       { target: "Node.js",                type: "technical" },
       { target: "Prompt Engineering",     type: "workflow" },
       { target: "REST API",               type: "technical" },
       { target: "Hono",                   type: "technical" },
       { target: "AI-Augmented Productivity", type: "workflow" },
     ]},
-    { name: "Prompt Engineering", level: "Avanzato", links: [
+    { name: "Prompt Engineering", level: "Avanzato", mastery: 90, links: [
       { target: "MCP Protocol",           type: "workflow" },
       { target: "AI-Augmented Productivity", type: "workflow" },
       { target: "Node.js",                type: "technical" },
       { target: "T-shaped thinking",      type: "cross-domain" },
     ]},
-    { name: "GSAP", level: "Avanzato", icon: "greensock", links: [
+    { name: "GSAP", level: "Avanzato", icon: "greensock", mastery: 80, links: [
       { target: "JavaScript",             type: "technical" },
       { target: "CSS / SCSS",             type: "technical" },
       { target: "Lit",                    type: "workflow" },
       { target: "Aesthetic sensibility",  type: "cross-domain" },
       { target: "Applied creativity",     type: "cross-domain" },
     ]},
-    { name: "Astro", level: "Intermedio", icon: "astro", links: [
+    { name: "Astro", level: "Intermedio", icon: "astro", mastery: 65, links: [
       { target: "TypeScript",             type: "technical" },
       { target: "HTML5",                  type: "technical" },
       { target: "CSS / SCSS",             type: "technical" },
       { target: "Lit",                    type: "technical" },
       { target: "Node.js",                type: "technical" },
     ]},
-    { name: "Hono", level: "Intermedio", links: [
+    { name: "Hono", level: "Intermedio", mastery: 65, links: [
       { target: "Node.js",                type: "technical" },
       { target: "REST API",               type: "technical" },
       { target: "MCP Protocol",           type: "workflow" },
