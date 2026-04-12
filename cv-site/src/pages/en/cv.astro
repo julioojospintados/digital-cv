@@ -43,7 +43,7 @@ const skillSquares = cvDataEn.technicalSkills.map(skill => ({
   level: LEVEL_EN[skill.level] ?? skill.level,
   borderPx: LEVEL_BORDERS[skill.level] ?? 1,
   isGlow: skill.level === 'Avanzato' || skill.level === 'Esperto',
-  isLarge: skill.level === 'Esperto',
+  weight: skill.weight ?? 1,
   modeTags: skillModeTags(skill.name),
 }));
 
@@ -293,12 +293,14 @@ const projectsData = cvDataEn.projects.slice(0, 6).map(p => {
       </div>
     </section>
 
-    <!-- ── SKILLS BENTO ─────────────────────────────────────────────── -->
+    <!-- ── SKILLS BENTO ──────────────────────────────────────── -->
     <section class="skills-section reveal delay-100" aria-label="Technical skills">
       <h2 class="section-title">
         <span>Skills</span>
-        <span class="section-subtitle">Size and glow proportional to level</span>
+        <span class="section-subtitle">Skill map by domain — hover to explore</span>
       </h2>
+      <skill-domain-bubbles></skill-domain-bubbles>
+      <h3 class="skills-sub-title">Technical skills — tile size &amp; glow proportional to weight</h3>
       <div class="skills-grid">
         {skillSquares.map(skill => (
           <SkillSquare {...skill} />
@@ -415,6 +417,6 @@ const projectsData = cvDataEn.projects.slice(0, 6).map(p => {
 
 <script>
   import '../../scripts/cv-init.ts';
-  import '../../islands/SkillConstellation.lit.ts';
+  import '../../islands/SkillDomainBubbles.lit.ts';
   import '../../islands/FloatingMenu.lit.ts';
 </script>

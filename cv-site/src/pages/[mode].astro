@@ -49,7 +49,7 @@ const skillSquares = cvData.technicalSkills.map(skill => ({
   level: skill.level,
   borderPx: LEVEL_BORDERS[skill.level] ?? 1,
   isGlow: skill.level === 'Avanzato' || skill.level === 'Esperto',
-  isLarge: skill.level === 'Esperto',
+  weight: skill.weight ?? 1,
   modeTags: skillModeTags(skill.name),
 }));
 
@@ -297,7 +297,7 @@ const modeLabel = mode.charAt(0).toUpperCase() + mode.slice(1);
         <span>Skills</span>
         <span class="section-subtitle">Mappa delle competenze — hover per esplorare</span>
       </h2>
-      <skill-constellation></skill-constellation>
+      <skill-domain-bubbles></skill-domain-bubbles>
       <h3 class="skills-sub-title">Competenze tecniche — livello &amp; glow proporzionale</h3>
       <div class="skills-grid">
         {skillSquares.map(skill => (
@@ -416,6 +416,6 @@ const modeLabel = mode.charAt(0).toUpperCase() + mode.slice(1);
 
 <script>
   import '../scripts/cv-init.ts';
-  import '../islands/SkillConstellation.lit.ts';
+  import '../islands/SkillDomainBubbles.lit.ts';
   import '../islands/FloatingMenu.lit.ts';
 </script>

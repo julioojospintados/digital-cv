@@ -4,25 +4,34 @@ interface Props {
   level: string;
   borderPx: number;
   isGlow: boolean;
-  isLarge: boolean;
   modeTags: string;
+  weight?: number; // 1–5 from cv.ts — drives grid span & font size
 }
 
-const { name, level, borderPx, isGlow, isLarge, modeTags } = Astro.props;
+const { name, level, borderPx, isGlow, weight = 1, modeTags } = Astro.props;
+
+// Grid span based on weight
+const spanCol = weight >= 5 ? 3 : weight >= 3 ? 2 : 1;
+const spanRow = weight >= 4 ? 2 : 1;
 
 const levelAbbr = level.substring(0, 3).toUpperCase();
+const sizeClass = weight >= 5 ? 'skill-sq--w5'
+                : weight >= 4 ? 'skill-sq--w4'
+                : weight >= 3 ? 'skill-sq--w3'
+                : 'skill-sq--w1';
+
 const classes = [
   'skill-sq',
   'cv-card',
-  isLarge ? 'skill-sq--lg' : '',
-  isGlow  ? 'skill-sq--glow' : '',
+  sizeClass,
+  isGlow ? 'skill-sq--glow' : '',
 ].filter(Boolean).join(' ');
 ---
 
 <div
   class={classes}
   data-tags={modeTags}
-  style={`--skill-border: ${borderPx}px`}
+  style={`--skill-border: ${borderPx}px; grid-column: span ${spanCol}; grid-row: span ${spanRow};`}
   title={`${name} — ${level}`}
 >
   <span class="skill-sq__name">{name}</span>
@@ -50,12 +59,18 @@ const classes = [
     text-align: center;
   }
 
-  .skill-sq--lg {
-    grid-column: span 2;
-    grid-row: span 2;
-    width: 100%;
-    height: 100%;
-  }
+  /* Weight-based font scaling */
+  .skill-sq--w5 .skill-sq__name { font-size: 0.82rem; }
+  .skill-sq--w5 .skill-sq__level { font-size: 0.6rem; }
+
+  .skill-sq--w4 .skill-sq__name { font-size: 0.66rem; }
+  .skill-sq--w4 .skill-sq__level { font-size: 0.52rem; }
+
+  .skill-sq--w3 .skill-sq__name { font-size: 0.56rem; }
+  .skill-sq--w3 .skill-sq__level { font-size: 0.46rem; }
+
+  .skill-sq--w1 .skill-sq__name { font-size: 0.5rem; }
+  .skill-sq--w1 .skill-sq__level { font-size: 0.42rem; }
 
   .skill-sq--glow {
     box-shadow: 0 0 8px rgba(0, 0, 0, 0), 0 0 0px var(--color-accent);
@@ -67,7 +82,6 @@ const classes = [
   }
 
   .skill-sq__name {
-    font-size: 0.5rem;
     font-weight: 600;
     letter-spacing: 0.02em;
     line-height: 1.2;
@@ -75,7 +89,6 @@ const classes = [
   }
 
   .skill-sq__level {
-    font-size: 0.42rem;
     font-weight: 500;
     letter-spacing: 0.08em;
     color: rgba(192, 220, 215, 0.85);

@@ -67,10 +67,12 @@ html[data-mode='management'] .bg-knoll--flashlight { opacity: 0.06; }
   .bg-knoll { opacity: 0.025 !important; width: 120px; }
 }
 
-/* ── Skill constellation wrapper ─────────────────────────────── */
-skill-constellation {
+/* ── Skill domain bubbles wrapper ───────────────────────────── */
+skill-constellation,
+skill-domain-bubbles {
   display: block;
   margin-bottom: 2rem;
+  overflow-x: auto; /* horizontal scroll on tiny viewports */
 }
 
 .skills-sub-title {
@@ -479,15 +481,23 @@ go-logo:not(:defined) {
   box-shadow: 0 0 3px var(--color-accent);
 }
 
-/* ── Skills bento ────────────────────────────────────────────── */
-/* Knolling grid: square cells on a rigid mesh, Esperto items span 2×2 */
+/* ── Skills mosaic ───────────────────────────────────────────── */
+/* Knolling grid: weight-based spans create the mosaic effect     */
 .skills-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, 4rem);
-  grid-auto-rows: 4rem;
+  grid-template-columns: repeat(auto-fill, 3.5rem);
+  grid-auto-rows: 3.5rem;
   grid-auto-flow: dense;
   gap: var(--bento-gap, 0.5rem);
   justify-content: start;
+}
+
+/* Mobile: tighter cells so the grid still reads at 360px */
+@media (max-width: 479px) {
+  .skills-grid {
+    grid-template-columns: repeat(auto-fill, 2.8rem);
+    grid-auto-rows: 2.8rem;
+  }
 }
 
 /* ── Experience ──────────────────────────────────────────────── */
