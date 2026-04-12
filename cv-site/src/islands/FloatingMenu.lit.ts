@@ -157,12 +157,17 @@ class FloatingMenu extends LitElement {
     /* ── Mobile adjustments ── */
     @media (max-width: 640px) {
       :host {
-        bottom: 1.25rem;
-        right: 1.25rem;
+        bottom: max(1.25rem, env(safe-area-inset-bottom, 0px) + 1rem);
+        right: 1rem;
+        z-index: 400;
       }
       .fab-trigger {
-        width: 2.8rem;
-        height: 2.8rem;
+        width: 3rem;
+        height: 3rem;
+        touch-action: manipulation;
+      }
+      .fab-item {
+        touch-action: manipulation;
       }
     }
 

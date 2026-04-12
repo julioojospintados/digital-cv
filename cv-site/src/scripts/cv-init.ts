@@ -84,7 +84,10 @@ function applyMode(mode: string) {
 // CSS transition rimossa dal .mode-btn: GSAP controlla tutto.
 // killTweensOf previene ghosting su click rapido.
 const INACTIVE_W = '2.2rem';
-const ACTIVE_W   = '7.5rem'; // sufficiente per 'Management' (label più lungo)
+// Su schermi <= 374px comprimiamo la label del bottone attivo
+function getActiveW(): string {
+  return window.innerWidth <= 374 ? '5.5rem' : '7.5rem';
+}
 let navInitialized = false;
 
 function updateNavButtons(mode: string) {
@@ -112,16 +115,16 @@ function updateNavButtons(mode: string) {
 
     // ── Mobile: morph abbreviazione ↔ label completa ───────────────
     if (!navInitialized) {
-      gsap.set(btn,   { width: isActive ? ACTIVE_W : INACTIVE_W });
+      gsap.set(btn,   { width: isActive ? getActiveW() : INACTIVE_W });
       gsap.set(abbr,  { opacity: isActive ? 0 : 1 });
       gsap.set(label, { opacity: isActive ? 1 : 0 });
       return;
     }
 
     if (isActive) {
-      gsap.to(btn,   { width: ACTIVE_W, duration: 0.36, ease: 'power3.inOut' });
-      gsap.to(abbr,  { opacity: 0,      duration: 0.1,  ease: 'power2.in' });
-      gsap.to(label, { opacity: 1,      duration: 0.22, delay: 0.14, ease: 'power2.out' });
+      gsap.to(btn,   { width: getActiveW(), duration: 0.36, ease: 'power3.inOut' });
+      gsap.to(abbr,  { opacity: 0,         duration: 0.1,  ease: 'power2.in' });
+      gsap.to(label, { opacity: 1,         duration: 0.22, delay: 0.14, ease: 'power2.out' });
       // Nessun punch qui — il feedback fisico è solo sul secondo tap (scroll confirm)
     } else {
       gsap.to(label, { opacity: 0,        duration: 0.1,  ease: 'power2.in' });
