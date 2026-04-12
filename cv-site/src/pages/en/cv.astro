@@ -84,6 +84,8 @@ const featuredExpData = cvDataEn.experience.map((exp, i) => ({
   highlights: exp.highlights ?? [],
   skills: exp.skills ?? [],
   modeTags: EXP_MODE_TAGS[i] ?? 'tech creative human',
+  aiAugmented: !!(exp.tags?.includes('ai-orchestration') ||
+    exp.skills?.some((s: string) => ['MCP Protocol','Prompt Engineering','GitHub Copilot','Claude','Cursor','AI Orchestration','MCP'].includes(s))),
 }));
 
 // ── Soft skills mode tags ─────────────────────────────────────────────────
@@ -234,13 +236,13 @@ const projectsData = cvDataEn.projects.slice(0, 6).map(p => {
         <span class="mode-btn__abbr" aria-hidden="true">CR</span>
         <span class="mode-btn__label">Creative</span>
       </button>
-      <button class="mode-btn" data-nav-mode="human" type="button" aria-pressed="false">
-        <span class="mode-btn__abbr" aria-hidden="true">HU</span>
-        <span class="mode-btn__label">Human</span>
-      </button>
       <button class="mode-btn" data-nav-mode="management" type="button" aria-pressed="false">
         <span class="mode-btn__abbr" aria-hidden="true">MG</span>
         <span class="mode-btn__label">Management</span>
+      </button>
+      <button class="mode-btn" data-nav-mode="human" type="button" aria-pressed="false">
+        <span class="mode-btn__abbr" aria-hidden="true">HU</span>
+        <span class="mode-btn__label">Human</span>
       </button>
     </div>
     <a href="/tech" class="cv-nav__lang" aria-label="Versione italiana">IT</a>
@@ -405,9 +407,14 @@ const projectsData = cvDataEn.projects.slice(0, 6).map(p => {
     </p>
   </footer>
 
+  <!-- ── Floating Action Button ──────────────────────────────────── -->
+  <floating-menu></floating-menu>
+
 </Layout>
 
 
 <script>
   import '../../scripts/cv-init.ts';
+  import '../../islands/SkillConstellation.lit.ts';
+  import '../../islands/FloatingMenu.lit.ts';
 </script>

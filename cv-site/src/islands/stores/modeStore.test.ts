@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { modeStore, setMode, initMode, type Mode } from "./modeStore";
 
-const VALID_MODES: Mode[] = ["tech", "creative", "human"];
+const VALID_MODES: Mode[] = ["tech", "creative", "human", "management"];
 
 beforeEach(() => {
   // Reset to default state before each test
@@ -12,8 +12,8 @@ beforeEach(() => {
 });
 
 describe("modeStore — valid modes", () => {
-  it("exports exactly three valid modes", () => {
-    // Verified by testing all three transitions work successfully
+  it("exports all four valid modes", () => {
+    // Verified by testing all four transitions work successfully
     for (const mode of VALID_MODES) {
       setMode(mode);
       expect(modeStore.get()).toBe(mode);
@@ -42,9 +42,19 @@ describe("setMode", () => {
     expect(modeStore.get()).toBe("human");
   });
 
+  it("updates the store value for 'management'", () => {
+    setMode("management");
+    expect(modeStore.get()).toBe("management");
+  });
+
   it("sets document.documentElement data-mode attribute", () => {
     setMode("creative");
     expect(document.documentElement.dataset.mode).toBe("creative");
+  });
+
+  it("sets data-mode to 'management'", () => {
+    setMode("management");
+    expect(document.documentElement.dataset.mode).toBe("management");
   });
 
   it("does not change store when given an invalid mode", () => {
@@ -64,6 +74,12 @@ describe("setMode", () => {
     const params = new URLSearchParams(window.location.search);
     expect(params.get("mode")).toBe("creative");
   });
+
+  it("updates the URL search param for 'management'", () => {
+    setMode("management");
+    const params = new URLSearchParams(window.location.search);
+    expect(params.get("mode")).toBe("management");
+  });
 });
 
 describe("initMode", () => {
@@ -73,7 +89,7 @@ describe("initMode", () => {
     expect(document.documentElement.dataset.mode).toBe("human");
   });
 
-  it("works for all three modes", () => {
+  it("works for all four modes", () => {
     for (const mode of VALID_MODES) {
       modeStore.set(mode);
       initMode();

@@ -58,6 +58,7 @@ export class ModeSwitcher extends LitElement {
     const modes: { id: Mode; label: string }[] = [
       { id: 'tech', label: 'TECH' },
       { id: 'creative', label: 'CREATIVE' },
+      { id: 'management', label: 'MANAGEMENT' },
       { id: 'human', label: 'HUMAN' },
     ];
 

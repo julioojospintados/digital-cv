@@ -10,6 +10,7 @@ interface Props {
   highlights?: string[];
   skills?: string[];
   modeTags: string;
+  aiAugmented?: boolean;
 }
 
 const {
@@ -23,10 +24,17 @@ const {
   highlights = [],
   skills = [],
   modeTags,
+  aiAugmented = false,
 } = Astro.props;
 ---
 
 <article class="exp-card cv-card" data-tags={modeTags}>
+  {aiAugmented && (
+    <span class="ai-clip" aria-label="AI-augmented workflow">
+      <span class="ai-clip__pin" aria-hidden="true"></span>
+      <span class="ai-clip__text" aria-hidden="true">⚡ AI</span>
+    </span>
+  )}
   <header class="exp-card__header">
     <div class="exp-card__top">
       <span class="exp-card__company">{company}</span>
@@ -56,6 +64,7 @@ const {
 
 <style>
   .exp-card {
+    position: relative;          /* anchor for .ai-clip absolute badge  */
     padding: 1.25rem;
     border: 1px solid var(--color-border);
     border-radius: 2px;
@@ -67,6 +76,68 @@ const {
       opacity var(--duration-state) var(--ease-standard),
       transform var(--duration-state) var(--ease-standard),
       border-color var(--duration-state) var(--ease-standard);
+  }
+
+  /* ── AI clip badge — straddles the top border like a physical label ── */
+  .ai-clip {
+    position: absolute;
+    top: -13px;           /* half above card top border */
+    right: 1.1rem;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    z-index: 4;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .ai-clip__pin {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    opacity: 0.55;
+    box-shadow: 0 0 4px var(--color-accent);
+  }
+
+  .ai-clip__text {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.22rem 0.55rem;
+    background: var(--color-accent);
+    border-radius: 2px;
+    color: rgba(8, 73, 67, 1);   /* ottanio — guaranteed contrast on accent */
+    font-size: 0.5rem;
+    font-weight: 900;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    /* Physical depth */
+    box-shadow:
+      0 0 18px var(--color-accent),
+      0 2px 8px rgba(0, 0, 0, 0.5),
+      inset 0 1px 0 rgba(255, 255, 255, 0.32),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.18);
+    animation: ai-clip-breathe 2.6s ease-in-out infinite;
+  }
+
+  @keyframes ai-clip-breathe {
+    0%, 100% {
+      box-shadow:
+        0 0 14px var(--color-accent),
+        0 2px 8px rgba(0, 0, 0, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.32),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.18);
+    }
+    50% {
+      box-shadow:
+        0 0 30px var(--color-accent),
+        0 0 14px var(--color-accent),
+        0 2px 8px rgba(0, 0, 0, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.32),
+        inset 0 -1px 0 rgba(0, 0, 0, 0.18);
+    }
   }
 
   .exp-card[data-state='active'] {

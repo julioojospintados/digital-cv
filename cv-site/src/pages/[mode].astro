@@ -89,6 +89,8 @@ const featuredExpData = cvData.experience.map((exp, i) => ({
   highlights: exp.highlights ?? [],
   skills: exp.skills ?? [],
   modeTags: EXP_MODE_TAGS[i] ?? 'tech creative human',
+  aiAugmented: !!(exp.tags?.includes('ai-orchestration') ||
+    exp.skills?.some(s => ['MCP Protocol','Prompt Engineering','GitHub Copilot','Claude','Cursor','AI Orchestration','MCP'].includes(s))),
 }));
 
 const SOFT_MODE_TAGS = [
@@ -230,13 +232,13 @@ const modeLabel = mode.charAt(0).toUpperCase() + mode.slice(1);
         <span class="mode-btn__abbr" aria-hidden="true">CR</span>
         <span class="mode-btn__label">Creative</span>
       </button>
-      <button class="mode-btn" data-nav-mode="human" type="button" aria-pressed={mode === 'human' ? 'true' : 'false'}>
-        <span class="mode-btn__abbr" aria-hidden="true">HU</span>
-        <span class="mode-btn__label">Human</span>
-      </button>
       <button class="mode-btn" data-nav-mode="management" type="button" aria-pressed={mode === 'management' ? 'true' : 'false'}>
         <span class="mode-btn__abbr" aria-hidden="true">MG</span>
         <span class="mode-btn__label">Management</span>
+      </button>
+      <button class="mode-btn" data-nav-mode="human" type="button" aria-pressed={mode === 'human' ? 'true' : 'false'}>
+        <span class="mode-btn__abbr" aria-hidden="true">HU</span>
+        <span class="mode-btn__label">Human</span>
       </button>
     </div>
     <a href="/en/cv" class="cv-nav__lang" aria-label="English version">EN</a>
@@ -247,6 +249,7 @@ const modeLabel = mode.charAt(0).toUpperCase() + mode.slice(1);
 
     <!-- ── HERO ────────────────────────────────────────────────────── -->
     <section class="hero-section" id="hero">
+      <img class="bg-knoll bg-knoll--laptop" src="/knolling/laptop.png" aria-hidden="true" alt="">
       <div class="hero-badges">
         <span class={`avail-badge ${availClass}`}>{availLabel}</span>
       </div>
@@ -287,12 +290,15 @@ const modeLabel = mode.charAt(0).toUpperCase() + mode.slice(1);
       </div>
     </section>
 
-    <!-- ── SKILLS BENTO ─────────────────────────────────────────────── -->
+    <!-- ── SKILLS BENTO + CONSTELLATION ─────────────────────────── -->
     <section class="skills-section reveal delay-100" aria-label="Competenze tecniche">
+      <img class="bg-knoll bg-knoll--multitool" src="/knolling/multitool.png" aria-hidden="true" alt="">
       <h2 class="section-title">
         <span>Skills</span>
-        <span class="section-subtitle">Dimensione e glow proporzionali al livello</span>
+        <span class="section-subtitle">Mappa delle competenze — hover per esplorare</span>
       </h2>
+      <skill-constellation></skill-constellation>
+      <h3 class="skills-sub-title">Competenze tecniche — livello &amp; glow proporzionale</h3>
       <div class="skills-grid">
         {skillSquares.map(skill => (
           <SkillSquare {...skill} />
@@ -302,6 +308,7 @@ const modeLabel = mode.charAt(0).toUpperCase() + mode.slice(1);
 
     <!-- ── EXPERIENCE ─────────────────────────────────────────────── -->
     <section class="exp-section reveal delay-200" aria-label="Esperienze lavorative">
+      <img class="bg-knoll bg-knoll--flashlight" src="/knolling/flashlight.webp" aria-hidden="true" alt="">
       <h2 class="section-title">
         <span>Esperienze</span>
         <span class="section-subtitle">{cvData.experience.length} ruoli in 5 paesi</span>
@@ -314,7 +321,7 @@ const modeLabel = mode.charAt(0).toUpperCase() + mode.slice(1);
     </section>
 
     <!-- ── AI WORKFLOW ─────────────────────────────────────────────── -->
-    <section class="ai-section reveal delay-300" aria-label="AI-Enhanced Workflow">
+    <section class="ai-section reveal delay-300" id="ai-section" aria-label="AI-Enhanced Workflow">
       <h2 class="section-title">
         <span>AI-Enhanced Workflow</span>
         <span class="section-subtitle">Come l'AI moltiplica l'output senza sostituire il giudizio</span>
@@ -401,9 +408,14 @@ const modeLabel = mode.charAt(0).toUpperCase() + mode.slice(1);
     </p>
   </footer>
 
+  <!-- ── Floating Action Button ──────────────────────────────────── -->
+  <floating-menu></floating-menu>
+
 </Layout>
 
 
 <script>
   import '../scripts/cv-init.ts';
+  import '../islands/SkillConstellation.lit.ts';
+  import '../islands/FloatingMenu.lit.ts';
 </script>
