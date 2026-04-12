@@ -51,13 +51,20 @@ Digital_CV/
 │       │   ├── ExperienceSection.astro  ← Card esperienze lavorative
 │       │   ├── EducationSection.astro   ← Card formazione
 │       │   ├── SkillsSection.astro      ← Griglia skill (quadrati, no barre percentuali)
-│       │   └── ProjectsSection.astro   ← Card progetti
+│       │   ├── ProjectsSection.astro    ← Card progetti
+│       │   └── cards/              ← Card riutilizzabili per ogni sezione
+│       │       ├── ExpCard.astro   ← Card esperienza (tag mode, impactScore, logo azienda)
+│       │       ├── AiCard.astro    ← Card AI-enhanced workflow (badge impactScore)
+│       │       ├── ProjectCard.astro ← Card progetto (tech stack, link)
+│       │       ├── SkillSquare.astro  ← Skill quadrato con glow (NO barre %)
+│       │       ├── SoftItem.astro  ← Item soft / transversal skill
+│       │       └── EduItem.astro   ← Item formazione / certificazione
 │       │
 │       ├── islands/                ← Lit web components interattivi (client-side)
 │       │   ├── GoLogo.lit.ts       ← <go-logo>: logo animato, click = reset a /, cambia colore per mode
-│       │   ├── ModeSwitcher.ts     ← <mode-switcher>: selettore TECH / CREATIVE / HUMAN
+│       │   ├── ModeSwitcher.ts     ← <mode-switcher>: selettore TECH / CREATIVE / HUMAN / MANAGEMENT
 │       │   └── stores/
-│       │       ├── modeStore.ts    ← NanoStore globale per il mode attivo (tech/creative/human)
+│       │       ├── modeStore.ts    ← NanoStore globale per il mode attivo (tech/creative/human/management)
 │       │       └── modeStore.test.ts
 │       │
 │       ├── layouts/
@@ -131,10 +138,20 @@ Digital_CV/
 ├── .github/
 │   ├── copilot-instructions.md     ← [COPILOT] Istruzioni globali iniettate in ogni chat
 │   │                                   (scopo progetto, GO concept, gamification, comportamento AI)
-│   └── skills/
-│       └── knolling-cv/
-│           └── SKILL.md            ← [COPILOT SKILL] Design system completo, GO concept, Awwwards standard
-│                                       Caricato automaticamente per qualsiasi richiesta su questo progetto
+│   └── skills/                     ← Skill specializzate caricate da Copilot su richiesta
+│       ├── knolling-cv/
+│       │   └── SKILL.md            ← Contesto globale progetto — caricata SEMPRE per prima
+│       ├── design-system/
+│       │   ├── SKILL.md            ← UI, animazioni Emil Kowalski, knolling, GSAP, Tailwind 4, Awwwards
+│       │   └── knolling-reference.png  ← Foto di riferimento layout knolling
+│       ├── identity/
+│       │   └── SKILL.md            ← Bio, tone of voice, narrativa GO, job hunting
+│       ├── agile-methodology/
+│       │   └── SKILL.md            ← Agile snello, Lean, PM per PMI, impactScore, sprint
+│       ├── mcp-architecture/
+│       │   └── SKILL.md            ← MCP tools, Hono, cv.ts, test, AI workflow
+│       └── partnership-strategy/
+│           └── SKILL.md            ← Fractional partner, posizionamento consulente PMI
 │
 ├── AGENTS.md                       ← Guida per agenti AI (struttura, convenzioni, where to make changes)
 ├── .env.example                    ← Template variabili d'ambiente (non committare .env)
@@ -189,7 +206,15 @@ Quattro livelli di personalizzazione, dal più specifico al più generale:
 ### 1. Skills (`.github/skills/`)
 
 Conoscenza dominio avanzata caricata **su richiesta** da Copilot prima di rispondere.
-`knolling-cv/SKILL.md` contiene design system, GO concept, gamification, standard Awwwards.
+
+| Skill                  | Quando si carica                                               |
+| ---------------------- | -------------------------------------------------------------- |
+| `knolling-cv`          | **Sempre** per prima — contesto globale del progetto           |
+| `design-system`        | UI, animazioni, card, knolling, GSAP, Tailwind 4, Awwwards     |
+| `identity`             | Bio, tone of voice, narrativa GO, copy, job hunting            |
+| `agile-methodology`    | Esperienze Agile, sprint, backlog, impactScore, certificazioni |
+| `mcp-architecture`     | Backend, MCP tools, Hono, test, cv.ts, AI workflow             |
+| `partnership-strategy` | Posizionamento Fractional Partner, offerta per PMI             |
 
 ### 2. Prompt riutilizzabili (`.vscode/prompts/*.prompt.md`)
 
@@ -222,16 +247,19 @@ Contiene: scopo professionale, GO concept, struttura progetto, comportamento Cop
 
 Configurati in `.vscode/mcp.json`:
 
-| Server                | Stato         | Cosa fa                                  |
-| --------------------- | ------------- | ---------------------------------------- |
-| `digital-cv`          | ✅ attivo     | Il server MCP locale di questo progetto  |
-| `github`              | ✅ attivo     | Repos, issues, PR, branch, commit        |
-| `filesystem`          | 💤 commentato | Lettura/scrittura file su disco          |
-| `memory`              | 💤 commentato | Knowledge graph persistente tra sessioni |
-| `sequential-thinking` | 💤 commentato | Ragionamento multi-step strutturato      |
+| Server                | Stato     | Cosa fa                                             |
+| --------------------- | --------- | --------------------------------------------------- |
+| `mcp-base-template`   | ✅ attivo | Server MCP locale — espone cv.ts come tool/resource |
+| `memory`              | ✅ attivo | Knowledge graph persistente tra sessioni            |
+| `sequential-thinking` | ✅ attivo | Ragionamento strutturato step-by-step               |
+| `filesystem`          | ✅ attivo | Lettura/scrittura file nel workspace                |
+| `github`              | ✅ attivo | Repos, issues, PR, branch, commit                   |
+| `gitlab`              | ✅ attivo | Repos, MR, issues, pipelines                        |
+| `playwright`          | ✅ attivo | Browser automation, screenshot, E2E                 |
+| `google-maps`         | ✅ attivo | Geocoding, places, directions, distance matrix      |
 
-
-Per attivare un server commentato: rimuovi i `//` nel blocco corrispondente in `.vscode/mcp.json`.
+Server commentati (attivabili rimuovendo `//`): `fetch`, `postgres`, `sqlite`, `git`, `context7`,
+`tavily`, `n8n`, `notion`, `figma`, `office-word/excel/powerpoint`, `task-master`, `tam`, `fred`.
 
 ---
 

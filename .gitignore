@@ -27,3 +27,6 @@ Thumbs.db
 
 # Playwright MCP — runtime snapshots, never commit
 .playwright-mcp/
+
+# todo
+.todo.md

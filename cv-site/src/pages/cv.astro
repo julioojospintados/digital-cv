@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { cvData } from '@cv-data';
+import '../styles/cv-page.css';
 import ExpCard     from '../components/cards/ExpCard.astro';
 import AiCard      from '../components/cards/AiCard.astro';
 import ProjectCard from '../components/cards/ProjectCard.astro';
@@ -136,6 +137,44 @@ const availClass =
   cvData.personal.availability === 'open' ? 'badge--amber' :
   'badge--gray';
 
+// ── Timeline: formazione + certificazioni unite, ordinate per data desc ────
+const MONTHS_IT = ['Gen','Feb','Mar','Apr','Mag','Giu','Lug','Ago','Set','Ott','Nov','Dic'];
+function isoToLabel(iso: string): string {
+  const [y, m] = iso.split('-');
+  return m ? `${MONTHS_IT[parseInt(m, 10) - 1]} ${y}` : y;
+}
+const timelineItems = [
+  ...cvData.education.map(e => ({
+    date: e.endDate,
+    dateLabel: isoToLabel(e.endDate),
+    title: `${e.degree}${e.field ? ` — ${e.field}` : ''}`,
+    institution: e.institution,
+    type: 'edu' as const,
+    inProgress: false,
+    credentialId: undefined as string | undefined,
+  })),
+  ...cvData.certifications.map(c => ({
+    date: c.date,
+    dateLabel: isoToLabel(c.date),
+    title: c.name,
+    institution: c.issuer,
+    type: 'cert' as const,
+    inProgress: c.inProgress ?? false,
+    credentialId: c.credentialId,
+  })),
+].sort((a, b) => b.date.localeCompare(a.date));
+
+// ── CEFR steps (6 dots: A1=1 … C2=6, Madrelingua=6+glow) ─────────────────
+// 6 CEFR levels — 1-indexed so A1 always shows at least 1 dot filled
+const CEFR_STEPS: Record<string, number> = {
+  'Madrelingua': 6, 'Native': 6,
+  'C2': 6, 'C1': 5, 'B2': 4, 'B1': 3, 'A2': 2, 'A1': 1,
+};
+const langsWithSteps = cvData.languages.map(l => ({
+  ...l,
+  steps: CEFR_STEPS[l.level] ?? 3,
+}));
+
 // ── Project mode tags ─────────────────────────────────────────────────────
 const PROJECT_TAGS_MAP: Record<string, string> = {
   'Cinema': 'creative',
@@ -212,10 +251,18 @@ const projectsData = cvData.projects.slice(0, 6).map(p => {
           ))}
         </div>
         <div class="hero-langs">
-          {cvData.languages.map(l => (
+          {langsWithSteps.map(l => (
             <span class="lang-chip">
               <b>{l.name}</b>
-              <span class="lang-level">{l.level}</span>
+              <span class="lang-cefr" aria-label={l.level} title={l.level}>
+                {Array.from({ length: 6 }, (_, i) => (
+                  <span class:list={[
+                    'lang-dot',
+                    { 'lang-dot--filled': i < l.steps },
+                    { 'lang-dot--native': l.steps === 6 },
+                  ]}></span>
+                ))}
+              </span>
             </span>
           ))}
         </div>
@@ -297,32 +344,36 @@ const projectsData = cvData.projects.slice(0, 6).map(p => {
 
     <!-- ── FORMAZIONE & CERTIFICAZIONI ────────────────────────────── -->
     <section class="edu-section reveal" aria-label="Formazione e certificazioni">
-      <div class="two-col-grid">
-        <div class="edu-block cv-card" data-tags="tech creative human management">
-          <h2 class="section-title"><span>Formazione</span></h2>
-          <ul class="edu-list">
-            {cvData.education.slice(0, 4).map(edu => (
-              <EduItem
-                institution={edu.institution}
-                degree={`${edu.degree}${edu.field ? ` — ${edu.field}` : ''}`}
-                dates={`${edu.startDate.substring(0, 4)}–${edu.endDate.substring(0, 4)}`}
-              />
-            ))}
-          </ul>
-        </div>
-        <div class="cert-block cv-card" data-tags="tech creative human management">
-          <h2 class="section-title"><span>Certificazioni</span></h2>
-          <ul class="edu-list">
-            {cvData.certifications.map(cert => (
-              <EduItem
-                institution={cert.issuer}
-                degree={`${cert.name}${cert.inProgress ? ' ↗' : ''}`}
-                dates={cert.date.substring(0, 4)}
-              />
-            ))}
-          </ul>
+            <div class="edu-header">
+        <h2 class="section-title">
+          <span>Formazione &amp; Certificazioni</span>
+          <span class="section-subtitle">cronologia completamento</span>
+        </h2>
+        <div class="timeline-legend" aria-hidden="true">
+          <span class="tl-legend-chip tl-legend-chip--cert">Certificazione</span>
+          <span class="tl-legend-chip tl-legend-chip--edu">Formazione</span>
         </div>
       </div>
+      <ol class="timeline" role="list">
+        {timelineItems.map(item => (
+          <li class="tl-item" data-type={item.type}>
+            <time class="tl-date" datetime={item.date} title={item.date}>{item.dateLabel}</time>
+            <span class="tl-dot-col" aria-hidden="true">
+              <span class="tl-dot"></span>
+            </span>
+            <div class="tl-body">
+              <p class="tl-title">
+                {item.title}
+                {item.inProgress && <span class="tl-wip">in corso</span>}
+              </p>
+              <p class="tl-inst">{item.institution}</p>
+              {item.credentialId && (
+                <p class="tl-cred">ID: {item.credentialId}</p>
+              )}
+            </div>
+          </li>
+        ))}
+      </ol>
     </section>
 
   </main>
@@ -336,758 +387,7 @@ const projectsData = cvData.projects.slice(0, 6).map(p => {
 
 </Layout>
 
-<style>
-  /* ── Navigation ─────────────────────────────────────────────── */
-  .cv-nav {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 1.5rem;
-    height: 3.25rem;
-    background: rgba(8, 73, 67, 0.85);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--color-border);
-    @media (max-width: 640px) {
-      padding: 0 1rem;
-    }
-  }
-
-  .cv-nav__logo {
-    text-decoration: none;
-  }
-
-  /* go-logo web component in navbar */
-  go-logo {
-    display: inline-flex;
-    align-items: center;
-    flex-shrink: 0;
-  }
-
-  /* Placeholder mentre l'elemento non è ancora definito (evita layout shift) */
-  go-logo:not(:defined) {
-    display: inline-block;
-    width: 1.8rem;
-    height: 1.2rem;
-  }
-
-  .logo-initials {
-    font-size: 0.85rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    color: var(--color-text-primary);
-    opacity: 0.9;
-  }
-
-  .mode-buttons {
-    display: flex;
-    gap: 0.2rem;
-    align-items: center;
-  }
-
-  .mode-btn {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    overflow: hidden;
-    white-space: nowrap;
-    width: 2.2rem; /* GSAP sovrascrive ad ogni cambio mode */
-    height: 1.9rem;
-    padding: 0 0.5rem;
-    font-size: 0.62rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    background: transparent;
-    border: 1px solid transparent;
-    border-radius: 1px;
-    color: rgba(192, 220, 215, 0.85);
-    cursor: pointer;
-    will-change: width;
-    /* Nessuna CSS transition — GSAP gestisce tutto per evitare desincronizzazione */
-  }
-
-  .mode-btn:hover {
-    background: rgba(255, 255, 255, 0.05);
-  }
-
-  .mode-btn.is-active {
-    color: var(--color-accent);
-    border-color: color-mix(in srgb, var(--color-accent) 50%, transparent);
-    background: rgba(255, 255, 255, 0.04);
-  }
-
-  /* abbr: centrata nel bottone stretto — visibile solo su mobile */
-  .mode-btn__abbr {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    pointer-events: none;
-  }
-
-  /* label: invisibile di default su mobile (GSAP anima), visibile fisso su desktop */
-  .mode-btn__label {
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  /* ── Desktop: label sempre visibile, abbr nascosta ── */
-  @media (min-width: 641px) {
-    .mode-btn {
-      width: auto;
-      overflow: visible;
-      padding: 0.3rem 0.75rem;
-      will-change: auto;
-      justify-content: center;
-    }
-    .mode-btn__abbr {
-      display: none;
-    }
-    .mode-btn__label {
-      opacity: 1;
-      position: static;
-      transform: none;
-    }
-  }
-
-  .cv-nav__lang {
-    padding: 0.3rem 0.75rem;
-    font-size: 0.65rem;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    background: transparent;
-    border: 1px solid transparent;
-    border-radius: 1px;
-    color: rgba(192, 220, 215, 0.85);
-    text-decoration: none;
-    transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
-  }
-
-  .cv-nav__lang:hover {
-    color: var(--color-text-primary);
-    border-color: var(--color-accent);
-    background: rgba(255, 255, 255, 0.06);
-  }
-
-  /* ── Main layout ─────────────────────────────────────────────── */
-  .cv-main {
-    padding-top: 5rem;
-    padding-bottom: 4rem;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding-left: 1.25rem;
-    padding-right: 1.25rem;
-    display: flex;
-    flex-direction: column;
-    gap: 4rem;
-    --bento-gap: 0.75rem; /* Knolling constant gutter */
-  }
-
-  /* ── Section title ────────────────────────────────────────────── */
-  .section-title {
-    display: flex;
-    align-items: baseline;
-    gap: 1rem;
-    font-size: 0.65rem;
-    font-weight: 600;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: rgba(192, 220, 215, 0.85);
-    margin: 0 0 1.5rem 0;
-  }
-
-  .section-title > span:first-child {
-    color: var(--color-text-primary);
-  }
-
-  .section-subtitle {
-    font-size: 0.6rem;
-    font-weight: 400;
-    letter-spacing: 0.05em;
-    text-transform: none;
-    color: rgba(192, 220, 215, 0.85);
-    opacity: 0.7;
-  }
-
-  /* ── Hero ────────────────────────────────────────────────────── */
-  /* ── Hero initial state (pre-JS) — prevents flash of visible content ── */
-  .hero-section {
-    border-bottom: 1px solid var(--color-border);
-    padding-bottom: 3rem;
-    opacity: 0; /* GSAP animates to 1 */
-  }
-
-  .hero-badges,
-  .hero-title,
-  .hero-summary,
-  .hero-footer {
-    opacity: 0; /* GSAP animates to 1 */
-    transform: translateY(14px);
-  }
-
-  .hero-badges {
-    display: flex;
-    gap: 0.75rem;
-    flex-wrap: wrap;
-    margin-bottom: 1.25rem;
-  }
-
-  .avail-badge {
-    display: inline-block;
-    font-size: 0.6rem;
-    font-weight: 600;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    padding: 0.25rem 0.6rem;
-    border-radius: 1px;
-    border: 1px solid;
-  }
-
-  .badge--green {
-    color: rgba(0, 220, 140, 1);
-    border-color: rgba(0, 220, 140, 0.4);
-    background: rgba(0, 220, 140, 0.08);
-  }
-
-  .badge--amber {
-    color: rgba(255, 190, 80, 1);
-    border-color: rgba(255, 190, 80, 0.4);
-    background: rgba(255, 190, 80, 0.08);
-  }
-
-  .badge--gray {
-    color: rgba(192, 220, 215, 0.85);
-    border-color: var(--color-border);
-    background: transparent;
-  }
-
-  .loc-badge {
-    font-size: 0.65rem;
-    font-weight: 500;
-    letter-spacing: 0.08em;
-    color: rgba(192, 220, 215, 0.85);
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-  }
-
-  .hero-name {
-    font-family: var(--font-display);
-    font-size: clamp(3rem, 8vw, 7rem);
-    font-weight: 800;
-    letter-spacing: -0.04em;
-    line-height: 0.92;
-    color: var(--color-text-primary);
-    margin: 0 0 0.75rem 0;
-  }
-
-  /* ── Hero name — char animation ─────────── */
-  .hero-char {
-    display: inline-block;
-    white-space: pre;
-    opacity: 0;           /* GSAP animates to 1 */
-    transform: translateY(18px);
-    will-change: transform, opacity;
-  }
-
-  .hero-char--go {
-    color: var(--color-accent);
-  }
-
-  /* ── Hero name — mobile: two lines, smaller size ─────────── */
-  @media (max-width: 640px) {
-    .hero-name {
-      display: flex;
-      flex-wrap: wrap;
-      font-size: clamp(2rem, 11vw, 2.75rem);
-      line-height: 1.1;
-    }
-    .hero-char--space {
-      flex-basis: 100%;
-      height: 0;
-      overflow: hidden;
-    }
-  }
-
-  /* ── Hero name — desktop: -10% rispetto al default ─────────── */
-  @media (min-width: 641px) {
-    .hero-name {
-      font-size: clamp(2.7rem, 7.2vw, 6.3rem);
-    }
-  }
-
-  .hero-title {
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: var(--color-accent);
-    letter-spacing: 0.02em;
-    margin: 0 0 1.5rem 0;
-  }
-
-  .hero-summary {
-    font-size: 0.95rem;
-    line-height: 1.75;
-    color: rgba(192, 220, 215, 0.85);
-    max-width: 72ch;
-    margin: 0 0 2rem 0;
-  }
-
-  .hero-footer {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1.5rem;
-    align-items: center;
-  }
-
-  .hero-socials {
-    display: flex;
-    gap: 0.75rem;
-    flex-wrap: wrap;
-  }
-
-  .social-link {
-    font-size: 0.7rem;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: rgba(192, 220, 215, 0.85);
-    text-decoration: none;
-    padding: 0.25rem 0.6rem;
-    border: 1px solid var(--color-border);
-    border-radius: 1px;
-    transition: color 0.2s ease, border-color 0.2s ease;
-  }
-
-  .social-link:hover {
-    color: var(--color-text-primary);
-    border-color: var(--color-accent);
-  }
-
-  .hero-langs {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-  }
-
-  .lang-chip {
-    font-size: 0.65rem;
-    color: rgba(192, 220, 215, 0.85);
-    display: flex;
-    align-items: center;
-    gap: 0.3rem;
-  }
-
-  .lang-chip b {
-    color: var(--color-text-primary);
-    font-weight: 600;
-  }
-
-  .lang-level {
-    opacity: 0.6;
-  }
-
-  /* ── Skills bento ────────────────────────────────────────────── */
-  /* Knolling grid: square cells on a rigid mesh, Esperto items span 2×2 */
-  .skills-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, 4rem);
-    grid-auto-rows: 4rem;
-    grid-auto-flow: dense;
-    gap: var(--bento-gap, 0.5rem);
-    justify-content: start;
-  }
-
-  /* ── Experience ──────────────────────────────────────────────── */
-  .exp-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-
-  @media (min-width: 768px) {
-    .exp-grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-
-  @media (min-width: 1100px) {
-    .exp-grid {
-      grid-template-columns: repeat(3, 1fr);
-    }
-
-    /* ALTEN is the primary — make it span 2 cols */
-    .exp-card:first-child {
-      grid-column: span 2;
-    }
-  }
-
-  /* ExpCard styles → cards/ExpCard.astro */
-
-  /* ── AI Workflow ──────────────────────────────────────────────── */
-  .ai-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 0.75rem;
-  }
-
-  @media (min-width: 480px) {
-    .ai-grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .ai-grid {
-      grid-template-columns: repeat(3, 1fr);
-    }
-
-    .ai-card:first-child {
-      grid-column: span 1;
-    }
-  }
-
-  /* AiCard styles → cards/AiCard.astro */
-
-  /* ── Soft skills + Methodology ────────────────────────────────── */
-  .two-col-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 2rem;
-  }
-
-  @media (min-width: 768px) {
-    .two-col-grid {
-      grid-template-columns: 1fr 1fr;
-    }
-  }
-
-  .soft-list,
-  .method-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  /* SoftItem styles → cards/SoftItem.astro */
-
-  /* ── Projects ────────────────────────────────────────────────── */
-  .projects-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 0.75rem;
-  }
-
-  @media (min-width: 480px) {
-    .projects-grid {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .projects-grid {
-      grid-template-columns: repeat(3, 1fr);
-    }
-  }
-
-  /* ProjectCard styles → cards/ProjectCard.astro */
-
-  /* ── Education ────────────────────────────────────────────────── */
-  .edu-block,
-  .cert-block {
-    padding: 1.25rem;
-    border: 1px solid var(--color-border);
-    border-radius: 2px;
-    background: rgba(255, 255, 255, 0.025);
-  }
-
-  .edu-list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.85rem;
-  }
-
-  /* EduItem styles → cards/EduItem.astro */
-
-  /* ── Footer ──────────────────────────────────────────────────── */
-  .cv-footer {
-    border-top: 1px solid var(--color-border);
-    padding: 2rem 1.25rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 1rem;
-    max-width: 1200px;
-    margin: 0 auto;
-  }
-
-  .cv-footer__credit {
-    font-size: 0.65rem;
-    color: rgba(192, 220, 215, 0.85);
-    margin: 0;
-  }
-
-  .cv-footer__credit a {
-    color: rgba(192, 220, 215, 0.85);
-    text-decoration: none;
-    transition: color 0.2s ease;
-  }
-
-  .cv-footer__credit a:hover {
-    color: var(--color-text-primary);
-  }
-
-  .cv-footer__back {
-    font-size: 0.65rem;
-    font-weight: 500;
-    letter-spacing: 0.05em;
-    color: rgba(192, 220, 215, 0.85);
-    text-decoration: none;
-    transition: color 0.2s ease;
-  }
-
-  .cv-footer__back:hover {
-    color: var(--color-text-primary);
-  }
-
-  /* ── Reveal animation (scroll-triggered via GSAP) ──────────── */
-  .reveal {
-    opacity: 0;
-    transform: translateY(32px);
-  }
-
-  .reveal.is-visible {
-    opacity: 1;
-    transform: translateY(0);
-    transition:
-      opacity 0.7s var(--ease-standard),
-      transform 0.7s var(--ease-standard);
-  }
-
-  /* cv-card passive/active states → global.css */
-</style>
 
 <script>
-  import { gsap } from 'gsap';
-  import { ScrollTrigger } from 'gsap/ScrollTrigger';
-  import { modeStore, setMode } from '../islands/stores/modeStore.ts';
-  import '../islands/GoLogo.lit.ts';
-
-  gsap.registerPlugin(ScrollTrigger);
-
-  // ── Hero entrance — G and O first, then the rest ──────────────────────
-  const heroEl      = document.querySelector<HTMLElement>('.hero-section')!;
-  const allChars    = document.querySelectorAll<HTMLElement>('.hero-char');
-  const goChars     = document.querySelectorAll<HTMLElement>('.hero-char--go');
-  const restChars   = [...allChars].filter(el => !el.classList.contains('hero-char--go'));
-  const heroBadges  = heroEl.querySelector<HTMLElement>('.hero-badges');
-  const heroTitle   = heroEl.querySelector<HTMLElement>('.hero-title');
-  const heroSummary = heroEl.querySelector<HTMLElement>('.hero-summary');
-  const heroFooter  = heroEl.querySelector<HTMLElement>('.hero-footer');
-
-  // Initial states are set in CSS (.hero-section, .hero-char, .hero-badges etc.)
-  // GSAP only needs to animate: opacity → 1, y → 0
-
-  const heroTl = gsap.timeline({ delay: 0 });
-
-  // 1. Hero section surfaces
-  heroTl.to(heroEl, { opacity: 1, duration: 0.4, ease: 'power2.out' });
-
-  // 2. G and O arrivano per primi — punch + scala (come volano verso il nome nel preloader)
-  heroTl.fromTo(goChars,
-    { opacity: 0, scale: 1.5, y: -12 },
-    { opacity: 1, scale: 1, y: 0, duration: 0.55, stagger: 0.18, ease: 'back.out(1.7)' },
-    '+=0.05'
-  );
-
-  // 3. Glow pulse accent su G e O
-  heroTl.to(goChars, {
-    textShadow: '0 0 28px var(--color-accent), 0 0 10px var(--color-accent)',
-    duration: 0.3, ease: 'power2.out',
-  }, '-=0.15');
-  heroTl.to(goChars, {
-    textShadow: '0 0 0px transparent',
-    duration: 0.7, ease: 'power2.in',
-  });
-
-  // 4. Le altre lettere scorrono in sequenza — stagger simile alle speed lines
-  heroTl.to(restChars, {
-    opacity: 1, y: 0,
-    duration: 0.55,
-    stagger: { each: 0.05, from: 'start' },
-    ease: 'power3.out',
-  }, '-=0.5');
-
-  // 5. Resto della sezione hero (badges, titolo, summary, footer)
-  heroTl.to([heroBadges, heroTitle, heroSummary, heroFooter], {
-    opacity: 1, y: 0,
-    duration: 0.55,
-    stagger: 0.09,
-    ease: 'power2.out',
-  }, '-=0.25');
-
-  // ── Scroll progress bar ───────────────────────────────────────────────
-  const progressBar = document.createElement('div');
-  progressBar.className = 'scroll-progress';
-  document.body.prepend(progressBar);
-
-  ScrollTrigger.create({
-    start: 0,
-    end: 'max',
-    onUpdate: ({ progress }) => { progressBar.style.width = `${progress * 100}%`; },
-  });
-
-  // ── Apply mode: aggiorna data-state su tutte le card ────────────────
-  // CSS transitions già definite su ogni card (opacity, border-color, transform).
-  // Rimosso GSAP Flip: catturare computed styles di ogni card è CPU-intensivo
-  // quando il layout non cambia — solo gli stati visivi. CSS gestisce da solo.
-  function applyMode(mode: string) {
-    document.querySelectorAll<HTMLElement>('.cv-card[data-tags]').forEach(card => {
-      const tags = card.dataset.tags?.split(' ') ?? [];
-      card.dataset.state = tags.includes(mode) ? 'active' : 'passive';
-    });
-    updateNavButtons(mode);
-  }
-
-  // ── Update nav buttons: morph larghezza + crossfade testo ───────────
-  // Larghezze FISSE (no 'auto' — GSAP non può interpolare verso auto).
-  // CSS transition rimossa dal .mode-btn: GSAP controlla tutto.
-  // killTweensOf previene ghosting su click rapido.
-  const INACTIVE_W = '2.2rem';
-  const ACTIVE_W   = '7.5rem'; // sufficiente per 'Management' (label più lungo)
-  let navInitialized = false;
-
-  function updateNavButtons(mode: string) {
-    const isDesktop = window.matchMedia('(min-width: 641px)').matches;
-
-    document.querySelectorAll<HTMLElement>('[data-nav-mode]').forEach(btn => {
-      const isActive = btn.dataset.navMode === mode;
-      const abbr  = btn.querySelector<HTMLElement>('.mode-btn__abbr')!;
-      const label = btn.querySelector<HTMLElement>('.mode-btn__label')!;
-
-      gsap.killTweensOf([btn, abbr, label]);
-
-      // Colore/bordo: cambio immediato via classe — zero ritardo, zero desincronizzazione
-      btn.classList.toggle('is-active', isActive);
-      btn.setAttribute('aria-pressed', String(isActive));
-
-      if (isDesktop) {
-        // Desktop: CSS gestisce tutto (label visibile, abbr nascosta, width: auto).
-        // Rimuoviamo qualsiasi inline style lasciato da GSAP (es. resize mobile→desktop).
-        gsap.set(btn,   { clearProps: 'width' });
-        gsap.set(abbr,  { clearProps: 'opacity' });
-        gsap.set(label, { clearProps: 'opacity' });
-        return;
-      }
-
-      // ── Mobile: morph abbreviazione ↔ label completa ───────────────
-      if (!navInitialized) {
-        gsap.set(btn,   { width: isActive ? ACTIVE_W : INACTIVE_W });
-        gsap.set(abbr,  { opacity: isActive ? 0 : 1 });
-        gsap.set(label, { opacity: isActive ? 1 : 0 });
-        return;
-      }
-
-      if (isActive) {
-        gsap.to(btn,   { width: ACTIVE_W, duration: 0.36, ease: 'power3.inOut' });
-        gsap.to(abbr,  { opacity: 0,      duration: 0.1,  ease: 'power2.in' });
-        gsap.to(label, { opacity: 1,      duration: 0.22, delay: 0.14, ease: 'power2.out' });
-      } else {
-        gsap.to(label, { opacity: 0,        duration: 0.1,  ease: 'power2.in' });
-        gsap.to(btn,   { width: INACTIVE_W, duration: 0.36, delay: 0.06, ease: 'power3.inOut' });
-        gsap.to(abbr,  { opacity: 1,        duration: 0.22, delay: 0.22, ease: 'power2.out' });
-      }
-    });
-    navInitialized = true;
-  }
-
-  // ── Nav button clicks + magnetic ─────────────────────────────────────
-  document.querySelectorAll<HTMLButtonElement>('[data-nav-mode]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const mode = btn.dataset.navMode;
-      if (!mode) return;
-      setMode(mode as 'tech' | 'creative' | 'human' | 'management');
-      applyMode(mode);
-    });
-
-    btn.addEventListener('mousemove', (e) => {
-      const rect = btn.getBoundingClientRect();
-      const dx = (e.clientX - rect.left - rect.width / 2) / rect.width * 6;
-      const dy = (e.clientY - rect.top - rect.height / 2) / rect.height * 6;
-      gsap.to(btn, { x: dx, y: dy, duration: 0.3, ease: 'power2.out' });
-    });
-
-    btn.addEventListener('mouseleave', () => {
-      gsap.to(btn, { x: 0, y: 0, duration: 0.5, ease: 'elastic.out(1, 0.4)' });
-    });
-  });
-
-  // ── Magnetic hover on GO logo + lang switcher ────────────────────────
-  ([
-    document.querySelector<HTMLElement>('go-logo'),
-    document.querySelector<HTMLElement>('.cv-nav__lang'),
-  ] as (HTMLElement | null)[]).forEach(el => {
-    if (!el) return;
-    el.addEventListener('mousemove', (e) => {
-      const rect = el.getBoundingClientRect();
-      const dx = (e.clientX - rect.left - rect.width / 2) / rect.width * 6;
-      const dy = (e.clientY - rect.top - rect.height / 2) / rect.height * 6;
-      gsap.to(el, { x: dx, y: dy, duration: 0.3, ease: 'power2.out' });
-    });
-    el.addEventListener('mouseleave', () => {
-      gsap.to(el, { x: 0, y: 0, duration: 0.5, ease: 'elastic.out(1, 0.4)' });
-    });
-  });
-
-  // ── Subscribe to modeStore (fires immediately with current value) ─────
-  modeStore.subscribe(mode => {
-    applyMode(mode ?? 'tech');
-  });
-
-  // ── GSAP ScrollTrigger reveals (replaces IntersectionObserver) ───────
-  document.querySelectorAll<HTMLElement>('.reveal').forEach((el, i) => {
-    gsap.fromTo(el,
-      { opacity: 0, y: 32 },
-      {
-        opacity: 1, y: 0,
-        duration: 0.8,
-        ease: 'power3.out',
-        delay: (i % 3) * 0.08,
-        scrollTrigger: {
-          trigger: el,
-          start: 'top 88%',
-          toggleActions: 'play none none none',
-        },
-      }
-    );
-    el.classList.add('is-visible');
-  });
-
-  // ── 3D tilt on cards ─────────────────────────────────────────────────
-  document.querySelectorAll<HTMLElement>('.exp-card, .skill-square, .project-card').forEach(card => {
-    card.style.transformStyle = 'preserve-3d';
-
-    card.addEventListener('mousemove', (e) => {
-      const rect = card.getBoundingClientRect();
-      const rx = ((e.clientY - rect.top) / rect.height - 0.5) * -8;
-      const ry = ((e.clientX - rect.left) / rect.width - 0.5) * 8;
-      gsap.to(card, { rotateX: rx, rotateY: ry, scale: 1.02, duration: 0.3, ease: 'power2.out', transformPerspective: 800 });
-    });
-
-    card.addEventListener('mouseleave', () => {
-      gsap.to(card, { rotateX: 0, rotateY: 0, scale: 1, duration: 0.6, ease: 'elastic.out(1, 0.4)' });
-    });
-  });
+  import '../scripts/cv-init.ts';
 </script>

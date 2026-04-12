@@ -17,10 +17,18 @@ const { tool, title, desc, impact, tags } = Astro.props;
   </div>
   <h3 class="ai-card__title">{title}</h3>
   <p class="ai-card__desc">{desc}</p>
+  <span class="ai-card__ai-badge" aria-label="Potenziato da AI" title="AI-Enhanced">
+    <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+      <!-- sparkle a 4 punte -->
+      <path d="M6 0 L6.8 5.2 L12 6 L6.8 6.8 L6 12 L5.2 6.8 L0 6 L5.2 5.2 Z" fill="currentColor"/>
+    </svg>
+    AI
+  </span>
 </div>
 
 <style>
   .ai-card {
+    position: relative;
     padding: 1rem 1.25rem;
     border: 1px solid var(--color-border);
     border-radius: 2px;
@@ -57,6 +65,28 @@ const { tool, title, desc, impact, tags } = Astro.props;
     padding: 0.15rem 0.45rem;
     border-radius: 1px;
     font-variant-numeric: tabular-nums;
+  }
+
+  /* Icona AI — angolo in basso a destra, sempre visibile */
+  .ai-card__ai-badge {
+    position: absolute;
+    bottom: 0.6rem;
+    right: 0.75rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.5rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    opacity: 0.45;
+    transition: opacity 0.2s ease;
+    pointer-events: none;
+  }
+
+  .ai-card:hover .ai-card__ai-badge {
+    opacity: 0.85;
   }
 
   .ai-card__title {

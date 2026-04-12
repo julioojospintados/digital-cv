@@ -123,6 +123,14 @@ Tutti con `alt=""` — sono decorativi, il knolling-stage ha `aria-hidden="true"
 
 ---
 
+## UX & Cognitive Load
+
+- **Leggi della Gestalt:** Usa la prossimità degli oggetti nel Knolling per far percepire i servizi come un unico ecosistema armonico.
+- **Social Proof Visiva:** Le card devono mostrare "dati di impatto" (es. -80% tempo) accanto al design, unendo l'estetica alla prova concreta.
+- **F-Pattern:** Disponi le informazioni nelle card seguendo la lettura naturale dell'utente per massimizzare la ritenzione dei messaggi chiave.
+
+---
+
 ## Skill Grid
 
 **Mai barre percentuali.** Quadrati con bordo proporzionale al livello:
@@ -198,16 +206,168 @@ La sezione mostra il badge `MCP` come firma del metodo.
 
 ---
 
-## Typography Scale
+## Animation Engineering — Regole Emil Kowalski
+
+Principi estratti da `emilkowalski/skill` (591★, MIT). Applicabili direttamente al stack Astro + GSAP + CSS.
+
+### Easing Curves Custom — aggiungere in `global.css`
+
+I built-in CSS (`ease`, `ease-out`) sono troppo deboli. Usare sempre variabili custom:
 
 ```css
-/* h1 hero (entry-name): clamp(3rem, 10vw, 7rem) — font-weight 800 */
-/* h1 display (cv.astro): clamp(3.5rem, 10vw, 9rem) — font-weight 800 */
-/* h2 sezione: clamp(2rem, 5vw, 4.5rem) — font-weight 700 */
-/* Label uppercase (entry-label): 0.65rem, letter-spacing: 0.25em */
-/* Body: max 1.1rem, line-height: 1.65 */
-/* Tagline/italic: 0.9rem */
+--ease-out: cubic-bezier(0.23, 1, 0.32, 1); /* enters, UI interactions */
+--ease-in-out: cubic-bezier(0.77, 0, 0.175, 1); /* movimenti su schermo */
+--ease-drawer: cubic-bezier(0.32, 0.72, 0, 1); /* slide drawer mobile */
 ```
+
+In GSAP: `'power3.out'` ≈ `--ease-out` forte. `'power3.inOut'` ≈ `--ease-in-out` forte.
+
+### Mai `scale(0)` in Entrata
+
+Nulla nel mondo reale appare dal nulla. Sempre partire da `scale(0.92–0.95) + opacity: 0`.
+
+```css
+/* ❌ Sbagliato */
+.entering {
+  transform: scale(0);
+}
+/* ✅ Corretto  */
+.entering {
+  transform: scale(0.95);
+  opacity: 0;
+}
+```
+
+In GSAP: il `mode-card__go` usa `scale: 0.82` come start — portare a `scale: 0.92` minimo.
+
+### Solo `transform` e `opacity` — Regola GPU
+
+Animare solo queste due proprietà (girano su GPU, saltano layout e paint).
+**Mai animare:** `padding`, `margin`, `height`, `width`, `top`, `left`.
+
+```css
+/* ❌ */
+transition: all 300ms ease;
+/* ✅ */
+transition:
+  transform 200ms var(--ease-out),
+  opacity 200ms ease;
+```
+
+### Durazioni per Tipo di Elemento
+
+| Elemento                     | Durata         |
+| ---------------------------- | -------------- |
+| Button press (`:active`)     | 100–160ms      |
+| Tooltip, small popover       | 125–200ms      |
+| Dropdown, select             | 150–250ms      |
+| Modal, drawer                | 200–500ms      |
+| Marketing / preloader / hero | Oltre 300ms ok |
+
+**Regola UI: mai oltre 300ms.** Preloader e animazioni hero sono eccezioni.
+
+### `scale(0.97)` su `:active` — Feedback Immediato
+
+Ogni elemento pressabile deve rispondere fisicamente al click:
+
+```css
+.mode-card__go,
+.mode-card,
+button {
+  transition: transform 160ms var(--ease-out);
+}
+
+.mode-card__go:active,
+.mode-card:active {
+  transform: scale(0.97);
+}
+```
+
+### Hover Gated — Obbligatorio su Touch
+
+Su touch il `:hover` si attiva al tap. Sempre wrappare:
+
+```css
+@media (hover: hover) and (pointer: fine) {
+  .mode-card:hover {
+    transform: scale(1.02);
+  }
+  .knoll-item:hover {
+    opacity: 0.9;
+  }
+}
+```
+
+### `prefers-reduced-motion` — Rispettare Sempre
+
+Riduzione ≠ eliminazione. Mantenere opacity/color, rimuovere i transform.
+La regola è già in `global.css` — non aggiungere nuove animazioni senza verificarla.
+
+### Asimmetria Enter/Exit
+
+Entrata lenta (deliberata) → uscita veloce (il sistema risponde). Mai stessa durata per entrambe.
+
+```css
+.overlay {
+  transition: clip-path 200ms var(--ease-out);
+} /* exit: veloce */
+.button:active .overlay {
+  transition: clip-path 2s linear;
+} /* enter: lento */
+```
+
+Il `mode-card__go` già rispetta il principio (`0.6s` in entrata, `0.2s` in uscita).
+
+### Stagger per Gruppi (30–80ms per item)
+
+```css
+.skill-square:nth-child(1) {
+  animation-delay: 0ms;
+}
+.skill-square:nth-child(2) {
+  animation-delay: 50ms;
+}
+.skill-square:nth-child(3) {
+  animation-delay: 100ms;
+}
+```
+
+In GSAP: `gsap.from('.skill-square', { stagger: 0.05, opacity: 0, y: 8 })`.
+Oltre 80ms per item si percepisce come lentezza, non coreografia.
+
+### `clip-path: inset()` per Reveal on Scroll
+
+```css
+.cv-section {
+  clip-path: inset(0 0 100% 0);
+  transition: clip-path 600ms var(--ease-out);
+}
+.cv-section.is-visible {
+  clip-path: inset(0 0 0 0);
+}
+```
+
+Hardware-accelerato. Applicabile alle sezioni di `cv.astro` con `IntersectionObserver`.
+
+### CSS vs GSAP — Quando Usare Cosa
+
+| Scenario                                    | Soluzione                        |
+| ------------------------------------------- | -------------------------------- |
+| Animazione predeterminata (preloader, idle) | CSS puro — off main thread       |
+| Animazione interrompibile (hover, drag)     | CSS `transition` — retargetabile |
+| Animazione dinamica con logica JS           | GSAP — controllo completo        |
+| Reveal on scroll                            | GSAP ScrollTrigger + CSS class   |
+
+---
+
+## Typography Scale
+
+/_ h2 sezione: clamp(2rem, 5vw, 4.5rem) — font-weight 700 _/
+/_ Label uppercase (entry-label): 0.65rem, letter-spacing: 0.25em _/
+/_ Body: max 1.1rem, line-height: 1.65 _/
+/_ Tagline/italic: 0.9rem _/
+
+````
 
 **Font coppia tecnica — self-hosted via Fontsource (nessuna richiesta esterna, GDPR compliant):**
 
@@ -288,7 +448,7 @@ Lo sfondo è **sempre ottanio** `rgba(8,73,67,1)` in tutti e 3 i mode. Solo `--c
   --color-text-primary: rgba(245, 240, 230, 1)
   --color-text-muted: rgba(180, 210, 205, 0.7)
   --color-accent: /* vedi tabella mode */;
-```
+````
 
 | Mode       | `--color-accent`                 | Target                   |
 | ---------- | -------------------------------- | ------------------------ |

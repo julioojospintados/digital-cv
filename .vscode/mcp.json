@@ -13,7 +13,13 @@
       "type": "promptString",
       "description": "GitLab Personal Access Token (scope: api)",
       "password": true
-    }
+    },
+    // {
+    //   "id": "google-maps-api-key",
+    //   "type": "promptString",
+    //   "description": "Google Maps API Key (Console: APIs & Services → Credentials)",
+    //   "password": true
+    // }
   ],
   "servers": {
     // ═══════════════════════════════════════════════════════════════════════
@@ -86,6 +92,20 @@
         "GITLAB_API_URL": "https://gitlab.com"
       }
     },
+    // GOOGLE MAPS — geocoding, places, directions, distance matrix, elevation, time zones
+    // Create API key: https://console.cloud.google.com/apis/credentials
+    // Enable APIs: Maps JavaScript API, Geocoding API, Places API, Directions API
+    // "google-maps": {
+    //   "type": "stdio",
+    //   "command": "npx",
+    //   "args": [
+    //     "-y",
+    //     "@modelcontextprotocol/server-google-maps"
+    //   ],
+    //   "env": {
+    //     "GOOGLE_MAPS_API_KEY": "${input:google-maps-api-key}"
+    //   }
+    // },
     // FETCH — fetch any URL, scrape web content, call REST APIs
     // "fetch": {
     //   "type": "stdio",

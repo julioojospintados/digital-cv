@@ -22,6 +22,14 @@ Significa **rilasciare ogni settimana qualcosa che funziona**.
 
 ---
 
+## Tech Management & Problem Solving
+
+- **Metodo "Shape Up" (Snello):** Organizza il lavoro in cicli brevi (6 settimane) per garantire la consegna di valore reale, non solo codice.
+- **Problem Solving Flow:** Analisi del collo di bottiglia -> Automazione via AI/MCP -> Test sul campo -> Formazione del team.
+- **Trasparenza Agile:** Ogni sprint deve produrre un risultato visibile al titolare, eliminando l'ansia da "scatola nera" tipica dei consulenti IT.
+
+---
+
 ## Priorità Glow/Square — Agile & UX/UI
 
 Quando il mode attivo è **HUMAN** o **CREATIVE**, le card e le skill con tag `agile` o `ux`
@@ -40,12 +48,14 @@ ricevono la **priorità visiva massima** nel sistema Square/Glow:
 ## Tono della Sezione Agile — Regole Testo
 
 **USA:**
+
 - velocità di rilascio, sprint chiusi, impactScore, backlog orientato al business
 - "rilasciare ogni settimana qualcosa che funziona"
 - "i progetti finiscono — nei tempi, con risultati misurabili"
 - "fare in 2 quello che altri fanno in 8"
 
 **EVITA:**
+
 - "gestione del team", "ownership", "stakeholder management"
 - "framework enterprise", "scaling SAFe", "governance"
 - qualsiasi gergo che suoni da multinazionale con 50 persone
@@ -54,11 +64,11 @@ ricevono la **priorità visiva massima** nel sistema Square/Glow:
 
 ## Certificazioni Rilevanti
 
-| Certificazione | Issuer | ID | Rilevanza |
-|---|---|---|---|
-| Introduction to Agile Development and Scrum | IBM | `L7GZFSYJYMAC` | Scrum, sprint, backlog |
+| Certificazione                                             | Issuer  | ID             | Rilevanza                |
+| ---------------------------------------------------------- | ------- | -------------- | ------------------------ |
+| Introduction to Agile Development and Scrum                | IBM     | `L7GZFSYJYMAC` | Scrum, sprint, backlog   |
 | UX/UI Design Fundamentals: Usability and Visual Principles | SkillUp | `VELSWBCO2YEL` | Usabilità, visual design |
-| Introduction to UX/UI Design | IBM | `LUL4LSALE01X` | UX research, wireframing |
+| Introduction to UX/UI Design                               | IBM     | `LUL4LSALE01X` | UX research, wireframing |
 
 Queste certificazioni non sono decorative. Dimostrano che i progetti arrivano in produzione —
 nei tempi stabiliti, con risultati verificabili.
