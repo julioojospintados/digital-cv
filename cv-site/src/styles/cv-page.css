@@ -547,11 +547,16 @@ go-logo:not(:defined) {
 }
 
 .skills-view-btn {
+  width: 7rem;
+  min-width: 7rem;
+  flex: 0 0 7rem;
   padding: 0.35rem 0.8rem;
   border: 1px solid var(--skills-panel-border);
   border-radius: 2px;
   background: color-mix(in srgb, var(--skills-panel-bg) 72%, transparent);
   color: var(--color-text-muted);
+  justify-content: center;
+  text-align: center;
   font-family: var(--font-mono);
   font-size: 0.56rem;
   font-weight: 700;
@@ -642,6 +647,12 @@ go-logo:not(:defined) {
 /* AI section enhanced visibility */
 .ai-title {
   position: relative;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.ai-title .section-subtitle {
+  flex-basis: 100%;
 }
 
 .ai-title span:first-child {
@@ -655,6 +666,65 @@ go-logo:not(:defined) {
   background-clip: text;
   font-weight: 800;
   text-shadow: 0 0 20px color-mix(in srgb, var(--color-accent) 30%, transparent);
+}
+
+.ai-title__clip {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  margin-left: auto;
+  pointer-events: none;
+  user-select: none;
+}
+
+.ai-title__clip-pin {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--color-accent);
+  opacity: 0.55;
+  box-shadow: 0 0 4px var(--color-accent);
+}
+
+.ai-title__clip-text {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.22rem 0.55rem;
+  background: var(--color-accent);
+  border-radius: 2px;
+  color: rgba(8, 73, 67, 1);
+  font-size: 0.5rem;
+  font-weight: 900;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  box-shadow:
+    0 0 18px var(--color-accent),
+    0 2px 8px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.32),
+    inset 0 -1px 0 rgba(0, 0, 0, 0.18);
+  animation: ai-clip-breathe 2.6s ease-in-out infinite;
+}
+
+@keyframes ai-clip-breathe {
+  0%,
+  100% {
+    box-shadow:
+      0 0 14px var(--color-accent),
+      0 2px 8px rgba(0, 0, 0, 0.5),
+      inset 0 1px 0 rgba(255, 255, 255, 0.32),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.18);
+  }
+
+  50% {
+    box-shadow:
+      0 0 30px var(--color-accent),
+      0 0 14px var(--color-accent),
+      0 2px 8px rgba(0, 0, 0, 0.5),
+      inset 0 1px 0 rgba(255, 255, 255, 0.32),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.18);
+  }
 }
 
 /* ── Experience ──────────────────────────────────────────────── */
