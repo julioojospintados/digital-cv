@@ -375,15 +375,19 @@ class FloatingMenu extends LitElement {
   }
 
   render() {
-    const href = window.location.pathname.match(/^\/(tech|creative|human|management|cv)/)
+    // Guard window/sessionStorage access for SSR compatibility (window is undefined in Node.js)
+    const isClient = typeof window !== 'undefined';
+    const href = isClient && window.location.pathname.match(/^\/(tech|creative|human|management|cv)/)
       ? '#ai-section'
       : '/tech#ai-section';
 
     let feedbackCount = 0;
-    try {
-      const stored = JSON.parse(sessionStorage.getItem('cv-feedbacks') ?? '[]');
-      feedbackCount = Array.isArray(stored) ? stored.length : 0;
-    } catch { /* noop */ }
+    if (isClient) {
+      try {
+        const stored = JSON.parse(sessionStorage.getItem('cv-feedbacks') ?? '[]');
+        feedbackCount = Array.isArray(stored) ? stored.length : 0;
+      } catch { /* noop */ }
+    }
 
     return html`
       ${this._showFeedback ? html`
