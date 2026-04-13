@@ -111,13 +111,14 @@ const EDGES = buildEdges();
 // ── Component ─────────────────────────────────────────────────────────────────
 class SkillScatterPlot extends LitElement {
   static styles = css`
-    :host { display: block; width: 100%; }
+    :host { display: block; width: 100%; max-width: 100%; overflow: hidden; }
 
     .sp-wrapper {
       position: relative;
       border: 1px solid rgba(255, 255, 255, 0.07);
       border-radius: 2px;
       background: rgba(0, 0, 0, 0.15);
+      overflow: hidden;
     }
 
     .sp-svg {
@@ -265,6 +266,7 @@ class SkillScatterPlot extends LitElement {
 
   private _mode: Mode       = 'tech';
   private _hoveredIdx: number | null = null;
+  private _animated = false;
   private _unsub?: () => void;
 
   override connectedCallback() {
@@ -272,7 +274,7 @@ class SkillScatterPlot extends LitElement {
     this._mode = modeStore.get();
     this._unsub = modeStore.subscribe(m => {
       this._mode = m;
-      this._updateModeOpacity();
+      if (this._animated) this._updateModeOpacity();
     });
   }
 
@@ -282,21 +284,46 @@ class SkillScatterPlot extends LitElement {
   }
 
   // ── GSAP entrance animation ─────────────────────────────────────────────────
+  // NOTA: SVG in Lit Shadow DOM non supporta scale/svgOrigin via GSAP.
+  // Usa solo opacity (come SkillConstellation) + requestAnimationFrame.
   override firstUpdated() {
-    const groups = this.renderRoot.querySelectorAll<SVGGElement>('.sp-node-group');
+    requestAnimationFrame(() => this._animate());
+  }
+
+  private _animate() {
+    const groups = Array.from(
+      this.renderRoot.querySelectorAll<SVGGElement>('.sp-node-group')
+    );
+
+    let done = 0;
+    const total = groups.length;
+
     groups.forEach((g, i) => {
-      const node = NODES[i];
-      if (!node) return;
-      gsap.from(g, {
-        x: CX - node.x,
-        y: CY - node.y,
-        opacity: 0,
-        scale: 0,
-        svgOrigin: `${node.x} ${node.y}`,
-        duration: 0.65,
-        ease: 'back.out(1.4)',
-        delay: 0.08 + i * 0.012,
-      });
+      gsap.fromTo(
+        g,
+        { opacity: 0 },
+        {
+          opacity: 1,
+          duration: 0.5,
+          delay: 0.05 + i * 0.008,
+          ease: 'power2.out',
+          onComplete: () => {
+            done++;
+            if (done === total) {
+              this._animated = true;
+              this._updateModeOpacity();
+            }
+          },
+        }
+      );
+    });
+
+    // Safety: applica mode anche se alcune animazioni non completano
+    gsap.delayedCall(1.8, () => {
+      if (!this._animated) {
+        this._animated = true;
+        this._updateModeOpacity();
+      }
     });
   }
 
@@ -306,10 +333,11 @@ class SkillScatterPlot extends LitElement {
     groups.forEach((g, i) => {
       const node = NODES[i];
       if (!node) return;
-      const active = node.domain === this._mode || this._mode === 'management' && node.domain === 'management';
-      gsap.to(g, { opacity: active ? 1 : 0.25, duration: 0.4, ease: 'power2.out' });
+      const active = node.domain === this._mode
+        || (this._mode === 'management' && node.domain === 'management')
+        || (this._mode === 'tech' && node.domain === 'ai');
+      gsap.to(g, { opacity: active ? 1 : 0.22, duration: 0.4, ease: 'power2.out' });
     });
-    this.requestUpdate();
   }
 
   // ── Interaction ─────────────────────────────────────────────────────────────

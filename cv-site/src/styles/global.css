@@ -376,6 +376,30 @@ body::after {
   transition: width 0.1s linear;
 }
 
+/* ─── FloatingMenu — posizionamento nel light DOM (più affidabile del Shadow DOM :host) ─── */
+/* Lit shadow DOM position:fixed può essere interrotto da GSAP transforms su ancestors.    */
+/* Applicare qui garantisce il corretto ancoraggio al viewport su tutti i browser/device.  */
+
+floating-menu {
+  position: fixed !important;
+  bottom: max(1.5rem, env(safe-area-inset-bottom, 0px) + 1rem);
+  right: 1.5rem;
+  z-index: 400;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: flex-end;
+  gap: 0.65rem;
+  pointer-events: none;
+}
+
+@media (max-width: 640px) {
+  floating-menu {
+    bottom: max(1.25rem, env(safe-area-inset-bottom, 0px) + 0.75rem);
+    right: 1rem;
+    z-index: 400;
+  }
+}
+
 /* ─── Preloader ─── */
 
 #preloader {

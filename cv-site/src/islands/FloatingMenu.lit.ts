@@ -15,15 +15,14 @@ import { modeStore, type Mode } from './stores/modeStore.js';
 class FloatingMenu extends LitElement {
   static styles = css`
     :host {
-      position: fixed;
-      bottom: 1.75rem;
-      right: 1.5rem;
-      z-index: 200;
+      /* Posizionamento gestito dal light DOM CSS in global.css —          */
+      /* non ridichiarare position/bottom/right/z-index qui: GSAP su       */
+      /* elementi ancestor può rompere position:fixed nel Shadow DOM.      */
       display: flex;
       flex-direction: column-reverse;
       align-items: flex-end;
       gap: 0.65rem;
-      pointer-events: none; /* let individual elements capture events */
+      pointer-events: none;
     }
 
     /* ── Trigger button ── */
@@ -156,11 +155,6 @@ class FloatingMenu extends LitElement {
 
     /* ── Mobile adjustments ── */
     @media (max-width: 640px) {
-      :host {
-        bottom: max(1.25rem, env(safe-area-inset-bottom, 0px) + 1rem);
-        right: 1rem;
-        z-index: 400;
-      }
       .fab-trigger {
         width: 3rem;
         height: 3rem;

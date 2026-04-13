@@ -52,6 +52,9 @@ const {
 
     <slot />
 
+    <!-- Floating Action Button — globale su tutte le pagine -->
+    <floating-menu></floating-menu>
+
     <SpeedInsights />
 
     <!-- Init mode from store on client -->
@@ -127,6 +130,11 @@ const {
       document.addEventListener('mouseenter', () => {
         gsap.to([dot, ring], { opacity: 1, duration: 0.3 });
       });
+    </script>
+
+    <!-- FloatingMenu Lit island — sempre attivo su tutte le pagine -->
+    <script>
+      import '../islands/FloatingMenu.lit.ts';
     </script>
   </body>
 </html>

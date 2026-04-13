@@ -72,7 +72,11 @@ skill-constellation,
 skill-scatter-plot {
   display: block;
   margin-bottom: 2rem;
+  max-width: 100%;
+  /* overflow: auto permette scroll orizzontale su schermi stretti */
   overflow-x: auto;
+  /* Blocca espansione oltre il viewport su mobile */
+  contain: layout inline-size;
 }
 
 .skills-sub-title {
