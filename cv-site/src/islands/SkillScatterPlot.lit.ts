@@ -1,5 +1,4 @@
 import { LitElement, html, css } from 'lit';
-import { gsap } from 'gsap';
 import { modeStore, type Mode } from './stores/modeStore.js';
 import { cvData } from '@cv-data';
 
@@ -178,6 +177,9 @@ class SkillScatterPlot extends LitElement {
     /* Nodes */
     .sp-node-group {
       cursor: pointer;
+      /* CSS transition handles smooth opacity changes on mode switch.
+         Opacity is declared in the template (style attr) — no GSAP needed. */
+      transition: opacity 0.4s ease;
     }
     .sp-node {
       transition: filter 0.25s ease, opacity 0.25s ease;
@@ -266,78 +268,22 @@ class SkillScatterPlot extends LitElement {
 
   private _mode: Mode       = 'tech';
   private _hoveredIdx: number | null = null;
-  private _animated = false;
   private _unsub?: () => void;
 
   override connectedCallback() {
     super.connectedCallback();
     this._mode = modeStore.get();
+    // requestUpdate() triggers re-render; Lit sets opacity via template style attr;
+    // CSS transition: opacity 0.4s on .sp-node-group animates the change smoothly.
     this._unsub = modeStore.subscribe(m => {
       this._mode = m;
-      if (this._animated) this._updateModeOpacity();
+      this.requestUpdate();
     });
   }
 
   override disconnectedCallback() {
     super.disconnectedCallback();
     this._unsub?.();
-  }
-
-  // ── GSAP entrance animation ─────────────────────────────────────────────────
-  // NOTA: SVG in Lit Shadow DOM non supporta scale/svgOrigin via GSAP.
-  // Usa solo opacity (come SkillConstellation) + requestAnimationFrame.
-  override firstUpdated() {
-    requestAnimationFrame(() => this._animate());
-  }
-
-  private _animate() {
-    const groups = Array.from(
-      this.renderRoot.querySelectorAll<SVGGElement>('.sp-node-group')
-    );
-
-    let done = 0;
-    const total = groups.length;
-
-    groups.forEach((g, i) => {
-      gsap.fromTo(
-        g,
-        { opacity: 0 },
-        {
-          opacity: 1,
-          duration: 0.5,
-          delay: 0.05 + i * 0.008,
-          ease: 'power2.out',
-          onComplete: () => {
-            done++;
-            if (done === total) {
-              this._animated = true;
-              this._updateModeOpacity();
-            }
-          },
-        }
-      );
-    });
-
-    // Safety: applica mode anche se alcune animazioni non completano
-    gsap.delayedCall(1.8, () => {
-      if (!this._animated) {
-        this._animated = true;
-        this._updateModeOpacity();
-      }
-    });
-  }
-
-  // ── Mode opacity via GSAP (smooth on mode change) ───────────────────────────
-  private _updateModeOpacity() {
-    const groups = this.renderRoot.querySelectorAll<SVGGElement>('.sp-node-group');
-    groups.forEach((g, i) => {
-      const node = NODES[i];
-      if (!node) return;
-      const active = node.domain === this._mode
-        || (this._mode === 'management' && node.domain === 'management')
-        || (this._mode === 'tech' && node.domain === 'ai');
-      gsap.to(g, { opacity: active ? 1 : 0.22, duration: 0.4, ease: 'power2.out' });
-    });
   }
 
   // ── Interaction ─────────────────────────────────────────────────────────────
@@ -438,6 +384,14 @@ class SkillScatterPlot extends LitElement {
     const isDimmed  = hovered !== null && !isHovered;
     const color     = DOMAIN_COLOR[node.domain] ?? 'rgba(192,220,215,1)';
 
+    // Opacity declared here — Lit sets it on every render.
+    // CSS transition: opacity 0.4s on .sp-node-group handles smooth mode changes.
+    // No GSAP needed — eliminates all timing/animation race conditions.
+    const isActive = node.domain === this._mode
+      || (this._mode === 'management' && node.domain === 'management')
+      || (this._mode === 'tech' && node.domain === 'ai');
+    const groupOpacity = isActive ? 1 : 0.22;
+
     const nodeCls = [
       'sp-node',
       isDimmed  ? 'sp-node--dimmed' : '',
@@ -457,6 +411,7 @@ class SkillScatterPlot extends LitElement {
       <g
         class="sp-node-group"
         transform="translate(${node.x},${node.y})"
+        style="opacity: ${groupOpacity}"
         data-idx="${idx}"
         @mouseenter=${() => this._onNodeEnter(idx)}
         @mouseleave=${this._onNodeLeave}

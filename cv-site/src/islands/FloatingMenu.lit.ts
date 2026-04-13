@@ -15,13 +15,11 @@ import { modeStore, type Mode } from './stores/modeStore.js';
 class FloatingMenu extends LitElement {
   static styles = css`
     :host {
-      /* Posizionamento gestito dal light DOM CSS in global.css —          */
-      /* non ridichiarare position/bottom/right/z-index qui: GSAP su       */
-      /* elementi ancestor può rompere position:fixed nel Shadow DOM.      */
-      display: flex;
-      flex-direction: column-reverse;
-      align-items: flex-end;
-      gap: 0.65rem;
+      /* Posizionamento gestito dal light DOM CSS in global.css.            */
+      /* display: block — il trigger occupa solo 3.1rem x 3.1rem.          */
+      /* .fab-items e .feedback-panel sono position:absolute e NON occupano */
+      /* spazio nel flusso (evita il box invisibile di ~110px sopra il FAB).*/
+      display: block;
       pointer-events: none;
     }
 
@@ -45,7 +43,7 @@ class FloatingMenu extends LitElement {
         box-shadow 0.3s ease;
       will-change: transform;
       flex-shrink: 0;
-      position: fixed;
+      position: relative;
     }
 
     .fab-trigger:hover {
@@ -77,8 +75,12 @@ class FloatingMenu extends LitElement {
     :host(:not([open])) .fab-icon--open  { opacity: 0; }
     :host(:not([open])) .fab-icon--close { opacity: 1; transform: rotate(0deg) scale(1); }
 
-    /* ── Items container ── */
+    /* ── Items container — absolute per non occupare spazio nel flusso ── */
+    /* bottom: 3.1rem (trigger) + 0.65rem (gap) = 3.75rem                  */
     .fab-items {
+      position: absolute;
+      right: 0;
+      bottom: 3.75rem;
       display: flex;
       flex-direction: column;
       align-items: flex-end;
@@ -165,8 +167,11 @@ class FloatingMenu extends LitElement {
       }
     }
 
-    /* ── Feedback panel ── */
+    /* ── Feedback panel — absolute come .fab-items ── */
     .feedback-panel {
+      position: absolute;
+      right: 0;
+      bottom: 3.75rem;
       width: 15rem;
       background: rgba(8, 73, 67, 0.97);
       border: 1px solid color-mix(in srgb, var(--color-accent, rgba(0,255,200,1)) 40%, transparent);

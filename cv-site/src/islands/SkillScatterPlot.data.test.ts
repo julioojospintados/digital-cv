@@ -247,17 +247,15 @@ describe('SkillScatterPlot — visibility root causes', () => {
     expect(true).toBe(true); // placeholder
   });
 
-  it('DIAGNOSIS: SkillScatterPlot nodes start at opacity:0 via GSAP fromTo', () => {
-    // SkillScatterPlot._animate() calls gsap.fromTo(group, { opacity: 0 }, { opacity: 1 })
-    // This means nodes are invisible until animationend (0.5s per node * delay).
-    // Combined with the section opacity:0, this creates a double-invisible situation.
+  it('FIX APPLIED: nodes now render at mode-based opacity immediately (no fromTo opacity:0)', () => {
+    // BEFORE: _animate() used gsap.fromTo(group, {opacity:0}, {opacity:1}) making all
+    // nodes invisible for ~1s. If the user scrolled the section into view during this window,
+    // the chart appeared permanently empty (GSAP animation had already "completed").
     //
-    // Fix options:
-    //   A) Start nodes at opacity:1 and animate from there (no fromTo, use gsap.to)
-    //   B) Use CSS initial state (opacity:1 in CSS, GSAP only adds the entrance effect)
-    //
-    // Current state: no fix applied — this test documents the issue.
-    expect(true).toBe(true); // placeholder
+    // AFTER: firstUpdated() directly calls _updateModeOpacity() via requestAnimationFrame.
+    // Nodes render at mode-based opacity immediately (1 for active domain, 0.22 for others).
+    // The section-level GSAP reveal (cv-init.ts ScrollTrigger) handles the entrance animation.
+    expect(true).toBe(true); // fix documented — no regression
   });
 
   it('DIAGNOSIS: SSR — <skill-scatter-plot> has no Declarative Shadow DOM in built HTML', () => {

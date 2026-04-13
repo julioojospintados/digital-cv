@@ -73,10 +73,9 @@ skill-scatter-plot {
   display: block;
   margin-bottom: 2rem;
   max-width: 100%;
-  /* overflow: auto permette scroll orizzontale su schermi stretti */
-  overflow-x: auto;
-  /* Blocca espansione oltre il viewport su mobile */
-  contain: layout inline-size;
+  /* overflow: hidden prevents the SVG from creating horizontal scroll on mobile.
+     The SVG uses width:100%;height:auto with a viewBox, so it scales correctly. */
+  overflow: hidden;
 }
 
 .skills-sub-title {
@@ -94,10 +93,9 @@ skill-scatter-plot {
   padding-top: 1rem;
 }
 
-/* ── Floating menu placeholder styling ───────────────────────── */
-floating-menu {
-  display: block; /* must be block — display:contents kills position:fixed on :host */
-}
+/* floating-menu MUST NOT set display here — global.css sets display:flex which positions
+   the trigger via align-items:flex-end. Overriding with display:block causes the trigger
+   to appear far left (block-flow left-alignment vs flex end-alignment). */
 
 .cv-nav {
   position: fixed;
@@ -263,6 +261,9 @@ go-logo:not(:defined) {
   flex-direction: column;
   gap: 4rem;
   --bento-gap: 0.75rem; /* Knolling constant gutter */
+  /* Clip bg-knoll images (right:-Xrem) and any other content that overflows the content
+     area on mobile. Does not affect position:fixed elements (floating-menu, cv-nav). */
+  overflow-x: clip;
 }
 
 /* ── Section title ────────────────────────────────────────────── */
