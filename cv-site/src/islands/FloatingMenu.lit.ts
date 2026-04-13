@@ -45,7 +45,7 @@ class FloatingMenu extends LitElement {
         box-shadow 0.3s ease;
       will-change: transform;
       flex-shrink: 0;
-      position: relative;
+      position: fixed;
     }
 
     .fab-trigger:hover {
