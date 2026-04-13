@@ -11,8 +11,8 @@ interface Props {
 const { name, level, borderPx, isGlow, weight = 1, modeTags } = Astro.props;
 
 // Grid span based on weight
-const spanCol = weight >= 5 ? 3 : weight >= 3 ? 2 : 1;
-const spanRow = weight >= 4 ? 2 : 1;
+const spanCol = weight >= 5 ? 3 : weight >= 4 ? 2 : 1;
+const spanRow = weight >= 5 ? 2 : weight >= 4 ? 2 : 1;
 
 const levelAbbr = level.substring(0, 3).toUpperCase();
 const sizeClass = weight >= 5 ? 'skill-sq--w5'

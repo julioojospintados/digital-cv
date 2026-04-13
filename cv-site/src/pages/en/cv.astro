@@ -13,6 +13,14 @@ const LEVEL_EN: Record<string, string> = {
   'Base': 'Basic', 'Intermedio': 'Intermediate', 'Avanzato': 'Advanced', 'Esperto': 'Expert',
 };
 
+type SkillSquareSource = {
+  name: string;
+  domain?: 'tech' | 'human' | 'creative' | 'management' | 'ai';
+  level?: string;
+  weight?: number;
+  mastery?: number;
+};
+
 // ── Skill mode-tag sets ────────────────────────────────────────────────────
 const TECH_SKILL_SET = new Set([
   'Angular', 'HTML5', 'CSS / SCSS', 'TypeScript', 'JavaScript', 'Lit',
@@ -26,26 +34,69 @@ const CREATIVE_SKILL_SET = new Set([
 ]);
 const DUAL_SKILL_SET = new Set(['Accessibility / WCAG', 'UX Research', 'Wireframing', 'Figma']);
 
-function skillModeTags(name: string): string {
-  const isT = TECH_SKILL_SET.has(name);
-  const isC = CREATIVE_SKILL_SET.has(name) || DUAL_SKILL_SET.has(name);
-  if (isT && isC) return 'tech creative';
-  if (isT) return 'tech';
-  if (isC) return 'creative';
-  return 'tech creative human';
+function deriveSkillLevel(mastery = 65): string {
+  if (mastery >= 85) return 'Esperto';
+  if (mastery >= 70) return 'Avanzato';
+  if (mastery >= 50) return 'Intermedio';
+  return 'Base';
 }
 
+function skillModeTags(skill: SkillSquareSource): string {
+  const tags = new Set<string>();
+
+  if (skill.domain) {
+    tags.add(skill.domain === 'ai' ? 'tech' : skill.domain);
+  }
+
+  if (TECH_SKILL_SET.has(skill.name)) {
+    tags.add('tech');
+  }
+
+  if (CREATIVE_SKILL_SET.has(skill.name) || DUAL_SKILL_SET.has(skill.name)) {
+    tags.add('creative');
+  }
+
+  if (tags.size === 0) {
+    tags.add('tech');
+    tags.add('creative');
+    tags.add('human');
+    tags.add('management');
+  }
+
+  return Array.from(tags).join(' ');
+}
+
+// ── Skill Grid ─────────────────────────────────────────────────────────────
 const LEVEL_BORDERS: Record<string, number> = {
   'Base': 1, 'Intermedio': 2, 'Avanzato': 3, 'Esperto': 4,
 };
-const skillSquares = cvDataEn.technicalSkills.map(skill => ({
-  name: skill.name,
-  level: LEVEL_EN[skill.level] ?? skill.level,
-  borderPx: LEVEL_BORDERS[skill.level] ?? 1,
-  isGlow: skill.level === 'Avanzato' || skill.level === 'Esperto',
-  weight: skill.weight ?? 1,
-  modeTags: skillModeTags(skill.name),
-}));
+function toSkillSquare(skill: SkillSquareSource) {
+  const level = skill.level ?? deriveSkillLevel(skill.mastery);
+  return {
+    name: skill.name,
+    level: LEVEL_EN[level] ?? level,
+    borderPx: LEVEL_BORDERS[level] ?? 1,
+    isGlow: level === 'Avanzato' || level === 'Esperto',
+    modeTags: skillModeTags(skill),
+    weight: skill.weight ?? 1,
+  };
+}
+
+const skillSquares = [
+  ...cvDataEn.technicalSkills.map((skill) => toSkillSquare(skill)),
+  ...cvDataEn.softSkills
+    .filter((skill) => skill.domain === 'human' || skill.domain === 'management')
+    .map((skill) => toSkillSquare(skill)),
+  ...cvDataEn.transversalSkills
+    .filter((skill) => skill.domain === 'human' || skill.domain === 'management')
+    .map((skill) => toSkillSquare(skill)),
+].sort((a, b) => {
+  const areaA = (a.weight ?? 1) * (LEVEL_BORDERS[a.level] ?? 1);
+  const areaB = (b.weight ?? 1) * (LEVEL_BORDERS[b.level] ?? 1);
+  if (areaA !== areaB) return areaB - areaA;
+
+  return a.name.localeCompare(b.name);
+});
 
 // ── Experience mode tags ───────────────────────────────────────────────────
 const EXP_MODE_TAGS = [
@@ -72,6 +123,11 @@ const EXP_MODE_TAGS = [
   'human management',       // 20 — Metamorfosi / Fun Factory
   'human',                  // 21 — Caveja srl
 ];
+
+const skillViewLabels = {
+  graph: 'Graph',
+  cards: 'Cards',
+} as const;
 
 const featuredExpData = cvDataEn.experience.map((exp, i) => ({
   company: exp.company,
@@ -299,13 +355,23 @@ const projectsData = cvDataEn.projects.slice(0, 6).map(p => {
         <span>Skills</span>
         <span class="section-subtitle">Force-directed skill network - hover and drag to explore</span>
       </h2>
-      <h3 class="skills-sub-title">Technical skills — tile size &amp; glow proportional to weight</h3>
-      <div class="skills-grid">
-        {skillSquares.map(skill => (
-          <SkillSquare {...skill} />
-        ))}
+      <h3 class="skills-sub-title">Technical, management and human skills — tile size &amp; glow proportional to weight</h3>
+      <div class="skills-view-toggle" role="tablist" aria-label="Choose skills view">
+        <button class="skills-view-btn is-active" type="button" data-skills-view-button="graph" aria-pressed="true">{skillViewLabels.graph}</button>
+        <button class="skills-view-btn" type="button" data-skills-view-button="cards" aria-pressed="false">{skillViewLabels.cards}</button>
       </div>
-      <skill-force-graph></skill-force-graph>
+      <div class="skills-stage" data-skills-view="graph">
+        <div class="skills-stage__panel skills-stage__panel--graph">
+          <skill-force-graph></skill-force-graph>
+        </div>
+        <div class="skills-stage__panel skills-stage__panel--cards">
+          <div class="skills-grid">
+            {skillSquares.map(skill => (
+              <SkillSquare {...skill} />
+            ))}
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- ── EXPERIENCE ─────────────────────────────────────────────── -->

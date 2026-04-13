@@ -19,6 +19,14 @@ export function getStaticPaths() {
 
 const { mode } = Astro.params as { mode: 'tech' | 'creative' | 'human' | 'management' };
 
+type SkillSquareSource = {
+  name: string;
+  domain?: 'tech' | 'human' | 'creative' | 'management' | 'ai';
+  level?: string;
+  weight?: number;
+  mastery?: number;
+};
+
 // ── Skill mode-tag sets ────────────────────────────────────────────────────
 const TECH_SKILL_SET = new Set([
   'Angular', 'HTML5', 'CSS / SCSS', 'TypeScript', 'JavaScript', 'Lit',
@@ -32,26 +40,77 @@ const CREATIVE_SKILL_SET = new Set([
 ]);
 const DUAL_SKILL_SET = new Set(['Accessibility / WCAG', 'UX Research', 'Wireframing', 'Figma']);
 
-function skillModeTags(name: string): string {
-  const isT = TECH_SKILL_SET.has(name);
-  const isC = CREATIVE_SKILL_SET.has(name) || DUAL_SKILL_SET.has(name);
-  if (isT && isC) return 'tech creative';
-  if (isT) return 'tech';
-  if (isC) return 'creative';
-  return 'tech creative human';
+function deriveSkillLevel(mastery = 65): string {
+  if (mastery >= 85) return 'Esperto';
+  if (mastery >= 70) return 'Avanzato';
+  if (mastery >= 50) return 'Intermedio';
+  return 'Base';
 }
 
+function skillModeTags(skill: SkillSquareSource): string {
+  const tags = new Set<string>();
+
+  if (skill.domain) {
+    tags.add(skill.domain === 'ai' ? 'tech' : skill.domain);
+  }
+
+  if (TECH_SKILL_SET.has(skill.name)) {
+    tags.add('tech');
+  }
+
+  if (CREATIVE_SKILL_SET.has(skill.name) || DUAL_SKILL_SET.has(skill.name)) {
+    tags.add('creative');
+  }
+
+  if (tags.size === 0) {
+    tags.add('tech');
+    tags.add('creative');
+    tags.add('human');
+    tags.add('management');
+  }
+
+  return Array.from(tags).join(' ');
+}
+
+// ── Skill Grid ─────────────────────────────────────────────────────────────
 const LEVEL_BORDERS: Record<string, number> = {
   'Base': 1, 'Intermedio': 2, 'Avanzato': 3, 'Esperto': 4,
 };
-const skillSquares = cvData.technicalSkills.map(skill => ({
-  name: skill.name,
-  level: skill.level,
-  borderPx: LEVEL_BORDERS[skill.level] ?? 1,
-  isGlow: skill.level === 'Avanzato' || skill.level === 'Esperto',
-  weight: skill.weight ?? 1,
-  modeTags: skillModeTags(skill.name),
-}));
+function toSkillSquare(skill: SkillSquareSource) {
+  const level = skill.level ?? deriveSkillLevel(skill.mastery);
+  return {
+    name: skill.name,
+    level,
+    borderPx: LEVEL_BORDERS[level] ?? 1,
+    isGlow: level === 'Avanzato' || level === 'Esperto',
+    modeTags: skillModeTags(skill),
+    weight: skill.weight ?? 1,
+  };
+}
+
+function isActiveSkill(modeTags: string): boolean {
+  const tags = modeTags.split(' ');
+  return tags.includes(mode) || (mode === 'tech' && tags.includes('ai'));
+}
+
+const skillSquares = [
+  ...cvData.technicalSkills.map((skill) => toSkillSquare(skill)),
+  ...cvData.softSkills
+    .filter((skill) => skill.domain === 'human' || skill.domain === 'management')
+    .map((skill) => toSkillSquare(skill)),
+  ...cvData.transversalSkills
+    .filter((skill) => skill.domain === 'human' || skill.domain === 'management')
+    .map((skill) => toSkillSquare(skill)),
+].sort((a, b) => {
+  const activeDelta = Number(isActiveSkill(b.modeTags)) - Number(isActiveSkill(a.modeTags));
+  if (activeDelta !== 0) return activeDelta;
+
+  const areaA = (a.weight ?? 1) * (LEVEL_BORDERS[a.level] ?? 1);
+  const areaB = (b.weight ?? 1) * (LEVEL_BORDERS[b.level] ?? 1);
+  if (areaA !== areaB) return areaB - areaA;
+
+  return a.name.localeCompare(b.name);
+});
 
 const EXP_MODE_TAGS = [
   'tech management',       // 0 — Progetto Interno — Gestionale PMI
@@ -92,6 +151,11 @@ const featuredExpData = cvData.experience.map((exp, i) => ({
   aiAugmented: !!(exp.tags?.includes('ai-orchestration') ||
     exp.skills?.some(s => ['MCP Protocol','Prompt Engineering','GitHub Copilot','Claude','Cursor','AI Orchestration','MCP'].includes(s))),
 }));
+
+const skillViewLabels = {
+  graph: 'Grafico',
+  cards: 'Card',
+} as const;
 
 const SOFT_MODE_TAGS = [
   'human creative',
@@ -297,13 +361,23 @@ const modeLabel = mode.charAt(0).toUpperCase() + mode.slice(1);
         <span>Skills</span>
         <span class="section-subtitle">Force-directed network delle competenze - hover e drag per esplorare</span>
       </h2>
-      <h3 class="skills-sub-title">Competenze tecniche — livello &amp; glow proporzionale</h3>
-      <div class="skills-grid">
-        {skillSquares.map(skill => (
-          <SkillSquare {...skill} />
-        ))}
+      <h3 class="skills-sub-title">Competenze tecniche, management e human — livello &amp; glow proporzionale</h3>
+      <div class="skills-view-toggle" role="tablist" aria-label="Scegli vista competenze">
+        <button class="skills-view-btn is-active" type="button" data-skills-view-button="graph" aria-pressed="true">{skillViewLabels.graph}</button>
+        <button class="skills-view-btn" type="button" data-skills-view-button="cards" aria-pressed="false">{skillViewLabels.cards}</button>
       </div>
-      <skill-force-graph></skill-force-graph>
+      <div class="skills-stage" data-skills-view="graph">
+        <div class="skills-stage__panel skills-stage__panel--graph">
+          <skill-force-graph></skill-force-graph>
+        </div>
+        <div class="skills-stage__panel skills-stage__panel--cards">
+          <div class="skills-grid">
+            {skillSquares.map(skill => (
+              <SkillSquare {...skill} />
+            ))}
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- ── EXPERIENCE ─────────────────────────────────────────────── -->
@@ -322,7 +396,7 @@ const modeLabel = mode.charAt(0).toUpperCase() + mode.slice(1);
 
     <!-- ── AI WORKFLOW ─────────────────────────────────────────────── -->
     <section class="ai-section reveal delay-300" id="ai-section" aria-label="AI-Enhanced Workflow">
-      <h2 class="section-title">
+      <h2 class="section-title ai-title">
         <span>AI-Enhanced Workflow</span>
         <span class="section-subtitle">Come l'AI moltiplica l'output senza sostituire il giudizio</span>
       </h2>

@@ -1,6 +1,7 @@
 import { LitElement, html, css } from "lit";
 import {
   drag,
+  easeCubicOut,
   forceCenter,
   forceCollide,
   forceLink,
@@ -8,7 +9,9 @@ import {
   forceSimulation,
   forceX,
   forceY,
+  pointer,
   select,
+  type D3DragEvent,
   type Selection,
   type Simulation,
   type SimulationLinkDatum,
@@ -43,8 +46,20 @@ interface GraphLink extends SimulationLinkDatum<GraphNode> {
   description?: string;
 }
 
-const WIDTH = 920;
-const HEIGHT = 560;
+interface TooltipState {
+  nodeId: string;
+  x: number;
+  y: number;
+}
+
+interface LinkInsight {
+  id: string;
+  type: string;
+  description?: string;
+}
+
+const WIDTH = 1080;
+const HEIGHT = 760;
 
 const DOMAIN_COLOR: Record<SkillDomain, string> = {
   tech: "rgba(0,255,200,1)",
@@ -62,11 +77,20 @@ const DOMAIN_LABEL: Record<SkillDomain, string> = {
   ai: "AI",
 };
 
+const LINK_TYPE_LABEL: Record<string, string> = {
+  technical: "Technical",
+  "cross-domain": "Cross",
+  conceptual: "Conceptual",
+  workflow: "Workflow",
+};
+
+const PIN_DURATION_MS = 1600;
+
 const DOMAIN_ANCHOR: Record<SkillDomain, { x: number; y: number }> = {
-  tech: { x: WIDTH * 0.26, y: HEIGHT * 0.32 },
-  creative: { x: WIDTH * 0.74, y: HEIGHT * 0.32 },
-  management: { x: WIDTH * 0.29, y: HEIGHT * 0.76 },
-  human: { x: WIDTH * 0.74, y: HEIGHT * 0.76 },
+  tech: { x: WIDTH * 0.16, y: HEIGHT * 0.26 },
+  creative: { x: WIDTH * 0.84, y: HEIGHT * 0.26 },
+  management: { x: WIDTH * 0.18, y: HEIGHT * 0.8 },
+  human: { x: WIDTH * 0.82, y: HEIGHT * 0.8 },
   ai: { x: WIDTH * 0.5, y: HEIGHT * 0.5 },
 };
 
@@ -75,7 +99,7 @@ function clamp(value: number, min: number, max: number): number {
 }
 
 function toRadius(weight: number, mastery: number): number {
-  return 4 + weight * 1.5 + (mastery / 100) * 2;
+  return 6 + weight * 2.1 + (mastery / 100) * 4.5;
 }
 
 function normalizeDomain(domain?: SkillDomain): SkillDomain {
@@ -178,9 +202,10 @@ class SkillForceGraph extends LitElement {
     }
 
     .graph-wrap {
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      background: rgba(0, 0, 0, 0.14);
-      border-radius: 2px;
+      position: relative;
+      border: 0;
+      background: transparent;
+      border-radius: 0;
       overflow: hidden;
     }
 
@@ -189,13 +214,16 @@ class SkillForceGraph extends LitElement {
       width: 100%;
       height: auto;
       cursor: grab;
-      background:
+      aspect-ratio: 1080 / 760;
+      background: var(
+        --skills-panel-overlay,
         radial-gradient(
           circle at 50% 35%,
           rgba(255, 255, 255, 0.03),
           transparent 45%
         ),
-        linear-gradient(160deg, rgba(255, 255, 255, 0.02), transparent 60%);
+        linear-gradient(160deg, rgba(255, 255, 255, 0.02), transparent 60%)
+      );
     }
 
     .graph-svg:active {
@@ -223,7 +251,7 @@ class SkillForceGraph extends LitElement {
 
     .force-node-label {
       font-family: "Lexend", sans-serif;
-      font-size: 8px;
+      font-size: 9px;
       font-weight: 600;
       letter-spacing: 0.02em;
       fill: rgba(245, 240, 230, 0.88);
@@ -238,7 +266,8 @@ class SkillForceGraph extends LitElement {
       justify-content: center;
       gap: 0.9rem;
       padding: 0.55rem 1rem 0.6rem;
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      border-top: 1px solid
+        var(--skills-panel-border, rgba(255, 255, 255, 0.05));
     }
 
     .graph-legend-item {
@@ -262,22 +291,91 @@ class SkillForceGraph extends LitElement {
 
     .graph-meta {
       padding: 0.35rem 0.9rem 0.65rem;
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      border-top: 1px solid
+        var(--skills-panel-border, rgba(255, 255, 255, 0.05));
       font-family: "JetBrains Mono", monospace;
       font-size: 0.56rem;
       color: rgba(192, 220, 215, 0.58);
       text-align: center;
       min-height: 2.1rem;
     }
+
+    .graph-tooltip {
+      position: absolute;
+      z-index: 4;
+      width: min(320px, calc(100% - 1.25rem));
+      padding: 0.6rem 0.7rem;
+      border-radius: 2px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(8, 73, 67, 0.96);
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.38);
+      pointer-events: none;
+      font-family: "Lexend", sans-serif;
+    }
+
+    .graph-tooltip__title {
+      margin: 0;
+      font-size: 0.66rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      color: rgba(245, 240, 230, 0.96);
+    }
+
+    .graph-tooltip__meta {
+      margin: 0.2rem 0 0;
+      font-size: 0.56rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: rgba(192, 220, 215, 0.82);
+    }
+
+    .graph-tooltip__list {
+      margin: 0.5rem 0 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 0.36rem;
+    }
+
+    .graph-tooltip__item {
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding-top: 0.36rem;
+    }
+
+    .graph-tooltip__row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      font-size: 0.56rem;
+      color: rgba(245, 240, 230, 0.9);
+    }
+
+    .graph-tooltip__type {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.5rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: rgba(192, 220, 215, 0.88);
+    }
+
+    .graph-tooltip__desc {
+      margin: 0.18rem 0 0;
+      font-size: 0.55rem;
+      line-height: 1.35;
+      color: rgba(192, 220, 215, 0.82);
+    }
   `;
 
   private _mode: Mode = "tech";
   private _hoveredNodeId: string | null = null;
+  private _tooltip: TooltipState | null = null;
 
   private _nodes: GraphNode[] = [];
   private _links: GraphLink[] = [];
   private _nodeById = new Map<string, GraphNode>();
   private _adjacency = new Map<string, Set<string>>();
+  private _autoPinnedNodeIds = new Set<string>();
 
   private _simulation?: Simulation<GraphNode, GraphLink>;
   private _nodeSelection?: Selection<
@@ -293,6 +391,7 @@ class SkillForceGraph extends LitElement {
     unknown
   >;
   private _unsub?: () => void;
+  private _releasePinTimer?: number;
 
   override connectedCallback() {
     super.connectedCallback();
@@ -300,11 +399,17 @@ class SkillForceGraph extends LitElement {
     this._unsub = modeStore.subscribe((mode) => {
       this._mode = mode;
       this._applyVisualState();
+      this._pinActiveClustersTemporarily();
       this.requestUpdate();
     });
   }
 
   override disconnectedCallback() {
+    if (this._releasePinTimer) {
+      window.clearTimeout(this._releasePinTimer);
+      this._releasePinTimer = undefined;
+    }
+    this._releasePinnedNodes();
     this._simulation?.stop();
     this._unsub?.();
     super.disconnectedCallback();
@@ -350,7 +455,9 @@ class SkillForceGraph extends LitElement {
       .join("line")
       .attr("class", "force-link")
       .attr("stroke-width", 1.1)
-      .attr("stroke-linecap", "round");
+      .attr("stroke-linecap", "round")
+      .attr("stroke-dasharray", "6 8")
+      .attr("stroke-dashoffset", 24);
 
     this._nodeSelection = nodesLayer
       .selectAll<SVGGElement, GraphNode>("g")
@@ -360,48 +467,66 @@ class SkillForceGraph extends LitElement {
 
         g.append("circle")
           .attr("class", "force-node-dot")
-          .attr("r", (node) => node.r)
+          .attr("r", 1.8)
           .attr("fill", (node) => DOMAIN_COLOR[node.domain])
-          .attr("fill-opacity", 0.88)
+          .attr("fill-opacity", 0.22)
           .attr("stroke", "rgba(8,73,67,0.9)")
-          .attr("stroke-width", 1.2);
+          .attr("stroke-width", 0.85)
+          .attr("filter", "blur(0.8px)");
 
         g.append("text")
           .attr("class", "force-node-label")
           .attr("dy", (node) => node.r + 11)
+          .attr("opacity", 0)
           .text((node) => node.label);
 
         return g;
       });
 
     this._nodeSelection
-      .on("mouseenter", (_event, node) => {
+      .on("mouseenter", (event: MouseEvent, node) => {
         this._hoveredNodeId = node.id;
+        this._updateTooltip(event as MouseEvent, node.id);
         this._applyVisualState();
+        this.requestUpdate();
+      })
+      .on("mousemove", (event: MouseEvent, node) => {
+        this._updateTooltip(event as MouseEvent, node.id);
         this.requestUpdate();
       })
       .on("mouseleave", () => {
         this._hoveredNodeId = null;
+        this._tooltip = null;
         this._applyVisualState();
         this.requestUpdate();
       });
 
     this._nodeSelection.call(
       drag<SVGGElement, GraphNode>()
-        .on("start", (event, node) => {
-          if (!event.active) this._simulation?.alphaTarget(0.25).restart();
-          node.fx = node.x;
-          node.fy = node.y;
-        })
-        .on("drag", (event, node) => {
-          node.fx = clamp(event.x, node.r, WIDTH - node.r);
-          node.fy = clamp(event.y, node.r, HEIGHT - node.r);
-        })
-        .on("end", (event, node) => {
-          if (!event.active) this._simulation?.alphaTarget(0);
-          node.fx = null;
-          node.fy = null;
-        }),
+        .on(
+          "start",
+          (event: D3DragEvent<SVGGElement, GraphNode, GraphNode>, node) => {
+            if (!event.active) this._simulation?.alphaTarget(0.25).restart();
+            this._tooltip = null;
+            node.fx = node.x;
+            node.fy = node.y;
+          },
+        )
+        .on(
+          "drag",
+          (event: D3DragEvent<SVGGElement, GraphNode, GraphNode>, node) => {
+            node.fx = clamp(event.x, node.r, WIDTH - node.r);
+            node.fy = clamp(event.y, node.r, HEIGHT - node.r);
+          },
+        )
+        .on(
+          "end",
+          (event: D3DragEvent<SVGGElement, GraphNode, GraphNode>, node) => {
+            if (!event.active) this._simulation?.alphaTarget(0);
+            node.fx = null;
+            node.fy = null;
+          },
+        ),
     );
 
     this._simulation = forceSimulation<GraphNode>(this._nodes)
@@ -412,24 +537,25 @@ class SkillForceGraph extends LitElement {
           .distance((link) => {
             const source = this._resolveNode(link.source);
             const target = this._resolveNode(link.target);
-            if (!source || !target) return 70;
-            return source.domain === target.domain ? 54 : 82;
+            if (!source || !target) return 96;
+            return source.domain === target.domain ? 76 : 122;
           })
           .strength((link) => {
             const source = this._resolveNode(link.source);
             const target = this._resolveNode(link.target);
-            if (!source || !target) return 0.2;
-            return source.domain === target.domain ? 0.45 : 0.18;
+            if (!source || !target) return 0.14;
+            return source.domain === target.domain ? 0.34 : 0.12;
           }),
       )
       .force(
         "charge",
-        forceManyBody<GraphNode>().strength((node) => -30 - node.weight * 8),
+        forceManyBody<GraphNode>().strength((node) => -48 - node.weight * 12),
       )
       .force(
         "collide",
         forceCollide<GraphNode>()
-          .radius((node) => node.r + 3)
+          .radius((node) => node.r + 7)
+          .radius((node) => node.r + 12)
           .strength(0.95),
       )
       .force("center", forceCenter(WIDTH / 2, HEIGHT / 2))
@@ -437,7 +563,7 @@ class SkillForceGraph extends LitElement {
         "x",
         forceX<GraphNode>((node) => DOMAIN_ANCHOR[node.domain].x).strength(
           (node) => {
-            return node.domain === "ai" ? 0.045 : 0.1;
+            return node.domain === "ai" ? 0.04 : 0.06;
           },
         ),
       )
@@ -445,12 +571,12 @@ class SkillForceGraph extends LitElement {
         "y",
         forceY<GraphNode>((node) => DOMAIN_ANCHOR[node.domain].y).strength(
           (node) => {
-            return node.domain === "ai" ? 0.045 : 0.1;
+            return node.domain === "ai" ? 0.04 : 0.06;
           },
         ),
       )
-      .alpha(0.95)
-      .alphaDecay(0.04)
+      .alpha(1.1)
+      .alphaDecay(0.028)
       .on("tick", () => {
         this._linkSelection
           ?.attr("x1", (link) => this._safeX(this._resolveNode(link.source)))
@@ -465,7 +591,136 @@ class SkillForceGraph extends LitElement {
         });
       });
 
+    this._runCinematicEntryAnimation();
+    this._pinActiveClustersTemporarily(1200);
     this._applyVisualState();
+  }
+
+  private _runCinematicEntryAnimation() {
+    const indexById = new Map(
+      this._nodes.map((node, index) => [node.id, index]),
+    );
+
+    this._nodeSelection
+      ?.select<SVGCircleElement>(".force-node-dot")
+      .transition()
+      .delay((node) => {
+        const lane = this._isModeActive(node.domain) ? 0 : 180;
+        const idx = indexById.get(node.id) ?? 0;
+        return lane + idx * 28;
+      })
+      .duration(800)
+      .ease(easeCubicOut)
+      .attr("r", (node) => node.r)
+      .attr("fill-opacity", 0.88)
+      .attr("stroke-width", 1.2)
+      .attr("filter", "none");
+
+    this._nodeSelection
+      ?.select<SVGTextElement>(".force-node-label")
+      .transition()
+      .delay((node) => {
+        const lane = this._isModeActive(node.domain) ? 110 : 260;
+        const idx = indexById.get(node.id) ?? 0;
+        return lane + idx * 28;
+      })
+      .duration(360)
+      .ease(easeCubicOut)
+      .attr("opacity", 1);
+
+    this._linkSelection
+      ?.transition()
+      .delay((_link, index) => 180 + index * 8)
+      .duration(560)
+      .ease(easeCubicOut)
+      .attr("stroke-dashoffset", 0)
+      .on("end", function () {
+        select(this).attr("stroke-dasharray", null);
+      });
+  }
+
+  private _releasePinnedNodes() {
+    this._autoPinnedNodeIds.forEach((nodeId) => {
+      const node = this._nodeById.get(nodeId);
+      if (!node) return;
+      node.fx = null;
+      node.fy = null;
+    });
+    this._autoPinnedNodeIds.clear();
+  }
+
+  private _pinActiveClustersTemporarily(duration = PIN_DURATION_MS) {
+    if (!this._simulation || this._nodes.length === 0) return;
+
+    if (this._releasePinTimer) {
+      window.clearTimeout(this._releasePinTimer);
+      this._releasePinTimer = undefined;
+    }
+
+    this._releasePinnedNodes();
+
+    const activeNodes = this._nodes.filter((node) =>
+      this._isModeActive(node.domain),
+    );
+    if (activeNodes.length === 0) return;
+
+    activeNodes.forEach((node, index) => {
+      const anchor = DOMAIN_ANCHOR[node.domain];
+      const orbit = 24 + (index % 6) * 7;
+      const angle = (index / activeNodes.length) * Math.PI * 2;
+      node.fx = clamp(
+        anchor.x + Math.cos(angle) * orbit,
+        node.r,
+        WIDTH - node.r,
+      );
+      node.fy = clamp(
+        anchor.y + Math.sin(angle) * orbit,
+        node.r,
+        HEIGHT - node.r,
+      );
+      this._autoPinnedNodeIds.add(node.id);
+    });
+
+    this._simulation.alphaTarget(0.24).restart();
+
+    this._releasePinTimer = window.setTimeout(() => {
+      this._releasePinnedNodes();
+      this._simulation?.alphaTarget(0).alpha(0.42).restart();
+      this._releasePinTimer = undefined;
+    }, duration);
+  }
+
+  private _updateTooltip(event: MouseEvent, nodeId: string) {
+    const svg = this.renderRoot.querySelector<SVGSVGElement>(".graph-svg");
+    if (!svg) return;
+
+    const [px, py] = pointer(event, svg);
+    const x = clamp(px + 14, 12, Math.max(12, svg.clientWidth - 326));
+    const y = clamp(py + 16, 12, Math.max(12, svg.clientHeight - 194));
+    this._tooltip = { nodeId, x, y };
+  }
+
+  private _getLinkInsights(nodeId: string): LinkInsight[] {
+    const insights: LinkInsight[] = [];
+
+    this._links.forEach((link) => {
+      const sourceId = nodeIdFromEndpoint(link.source);
+      const targetId = nodeIdFromEndpoint(link.target);
+
+      if (sourceId !== nodeId && targetId !== nodeId) return;
+
+      const peerId = sourceId === nodeId ? targetId : sourceId;
+      const peerNode = this._nodeById.get(peerId);
+      if (!peerNode) return;
+
+      insights.push({
+        id: peerNode.label,
+        type: LINK_TYPE_LABEL[link.type] ?? link.type,
+        description: link.description,
+      });
+    });
+
+    return insights.sort((a, b) => a.id.localeCompare(b.id));
   }
 
   private _resolveNode(endpoint: string | GraphNode): GraphNode | undefined {
@@ -572,6 +827,56 @@ class SkillForceGraph extends LitElement {
     return `${node.label} | ${domainLabel} | weight ${node.weight}/5 | mastery ${node.mastery}% | links: ${connectionLabel}`;
   }
 
+  private _renderTooltip() {
+    const tooltip = this._tooltip;
+    if (!tooltip) return null;
+
+    const node = this._nodeById.get(tooltip.nodeId);
+    if (!node) return null;
+
+    const insights = this._getLinkInsights(node.id);
+    const domainLabel = DOMAIN_LABEL[node.domain] ?? node.domain;
+
+    return html`
+      <aside
+        class="graph-tooltip"
+        style="left:${tooltip.x}px; top:${tooltip.y}px; border-color:${DOMAIN_COLOR[
+          node.domain
+        ]};"
+        aria-hidden="true"
+      >
+        <p class="graph-tooltip__title">${node.label}</p>
+        <p class="graph-tooltip__meta">
+          ${domainLabel} · weight ${node.weight}/5 · mastery ${node.mastery}%
+        </p>
+        <ul class="graph-tooltip__list">
+          ${insights.length > 0
+            ? insights.map(
+                (insight) => html`
+                  <li class="graph-tooltip__item">
+                    <div class="graph-tooltip__row">
+                      <span>${insight.id}</span>
+                      <span class="graph-tooltip__type">${insight.type}</span>
+                    </div>
+                    <p class="graph-tooltip__desc">
+                      ${insight.description ??
+                      "Relazione senza dettaglio testuale nel dataset."}
+                    </p>
+                  </li>
+                `,
+              )
+            : html`
+                <li class="graph-tooltip__item">
+                  <p class="graph-tooltip__desc">
+                    Nessuna relazione collegata a questo nodo.
+                  </p>
+                </li>
+              `}
+        </ul>
+      </aside>
+    `;
+  }
+
   override render() {
     return html`
       <div class="graph-wrap">
@@ -581,6 +886,8 @@ class SkillForceGraph extends LitElement {
           role="img"
           aria-label="Force-directed network graph of skills"
         ></svg>
+
+        ${this._renderTooltip()}
 
         <div class="graph-legend" aria-hidden="true">
           ${Object.entries(DOMAIN_LABEL).map(
