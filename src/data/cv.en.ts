@@ -480,7 +480,7 @@ export const cvDataEn = {
       { target: "Node.js",                type: "technical" },
       { target: "MCP Protocol",           type: "workflow" },
     ]},
-    { name: "JavaScript", level: "Avanzato", icon: "javascript", mastery: 80, links: [
+    { name: "JavaScript", level: "Esperto", icon: "javascript", mastery: 90, links: [
       { target: "TypeScript",             type: "technical" },
       { target: "React",                  type: "technical" },
       { target: "GSAP",                   type: "workflow" },

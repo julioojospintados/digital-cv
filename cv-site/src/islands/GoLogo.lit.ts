@@ -1,5 +1,5 @@
 import { LitElement, html, css } from 'lit';
-import { modeStore, type Mode } from './stores/modeStore.js';
+import { modeStore, type Mode } from './stores/modeStore.ts';
 
 /**
  * <go-logo>
@@ -128,7 +128,7 @@ class GoLogo extends LitElement {
 
   private _handleClick() {
     // Master Reset: torna alla landing con stato neutro
-    window.location.href = '/home';
+    window.location.href = '/';
   }
 
   render() {
@@ -144,4 +144,6 @@ class GoLogo extends LitElement {
   }
 }
 
-customElements.define('go-logo', GoLogo);
+if (!customElements.get('go-logo')) {
+  customElements.define('go-logo', GoLogo);
+}

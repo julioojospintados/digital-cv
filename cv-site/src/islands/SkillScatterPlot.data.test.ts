@@ -7,10 +7,8 @@
  * 1. La sezione `.skills-section` ha classe `reveal` → parte con opacity:0 e
  *    diventa visibile SOLO dopo lo scroll (ScrollTrigger). Localmente, se si
  *    guarda la pagina senza scorrere, la sezione (e il grafico) restano invisibili.
- * 2. I nodi del grafico partono anch'essi a opacity:0 (GSAP fromTo in _animate())
- *    e si animano a opacity:1 dopo il mount. Su produzione, il CSS block del
- *    custom element mostra la "struttura" (bordo, padding) ma i nodi richiedono
- *    JS per apparire.
+ * 2. Con coordinate uguali (weight/mastery), più nodi si sovrapponevano nello
+ *    stesso punto e il grafico poteva sembrare "vuoto" a colpo d'occhio.
  * 3. L'alias @cv-data non era configurato in vitest.config.ts → i test non
  *    potevano importare i dati CV per verificarli.
  *
@@ -36,6 +34,18 @@ function toSvgX(weight: number): number {
 }
 function toSvgY(mastery: number): number {
   return PT + (1 - mastery / 100) * CH;
+}
+
+function clamp(value: number, min: number, max: number): number {
+  return Math.max(min, Math.min(max, value));
+}
+
+function hashName(name: string): number {
+  let hash = 0;
+  for (let i = 0; i < name.length; i += 1) {
+    hash = ((hash << 5) - hash + name.charCodeAt(i)) | 0;
+  }
+  return Math.abs(hash);
 }
 
 // ── Riproduzione locale di buildNodes() per il test ───────────────────────────
@@ -80,6 +90,34 @@ function buildTestNodes(): PlotNode[] {
   (cvData.softSkills as any[]).forEach((s) => add(s));
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (cvData.transversalSkills as any[]).forEach((s) => add(s));
+
+  const overlapBuckets = new Map<string, PlotNode[]>();
+  nodes.forEach((node) => {
+    const key = `${node.x.toFixed(2)}|${node.y.toFixed(2)}`;
+    const bucket = overlapBuckets.get(key);
+    if (bucket) bucket.push(node);
+    else overlapBuckets.set(key, [node]);
+  });
+
+  overlapBuckets.forEach((bucket) => {
+    if (bucket.length < 2) return;
+
+    bucket
+      .slice()
+      .sort((a, b) => a.name.localeCompare(b.name, 'it'))
+      .forEach((node, idx) => {
+        const ring = Math.floor(idx / 6) + 1;
+        const ringRadius = 6 * ring;
+        const angleDeg = (hashName(node.name) + idx * 57) % 360;
+        const angle = angleDeg * (Math.PI / 180);
+        const nextX = node.x + Math.cos(angle) * ringRadius;
+        const nextY = node.y + Math.sin(angle) * ringRadius;
+
+        node.x = clamp(nextX, PL + 5, VW - PR - 5);
+        node.y = clamp(nextY, PT + 5, VH - PB - 5);
+      });
+  });
+
   return nodes;
 }
 
@@ -193,12 +231,7 @@ describe('buildNodes() — scatter-plot node generation', () => {
       }
       positions.add(key);
     }
-    if (duplicates.length > 0) {
-      // Warn (not fail) — overlapping nodes are a data quality issue, not a crash
-      console.warn(`[SkillScatterPlot] ${duplicates.length} nodes overlap:`, duplicates.join(', '));
-    }
-    // Soft assertion — fail only if more than 25% overlap
-    expect(duplicates.length).toBeLessThan(NODES.length * 0.25);
+    expect(duplicates.length, duplicates.join(', ')).toBe(0);
   });
 
   it('has at least one node per domain (tech, creative, human, management)', () => {

@@ -626,7 +626,7 @@ export const cvData = {
       { target: "Node.js",             type: "technical" },
       { target: "MCP Protocol",        type: "workflow", description: "Il sistema di tipi è la lingua comune tra sviluppatore e agente AI" },
     ]},
-    { name: "JavaScript", level: "Avanzato", icon: "javascript", domain: "tech", weight: 4, mastery: 80, role: "core", links: [
+    { name: "JavaScript", level: "Esperto", icon: "javascript", domain: "tech", weight: 4, mastery: 90, role: "core", links: [
       { target: "TypeScript",          type: "technical" },
       { target: "React",               type: "technical" },
       { target: "GSAP",                type: "workflow" },

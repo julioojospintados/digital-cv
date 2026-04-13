@@ -28,8 +28,10 @@ document.querySelectorAll<HTMLElement>('.name-word').forEach((word, wi) => {
 });
 
 const allChars   = Array.from(nameEl.querySelectorAll<HTMLElement>('.name-char'));
-const goChars    = [firstGChar, firstOChar].filter((c): c is HTMLElement => c !== null);
-const otherChars = allChars.filter(c => !goChars.includes(c));
+const goChars: HTMLElement[] = [];
+if (firstGChar) goChars.push(firstGChar);
+if (firstOChar) goChars.push(firstOChar);
+const otherChars = allChars.filter(c => c !== firstGChar && c !== firstOChar);
 
 // ── Stato iniziale: tutto nascosto — GSAP gestisce la rivelazione ──────────
 // G e O: partono grandi e in alto (stessa fromTo della hero di cv.astro)
@@ -226,6 +228,7 @@ function selectMode(targetCard: HTMLButtonElement, mode: string) {
   selectedMode = mode;
   setMode(mode as 'tech' | 'creative' | 'human' | 'management');
   nameEl.setAttribute('data-mode-preview', mode);
+  const isMobile = !window.matchMedia('(min-width: 640px)').matches;
   cards.forEach(c => {
     const goBtn = c.querySelector<HTMLElement>('.mode-card__go');
     if (c === targetCard) {
@@ -236,7 +239,7 @@ function selectMode(targetCard: HTMLButtonElement, mode: string) {
         goBtn.removeAttribute('aria-hidden');
         gsap.timeline({ delay: 0.2 })
           .fromTo(goBtn,
-            { opacity: 0, y: 28, scale: 0.82 },
+            { opacity: 0, y: 20, scale: 0.92 },
             { opacity: 1, y: 0, scale: 1, duration: 0.6, ease: 'back.out(3)',
               onStart: () => goBtn.classList.add('is-ready') }
           )
@@ -245,6 +248,9 @@ function selectMode(targetCard: HTMLButtonElement, mode: string) {
               ease: 'power2.out', yoyo: true, repeat: 1 },
             0.5
           );
+        if (isMobile) {
+          goBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'nearest' });
+        }
       }
     } else {
       c.classList.add('is-passive'); c.classList.remove('is-selected');
@@ -267,280 +273,28 @@ function selectMode(targetCard: HTMLButtonElement, mode: string) {
   });
 }
 
-// ── Hold-to-navigate — liquid fill + implosion/explosion ────────────────
-const HOLD_DURATION = 1400;
-const HOLD_ACCENT: Record<string, string> = {
-  tech:       'rgba(0, 255, 200, 1)',
-  creative:   'rgba(255, 107, 53, 1)',
-  human:      'rgba(240, 200, 127, 1)',
-  management: 'rgba(180, 100, 255, 1)',
-};
-
-// ── SVG filter — distorsione sott'acqua sul testo delle card ─────────────
-const { waveTurbulence, waveDisplace } = (() => {
-  const SN = 'http://www.w3.org/2000/svg';
-  const svg = document.createElementNS(SN, 'svg') as SVGSVGElement;
-  svg.setAttribute('aria-hidden', 'true');
-  svg.style.cssText = 'position:absolute;width:0;height:0;overflow:hidden;pointer-events:none;';
-  const defs = document.createElementNS(SN, 'defs');
-  const filt = document.createElementNS(SN, 'filter');
-  filt.id = 'wave-distort';
-  filt.setAttribute('x', '-15%'); filt.setAttribute('y', '-15%');
-  filt.setAttribute('width', '130%'); filt.setAttribute('height', '130%');
-  filt.setAttribute('color-interpolation-filters', 'sRGB');
-  const turb = document.createElementNS(SN, 'feTurbulence');
-  turb.setAttribute('type', 'fractalNoise');
-  turb.setAttribute('baseFrequency', '0.015 0.025');
-  turb.setAttribute('numOctaves', '2');
-  turb.setAttribute('seed', '3');
-  turb.setAttribute('result', 'noise');
-  const disp = document.createElementNS(SN, 'feDisplacementMap');
-  disp.setAttribute('in', 'SourceGraphic');
-  disp.setAttribute('in2', 'noise');
-  disp.setAttribute('scale', '0');
-  disp.setAttribute('xChannelSelector', 'R');
-  disp.setAttribute('yChannelSelector', 'G');
-  filt.appendChild(turb); filt.appendChild(disp);
-  defs.appendChild(filt); svg.appendChild(defs);
-  document.body.appendChild(svg);
-  return { waveTurbulence: turb, waveDisplace: disp };
-})();
-
-// ── Per-card: click (selezione) + hold (navigazione Pattern E) ────────────
-// tappedOnce: traccia se l'utente ha già deliberatamente toccato+rilasciato una card.
-// NON usiamo is-selected perché touchstart→selectMode la imposta PRIMA del click sintetico.
-const tappedOnce = new WeakMap<HTMLButtonElement, boolean>();
-cards.forEach(c => tappedOnce.set(c, false));
-
+// ── Per-card: tap/click = selezione, GO button = navigazione ───────────────
 cards.forEach((card) => {
   const mode = card.dataset.mode ?? 'tech';
-  const href = `/${mode}`;
-  const color = HOLD_ACCENT[mode] ?? 'rgba(255,255,255,1)';
-  const indicator = card.querySelector<HTMLElement>('.hold-indicator');
-  const tapHint   = card.querySelector<HTMLElement>('.tap-hint');
-  let cancelFn: (() => void) | null = null;
-  let holdCompleted = false;
-  let holdJustCancelled = false;
-
-  // ── Mostra/nasconde il tap-hint su mobile ───────────────────────────────
-  function showTapHint() {
-    if (!tapHint) return;
-    gsap.killTweensOf(tapHint);
-    gsap.fromTo(tapHint,
-      { opacity: 0, y: 4 },
-      { opacity: 1, y: 0, duration: 0.28, delay: 0.35, ease: 'power2.out' }
-    );
-  }
-
-  function hideTapHint() {
-    if (!tapHint) return;
-    gsap.killTweensOf(tapHint);
-    gsap.to(tapHint, { opacity: 0, duration: 0.15, ease: 'power2.in' });
-  }
-
-  // ── Click handler ────────────────────────────────────────────────────────
-  // Su mobile: primo click deliberato = select + mostra hint.
-  //            secondo click = navigate con warp.
-  // tappedOnce è indipendente dalla classe DOM (evita la race condition touchstart→is-selected→click).
   card.addEventListener('click', (e) => {
-    if (holdCompleted) { holdCompleted = false; return; }
-
-    const isMobile = !window.matchMedia('(min-width: 640px)').matches;
-
-    if (isMobile) {
-      const wasAlreadyTapped = tappedOnce.get(card) ?? false;
-
-      if (wasAlreadyTapped) {
-        // Secondo tap deliberato → animate + navigate solo se il hold non è stato appena annullato
-        if (holdJustCancelled) { holdJustCancelled = false; return; }
-        // Secondo tap deliberato → animate + navigate
-        tappedOnce.set(card, false);
-        hideTapHint();
-        gsap.timeline()
-          .to(card, { scale: 1.07, duration: 0.12, ease: 'power2.out' })
-          .to(card, { scale: 1.0,  duration: 0.2,  ease: 'power3.in',
-              onComplete: () => launchJourney(href) });
-        return;
-      }
-
-      // Primo tap: segna questa card come "tapped", azzera tutte le altre
-      cards.forEach(c => tappedOnce.set(c, false));
-      tappedOnce.set(card, true);
-      // Nascondi hint sulle altre card
-      cards.forEach(c => {
-        if (c !== card) {
-          const h = c.querySelector<HTMLElement>('.tap-hint');
-          if (h) gsap.to(h, { opacity: 0, duration: 0.12 });
-        }
-      });
-      showTapHint();
-    }
-
     // Ripple
     const rect = card.getBoundingClientRect();
+    const clickEvent = e as MouseEvent;
+    const cx = Number.isFinite(clickEvent.clientX) && clickEvent.clientX > 0
+      ? clickEvent.clientX
+      : rect.left + rect.width / 2;
+    const cy = Number.isFinite(clickEvent.clientY) && clickEvent.clientY > 0
+      ? clickEvent.clientY
+      : rect.top + rect.height / 2;
     const ripple = document.createElement('span');
     ripple.className = 'ripple';
-    ripple.style.left = `${(e as MouseEvent).clientX - rect.left - 30}px`;
-    ripple.style.top  = `${(e as MouseEvent).clientY - rect.top - 30}px`;
+    ripple.style.left = `${cx - rect.left - 30}px`;
+    ripple.style.top  = `${cy - rect.top - 30}px`;
     card.appendChild(ripple);
     ripple.addEventListener('animationend', () => ripple.remove());
 
     selectMode(card, mode);
   });
-
-  // Hold lungo: water wave sale dal basso → card implode → esplode → naviga
-  // GUARD: attivo solo se la card è già stata toccata una volta (tappedOnce)
-  function startHold() {
-    if (cancelFn) return;
-    if (!tappedOnce.get(card)) return; // 🔒 primo tocco = solo select, mai navigate
-
-    holdCompleted = false;
-    hideTapHint();
-
-    // ── Aquatic background tint on card ─────────────────────────────────────
-    const origBg = card.style.background;
-    gsap.to(card, {
-      background: color.replace('1)', '0.12)'),
-      duration: HOLD_DURATION / 1000 * 0.6,
-      ease: 'power1.in',
-    });
-
-    // ── Water container: translateY 100%→0% (sale dal basso) ──────────────
-    const waterInner = document.createElement('div');
-    waterInner.style.cssText = 'position:absolute;bottom:0;left:0;right:0;height:100%;pointer-events:none;z-index:1;overflow:visible;';
-    gsap.set(waterInner, { y: '100%' });
-    card.appendChild(waterInner);
-
-    // ── Solid fill layer: garantisce nessun gap in cima quando piena ────────
-    // Questo rettangolo solido a bassa opacità riempie dal basso dell'onda
-    // fino al fondo, mentre la waterInner risale tutta di y=100%→0%.
-    // Posizionato SOTTO l'SVG (z-index basso), copre l'area già "allagata".
-    const solidFill = document.createElement('div');
-    solidFill.style.cssText = `position:absolute;top:20px;left:0;right:0;bottom:0;background:${color.replace('1)', '0.55)')};pointer-events:none;z-index:0;`;
-    waterInner.appendChild(solidFill);
-
-    // ── SVG unico: onda + riempimento — stessa opacità, nessuna riga ───────
-    // height: calc(100%+20px) → SVG bottom = waterInner bottom (card bottom).
-    // viewBox 400×1000: wave midpoint vb y=133 → ~20px da SVG top → waterline.
-    // Riempie fino a vb y=1000 → nessun elemento separato, nessuna seam.
-    const svgEl = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    svgEl.style.cssText = 'position:absolute;top:-20px;left:0;width:200%;height:calc(100% + 20px);display:block;overflow:visible;z-index:1;';
-    svgEl.setAttribute('viewBox', '0 0 400 1000');
-    svgEl.setAttribute('preserveAspectRatio', 'none');
-    const wavePathEl = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    // Midpoint vb y=133, creste y=88, valli y=178 — ampiezza ~6px su card 130px
-    wavePathEl.setAttribute('d', 'M0,133 C25,88 75,88 100,133 C125,178 175,178 200,133 C225,88 275,88 300,133 C325,178 375,178 400,133 L400,1000 L0,1000 Z');
-    wavePathEl.setAttribute('fill', color);
-    wavePathEl.setAttribute('opacity', '0.55');
-    svgEl.appendChild(wavePathEl);
-    waterInner.appendChild(svgEl);
-
-    // ── Border fill — sale in sincronia ─────────────────────────────────────
-    const borderEl = document.createElement('div');
-    borderEl.style.cssText = [
-      'position:absolute', 'inset:-1px', 'border-radius:inherit',
-      `border:2px solid ${color}`,
-      'clip-path:inset(100% 0 0 0)',
-      'pointer-events:none', 'z-index:3',
-    ].join(';');
-    card.appendChild(borderEl);
-
-    // ── Distorsione sott'acqua: feTurbulence+feDisplacementMap sul testo ────
-    const contentEls = [
-      card.querySelector<HTMLElement>('.mode-card__label'),
-      card.querySelector<HTMLElement>('.mode-card__desc'),
-    ].filter((el): el is HTMLElement => el !== null);
-    const distProxy = { scale: 0, freqX: 0.015, freqY: 0.025 };
-    const distAnim = gsap.to(distProxy, {
-      scale: 9,
-      freqX: 0.042,
-      freqY: 0.068,
-      duration: HOLD_DURATION / 1000,
-      ease: 'power2.in',
-      onStart() { contentEls.forEach(el => { el.style.filter = 'url(#wave-distort)'; }); },
-      onUpdate() {
-        waveDisplace.setAttribute('scale', distProxy.scale.toFixed(1));
-        waveTurbulence.setAttribute('baseFrequency', `${distProxy.freqX.toFixed(4)} ${distProxy.freqY.toFixed(4)}`);
-      },
-    });
-
-    // ── Leggera compressione della card ─────────────────────────────────────
-    gsap.to(card, { scale: 0.96, duration: 0.25, ease: 'power2.out' });
-
-    // ── Wave ripple loop — −50% = 1 ciclo seamless ──────────────────────────
-    const waveAnim = gsap.to(svgEl, {
-      x: '-50%',
-      duration: 1.6,
-      ease: 'none',
-      repeat: -1,
-    });
-
-    // ── Water rise: translateY 100% → 0% ────────────────────────────────────
-    gsap.to(waterInner, {
-      y: '0%',
-      duration: HOLD_DURATION / 1000,
-      ease: 'power1.inOut',
-      onComplete: () => {
-        holdCompleted = true;
-        cancelFn = null;
-        tappedOnce.set(card, false);
-        waveAnim.kill();
-        distAnim.kill();
-        contentEls.forEach(el => { el.style.filter = ''; });
-        gsap.timeline()
-          .to(card, { scale: 0.80, duration: 0.18, ease: 'power3.in' })
-          .to(card, {
-            scale: 5,
-            opacity: 0,
-            duration: 0.42,
-            ease: 'power4.in',
-            onStart: () => launchJourney(href),
-          });
-      },
-    });
-
-    // ── Border syncronizzato ─────────────────────────────────────────────────
-    gsap.to(borderEl, {
-      clipPath: 'inset(0% 0 0 0)',
-      duration: HOLD_DURATION / 1000,
-      ease: 'power1.inOut',
-    });
-
-    cancelFn = () => {
-      waveAnim.kill();
-      distAnim.kill();
-      gsap.killTweensOf([waterInner, borderEl, card]);
-      // Distorsione ritorna a 0 → rimuovi filtro
-      gsap.to(distProxy, {
-        scale: 0,
-        duration: 0.3,
-        ease: 'power2.out',
-        onUpdate() { waveDisplace.setAttribute('scale', distProxy.scale.toFixed(1)); },
-        onComplete() { contentEls.forEach(el => { el.style.filter = ''; }); },
-      });
-      gsap.to(waterInner, { y: '100%', duration: 0.3, ease: 'power2.in',
-        onComplete: () => waterInner.remove() });
-      gsap.to(borderEl, { clipPath: 'inset(100% 0 0 0)', duration: 0.3, ease: 'power2.in',
-        onComplete: () => borderEl.remove() });
-      // Ripristina background della card
-      gsap.to(card, { background: origBg || '', scale: 1.04, duration: 0.35, ease: 'back.out(1.5)' });
-      cancelFn = null;
-    };
-  }
-
-  function endHold() {
-    if (cancelFn && !holdCompleted) {
-      cancelFn();
-      holdJustCancelled = true;
-      const isMobile = !window.matchMedia('(min-width: 640px)').matches;
-      if (isMobile && tappedOnce.get(card)) showTapHint();
-    }
-  }
-
-  // Hold-to-navigate: SOLO mobile (touch). Desktop usa CTA button.
-  card.addEventListener('touchstart', startHold, { passive: true });
-  card.addEventListener('touchend', endHold);
-  card.addEventListener('touchcancel', endHold);
 });
 
 // GO button desktop: click → naviga — stopPropagation evita il double-fire con card click

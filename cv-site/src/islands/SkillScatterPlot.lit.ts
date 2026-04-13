@@ -1,5 +1,5 @@
 import { LitElement, html, css } from 'lit';
-import { modeStore, type Mode } from './stores/modeStore.js';
+import { modeStore, type Mode } from './stores/modeStore.ts';
 import { cvData } from '@cv-data';
 
 // ── Domain palette — matches global.css mode accents ─────────────────────────
@@ -42,6 +42,18 @@ function toRadius(weight: number): number {
   return 4 + (weight - 1) * 2.2;  // 4 → 12.8 px
 }
 
+function clamp(value: number, min: number, max: number): number {
+  return Math.max(min, Math.min(max, value));
+}
+
+function hashName(name: string): number {
+  let hash = 0;
+  for (let i = 0; i < name.length; i += 1) {
+    hash = ((hash << 5) - hash + name.charCodeAt(i)) | 0;
+  }
+  return Math.abs(hash);
+}
+
 // ── Unified node type ─────────────────────────────────────────────────────────
 interface PlotNode {
   name:   string;
@@ -80,6 +92,38 @@ function buildNodes(): PlotNode[] {
   (cvData.technicalSkills  as unknown as Parameters<typeof add>[0][]).forEach(s => add(s));
   (cvData.softSkills       as unknown as Parameters<typeof add>[0][]).forEach(s => add(s));
   (cvData.transversalSkills as unknown as Parameters<typeof add>[0][]).forEach(s => add(s));
+
+  // Spread nodes that share identical coordinates to avoid complete overlap.
+  // The offset is deterministic (based on name + index), so layout stays stable.
+  const overlapBuckets = new Map<string, PlotNode[]>();
+  nodes.forEach((node) => {
+    const key = `${node.x.toFixed(2)}|${node.y.toFixed(2)}`;
+    const bucket = overlapBuckets.get(key);
+    if (bucket) {
+      bucket.push(node);
+    } else {
+      overlapBuckets.set(key, [node]);
+    }
+  });
+
+  overlapBuckets.forEach((bucket) => {
+    if (bucket.length < 2) return;
+
+    bucket
+      .slice()
+      .sort((a, b) => a.name.localeCompare(b.name, 'it'))
+      .forEach((node, idx) => {
+        const ring = Math.floor(idx / 6) + 1;
+        const ringRadius = 6 * ring;
+        const angleDeg = (hashName(node.name) + idx * 57) % 360;
+        const angle = angleDeg * (Math.PI / 180);
+        const nextX = node.x + Math.cos(angle) * ringRadius;
+        const nextY = node.y + Math.sin(angle) * ringRadius;
+
+        node.x = clamp(nextX, PL + node.r + 1, VW - PR - node.r - 1);
+        node.y = clamp(nextY, PT + node.r + 1, VH - PB - node.r - 1);
+      });
+  });
 
   return nodes;
 }
@@ -527,4 +571,6 @@ class SkillScatterPlot extends LitElement {
   }
 }
 
-customElements.define('skill-scatter-plot', SkillScatterPlot);
+if (!customElements.get('skill-scatter-plot')) {
+  customElements.define('skill-scatter-plot', SkillScatterPlot);
+}
