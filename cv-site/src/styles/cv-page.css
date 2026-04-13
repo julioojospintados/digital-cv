@@ -33,9 +33,15 @@
 }
 
 /* Mode-reactive opacity */
-html[data-mode='tech'] .bg-knoll--laptop     { opacity: 0.08; }
-html[data-mode='creative'] .bg-knoll--laptop { opacity: 0.025; }
-html[data-mode='human'] .bg-knoll--laptop    { opacity: 0.02; }
+html[data-mode="tech"] .bg-knoll--laptop {
+  opacity: 0.08;
+}
+html[data-mode="creative"] .bg-knoll--laptop {
+  opacity: 0.025;
+}
+html[data-mode="human"] .bg-knoll--laptop {
+  opacity: 0.02;
+}
 
 /* Knolling in skills section — multitool right */
 .bg-knoll--multitool {
@@ -45,9 +51,15 @@ html[data-mode='human'] .bg-knoll--laptop    { opacity: 0.02; }
   transform: rotate(8deg);
 }
 
-html[data-mode='tech'] .bg-knoll--multitool     { opacity: 0.07; }
-html[data-mode='creative'] .bg-knoll--multitool { opacity: 0.06; }
-html[data-mode='human'] .bg-knoll--multitool    { opacity: 0.03; }
+html[data-mode="tech"] .bg-knoll--multitool {
+  opacity: 0.07;
+}
+html[data-mode="creative"] .bg-knoll--multitool {
+  opacity: 0.06;
+}
+html[data-mode="human"] .bg-knoll--multitool {
+  opacity: 0.03;
+}
 
 /* Knolling in experience section — flashlight right */
 .bg-knoll--flashlight {
@@ -57,19 +69,29 @@ html[data-mode='human'] .bg-knoll--multitool    { opacity: 0.03; }
   transform: rotate(180deg);
 }
 
-html[data-mode='tech'] .bg-knoll--flashlight       { opacity: 0.07; }
-html[data-mode='creative'] .bg-knoll--flashlight   { opacity: 0.03; }
-html[data-mode='human'] .bg-knoll--flashlight      { opacity: 0.03; }
-html[data-mode='management'] .bg-knoll--flashlight { opacity: 0.06; }
+html[data-mode="tech"] .bg-knoll--flashlight {
+  opacity: 0.07;
+}
+html[data-mode="creative"] .bg-knoll--flashlight {
+  opacity: 0.03;
+}
+html[data-mode="human"] .bg-knoll--flashlight {
+  opacity: 0.03;
+}
+html[data-mode="management"] .bg-knoll--flashlight {
+  opacity: 0.06;
+}
 
 /* Mobile: push images further out so they don't overlay text */
 @media (max-width: 768px) {
-  .bg-knoll { opacity: 0.025 !important; width: 120px; }
+  .bg-knoll {
+    opacity: 0.025 !important;
+    width: 120px;
+  }
 }
 
 /* ── Skill chart wrapper ───────────────────────────── */
-skill-constellation,
-skill-scatter-plot {
+skill-force-graph {
   display: block;
   margin-bottom: 2rem;
   max-width: 100%;
@@ -238,7 +260,10 @@ go-logo:not(:defined) {
   border-radius: 1px;
   color: rgba(192, 220, 215, 0.85);
   text-decoration: none;
-  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease,
+    background 0.2s ease;
   flex-shrink: 0;
   white-space: nowrap;
 }
@@ -368,7 +393,7 @@ go-logo:not(:defined) {
 .hero-char {
   display: inline-block;
   white-space: pre;
-  opacity: 0;           /* GSAP animates to 1 */
+  opacity: 0; /* GSAP animates to 1 */
   transform: translateY(18px);
   will-change: transform, opacity;
 }
@@ -438,7 +463,9 @@ go-logo:not(:defined) {
   padding: 0.25rem 0.6rem;
   border: 1px solid var(--color-border);
   border-radius: 1px;
-  transition: color 0.2s ease, border-color 0.2s ease;
+  transition:
+    color 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .social-link:hover {
@@ -652,7 +679,7 @@ go-logo:not(:defined) {
 
 /* Dot indicator — mirrors the tl-dot shape */
 .tl-legend-chip::before {
-  content: '';
+  content: "";
   display: inline-block;
   width: 7px;
   height: 7px;
@@ -666,7 +693,8 @@ go-logo:not(:defined) {
 
 .tl-legend-chip--cert::before {
   background: var(--color-accent);
-  box-shadow: 0 0 4px 1px color-mix(in srgb, var(--color-accent) 40%, transparent);
+  box-shadow: 0 0 4px 1px
+    color-mix(in srgb, var(--color-accent) 40%, transparent);
 }
 
 .tl-legend-chip--edu {
@@ -687,9 +715,11 @@ go-logo:not(:defined) {
 
 /* Connector line — centered on the dot column */
 .timeline::before {
-  content: '';
+  content: "";
   position: absolute;
-  left: calc(7rem + 0.75rem + 0.69rem); /* date(7rem) + gap(0.75rem) + dot-col-center(1.375rem/2) */
+  left: calc(
+    7rem + 0.75rem + 0.69rem
+  ); /* date(7rem) + gap(0.75rem) + dot-col-center(1.375rem/2) */
   top: 0.45rem;
   bottom: 2rem;
   width: 1px;
@@ -739,7 +769,8 @@ go-logo:not(:defined) {
 
 .tl-item[data-type="cert"] .tl-dot {
   background: var(--color-accent);
-  box-shadow: 0 0 5px 1px color-mix(in srgb, var(--color-accent) 40%, transparent);
+  box-shadow: 0 0 5px 1px
+    color-mix(in srgb, var(--color-accent) 40%, transparent);
 }
 
 .tl-item[data-type="edu"] .tl-dot {

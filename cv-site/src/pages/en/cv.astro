@@ -293,11 +293,11 @@ const projectsData = cvDataEn.projects.slice(0, 6).map(p => {
       </div>
     </section>
 
-    <!-- ── SKILLS BENTO ──────────────────────────────────────── -->
+    <!-- ── SKILLS BENTO + FORCE NETWORK ──────────────────────── -->
     <section class="skills-section reveal delay-100" aria-label="Technical skills">
       <h2 class="section-title">
         <span>Skills</span>
-        <span class="section-subtitle">Skill map by domain — hover to explore</span>
+        <span class="section-subtitle">Force-directed skill network - hover and drag to explore</span>
       </h2>
       <h3 class="skills-sub-title">Technical skills — tile size &amp; glow proportional to weight</h3>
       <div class="skills-grid">
@@ -305,7 +305,7 @@ const projectsData = cvDataEn.projects.slice(0, 6).map(p => {
           <SkillSquare {...skill} />
         ))}
       </div>
-      <skill-scatter-plot></skill-scatter-plot>
+      <skill-force-graph></skill-force-graph>
     </section>
 
     <!-- ── EXPERIENCE ─────────────────────────────────────────────── -->
@@ -414,5 +414,5 @@ const projectsData = cvDataEn.projects.slice(0, 6).map(p => {
 
 <script>
   import '../../scripts/cv-init.ts';
-  import '../../islands/SkillScatterPlot.lit.ts';
+  import '../../islands/SkillForceGraph.lit.ts';
 </script>

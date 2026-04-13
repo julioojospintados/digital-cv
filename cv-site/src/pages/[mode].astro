@@ -290,12 +290,12 @@ const modeLabel = mode.charAt(0).toUpperCase() + mode.slice(1);
       </div>
     </section>
 
-    <!-- ── SKILLS BENTO + CONSTELLATION ─────────────────────────── -->
+    <!-- ── SKILLS BENTO + FORCE NETWORK ─────────────────────────── -->
     <section class="skills-section reveal delay-100" aria-label="Competenze tecniche">
       <img class="bg-knoll bg-knoll--multitool" src="/knolling/multitool.png" aria-hidden="true" alt="">
       <h2 class="section-title">
         <span>Skills</span>
-        <span class="section-subtitle">Mappa delle competenze — hover per esplorare</span>
+        <span class="section-subtitle">Force-directed network delle competenze - hover e drag per esplorare</span>
       </h2>
       <h3 class="skills-sub-title">Competenze tecniche — livello &amp; glow proporzionale</h3>
       <div class="skills-grid">
@@ -303,7 +303,7 @@ const modeLabel = mode.charAt(0).toUpperCase() + mode.slice(1);
           <SkillSquare {...skill} />
         ))}
       </div>
-      <skill-scatter-plot></skill-scatter-plot>
+      <skill-force-graph></skill-force-graph>
     </section>
 
     <!-- ── EXPERIENCE ─────────────────────────────────────────────── -->
@@ -414,5 +414,5 @@ const modeLabel = mode.charAt(0).toUpperCase() + mode.slice(1);
 
 <script>
   import '../scripts/cv-init.ts';
-  import '../islands/SkillScatterPlot.lit.ts';
+  import '../islands/SkillForceGraph.lit.ts';
 </script>
