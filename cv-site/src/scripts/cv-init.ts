@@ -90,6 +90,7 @@ document.body.prepend(progressBar);
 ScrollTrigger.create({
   start: 0,
   end: "max",
+  invalidateOnRefresh: true,
   onUpdate: ({ progress }) => {
     progressBar.style.width = `${progress * 100}%`;
   },
@@ -388,5 +389,36 @@ document
           },
         });
       },
+    });
+  });
+
+// ── ScrollTrigger refresh — fixes Lit web components (SkillForceGraph etc.)
+// expanding after init and pushing bottom sections out of calculated trigger range.
+// On window.load all resources (including custom elements) are settled;
+// the 500ms fallback covers slow Lit hydration on low-end devices.
+window.addEventListener("load", () => ScrollTrigger.refresh());
+setTimeout(() => ScrollTrigger.refresh(), 500);
+
+// ── Experience cluster accordion ──────────────────────────────────────────
+document
+  .querySelectorAll<HTMLElement>(".exp-cluster__header")
+  .forEach((header) => {
+    header.addEventListener("click", () => {
+      const cluster = header.closest<HTMLElement>(".exp-cluster");
+      if (!cluster) return;
+      const isOpen = cluster.hasAttribute("data-open");
+      if (isOpen) {
+        cluster.removeAttribute("data-open");
+        header.setAttribute("aria-expanded", "false");
+      } else {
+        cluster.setAttribute("data-open", "");
+        header.setAttribute("aria-expanded", "true");
+        // Move focus into the opened body for keyboard users
+        const body = cluster.querySelector<HTMLElement>(".exp-cluster__body");
+        if (body) {
+          body.setAttribute("tabindex", "-1");
+          body.focus({ preventScroll: true });
+        }
+      }
     });
   });

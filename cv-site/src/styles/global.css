@@ -7,30 +7,33 @@
    il browser trattiene il testo invisible (max 3s) invece di fare swap.
    Il file è anche preloadato in Layout.astro per caricarlo prima del primo paint. */
 @font-face {
-  font-family: 'Lexend';
+  font-family: "Lexend";
   font-style: normal;
   font-display: block;
   font-weight: 800;
-  src: url('/fonts/Lexend/lexend-latin-800-normal.woff2') format('woff2');
-  unicode-range: U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+  src: url("/fonts/Lexend/lexend-latin-800-normal.woff2") format("woff2");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
+    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212,
+    U+2215, U+FEFF, U+FFFD;
 }
 
 /* Pesi secondari via Fontsource — font-display: swap (default), non critici per il primo frame */
-@import '@fontsource/lexend/400.css';
-@import '@fontsource/lexend/500.css';
-@import '@fontsource/lexend/600.css';
-@import '@fontsource/lexend/700.css';
-@import '@fontsource/jetbrains-mono/400.css';
-@import '@fontsource/jetbrains-mono/500.css';
-@import '@fontsource/jetbrains-mono/600.css';
-@import '@fontsource/jetbrains-mono/700.css';
+@import "@fontsource/lexend/400.css";
+@import "@fontsource/lexend/500.css";
+@import "@fontsource/lexend/600.css";
+@import "@fontsource/lexend/700.css";
+@import "@fontsource/jetbrains-mono/400.css";
+@import "@fontsource/jetbrains-mono/500.css";
+@import "@fontsource/jetbrains-mono/600.css";
+@import "@fontsource/jetbrains-mono/700.css";
 
 @import "tailwindcss";
 
 @theme {
-  --font-sans: 'Lexend', ui-sans-serif, system-ui, sans-serif;
-  --font-display: 'Lexend', ui-sans-serif, system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+  --font-sans: "Lexend", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Lexend", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
 }
 
 /* ─── CSS Custom Properties — Knolling Design System ─── */
@@ -64,7 +67,7 @@
   --color-border: rgba(0, 255, 200, 0.2);
   --color-text-primary: rgba(220, 255, 245, 1);
   /* WCAG AA — ~4.8:1 su bg ottanio */
-  --color-text-muted: rgba(0, 255, 200, 0.70);
+  --color-text-muted: rgba(0, 255, 200, 0.7);
   --color-accent: rgba(0, 255, 200, 1);
   --card-opacity-passive: 0.2;
   --card-scale-passive: 1;
@@ -131,7 +134,6 @@ body {
 /* ─── Reduced motion ─── */
 
 @media (prefers-reduced-motion: reduce) {
-
   *,
   *::before,
   *::after {
@@ -218,7 +220,10 @@ body {
   pointer-events: none;
   z-index: 99999;
   mix-blend-mode: difference;
-  transition: width 0.25s ease, height 0.25s ease, opacity 0.25s ease;
+  transition:
+    width 0.25s ease,
+    height 0.25s ease,
+    opacity 0.25s ease;
   will-change: transform;
 }
 
@@ -233,7 +238,11 @@ body {
   pointer-events: none;
   z-index: 99998;
   opacity: 0.5;
-  transition: width 0.3s ease, height 0.3s ease, border-color 0.3s ease, opacity 0.3s ease;
+  transition:
+    width 0.3s ease,
+    height 0.3s ease,
+    border-color 0.3s ease,
+    opacity 0.3s ease;
   will-change: transform;
 }
 
@@ -249,9 +258,7 @@ body {
   border-color: var(--color-accent);
 }
 
-@media (hover: none),
-(pointer: coarse) {
-
+@media (hover: none), (pointer: coarse) {
   #cursor-dot,
   #cursor-ring {
     display: none;
@@ -265,7 +272,7 @@ body {
 /* ─── Noise grain overlay ─── */
 
 body::after {
-  content: '';
+  content: "";
   position: fixed;
   inset: 0;
   pointer-events: none;
@@ -315,7 +322,7 @@ body::after {
 /* Globali perché le card sono in sub-component Astro con hash diverso */
 
 /* Passive: sussurro visivo — presente ma in ombra */
-.cv-card[data-state='passive'] {
+.cv-card[data-state="passive"] {
   opacity: 0.4;
   transform: scale(var(--card-scale-passive, 0.97));
   backdrop-filter: blur(4px);
@@ -325,7 +332,7 @@ body::after {
 }
 
 /* Active: card in primo piano con bordo colorato e glow leggero */
-.cv-card[data-state='active'] {
+.cv-card[data-state="active"] {
   opacity: 1;
   border-color: color-mix(in srgb, var(--color-accent) 55%, transparent);
   box-shadow:
@@ -335,14 +342,14 @@ body::after {
 
 /* Mobile: bordo sinistro luminoso sulla card attiva */
 @media (max-width: 639px) {
-  .cv-card[data-state='active'] {
+  .cv-card[data-state="active"] {
     border-left-width: 3px;
     border-left-color: var(--color-accent);
-    box-shadow:
-      -4px 0 20px color-mix(in srgb, var(--color-accent) 30%, transparent);
+    box-shadow: -4px 0 20px
+      color-mix(in srgb, var(--color-accent) 30%, transparent);
   }
 
-  .cv-card[data-state='passive'] {
+  .cv-card[data-state="passive"] {
     backdrop-filter: none;
     -webkit-backdrop-filter: none;
   }
@@ -375,7 +382,8 @@ body::after {
   background: var(--color-accent);
   z-index: 9997;
   width: 0%;
-  transition: width 0.1s linear;
+  /* No CSS transition: GSAP/ScrollTrigger drives width directly via rAF.
+     A CSS transition would add lag and prevent reaching 100% at exact bottom. */
 }
 
 /* ─── FloatingMenu — posizionamento nel light DOM (più affidabile del Shadow DOM :host) ─── */
@@ -455,7 +463,7 @@ floating-menu {
 }
 
 #preloader .pre-bar::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   background: var(--color-accent);

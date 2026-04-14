@@ -1,14 +1,14 @@
-import { LitElement, html, css } from 'lit';
-import { modeStore, type Mode } from './stores/modeStore.ts';
+import { LitElement, html, css } from "lit";
+import { modeStore, type Mode } from "./stores/modeStore.ts";
 
 /**
  * <go-logo>
  *
  * Brand logo "GO" (Giulio Occhipinti) che reagisce al mode attivo:
- *  - TECH       → G con bagliore cyan
- *  - CREATIVE   → O con gradiente orange animato
- *  - HUMAN      → entrambe le lettere con glow gold
- *  - MANAGEMENT → entrambe le lettere con glow violet
+ *  - TECH       → G e O con bagliore cyan
+ *  - CREATIVE   → G e O con gradiente orange animato
+ *  - HUMAN      → G e O con glow gold
+ *  - MANAGEMENT → G e O con glow violet
  *
  * Click → Master Reset: torna alla landing / con gli oggetti knolling in stato neutro.
  */
@@ -29,9 +29,11 @@ class GoLogo extends LitElement {
       display: inline-flex;
       align-items: baseline;
       gap: 0;
-      font-family: var(--font-display, 'Lexend', ui-sans-serif, sans-serif);
+      font-family: var(--font-display, "Lexend", ui-sans-serif, sans-serif);
       line-height: 1;
-      transition: border-color 0.2s ease, background-color 0.2s ease;
+      transition:
+        border-color 0.2s ease,
+        background-color 0.2s ease;
     }
 
     button:hover {
@@ -53,8 +55,9 @@ class GoLogo extends LitElement {
       will-change: filter, text-shadow, color;
     }
 
-    /* ── TECH: G brilla cyan ─────────────────────────────────── */
-    :host([data-mode='tech']) .go-g {
+    /* ── TECH: G e O brilla cyan ─────────────────────────────── */
+    :host([data-mode="tech"]) .go-g,
+    :host([data-mode="tech"]) .go-o {
       color: rgba(0, 255, 200, 1);
       text-shadow:
         0 0 6px rgba(0, 255, 200, 1),
@@ -62,8 +65,9 @@ class GoLogo extends LitElement {
         0 0 36px rgba(0, 255, 200, 0.2);
     }
 
-    /* ── CREATIVE: O con gradiente orange animato ─────────────── */
-    :host([data-mode='creative']) .go-o {
+    /* ── CREATIVE: G e O con gradiente orange animato ─────────── */
+    :host([data-mode="creative"]) .go-g,
+    :host([data-mode="creative"]) .go-o {
       color: transparent;
       background: linear-gradient(
         135deg,
@@ -81,14 +85,13 @@ class GoLogo extends LitElement {
         filter: brightness(1) drop-shadow(0 0 0px rgba(255, 107, 53, 0));
       }
       50% {
-        filter: brightness(1.3)
-          drop-shadow(0 0 8px rgba(255, 107, 53, 0.75));
+        filter: brightness(1.3) drop-shadow(0 0 8px rgba(255, 107, 53, 0.75));
       }
     }
 
     /* ── HUMAN: G e O entrambe gold ──────────────────────────── */
-    :host([data-mode='human']) .go-g,
-    :host([data-mode='human']) .go-o {
+    :host([data-mode="human"]) .go-g,
+    :host([data-mode="human"]) .go-o {
       color: rgba(240, 200, 127, 1);
       text-shadow:
         0 0 5px rgba(240, 200, 127, 0.6),
@@ -96,8 +99,8 @@ class GoLogo extends LitElement {
     }
 
     /* ── MANAGEMENT: G e O entrambe violet ──────────────────── */
-    :host([data-mode='management']) .go-g,
-    :host([data-mode='management']) .go-o {
+    :host([data-mode="management"]) .go-g,
+    :host([data-mode="management"]) .go-o {
       color: rgba(180, 100, 255, 1);
       text-shadow:
         0 0 6px rgba(180, 100, 255, 1),
@@ -112,11 +115,11 @@ class GoLogo extends LitElement {
   connectedCallback() {
     super.connectedCallback();
     // Imposta data-mode sull'host subito (prima del render) per evitare flash
-    this.setAttribute('data-mode', this._mode);
+    this.setAttribute("data-mode", this._mode);
 
-    this._unsub = modeStore.subscribe(m => {
+    this._unsub = modeStore.subscribe((m) => {
       this._mode = m;
-      this.setAttribute('data-mode', m);
+      this.setAttribute("data-mode", m);
       this.requestUpdate();
     });
   }
@@ -128,7 +131,7 @@ class GoLogo extends LitElement {
 
   private _handleClick() {
     // Master Reset: torna alla landing con stato neutro
-    window.location.href = '/';
+    window.location.href = "/";
   }
 
   render() {
@@ -144,6 +147,6 @@ class GoLogo extends LitElement {
   }
 }
 
-if (!customElements.get('go-logo')) {
-  customElements.define('go-logo', GoLogo);
+if (!customElements.get("go-logo")) {
+  customElements.define("go-logo", GoLogo);
 }

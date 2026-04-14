@@ -1,4 +1,44 @@
-/* ── Preloader ── */
+/* ── Scroll cue — desktop only, fade dopo 2s, sparisce allo scroll ——————— */
+.scroll-cue {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  opacity: 0;
+  animation: fade-in-cue 0.5s ease 2s forwards;
+  font-size: 0.65rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  pointer-events: none;
+  user-select: none;
+  z-index: 20;
+  transition: opacity 0.4s ease;
+}
+
+.scroll-cue.is-hidden {
+  opacity: 0 !important;
+  animation: none;
+}
+
+@keyframes fade-in-cue {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Su mobile non ha senso (layout overflow:hidden) */
+@media (max-width: 639px) {
+  .scroll-cue {
+    display: none;
+  }
+}
+
+/* ── Preloader —— */
 #preloader {
   position: fixed;
   inset: 0;
@@ -37,18 +77,22 @@
 }
 
 .pre-bar::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   background: var(--color-text-primary);
   transform: scaleX(0);
   transform-origin: left;
-  animation: preBarFill 1.0s cubic-bezier(0.4, 0, 0.2, 1) 0.2s forwards;
+  animation: preBarFill 1s cubic-bezier(0.4, 0, 0.2, 1) 0.2s forwards;
 }
 
 @keyframes preBarFill {
-  from { transform: scaleX(0); }
-  to   { transform: scaleX(1); }
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
 }
 
 /* ── Layout root ── */
@@ -75,13 +119,17 @@
   position: absolute;
   left: var(--kx);
   top: var(--ky);
-  transform: translate(-50%, -50%) rotate(var(--kr)) scaleX(var(--kfx, 1)) scale(var(--ks));
+  transform: translate(-50%, -50%) rotate(var(--kr)) scaleX(var(--kfx, 1))
+    scale(var(--ks));
   width: clamp(80px, 12vw, 200px);
   object-fit: contain;
   opacity: 0;
   scale: 1; /* CSS scale — separato da transform, no conflitto GSAP */
   will-change: transform, opacity, scale;
-  transition: filter 0.4s ease, opacity 0.5s ease, scale 0.5s ease;
+  transition:
+    filter 0.4s ease,
+    opacity 0.5s ease,
+    scale 0.5s ease;
 }
 
 .knoll-item.is-dim,
@@ -93,14 +141,21 @@
 
 .knoll-item.is-hero,
 .knoll-m.is-hero {
-  filter: brightness(1.25) drop-shadow(0 8px 32px rgba(0,0,0,0.6)) saturate(1.1);
+  filter: brightness(1.25) drop-shadow(0 8px 32px rgba(0, 0, 0, 0.6))
+    saturate(1.1);
   z-index: 1;
   scale: 1.08;
 }
 
 @keyframes knollLand {
-  0%   { opacity: 0; filter: blur(6px) brightness(0.4); }
-  100% { opacity: 0.4; filter: none; }
+  0% {
+    opacity: 0;
+    filter: blur(6px) brightness(0.4);
+  }
+  100% {
+    opacity: 0.4;
+    filter: none;
+  }
 }
 
 .knoll-item.do-enter,
@@ -110,11 +165,15 @@
 }
 
 /* ── Mobile inline knolling zone — desktop hidden ── */
-.knolling-mob { display: none; }
+.knolling-mob {
+  display: none;
+}
 
 @media (max-width: 639px) {
   /* Fixed stage sostituito dalla zona inline — nascosto su mobile */
-  .knolling-stage { display: none; }
+  .knolling-stage {
+    display: none;
+  }
 
   /* ── Mobile knolling zone — grid 15 colonne, 2 righe ── */
   .knolling-mob {
@@ -135,16 +194,40 @@
   }
 
   /* Riga 1: 4+7+4 = 15 — laptop centrale occupa 47% della larghezza */
-  .knoll-wrap:nth-child(1) { grid-column: 1 / 5;   grid-row: 1; } /* megaphone */
-  .knoll-wrap:nth-child(2) { grid-column: 5 / 12;  grid-row: 1; } /* laptop — 7 col */
-  .knoll-wrap:nth-child(3) { grid-column: 12 / 16; grid-row: 1; } /* compass */
+  .knoll-wrap:nth-child(1) {
+    grid-column: 1 / 5;
+    grid-row: 1;
+  } /* megaphone */
+  .knoll-wrap:nth-child(2) {
+    grid-column: 5 / 12;
+    grid-row: 1;
+  } /* laptop — 7 col */
+  .knoll-wrap:nth-child(3) {
+    grid-column: 12 / 16;
+    grid-row: 1;
+  } /* compass */
 
   /* Riga 2: 2+5+2+3+3 = 15 — flashlight dominante, chess e pianta piccoli */
-  .knoll-wrap:nth-child(4) { grid-column: 1 / 4;   grid-row: 2; } /* plant — 2 col */
-  .knoll-wrap:nth-child(5) { grid-column: 3 / 8;   grid-row: 2; } /* flashlight — 5 col */
-  .knoll-wrap:nth-child(6) { grid-column: 7 / 9;  grid-row: 2; } /* chess — 2 col */
-  .knoll-wrap:nth-child(7) { grid-column: 9 / 13; grid-row: 2; } /* camera — 3 col */
-  .knoll-wrap:nth-child(8) { grid-column: 13 / 16; grid-row: 2; } /* multitool — 3 col */
+  .knoll-wrap:nth-child(4) {
+    grid-column: 1 / 4;
+    grid-row: 2;
+  } /* plant — 2 col */
+  .knoll-wrap:nth-child(5) {
+    grid-column: 3 / 8;
+    grid-row: 2;
+  } /* flashlight — 5 col */
+  .knoll-wrap:nth-child(6) {
+    grid-column: 7 / 9;
+    grid-row: 2;
+  } /* chess — 2 col */
+  .knoll-wrap:nth-child(7) {
+    grid-column: 9 / 13;
+    grid-row: 2;
+  } /* camera — 3 col */
+  .knoll-wrap:nth-child(8) {
+    grid-column: 13 / 16;
+    grid-row: 2;
+  } /* multitool — 3 col */
 
   /* Immagini: % relative alla cella grid (più stabili di clamp qui) */
   .knoll-m {
@@ -152,19 +235,31 @@
     height: 100%;
     object-fit: contain;
     opacity: 0; /* GSAP gestisce entrance */
-    transition: filter 0.4s ease, opacity 0.5s ease;
+    transition:
+      filter 0.4s ease,
+      opacity 0.5s ease;
     transform-origin: center;
     display: block;
   }
 
   /* Padding wrapper per controllo visivo dimensione oggetto nella cella */
-  .knoll-wrap:nth-child(3) { padding: 0% 10%; }       /* compass — più piccola della cella */
-  .knoll-wrap:nth-child(5) { padding-bottom: 5%; }       /* compass — più piccola della cella */
-  .knoll-wrap:nth-child(6) { padding: 4%; }        /* plant — leggero margine */
-  .knoll-wrap:nth-child(7) { padding: 0% 8%; }  /* chess — piccoli nella cella 2-col */
+  .knoll-wrap:nth-child(3) {
+    padding: 0% 10%;
+  } /* compass — più piccola della cella */
+  .knoll-wrap:nth-child(5) {
+    padding-bottom: 5%;
+  } /* compass — più piccola della cella */
+  .knoll-wrap:nth-child(6) {
+    padding: 4%;
+  } /* plant — leggero margine */
+  .knoll-wrap:nth-child(7) {
+    padding: 0% 8%;
+  } /* chess — piccoli nella cella 2-col */
 
   /* Torcia: ruotata 120° — luce verso il laptop (in alto a destra) */
-  .knoll-wrap:nth-child(5) .knoll-m { transform: rotate(120deg); }
+  .knoll-wrap:nth-child(5) .knoll-m {
+    transform: rotate(120deg);
+  }
 }
 
 /* ── Main content ── */
@@ -291,7 +386,8 @@
 }
 
 @keyframes go-orange-pulse {
-  0%, 100% {
+  0%,
+  100% {
     filter: brightness(1) drop-shadow(0 0 0px rgba(255, 107, 53, 0));
   }
   50% {
@@ -357,23 +453,30 @@
   -webkit-user-select: none;
   opacity: 0; /* GSAP gestisce */
   will-change: transform, opacity;
-  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.2s ease;
   position: relative;
   overflow: hidden;
 }
 
 .mode-card::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   opacity: 0;
   transition: opacity 0.3s ease;
-  background: radial-gradient(ellipse at 50% 120%, var(--card-glow, transparent) 0%, transparent 70%);
+  background: radial-gradient(
+    ellipse at 50% 120%,
+    var(--card-glow, transparent) 0%,
+    transparent 70%
+  );
 }
 
 /* "Launch" light sweep on hover — GO concept */
 .mode-card::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: -80%;
@@ -405,19 +508,35 @@
   border-color: rgba(255, 255, 255, 0.25);
 }
 
-.mode-card[data-mode="tech"]       { --card-glow: rgba(0, 255, 200, 0.15); }
-.mode-card[data-mode="creative"]   { --card-glow: rgba(255, 107, 53, 0.15); }
-.mode-card[data-mode="human"]      { --card-glow: rgba(240, 200, 127, 0.15); }
-.mode-card[data-mode="management"] { --card-glow: rgba(180, 100, 255, 0.15); }
+.mode-card[data-mode="tech"] {
+  --card-glow: rgba(0, 255, 200, 0.15);
+}
+.mode-card[data-mode="creative"] {
+  --card-glow: rgba(255, 107, 53, 0.15);
+}
+.mode-card[data-mode="human"] {
+  --card-glow: rgba(240, 200, 127, 0.15);
+}
+.mode-card[data-mode="management"] {
+  --card-glow: rgba(180, 100, 255, 0.15);
+}
 
 .mode-card.is-selected {
   background: rgba(255, 255, 255, 0.09);
 }
 
-.mode-card[data-mode="tech"].is-selected       { border-color: rgba(0, 255, 200, 0.5); }
-.mode-card[data-mode="creative"].is-selected   { border-color: rgba(255, 107, 53, 0.5); }
-.mode-card[data-mode="human"].is-selected      { border-color: rgba(240, 200, 127, 0.5); }
-.mode-card[data-mode="management"].is-selected { border-color: rgba(180, 100, 255, 0.5); }
+.mode-card[data-mode="tech"].is-selected {
+  border-color: rgba(0, 255, 200, 0.5);
+}
+.mode-card[data-mode="creative"].is-selected {
+  border-color: rgba(255, 107, 53, 0.5);
+}
+.mode-card[data-mode="human"].is-selected {
+  border-color: rgba(240, 200, 127, 0.5);
+}
+.mode-card[data-mode="management"].is-selected {
+  border-color: rgba(180, 100, 255, 0.5);
+}
 
 .mode-card.is-passive {
   opacity: 0.3 !important;
@@ -440,8 +559,14 @@
 
 /* Ripple effect su card */
 @keyframes ripple {
-  from { transform: scale(0); opacity: 0.4; }
-  to   { transform: scale(4); opacity: 0; }
+  from {
+    transform: scale(0);
+    opacity: 0.4;
+  }
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
 }
 
 .ripple {
@@ -449,7 +574,7 @@
   width: 60px;
   height: 60px;
   border-radius: 50%;
-  background: rgba(255,255,255,0.15);
+  background: rgba(255, 255, 255, 0.15);
   pointer-events: none;
   animation: ripple 0.6s ease-out forwards;
   transform-origin: center;
@@ -466,7 +591,7 @@
   border-radius: 2px;
   background: rgba(212, 168, 55, 0.07);
   width: 100%;
-  color: #D4A837;
+  color: #d4a837;
   font-size: 0.56rem;
   font-weight: 700;
   letter-spacing: 0.18em;
@@ -475,7 +600,10 @@
   opacity: 0;
   pointer-events: none;
   user-select: none;
-  transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 @media (min-width: 640px) {
@@ -525,7 +653,9 @@
   opacity: 0;
 }
 @media (min-width: 640px) {
-  .tap-hint { display: none; }
+  .tap-hint {
+    display: none;
+  }
 }
 
 /* ── Launch journey overlay ── */

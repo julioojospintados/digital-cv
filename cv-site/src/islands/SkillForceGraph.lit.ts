@@ -11,11 +11,14 @@ import {
   forceY,
   pointer,
   select,
+  zoom,
   type D3DragEvent,
+  type D3ZoomEvent,
   type Selection,
   type Simulation,
   type SimulationLinkDatum,
   type SimulationNodeDatum,
+  type ZoomBehavior,
 } from "d3";
 import { cvData } from "@cv-data";
 import { modeStore, type Mode } from "./stores/modeStore.ts";
@@ -198,7 +201,8 @@ class SkillForceGraph extends LitElement {
       display: block;
       width: 100%;
       max-width: 100%;
-      overflow: hidden;
+      overflow: visible;
+      margin: 0 1rem;
     }
 
     .graph-wrap {
@@ -215,6 +219,7 @@ class SkillForceGraph extends LitElement {
       height: auto;
       cursor: grab;
       aspect-ratio: 1080 / 760;
+      touch-action: none; /* necessario per pinch-to-zoom via D3 */
       background: var(
         --skills-panel-overlay,
         radial-gradient(
@@ -251,13 +256,17 @@ class SkillForceGraph extends LitElement {
 
     .force-node-label {
       font-family: "Lexend", sans-serif;
-      font-size: 9px;
+      font-size: 11px;
       font-weight: 600;
       letter-spacing: 0.02em;
-      fill: rgba(245, 240, 230, 0.88);
+      fill: rgba(245, 240, 230, 0.92);
       text-anchor: middle;
       pointer-events: none;
       user-select: none;
+      paint-order: stroke;
+      stroke: rgba(8, 73, 67, 0.9);
+      stroke-width: 3px;
+      stroke-linejoin: round;
     }
 
     .graph-legend {
@@ -392,6 +401,7 @@ class SkillForceGraph extends LitElement {
   >;
   private _unsub?: () => void;
   private _releasePinTimer?: number;
+  private _zoomBehavior?: ZoomBehavior<SVGSVGElement, unknown>;
 
   override connectedCallback() {
     super.connectedCallback();
@@ -446,8 +456,20 @@ class SkillForceGraph extends LitElement {
     const root = select(svg);
     root.selectAll("*").remove();
 
-    const linksLayer = root.append("g").attr("class", "force-links");
-    const nodesLayer = root.append("g").attr("class", "force-nodes");
+    // Zoom root — wraps all layers so pan/zoom is applied to a single group
+    const zoomRoot = root.append("g").attr("class", "zoom-root");
+    const linksLayer = zoomRoot.append("g").attr("class", "force-links");
+    const nodesLayer = zoomRoot.append("g").attr("class", "force-nodes");
+
+    // D3 zoom behavior — supports pinch-to-zoom natively on touch devices
+    this._zoomBehavior = zoom<SVGSVGElement, unknown>()
+      .scaleExtent([0.3, 5])
+      .on("zoom", (event: D3ZoomEvent<SVGSVGElement, unknown>) => {
+        zoomRoot.attr("transform", event.transform.toString());
+      });
+    root.call(this._zoomBehavior);
+    // Double-click zooms in by default — disable to avoid conflict with node selection
+    root.on("dblclick.zoom", null);
 
     this._linkSelection = linksLayer
       .selectAll<SVGLineElement, GraphLink>("line")

@@ -1,5 +1,5 @@
-import { LitElement, html, css } from 'lit';
-import { modeStore, type Mode } from './stores/modeStore.js';
+import { LitElement, html, css } from "lit";
+import { modeStore } from "./stores/modeStore.js";
 
 /**
  * <floating-menu>
@@ -28,7 +28,12 @@ class FloatingMenu extends LitElement {
       width: 3.1rem;
       height: 3.1rem;
       border-radius: 50%;
-      background: rgba(240, 200, 127, 1); /* gold — fixed: ottanio icon 10:1 contrast + cyan glow = TECH identity */
+      background: rgba(
+        240,
+        200,
+        127,
+        1
+      ); /* gold — fixed: ottanio icon 10:1 contrast + cyan glow = TECH identity */
       border: none;
       cursor: none;
       pointer-events: all;
@@ -49,7 +54,7 @@ class FloatingMenu extends LitElement {
     .fab-trigger:hover {
       transform: scale(1.1);
       box-shadow:
-        0 0 36px rgba(0, 255, 200, 0.70),
+        0 0 36px rgba(0, 255, 200, 0.7),
         0 4px 22px rgba(0, 0, 0, 0.5);
     }
 
@@ -64,16 +69,34 @@ class FloatingMenu extends LitElement {
       font-size: 1.25rem;
       font-weight: 900;
       line-height: 1;
-      transition: opacity 0.18s ease, transform 0.28s ease;
+      transition:
+        opacity 0.18s ease,
+        transform 0.28s ease;
     }
 
-    .fab-icon--open  { opacity: 0; transform: rotate(-45deg) scale(0.7); }
-    .fab-icon--close { opacity: 0; transform: rotate(45deg)  scale(0.7); }
+    .fab-icon--open {
+      opacity: 0;
+      transform: rotate(-45deg) scale(0.7);
+    }
+    .fab-icon--close {
+      opacity: 0;
+      transform: rotate(45deg) scale(0.7);
+    }
 
-    :host([open]) .fab-icon--open  { opacity: 1; transform: rotate(0deg) scale(1); }
-    :host([open]) .fab-icon--close { opacity: 0; }
-    :host(:not([open])) .fab-icon--open  { opacity: 0; }
-    :host(:not([open])) .fab-icon--close { opacity: 1; transform: rotate(0deg) scale(1); }
+    :host([open]) .fab-icon--open {
+      opacity: 1;
+      transform: rotate(0deg) scale(1);
+    }
+    :host([open]) .fab-icon--close {
+      opacity: 0;
+    }
+    :host(:not([open])) .fab-icon--open {
+      opacity: 0;
+    }
+    :host(:not([open])) .fab-icon--close {
+      opacity: 1;
+      transform: rotate(0deg) scale(1);
+    }
 
     /* ── Items container — absolute per non occupare spazio nel flusso ── */
     /* bottom: 3.1rem (trigger) + 0.65rem (gap) = 3.75rem                  */
@@ -96,9 +119,14 @@ class FloatingMenu extends LitElement {
       padding: 0.42rem 1.05rem;
       border-radius: 100px;
       background: rgba(8, 73, 67, 0.96);
-      border: 1px solid color-mix(in srgb, var(--color-accent, rgba(0,255,200,1)) 40%, transparent);
+      border: 1px solid
+        color-mix(
+          in srgb,
+          var(--color-accent, rgba(0, 255, 200, 1)) 40%,
+          transparent
+        );
       color: var(--color-text-primary, rgba(245, 240, 230, 1));
-      font-family: 'Lexend', ui-sans-serif, sans-serif;
+      font-family: "Lexend", ui-sans-serif, sans-serif;
       font-size: 0.68rem;
       font-weight: 600;
       letter-spacing: 0.08em;
@@ -131,7 +159,9 @@ class FloatingMenu extends LitElement {
     }
 
     /* ── Open state: items appear with stagger ── */
-    :host([open]) .fab-items { pointer-events: all; }
+    :host([open]) .fab-items {
+      pointer-events: all;
+    }
 
     :host([open]) .fab-item {
       opacity: 1;
@@ -139,15 +169,27 @@ class FloatingMenu extends LitElement {
       pointer-events: all;
     }
 
-    :host([open]) .fab-item:nth-child(1) { transition-delay: 0.04s; }
-    :host([open]) .fab-item:nth-child(2) { transition-delay: 0.08s; }
-    :host([open]) .fab-item:nth-child(3) { transition-delay: 0.12s; }
+    :host([open]) .fab-item:nth-child(1) {
+      transition-delay: 0.04s;
+    }
+    :host([open]) .fab-item:nth-child(2) {
+      transition-delay: 0.08s;
+    }
+    :host([open]) .fab-item:nth-child(3) {
+      transition-delay: 0.12s;
+    }
 
     /* ── Pulse ring (attrae l'attenzione quando chiuso) ── */
     @keyframes fab-ring-pulse {
-      0%   { box-shadow: 0 0 0 0 rgba(0, 255, 200, 0.45); }
-      70%  { box-shadow: 0 0 0 14px transparent; }
-      100% { box-shadow: 0 0 0 0 transparent; }
+      0% {
+        box-shadow: 0 0 0 0 rgba(0, 255, 200, 0.45);
+      }
+      70% {
+        box-shadow: 0 0 0 14px transparent;
+      }
+      100% {
+        box-shadow: 0 0 0 0 transparent;
+      }
     }
 
     :host(:not([open])) .fab-trigger {
@@ -174,7 +216,12 @@ class FloatingMenu extends LitElement {
       bottom: 3.75rem;
       width: 15rem;
       background: rgba(8, 73, 67, 0.97);
-      border: 1px solid color-mix(in srgb, var(--color-accent, rgba(0,255,200,1)) 40%, transparent);
+      border: 1px solid
+        color-mix(
+          in srgb,
+          var(--color-accent, rgba(0, 255, 200, 1)) 40%,
+          transparent
+        );
       border-radius: 0.75rem;
       padding: 1rem;
       backdrop-filter: blur(16px);
@@ -187,12 +234,12 @@ class FloatingMenu extends LitElement {
       margin-bottom: 0.65rem;
     }
     .fp-title {
-      font-family: 'Lexend', sans-serif;
+      font-family: "Lexend", sans-serif;
       font-size: 0.6rem;
       font-weight: 700;
       letter-spacing: 0.15em;
       text-transform: uppercase;
-      color: var(--color-accent, rgba(0,255,200,1));
+      color: var(--color-accent, rgba(0, 255, 200, 1));
     }
     .fp-close {
       background: none;
@@ -205,14 +252,17 @@ class FloatingMenu extends LitElement {
       display: flex;
       align-items: center;
     }
-    .fp-close:hover { color: rgba(245, 240, 230, 1); }
-    .fp-input, .fp-textarea {
+    .fp-close:hover {
+      color: rgba(245, 240, 230, 1);
+    }
+    .fp-input,
+    .fp-textarea {
       width: 100%;
       background: rgba(255, 255, 255, 0.05);
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 0.35rem;
       color: rgba(245, 240, 230, 1);
-      font-family: 'Lexend', sans-serif;
+      font-family: "Lexend", sans-serif;
       font-size: 0.62rem;
       padding: 0.45rem 0.6rem;
       margin-bottom: 0.5rem;
@@ -220,20 +270,37 @@ class FloatingMenu extends LitElement {
       transition: border-color 0.2s ease;
       resize: none;
     }
-    .fp-input { cursor: text; }
-    .fp-textarea { height: 4rem; cursor: text; }
-    .fp-input::placeholder, .fp-textarea::placeholder { color: rgba(192, 220, 215, 0.4); }
-    .fp-input:focus, .fp-textarea:focus {
+    .fp-input {
+      cursor: text;
+    }
+    .fp-textarea {
+      height: 4rem;
+      cursor: text;
+    }
+    .fp-input::placeholder,
+    .fp-textarea::placeholder {
+      color: rgba(192, 220, 215, 0.4);
+    }
+    .fp-input:focus,
+    .fp-textarea:focus {
       outline: none;
-      border-color: color-mix(in srgb, var(--color-accent, rgba(0,255,200,1)) 60%, transparent);
+      border-color: color-mix(
+        in srgb,
+        var(--color-accent, rgba(0, 255, 200, 1)) 60%,
+        transparent
+      );
     }
     .fp-submit {
       width: 100%;
-      background: color-mix(in srgb, var(--color-accent, rgba(0,255,200,1)) 20%, transparent);
-      border: 1px solid var(--color-accent, rgba(0,255,200,1));
+      background: color-mix(
+        in srgb,
+        var(--color-accent, rgba(0, 255, 200, 1)) 20%,
+        transparent
+      );
+      border: 1px solid var(--color-accent, rgba(0, 255, 200, 1));
       border-radius: 0.35rem;
-      color: var(--color-accent, rgba(0,255,200,1));
-      font-family: 'Lexend', sans-serif;
+      color: var(--color-accent, rgba(0, 255, 200, 1));
+      font-family: "Lexend", sans-serif;
       font-size: 0.6rem;
       font-weight: 700;
       letter-spacing: 0.1em;
@@ -242,16 +309,22 @@ class FloatingMenu extends LitElement {
       cursor: pointer;
       transition: background 0.2s ease;
     }
-    .fp-submit:hover { background: color-mix(in srgb, var(--color-accent, rgba(0,255,200,1)) 35%, transparent); }
+    .fp-submit:hover {
+      background: color-mix(
+        in srgb,
+        var(--color-accent, rgba(0, 255, 200, 1)) 35%,
+        transparent
+      );
+    }
     .fp-sent {
       text-align: center;
-      font-family: 'Lexend', sans-serif;
+      font-family: "Lexend", sans-serif;
       font-size: 0.62rem;
-      color: var(--color-accent, rgba(0,255,200,1));
+      color: var(--color-accent, rgba(0, 255, 200, 1));
       padding: 0.5rem 0;
     }
     .fp-hint {
-      font-family: 'Lexend', sans-serif;
+      font-family: "Lexend", sans-serif;
       font-size: 0.5rem;
       color: rgba(192, 220, 215, 0.4);
       text-align: center;
@@ -267,7 +340,7 @@ class FloatingMenu extends LitElement {
       border-radius: 50%;
       background: rgba(0, 255, 200, 1);
       color: rgba(8, 73, 67, 1);
-      font-family: 'Lexend', sans-serif;
+      font-family: "Lexend", sans-serif;
       font-size: 0.45rem;
       font-weight: 800;
       display: flex;
@@ -278,32 +351,32 @@ class FloatingMenu extends LitElement {
   `;
 
   private _open = false;
-  private _mode: Mode = 'tech';
   private _unsub?: () => void;
   private _showFeedback = false;
   private _feedbackSent = false;
 
   connectedCallback() {
     super.connectedCallback();
-    this._mode = modeStore.get();
-    this._unsub = modeStore.subscribe((m) => { this._mode = m; this.requestUpdate(); });
-    document.addEventListener('click', this._handleOutsideClick);
-    document.addEventListener('keydown', this._handleKeydown);
+    this._unsub = modeStore.subscribe(() => {
+      this.requestUpdate();
+    });
+    document.addEventListener("click", this._handleOutsideClick);
+    document.addEventListener("keydown", this._handleKeydown);
   }
 
   disconnectedCallback() {
     super.disconnectedCallback();
     this._unsub?.();
-    document.removeEventListener('click', this._handleOutsideClick);
-    document.removeEventListener('keydown', this._handleKeydown);
+    document.removeEventListener("click", this._handleOutsideClick);
+    document.removeEventListener("keydown", this._handleKeydown);
   }
 
   private _toggle() {
     this._open = !this._open;
     if (this._open) {
-      this.setAttribute('open', '');
+      this.setAttribute("open", "");
     } else {
-      this.removeAttribute('open');
+      this.removeAttribute("open");
       this._showFeedback = false;
       this._feedbackSent = false;
     }
@@ -313,7 +386,7 @@ class FloatingMenu extends LitElement {
   private _handleOutsideClick = (e: Event) => {
     if (this._open && !e.composedPath().includes(this)) {
       this._open = false;
-      this.removeAttribute('open');
+      this.removeAttribute("open");
       this._showFeedback = false;
       this._feedbackSent = false;
       this.requestUpdate();
@@ -321,9 +394,9 @@ class FloatingMenu extends LitElement {
   };
 
   private _handleKeydown = (e: KeyboardEvent) => {
-    if (e.key === 'Escape' && this._open) {
+    if (e.key === "Escape" && this._open) {
       this._open = false;
-      this.removeAttribute('open');
+      this.removeAttribute("open");
       this._showFeedback = false;
       this._feedbackSent = false;
       this.requestUpdate();
@@ -332,7 +405,7 @@ class FloatingMenu extends LitElement {
 
   private _closeOnNav() {
     this._open = false;
-    this.removeAttribute('open');
+    this.removeAttribute("open");
     this._showFeedback = false;
     this._feedbackSent = false;
     this.requestUpdate();
@@ -351,28 +424,34 @@ class FloatingMenu extends LitElement {
   }
 
   private _submitFeedback() {
-    const nameInput = this.renderRoot.querySelector<HTMLInputElement>('#fp-name');
-    const noteInput = this.renderRoot.querySelector<HTMLTextAreaElement>('#fp-note');
-    const name = nameInput?.value.trim() ?? '';
-    const note = noteInput?.value.trim() ?? '';
+    const nameInput =
+      this.renderRoot.querySelector<HTMLInputElement>("#fp-name");
+    const noteInput =
+      this.renderRoot.querySelector<HTMLTextAreaElement>("#fp-note");
+    const name = nameInput?.value.trim() ?? "";
+    const note = noteInput?.value.trim() ?? "";
     if (!note) return;
 
     // Persist to sessionStorage so the badge updates
     try {
-      const feedbacks: unknown[] = JSON.parse(sessionStorage.getItem('cv-feedbacks') ?? '[]');
+      const feedbacks: unknown[] = JSON.parse(
+        sessionStorage.getItem("cv-feedbacks") ?? "[]",
+      );
       feedbacks.push({ timestamp: new Date().toISOString(), name, note });
-      sessionStorage.setItem('cv-feedbacks', JSON.stringify(feedbacks));
+      sessionStorage.setItem("cv-feedbacks", JSON.stringify(feedbacks));
     } catch {
       // sessionStorage blocked — proceed anyway
     }
 
     // Open mailto with pre-filled content — zero infrastructure required
-    const subject = encodeURIComponent('Feedback — CV Digitale Giulio Occhipinti');
-    const nameStr = name ? `Da: ${name}` : 'Feedback anonimo';
+    const subject = encodeURIComponent(
+      "Feedback — CV Digitale Giulio Occhipinti",
+    );
+    const nameStr = name ? `Da: ${name}` : "Feedback anonimo";
     const body = encodeURIComponent(`${nameStr}\n\n${note}`);
     window.open(
       `mailto:giulio.occhipinti.g@gmail.com?subject=${subject}&body=${body}`,
-      '_blank',
+      "_blank",
     );
 
     this._feedbackSent = true;
@@ -381,96 +460,132 @@ class FloatingMenu extends LitElement {
 
   render() {
     // Guard window/sessionStorage access for SSR compatibility (window is undefined in Node.js)
-    const isClient = typeof window !== 'undefined';
-    const href = isClient && window.location.pathname.match(/^\/(tech|creative|human|management|cv)/)
-      ? '#ai-section'
-      : '/tech#ai-section';
+    const isClient = typeof window !== "undefined";
+    const href =
+      isClient &&
+      window.location.pathname.match(/^\/(tech|creative|human|management|cv)/)
+        ? "#ai-section"
+        : "/tech#ai-section";
 
     let feedbackCount = 0;
     if (isClient) {
       try {
-        const stored = JSON.parse(sessionStorage.getItem('cv-feedbacks') ?? '[]');
+        const stored = JSON.parse(
+          sessionStorage.getItem("cv-feedbacks") ?? "[]",
+        );
         feedbackCount = Array.isArray(stored) ? stored.length : 0;
-      } catch { /* noop */ }
+      } catch {
+        /* noop */
+      }
     }
 
     return html`
-      ${this._showFeedback ? html`
-        <div class="feedback-panel" role="dialog" aria-label="Modulo feedback">
-          <div class="fp-header">
-            <span class="fp-title">✦ Feedback</span>
-            <button class="fp-close" @click=${this._closeFeedback} aria-label="Chiudi">✕</button>
-          </div>
-          ${this._feedbackSent ? html`
-            <p class="fp-sent">✓ Grazie! Apertura email…</p>
-            <p class="fp-hint">Invia il messaggio nel client di posta che si è aperto.</p>
-          ` : html`
-            <input
-              class="fp-input"
-              type="text"
-              id="fp-name"
-              placeholder="Nome (opzionale)"
-              autocomplete="off"
-            />
-            <textarea
-              class="fp-textarea"
-              id="fp-note"
-              placeholder="Lascia un commento…"
-            ></textarea>
-            <button class="fp-submit" @click=${this._submitFeedback} type="button">Invia</button>
-            <p class="fp-hint">Apre il tuo client email — nessun DB, nessun account richiesto.</p>
+      ${this._showFeedback
+        ? html`
+            <div
+              class="feedback-panel"
+              role="dialog"
+              aria-label="Modulo feedback"
+            >
+              <div class="fp-header">
+                <span class="fp-title">✦ Feedback</span>
+                <button
+                  class="fp-close"
+                  @click=${this._closeFeedback}
+                  aria-label="Chiudi"
+                >
+                  ✕
+                </button>
+              </div>
+              ${this._feedbackSent
+                ? html`
+                    <p class="fp-sent">✓ Grazie! Apertura email…</p>
+                    <p class="fp-hint">
+                      Invia il messaggio nel client di posta che si è aperto.
+                    </p>
+                  `
+                : html`
+                    <input
+                      class="fp-input"
+                      type="text"
+                      id="fp-name"
+                      placeholder="Nome (opzionale)"
+                      autocomplete="off"
+                    />
+                    <textarea
+                      class="fp-textarea"
+                      id="fp-note"
+                      placeholder="Lascia un commento…"
+                    ></textarea>
+                    <button
+                      class="fp-submit"
+                      @click=${this._submitFeedback}
+                      type="button"
+                    >
+                      Invia
+                    </button>
+                    <p class="fp-hint">
+                      Apre il tuo client email — nessun DB, nessun account
+                      richiesto.
+                    </p>
+                  `}
+            </div>
+          `
+        : html`
+            <div class="fab-items" aria-hidden="${!this._open}">
+              <a
+                class="fab-item"
+                href="mailto:giulio.occhipinti.g@gmail.com"
+                aria-label="Invia email a Giulio"
+                @click=${this._closeOnNav}
+              >
+                <span class="fab-item__icon">✉</span>
+                <span>Contattami</span>
+              </a>
+              <button
+                class="fab-item"
+                @click=${this._openFeedback}
+                aria-label="Lascia un feedback"
+                type="button"
+              >
+                <span class="fab-item__icon">✦</span>
+                <span>Feedback</span>
+              </button>
+              <a
+                class="fab-item"
+                href="${href}"
+                aria-label="AI Workflow — come l'AI amplifica il lavoro"
+                @click=${this._closeOnNav}
+              >
+                <span class="fab-item__icon">⚡</span>
+                <span>AI Workflow</span>
+              </a>
+            </div>
           `}
-        </div>
-      ` : html`
-        <div class="fab-items" aria-hidden="${!this._open}">
-          <a
-            class="fab-item"
-            href="mailto:giulio.occhipinti.g@gmail.com"
-            aria-label="Invia email a Giulio"
-            @click=${this._closeOnNav}
-          >
-            <span class="fab-item__icon">✉</span>
-            <span>Contattami</span>
-          </a>
-          <button
-            class="fab-item"
-            @click=${this._openFeedback}
-            aria-label="Lascia un feedback"
-            type="button"
-          >
-            <span class="fab-item__icon">✦</span>
-            <span>Feedback</span>
-          </button>
-          <a
-            class="fab-item"
-            href="${href}"
-            aria-label="AI Workflow — come l'AI amplifica il lavoro"
-            @click=${this._closeOnNav}
-          >
-            <span class="fab-item__icon">⚡</span>
-            <span>AI Workflow</span>
-          </a>
-        </div>
-      `}
 
       <button
         class="fab-trigger"
         @click=${this._toggle}
-        aria-label="${this._open ? 'Chiudi menu' : 'Apri menu interazioni'}"
+        aria-label="${this._open ? "Chiudi menu" : "Apri menu interazioni"}"
         aria-expanded="${this._open}"
         aria-haspopup="menu"
         type="button"
       >
         <span class="fab-icon fab-icon--open" aria-hidden="true">✕</span>
         <span class="fab-icon fab-icon--close" aria-hidden="true">⚡</span>
-        ${feedbackCount > 0 ? html`
-          <span class="fab-badge" title="${feedbackCount} feedback inviati in questa sessione">
-            ${feedbackCount}
-          </span>
-        ` : ''}
+        ${feedbackCount > 0
+          ? html`
+              <span
+                class="fab-badge"
+                title="${feedbackCount} feedback inviati in questa sessione"
+              >
+                ${feedbackCount}
+              </span>
+            `
+          : ""}
       </button>
     `;
   }
 }
 
-customElements.define('floating-menu', FloatingMenu);
+customElements.define("floating-menu", FloatingMenu);

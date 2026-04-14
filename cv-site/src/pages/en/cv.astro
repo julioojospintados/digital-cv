@@ -69,6 +69,7 @@ function skillModeTags(skill: SkillSquareSource): string {
 // ── Skill Grid ─────────────────────────────────────────────────────────────
 const LEVEL_BORDERS: Record<string, number> = {
   'Base': 1, 'Intermedio': 2, 'Avanzato': 3, 'Esperto': 4,
+  'Basic': 1, 'Intermediate': 2, 'Advanced': 3, 'Expert': 4,
 };
 function toSkillSquare(skill: SkillSquareSource) {
   const level = skill.level ?? deriveSkillLevel(skill.mastery);
@@ -91,12 +92,21 @@ const skillSquares = [
     .filter((skill) => skill.domain === 'human' || skill.domain === 'management')
     .map((skill) => toSkillSquare(skill)),
 ].sort((a, b) => {
+  const activeDelta = Number(isActiveSkill(b.modeTags)) - Number(isActiveSkill(a.modeTags));
+  if (activeDelta !== 0) return activeDelta;
+
   const areaA = (a.weight ?? 1) * (LEVEL_BORDERS[a.level] ?? 1);
   const areaB = (b.weight ?? 1) * (LEVEL_BORDERS[b.level] ?? 1);
   if (areaA !== areaB) return areaB - areaA;
 
   return a.name.localeCompare(b.name);
 });
+
+function isActiveSkill(modeTags: string): boolean {
+  // EN page is always static; default mode is 'tech'
+  const tags = modeTags.split(' ');
+  return tags.includes('tech') || tags.includes('ai');
+}
 
 // ── Experience mode tags ───────────────────────────────────────────────────
 const EXP_MODE_TAGS = [
@@ -123,6 +133,44 @@ const EXP_MODE_TAGS = [
   'human management',       // 20 — Metamorfosi / Fun Factory
   'human',                  // 21 — Caveja srl
 ];
+
+// ── Experience clusters ───────────────────────────────────────────────────
+const EXP_CLUSTER_DEFS_EN = [
+  {
+    key: 'tech',
+    label: 'Software Development & AI',
+    tags: 'tech management',
+    openForModes: ['tech', 'management'],
+    indices: [0, 1, 2, 5, 6, 7],
+  },
+  {
+    key: 'creative',
+    label: 'Design & Communication',
+    tags: 'creative',
+    openForModes: ['creative'],
+    indices: [3, 4, 9, 10, 11, 12],
+  },
+  {
+    key: 'human',
+    label: 'Facilitation & Culture',
+    tags: 'human management',
+    openForModes: ['human', 'management'],
+    indices: [8, 13, 20, 21],
+  },
+  {
+    key: 'roots',
+    label: 'Roots',
+    tags: 'human creative',
+    openForModes: ['human', 'creative'],
+    indices: [14, 15, 16, 17, 18, 19],
+  },
+];
+
+const expClustersEn = EXP_CLUSTER_DEFS_EN.map(cluster => ({
+  ...cluster,
+  isDefaultOpen: cluster.key === 'tech', // EN page is always static at 'tech'
+  items: cluster.indices.map(i => featuredExpData[i]).filter(Boolean),
+}));
 
 const skillViewLabels = {
   graph: 'Graph',
@@ -162,45 +210,6 @@ const softSkillsData = cvDataEn.softSkills.map((skill, i) => ({
   description: skill.description ?? '',
   modeTags: SOFT_MODE_TAGS[i] ?? 'tech creative human',
 }));
-
-// ── AI Workflow items (English) ────────────────────────────────────────────
-const aiItems = [
-  {
-    tool: 'GitHub Copilot',
-    title: 'Angular enterprise development acceleration',
-    desc: 'NGRX boilerplate generation, Jest testing and repetitive architectural patterns, with critical validation of output.',
-    impact: '-87% boilerplate',
-    tags: 'tech',
-  },
-  {
-    tool: 'ChatGPT / Claude',
-    title: 'Prompt Engineering for UX prototyping',
-    desc: 'User personas, navigation flows and test scenarios from text briefs. Applied during the IBM UX Research phase.',
-    impact: '-90% discovery time',
-    tags: 'creative tech',
-  },
-  {
-    tool: 'Claude / GPT-4',
-    title: 'Code review and Angular architecture',
-    desc: 'Code smell analysis, refactoring and microfrontend architecture review with LLMs as pair reviewers.',
-    impact: '-60% debug time',
-    tags: 'tech',
-  },
-  {
-    tool: 'Midjourney',
-    title: 'Visual exploration for UX/UI briefs',
-    desc: 'Fast moodboards and visual concepts to align stakeholders before wireframing, avoiding costly iterations.',
-    impact: '-70% alignment cycles',
-    tags: 'creative',
-  },
-  {
-    tool: 'AI Tools',
-    title: 'Copywriting and technical documentation',
-    desc: 'SEO copy, A/B variants for landing pages and technical documentation from annotated code.',
-    impact: '+3x content velocity',
-    tags: 'creative',
-  },
-];
 
 // ── Availability badge ─────────────────────────────────────────────────────
 const availLabel =
@@ -356,6 +365,12 @@ const projectsData = cvDataEn.projects.slice(0, 6).map(p => {
         <span class="section-subtitle">Force-directed skill network - hover and drag to explore</span>
       </h2>
       <h3 class="skills-sub-title">Technical, management and human skills — tile size &amp; glow proportional to weight</h3>
+      <div class="skills-legend" aria-hidden="true">
+        <span class="skills-legend__item" style="--legend-border: 1px">Basic</span>
+        <span class="skills-legend__item" style="--legend-border: 2px">Intermediate</span>
+        <span class="skills-legend__item" style="--legend-border: 3px">Advanced</span>
+        <span class="skills-legend__item" style="--legend-border: 4px">Expert</span>
+      </div>
       <div class="skills-view-toggle" role="tablist" aria-label="Choose skills view">
         <button class="skills-view-btn is-active" type="button" data-skills-view-button="graph" aria-pressed="true">{skillViewLabels.graph}</button>
         <button class="skills-view-btn" type="button" data-skills-view-button="cards" aria-pressed="false">{skillViewLabels.cards}</button>
@@ -374,22 +389,40 @@ const projectsData = cvDataEn.projects.slice(0, 6).map(p => {
       </div>
     </section>
 
-    <!-- ── EXPERIENCE ─────────────────────────────────────────────── -->
+    <!-- ── EXPERIENCE (clustered) ──────────────────────────────────── -->
     <section class="exp-section reveal delay-200" aria-label="Work experience">
       <h2 class="section-title">
         <span>Experience</span>
-        <span class="section-subtitle">{cvDataEn.experience.length} roles across 5 countries</span>
+        <span class="section-subtitle">{cvDataEn.experience.length} roles — 4 clusters</span>
       </h2>
-      <div class="exp-grid">
-        {featuredExpData.map(exp => (
-          <ExpCard {...exp} />
+      <div class="exp-clusters">
+        {expClustersEn.map(cluster => (
+          <div class="exp-cluster" data-cluster={cluster.key} {...(cluster.isDefaultOpen ? { 'data-open': '' } : {})}>
+            <button class="exp-cluster__header" type="button" aria-expanded={cluster.isDefaultOpen ? 'true' : 'false'} aria-controls={`cluster-body-${cluster.key}`}>
+              <span class="exp-cluster__name">{cluster.label}</span>
+              <div class="exp-cluster__meta">
+                {cluster.tags.split(' ').map(tag => (
+                  <span class="exp-cluster__tag-dot" data-tag={tag}></span>
+                ))}
+                <span class="exp-cluster__count">{cluster.items.length}</span>
+              </div>
+              <span class="exp-cluster__chevron" aria-hidden="true">›</span>
+            </button>
+            <div class="exp-cluster__body" id={`cluster-body-${cluster.key}`}>
+              <div class="exp-grid">
+                {cluster.items.map(exp => (
+                  <ExpCard {...exp} />
+                ))}
+              </div>
+            </div>
+          </div>
         ))}
       </div>
     </section>
 
     <!-- ── AI WORKFLOW ─────────────────────────────────────────────── -->
-    <section class="ai-section reveal delay-300" aria-label="AI-Enhanced Workflow">
-      <h2 class="section-title">
+    <section class="ai-section reveal delay-300" id="ai-section" aria-label="AI-Enhanced Workflow">
+      <h2 class="section-title ai-title">
         <span>AI-Enhanced Workflow</span>
         <span class="ai-title__clip" aria-hidden="true">
           <span class="ai-title__clip-pin"></span>
@@ -398,7 +431,7 @@ const projectsData = cvDataEn.projects.slice(0, 6).map(p => {
         <span class="section-subtitle">How AI multiplies output without replacing judgement</span>
       </h2>
       <div class="ai-grid">
-        {aiItems.map(item => (
+        {cvDataEn.aiWorkflow.map(item => (
           <AiCard {...item} />
         ))}
       </div>
@@ -426,6 +459,25 @@ const projectsData = cvDataEn.projects.slice(0, 6).map(p => {
       </div>
     </section>
 
+    <!-- ── GROWTH AREAS ─────────────────────────────────────────────── -->
+    {cvDataEn.growthAreas.length > 0 && (
+      <section class="growth-section reveal" aria-label="Areas of conscious growth">
+        <h2 class="section-title">
+          <span>Self-awareness</span>
+          <span class="section-subtitle">Growing areas reframed as strengths</span>
+        </h2>
+        <div class="growth-grid">
+          {cvDataEn.growthAreas.map(area => (
+            <article class="growth-card cv-card" data-tags="tech creative human management">
+              <p class="growth-card__label">Growing area</p>
+              <p class="growth-card__name">{area.name}</p>
+              <p class="growth-card__reframe">{area.reframe}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+    )}
+
     <!-- ── PROJECTS ────────────────────────────────────────────────── -->
     <section class="projects-section reveal" aria-label="Personal projects">
       <h2 class="section-title"><span>Projects</span></h2>
@@ -435,7 +487,30 @@ const projectsData = cvDataEn.projects.slice(0, 6).map(p => {
         ))}
       </div>
     </section>
-
+    <!-- ── SOCIAL IMPACT ────────────────────────────────────────────────── -->
+    {cvDataEn.socialImpact.length > 0 && (
+      <section class="social-impact-section reveal" aria-label="Social impact">
+        <h2 class="section-title">
+          <span>Beyond the Code</span>
+          <span class="section-subtitle">Real-world actions beyond the screen</span>
+        </h2>
+        <div class="social-impact-grid">
+          {cvDataEn.socialImpact.map(item => (
+            <article class="social-impact-card cv-card" data-tags="human management">
+              <p class="social-impact-card__label">Impact</p>
+              <p class="social-impact-card__name">{item.name}</p>
+              {item.tags && item.tags.length > 0 && (
+                <div class="social-impact-card__tags">
+                  {item.tags.map((tag: string) => (
+                    <span class="social-impact-card__tag">{tag}</span>
+                  ))}
+                </div>
+              )}
+            </article>
+          ))}
+        </div>
+      </section>
+    )}
     <!-- ── EDUCATION & CERTIFICATIONS ─────────────────────────────── -->
     <section class="edu-section reveal" aria-label="Education and certifications">
       <div class="edu-header">
@@ -474,6 +549,16 @@ const projectsData = cvDataEn.projects.slice(0, 6).map(p => {
 
   <!-- ────────────────────────────────────────────────────────── FOOTER -->
   <footer class="cv-footer">
+    {cvDataEn.interests.length > 0 && (
+      <div class="interests-strip">
+        <p class="interests-label">Interests</p>
+        <ul class="interests-chips" role="list">
+          {cvDataEn.interests.map(interest => (
+            <li class="interest-chip">{interest}</li>
+          ))}
+        </ul>
+      </div>
+    )}
     <p class="cv-footer__credit">
       Giulio Occhipinti · <a href="mailto:giulio.occhipinti.g@gmail.com">giulio.occhipinti.g@gmail.com</a>
     </p>

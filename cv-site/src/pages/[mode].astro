@@ -152,6 +152,44 @@ const featuredExpData = cvData.experience.map((exp, i) => ({
     exp.skills?.some(s => ['MCP Protocol','Prompt Engineering','GitHub Copilot','Claude','Cursor','AI Orchestration','MCP'].includes(s))),
 }));
 
+// ── Experience clusters ────────────────────────────────────────────────────
+const EXP_CLUSTER_DEFS = [
+  {
+    key: 'tech',
+    label: 'Sviluppo Software & AI',
+    tags: 'tech management',
+    openForModes: ['tech', 'management'],
+    indices: [0, 1, 2, 5, 6, 7],
+  },
+  {
+    key: 'creative',
+    label: 'Design & Comunicazione',
+    tags: 'creative',
+    openForModes: ['creative'],
+    indices: [3, 4, 9, 10, 11, 12],
+  },
+  {
+    key: 'human',
+    label: 'Facilitazione & Cultura',
+    tags: 'human management',
+    openForModes: ['human', 'management'],
+    indices: [8, 13, 20, 21],
+  },
+  {
+    key: 'roots',
+    label: 'Radici',
+    tags: 'human creative',
+    openForModes: ['human', 'creative'],
+    indices: [14, 15, 16, 17, 18, 19],
+  },
+];
+
+const expClusters = EXP_CLUSTER_DEFS.map(cluster => ({
+  ...cluster,
+  isDefaultOpen: cluster.openForModes.includes(mode),
+  items: cluster.indices.map(i => featuredExpData[i]).filter(Boolean),
+}));
+
 const skillViewLabels = {
   graph: 'Grafico',
   cards: 'Card',
@@ -174,44 +212,6 @@ const softSkillsData = cvData.softSkills.map((skill, i) => ({
   description: skill.description ?? '',
   modeTags: SOFT_MODE_TAGS[i] ?? 'tech creative human',
 }));
-
-const aiItems = [
-  {
-    tool: 'GitHub Copilot',
-    title: 'Accelerazione sviluppo Angular enterprise',
-    desc: "Generazione di boilerplate NGRX, testing Jest e pattern architetturali ripetitivi, con validazione critica dell'output.",
-    impact: '-87% boilerplate',
-    tags: 'tech',
-  },
-  {
-    tool: 'ChatGPT / Claude',
-    title: 'Prompt Engineering per prototipazione UX',
-    desc: 'User personas, flussi di navigazione e scenari di test da brief testuali. Applicato nella fase UX Research IBM.',
-    impact: '-90% discovery time',
-    tags: 'creative tech',
-  },
-  {
-    tool: 'Claude / GPT-4',
-    title: 'Code review e architettura Angular',
-    desc: 'Analisi di code smell, refactoring e revisione architetture a microfrontend con LLM come pair reviewer.',
-    impact: '-60% debug time',
-    tags: 'tech',
-  },
-  {
-    tool: 'Midjourney',
-    title: 'Visual exploration per brief UX/UI',
-    desc: 'Moodboard e concept visivi veloci per allineare stakeholder prima del wireframing, senza iterazioni costose.',
-    impact: '-70% cicli allineamento',
-    tags: 'creative',
-  },
-  {
-    tool: 'AI Tools',
-    title: 'Copywriting e documentazione tecnica',
-    desc: 'SEO copy, varianti A/B per landing page e documentazione tecnica da codice annotato.',
-    impact: '+3x velocità contenuti',
-    tags: 'creative',
-  },
-];
 
 const availLabel =
   cvData.personal.availability === 'available' ? 'Disponibile subito' :
@@ -362,6 +362,12 @@ const modeLabel = mode.charAt(0).toUpperCase() + mode.slice(1);
         <span class="section-subtitle">Force-directed network delle competenze - hover e drag per esplorare</span>
       </h2>
       <h3 class="skills-sub-title">Competenze tecniche, management e human — livello &amp; glow proporzionale</h3>
+      <div class="skills-legend" aria-hidden="true" role="presentation">
+        <span class="skills-legend__item" style="--legend-border: 1px">Base</span>
+        <span class="skills-legend__item" style="--legend-border: 2px">Intermedio</span>
+        <span class="skills-legend__item" style="--legend-border: 3px">Avanzato</span>
+        <span class="skills-legend__item" style="--legend-border: 4px">Esperto</span>
+      </div>
       <div class="skills-view-toggle" role="tablist" aria-label="Scegli vista competenze">
         <button class="skills-view-btn is-active" type="button" data-skills-view-button="graph" aria-pressed="true">{skillViewLabels.graph}</button>
         <button class="skills-view-btn" type="button" data-skills-view-button="cards" aria-pressed="false">{skillViewLabels.cards}</button>
@@ -385,11 +391,29 @@ const modeLabel = mode.charAt(0).toUpperCase() + mode.slice(1);
       <img class="bg-knoll bg-knoll--flashlight" src="/knolling/flashlight.webp" aria-hidden="true" alt="">
       <h2 class="section-title">
         <span>Esperienze</span>
-        <span class="section-subtitle">{cvData.experience.length} ruoli in 5 paesi</span>
+        <span class="section-subtitle">{cvData.experience.length} ruoli in 5 paesi — espandi il cluster per esplorare</span>
       </h2>
-      <div class="exp-grid">
-        {featuredExpData.map(exp => (
-          <ExpCard {...exp} />
+      <div class="exp-clusters">
+        {expClusters.map(cluster => (
+          <div class="exp-cluster" data-cluster={cluster.key} {...(cluster.isDefaultOpen ? { 'data-open': '' } : {})}>
+            <button class="exp-cluster__header" type="button" aria-expanded={cluster.isDefaultOpen ? 'true' : 'false'} aria-controls={`cluster-body-${cluster.key}`}>
+              <span class="exp-cluster__name">{cluster.label}</span>
+              <div class="exp-cluster__meta">
+                {cluster.tags.split(' ').map(tag => (
+                  <span class="exp-cluster__tag-dot" data-tag={tag}></span>
+                ))}
+                <span class="exp-cluster__count">{cluster.items.length}</span>
+              </div>
+              <span class="exp-cluster__chevron" aria-hidden="true">›</span>
+            </button>
+            <div class="exp-cluster__body" id={`cluster-body-${cluster.key}`}>
+              <div class="exp-grid">
+                {cluster.items.map(exp => (
+                  <ExpCard {...exp} />
+                ))}
+              </div>
+            </div>
+          </div>
         ))}
       </div>
     </section>
@@ -405,7 +429,7 @@ const modeLabel = mode.charAt(0).toUpperCase() + mode.slice(1);
         <span class="section-subtitle">Come l'AI moltiplica l'output senza sostituire il giudizio</span>
       </h2>
       <div class="ai-grid">
-        {aiItems.map(item => (
+        {cvData.aiWorkflow.map(item => (
           <AiCard {...item} />
         ))}
       </div>
@@ -433,6 +457,25 @@ const modeLabel = mode.charAt(0).toUpperCase() + mode.slice(1);
       </div>
     </section>
 
+    <!-- ── GROWTH AREAS ─────────────────────────────────────────────── -->
+    {cvData.growthAreas.length > 0 && (
+      <section class="growth-section reveal" aria-label="Aree di crescita consapevole">
+        <h2 class="section-title">
+          <span>Consapevolezza</span>
+          <span class="section-subtitle">Aree in evoluzione reincorniciate come risorse</span>
+        </h2>
+        <div class="growth-grid">
+          {cvData.growthAreas.map(area => (
+            <article class="growth-card cv-card" data-tags="tech creative human management">
+              <p class="growth-card__label">Area in evoluzione</p>
+              <p class="growth-card__name">{area.name}</p>
+              <p class="growth-card__reframe">{area.reframe}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+    )}
+
     <!-- ── PROJECTS ────────────────────────────────────────────────── -->
     <section class="projects-section reveal" aria-label="Progetti personali">
       <h2 class="section-title"><span>Progetti</span></h2>
@@ -442,7 +485,30 @@ const modeLabel = mode.charAt(0).toUpperCase() + mode.slice(1);
         ))}
       </div>
     </section>
-
+    <!-- ── SOCIAL IMPACT ────────────────────────────────────────────────── -->
+    {cvData.socialImpact.length > 0 && (
+      <section class="social-impact-section reveal" aria-label="Impatto sociale">
+        <h2 class="section-title">
+          <span>Impatto</span>
+          <span class="section-subtitle">Oltre il codice — azioni concrete nel mondo reale</span>
+        </h2>
+        <div class="social-impact-grid">
+          {cvData.socialImpact.map(item => (
+            <article class="social-impact-card cv-card" data-tags="human management">
+              <p class="social-impact-card__label">Impatto</p>
+              <p class="social-impact-card__name">{item.name}</p>
+              {item.tags && item.tags.length > 0 && (
+                <div class="social-impact-card__tags">
+                  {item.tags.map(tag => (
+                    <span class="social-impact-card__tag">{tag}</span>
+                  ))}
+                </div>
+              )}
+            </article>
+          ))}
+        </div>
+      </section>
+    )}
     <!-- ── FORMAZIONE & CERTIFICAZIONI ────────────────────────────── -->
     <section class="edu-section reveal" aria-label="Formazione e certificazioni">
       <div class="edu-header">
@@ -481,6 +547,16 @@ const modeLabel = mode.charAt(0).toUpperCase() + mode.slice(1);
 
   <!-- ────────────────────────────────────────────────────────── FOOTER -->
   <footer class="cv-footer">
+    {cvData.interests.length > 0 && (
+      <div class="interests-strip">
+        <p class="interests-label">Interessi</p>
+        <ul class="interests-chips" role="list">
+          {cvData.interests.map(interest => (
+            <li class="interest-chip">{interest}</li>
+          ))}
+        </ul>
+      </div>
+    )}
     <p class="cv-footer__credit">
       Giulio Occhipinti · <a href="mailto:giulio.occhipinti.g@gmail.com">giulio.occhipinti.g@gmail.com</a>
     </p>
