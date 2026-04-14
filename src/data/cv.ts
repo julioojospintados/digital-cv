@@ -171,6 +171,10 @@ export interface AiWorkflowItem {
 
 export interface Feedback {
   name: string;
+  /** Job title of the person giving the feedback (e.g., "Recruiter / Head Hunter") */
+  role?: string;
+  /** Free-text testimonial — optional, can be added later */
+  quote?: string;
   keywords: string[];
 }
 
@@ -1918,6 +1922,7 @@ export const cvData = {
   feedbacks: [
     {
       name: "Lorenzo Rando",
+      role: "Recruiter / Head Hunter",
       keywords: [
         "dialettica",
         "umorismo",

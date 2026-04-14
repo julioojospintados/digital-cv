@@ -57,12 +57,12 @@ Digital_CV/
 │       │       ├── AiCard.astro    ← Card AI-enhanced workflow (badge impactScore)
 │       │       ├── ProjectCard.astro ← Card progetto (tech stack, link)
 │       │       ├── SkillSquare.astro  ← Skill quadrato con glow (NO barre %)
-│       │       ├── SoftItem.astro  ← Item soft / transversal skill
-│       │       └── EduItem.astro   ← Item formazione / certificazione
+│       │       └── SoftItem.astro  ← Item soft / transversal skill
 │       │
 │       ├── islands/                ← Lit web components interattivi (client-side)
 │       │   ├── GoLogo.lit.ts       ← <go-logo>: logo animato, click = reset a /, cambia colore per mode
-│       │   ├── ModeSwitcher.ts     ← <mode-switcher>: selettore TECH / CREATIVE / HUMAN / MANAGEMENT
+│       │   ├── FloatingMenu.lit.ts ← <floating-menu>: FAB contatti / feedback / AI-section
+│       │   ├── SkillForceGraph.lit.ts ← <skill-force-graph>: grafo D3 force-directed
 │       │   └── stores/
 │       │       ├── modeStore.ts    ← NanoStore globale per il mode attivo (tech/creative/human/management)
 │       │       └── modeStore.test.ts

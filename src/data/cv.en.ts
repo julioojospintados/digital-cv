@@ -1516,6 +1516,7 @@ export const cvDataEn = {
   feedbacks: [
     {
       name: "Lorenzo Rando",
+      role: "Recruiter / Head Hunter",
       keywords: [
         "articulate",
         "humour",

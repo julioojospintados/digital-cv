@@ -119,10 +119,10 @@ cv-site/                  ← Astro site (the actual CV)
         ProjectCard.astro ← Project card (tech stack, links)
         SkillSquare.astro ← Skill square with glow (NO progress bars)
         SoftItem.astro    ← Soft / transversal skill item
-        EduItem.astro     ← Education / certification item
     islands/              ← Lit interactive web components
       GoLogo.lit.ts       ← <go-logo>: animated logo, click = reset to /, mode-reactive color
-      ModeSwitcher.ts     ← <mode-switcher>: TECH/CREATIVE/HUMAN/MANAGEMENT switcher
+      FloatingMenu.lit.ts ← <floating-menu>: FAB with contact/feedback/AI-section links
+      SkillForceGraph.lit.ts ← <skill-force-graph>: D3 force-directed skill network
       stores/modeStore.ts ← NanoStore for global mode state (tech/creative/human/management)
     styles/global.css     ← CSS custom properties for 4 modes
     layouts/Layout.astro  ← Base layout
@@ -221,11 +221,12 @@ cv-site/
   src/
     pages/            ← Astro pages (index.astro, cv.astro, en/)
     components/       ← Static Astro components
-      cards/          ← Reusable cards (ExpCard, AiCard, ProjectCard, SkillSquare, SoftItem, EduItem)
+      cards/          ← Reusable cards (ExpCard, AiCard, ProjectCard, SkillSquare, SoftItem)
     islands/          ← Lit interactive web components
-      GoLogo.lit.ts   ← <go-logo> web component
-      ModeSwitcher.ts ← <mode-switcher>: TECH/CREATIVE/HUMAN/MANAGEMENT
-      stores/modeStore.ts ← NanoStore for global mode (tech/creative/human/management)
+      GoLogo.lit.ts          ← <go-logo> web component
+      FloatingMenu.lit.ts    ← <floating-menu> FAB
+      SkillForceGraph.lit.ts ← <skill-force-graph> D3 network
+      stores/modeStore.ts    ← NanoStore for global mode (tech/creative/human/management)
     styles/global.css ← CSS custom properties for 4 modes
     layouts/Layout.astro ← Base layout
 .vscode/
