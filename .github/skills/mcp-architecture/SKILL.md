@@ -73,6 +73,9 @@ src/
 Sezioni esportate: `personal` · `social` · `languages` · `experience` · `education`
 · `certifications` · `technicalSkills` · `softSkills` · `transversalSkills`
 · `methodology` · `growthAreas` · `projects` · `interests` · `socialImpact`
+· `aiWorkflow` · `valueFlows` · `feedbacks`
+
+L'interfaccia `Feedback` ha: `name`, `role?`, `quote?`, `keywords[]`.
 
 ---
 

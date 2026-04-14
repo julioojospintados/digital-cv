@@ -1,6 +1,6 @@
 ---
 name: identity
-description: "Chi è Giulio Occhipinti — AI Specialist & Consulente Tecnico, digitale e marketing per PMI, sviluppatore software, ha lavorato come tech lead, esperto in gestione del team e del progetto tramite metodologia agile e UI/UI expert. Carica quando: scrivi bio, testi di presentazione, copy delle card, descrizioni esperienze, tone of voice, storytelling, identità professionale, frasi guida, job hunting, target recruiter/CTO/art director, narrativa GO, 3 atti, preloader."
+description: "Chi è Giulio Occhipinti — Consulente per l'Innovazione Digitale & Partner Tecnico per PMI. Profilo multidisciplinare: Tech (Angular, Lit, MCP, Node.js), Design (UX/UI cert. IBM), Metodo (Agile snello). Carica quando: scrivi bio, testi di presentazione, copy delle card, descrizioni esperienze, tone of voice, storytelling, identità professionale, frasi guida, job hunting, target recruiter/CTO/art director/management, narrativa GO, 4 mode (tech/creative/human/management), preloader."
 ---
 
 ## 🎯 Regole di Copywriting Strategico (AIDA/PAS)

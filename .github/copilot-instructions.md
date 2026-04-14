@@ -132,10 +132,11 @@ Quando leggi il file `.todo.md` depenna i punti completati, ma non sentirti obbl
 
 Il **sito principale** (`cv-site/`) usa:
 
-- **Astro** (shell statica, routing)
-- **Lit** (web components interattivi — "islands")
-- **Tailwind CSS** (grid, spacing, utilities)
-- **NanoStores** (stato globale mode: tech / creative / human)
+- **Astro** (shell statica, routing statico per mode)
+- **Lit** (web components interattivi — 3 islands: GoLogo, FloatingMenu, SkillForceGraph)
+- **NanoStores** (stato globale mode: tech / creative / human / management)
+- **GSAP** + **ScrollTrigger** (animazioni, reveal, warp navigation)
+- **D3** (grafo skill force-directed)
 - **View Transitions API** (transizioni animate)
 
 ---
@@ -150,7 +151,9 @@ Il **sito principale** (`cv-site/`) usa:
 Entrambi esportano `cvData` / `cvDataEn` con le sezioni:
 `personal`, `social`, `languages`, `experience`, `education`, `certifications`,
 `technicalSkills`, `softSkills`, `transversalSkills`, `methodology`, `growthAreas`,
-`projects`, `interests`, `socialImpact`
+`projects`, `interests`, `socialImpact`, `aiWorkflow`, `valueFlows`, `feedbacks`
+
+L'interfaccia `Feedback` ha: `name`, `role?`, `quote?`, `keywords[]`.
 
 **Non modificare la struttura dei tipi in `cv.ts` senza aggiornare anche `cv.en.ts`.**
 
@@ -161,13 +164,16 @@ Entrambi esportano `cvData` / `cvDataEn` con le sezioni:
 Il sito si chiama **Knolling / Flat Lay CV**: ogni elemento (esperienza, skill, progetto) è un
 "oggetto" disposto su un piano visivo come in una fotografia knolling.
 
-**3 modalità globali** (impostabili via URL `?mode=...` e `localStorage`):
+**4 modalità globali** — il mode = route Astro, non URL param:
 
-| Mode     | URL param        | Focus                                                     |
-| -------- | ---------------- | --------------------------------------------------------- |
-| TECH     | `?mode=tech`     | Architetture, codice, sistemi. Tema scuro, neon verde/blu |
-| CREATIVE | `?mode=creative` | Racconto, immagine, suono. Tema caldo, editoriale         |
-| HUMAN    | `?mode=human`    | Impatto, relazione, presenza. Tema neutro carta           |
+| Mode       | Route         | Accent                   | Focus                                                |
+| ---------- | ------------- | ------------------------ | ---------------------------------------------------- |
+| TECH       | `/tech`       | Cyan `rgba(0,255,200,1)` | Architetture, codice, sistemi                        |
+| CREATIVE   | `/creative`   | Arancione `rgba(255,107,53,1)` | Racconto, immagine, suono                      |
+| HUMAN      | `/human`      | Oro `rgba(240,200,127,1)` | Impatto, relazione, presenza                        |
+| MANAGEMENT | `/management` | Viola `rgba(180,100,255,1)` | Metodo, Agile, PMI, consulenza strategica         |
+
+Tutti e 4 i mode usano sfondo ottanio `rgba(8,73,67,1)` — solo `--color-accent` cambia.
 
 **Regola card**: ogni card ha tag (`tech`, `creative`, `human`, `logic`, `agile`, ecc.).
 Il mode attivo porta le card con tag corrispondenti a `opacity: 1`, le altre a `opacity: var(--card-opacity-passive)`.
@@ -199,10 +205,12 @@ src/                      ← MCP server + HTTP API (Node.js / TypeScript)
 
 cv-site/                  ← Sito Astro (il CV vero e proprio)
   src/
-    pages/                ← Astro pages (index, cv, en/)
-    components/           ← Componenti Astro statici
-    islands/              ← Lit web components interattivi (da creare)
-    styles/global.css     ← CSS custom properties per i 3 mode
+    pages/                ← Astro pages (index, home, [mode], en/cv)
+    components/cards/     ← Componenti Astro statici (ExpCard, AiCard, ProjectCard, SkillSquare, SoftItem)
+    islands/              ← Lit web components (GoLogo, FloatingMenu, SkillForceGraph)
+    islands/stores/       ← NanoStore modeStore
+    scripts/              ← GSAP init scripts (cv-init.ts, index-init.ts)
+    styles/global.css     ← CSS custom properties per i 4 mode
   DESIGN.md               ← Specifica completa design system
 
 .vscode/

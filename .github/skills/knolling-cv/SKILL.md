@@ -28,22 +28,50 @@ Questo progetto ha 4 skill specializzate. Carica quella piu pertinente alla rich
 
 ### Mode System — Core
 
-3 mode globali (URL `?mode=...` + localStorage):
+4 mode globali (URL `/<mode>` — route statica Astro):
 
 | Mode | Accent | Focus |
 |---|---|---|
-| tech | Cyan rgba(0,255,200,1) | Architetture, codice, AI |
-| creative | Arancione rgba(255,107,53,1) | Storytelling, estetica, fotografia |
-| human | Oro rgba(240,200,127,1) | Impatto, relazione, autonomia strategica |
+| tech | Cyan `rgba(0,255,200,1)` | Architetture, codice, AI |
+| creative | Arancione `rgba(255,107,53,1)` | Storytelling, estetica, fotografia |
+| human | Oro `rgba(240,200,127,1)` | Impatto, relazione, autonomia strategica |
+| management | Viola `rgba(180,100,255,1)` | Metodo, Agile, PMI, consulenza strategica |
 
 Il mode cambia **solo l'enfasi visiva** — mai il template, mai la struttura.
-Lo sfondo e **sempre ottanio** rgba(8,73,67,1). Mai hardcodare colori.
+Lo sfondo è **sempre ottanio** rgba(8,73,67,1). Mai hardcodare colori.
+
+### Routing del sito (Astro)
+
+| URL | File | Ruolo |
+|---|---|---|
+| `/` | `index.astro` | Entry con preloader GO |
+| `/home` | `home.astro` | Landing con le 4 mode-card (knolling) |
+| `/tech` `/creative` `/human` `/management` | `[mode].astro` | Pagina CV filtrata per mode |
+| `/en/cv` | `en/cv.astro` | Versione inglese del CV |
+| `/cv` | redirect → `/tech` | Legacy |
+
+### Islands Lit attive
+
+| File | Custom element | Scopo |
+|---|---|---|
+| `GoLogo.lit.ts` | `<go-logo>` | Logo animato, click = reset a `/`, colore mode-reactive |
+| `FloatingMenu.lit.ts` | `<floating-menu>` | FAB: contatti, feedback, AI-section |
+| `SkillForceGraph.lit.ts` | `<skill-force-graph>` | Grafo D3 force-directed delle skill |
 
 ### Data Source of Truth
 
-- src/data/cv.ts — dati IT (unica fonte di verita)
-- src/data/cv.en.ts — dati EN (importa i tipi da cv.ts)
+### Data Source of Truth
+
+- `src/data/cv.ts` — dati IT (unica fonte di verità)
+- `src/data/cv.en.ts` — dati EN (importa i tipi da cv.ts)
 - Non modificare i tipi in cv.ts senza aggiornare cv.en.ts.
+
+Sezioni esportate: `personal` · `social` · `languages` · `experience` · `education`
+· `certifications` · `technicalSkills` · `softSkills` · `transversalSkills`
+· `methodology` · `growthAreas` · `projects` · `interests` · `socialImpact`
+· `aiWorkflow` · `valueFlows` · `feedbacks`
+
+L'interfaccia `Feedback` ha: `name`, `role?`, `quote?`, `keywords[]`.
 
 ---
 

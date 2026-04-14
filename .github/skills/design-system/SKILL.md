@@ -1,6 +1,6 @@
 ---
 name: design-system
-description: "Regole visual e tecniche del Digital CV. Carica quando: crei componenti UI, animazioni GSAP, layout, card, skill grid, knolling, mode system, colori, tipografia, responsive, mobile, GoLogo, ModeSwitcher, Lit islands, Tailwind 4, Awwwards, cursor custom, smooth scroll, bento grid, preloader, View Transitions, ottanio, accent."
+description: "Regole visual e tecniche del Digital CV. Carica quando: crei componenti UI, animazioni GSAP, layout, card, skill grid, knolling, mode system (4 mode: tech/creative/human/management), colori, tipografia, responsive, mobile, GoLogo, FloatingMenu, SkillForceGraph, Lit islands, Awwwards, cursor custom, smooth scroll, bento grid, preloader, View Transitions, ottanio, accent, viola management."
 ---
 
 # Design System — Knolling CV
@@ -37,18 +37,25 @@ Lo sfondo è **sempre ottanio** `rgba(8,73,67,1)` in tutti e 3 i mode. Solo `--c
   /* WCAG AA ~5.7:1 su bg ottanio */ --color-accent: /* vedi tabella mode */;
 ```
 
-| Mode       | `--color-accent`        | `--color-text-muted` (WCAG AA verificato) | Target                   |
-| ---------- | ----------------------- | ----------------------------------------- | ------------------------ |
-| default    | `rgba(255,255,255,0.9)` | `rgba(192,220,215,0.85)` — ~5.7:1 ✅      | nessun mode attivo       |
-| `tech`     | `rgba(0,255,200,1)`     | `rgba(0,255,200,0.70)` — ~4.8:1 ✅        | CTO, recruiter tecnico   |
-| `creative` | `rgba(255,107,53,1)`    | `rgba(255,195,155,0.82)` — ~4.9:1 ✅      | Art director, agenzia    |
-| `human`    | `rgba(240,200,127,1)`   | `rgba(240,210,148,0.75)` — ~4.6:1 ✅      | HR, fondatore, no-profit |
+| Mode         | `--color-accent`        | `--color-text-muted` (WCAG AA verificato) | Target                      |
+| ------------ | ----------------------- | ----------------------------------------- | --------------------------- |
+| default      | `rgba(255,255,255,0.9)` | `rgba(192,220,215,0.85)` — ~5.7:1 ✅      | nessun mode attivo          |
+| `tech`       | `rgba(0,255,200,1)`     | `rgba(0,255,200,0.70)` — ~4.8:1 ✅        | CTO, recruiter tecnico      |
+| `creative`   | `rgba(255,107,53,1)`    | `rgba(255,195,155,0.82)` — ~4.9:1 ✅      | Art director, agenzia       |
+| `human`      | `rgba(240,200,127,1)`   | `rgba(240,210,148,0.75)` — ~4.6:1 ✅      | HR, fondatore, no-profit    |
+| `management` | `rgba(180,100,255,1)`   | `rgba(200,170,255,0.78)` — ~4.6:1 ✅      | Recruiter, PMI, innovazione |
 
 ### Token NON esistenti — non usarli mai
 
 - ~~`--color-ottanio-dark`~~ — rimosso (era inutilizzato)
 - ~~`--color-ottanio-light`~~ — rimosso (era inutilizzato)
 - ~~`--color-accent-2`~~ — rimosso (era inutilizzato in tutti i mode)
+
+### Mode `management` — Spec
+
+Accent viola `rgba(180,100,255,1)`. Target: recruiter, PMI, contenuti su metodo e consulenza.
+Le card con `data-tags="management"` sono attive in questo mode.
+L'oggetto knolling associato al management è `chess.png` (strategia) e `compass.png` (orientamento).
 
 ---
 
@@ -105,16 +112,16 @@ Il CSS gestisce `opacity` e `transform` in base a `data-state`.
 
 8 PNG con sfondo trasparente in `cv-site/public/knolling/`:
 
-| File              | Mode             | Significato simbolico         |
-| ----------------- | ---------------- | ----------------------------- |
-| `laptop.png`      | tech             | Il lavoro digitale, il codice |
-| `flashlight.webp` | tech             | Illuminare problemi complessi |
-| `multitool.png`   | tech + creative  | Versatilità, problem solving  |
-| `camera.png`      | creative         | Fotografia, visione estetica  |
-| `megaphone.png`   | creative + human | Comunicazione, palco, voce    |
-| `chess.png`       | human            | Strategia, pensiero laterale  |
-| `plant.png`       | human            | Crescita, cura, impatto       |
-| `compass.png`     | creative + human | Orientamento, esplorazione    |
+| File              | Mode                    | Significato simbolico         |
+| ----------------- | ----------------------- | ----------------------------- |
+| `laptop.png`      | tech + management       | Il lavoro digitale, il codice |
+| `flashlight.webp` | tech + management       | Illuminare problemi complessi |
+| `multitool.png`   | tech + creative + mgmt  | Versatilità, problem solving  |
+| `camera.png`      | creative                | Fotografia, visione estetica  |
+| `megaphone.png`   | creative + human + mgmt | Comunicazione, palco, voce    |
+| `chess.png`       | human + management      | Strategia, pensiero laterale  |
+| `plant.png`       | human + management      | Crescita, cura, impatto       |
+| `compass.png`     | creative + human + mgmt | Orientamento, esplorazione    |
 
 Posizionamento via CSS custom properties `--kx`, `--ky`, `--kr`, `--ks` (e `--kfx` per flip X).
 GSAP anima ingresso (`.do-enter`) e cambio mode (`.is-hero` / `.is-dim`).

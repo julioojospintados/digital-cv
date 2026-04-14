@@ -9,144 +9,124 @@ applyTo: "cv-site/src/**"
 ## Stack
 
 - **Astro** (static shell, routing, page structure)
-- **Lit** (interactive islands: card, skill grid, mode switcher, AI workflow)
-- **Tailwind CSS** (utility classes, grid, spacing)
+- **Lit** (interactive islands — only 3 exist, see below)
 - **NanoStores** (`@nanostores/persistent`) for global mode state
-- **View Transitions API** for mode and page transitions
+- **GSAP** + **ScrollTrigger** for animations (in `cv-init.ts` / `index-init.ts`)
+- **D3** for the force-directed skill graph (inside `SkillForceGraph.lit.ts`)
+- **View Transitions API** for page transitions
 
 ## Mode system
 
-The site has 3 modes: `tech | creative | human`.
-- Store: `src/islands/stores/modeStore.ts` — export a `nanostores/persistent` atom
-- URL: always reflect mode as `?mode=tech` (use `URLSearchParams` on load + on change)
-- DOM: set `document.documentElement.dataset.mode = mode` — CSS tokens handle the rest
-- Persist: `localStorage` via NanoStores persistent
-- Transitions: ALWAYS wrap mode changes in `document.startViewTransition(() => { ... })`
+The site has **4 modes**: `tech | creative | human | management`.
+
+Mode = Astro route, not URL param. Each mode is a static page at `/<mode>`:
+- `/tech` → `[mode].astro` with `mode = 'tech'`
+- `/creative` → `[mode].astro` with `mode = 'creative'`
+- `/human` → `[mode].astro` with `mode = 'human'`
+- `/management` → `[mode].astro` with `mode = 'management'`
+
+Mode state is also stored in `modeStore.ts` (NanoStores) and `localStorage`.
+Navigation from home uses a GSAP warp animation then `window.location.href`.
+
+The `data-mode` attribute is set on `<html>` — CSS custom properties handle all visual changes.
+**Never set mode via URL query string** — use the static route instead.
+
+### CSS accent tokens per mode
+
+| Mode | `--color-accent` | `--color-text-muted` |
+|---|---|---|
+| `tech` | `rgba(0,255,200,1)` | `rgba(0,255,200,0.70)` |
+| `creative` | `rgba(255,107,53,1)` | `rgba(255,195,155,0.82)` |
+| `human` | `rgba(240,200,127,1)` | `rgba(240,210,148,0.75)` |
+| `management` | `rgba(180,100,255,1)` | `rgba(200,170,255,0.78)` |
+
+Background is always ottanio `rgba(8,73,67,1)` in every mode.
 
 ## CSS tokens — never hardcode colors
 
 Use CSS custom properties from `src/styles/global.css`:
 - `--color-bg`, `--color-surface`, `--color-border`
 - `--color-text-primary`, `--color-text-muted`
-- `--color-accent`, `--color-accent-2`
+- `--color-accent`
 - `--card-opacity-active`, `--card-opacity-passive`, `--card-scale-passive`
 
-Never write `bg-black`, `text-white` etc. directly. Use `bg-[var(--color-bg)]`.
+Never write `bg-black`, `text-white` etc. directly.
+
+## Routing
+
+| URL | File | Purpose |
+|---|---|---|
+| `/` | `index.astro` | Preloader GO — navigates to `/home` |
+| `/home` | `home.astro` | 4-card mode selector (knolling layout) |
+| `/tech` `/creative` `/human` `/management` | `[mode].astro` | Full CV page filtered by mode |
+| `/en/cv` | `en/cv.astro` | English version of the CV |
+| `/cv` | redirect | → `/tech` |
 
 ## Components
 
-### Astro components (`src/components/`)
-- Static shell only — no interactive state
-- Pass data from `cvData` / `cvDataEn` as props
-- Use `<client:idle>` or `<client:visible>` for Lit islands
+### Astro components (`src/components/cards/`)
+- `ExpCard.astro` — experience card (mode tags, highlights, skills)
+- `AiCard.astro` — AI workflow card (impactScore badge, tool name)
+- `ProjectCard.astro` — project card (tech stack, links)
+- `SkillSquare.astro` — skill square with border/glow (NO progress bars)
+- `SoftItem.astro` — soft/transversal skill list item
 
-### Lit islands (`src/islands/`)
-- One file per interactive component
-- Always use `@customElement('kebab-case-name')`
-- Subscribe to `modeStore` inside `connectedCallback` for reactivity
-- Emit `CustomEvent` for cross-component communication (do not use global variables)
-- Clean up store subscriptions in `disconnectedCallback`
+### Lit islands (`src/islands/`) — only 3 exist
 
-## Card states
+| File | Custom element | Purpose |
+|---|---|---|
+| `GoLogo.lit.ts` | `<go-logo>` | Animated logo, click = `/`, mode-reactive color |
+| `FloatingMenu.lit.ts` | `<floating-menu>` | FAB: contact, feedback, AI-section link |
+| `SkillForceGraph.lit.ts` | `<skill-force-graph>` | D3 force-directed skill network |
 
-Every card has a `state: "active" | "passive"` property.
-- `active`: `opacity: 1`, full content visible, accent border
-- `passive`: `opacity: var(--card-opacity-passive)`, reduced content, no border accent
-- Transition: `transition: opacity 300ms ease, transform 300ms ease`
+**DO NOT reference** `ModeSwitcher.ts`, `EduItem.astro`, `EntryPortal.ts`, `KnollingGrid.ts`,
+`CvCard.ts`, `SkillBento.ts`, `XFactorBadge.ts`, `ImpactBadge.ts` — these do NOT exist.
 
-A card is `active` when its tag array intersects the current mode's tag set:
-```typescript
-const modeTags: Record<string, string[]> = {
-  tech: ["tech", "logic", "agile"],
-  creative: ["creative", "storytelling", "marketing"],
-  human: ["human", "solving", "international"],
-};
-```
+### Mode-reactive nav buttons (in `[mode].astro`)
+Mode switching on the CV page uses `<button data-nav-mode="tech">` buttons + `cv-init.ts`.
+GSAP handles width morph and label crossfade. No Lit component wraps this.
+
+## Card states — mode tag system
+
+Cards have `data-tags="tech creative"` (space-separated). `cv-init.ts` sets `data-state`:
+- `data-state="active"` → `opacity: 1`
+- `data-state="passive"` → `opacity: var(--card-opacity-passive)` (0.2) — NEVER `display:none`
+
+Valid tags: `tech` `creative` `human` `management` (align with mode names).
 
 ## Skill grid — no progress bars
 
-Skill items are squares (`aspect-ratio: 1`) — never use `<progress>` or width-percentage bars.
-Skill level maps to border weight and glow:
+Skill items are squares — never use `<progress>` or width-percentage bars.
+Border weight + glow maps to level:
 - `"Base"` → `border: 1px solid var(--color-border)`
 - `"Intermedio"` → `border: 2px solid var(--color-border)`
 - `"Avanzato"` → `border: 3px solid var(--color-accent); box-shadow: 0 0 6px var(--color-accent)`
-- `"Esperto"` → `border: 4px solid var(--color-accent); box-shadow: 0 0 12px var(--color-accent); transform: scale(1.1)`
+- `"Esperto"` → `border: 4px solid var(--color-accent); box-shadow: 0 0 12px var(--color-accent)`
 
 ## AI Workflow section
 
-Each AI workflow item MUST have:
-- `tool`: name of AI tool used
-- `title`: concise action label
-- `description`: how it is used in practice
-- `example`: before/after concrete case
-- `impactScore`: concise string (`-50% development time`, `+3x output speed`)
-
-`impactScore` is displayed as a badge. Color: green for time saved, blue for multiplied output.
-Never present it as scientific data — it is a narrative estimate, visually styled as data.
-
-## X-Factor badge
-
-Show the `<xfactor-badge>` on cards with:
-- International location (not Italy)
-- `socialImpact` items (always)
-- Skills from `transversalSkills` with tags `human`, `international`
-- "Scrittura e poesia" and "Teatro e improvvisazione" entries
-
-In HUMAN mode: always visible. In TECH/CREATIVE: visible on hover only (`opacity: 0` → `opacity: 1` on `:hover`).
+Each `AiCard` item has: `tool`, `title`, `desc`, `impact`, `tags`.
+`impact` is displayed as a badge (font mono, accent color) — narrative estimate framed as data.
 
 ## View Transitions
 
-- Add `<meta name="view-transition" />` in `Layout.astro`
-- Every navigation and mode switch MUST use `document.startViewTransition()`
-- Assign `view-transition-name` to hero elements (name card, main title, mode switcher)
-- Duration: `150ms` micro, `300ms` state change, `500ms` page transition
+- `<meta name="view-transition" />` is in `Layout.astro`
 - ALWAYS add `@media (prefers-reduced-motion: reduce)` override with `duration: 0ms`
 
 ## Typography rules
 
-- Headings: `Inter` (all modes) except CREATIVE where `Playfair Display` is used for H1/H2
-- Body: `Inter` always
+- All headings/body: `Lexend` (preloaded — weight 800 critical for preloader)
 - Technical data / code snippets: `JetBrains Mono`
-- Quotes / narrative text: `font-style: italic` with `Georgia` in HUMAN mode
-- Labels / badges: `text-xs font-medium tracking-widest uppercase`
+- Labels / badges: font mono, `text-transform: uppercase`, `letter-spacing`
 
 ## Accessibility
 
-- All cards: `role="article"`, descriptive `aria-label`
-- Mode switcher buttons: `aria-pressed={isActive}`, `aria-label="Switch to [MODE] mode"`
-- Skill squares: `role="button"`, `aria-expanded`, `aria-label="[Skill] — [Level] level"`
-- Focus ring: always `outline: 2px solid var(--color-accent); outline-offset: 2px`
-- Contrast: minimum 4.5:1 ratio — verify all mode themes, especially TECH dark mode
-
-## File structure
-
-```
-cv-site/src/
-  islands/
-    stores/
-      modeStore.ts        ← NanoStore persistent atom for mode
-    ModeStore.ts          ← Lit element wrapping the store
-    EntryPortal.ts        ← Landing 3-card portal
-    KnollingGrid.ts       ← Main grid container
-    CvCard.ts             ← Single card with active/passive states
-    SkillBento.ts         ← Bento grid of skills
-    SkillItem.ts          ← Single clickable skill square
-    AiWorkflow.ts         ← AI section container
-    AiWorkflowItem.ts     ← Single AI card with impact score
-    ModeSwitcher.ts       ← Navbar mode toggle
-    LangToggle.ts         ← IT/EN language switch
-    ImpactBadge.ts        ← Impact score badge
-    XFactorBadge.ts       ← X-Factor badge with tooltip
-  pages/
-    index.astro           ← Entry portal (mode=null)
-    cv.astro              ← Main CV page (reads ?mode param)
-    en/
-      index.astro         ← EN entry portal
-      cv.astro            ← EN CV page
-```
+- All interactive cards: `role="button"` or `role="article"` with `aria-label`
+- Nav mode buttons: `aria-pressed={isActive}`
+- Focus ring: `outline: 2px solid var(--color-accent); outline-offset: 2px` (in global.css)
+- Minimum contrast 4.5:1 — token values are pre-calibrated, do not increase transparency
 
 ## Data import
 
 - Italian: `import { cvData } from '@cv-data'`
 - English: `import { cvDataEn } from '@cv-data-en'`
-  Add to `astro.config.mjs`: `'@cv-data': '../../src/data/cv.js'`, `'@cv-data-en': '../../src/data/cv.en.js'`

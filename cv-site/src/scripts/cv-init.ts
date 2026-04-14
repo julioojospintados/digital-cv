@@ -391,10 +391,11 @@ document
     });
   });
 
-// ── ScrollTrigger refresh — fixes Lit web components (SkillForceGraph etc.)
+// ── ScrollTrigger refresh — fixes Lit web components (GoLogo, FloatingMenu etc.)
 // expanding after init and pushing bottom sections out of calculated trigger range.
 // On window.load all resources (including custom elements) are settled;
 // the 500ms fallback covers slow Lit hydration on low-end devices.
+// NOTE: SkillForceGraph is lazy-loaded below — its own .then() calls refresh.
 window.addEventListener("load", () => ScrollTrigger.refresh());
 setTimeout(() => ScrollTrigger.refresh(), 500);
 
@@ -421,3 +422,21 @@ document
       }
     });
   });
+
+// ── Lazy-load SkillForceGraph — D3 (~130 KB gzip) fuori dal percorso critico ──
+// Il grafo viene importato solo quando .skills-section entra nel viewport
+// (con 200px di anticipo), così D3 non blocca il caricamento iniziale.
+if (skillsSection) {
+  const graphObserver = new IntersectionObserver(
+    (entries, obs) => {
+      if (!entries[0].isIntersecting) return;
+      obs.disconnect();
+      import("../islands/SkillForceGraph.lit.ts").then(() => {
+        // Custom element ora registrato — ricalcola trigger ScrollTrigger
+        requestAnimationFrame(() => ScrollTrigger.refresh());
+      });
+    },
+    { rootMargin: "200px 0px" },
+  );
+  graphObserver.observe(skillsSection);
+}
