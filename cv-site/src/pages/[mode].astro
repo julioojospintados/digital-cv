@@ -213,16 +213,6 @@ const softSkillsData = cvData.softSkills.map((skill, i) => ({
   modeTags: SOFT_MODE_TAGS[i] ?? 'tech creative human',
 }));
 
-const availLabel =
-  cvData.personal.availability === 'available' ? 'Disponibile subito' :
-  cvData.personal.availability === 'open' ? 'Open to opportunities' :
-  'Non disponibile';
-
-const availClass =
-  cvData.personal.availability === 'available' ? 'badge--green' :
-  cvData.personal.availability === 'open' ? 'badge--amber' :
-  'badge--gray';
-
 const MONTHS_IT = ['Gen','Feb','Mar','Apr','Mag','Giu','Lug','Ago','Set','Ott','Nov','Dic'];
 function isoToLabel(iso: string): string {
   const [y, m] = iso.split('-');
@@ -314,9 +304,6 @@ const modeLabel = mode.charAt(0).toUpperCase() + mode.slice(1);
     <!-- ── HERO ────────────────────────────────────────────────────── -->
     <section class="hero-section" id="hero">
       <img class="bg-knoll bg-knoll--laptop" src="/knolling/laptop.png" aria-hidden="true" alt="">
-      <div class="hero-badges">
-        <span class={`avail-badge ${availClass}`}>{availLabel}</span>
-      </div>
       <h1 class="hero-name" id="hero-name" aria-label={cvData.personal.name}>
         {cvData.personal.name.split('').map((char, i) => (
           <span
@@ -362,12 +349,6 @@ const modeLabel = mode.charAt(0).toUpperCase() + mode.slice(1);
         <span class="section-subtitle">Force-directed network delle competenze - hover e drag per esplorare</span>
       </h2>
       <h3 class="skills-sub-title">Competenze tecniche, management e human — livello &amp; glow proporzionale</h3>
-      <div class="skills-legend" aria-hidden="true" role="presentation">
-        <span class="skills-legend__item" style="--legend-border: 1px">Base</span>
-        <span class="skills-legend__item" style="--legend-border: 2px">Intermedio</span>
-        <span class="skills-legend__item" style="--legend-border: 3px">Avanzato</span>
-        <span class="skills-legend__item" style="--legend-border: 4px">Esperto</span>
-      </div>
       <div class="skills-view-toggle" role="tablist" aria-label="Scegli vista competenze">
         <button class="skills-view-btn is-active" type="button" data-skills-view-button="graph" aria-pressed="true">{skillViewLabels.graph}</button>
         <button class="skills-view-btn" type="button" data-skills-view-button="cards" aria-pressed="false">{skillViewLabels.cards}</button>

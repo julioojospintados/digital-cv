@@ -3,7 +3,7 @@
 /* ── Knolling background objects in CV sections ──────────────── */
 /*
   Subtle decorative objects positioned at section edges.
-  opacity: 0.04 base — brightens for matching mode via html[data-mode].
+  Desktop opacity is intentionally higher so the objects read as part of the layout.
   position: absolute requires position: relative on parent section.
 */
 .hero-section,
@@ -19,7 +19,7 @@
   position: absolute;
   pointer-events: none;
   user-select: none;
-  opacity: 0.04;
+  opacity: 0.25;
   transition: opacity 0.6s ease;
   z-index: 0;
 }
@@ -34,13 +34,13 @@
 
 /* Mode-reactive opacity */
 html[data-mode="tech"] .bg-knoll--laptop {
-  opacity: 0.08;
+  opacity: 0.25;
 }
 html[data-mode="creative"] .bg-knoll--laptop {
-  opacity: 0.025;
+  opacity: 0.24;
 }
 html[data-mode="human"] .bg-knoll--laptop {
-  opacity: 0.02;
+  opacity: 0.23;
 }
 
 /* Knolling in skills section — multitool right */
@@ -52,13 +52,13 @@ html[data-mode="human"] .bg-knoll--laptop {
 }
 
 html[data-mode="tech"] .bg-knoll--multitool {
-  opacity: 0.07;
+  opacity: 0.25;
 }
 html[data-mode="creative"] .bg-knoll--multitool {
-  opacity: 0.06;
+  opacity: 0.24;
 }
 html[data-mode="human"] .bg-knoll--multitool {
-  opacity: 0.03;
+  opacity: 0.23;
 }
 
 /* Knolling in experience section — flashlight right */
@@ -66,26 +66,26 @@ html[data-mode="human"] .bg-knoll--multitool {
   top: 2rem;
   right: -2rem;
   width: 280px;
-  transform: rotate(180deg);
+  transform: rotate(45deg);
 }
 
 html[data-mode="tech"] .bg-knoll--flashlight {
-  opacity: 0.07;
+  opacity: 0.25;
 }
 html[data-mode="creative"] .bg-knoll--flashlight {
-  opacity: 0.03;
+  opacity: 0.24;
 }
 html[data-mode="human"] .bg-knoll--flashlight {
-  opacity: 0.03;
+  opacity: 0.23;
 }
 html[data-mode="management"] .bg-knoll--flashlight {
-  opacity: 0.06;
+  opacity: 0.24;
 }
 
-/* Mobile: push images further out so they don't overlay text */
+/* Mobile: keep the objects visible but smaller so they stay decorative without covering text */
 @media (max-width: 768px) {
   .bg-knoll {
-    opacity: 0.025 !important;
+    opacity: 0.25 !important;
     width: 120px;
   }
 }
@@ -283,9 +283,13 @@ go-logo:not(:defined) {
   flex-direction: column;
   gap: 4rem;
   --bento-gap: 0.75rem; /* Knolling constant gutter */
-  /* Clip bg-knoll images (right:-Xrem) and any other content that overflows the content
-     area on mobile. Does not affect position:fixed elements (floating-menu, cv-nav). */
-  overflow-x: clip;
+  overflow-x: visible;
+}
+
+@media (max-width: 639px) {
+  .cv-main {
+    overflow-x: clip;
+  }
 }
 
 /* ── Section title ────────────────────────────────────────────── */
@@ -586,38 +590,6 @@ go-logo:not(:defined) {
   transform: scale(0.98);
 }
 
-/* ── Skill legend — border thickness = level ─────────────────── */
-.skills-legend {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-  align-items: center;
-  margin-bottom: 0.75rem;
-}
-
-.skills-legend__item {
-  display: flex;
-  align-items: center;
-  gap: 0.35rem;
-  font-family: var(--font-mono);
-  font-size: 0.54rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--color-text-muted);
-  opacity: 0.65;
-}
-
-.skills-legend__item::before {
-  content: "";
-  width: 11px;
-  height: 11px;
-  border: var(--legend-border) solid var(--color-accent);
-  border-radius: 1px;
-  flex-shrink: 0;
-  opacity: 0.7;
-}
-
 .skills-stage {
   position: relative;
   border: 1px solid var(--skills-panel-border);
@@ -812,11 +784,19 @@ go-logo:not(:defined) {
 }
 
 .exp-cluster__tag-dot {
-  width: 5px;
-  height: 5px;
+  width: 1.1rem;
+  height: 1.1rem;
   border-radius: 1px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   flex-shrink: 0;
-  opacity: 0.7;
+  opacity: 1;
+  font-family: var(--font-mono);
+  font-size: 0.5rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: rgba(8, 73, 67, 1);
 }
 
 .exp-cluster__tag-dot[data-tag="tech"] {
@@ -830,6 +810,26 @@ go-logo:not(:defined) {
 }
 .exp-cluster__tag-dot[data-tag="management"] {
   background: rgba(180, 100, 255, 0.8);
+}
+
+.exp-cluster__tag-dot::after {
+  line-height: 1;
+}
+
+.exp-cluster__tag-dot[data-tag="tech"]::after {
+  content: "T";
+}
+
+.exp-cluster__tag-dot[data-tag="creative"]::after {
+  content: "C";
+}
+
+.exp-cluster__tag-dot[data-tag="human"]::after {
+  content: "H";
+}
+
+.exp-cluster__tag-dot[data-tag="management"]::after {
+  content: "M";
 }
 
 .exp-cluster__count {
@@ -996,7 +996,7 @@ go-logo:not(:defined) {
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--color-text-muted);
-  opacity: 0.55;
+  opacity: 0.7;
   margin: 0;
 }
 
@@ -1011,7 +1011,7 @@ go-logo:not(:defined) {
 .growth-card__reframe {
   font-size: 0.82rem;
   line-height: 1.72;
-  color: var(--color-text-muted);
+  color: var(--color-text-primary);
   margin: 0;
 }
 
@@ -1093,7 +1093,7 @@ go-logo:not(:defined) {
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--color-text-muted);
-  opacity: 0.55;
+  opacity: 0.7;
   margin: 0;
 }
 
@@ -1114,7 +1114,7 @@ go-logo:not(:defined) {
 
 .social-impact-card__tag {
   font-size: 0.65rem;
-  color: var(--color-text-muted);
+  color: var(--color-text-primary);
   padding: 0.1rem 0.4rem;
   border: 1px solid rgba(255 255 255 / 0.1);
   border-radius: 999px;

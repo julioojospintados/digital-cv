@@ -166,12 +166,6 @@ const EXP_CLUSTER_DEFS_EN = [
   },
 ];
 
-const expClustersEn = EXP_CLUSTER_DEFS_EN.map(cluster => ({
-  ...cluster,
-  isDefaultOpen: cluster.key === 'tech', // EN page is always static at 'tech'
-  items: cluster.indices.map(i => featuredExpData[i]).filter(Boolean),
-}));
-
 const skillViewLabels = {
   graph: 'Graph',
   cards: 'Cards',
@@ -192,6 +186,12 @@ const featuredExpData = cvDataEn.experience.map((exp, i) => ({
     exp.skills?.some((s: string) => ['MCP Protocol','Prompt Engineering','GitHub Copilot','Claude','Cursor','AI Orchestration','MCP'].includes(s))),
 }));
 
+const expClustersEn = EXP_CLUSTER_DEFS_EN.map(cluster => ({
+  ...cluster,
+  isDefaultOpen: cluster.key === 'tech', // EN page is always static at 'tech'
+  items: cluster.indices.map(i => featuredExpData[i]).filter(Boolean),
+}));
+
 // ── Soft skills mode tags ─────────────────────────────────────────────────
 const SOFT_MODE_TAGS = [
   'human creative',
@@ -210,17 +210,6 @@ const softSkillsData = cvDataEn.softSkills.map((skill, i) => ({
   description: skill.description ?? '',
   modeTags: SOFT_MODE_TAGS[i] ?? 'tech creative human',
 }));
-
-// ── Availability badge ─────────────────────────────────────────────────────
-const availLabel =
-  cvDataEn.personal.availability === 'available' ? 'Available immediately' :
-  cvDataEn.personal.availability === 'open' ? 'Open to opportunities' :
-  'Not available';
-
-const availClass =
-  cvDataEn.personal.availability === 'available' ? 'badge--green' :
-  cvDataEn.personal.availability === 'open' ? 'badge--amber' :
-  'badge--gray';
 
 // ── Timeline ───────────────────────────────────────────────────────────────
 const MONTHS_EN = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -318,9 +307,6 @@ const projectsData = cvDataEn.projects.slice(0, 6).map(p => {
 
     <!-- ── HERO ────────────────────────────────────────────────────── -->
     <section class="hero-section" id="hero">
-      <div class="hero-badges">
-        <span class={`avail-badge ${availClass}`}>{availLabel}</span>
-      </div>
       <h1 class="hero-name" id="hero-name" aria-label={cvDataEn.personal.name}>
         {cvDataEn.personal.name.split('').map((char, i) => (
           <span
@@ -365,12 +351,6 @@ const projectsData = cvDataEn.projects.slice(0, 6).map(p => {
         <span class="section-subtitle">Force-directed skill network - hover and drag to explore</span>
       </h2>
       <h3 class="skills-sub-title">Technical, management and human skills — tile size &amp; glow proportional to weight</h3>
-      <div class="skills-legend" aria-hidden="true">
-        <span class="skills-legend__item" style="--legend-border: 1px">Basic</span>
-        <span class="skills-legend__item" style="--legend-border: 2px">Intermediate</span>
-        <span class="skills-legend__item" style="--legend-border: 3px">Advanced</span>
-        <span class="skills-legend__item" style="--legend-border: 4px">Expert</span>
-      </div>
       <div class="skills-view-toggle" role="tablist" aria-label="Choose skills view">
         <button class="skills-view-btn is-active" type="button" data-skills-view-button="graph" aria-pressed="true">{skillViewLabels.graph}</button>
         <button class="skills-view-btn" type="button" data-skills-view-button="cards" aria-pressed="false">{skillViewLabels.cards}</button>

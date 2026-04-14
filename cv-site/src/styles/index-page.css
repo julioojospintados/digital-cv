@@ -344,8 +344,9 @@
   will-change: color, text-shadow, filter;
 }
 
-/* TECH: G brilla cyan */
-#entry-name[data-mode-preview="tech"] .name-go-g {
+/* TECH: G e O brilla cyan */
+#entry-name[data-mode-preview="tech"] .name-go-g,
+#entry-name[data-mode-preview="tech"] .name-go-o {
   color: rgba(0, 255, 200, 1);
   text-shadow:
     0 0 6px rgba(0, 255, 200, 1),
@@ -353,16 +354,14 @@
     0 0 36px rgba(0, 255, 200, 0.2);
 }
 
-/* CREATIVE: O con gradiente orange animato */
+/* CREATIVE: G e O orange con pulse morbido */
+#entry-name[data-mode-preview="creative"] .name-go-g,
 #entry-name[data-mode-preview="creative"] .name-go-o {
-  color: transparent;
-  background: linear-gradient(
-    135deg,
-    rgba(255, 107, 53, 1) 0%,
-    rgba(255, 200, 50, 1) 100%
-  );
-  -webkit-background-clip: text;
-  background-clip: text;
+  color: rgba(255, 107, 53, 1);
+  text-shadow:
+    0 0 6px rgba(255, 107, 53, 1),
+    0 0 18px rgba(255, 107, 53, 0.55),
+    0 0 36px rgba(255, 107, 53, 0.2);
   animation: go-orange-pulse 2.2s ease-in-out infinite;
 }
 
@@ -400,6 +399,7 @@
   font-style: italic;
   color: var(--color-text-muted);
   margin: 0;
+  margin-top: 0.5rem;
 }
 
 /* ── Mode cards ── */
@@ -510,15 +510,39 @@
 
 .mode-card[data-mode="tech"] {
   --card-glow: rgba(0, 255, 200, 0.15);
+  --card-go-color: rgba(0, 255, 200, 1);
+  --card-go-border: rgba(0, 255, 200, 0.45);
+  --card-go-bg: rgba(0, 255, 200, 0.08);
+  --card-go-hover-bg: rgba(0, 255, 200, 0.16);
+  --card-go-hover-border: rgba(0, 255, 200, 0.75);
+  --card-go-shadow: rgba(0, 255, 200, 0.35);
 }
 .mode-card[data-mode="creative"] {
   --card-glow: rgba(255, 107, 53, 0.15);
+  --card-go-color: rgba(255, 107, 53, 1);
+  --card-go-border: rgba(255, 107, 53, 0.45);
+  --card-go-bg: rgba(255, 107, 53, 0.08);
+  --card-go-hover-bg: rgba(255, 107, 53, 0.16);
+  --card-go-hover-border: rgba(255, 107, 53, 0.75);
+  --card-go-shadow: rgba(255, 107, 53, 0.35);
 }
 .mode-card[data-mode="human"] {
   --card-glow: rgba(240, 200, 127, 0.15);
+  --card-go-color: rgba(240, 200, 127, 1);
+  --card-go-border: rgba(240, 200, 127, 0.45);
+  --card-go-bg: rgba(240, 200, 127, 0.08);
+  --card-go-hover-bg: rgba(240, 200, 127, 0.16);
+  --card-go-hover-border: rgba(240, 200, 127, 0.75);
+  --card-go-shadow: rgba(240, 200, 127, 0.35);
 }
 .mode-card[data-mode="management"] {
   --card-glow: rgba(180, 100, 255, 0.15);
+  --card-go-color: rgba(180, 100, 255, 1);
+  --card-go-border: rgba(180, 100, 255, 0.45);
+  --card-go-bg: rgba(180, 100, 255, 0.08);
+  --card-go-hover-bg: rgba(180, 100, 255, 0.16);
+  --card-go-hover-border: rgba(180, 100, 255, 0.75);
+  --card-go-shadow: rgba(180, 100, 255, 0.35);
 }
 
 .mode-card.is-selected {
@@ -587,11 +611,11 @@
   gap: 0.45rem;
   margin-top: auto;
   padding: 0.5rem 0.7rem;
-  border: 1px solid rgba(212, 168, 55, 0.45);
+  border: 1px solid var(--card-go-border, rgba(255, 255, 255, 0.45));
   border-radius: 2px;
-  background: rgba(212, 168, 55, 0.07);
+  background: var(--card-go-bg, rgba(255, 255, 255, 0.07));
   width: 100%;
-  color: #d4a837;
+  color: var(--card-go-color, var(--color-accent));
   font-size: 0.56rem;
   font-weight: 700;
   letter-spacing: 0.18em;
@@ -603,7 +627,8 @@
   transition:
     background 0.2s ease,
     border-color 0.2s ease,
-    box-shadow 0.2s ease;
+    box-shadow 0.2s ease,
+    color 0.2s ease;
 }
 
 @media (min-width: 640px) {
@@ -620,9 +645,9 @@
 }
 
 .mode-card__go.is-ready:hover {
-  background: rgba(212, 168, 55, 0.16);
-  border-color: rgba(212, 168, 55, 0.75);
-  box-shadow: 0 0 16px rgba(212, 168, 55, 0.28);
+  background: var(--card-go-hover-bg, rgba(255, 255, 255, 0.16));
+  border-color: var(--card-go-hover-border, rgba(255, 255, 255, 0.75));
+  box-shadow: 0 0 16px var(--card-go-shadow, rgba(255, 255, 255, 0.28));
 }
 
 .go-icon {

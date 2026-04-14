@@ -26,6 +26,27 @@ const {
   modeTags,
   aiAugmented = false,
 } = Astro.props;
+
+const locationText = location?.trim() ?? "";
+const normalizedLocation = locationText.toLowerCase();
+const italianLocationHints = [
+  "italia",
+  "italy",
+  "torino",
+  "chieri",
+  "milano",
+  "roma",
+  "toscana",
+  "piemonte",
+  "ravenna",
+  "crotone",
+];
+const abroadLabel =
+  locationText &&
+  !remote &&
+  !italianLocationHints.some((hint) => normalizedLocation.includes(hint))
+    ? "Estero"
+    : null;
 ---
 
 <article class="exp-card cv-card" data-tags={modeTags}>
@@ -42,7 +63,10 @@ const {
     </div>
     <h3 class="exp-card__role">{role}</h3>
     {location && (
-      <p class="exp-card__location">{location}{remote ? ' · Remote' : ''}</p>
+      <p class="exp-card__location">
+        <span class="exp-card__location-text">{location}{remote ? ' · Remote' : ''}</span>
+        {abroadLabel && <span class="exp-card__abroad-chip">{abroadLabel}</span>}
+      </p>
     )}
   </header>
   <p class="exp-card__desc">{description}</p>
@@ -183,9 +207,34 @@ const {
   }
 
   .exp-card__location {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.35rem;
     font-size: 0.62rem;
     color: rgba(192, 220, 215, 0.85);
     margin: 0;
+  }
+
+  .exp-card__location-text {
+    min-width: 0;
+  }
+
+  .exp-card__abroad-chip {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.16rem 0.45rem;
+    border-radius: 999px;
+    border: 1px solid color-mix(in srgb, var(--color-accent) 48%, var(--color-border));
+    background: color-mix(in srgb, var(--color-accent) 18%, rgba(8, 73, 67, 0.88));
+    font-size: 0.5rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    box-shadow:
+      0 0 14px color-mix(in srgb, var(--color-accent) 38%, transparent),
+      inset 0 1px 0 rgba(255, 255, 255, 0.24);
   }
 
   .exp-card__desc {

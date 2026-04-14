@@ -178,7 +178,7 @@ cards.forEach((card) => {
     gsap.to(card, { x: dx, y: dy, duration: 0.4, ease: "power2.out" });
   });
 
-  card.addEventListener("mouseleave", () => {
+  card.addEventListener("mouseleave", (event) => {
     if (!card.classList.contains("is-selected")) {
       gsap.to(card, {
         x: 0,
@@ -188,8 +188,16 @@ cards.forEach((card) => {
         ease: "elastic.out(1, 0.4)",
       });
     }
-    // Rimuovi preview mode solo se nessuna card è stata selezionata
-    if (!selectedMode) nameEl.removeAttribute("data-mode-preview");
+    const relatedTarget = event.relatedTarget as Node | null;
+    const isMovingWithinCards =
+      !!relatedTarget && relatedTarget instanceof Node
+        ? card.parentElement?.contains(relatedTarget) ?? false
+        : false;
+
+    // Rimuovi preview mode solo quando il puntatore lascia davvero l'area delle card.
+    if (!selectedMode && !isMovingWithinCards) {
+      nameEl.removeAttribute("data-mode-preview");
+    }
   });
 
   card.addEventListener("mouseenter", () => {
@@ -316,6 +324,13 @@ function launchJourney(href: string) {
 }
 
 // ── Seleziona mode: aggiorna card UI, knolling, modeStore ───────────────
+const modeGlow: Record<string, string> = {
+  tech: "0 0 24px 4px rgba(0,255,200,0.45)",
+  creative: "0 0 24px 4px rgba(255,107,53,0.45)",
+  human: "0 0 24px 4px rgba(240,200,127,0.45)",
+  management: "0 0 24px 4px rgba(180,100,255,0.45)",
+};
+
 function selectMode(targetCard: HTMLButtonElement, mode: string) {
   selectedMode = mode;
   setMode(mode as "tech" | "creative" | "human" | "management");
@@ -347,7 +362,7 @@ function selectMode(targetCard: HTMLButtonElement, mode: string) {
           .to(
             goBtn,
             {
-              boxShadow: "0 0 24px 4px rgba(212,168,55,0.45)",
+              boxShadow: modeGlow[mode] ?? modeGlow.management,
               duration: 0.28,
               ease: "power2.out",
               yoyo: true,

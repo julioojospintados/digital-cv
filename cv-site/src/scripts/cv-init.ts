@@ -12,12 +12,11 @@ const goChars = document.querySelectorAll<HTMLElement>(".hero-char--go");
 const restChars = [...allChars].filter(
   (el) => !el.classList.contains("hero-char--go"),
 );
-const heroBadges = heroEl.querySelector<HTMLElement>(".hero-badges");
 const heroTitle = heroEl.querySelector<HTMLElement>(".hero-title");
 const heroSummary = heroEl.querySelector<HTMLElement>(".hero-summary");
 const heroFooter = heroEl.querySelector<HTMLElement>(".hero-footer");
 
-// Initial states are set in CSS (.hero-section, .hero-char, .hero-badges etc.)
+// Initial states are set in CSS (.hero-section, .hero-char, .hero-title, etc.)
 // GSAP only needs to animate: opacity → 1, y → 0
 
 const heroTl = gsap.timeline({ delay: 0 });
@@ -69,9 +68,9 @@ heroTl.to(
   "-=0.5",
 );
 
-// 5. Resto della sezione hero (badges, titolo, summary, footer)
+// 5. Resto della sezione hero (titolo, summary, footer)
 heroTl.to(
-  [heroBadges, heroTitle, heroSummary, heroFooter],
+  [heroTitle, heroSummary, heroFooter],
   {
     opacity: 1,
     y: 0,

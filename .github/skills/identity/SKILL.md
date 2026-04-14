@@ -44,7 +44,7 @@ Il sito non deve "elencare", deve **"dimostrare"**.
 
 - **Target:** Recruiter stanchi, CTO in cerca di autonomia strategica, Clienti in cerca di visione creativa.
 - **Tone of Voice:** Professionale, innovativo, audace ma estremamente curato nei dettagli (**Pixel Perfect**).
-- **Frase guida:** "Chi sei, dipende da come mi guardi." — Lo stesso profilo, tre prospettive, tre storie vere.
+- **Frase guida:** "Scopri l'ecosistema digitale." — Lo stesso profilo, quattro prospettive, quattro storie vere.
 
 ---
 
@@ -64,7 +64,7 @@ Giulio Occhipinti è un Senior Frontend Developer con ~12 anni di esperienza.
 **Regola d'oro:** ogni elemento UI deve essere sia **bello** che **argomentabile in un colloquio**.
 
 - "Perché knolling?" → visualizzazione come inventario intenzionale — trasparenza radicale sul profilo
-- "Perché 3 mode?" → lo stesso profilo, tre frame narrativi — rispetto per il tempo di chi guarda
+- "Perché 4 mode?" → lo stesso profilo, quattro frame narrativi — rispetto per il tempo di chi guarda
 - "Perché il preloader con GO?" → il brand si fonde con la persona prima dell'interazione — coerenza narrativa
 
 ---
@@ -101,7 +101,7 @@ micro-interazioni che danno la sensazione di "partenza/lancio".
 
 ---
 
-## Narrativa in 3 Atti
+## Narrativa in 4 Atti
 
 **Atto 0 — Preloader:**
 Le lettere `G` e `O` appaiono grandi a schermo. Mentre la barra cresce, volano verso il nome:
@@ -109,7 +109,7 @@ Le lettere `G` e `O` appaiono grandi a schermo. Mentre la barra cresce, volano v
 È il **rituale iniziatico**: il brand fagocita la persona. Il viaggio ha già inizio.
 
 **Atto 1 — La Scelta (`/`):**
-8 oggetti knolling su sfondo ottanio, 3 card mode, nessuna istruzione esplicita.
+8 oggetti knolling su sfondo ottanio, 4 card mode, nessuna istruzione esplicita.
 L'utente è curioso, non guidato. Scegliere TECH / CREATIVE / MANAGEMENT / HUMAN è come **scegliere il proprio
 personaggio** in un RPG — la scelta rivela chi è chi guarda, non solo chi è Giulio.
 

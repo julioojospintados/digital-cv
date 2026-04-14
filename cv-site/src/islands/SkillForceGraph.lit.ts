@@ -12,6 +12,7 @@ import {
   pointer,
   select,
   zoom,
+  zoomIdentity,
   type D3DragEvent,
   type D3ZoomEvent,
   type Selection,
@@ -63,6 +64,7 @@ interface LinkInsight {
 
 const WIDTH = 1080;
 const HEIGHT = 760;
+const INITIAL_ZOOM = 1;
 
 const DOMAIN_COLOR: Record<SkillDomain, string> = {
   tech: "rgba(0,255,200,1)",
@@ -463,11 +465,17 @@ class SkillForceGraph extends LitElement {
 
     // D3 zoom behavior — supports pinch-to-zoom natively on touch devices
     this._zoomBehavior = zoom<SVGSVGElement, unknown>()
-      .scaleExtent([0.3, 5])
+      .scaleExtent([INITIAL_ZOOM, 5])
       .on("zoom", (event: D3ZoomEvent<SVGSVGElement, unknown>) => {
         zoomRoot.attr("transform", event.transform.toString());
       });
     root.call(this._zoomBehavior);
+    root.call(
+      this._zoomBehavior.transform,
+      zoomIdentity
+        .translate((WIDTH * (1 - INITIAL_ZOOM)) / 2, (HEIGHT * (1 - INITIAL_ZOOM)) / 2)
+        .scale(INITIAL_ZOOM),
+    );
     // Double-click zooms in by default — disable to avoid conflict with node selection
     root.on("dblclick.zoom", null);
 
@@ -560,7 +568,7 @@ class SkillForceGraph extends LitElement {
             const source = this._resolveNode(link.source);
             const target = this._resolveNode(link.target);
             if (!source || !target) return 96;
-            return source.domain === target.domain ? 76 : 122;
+            return source.domain === target.domain ? 90 : 142;
           })
           .strength((link) => {
             const source = this._resolveNode(link.source);
@@ -576,8 +584,7 @@ class SkillForceGraph extends LitElement {
       .force(
         "collide",
         forceCollide<GraphNode>()
-          .radius((node) => node.r + 7)
-          .radius((node) => node.r + 12)
+          .radius((node) => node.r + 16)
           .strength(0.95),
       )
       .force("center", forceCenter(WIDTH / 2, HEIGHT / 2))
@@ -910,20 +917,6 @@ class SkillForceGraph extends LitElement {
         ></svg>
 
         ${this._renderTooltip()}
-
-        <div class="graph-legend" aria-hidden="true">
-          ${Object.entries(DOMAIN_LABEL).map(
-            ([domain, label]) => html`
-              <span class="graph-legend-item">
-                <span
-                  class="graph-legend-dot"
-                  style="background:${DOMAIN_COLOR[domain as SkillDomain]}"
-                ></span>
-                ${label}
-              </span>
-            `,
-          )}
-        </div>
 
         <p class="graph-meta">${this._getMetaText()}</p>
       </div>
