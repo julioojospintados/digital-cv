@@ -98,6 +98,7 @@
 /* ── Layout root ── */
 .entry-root {
   position: relative;
+  min-height: 100vh;   /* fallback iOS < 15.4 / Chromium < 108 */
   min-height: 100svh;
   width: 100%;
   overflow: hidden;
@@ -107,12 +108,19 @@
   justify-content: center;
 }
 
-/* ── Knolling stage ── */
+/* ── Knolling stage — visible only on true desktop (≥ 900px) ── */
 .knolling-stage {
+  display: none; /* nascosto su mobile/tablet — usa knolling-mob */
   position: fixed;
   inset: 0;
   pointer-events: none;
   z-index: 0;
+}
+
+@media (min-width: 900px) {
+  .knolling-stage {
+    display: block;
+  }
 }
 
 .knoll-item {
@@ -164,26 +172,22 @@
   animation-delay: var(--knoll-delay, 0ms);
 }
 
-/* ── Mobile inline knolling zone — desktop hidden ── */
+/* ── Inline knolling zone — mobile + tablet (< 900px), desktop hidden ── */
 .knolling-mob {
   display: none;
 }
 
-@media (max-width: 639px) {
-  /* Fixed stage sostituito dalla zona inline — nascosto su mobile */
-  .knolling-stage {
-    display: none;
-  }
-
-  /* ── Mobile knolling zone — grid 15 colonne, 2 righe ── */
+@media (max-width: 899px) {
+  /* knolling-mob visibile fino a 899px — knolling-stage già nascosto per default */
   .knolling-mob {
     display: grid;
     grid-template-columns: repeat(15, 1fr);
-    /* clamp per le altezze riga: proporzionate su tutti i mobile */
+    /* altezza proporzionale al viewport: funziona su mobile e tablet portrait */
     grid-template-rows: 1fr 1fr;
+    height: clamp(82px, 22svh, 140px);
     gap: 3px;
     width: 100%;
-    flex: 0 0 auto; /* altezza determinata dalle righe grid */
+    flex: 0 0 auto;
   }
 
   .knoll-wrap {
@@ -248,13 +252,13 @@
   } /* compass — più piccola della cella */
   .knoll-wrap:nth-child(5) {
     padding-bottom: 5%;
-  } /* compass — più piccola della cella */
+  } /* flashlight — leggero margine inferiore */
   .knoll-wrap:nth-child(6) {
     padding: 4%;
-  } /* plant — leggero margine */
+  } /* chess — leggero margine */
   .knoll-wrap:nth-child(7) {
     padding: 0% 8%;
-  } /* chess — piccoli nella cella 2-col */
+  } /* camera — piccoli nella cella */
 
   /* Torcia: ruotata 120° — luce verso il laptop (in alto a destra) */
   .knoll-wrap:nth-child(5) .knoll-m {
@@ -277,11 +281,31 @@
 
 /* Mobile: header + knolling zone + 2×2 cards nella viewport — niente scroll */
 @media (max-width: 639px) {
-  .entry-main {
+  /* Impedisce qualsiasi scroll verticale sulla home — la pagina vive in 100svh.
+     100vh fallback per iOS Safari < 15.4 e Chromium < 108. */
+  html,
+  body {
+    height: 100vh;   /* fallback */
     height: 100svh;
+    overflow: hidden;
+  }
+
+  .entry-root {
+    height: 100vh;   /* fallback */
+    height: 100svh;
+    max-height: 100vh;   /* fallback */
+    max-height: 100svh;
+  }
+
+  .entry-main {
+    height: 100vh;   /* fallback */
+    height: 100svh;
+    max-height: 100vh;   /* fallback */
     max-height: 100svh;
     overflow: hidden;
-    padding: 1.25rem 1rem 1rem;
+    /* safe-area-inset-bottom: home indicator iPhone notch/Dynamic Island.
+       viewport-fit=cover in <meta viewport> deve essere attivo. */
+    padding: 1.25rem 1rem max(1rem, env(safe-area-inset-bottom));
     gap: 0.75rem;
     justify-content: flex-start;
   }
@@ -417,10 +441,34 @@
     grid-template-columns: 1fr 1fr;
     gap: 0.4rem;
     flex: 1; /* prende lo spazio rimanente dopo header + zona knolling */
+    min-height: 0; /* impedisce all'elemento flex di superare il contenitore */
+    overflow: hidden; /* difesa extra contro contenuto che sfora */
   }
 }
 
-@media (min-width: 640px) {
+/* Tablet (640–899px): 2×2 grid — struttura Header → Images → Cards */
+@media (min-width: 640px) and (max-width: 899px) {
+  .entry-main {
+    max-width: min(640px, 100%);
+    gap: 1.5rem;
+    padding: 1.5rem 1.5rem;
+  }
+
+  .mode-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.6rem;
+  }
+
+  /* pad ridotto su tablet per recuperare spazio verticale */
+  .mode-card {
+    padding: 1rem 1.1rem 1.25rem;
+    min-height: 0;
+  }
+}
+
+/* Desktop (≥ 900px): cards in fila orizzontale con knolling-stage fisso */
+@media (min-width: 900px) {
   .mode-cards {
     flex-direction: row;
     gap: 1rem;
@@ -434,7 +482,7 @@
 @media (max-width: 639px) {
   .mode-card {
     padding: 0.75rem 0.85rem 1.05rem;
-    min-height: 8.2rem;
+    min-height: 0; /* lascia alla grid il controllo dell'altezza */
   }
 }
 
@@ -451,6 +499,8 @@
   text-align: left;
   user-select: none;
   -webkit-user-select: none;
+  -webkit-touch-callout: none; /* iOS: nessun callout nativo su long-press */
+  touch-action: manipulation;  /* rimuove il 300ms di ritardo tap */
   opacity: 0; /* GSAP gestisce */
   will-change: transform, opacity;
   transition:

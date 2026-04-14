@@ -5,6 +5,10 @@ import "../islands/GoLogo.lit.ts";
 
 gsap.registerPlugin(ScrollTrigger);
 
+// ── Mode route constants — usati per URL-init e nav-navigation ──────────────
+const CV_MODES = ["tech", "creative", "human", "management"] as const;
+type CVMode = (typeof CV_MODES)[number];
+
 // ── Hero entrance — G and O first, then the rest ──────────────────────
 const heroEl = document.querySelector<HTMLElement>(".hero-section")!;
 const allChars = document.querySelectorAll<HTMLElement>(".hero-char");
@@ -107,6 +111,9 @@ function applyMode(mode: string) {
       card.dataset.state = tags.includes(mode) ? "active" : "passive";
     });
   updateNavButtons(mode);
+  // Refresh ScrollTrigger dopo CSS transition (~300ms) — usato per in-page
+  // switching (es. /en/cv). Su route IT il nav naviga, quindi non serve qui.
+  setTimeout(() => ScrollTrigger.refresh(), 320);
 }
 
 // ── Skills view toggle: graph default, cards optional ─────────────
@@ -244,7 +251,16 @@ document
       }
 
       setMode(mode);
-      applyMode(mode);
+      // Su route-based mode pages (/tech, /creative, /human, /management)
+      // naviga alla pagina statica del mode: il contenuto è pre-ordinato a
+      // build-time per quel mode (skill grid, experience cluster, card order).
+      // Su /en/cv rimane in-page (applyMode classico).
+      const currentSegment = window.location.pathname.split("/").filter(Boolean)[0];
+      if ((CV_MODES as readonly string[]).includes(currentSegment)) {
+        window.location.href = `/${mode}`;
+      } else {
+        applyMode(mode);
+      }
     });
 
     btn.addEventListener("mousemove", (e) => {
@@ -277,6 +293,17 @@ document
     gsap.to(el, { x: 0, y: 0, duration: 0.5, ease: "elastic.out(1, 0.4)" });
   });
 });
+
+// ── Forza il mode dalla route Astro (source of truth) ─────────────────────
+// La persistentAtom legge localStorage ma la route IS la fonte corretta.
+// setMode PRIMA del subscribe → la prima emissione del subscribe è già giusta,
+// nessun doppio applyMode con mode sbagliato da localStorage stale.
+const initialRouteMode = window.location.pathname
+  .split("/")
+  .filter(Boolean)[0] as CVMode;
+if ((CV_MODES as readonly string[]).includes(initialRouteMode)) {
+  setMode(initialRouteMode);
+}
 
 // ── Subscribe to modeStore (fires immediately with current value) ─────
 modeStore.subscribe((mode) => {

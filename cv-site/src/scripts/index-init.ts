@@ -1,6 +1,13 @@
 import { gsap } from "gsap";
 import { setMode } from "../islands/stores/modeStore.ts";
 
+// ── Reduced motion: GSAP bypassa le regole CSS, occorre controllo JS ────────
+// Accelera tutte le timeline a x50 → effetto "immediato" senza rimuovere la
+// logica degli stati. I callbacks (onComplete, launchJourney) girano comunque.
+if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  gsap.globalTimeline.timeScale(50);
+}
+
 // ── DOM refs ─────────────────────────────────────────────
 const preloader = document.getElementById("preloader")!;
 const header = document.getElementById("entry-header")!;
@@ -335,13 +342,13 @@ function selectMode(targetCard: HTMLButtonElement, mode: string) {
   selectedMode = mode;
   setMode(mode as "tech" | "creative" | "human" | "management");
   nameEl.setAttribute("data-mode-preview", mode);
-  const isMobile = !window.matchMedia("(min-width: 640px)").matches;
+  const isMobile = !window.matchMedia("(min-width: 900px)").matches;
   cards.forEach((c) => {
     const goBtn = c.querySelector<HTMLElement>(".mode-card__go");
     if (c === targetCard) {
       c.classList.add("is-selected");
       c.classList.remove("is-passive");
-      gsap.to(c, { scale: 1.04, duration: 0.3, ease: "back.out(2)" });
+      gsap.to(c, { scale: isMobile ? 1.06 : 1.04, duration: 0.3, ease: "back.out(2)" });
       if (goBtn) {
         goBtn.setAttribute("tabindex", "0");
         goBtn.removeAttribute("aria-hidden");
@@ -381,7 +388,7 @@ function selectMode(targetCard: HTMLButtonElement, mode: string) {
     } else {
       c.classList.add("is-passive");
       c.classList.remove("is-selected");
-      gsap.to(c, { scale: 0.96, duration: 0.25, ease: "power2.out" });
+      gsap.to(c, { scale: isMobile ? 0.94 : 0.96, duration: 0.25, ease: "power2.out" });
       if (goBtn && goBtn.classList.contains("is-ready")) {
         goBtn.setAttribute("tabindex", "-1");
         goBtn.setAttribute("aria-hidden", "true");
