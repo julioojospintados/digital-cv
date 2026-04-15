@@ -140,7 +140,51 @@ function applyAccordions(mode: string) {
   });
 }
 
-// ── Skills view toggle: graph default, cards optional ─────────────
+// Scroll helper: scroll fino a `targetY` e risolve quando la pagina è arrivata vicino alla posizione.
+function scrollToPositionThen(targetY: number, maxWait = 2200): Promise<void> {
+  const lenis = (window as any).__lenis;
+  return new Promise((resolve) => {
+    let rafId: number | null = null;
+    let timeoutId: number | null = null;
+
+    function cleanup() {
+      if (rafId) cancelAnimationFrame(rafId);
+      if (timeoutId) clearTimeout(timeoutId);
+      window.removeEventListener("scroll", onScroll);
+    }
+
+    function onScroll() {
+      // noop; RAF loop checks position
+    }
+
+    function check() {
+      const currentY = window.scrollY || window.pageYOffset || 0;
+      if (Math.abs(currentY - targetY) <= 4 || (window.innerHeight + currentY) >= document.body.scrollHeight) {
+        timeoutId = window.setTimeout(() => {
+          cleanup();
+          resolve();
+        }, 60);
+        return;
+      }
+      rafId = requestAnimationFrame(check);
+    }
+
+    window.addEventListener("scroll", onScroll, { passive: true } as any);
+
+    if (lenis) {
+      try {
+        lenis.scrollTo(targetY, { duration: 1.1 });
+      } catch (e) {
+        try { lenis.scrollTo(targetY); } catch (_) { window.scrollTo({ top: targetY, behavior: "smooth" }); }
+      }
+    } else {
+      window.scrollTo({ top: targetY, behavior: "smooth" });
+    }
+
+    rafId = requestAnimationFrame(check);
+    timeoutId = window.setTimeout(() => { cleanup(); resolve(); }, maxWait);
+  });
+}
 const skillsSection = document.querySelector<HTMLElement>(".skills-section");
 const skillsViewButtons = document.querySelectorAll<HTMLElement>(
   "[data-skills-view-button]",
@@ -308,16 +352,25 @@ document
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          fontSize: "clamp(4rem, 22vw, 18rem)",
+          /* Reduce base font-size and allow wrapping for long labels */
+          fontSize: "clamp(3rem, 16vw, 12rem)",
           fontFamily: "Lexend, sans-serif",
           fontWeight: "800",
-          letterSpacing: "-0.04em",
+          letterSpacing: "-0.02em",
           color: "var(--color-accent)",
           opacity: "0",
           zIndex: "9998",
           pointerEvents: "none",
           clipPath: "inset(50% 50% 50% 50%)",
           userSelect: "none",
+          textAlign: "center",
+          whiteSpace: "pre-wrap",
+          overflowWrap: "break-word",
+          wordBreak: "break-word",
+          paddingLeft: "1rem",
+          paddingRight: "1rem",
+          lineHeight: "0.9",
+          maxWidth: "calc(100% - 2rem)",
         });
         document.body.appendChild(stamp);
 
@@ -346,6 +399,30 @@ document
 
         // ── Fase 3: laser scan (parte a ~450ms, dopo lo stamp) ────────────
         setTimeout(() => {
+          // Rispetta preferenze reduce-motion
+          if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+            // minimal visual feedback
+            if (!isMobile && scanTarget) {
+              gsap.to(scanTarget, { boxShadow: "0 0 0 6px var(--color-accent)", duration: 0.18, yoyo: true, repeat: 1 });
+            }
+            return;
+          }
+
+          const isDesktop = !isMobile;
+
+          // Mobile: mostra un breve highlight sul cluster target, niente scanner pesante
+          if (!isDesktop) {
+            if (scanTarget) {
+              gsap.fromTo(
+                scanTarget,
+                { boxShadow: "0 0 0 0 rgba(0,0,0,0)" },
+                { boxShadow: "0 0 0 12px var(--color-accent)", duration: 0.34, yoyo: true, repeat: 1, ease: "power2.out" },
+              );
+            }
+            return;
+          }
+
+          // Desktop: scanner ottimizzato — calcola posizioni una sola volta e avanza un indice
           const scanner = document.createElement("div");
           Object.assign(scanner.style, {
             position: "fixed",
@@ -360,6 +437,10 @@ document
           });
           document.body.appendChild(scanner);
 
+          const cards = Array.from(document.querySelectorAll<HTMLElement>(".cv-card"));
+          const cardPositions = cards.map((el) => ({ el, top: el.getBoundingClientRect().top + window.scrollY }));
+          cardPositions.sort((a, b) => a.top - b.top);
+          let scanIndex = 0;
           const pageHeight = document.documentElement.scrollHeight;
 
           gsap.fromTo(
@@ -370,16 +451,11 @@ document
               duration: 0.85,
               ease: "none",
               onUpdate() {
-                const scanY = parseFloat(scanner.style.top);
-                // Flash accent su ogni card che il laser attraversa
-                document.querySelectorAll<HTMLElement>(".cv-card").forEach((card) => {
-                  const rect = card.getBoundingClientRect();
-                  const cardAbsTop = rect.top + window.scrollY;
-                  if (
-                    cardAbsTop <= scanY &&
-                    cardAbsTop >= scanY - 60 &&
-                    !card.dataset.scanned
-                  ) {
+                const scanY = parseFloat(scanner.style.top || "0") || 0;
+                // Avanza l'indice finché le card sono sopra la linea di scansione
+                while (scanIndex < cardPositions.length && cardPositions[scanIndex].top <= scanY) {
+                  const card = cardPositions[scanIndex].el;
+                  if (!card.dataset.scanned) {
                     card.dataset.scanned = "1";
                     gsap.fromTo(
                       card,
@@ -387,14 +463,12 @@ document
                       { filter: "brightness(1)", duration: 0.4, ease: "power2.out" },
                     );
                   }
-                });
+                  scanIndex += 1;
+                }
               },
               onComplete() {
                 scanner.remove();
-                // Pulisci flag
-                document.querySelectorAll<HTMLElement>(".cv-card[data-scanned]").forEach((c) => {
-                  delete c.dataset.scanned;
-                });
+                cardPositions.forEach((p) => { delete p.el.dataset.scanned; });
               },
             },
           );
