@@ -287,14 +287,14 @@ export const cvData = {
       location: "Torino, Italia",
       remote: true,
       description:
-        "Progettazione e sviluppo di un CV interattivo come banco di prova sistematico per un workflow AI-augmented end-to-end. L'intero ciclo — architettura, UI, animazioni GSAP, server MCP, API HTTP con Hono — è stato costruito con GitHub Copilot e Claude come copiloti operativi, applicando Prompt Engineering strutturato per ogni fase: specifica, revisione, debug, refactoring. Il risultato è un sistema a due livelli: sito Astro + Lit per il CV visuale, e un server MCP che espone i dati CV come API per agenti AI. Il progetto è anche la dimostrazione live che un developer singolo, con l'AI come moltiplicatore, può produrre in settimane ciò che richiederebbe un team in mesi.",
+        "Progettazione e sviluppo di un CV interattivo come banco di prova sistematico per un flusso di lavoro AI end-to-end. L'intero ciclo — architettura, UI, animazioni GSAP, server MCP, API HTTP con Hono — è stato costruito con GitHub Copilot e Claude come assistenti operativi, applicando Prompt Engineering strutturato per ogni fase: specifica, revisione, debug, refactoring. Il risultato è un sistema a due livelli: sito Astro + Lit per il CV visuale, e un server MCP che espone i dati CV come API per agenti AI. Il progetto è anche la dimostrazione live che un singolo sviluppatore, con l'AI come moltiplicatore, può produrre in settimane ciò che richiederebbe un team in mesi.",
       highlights: [
         "Architettura MCP con tool, resource e prompt template che espongono i dati CV come API per agenti AI (VS Code Copilot, Claude Desktop)",
         "Sito Astro + Lit con animazioni GSAP avanzate: preloader narrativo, wave hold effect con SVG sine wave, distortion filter sott'acqua via feTurbulence",
-        "Workflow AI-augmented completo: GitHub Copilot + Claude per architettura, codice, debug e refactoring — zero boilerplate scritto a mano",
+        "Flusso di lavoro AI completo: GitHub Copilot + Claude per architettura, codice, debug e refactoring — zero codice ripetitivo scritto a mano",
         "Server HTTP Hono con OpenAPI spec, validazione Zod, route tipizzate e test automatizzati con Vitest",
         "Prompt Engineering strutturato: skill file, agent instructions, prompt slash riutilizzabili — l'AI conosce il progetto come un membro senior del team",
-        "Completato in 5 giorni con AI workflow — stima tradizionale: 1+ mese. Riduzione del 70% del tempo di sviluppo, test coverage >80%, qualità Awwwards-level sull'UI",
+        "Completato in 5 giorni con flusso di lavoro AI — stima tradizionale: 1+ mese. Riduzione del 70% del tempo di sviluppo, copertura dei test >80%, qualità Awwwards-level sull'UI",
       ],
       skills: [
         "MCP Protocol",
@@ -322,7 +322,7 @@ export const cvData = {
       description:
         "I sistemi enterprise in ambito bancario e tecnologico operano a scala e richiedono interfacce architetturalmente solide e usabili da milioni di persone. Ho progettato design system, librerie WebComponents e architetture a microfrontend per Intesa San Paolo e Aruba — ogni soluzione pensata per sopravvivere nel tempo, ai cambi di stack e alla crescita non prevista.",
       highlights: [
-        "Tech Lead e Scrum Master del team Aruba Design System (3+ anni, team da 30+ persone): coordinamento sprint, code review sistematiche e roadmap tecnica di una libreria con oltre 100 componenti WebComponents adottata cross-prodotto",
+        "Tech Lead e Scrum Master del team Aruba Design System (3+ anni, team da 30+ persone): coordinamento sprint, revisione del codice sistematica e roadmap tecnica di una libreria con oltre 100 componenti WebComponents adottata cross-prodotto",
         "Collaborazione in team da 50+ persone per i prodotti digitali di Intesa San Paolo: architettura Angular su scala enterprise, standard condivisi e processo di code review",
         "Realizzazione di un’applicazione enterprise con architettura a microfrontend e microservizi, con gestione dello stato avanzata via NGRX",
         "Introduzione di test unitari sistematici con Jest, con impatto diretto sulla stabilità dei rilasci e sulla code coverage",
@@ -385,14 +385,14 @@ export const cvData = {
         "Produzione e regia video per matrimoni indiani di alto livello in Toscana. Settore che richiede estrema attenzione ai dettagli, gestione di logistica complessa e sensibilità estetica internazionale.",
       highlights: [
         "Regia video per cerimonie con centinaia di ospiti internazionali",
-        "Gestione di crew in contesti multiculturali e multi-day events",
-        "Post-produzione completa: color grading, montaggio narrativo, consegna in formati premium",
+        "Gestione di crew in contesti multiculturali con eventi che si estendono su più giornate",
+        "Post-produzione completa: correzione colore, montaggio narrativo, consegna in formati premium",
       ],
       skills: [
         "Videomaking",
         "Regia",
         "Post-produzione",
-        "Color grading",
+        "Correzione colore",
         "Gestione logistica",
       ],
     },
@@ -456,7 +456,7 @@ export const cvData = {
       description:
         "Collaborazione esterna con Satispay, una delle scale-up fintech più rilevanti del panorama italiano. Un contesto di rapida crescita in cui ogni contributo doveva essere immediato e orientato all'impatto — e in cui ho consolidato l'abitudine a lavorare in ambienti ad alta velocità con processi ancora in evoluzione.",
       highlights: [],
-      skills: ["Fintech", "Startup mindset", "Comunicazione digitale"],
+      skills: ["Fintech", "Mentalità da startup", "Comunicazione digitale"],
     },
     {
       company: "Festival ed eventi culturali",
@@ -1064,6 +1064,49 @@ export const cvData = {
         { target: "Material Design", type: "technical" },
         { target: "UX / UI Design", type: "workflow" },
         { target: "Graphic design", type: "cross-domain" },
+        { target: "Visily", type: "workflow" },
+        { target: "UX Pilot", type: "workflow" },
+      ],
+    },
+    {
+      name: "Visily",
+      level: "Intermedio",
+      domain: "creative",
+      weight: 2,
+      mastery: 58,
+      role: "support",
+      links: [
+        { target: "Figma", type: "workflow" },
+        { target: "UX Research", type: "workflow" },
+        { target: "Wireframing", type: "workflow" },
+        { target: "UX / UI Design", type: "workflow" },
+      ],
+    },
+    {
+      name: "UX Pilot",
+      level: "Base",
+      domain: "ai",
+      weight: 2,
+      mastery: 45,
+      role: "support",
+      links: [
+        { target: "UX Research", type: "workflow" },
+        { target: "Wireframing", type: "workflow" },
+        { target: "Figma", type: "workflow" },
+      ],
+    },
+    {
+      name: "Google Stitch",
+      level: "Base",
+      domain: "ai",
+      weight: 2,
+      mastery: 38,
+      role: "support",
+      links: [
+        { target: "Figma", type: "workflow" },
+        { target: "Visily", type: "workflow" },
+        { target: "UX / UI Design", type: "workflow" },
+        { target: "Prompt Engineering", type: "workflow" },
       ],
     },
     {
@@ -1215,6 +1258,36 @@ export const cvData = {
           description:
             "Prompt efficaci nascono da chi sa ragionare in più domini contemporaneamente",
         },
+        { target: "GitHub Copilot", type: "workflow" },
+        { target: "Google Stitch", type: "workflow" },
+      ],
+    },
+    {
+      name: "GitHub Copilot",
+      level: "Avanzato",
+      icon: "githubcopilot",
+      domain: "ai",
+      weight: 4,
+      mastery: 88,
+      role: "bridge",
+      links: [
+        { target: "Prompt Engineering", type: "workflow" },
+        { target: "MCP Protocol", type: "workflow" },
+        { target: "AI-Augmented Productivity", type: "workflow" },
+        { target: "TypeScript", type: "technical" },
+      ],
+    },
+    {
+      name: "Zed",
+      level: "Base",
+      domain: "tech",
+      weight: 1,
+      mastery: 35,
+      role: "support",
+      links: [
+        { target: "TypeScript", type: "technical" },
+        { target: "Git", type: "workflow" },
+        { target: "GitHub Copilot", type: "workflow" },
       ],
     },
     {
@@ -1821,8 +1894,8 @@ export const cvData = {
     {
       tool: "GitHub Copilot",
       title: "Accelerazione sviluppo Angular enterprise",
-      desc: "Generazione di boilerplate NGRX, testing Jest e pattern architetturali ripetitivi, con validazione critica dell'output.",
-      impact: "-87% boilerplate",
+      desc: "Generazione di codice ripetitivo NGRX, test Jest e pattern architetturali, con validazione critica dell'output.",
+      impact: "-87% codice ripetitivo",
       tags: "tech",
     },
     {
@@ -1834,15 +1907,15 @@ export const cvData = {
     },
     {
       tool: "Claude / GPT-4",
-      title: "Code review e architettura Angular",
-      desc: "Analisi di code smell, refactoring e revisione architetture a microfrontend con LLM come pair reviewer.",
-      impact: "-60% debug time",
+      title: "Revisione del codice e architettura Angular",
+      desc: "Analisi di problemi di qualità del codice, refactoring e revisione architetture a microfrontend con LLM come revisore tecnico.",
+      impact: "-60% tempo di debug",
       tags: "tech",
     },
     {
       tool: "Midjourney",
-      title: "Visual exploration per brief UX/UI",
-      desc: "Moodboard e concept visivi veloci per allineare stakeholder prima del wireframing, senza iterazioni costose.",
+      title: "Esplorazione visiva per brief UX/UI",
+      desc: "Moodboard e concept visivi veloci per allineare i referenti prima del wireframing, senza iterazioni costose.",
       impact: "-70% cicli allineamento",
       tags: "creative",
     },
@@ -1852,6 +1925,13 @@ export const cvData = {
       desc: "SEO copy, varianti A/B per landing page e documentazione tecnica da codice annotato.",
       impact: "+3x velocità contenuti",
       tags: "creative",
+    },
+    {
+      tool: "Figma Make",
+      title: "Da brief a prototipo interattivo in minuti",
+      desc: "Generazione di schermate e flussi di navigazione direttamente in Figma da descrizione in linguaggio naturale. Applicato nella fase di prototipazione rapida prima del wireframing strutturato.",
+      impact: "-75% tempo prototipazione",
+      tags: "creative tech",
     },
   ] as AiWorkflowItem[],
 

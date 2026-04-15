@@ -281,27 +281,155 @@ document
       if ((CV_MODES as readonly string[]).includes(currentSegment)) {
         applyMode(mode);
         applyAccordions(mode);
-        // La CSS transition degli accordion è 0.55s.
-        // Misurare getBoundingClientRect prima del completamento restituisce
-        // una posizione errata (i cluster che si chiudono spostano ancora il layout).
-        // 650ms = 550ms transition + 100ms di buffer per sicurezza.
+
+        // ── Animazione 2+3: Mode stamp fullscreen → Scan laser reveal ────
+        //
+        // Fase 1 (0ms): il nome del mode appare a caratteri enormi (fullscreen stamp)
+        //   con clip-path che si apre dal centro — effetto editorial magazine.
+        // Fase 2 (300ms): lo stamp esplode verso l'esterno e svanisce.
+        //   Contemporaneamente applyMode/applyAccordions.
+        // Fase 3 (450ms): laser accent scorre dall'alto verso il basso della pagina,
+        //   ogni card che tocca "si accende" nel suo nuovo stato (glow flash).
+        // Fase 4 (650ms layout stabile): scroll Lenis al cluster target.
+        // Fase 5 (dopo scroll): spotlight glow sul target, poi spegni.
+
+        const primaryClusterKey = (CLUSTER_OPEN_FOR[mode] ?? ["tech"])[0];
+        const scanTarget = document.querySelector<HTMLElement>(
+          `.exp-cluster[data-cluster="${primaryClusterKey}"]`,
+        );
+        const allClusters = document.querySelectorAll<HTMLElement>(".exp-cluster");
+
+        // ── Crea stamp fullscreen ──────────────────────────────────────────
+        const stamp = document.createElement("div");
+        stamp.textContent = mode.toUpperCase();
+        Object.assign(stamp.style, {
+          position: "fixed",
+          inset: "0",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontSize: "clamp(4rem, 22vw, 18rem)",
+          fontFamily: "Lexend, sans-serif",
+          fontWeight: "800",
+          letterSpacing: "-0.04em",
+          color: "var(--color-accent)",
+          opacity: "0",
+          zIndex: "9998",
+          pointerEvents: "none",
+          clipPath: "inset(50% 50% 50% 50%)",
+          userSelect: "none",
+        });
+        document.body.appendChild(stamp);
+
+        // ── Timeline principale ────────────────────────────────────────────
+        const tl = gsap.timeline();
+
+        // Fase 1 — stamp appare: clip-path si apre dal centro
+        tl.to(stamp, {
+          opacity: 0.1,
+          clipPath: "inset(0% 0% 0% 0%)",
+          duration: 0.28,
+          ease: "expo.out",
+        });
+
+        // Fase 2 — stamp esplode fuori schermo (scale + opacity 0)
+        tl.to(stamp, {
+          scale: 1.6,
+          opacity: 0,
+          duration: 0.38,
+          ease: "expo.in",
+          onComplete: () => {
+            stamp.remove();
+            // Aggiorna accordion durante l'esplosione (invisibile all'utente)
+          },
+        });
+
+        // ── Fase 3: laser scan (parte a ~450ms, dopo lo stamp) ────────────
         setTimeout(() => {
-          const primaryClusterKey = (CLUSTER_OPEN_FOR[mode] ?? ["tech"])[0];
-          const target = document.querySelector<HTMLElement>(
-            `.exp-cluster[data-cluster="${primaryClusterKey}"]`,
+          const scanner = document.createElement("div");
+          Object.assign(scanner.style, {
+            position: "fixed",
+            left: "0",
+            right: "0",
+            height: "2px",
+            background: "var(--color-accent)",
+            zIndex: "9999",
+            boxShadow: "0 0 22px 8px var(--color-accent)",
+            top: "0",
+            pointerEvents: "none",
+          });
+          document.body.appendChild(scanner);
+
+          const pageHeight = document.documentElement.scrollHeight;
+
+          gsap.fromTo(
+            scanner,
+            { top: 0 },
+            {
+              top: pageHeight,
+              duration: 0.85,
+              ease: "none",
+              onUpdate() {
+                const scanY = parseFloat(scanner.style.top);
+                // Flash accent su ogni card che il laser attraversa
+                document.querySelectorAll<HTMLElement>(".cv-card").forEach((card) => {
+                  const rect = card.getBoundingClientRect();
+                  const cardAbsTop = rect.top + window.scrollY;
+                  if (
+                    cardAbsTop <= scanY &&
+                    cardAbsTop >= scanY - 60 &&
+                    !card.dataset.scanned
+                  ) {
+                    card.dataset.scanned = "1";
+                    gsap.fromTo(
+                      card,
+                      { filter: "brightness(2.2)" },
+                      { filter: "brightness(1)", duration: 0.4, ease: "power2.out" },
+                    );
+                  }
+                });
+              },
+              onComplete() {
+                scanner.remove();
+                // Pulisci flag
+                document.querySelectorAll<HTMLElement>(".cv-card[data-scanned]").forEach((c) => {
+                  delete c.dataset.scanned;
+                });
+              },
+            },
           );
-          const lenis = (window as any).__lenis;
-          if (target) {
+        }, 450);
+
+        // ── Fase 4+5: scroll + spotlight (layout stabile a 650ms) ─────────
+        if (scanTarget) {
+          setTimeout(() => {
+            const lenis = (window as any).__lenis;
             const NAV_HEIGHT = 72;
             const absoluteTop =
-              target.getBoundingClientRect().top + window.scrollY - NAV_HEIGHT;
+              scanTarget.getBoundingClientRect().top + window.scrollY - NAV_HEIGHT;
+
+            // Spotlight: dim gli altri, glow sul target
+            gsap.to(allClusters, { opacity: 0.2, duration: 0.25 });
+            gsap.to(scanTarget, {
+              opacity: 1,
+              boxShadow:
+                "0 0 0 2px var(--color-accent), 0 0 28px color-mix(in srgb, var(--color-accent) 35%, transparent)",
+              duration: 0.25,
+            });
+
             if (lenis) {
               lenis.scrollTo(absoluteTop, { duration: 1.1 });
             } else {
               window.scrollTo({ top: absoluteTop, behavior: "smooth" });
             }
-          }
-        }, 650);
+
+            // Fase 5 — spegni spotlight dopo l'arrivo
+            setTimeout(() => {
+              gsap.to(allClusters, { opacity: 1, duration: 0.5, ease: "power2.out" });
+              gsap.to(scanTarget, { boxShadow: "none", duration: 0.5 });
+            }, 1000);
+          }, 650);
+        }
       } else {
         applyMode(mode);
       }

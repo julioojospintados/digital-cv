@@ -814,6 +814,40 @@ export const cvDataEn = {
         { target: "Material Design", type: "technical" },
         { target: "UX / UI Design", type: "workflow" },
         { target: "Graphic design", type: "cross-domain" },
+        { target: "Visily", type: "workflow" },
+        { target: "UX Pilot", type: "workflow" },
+      ],
+    },
+    {
+      name: "Visily",
+      level: "Intermedio",
+      mastery: 58,
+      links: [
+        { target: "Figma", type: "workflow" },
+        { target: "UX Research", type: "workflow" },
+        { target: "Wireframing", type: "workflow" },
+        { target: "UX / UI Design", type: "workflow" },
+      ],
+    },
+    {
+      name: "UX Pilot",
+      level: "Base",
+      mastery: 45,
+      links: [
+        { target: "UX Research", type: "workflow" },
+        { target: "Wireframing", type: "workflow" },
+        { target: "Figma", type: "workflow" },
+      ],
+    },
+    {
+      name: "Google Stitch",
+      level: "Base",
+      mastery: 38,
+      links: [
+        { target: "Figma", type: "workflow" },
+        { target: "Visily", type: "workflow" },
+        { target: "UX / UI Design", type: "workflow" },
+        { target: "Prompt Engineering", type: "workflow" },
       ],
     },
     {
@@ -925,6 +959,30 @@ export const cvDataEn = {
         { target: "AI-Augmented Productivity", type: "workflow" },
         { target: "Node.js", type: "technical" },
         { target: "T-shaped thinking", type: "cross-domain" },
+        { target: "GitHub Copilot", type: "workflow" },
+        { target: "Google Stitch", type: "workflow" },
+      ],
+    },
+    {
+      name: "GitHub Copilot",
+      level: "Avanzato",
+      icon: "githubcopilot",
+      mastery: 88,
+      links: [
+        { target: "Prompt Engineering", type: "workflow" },
+        { target: "MCP Protocol", type: "workflow" },
+        { target: "AI-Augmented Productivity", type: "workflow" },
+        { target: "TypeScript", type: "technical" },
+      ],
+    },
+    {
+      name: "Zed",
+      level: "Base",
+      mastery: 35,
+      links: [
+        { target: "TypeScript", type: "technical" },
+        { target: "Git", type: "workflow" },
+        { target: "GitHub Copilot", type: "workflow" },
       ],
     },
     {
@@ -1447,6 +1505,13 @@ export const cvDataEn = {
       desc: "SEO copy, A/B variants for landing pages and technical documentation from annotated code.",
       impact: "+3x content velocity",
       tags: "creative",
+    },
+    {
+      tool: "Figma Make",
+      title: "From brief to interactive prototype in minutes",
+      desc: "Generating screens and navigation flows directly in Figma from natural language descriptions. Applied during rapid prototyping phases before structured wireframing.",
+      impact: "-75% prototyping time",
+      tags: "creative tech",
     },
   ] as AiWorkflowItem[],
 
