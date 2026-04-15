@@ -116,6 +116,30 @@ function applyMode(mode: string) {
   setTimeout(() => ScrollTrigger.refresh(), 320);
 }
 
+// ── Apply accordions: apre/chiude i cluster di esperienza ────────────
+// Mappa mode → quali cluster devono essere aperti (coerente con EXP_CLUSTER_DEFS in [mode].astro)
+const CLUSTER_OPEN_FOR: Record<string, string[]> = {
+  tech: ["tech"],
+  creative: ["creative", "roots"],
+  human: ["human", "roots"],
+  management: ["tech", "human"],
+};
+
+function applyAccordions(mode: string) {
+  const shouldOpen = new Set(CLUSTER_OPEN_FOR[mode] ?? ["tech"]);
+  document.querySelectorAll<HTMLElement>(".exp-cluster").forEach((cluster) => {
+    const key = cluster.dataset.cluster ?? "";
+    const header = cluster.querySelector<HTMLElement>(".exp-cluster__header");
+    if (shouldOpen.has(key)) {
+      cluster.setAttribute("data-open", "");
+      header?.setAttribute("aria-expanded", "true");
+    } else {
+      cluster.removeAttribute("data-open");
+      header?.setAttribute("aria-expanded", "false");
+    }
+  });
+}
+
 // ── Skills view toggle: graph default, cards optional ─────────────
 const skillsSection = document.querySelector<HTMLElement>(".skills-section");
 const skillsViewButtons = document.querySelectorAll<HTMLElement>(
@@ -251,13 +275,33 @@ document
       }
 
       setMode(mode);
-      // Su route-based mode pages (/tech, /creative, /human, /management)
-      // naviga alla pagina statica del mode: il contenuto è pre-ordinato a
-      // build-time per quel mode (skill grid, experience cluster, card order).
-      // Su /en/cv rimane in-page (applyMode classico).
+      // In-page update: colori + accordion + scroll alla sezione rilevante.
+      // Rimossa navigazione window.location.href che causava un full reload.
       const currentSegment = window.location.pathname.split("/").filter(Boolean)[0];
       if ((CV_MODES as readonly string[]).includes(currentSegment)) {
-        window.location.href = `/${mode}`;
+        applyMode(mode);
+        applyAccordions(mode);
+        // La CSS transition degli accordion è 0.55s.
+        // Misurare getBoundingClientRect prima del completamento restituisce
+        // una posizione errata (i cluster che si chiudono spostano ancora il layout).
+        // 650ms = 550ms transition + 100ms di buffer per sicurezza.
+        setTimeout(() => {
+          const primaryClusterKey = (CLUSTER_OPEN_FOR[mode] ?? ["tech"])[0];
+          const target = document.querySelector<HTMLElement>(
+            `.exp-cluster[data-cluster="${primaryClusterKey}"]`,
+          );
+          const lenis = (window as any).__lenis;
+          if (target) {
+            const NAV_HEIGHT = 72;
+            const absoluteTop =
+              target.getBoundingClientRect().top + window.scrollY - NAV_HEIGHT;
+            if (lenis) {
+              lenis.scrollTo(absoluteTop, { duration: 1.1 });
+            } else {
+              window.scrollTo({ top: absoluteTop, behavior: "smooth" });
+            }
+          }
+        }, 650);
       } else {
         applyMode(mode);
       }
