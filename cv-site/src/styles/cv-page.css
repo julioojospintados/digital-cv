@@ -93,7 +93,6 @@ html[data-mode="management"] .bg-knoll--flashlight {
 /* ── Skill chart wrapper ───────────────────────────── */
 skill-force-graph {
   display: block;
-  margin-bottom: 2rem;
   max-width: 100%;
   /* overflow: hidden prevents the SVG from creating horizontal scroll on mobile.
      The SVG uses width:100%;height:auto with a viewBox, so it scales correctly. */
@@ -596,7 +595,7 @@ go-logo:not(:defined) {
   background: var(--skills-panel-bg);
   border-radius: 2px;
   overflow: hidden;
-  padding: 0.75rem;
+  padding: 0; /* nessun padding quando mostra il grafico */
 }
 
 .skills-stage::before {
@@ -622,6 +621,10 @@ go-logo:not(:defined) {
 
 .skills-section[data-skills-view="cards"] .skills-stage__panel--cards {
   display: block;
+}
+
+.skills-section[data-skills-view="cards"] .skills-stage {
+  padding: 0.75rem; /* padding solo con le card, non con il grafico */
 }
 
 .skills-grid {
@@ -863,7 +866,9 @@ go-logo:not(:defined) {
 }
 
 .exp-cluster[data-open] .exp-cluster__body {
-  max-height: 3000px;
+  /* 9000px: sufficiente per cluster molto ampi su mobile a singola colonna.
+     3000px era insufficiente per "Design e Comunicazione" con molte schede. */
+  max-height: 9000px;
 }
 
 /* Inner grid: padding-top 1rem for AI clip badges */

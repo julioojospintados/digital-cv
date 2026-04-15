@@ -1593,7 +1593,7 @@ export const cvData = {
         "Scrum e Kanban applicati in team enterprise distribuiti (ALTEN, Intesa San Paolo, Aruba) e in progetti creativi personali. Esperienza concreta in sprint planning, retrospective e gestione del backlog.",
       domain: "management",
       weight: 5,
-      mastery: 85,
+      mastery: 92,
       role: "bridge",
       links: [
         { target: "Pensiero T-shaped", type: "cross-domain" },

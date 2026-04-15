@@ -64,38 +64,37 @@ const { tool, title, desc, impact, tags } = Astro.props;
     display: inline-flex;
     align-items: center;
     padding: 0.22rem 0.55rem;
-    background: var(--color-accent);
+    /* Outline style: ottanio bg + accent border/text.
+       Il filled-accent originale falliva WCAG in management (viola → ottanio ~2.65:1)
+       e in creative (arancio → ottanio ~3.2:1). Con ottanio bg l'accent text
+       supera sempre 4.5:1 su tutti i 4 mode. */
+    background: rgba(8, 73, 67, 0.95);
+    border: 1px solid color-mix(in srgb, var(--color-accent) 60%, transparent);
     border-radius: 2px;
-    color: rgba(8, 73, 67, 1);
+    color: var(--color-accent);
     font-size: 0.5rem;
     font-weight: 900;
     letter-spacing: 0.2em;
     text-transform: uppercase;
     white-space: nowrap;
     box-shadow:
-      0 0 18px var(--color-accent),
-      0 2px 8px rgba(0, 0, 0, 0.5),
-      inset 0 1px 0 rgba(255, 255, 255, 0.32),
-      inset 0 -1px 0 rgba(0, 0, 0, 0.18);
+      0 0 10px color-mix(in srgb, var(--color-accent) 28%, transparent),
+      0 2px 8px rgba(0, 0, 0, 0.5);
     animation: ai-clip-breathe 2.6s ease-in-out infinite;
   }
 
   @keyframes ai-clip-breathe {
     0%, 100% {
+      border-color: color-mix(in srgb, var(--color-accent) 55%, transparent);
       box-shadow:
-        0 0 14px var(--color-accent),
-        0 2px 8px rgba(0, 0, 0, 0.5),
-        inset 0 1px 0 rgba(255, 255, 255, 0.32),
-        inset 0 -1px 0 rgba(0, 0, 0, 0.18);
+        0 0 10px color-mix(in srgb, var(--color-accent) 28%, transparent),
+        0 2px 8px rgba(0, 0, 0, 0.5);
     }
-
     50% {
+      border-color: color-mix(in srgb, var(--color-accent) 85%, transparent);
       box-shadow:
-        0 0 30px var(--color-accent),
-        0 0 14px var(--color-accent),
-        0 2px 8px rgba(0, 0, 0, 0.5),
-        inset 0 1px 0 rgba(255, 255, 255, 0.32),
-        inset 0 -1px 0 rgba(0, 0, 0, 0.18);
+        0 0 18px color-mix(in srgb, var(--color-accent) 45%, transparent),
+        0 2px 8px rgba(0, 0, 0, 0.5);
     }
   }
 

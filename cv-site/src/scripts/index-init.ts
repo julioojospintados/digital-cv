@@ -19,6 +19,70 @@ const knolls = document.querySelectorAll<HTMLImageElement>(
 
 let selectedMode: string | null = null;
 
+// ── Mobile grid expansion — stato modulo ─────────────────────────────────
+// Quando l'utente seleziona una card su touch, il grid si espande (60/40)
+// invece di usare scale() che causa overflow interno nella cella.
+const modeCardsEl = document.getElementById("mode-cards") as HTMLElement;
+let _gridLocked = false;  // true dopo la prima selezione (fr → px bloccati)
+let _lockedH = 0;         // altezza totale del container (meno il gap)
+let _lockedW = 0;         // larghezza totale del container (meno il gap)
+
+/**
+ * Converti la griglia da fr a px (no-op visivo), poi anima la distribuzione
+ * in modo che la cella selezionata ottenga il 60% dello spazio disponibile.
+ * Chiamate successive tweenano direttamente px→px senza reset.
+ * Ordine auto-placement: tech(0)=r0c0, creative(1)=r0c1, management(2)=r1c0, human(3)=r1c1
+ */
+function expandMobileGrid(cardIndex: number) {
+  const EXPAND = 0.60;
+  const SHRINK = 1 - EXPAND;
+  const GRID_GAP = 6; // corrisponde a gap: 0.4rem nel CSS
+
+  if (!_gridLocked) {
+    const rect = modeCardsEl.getBoundingClientRect();
+    _lockedH = rect.height - GRID_GAP;
+    _lockedW = rect.width - GRID_GAP;
+    // Blocca il grid su pixel espliciti → identico visivamente, tweenabile da GSAP
+    gsap.set(modeCardsEl, {
+      gridTemplateRows: `${_lockedH / 2}px ${_lockedH / 2}px`,
+      gridTemplateColumns: `${_lockedW / 2}px ${_lockedW / 2}px`,
+    });
+    _gridLocked = true;
+  }
+
+  const selRow = cardIndex < 2 ? 0 : 1;
+  const selCol = cardIndex % 2;
+
+  const r1 = selRow === 0 ? _lockedH * EXPAND : _lockedH * SHRINK;
+  const r2 = selRow === 1 ? _lockedH * EXPAND : _lockedH * SHRINK;
+  const c1 = selCol === 0 ? _lockedW * EXPAND : _lockedW * SHRINK;
+  const c2 = selCol === 1 ? _lockedW * EXPAND : _lockedW * SHRINK;
+
+  gsap.to(modeCardsEl, {
+    gridTemplateRows: `${r1}px ${r2}px`,
+    gridTemplateColumns: `${c1}px ${c2}px`,
+    duration: 0.52,
+    ease: "expo.out",
+    overwrite: "auto",
+  });
+}
+
+// Reset su resize per evitare valori px obsoleti dopo rotazione schermo
+window.addEventListener(
+  "resize",
+  () => {
+    if (_gridLocked) {
+      gsap.set(modeCardsEl, {
+        clearProps: "gridTemplateRows,gridTemplateColumns",
+      });
+      _gridLocked = false;
+      _lockedH = 0;
+      _lockedW = 0;
+    }
+  },
+  { passive: true },
+);
+
 // ── Split nome in chars individuali — G di Giulio e O di Occhipinti sono le iniziali GO ──
 let firstGChar: HTMLElement | null = null;
 let firstOChar: HTMLElement | null = null;
@@ -348,7 +412,8 @@ function selectMode(targetCard: HTMLButtonElement, mode: string) {
     if (c === targetCard) {
       c.classList.add("is-selected");
       c.classList.remove("is-passive");
-      gsap.to(c, { scale: isMobile ? 1.06 : 1.04, duration: 0.3, ease: "back.out(2)" });
+      // Su mobile il grid fa l'espansione — scale: 1 evita l'overflow nella cella
+      gsap.to(c, { scale: isMobile ? 1 : 1.04, duration: 0.3, ease: "back.out(2)" });
       if (goBtn) {
         goBtn.setAttribute("tabindex", "0");
         goBtn.removeAttribute("aria-hidden");
@@ -388,7 +453,8 @@ function selectMode(targetCard: HTMLButtonElement, mode: string) {
     } else {
       c.classList.add("is-passive");
       c.classList.remove("is-selected");
-      gsap.to(c, { scale: isMobile ? 0.94 : 0.96, duration: 0.25, ease: "power2.out" });
+      // Su mobile: scale: 1 (il grid riduce la cella, scale causerebbe overflow)
+      gsap.to(c, { scale: isMobile ? 1 : 0.96, duration: 0.25, ease: "power2.out" });
       if (goBtn && goBtn.classList.contains("is-ready")) {
         goBtn.setAttribute("tabindex", "-1");
         goBtn.setAttribute("aria-hidden", "true");
@@ -414,6 +480,29 @@ function selectMode(targetCard: HTMLButtonElement, mode: string) {
       ease: "power2.out",
     });
   });
+
+  // Mobile: espandi la cella del grid + scan sweep per feedback tattile
+  if (isMobile) {
+    const idx = Array.from(cards).indexOf(targetCard);
+    expandMobileGrid(idx);
+
+    // Scan sweep — linea luminosa che scorre dall'alto al basso sulla card
+    const scanEl = document.createElement("div");
+    scanEl.className = "mode-card-scan";
+    targetCard.appendChild(scanEl);
+    const cardH = targetCard.getBoundingClientRect().height;
+    gsap.fromTo(
+      scanEl,
+      { y: 0, opacity: 0.9 },
+      {
+        y: cardH + 4,
+        opacity: 0,
+        duration: 0.5,
+        ease: "power2.in",
+        onComplete: () => scanEl.remove(),
+      },
+    );
+  }
 }
 
 // ── Per-card: tap/click = selezione, GO button = navigazione ───────────────

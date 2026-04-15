@@ -120,6 +120,10 @@ Quando leggi il file `.todo.md` depenna i punti completati, ma non sentirti obbl
 
 ---
 
+## Quando l'utente ti dice di analizzare il file .todo.md riporta aggiornamenti dei punti immediatamente sotto ogni punto, se portato a termine inserisci un check altrimenti una X (icone) di fianco al numero inserito. Se l'utente ti dice di analizzare analizza, ma non modificare codice, riporta solo le soluzioni, consigli e migliorie.
+
+---
+
 ## Panoramica progetto
 
 **Digital CV di Giulio Occhipinti** — un CV interattivo con due sistemi indipendenti:

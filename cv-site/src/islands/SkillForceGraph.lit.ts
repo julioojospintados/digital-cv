@@ -83,9 +83,9 @@ const DOMAIN_LABEL: Record<SkillDomain, string> = {
 };
 
 const LINK_TYPE_LABEL: Record<string, string> = {
-  technical: "Technical",
-  "cross-domain": "Cross",
-  conceptual: "Conceptual",
+  technical: "Tecnico",
+  "cross-domain": "Trasversale",
+  conceptual: "Concettuale",
   workflow: "Workflow",
 };
 
@@ -301,14 +301,14 @@ class SkillForceGraph extends LitElement {
     }
 
     .graph-meta {
-      padding: 0.35rem 0.9rem 0.65rem;
+      padding: 0.5rem;
+      margin: 0;
       border-top: 1px solid
         var(--skills-panel-border, rgba(255, 255, 255, 0.05));
       font-family: "JetBrains Mono", monospace;
       font-size: 0.56rem;
       color: rgba(192, 220, 215, 0.58);
       text-align: center;
-      min-height: 2.1rem;
     }
 
     .graph-tooltip {
@@ -371,17 +371,35 @@ class SkillForceGraph extends LitElement {
     }
 
     .graph-tooltip__desc {
-      margin: 0.18rem 0 0;
-      font-size: 0.55rem;
+      margin: 0.15rem 0 0;
+      font-size: 0.5rem;
+      color: rgba(192, 220, 215, 0.68);
       line-height: 1.35;
-      color: rgba(192, 220, 215, 0.82);
+    }
+
+    /* Mobile: il viewBox (1080×760) porta le label a ~4px reali su 390px.
+       Si aumenta la dimensione SVG e si usa uno stroke più spesso.
+       Lo zoom iniziale 1.9× porta le label a ~9px effettivi. */
+    @media (max-width: 899px) {
+      .force-node-label {
+        font-size: 13px;
+        font-weight: 500;
+        stroke-width: 4px;
+      }
+      .graph-meta {
+        padding: 0.1rem 0.65rem 0.15rem;
+        font-size: 0.5rem;
+      }
+      .graph-tooltip {
+        width: min(220px, calc(100% - 1rem));
+        padding: 0.42rem 0.5rem;
+      }
     }
   `;
 
   private _mode: Mode = "tech";
   private _hoveredNodeId: string | null = null;
   private _tooltip: TooltipState | null = null;
-
   private _nodes: GraphNode[] = [];
   private _links: GraphLink[] = [];
   private _nodeById = new Map<string, GraphNode>();
@@ -465,11 +483,12 @@ class SkillForceGraph extends LitElement {
 
     // D3 zoom behavior — supports pinch-to-zoom natively on touch devices
     this._zoomBehavior = zoom<SVGSVGElement, unknown>()
-      .scaleExtent([INITIAL_ZOOM, 5])
+      .scaleExtent([0.5, 5])
       .on("zoom", (event: D3ZoomEvent<SVGSVGElement, unknown>) => {
         zoomRoot.attr("transform", event.transform.toString());
       });
     root.call(this._zoomBehavior);
+    // const mobileZoom = window.innerWidth < 640 ? 1.9 : INITIAL_ZOOM;
     root.call(
       this._zoomBehavior.transform,
       zoomIdentity
@@ -720,6 +739,9 @@ class SkillForceGraph extends LitElement {
   }
 
   private _updateTooltip(event: MouseEvent, nodeId: string) {
+    /* Su mobile mostriamo solo il highlight dei collegamenti — niente scheda. */
+    if (window.innerWidth < 900) return;
+
     const svg = this.renderRoot.querySelector<SVGSVGElement>(".graph-svg");
     if (!svg) return;
 
@@ -838,13 +860,18 @@ class SkillForceGraph extends LitElement {
   }
 
   private _getMetaText(): string {
-    if (!this._hoveredNodeId) {
-      return "Hover a node to inspect links. Drag nodes to reshape the network.";
-    }
+    const isMobile = window.innerWidth < 640;
+    const baseHint = isMobile
+      ? "Tocca un nodo per esplorare"
+      : "Tocca un nodo per esplorare le connessioni \u00b7 Trascina per riorganizzare la rete";
+    if (!this._hoveredNodeId) return baseHint;
 
     const node = this._nodeById.get(this._hoveredNodeId);
-    if (!node)
-      return "Hover a node to inspect links. Drag nodes to reshape the network.";
+    if (!node) return baseHint;
+
+    if (isMobile) {
+      return `${node.label} \u00b7 peso ${node.weight}/5 \u00b7 padronanza ${node.mastery}%`;
+    }
 
     const linkedNames = Array.from(this._adjacency.get(node.id) ?? [])
       .slice(0, 6)
@@ -852,8 +879,8 @@ class SkillForceGraph extends LitElement {
 
     const domainLabel = DOMAIN_LABEL[node.domain] ?? node.domain;
     const connectionLabel =
-      linkedNames.length > 0 ? linkedNames : "no direct links";
-    return `${node.label} | ${domainLabel} | weight ${node.weight}/5 | mastery ${node.mastery}% | links: ${connectionLabel}`;
+      linkedNames.length > 0 ? linkedNames : "nessuna connessione diretta";
+    return `${node.label} · ${domainLabel} · peso ${node.weight}/5 · padronanza ${node.mastery}% · connessioni: ${connectionLabel}`;
   }
 
   private _renderTooltip() {
@@ -863,7 +890,7 @@ class SkillForceGraph extends LitElement {
     const node = this._nodeById.get(tooltip.nodeId);
     if (!node) return null;
 
-    const insights = this._getLinkInsights(node.id);
+    const insights = this._getLinkInsights(node.id).slice(0, 5);
     const domainLabel = DOMAIN_LABEL[node.domain] ?? node.domain;
 
     return html`
@@ -876,7 +903,7 @@ class SkillForceGraph extends LitElement {
       >
         <p class="graph-tooltip__title">${node.label}</p>
         <p class="graph-tooltip__meta">
-          ${domainLabel} · weight ${node.weight}/5 · mastery ${node.mastery}%
+          ${domainLabel} · peso ${node.weight}/5 · padronanza ${node.mastery}%
         </p>
         <ul class="graph-tooltip__list">
           ${insights.length > 0
@@ -887,10 +914,9 @@ class SkillForceGraph extends LitElement {
                       <span>${insight.id}</span>
                       <span class="graph-tooltip__type">${insight.type}</span>
                     </div>
-                    <p class="graph-tooltip__desc">
-                      ${insight.description ??
-                      "Relazione senza dettaglio testuale nel dataset."}
-                    </p>
+                    ${insight.description
+                  ? html`<p class="graph-tooltip__desc">${insight.description}</p>`
+                  : null}
                   </li>
                 `,
               )

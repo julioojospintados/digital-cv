@@ -28,24 +28,26 @@ class FloatingMenu extends LitElement {
       width: 3.1rem;
       height: 3.1rem;
       border-radius: 50%;
-      background: rgba(
-        240,
-        200,
-        127,
-        1
-      ); /* gold — fixed: ottanio icon 10:1 contrast + cyan glow = TECH identity */
-      border: none;
+      /* Gradient radiale: luce accent in alto + ottanio base — comunica
+         chiaramente che il FAB è cliccabile senza perdere il contrasto. */
+      background: radial-gradient(
+        circle at 46% 38%,
+        color-mix(in srgb, var(--color-accent, rgba(0, 255, 200, 1)) 33%, rgba(14, 90, 82, 0.98)),
+        rgba(8, 73, 67, 0.97)
+      );
+      border: 1.5px solid var(--color-accent, rgba(0, 255, 200, 1));
       cursor: none;
       pointer-events: all;
       display: flex;
       align-items: center;
       justify-content: center;
       box-shadow:
-        0 0 22px rgba(0, 255, 200, 0.45),
+        0 0 18px color-mix(in srgb, var(--color-accent, rgba(0,255,200,1)) 38%, transparent),
         0 4px 18px rgba(0, 0, 0, 0.45);
       transition:
         transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
-        box-shadow 0.3s ease;
+        box-shadow 0.3s ease,
+        border-color 0.3s ease;
       will-change: transform;
       flex-shrink: 0;
       position: relative;
@@ -53,8 +55,13 @@ class FloatingMenu extends LitElement {
 
     .fab-trigger:hover {
       transform: scale(1.1);
+      background: radial-gradient(
+        circle at 46% 38%,
+        color-mix(in srgb, var(--color-accent, rgba(0, 255, 200, 1)) 26%, rgba(14, 90, 82, 0.98)),
+        rgba(8, 73, 67, 0.97) 58%
+      );
       box-shadow:
-        0 0 36px rgba(0, 255, 200, 0.7),
+        0 0 32px color-mix(in srgb, var(--color-accent, rgba(0,255,200,1)) 55%, transparent),
         0 4px 22px rgba(0, 0, 0, 0.5);
     }
 
@@ -65,7 +72,7 @@ class FloatingMenu extends LitElement {
       display: flex;
       align-items: center;
       justify-content: center;
-      color: rgba(8, 73, 67, 1); /* ottanio — high contrast on accent */
+      color: var(--color-accent, rgba(0, 255, 200, 1)); /* accent su ottanio — legibile in tutti i mode */
       font-size: 1.25rem;
       font-weight: 900;
       line-height: 1;
@@ -182,13 +189,19 @@ class FloatingMenu extends LitElement {
     /* ── Pulse ring (attrae l'attenzione quando chiuso) ── */
     @keyframes fab-ring-pulse {
       0% {
-        box-shadow: 0 0 0 0 rgba(0, 255, 200, 0.45);
+        box-shadow:
+          0 0 0 0 color-mix(in srgb, var(--color-accent, rgba(0,255,200,1)) 45%, transparent),
+          0 0 18px color-mix(in srgb, var(--color-accent, rgba(0,255,200,1)) 22%, transparent);
       }
       70% {
-        box-shadow: 0 0 0 14px transparent;
+        box-shadow:
+          0 0 0 14px transparent,
+          0 0 0px transparent;
       }
       100% {
-        box-shadow: 0 0 0 0 transparent;
+        box-shadow:
+          0 0 0 0 transparent,
+          0 0 0px transparent;
       }
     }
 
