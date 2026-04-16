@@ -114,11 +114,29 @@
   min-height: 100vh;   /* fallback iOS < 15.4 / Chromium < 108 */
   min-height: 100svh;
   width: 100%;
-  overflow: hidden;
+  overflow: hidden; /* ensure homepage never grows beyond viewport */
   background-color: var(--color-bg);
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* Force entry content to fit inside the viewport and avoid vertical scroll
+   on both desktop and mobile: the home is a single-screen hero/knolling stage. */
+.entry-main {
+  max-height: 100svh;
+  overflow: hidden;
+}
+
+@media (--desktop) {
+  /* reduce vertical padding/gaps on wide viewports to avoid accidental overflow */
+  .entry-main {
+    padding: 1.25rem 1.5rem;
+    gap: 1.5rem;
+  }
+  .entry-header {
+    gap: 0.25rem;
+  }
 }
 
 /* ── Knolling stage — visible only on true desktop (≥ 900px) ── */

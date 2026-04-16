@@ -491,17 +491,12 @@ document
               duration: 0.25,
             });
 
-            if (lenis) {
-              lenis.scrollTo(absoluteTop, { duration: 1.1 });
-            } else {
-              window.scrollTo({ top: absoluteTop, behavior: "smooth" });
-            }
-
-            // Fase 5 — spegni spotlight dopo l'arrivo
-            setTimeout(() => {
+            // Usa helper scrollToPositionThen per attendere l'arrivo e spegnere
+            // lo spotlight in modo affidabile (gestisce Lenis o fallback).
+            scrollToPositionThen(absoluteTop).then(() => {
               gsap.to(allClusters, { opacity: 1, duration: 0.5, ease: "power2.out" });
               gsap.to(scanTarget, { boxShadow: "none", duration: 0.5 });
-            }, 1000);
+            });
           }, 650);
         }
       } else {

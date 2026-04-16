@@ -325,7 +325,7 @@ class SkillForceGraph extends LitElement {
     @media (max-width: 899px) {
       .force-node-label {
         font-size: 13px;
-        font-weight: 500;
+        font-weight: 400;
         stroke-width: 4px;
       }
       .graph-meta {
@@ -455,6 +455,10 @@ class SkillForceGraph extends LitElement {
     }
     .graph-dialog-svg:active {
       cursor: grabbing;
+    }
+    /* In full-screen dialog make labels normal weight for readability */
+    .graph-dialog-svg .force-node-label {
+      font-weight: 400;
     }
     .graph-dialog-meta {
       padding: 0.3rem 1rem;

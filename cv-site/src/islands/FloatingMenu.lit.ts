@@ -367,6 +367,9 @@ class FloatingMenu extends LitElement {
   private _unsub?: () => void;
   private _showFeedback = false;
   private _feedbackSent = false;
+  private _draftName = "";
+  private _draftNote = "";
+  private static DRAFT_KEY = "cv-feedback-draft";
 
   connectedCallback() {
     super.connectedCallback();
@@ -375,6 +378,21 @@ class FloatingMenu extends LitElement {
     });
     document.addEventListener("click", this._handleOutsideClick);
     document.addEventListener("keydown", this._handleKeydown);
+
+    // Load saved draft (if any) from sessionStorage so the input is preserved
+    if (typeof window !== "undefined") {
+      try {
+        const draft = JSON.parse(
+          sessionStorage.getItem(FloatingMenu.DRAFT_KEY) ?? "null",
+        );
+        if (draft && typeof draft === "object") {
+          this._draftName = draft.name ?? "";
+          this._draftNote = draft.note ?? "";
+        }
+      } catch {
+        /* noop */
+      }
+    }
   }
 
   disconnectedCallback() {
@@ -425,6 +443,8 @@ class FloatingMenu extends LitElement {
   }
 
   private _openFeedback() {
+    // Ensure draft is loaded before showing the panel
+    this._loadDraft();
     this._showFeedback = true;
     this._feedbackSent = false;
     this.requestUpdate();
@@ -435,6 +455,45 @@ class FloatingMenu extends LitElement {
     this._feedbackSent = false;
     this.requestUpdate();
   }
+
+  private _saveDraft() {
+    if (typeof window === "undefined") return;
+    try {
+      sessionStorage.setItem(
+        FloatingMenu.DRAFT_KEY,
+        JSON.stringify({ name: this._draftName, note: this._draftNote }),
+      );
+    } catch {
+      // ignore storage errors
+    }
+  }
+
+  private _loadDraft() {
+    if (typeof window === "undefined") return;
+    try {
+      const draft = JSON.parse(
+        sessionStorage.getItem(FloatingMenu.DRAFT_KEY) ?? "null",
+      );
+      if (draft && typeof draft === "object") {
+        this._draftName = draft.name ?? "";
+        this._draftNote = draft.note ?? "";
+      }
+    } catch {
+      /* noop */
+    }
+  }
+
+  private _onNameInput = (e: Event) => {
+    const t = e.target as HTMLInputElement;
+    this._draftName = t?.value ?? "";
+    this._saveDraft();
+  };
+
+  private _onNoteInput = (e: Event) => {
+    const t = e.target as HTMLTextAreaElement;
+    this._draftNote = t?.value ?? "";
+    this._saveDraft();
+  };
 
   private _submitFeedback() {
     const nameInput =
@@ -467,8 +526,82 @@ class FloatingMenu extends LitElement {
       "_blank",
     );
 
+    // Clear saved draft after sending
+    if (typeof window !== "undefined") {
+      try {
+        sessionStorage.removeItem(FloatingMenu.DRAFT_KEY);
+      } catch {}
+    }
+    this._draftName = "";
+    this._draftNote = "";
+
     this._feedbackSent = true;
     this.requestUpdate();
+  }
+
+  private async _handleAI(e: Event) {
+    // Robust navigation to #ai-section: prevent default, close menu,
+    // wait a frame for layout, then smooth-scroll (Lenis aware) and focus.
+    if (typeof window === "undefined") return;
+    e.preventDefault();
+
+    this._closeOnNav();
+
+    // Allow potential layout changes to settle (one RAF)
+    await new Promise((res) => requestAnimationFrame(res));
+
+    const target = document.getElementById("ai-section");
+    if (!target) {
+      // Fallback: navigate via href if section missing
+      const href = (e.currentTarget as HTMLAnchorElement)?.getAttribute("href");
+      if (href) window.location.href = href;
+      return;
+    }
+
+    const NAV_HEIGHT = 72;
+    const absoluteTop = target.getBoundingClientRect().top + window.scrollY - NAV_HEIGHT;
+    const lenis = (window as any).__lenis;
+
+    const waitForArrival = (targetY: number) =>
+      new Promise<void>((resolve) => {
+        let rafId: number | null = null;
+        const timeoutId = window.setTimeout(() => {
+          if (rafId) cancelAnimationFrame(rafId);
+          resolve();
+        }, 1600);
+
+        const check = () => {
+          const currentY = window.scrollY || window.pageYOffset || 0;
+          if (Math.abs(currentY - targetY) <= 6 || (window.innerHeight + currentY) >= document.body.scrollHeight) {
+            clearTimeout(timeoutId);
+            if (rafId) cancelAnimationFrame(rafId);
+            resolve();
+            return;
+          }
+          rafId = requestAnimationFrame(check);
+        };
+        rafId = requestAnimationFrame(check);
+      });
+
+    try {
+      if (lenis && typeof lenis.scrollTo === "function") {
+        lenis.scrollTo(absoluteTop, { duration: 1.0 });
+        await waitForArrival(absoluteTop);
+      } else {
+        window.scrollTo({ top: absoluteTop, behavior: "smooth" });
+        await waitForArrival(absoluteTop);
+      }
+    } catch {
+      window.scrollTo({ top: absoluteTop, behavior: "smooth" });
+      await waitForArrival(absoluteTop);
+    }
+
+    try {
+      target.setAttribute("tabindex", "-1");
+      (target as HTMLElement).focus({ preventScroll: true });
+    } catch {
+      /* noop */
+    }
   }
 
   render() {
@@ -524,11 +657,15 @@ class FloatingMenu extends LitElement {
                       id="fp-name"
                       placeholder="Nome (opzionale)"
                       autocomplete="off"
+                      .value=${this._draftName}
+                      @input=${this._onNameInput}
                     />
                     <textarea
                       class="fp-textarea"
                       id="fp-note"
                       placeholder="Lascia un commento…"
+                      .value=${this._draftNote}
+                      @input=${this._onNoteInput}
                     ></textarea>
                     <button
                       class="fp-submit"
@@ -568,7 +705,7 @@ class FloatingMenu extends LitElement {
                 class="fab-item"
                 href="${href}"
                 aria-label="AI Workflow — come l'AI amplifica il lavoro"
-                @click=${this._closeOnNav}
+                @click=${this._handleAI}
               >
                 <span class="fab-item__icon">⚡</span>
                 <span>AI Workflow</span>
