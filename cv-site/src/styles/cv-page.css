@@ -894,6 +894,26 @@ go-logo:not(:defined) {
   }
 }
 
+/* Mobile touch hints & touch-action for accordion headers */
+@media (max-width: 640px) {
+  .exp-cluster__header {
+    touch-action: manipulation;
+  }
+
+  .exp-cluster__header::after {
+    content: "Tocca per espandere";
+    display: block;
+    font-size: 0.55rem;
+    color: rgba(192, 220, 215, 0.45);
+    margin-top: 0.25rem;
+    font-family: var(--font-sans, 'Lexend', sans-serif);
+  }
+
+  .exp-cluster[data-open] .exp-cluster__header::after {
+    content: "Scorri il cluster per esplorare";
+  }
+}
+
 /* ExpCard styles → cards/ExpCard.astro */
 
 /* ── AI Workflow ──────────────────────────────────────────────── */

@@ -548,7 +548,28 @@ if ((CV_MODES as readonly string[]).includes(initialRouteMode)) {
 
 // ── Subscribe to modeStore (fires immediately with current value) ─────
 modeStore.subscribe((mode) => {
-  applyMode(mode ?? "tech");
+  const m = mode ?? "tech";
+  applyMode(m);
+  applyAccordions(m);
+
+  // Mobile-first: focus the first open cluster body so keyboard/touch users
+  // land inside content immediately (only on small screens).
+  try {
+    if (typeof window !== "undefined" && window.matchMedia("(max-width: 640px)").matches) {
+      const openBody = document.querySelector<HTMLElement>(
+        ".exp-cluster[data-open] .exp-cluster__body",
+      );
+      if (openBody) {
+        openBody.setAttribute("tabindex", "-1");
+        openBody.focus({ preventScroll: true });
+      }
+    }
+  } catch {
+    /* noop */
+  }
+
+  // Ensure ScrollTrigger recalculates after accordion state changes
+  setTimeout(() => ScrollTrigger.refresh(), 320);
 });
 
 // ── GSAP ScrollTrigger reveals (replaces IntersectionObserver) ───────
@@ -675,12 +696,26 @@ document
       const cluster = header.closest<HTMLElement>(".exp-cluster");
       if (!cluster) return;
       const isOpen = cluster.hasAttribute("data-open");
+      const isMobile = typeof window !== "undefined" && window.matchMedia("(max-width: 640px)").matches;
+
       if (isOpen) {
         cluster.removeAttribute("data-open");
         header.setAttribute("aria-expanded", "false");
       } else {
+        // On mobile behave like a true accordion: close others
+        if (isMobile) {
+          document.querySelectorAll<HTMLElement>(".exp-cluster").forEach((c) => {
+            if (c !== cluster) {
+              c.removeAttribute("data-open");
+              const h = c.querySelector<HTMLElement>(".exp-cluster__header");
+              if (h) h.setAttribute("aria-expanded", "false");
+            }
+          });
+        }
+
         cluster.setAttribute("data-open", "");
         header.setAttribute("aria-expanded", "true");
+
         // Move focus into the opened body for keyboard users
         const body = cluster.querySelector<HTMLElement>(".exp-cluster__body");
         if (body) {
@@ -688,6 +723,9 @@ document
           body.focus({ preventScroll: true });
         }
       }
+
+      // After layout change, refresh ScrollTrigger to recompute offsets
+      setTimeout(() => ScrollTrigger.refresh(), 320);
     });
   });
 
