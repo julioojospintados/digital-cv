@@ -41,8 +41,9 @@ const {
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
 
-    <!-- Preload critical font — weight 800 used by preloader & entry name -->
+    <!-- Preload critical fonts — 400 for body text, 800 for preloader & entry name -->
     <!-- font-display: block in global.css prevents FOUC during the preloader animation -->
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/Lexend/lexend-latin-400-normal.woff2" crossorigin />
     <link rel="preload" as="font" type="font/woff2" href="/fonts/Lexend/lexend-latin-800-normal.woff2" crossorigin />
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
