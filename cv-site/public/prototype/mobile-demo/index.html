@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Prototype — Mobile Mode Demo</title>
+  <style>
+    :root{--bg:#084943;--accent:#00ffc8;--muted:rgba(192,220,215,0.6);font-family:Lexend,system-ui,Arial}
+    html,body{height:100%;margin:0;background:linear-gradient(180deg,#063f36 0%, #073d37 100%);display:flex;align-items:center;justify-content:center}
+    .frame{width:360px;height:780px;border-radius:28px;padding:18px;box-sizing:border-box;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));box-shadow:0 10px 30px rgba(0,0,0,0.6);position:relative;color:#f5f0e6}
+    header{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+    header .title{font-weight:700;font-size:14px}
+    .content{height:680px;overflow:auto;padding-right:6px}
+    .exp-cluster{border:1px solid rgba(255,255,255,0.06);border-radius:8px;margin-bottom:10px;background:rgba(255,255,255,0.01);overflow:hidden;transition:box-shadow .25s ease}
+    .exp-cluster__header{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;cursor:pointer}
+    .exp-cluster__name{font-size:13px;font-weight:700;letter-spacing:.08em}
+    .exp-cluster__chevron{transform:rotate(0deg);transition:transform .25s ease;color:var(--muted)}
+    .exp-cluster[data-open] .exp-cluster__chevron{transform:rotate(90deg);color:var(--accent)}
+    .exp-cluster__body{max-height:0;overflow:hidden;padding:0 14px;transition:max-height .45s ease,opacity .35s ease}
+    .exp-cluster[data-open] .exp-cluster__body{max-height:420px;padding-top:10px;padding-bottom:14px}
+    .exp-grid{display:grid;grid-template-columns:1fr;gap:10px}
+    .exp-card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.03)}
+    .exp-card__title{font-weight:700;font-size:12px}
+    .play-controls{position:absolute;left:18px;bottom:18px;display:flex;gap:8px}
+    .btn{background:var(--accent);color:#063f36;padding:8px 12px;border-radius:999px;font-weight:700;border:none;cursor:pointer}
+    .hint{font-size:11px;color:var(--muted);margin-bottom:8px}
+    /* tiny scrollbar for demo clarity */
+    .content::-webkit-scrollbar{width:6px}
+    .content::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.05);border-radius:6px}
+  </style>
+</head>
+<body>
+  <div class="frame" role="region" aria-label="Prototype demo — Mobile Mode">
+    <header>
+      <div style="width:36px;height:36px;border-radius:8px;background:var(--accent)"></div>
+      <div>
+        <div class="title">CV — Mobile Prototype</div>
+        <div class="hint">Simulazione mobile: cluster/accordion (Opzione B)</div>
+      </div>
+    </header>
+
+    <div class="content" id="content">
+      <div class="exp-cluster" data-cluster="tech" data-open>
+        <button class="exp-cluster__header" aria-expanded="true">
+          <span class="exp-cluster__name">Sviluppo Software & AI</span>
+          <span class="exp-cluster__chevron">›</span>
+        </button>
+        <div class="exp-cluster__body">
+          <div class="exp-grid">
+            <div class="exp-card"><div class="exp-card__title">Digital CV — Architettura MCP</div><div class="exp-card__meta">TypeScript · Hono · AI</div></div>
+            <div class="exp-card"><div class="exp-card__title">ALTEN — Angular WebComponents</div><div class="exp-card__meta">Enterprise UI · Accessibility</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="exp-cluster" data-cluster="creative">
+        <button class="exp-cluster__header" aria-expanded="false">
+          <span class="exp-cluster__name">Design & Comunicazione</span>
+          <span class="exp-cluster__chevron">›</span>
+        </button>
+        <div class="exp-cluster__body">
+          <div class="exp-grid">
+            <div class="exp-card"><div class="exp-card__title">Figma Make — Prototipi rapidissimi</div></div>
+            <div class="exp-card"><div class="exp-card__title">Videomaker — storyboarding</div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="exp-cluster" data-cluster="human">
+        <button class="exp-cluster__header" aria-expanded="false">
+          <span class="exp-cluster__name">Facilitazione & Cultura</span>
+          <span class="exp-cluster__chevron">›</span>
+        </button>
+        <div class="exp-cluster__body">
+          <div class="exp-grid">
+            <div class="exp-card"><div class="exp-card__title">Workshop & Sprint</div></div>
+            <div class="exp-card"><div class="exp-card__title">Formazione operatori</div></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="play-controls">
+      <button id="replay" class="btn">Riproduci</button>
+      <button id="pause" class="btn" style="background:#fff;color:#063f36;">Pausa</button>
+    </div>
+  </div>
+
+  <script>
+    // Auto-play demo sequence: open first, then switch clusters
+    const clusters = Array.from(document.querySelectorAll('.exp-cluster'));
+    let seqId = null;
+    let playing = false;
+
+    function openCluster(idx){
+      clusters.forEach((c,i)=>{
+        const header = c.querySelector('.exp-cluster__header');
+        if(i===idx){
+          c.setAttribute('data-open','');
+          header.setAttribute('aria-expanded','true');
+        } else {
+          c.removeAttribute('data-open');
+          header.setAttribute('aria-expanded','false');
+        }
+      });
+    }
+
+    async function playSequence(){
+      if(playing) return;
+      playing = true;
+      const order = [0,1,2,0];
+      for(let step=0; step<order.length && playing; step++){
+        openCluster(order[step]);
+        // scroll into view inside frame
+        const body = clusters[order[step]].querySelector('.exp-cluster__body');
+        const content = document.getElementById('content');
+        const top = clusters[order[step]].offsetTop - 16;
+        content.scrollTo({top, behavior:'smooth'});
+        await new Promise(r=>setTimeout(r, 1100));
+      }
+      playing=false;
+    }
+
+    document.getElementById('replay').addEventListener('click', ()=>{ playSequence(); });
+    document.getElementById('pause').addEventListener('click', ()=>{ playing=false; });
+
+    // start once after load
+    window.addEventListener('load', ()=> setTimeout(playSequence,600));
+  </script>
+</body>
+</html>

@@ -89,11 +89,54 @@ describe("initMode", () => {
     expect(document.documentElement.dataset.mode).toBe("human");
   });
 
-  it("works for all four modes", () => {
+  it("works for all four modes when no route mode is present", () => {
     for (const mode of VALID_MODES) {
       modeStore.set(mode);
       initMode();
       expect(document.documentElement.dataset.mode).toBe(mode);
     }
+  });
+
+  // ── Fix: route è source of truth (evita flash di colore sbagliato) ──────
+  it("usa il mode della route (/tech) anche se localStorage ha un altro mode", () => {
+    window.history.replaceState({}, "", "/tech");
+    modeStore.set("creative"); // localStorage ha creative
+    initMode();
+    expect(document.documentElement.dataset.mode).toBe("tech"); // route vince
+  });
+
+  it("usa il mode della route (/creative) anche se localStorage ha 'human'", () => {
+    window.history.replaceState({}, "", "/creative");
+    modeStore.set("human");
+    initMode();
+    expect(document.documentElement.dataset.mode).toBe("creative");
+  });
+
+  it("usa il mode della route (/management)", () => {
+    window.history.replaceState({}, "", "/management");
+    modeStore.set("tech");
+    initMode();
+    expect(document.documentElement.dataset.mode).toBe("management");
+  });
+
+  it("aggiorna lo store al mode della route (non solo data-mode)", () => {
+    window.history.replaceState({}, "", "/human");
+    modeStore.set("tech");
+    initMode();
+    expect(modeStore.get()).toBe("human");
+  });
+
+  it("route non-mode (/en/cv) → fallback su store (nessun flash)", () => {
+    window.history.replaceState({}, "", "/en/cv");
+    modeStore.set("creative");
+    initMode();
+    expect(document.documentElement.dataset.mode).toBe("creative");
+  });
+
+  it("route root (/) → fallback su store", () => {
+    window.history.replaceState({}, "", "/");
+    modeStore.set("management");
+    initMode();
+    expect(document.documentElement.dataset.mode).toBe("management");
   });
 });

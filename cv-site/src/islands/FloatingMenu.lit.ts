@@ -560,7 +560,7 @@ class FloatingMenu extends LitElement {
 
     const NAV_HEIGHT = 72;
     const absoluteTop = target.getBoundingClientRect().top + window.scrollY - NAV_HEIGHT;
-    const lenis = (window as any).__lenis;
+    const lenis = window.__lenis;
 
     const waitForArrival = (targetY: number) =>
       new Promise<void>((resolve) => {

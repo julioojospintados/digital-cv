@@ -326,7 +326,7 @@ class SkillForceGraph extends LitElement {
       .force-node-label {
         font-size: 13px;
         font-weight: 400;
-        stroke-width: 4px;
+        stroke-width: 2.5px;
       }
       .graph-meta {
         padding: 0.1rem 0.65rem 0.15rem;

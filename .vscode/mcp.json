@@ -42,22 +42,26 @@
     // Installato globalmente: npm i -g @modelcontextprotocol/server-memory
     "memory": {
       "type": "stdio",
-      "command": "mcp-server-memory"
+      "command": "cmd",
+      "args": ["/c", "mcp-server-memory"]
     },
     // SEQUENTIAL THINKING — ragionamento strutturato step-by-step
     // Attivare per decisioni architetturali, copy complesso, UX analysis
     // Installato globalmente: npm i -g @modelcontextprotocol/server-sequential-thinking
     "sequential-thinking": {
       "type": "stdio",
-      "command": "mcp-server-sequential-thinking"
+      "command": "cmd",
+      "args": ["/c", "mcp-server-sequential-thinking"]
     },
     // FILESYSTEM — accesso completo al workspace (anche fuori dalla finestra contesto)
     // Legge file grandi, cartelle, strutture senza copy-paste manuale
     // Installato globalmente: npm i -g @modelcontextprotocol/server-filesystem
     "filesystem": {
       "type": "stdio",
-      "command": "mcp-server-filesystem",
+      "command": "cmd",
       "args": [
+        "/c",
+        "mcp-server-filesystem",
         "${workspaceFolder}"
       ]
     },
