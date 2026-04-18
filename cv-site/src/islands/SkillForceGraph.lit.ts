@@ -213,7 +213,12 @@ class SkillForceGraph extends LitElement {
       border: 0;
       background: transparent;
       border-radius: 0;
-      overflow: hidden;
+    }
+
+    /* Isola il clipping solo all'SVG — il bottone vive dentro ma non viene clippato */
+    .graph-svg-clip {
+      position: relative;
+      overflow: visible;
     }
 
     .graph-svg {
@@ -334,11 +339,11 @@ class SkillForceGraph extends LitElement {
       }
     }
 
-    /* ── Expand button ── */
+    /* ── Expand button — position:absolute relativo a graph-svg-clip ── */
     .graph-expand-btn {
       position: absolute;
       bottom: 0.5rem;
-      right: 0.5rem;
+      right: 1.5rem;
       width: 2rem;
       height: 2rem;
       border-radius: 4px;
@@ -871,6 +876,7 @@ class SkillForceGraph extends LitElement {
       .force("y", forceY<GraphNode>((n) => DOMAIN_ANCHOR[n.domain].y).strength(0.06))
       .alpha(0.3)
       .alphaDecay(0.04)
+      .alphaMin(0.01)
       .on("tick", () => {
         this._dialogLinkSel
           ?.attr("x1", (l) => { const n = nodeMap.get(typeof l.source === "string" ? l.source : (l.source as GraphNode).id); return clamp(n?.x ?? WIDTH / 2, n?.r ?? 0, WIDTH - (n?.r ?? 0)); })
@@ -1073,6 +1079,7 @@ class SkillForceGraph extends LitElement {
       )
       .alpha(1.1)
       .alphaDecay(0.028)
+      .alphaMin(0.01)
       .on("tick", () => {
         this._linkSelection
           ?.attr("x1", (link) => this._safeX(this._resolveNode(link.source)))
@@ -1456,27 +1463,28 @@ class SkillForceGraph extends LitElement {
 
     return html`
       <div class="graph-wrap">
-        <svg
-          class="graph-svg"
-          viewBox="0 0 ${WIDTH} ${HEIGHT}"
-          role="img"
-          aria-label="Force-directed network graph of skills"
-          @touchstart=${this._hideTouchHint}
-        ></svg>
+        <div class="graph-svg-clip">
+          <svg
+            class="graph-svg"
+            viewBox="0 0 ${WIDTH} ${HEIGHT}"
+            role="img"
+            aria-label="Force-directed network graph of skills"
+            @touchstart=${this._hideTouchHint}
+          ></svg>
 
-
-        ${isMobile ? html`
-          <span class="graph-touch-hint ${this._touchHintHidden ? "graph-touch-hint--hidden" : ""}">
-            Trascina · Pizzica per zoom
-          </span>
-          <button
-            class="graph-expand-btn"
-            @click=${this._openDialog}
-            aria-label="Espandi grafico a schermo intero"
-            title="Schermo intero"
-            type="button"
-          >⛶</button>
-        ` : ""}
+          ${isMobile ? html`
+            <span class="graph-touch-hint ${this._touchHintHidden ? "graph-touch-hint--hidden" : ""}">
+              Trascina · Pizzica per zoom
+            </span>
+            <button
+              class="graph-expand-btn"
+              @click=${this._openDialog}
+              aria-label="Espandi grafico a schermo intero"
+              title="Schermo intero"
+              type="button"
+            >⛶</button>
+          ` : ""}
+        </div>
 
         <p class="graph-meta">${this._getMetaText()}</p>
       </div>

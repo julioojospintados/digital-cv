@@ -51,6 +51,7 @@ const classes = [
     border-radius: 2px;
     padding: 0.25rem;
     cursor: default;
+    container-type: inline-size;
     transition:
       opacity var(--duration-state) var(--ease-standard),
       transform var(--duration-state) var(--ease-standard),
@@ -58,19 +59,6 @@ const classes = [
       box-shadow var(--duration-state) var(--ease-standard);
     text-align: center;
   }
-
-  /* Weight-based font scaling */
-  .skill-sq--w5 .skill-sq__name { font-size: 0.82rem; }
-  .skill-sq--w5 .skill-sq__level { font-size: 0.6rem; }
-
-  .skill-sq--w4 .skill-sq__name { font-size: 0.66rem; }
-  .skill-sq--w4 .skill-sq__level { font-size: 0.52rem; }
-
-  .skill-sq--w3 .skill-sq__name { font-size: 0.56rem; }
-  .skill-sq--w3 .skill-sq__level { font-size: 0.46rem; }
-
-  .skill-sq--w1 .skill-sq__name { font-size: 0.5rem; }
-  .skill-sq--w1 .skill-sq__level { font-size: 0.42rem; }
 
   .skill-sq--glow {
     box-shadow: 0 0 8px rgba(0, 0, 0, 0), 0 0 0px var(--color-accent);
@@ -86,11 +74,14 @@ const classes = [
     letter-spacing: 0.02em;
     line-height: 1.2;
     color: var(--color-text-primary);
+    /* Font scala con la larghezza reale della card */
+    font-size: clamp(0.32rem, 9cqi, 0.82rem);
   }
 
   .skill-sq__level {
     font-weight: 500;
     letter-spacing: 0.08em;
     color: rgba(192, 220, 215, 0.85);
+    font-size: clamp(0.26rem, 6.5cqi, 0.6rem);
   }
 </style>
