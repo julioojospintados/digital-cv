@@ -17,6 +17,31 @@ const knolls = document.querySelectorAll<HTMLImageElement>(
   ".knoll-item, .knoll-m",
 );
 
+// ── Immagini knolling cliccabili — seguono l'istinto dell'utente ──────────
+// Desktop (.knoll-item): listener sull'img — area precisa via clip-path CSS.
+// Mobile (.knoll-wrap): listener sul div wrapper — evita che la zona
+//   trasparente dell'img intercetti il click sulle celle adiacenti.
+document.querySelectorAll<HTMLImageElement>(".knoll-item").forEach((img) => {
+  const primaryMode = img.dataset.modes?.split(" ")[0];
+  if (!primaryMode) return;
+  const targetCard = document.querySelector<HTMLButtonElement>(
+    `.mode-card[data-mode="${primaryMode}"]`,
+  );
+  if (!targetCard) return;
+  img.addEventListener("click", () => targetCard.click(), { passive: true });
+});
+
+document.querySelectorAll<HTMLElement>(".knoll-wrap").forEach((wrap) => {
+  const img = wrap.querySelector<HTMLImageElement>(".knoll-m");
+  const primaryMode = img?.dataset.modes?.split(" ")[0];
+  if (!primaryMode) return;
+  const targetCard = document.querySelector<HTMLButtonElement>(
+    `.mode-card[data-mode="${primaryMode}"]`,
+  );
+  if (!targetCard) return;
+  wrap.addEventListener("click", () => targetCard.click(), { passive: true });
+});
+
 let selectedMode: string | null = null;
 
 // ── Mobile grid expansion — stato modulo ─────────────────────────────────
@@ -199,41 +224,42 @@ gsap.delayedCall(1.25, () => {
     if (firstOChar) firstOChar.classList.add("name-go-o");
   });
 
-  // 8. Label + tagline
+  // 8. "Digital CV" + tagline compaiono insieme, subito dopo il nome completo
   tl.to(
     ["#entry-label", "#entry-tagline"],
     {
       opacity: 1,
       y: 0,
-      duration: 0.5,
-      stagger: 0.1,
+      duration: 0.45,
+      stagger: 0,
       ease: "power3.out",
     },
-    "-=0.3",
   );
 
-  // 9. Mode cards (GO concept — entrano dal basso)
+  // 9. Mode cards e oggetti knolling — partono insieme dopo label+tagline, ordine casuale
+  const shuffledCards = Array.from(cards).sort(() => Math.random() - 0.5);
   tl.fromTo(
-    Array.from(cards),
+    shuffledCards,
     { y: 30, opacity: 0, scale: 0.94 },
     {
       y: 0,
       opacity: 1,
       scale: 1,
-      duration: 0.65,
-      stagger: 0.08,
+      duration: 0.8,
+      stagger: 0.12,
       ease: "back.out(1.4)",
     },
-    "-=0.2",
+    "+=0.05",
   );
 
-  // 10. Oggetti knolling atterrano sul tavolo
+  // 10. Knolling: parte assieme alle card, ordine casuale
   tl.call(() => {
-    knolls.forEach((knoll, i) => {
-      knoll.style.setProperty("--knoll-delay", `${i * 65}ms`);
+    const shuffledKnolls = Array.from(knolls).sort(() => Math.random() - 0.5);
+    shuffledKnolls.forEach((knoll, i) => {
+      knoll.style.setProperty("--knoll-delay", `${i * 55}ms`);
       knoll.classList.add("do-enter");
     });
-  });
+  }, undefined, "<");
 });
 
 // ── Magnetic effect on mode cards ────────────────────────

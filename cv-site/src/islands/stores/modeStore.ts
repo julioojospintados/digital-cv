@@ -58,7 +58,13 @@ export function initMode(): void {
   // Evita il flash di colore sbagliato quando localStorage ha un mode diverso.
   const pathSegment = window.location.pathname.split('/').filter(Boolean)[0] ?? '';
   const routeMode = VALID_MODES.includes(pathSegment as Mode) ? (pathSegment as Mode) : null;
-  const mode = routeMode ?? modeStore.get();
-  document.documentElement.dataset.mode = mode;
-  if (routeMode) modeStore.set(routeMode);
+
+  if (routeMode) {
+    // Siamo su una pagina di mode (/tech, /creative, ecc.) — applica
+    document.documentElement.dataset.mode = routeMode;
+    modeStore.set(routeMode);
+  } else {
+    // Siamo sulla home (/) — nessun colore di mode, torna a neutro
+    delete document.documentElement.dataset.mode;
+  }
 }

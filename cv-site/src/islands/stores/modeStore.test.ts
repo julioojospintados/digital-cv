@@ -83,15 +83,23 @@ describe("setMode", () => {
 });
 
 describe("initMode", () => {
-  it("reads from store and sets document data-mode", () => {
-    modeStore.set("human");
+  it("on home (/) removes data-mode — torna a colori neutri", () => {
+    window.history.replaceState({}, "", "/");
+    document.documentElement.dataset.mode = "tech"; // simula ritorno da un mode
     initMode();
-    expect(document.documentElement.dataset.mode).toBe("human");
+    expect(document.documentElement.dataset.mode).toBeUndefined();
   });
 
-  it("works for all four modes when no route mode is present", () => {
+  it("on home (/) non imposta data-mode anche se store ha un valore", () => {
+    window.history.replaceState({}, "", "/");
+    modeStore.set("human");
+    initMode();
+    expect(document.documentElement.dataset.mode).toBeUndefined();
+  });
+
+  it("works for all four modes when route matches", () => {
     for (const mode of VALID_MODES) {
-      modeStore.set(mode);
+      window.history.replaceState({}, "", `/${mode}`);
       initMode();
       expect(document.documentElement.dataset.mode).toBe(mode);
     }
@@ -126,17 +134,17 @@ describe("initMode", () => {
     expect(modeStore.get()).toBe("human");
   });
 
-  it("route non-mode (/en/cv) → fallback su store (nessun flash)", () => {
+  it("route non-mode (/en/cv) → rimuove data-mode (colori neutri)", () => {
     window.history.replaceState({}, "", "/en/cv");
-    modeStore.set("creative");
+    document.documentElement.dataset.mode = "creative";
     initMode();
-    expect(document.documentElement.dataset.mode).toBe("creative");
+    expect(document.documentElement.dataset.mode).toBeUndefined();
   });
 
-  it("route root (/) → fallback su store", () => {
+  it("route root (/) → rimuove data-mode (colori neutri)", () => {
     window.history.replaceState({}, "", "/");
     modeStore.set("management");
     initMode();
-    expect(document.documentElement.dataset.mode).toBe("management");
+    expect(document.documentElement.dataset.mode).toBeUndefined();
   });
 });

@@ -165,10 +165,18 @@
   opacity: 0;
   scale: 1; /* CSS scale — separato da transform, no conflitto GSAP */
   will-change: transform, opacity, scale;
+  cursor: pointer;
   transition:
     filter 0.4s ease,
     opacity 0.5s ease,
     scale 0.5s ease;
+}
+
+/* Torcia — l'immagine ha molto spazio trasparente attorno all'oggetto visibile.
+   clip-path: inset() limita sia il rendering che l'area pointer-events
+   al solo rettangolo visibile, evitando che intercetti i click delle immagini vicine. */
+img[src*="flashlight"] {
+  clip-path: inset(5% 18%);
 }
 
 .knoll-item.is-dim,
@@ -189,17 +197,19 @@
 @keyframes knollLand {
   0% {
     opacity: 0;
-    filter: blur(6px) brightness(0.4);
+    filter: blur(4px) brightness(0.4);
+    transform: translateY(10px);
   }
   100% {
     opacity: 0.4;
     filter: none;
+    transform: translateY(0);
   }
 }
 
 .knoll-item.do-enter,
 .knoll-m.do-enter {
-  animation: knollLand 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  animation: knollLand 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
   animation-delay: var(--knoll-delay, 0ms);
 }
 
@@ -226,6 +236,7 @@
     align-items: center;
     justify-content: center;
     overflow: visible;
+    cursor: pointer;
   }
 
   /* Riga 1: 4+7+4 = 15 — laptop centrale occupa 47% della larghezza */
@@ -270,6 +281,7 @@
     height: 100%;
     object-fit: contain;
     opacity: 0; /* GSAP gestisce entrance */
+    pointer-events: none; /* il click è gestito dal .knoll-wrap */
     transition:
       filter 0.4s ease,
       opacity 0.5s ease;
@@ -466,10 +478,11 @@
   margin-top: 0.5rem;
 }
 
-/* Su touch la tagline libera spazio verticale prezioso per images e cards */
+/* Su touch la tagline è più piccola per non rubare spazio a card e img */
 @media (--touch) {
   .entry-tagline {
-    display: none;
+    font-size: 0.7rem;
+    margin-top: 0.25rem;
   }
 }
 
