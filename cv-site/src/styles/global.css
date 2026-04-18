@@ -2,6 +2,16 @@
    Lexend: testo e titoli (chiarezza + facilitazione)
    JetBrains Mono: tag, label, numeri, dati tecnici */
 
+/* @import deve precedere ogni altra regola CSS — vengono prima del @font-face custom */
+@import "@fontsource/lexend/400.css";
+@import "@fontsource/lexend/500.css";
+@import "@fontsource/lexend/600.css";
+@import "@fontsource/lexend/700.css";
+@import "@fontsource/jetbrains-mono/400.css";
+@import "@fontsource/jetbrains-mono/500.css";
+@import "@fontsource/jetbrains-mono/600.css";
+@import "@fontsource/jetbrains-mono/700.css";
+
 /* Peso 800 — font critico del preloader e del nome hero.
    font-display: block previene il FOUC durante l'animazione iniziale:
    il browser trattiene il testo invisible (max 3s) invece di fare swap.
@@ -18,27 +28,25 @@
     U+2215, U+FEFF, U+FFFD;
 }
 
-/* Pesi secondari via Fontsource — font-display: swap (default), non critici per il primo frame */
-@import "@fontsource/lexend/400.css";
-@import "@fontsource/lexend/500.css";
-@import "@fontsource/lexend/600.css";
-@import "@fontsource/lexend/700.css";
-@import "@fontsource/jetbrains-mono/400.css";
-@import "@fontsource/jetbrains-mono/500.css";
-@import "@fontsource/jetbrains-mono/600.css";
-@import "@fontsource/jetbrains-mono/700.css";
-
-@import "tailwindcss";
-
-@theme {
-  --font-sans: "Lexend", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Lexend", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, monospace;
-}
+/* ── Minimal reset — sostituisce Tailwind preflight ── */
+*, *::before, *::after { box-sizing: border-box; }
+html { line-height: 1.5; -webkit-text-size-adjust: 100%; tab-size: 4; }
+body { margin: 0; }
+h1, h2, h3, h4, h5, h6 { font-size: inherit; font-weight: inherit; margin: 0; }
+p, ul, ol, figure, blockquote, dl, dd { margin: 0; }
+ul, ol { padding: 0; list-style: none; }
+img, svg, video, canvas, audio, iframe, embed, object { display: block; max-width: 100%; }
+input, button, textarea, select { font: inherit; }
+button { background: none; border: 0; padding: 0; cursor: pointer; }
 
 /* ─── CSS Custom Properties — Knolling Design System ─── */
 
 :root {
+  /* Font stack — erano definiti nel @theme Tailwind, ora direttamente qui */
+  --font-sans: "Lexend", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Lexend", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
   /* Base ottanio — colore di sfondo primario del progetto */
   --color-ottanio: rgba(8, 73, 67, 1);
 

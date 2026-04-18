@@ -53,6 +53,12 @@ export function setMode(mode: Mode): void {
 
 export function initMode(): void {
   if (typeof window === 'undefined') return;
-  const stored = modeStore.get();
-  document.documentElement.dataset.mode = stored;
+  // La route è la source of truth: se siamo su /tech, usiamo 'tech'
+  // indipendentemente da cosa c'è in localStorage.
+  // Evita il flash di colore sbagliato quando localStorage ha un mode diverso.
+  const pathSegment = window.location.pathname.split('/').filter(Boolean)[0] ?? '';
+  const routeMode = VALID_MODES.includes(pathSegment as Mode) ? (pathSegment as Mode) : null;
+  const mode = routeMode ?? modeStore.get();
+  document.documentElement.dataset.mode = mode;
+  if (routeMode) modeStore.set(routeMode);
 }

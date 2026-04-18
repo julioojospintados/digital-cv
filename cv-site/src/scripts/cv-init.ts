@@ -1,6 +1,7 @@
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { modeStore, setMode } from "../islands/stores/modeStore.ts";
+import { applyAccordions, applyCardStates, CLUSTER_OPEN_FOR } from "./mode-helpers.ts";
 import "../islands/GoLogo.lit.ts";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -104,45 +105,18 @@ ScrollTrigger.create({
 // Rimosso GSAP Flip: catturare computed styles di ogni card è CPU-intensivo
 // quando il layout non cambia — solo gli stati visivi. CSS gestisce da solo.
 function applyMode(mode: string) {
-  document
-    .querySelectorAll<HTMLElement>(".cv-card[data-tags]")
-    .forEach((card) => {
-      const tags = card.dataset.tags?.split(" ") ?? [];
-      card.dataset.state = tags.includes(mode) ? "active" : "passive";
-    });
+  applyCardStates(mode);
   updateNavButtons(mode);
-  // Refresh ScrollTrigger dopo CSS transition (~300ms) — usato per in-page
-  // switching (es. /en/cv). Su route IT il nav naviga, quindi non serve qui.
-  setTimeout(() => ScrollTrigger.refresh(), 320);
+  // ScrollTrigger.refresh() rimosso da qui — il subscribe lo chiama già una sola volta.
 }
 
+// CLUSTER_OPEN_FOR, applyAccordions e applyCardStates sono importati da ./mode-helpers.ts
 // ── Apply accordions: apre/chiude i cluster di esperienza ────────────
-// Mappa mode → quali cluster devono essere aperti (coerente con EXP_CLUSTER_DEFS in [mode].astro)
-const CLUSTER_OPEN_FOR: Record<string, string[]> = {
-  tech: ["tech"],
-  creative: ["creative", "roots"],
-  human: ["human", "roots"],
-  management: ["tech", "human"],
-};
-
-function applyAccordions(mode: string) {
-  const shouldOpen = new Set(CLUSTER_OPEN_FOR[mode] ?? ["tech"]);
-  document.querySelectorAll<HTMLElement>(".exp-cluster").forEach((cluster) => {
-    const key = cluster.dataset.cluster ?? "";
-    const header = cluster.querySelector<HTMLElement>(".exp-cluster__header");
-    if (shouldOpen.has(key)) {
-      cluster.setAttribute("data-open", "");
-      header?.setAttribute("aria-expanded", "true");
-    } else {
-      cluster.removeAttribute("data-open");
-      header?.setAttribute("aria-expanded", "false");
-    }
-  });
-}
+// La funzione è definita in mode-helpers.ts per essere testabile indipendentemente.
 
 // Scroll helper: scroll fino a `targetY` e risolve quando la pagina è arrivata vicino alla posizione.
 function scrollToPositionThen(targetY: number, maxWait = 2200): Promise<void> {
-  const lenis = (window as any).__lenis;
+  const lenis = window.__lenis;
   return new Promise((resolve) => {
     let rafId: number | null = null;
     let timeoutId: number | null = null;
@@ -150,15 +124,10 @@ function scrollToPositionThen(targetY: number, maxWait = 2200): Promise<void> {
     function cleanup() {
       if (rafId) cancelAnimationFrame(rafId);
       if (timeoutId) clearTimeout(timeoutId);
-      window.removeEventListener("scroll", onScroll);
-    }
-
-    function onScroll() {
-      // noop; RAF loop checks position
     }
 
     function check() {
-      const currentY = window.scrollY || window.pageYOffset || 0;
+      const currentY = window.scrollY;
       if (Math.abs(currentY - targetY) <= 4 || (window.innerHeight + currentY) >= document.body.scrollHeight) {
         timeoutId = window.setTimeout(() => {
           cleanup();
@@ -168,8 +137,6 @@ function scrollToPositionThen(targetY: number, maxWait = 2200): Promise<void> {
       }
       rafId = requestAnimationFrame(check);
     }
-
-    window.addEventListener("scroll", onScroll, { passive: true } as any);
 
     if (lenis) {
       try {
@@ -319,12 +286,10 @@ document
       }
 
       setMode(mode);
-      // In-page update: colori + accordion + scroll alla sezione rilevante.
-      // Rimossa navigazione window.location.href che causava un full reload.
+      // setMode → subscribe → applyMode + applyAccordions già eseguiti (sincrono).
+      // Il button handler gestisce solo l'animazione visiva (stamp + scan + scroll).
       const currentSegment = window.location.pathname.split("/").filter(Boolean)[0];
       if ((CV_MODES as readonly string[]).includes(currentSegment)) {
-        applyMode(mode);
-        applyAccordions(mode);
 
         // ── Animazione 2+3: Mode stamp fullscreen → Scan laser reveal ────
         //
@@ -443,41 +408,40 @@ document
           let scanIndex = 0;
           const pageHeight = document.documentElement.scrollHeight;
 
-          gsap.fromTo(
-            scanner,
-            { top: 0 },
-            {
-              top: pageHeight,
-              duration: 0.85,
-              ease: "none",
-              onUpdate() {
-                const scanY = parseFloat(scanner.style.top || "0") || 0;
-                // Avanza l'indice finché le card sono sopra la linea di scansione
-                while (scanIndex < cardPositions.length && cardPositions[scanIndex].top <= scanY) {
-                  const card = cardPositions[scanIndex].el;
-                  if (!card.dataset.scanned) {
-                    card.dataset.scanned = "1";
-                    gsap.fromTo(
-                      card,
-                      { filter: "brightness(2.2)" },
-                      { filter: "brightness(1)", duration: 0.4, ease: "power2.out" },
-                    );
-                  }
-                  scanIndex += 1;
+          // Proxy object: evita DOM read (parseFloat(el.style.top)) in ogni frame.
+          const scanProxy = { y: 0 };
+          gsap.to(scanProxy, {
+            y: pageHeight,
+            duration: 0.85,
+            ease: "none",
+            onUpdate() {
+              scanner.style.top = scanProxy.y + "px";
+              // Avanza l'indice finché le card sono sopra la linea di scansione
+              while (scanIndex < cardPositions.length && cardPositions[scanIndex].top <= scanProxy.y) {
+                const card = cardPositions[scanIndex].el;
+                if (!card.dataset.scanned) {
+                  card.dataset.scanned = "1";
+                  // box-shadow invece di filter: brightness — evita compositing layer per ogni card
+                  gsap.fromTo(
+                    card,
+                    { boxShadow: "0 0 0 1px var(--color-accent), 0 0 16px var(--color-accent)" },
+                    { boxShadow: "0 0 0 0 transparent", duration: 0.45, ease: "power2.out" },
+                  );
                 }
-              },
-              onComplete() {
-                scanner.remove();
-                cardPositions.forEach((p) => { delete p.el.dataset.scanned; });
-              },
+                scanIndex += 1;
+              }
             },
-          );
+            onComplete() {
+              scanner.remove();
+              cardPositions.forEach((p) => { delete p.el.dataset.scanned; });
+            },
+          });
         }, 450);
 
         // ── Fase 4+5: scroll + spotlight (layout stabile a 650ms) ─────────
         if (scanTarget) {
           setTimeout(() => {
-            const lenis = (window as any).__lenis;
+            const lenis = window.__lenis;
             const NAV_HEIGHT = 72;
             const absoluteTop =
               scanTarget.getBoundingClientRect().top + window.scrollY - NAV_HEIGHT;
@@ -499,9 +463,8 @@ document
             });
           }, 650);
         }
-      } else {
-        applyMode(mode);
       }
+      // else: non su pagina mode — subscribe ha già chiamato applyMode.
     });
 
     btn.addEventListener("mousemove", (e) => {
@@ -568,30 +531,31 @@ modeStore.subscribe((mode) => {
     /* noop */
   }
 
-  // Ensure ScrollTrigger recalculates after accordion state changes
+  // Un solo ScrollTrigger.refresh() per ciclo mode — qui nel subscribe, non in applyMode.
   setTimeout(() => ScrollTrigger.refresh(), 320);
 });
 
-// ── GSAP ScrollTrigger reveals (replaces IntersectionObserver) ───────
-document.querySelectorAll<HTMLElement>(".reveal").forEach((el, i) => {
-  gsap.fromTo(
-    el,
-    { opacity: 0, y: 32 },
-    {
-      opacity: 1,
-      y: 0,
-      duration: 0.8,
-      ease: "power3.out",
-      delay: (i % 3) * 0.08,
-      scrollTrigger: {
-        trigger: el,
-        start: "top 88%",
-        toggleActions: "play none none none",
-      },
+// ── GSAP ScrollTrigger reveals — batch (1 istanza vs N) ────────────────────
+const revealEls = document.querySelectorAll<HTMLElement>(".reveal");
+if (revealEls.length) {
+  gsap.set(revealEls, { opacity: 0, y: 32 });
+  ScrollTrigger.batch(revealEls, {
+    start: "top 88%",
+    onEnter(batch) {
+      // Filtra solo gli elementi non ancora animati
+      const fresh = batch.filter((el) => !el.classList.contains("is-visible"));
+      if (!fresh.length) return;
+      gsap.to(fresh, {
+        opacity: 1,
+        y: 0,
+        duration: 0.8,
+        ease: "power3.out",
+        stagger: 0.08,
+      });
+      fresh.forEach((el) => el.classList.add("is-visible"));
     },
-  );
-  el.classList.add("is-visible");
-});
+  });
+}
 
 // ── Timeline stagger (separate from .reveal — items start invisible) ────
 const tlItems = document.querySelectorAll<HTMLElement>(".tl-item");

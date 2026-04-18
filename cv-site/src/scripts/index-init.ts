@@ -301,7 +301,7 @@ function launchJourney(href: string) {
       top: `${cy + Math.sin(rad) * dist}px`,
       width: `${len}px`,
       height: `${thick}px`,
-      background: "rgba(255,255,255,0.12)",
+      background: "rgba(255,255,255,0.9)",
       transform: `rotate(${angle}deg)`,
       transformOrigin: "left center",
       opacity: "0",
@@ -315,7 +315,6 @@ function launchJourney(href: string) {
   const journey = gsap.timeline({
     onComplete: () => {
       lineEls.forEach((l) => l.remove());
-      window.location.href = href;
     },
   });
 
@@ -323,14 +322,16 @@ function launchJourney(href: string) {
     .matches;
 
   // Speed lines sparano verso l'esterno (warp speed)
-  // Su touch: durate più lunghe per percepire l'animazione
-  const phase1Duration = isTouchDevice ? 0.9 : 0.6;
-  const phase1Stagger = isTouchDevice ? 0.028 : 0.018;
-  const phase2Duration = isTouchDevice ? 0.7 : 0.5;
-  const phase3Duration = isTouchDevice ? 0.55 : 0.35;
-  const phase3Stagger = isTouchDevice ? 0.016 : 0.009;
-  const blurStart = isTouchDevice ? 0.75 : 0.5;
-  const vignetteStart = isTouchDevice ? 1.3 : 0.9;
+  // Su touch: durate bilanciate per visibilità senza ritardo eccessivo
+  const phase1Duration = isTouchDevice ? 0.55 : 0.6;
+  const phase1Stagger = isTouchDevice ? 0.02 : 0.018;
+  const phase2Duration = isTouchDevice ? 0.25 : 0.5;
+  const phase3Duration = isTouchDevice ? 0.35 : 0.35;
+  const phase3Stagger = isTouchDevice ? 0.012 : 0.009;
+  const blurStart = isTouchDevice ? 0.4 : 0.5;
+  const vignetteStart = isTouchDevice ? 0.75 : 0.9;
+  // Naviga quando la vignette è abbastanza scura (non aspettare onComplete)
+  const navigateAt = isTouchDevice ? vignetteStart + 0.28 : vignetteStart + 0.4;
 
   // Fase 1: comparsa — rimangono visibili per ~1s totale
   journey.fromTo(
@@ -392,6 +393,9 @@ function launchJourney(href: string) {
     { opacity: 1, duration: 0.5, ease: "power2.inOut" },
     vignetteStart,
   );
+
+  // Naviga quando la vignette è abbastanza scura — non aspettare il completamento
+  journey.call(() => { window.location.href = href; }, undefined, navigateAt);
 }
 
 // ── Seleziona mode: aggiorna card UI, knolling, modeStore ───────────────

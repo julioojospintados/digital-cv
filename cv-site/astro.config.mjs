@@ -3,7 +3,6 @@ import { defineConfig } from 'astro/config';
 import { fileURLToPath } from 'url';
 import { resolve } from 'path';
 
-import tailwindcss from '@tailwindcss/vite';
 import lit from '@astrojs/lit';
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
@@ -14,7 +13,7 @@ export default defineConfig({
   compressHTML: true,
   integrations: [lit()],
   vite: {
-    plugins: [tailwindcss()],
+    plugins: [],
     resolve: {
       alias: {
         '@cv-data': resolve(__dirname, '../src/data/cv.ts'),

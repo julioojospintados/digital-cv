@@ -32,17 +32,6 @@
   transform: rotate(-10deg);
 }
 
-/* Mode-reactive opacity */
-html[data-mode="tech"] .bg-knoll--laptop {
-  opacity: 0.25;
-}
-html[data-mode="creative"] .bg-knoll--laptop {
-  opacity: 0.24;
-}
-html[data-mode="human"] .bg-knoll--laptop {
-  opacity: 0.23;
-}
-
 /* Knolling in skills section — multitool right */
 .bg-knoll--multitool {
   top: 0;
@@ -51,35 +40,12 @@ html[data-mode="human"] .bg-knoll--laptop {
   transform: rotate(8deg);
 }
 
-html[data-mode="tech"] .bg-knoll--multitool {
-  opacity: 0.25;
-}
-html[data-mode="creative"] .bg-knoll--multitool {
-  opacity: 0.24;
-}
-html[data-mode="human"] .bg-knoll--multitool {
-  opacity: 0.23;
-}
-
 /* Knolling in experience section — flashlight right */
 .bg-knoll--flashlight {
   top: 2rem;
   right: -2rem;
   width: 280px;
   transform: rotate(45deg);
-}
-
-html[data-mode="tech"] .bg-knoll--flashlight {
-  opacity: 0.25;
-}
-html[data-mode="creative"] .bg-knoll--flashlight {
-  opacity: 0.24;
-}
-html[data-mode="human"] .bg-knoll--flashlight {
-  opacity: 0.23;
-}
-html[data-mode="management"] .bg-knoll--flashlight {
-  opacity: 0.24;
 }
 
 /* Mobile: keep the objects visible but smaller so they stay decorative without covering text */
