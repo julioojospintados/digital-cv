@@ -1,10 +1,13 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import '../styles/index-page.css';
+import Layout from '../../layouts/Layout.astro';
+import '../../styles/index-page.css';
 ---
 
-<Layout title="Giulio Occhipinti — Digital CV" description="CV interattivo di Giulio Occhipinti">
-
+<Layout
+  title="Giulio Occhipinti — Digital CV"
+  description="Interactive CV of Giulio Occhipinti: Digital Innovation Consultant & Technical Partner for SMBs."
+  lang="en"
+>
 
   <div id="preloader" aria-hidden="true">
     <div class="pre-logo">
@@ -16,20 +19,18 @@ import '../styles/index-page.css';
 
   <div class="entry-root" id="entry-root">
 
-
     <div class="knolling-stage" id="knolling-stage" aria-hidden="true">
-      <img class="knoll-item" data-modes="creative human"  src="/knolling/megaphone.png"  alt="" loading="eager" style="--kx:7%;--ky:14%;--kr:0deg;--ks:0.82;">
+      <img class="knoll-item" data-modes="creative human"  src="/knolling/megaphone.png"   alt="" loading="eager" style="--kx:7%;--ky:14%;--kr:0deg;--ks:0.82;">
       <img class="knoll-item" data-modes="tech"            src="/knolling/flashlight.webp" alt="" loading="eager" style="--kx:9%;--ky:38%;--kr:0deg;--ks:1.2;--kfx:-1;">
-      <img class="knoll-item" data-modes="management"      src="/knolling/multitool.png"  alt="" loading="eager" style="--kx:7%;--ky:62%;--kr:0deg;--ks:0.85;">
-      <img class="knoll-item" data-modes="creative"        src="/knolling/camera.png"     alt="" loading="eager" style="--kx:7%;--ky:86%;--kr:0deg;--ks:0.8;">
-      <img class="knoll-item" data-modes="management"      src="/knolling/chess.png"      alt="" loading="eager" style="--kx:91%;--ky:14%;--kr:0deg;--ks:0.52;">
-      <img class="knoll-item" data-modes="tech"            src="/knolling/laptop.png"     alt="" loading="eager" style="--kx:91%;--ky:38%;--kr:0deg;--ks:0.75;">
-      <img class="knoll-item" data-modes="management"      src="/knolling/compass.png"    alt="" loading="eager" style="--kx:91%;--ky:62%;--kr:0deg;--ks:0.65;">
-      <img class="knoll-item" data-modes="human"           src="/knolling/plant.png"      alt="" loading="eager" style="--kx:91%;--ky:86%;--kr:0deg;--ks:0.72;">
+      <img class="knoll-item" data-modes="management"      src="/knolling/multitool.png"   alt="" loading="eager" style="--kx:7%;--ky:62%;--kr:0deg;--ks:0.85;">
+      <img class="knoll-item" data-modes="creative"        src="/knolling/camera.png"      alt="" loading="eager" style="--kx:7%;--ky:86%;--kr:0deg;--ks:0.8;">
+      <img class="knoll-item" data-modes="management"      src="/knolling/chess.png"       alt="" loading="eager" style="--kx:91%;--ky:14%;--kr:0deg;--ks:0.52;">
+      <img class="knoll-item" data-modes="tech"            src="/knolling/laptop.png"      alt="" loading="eager" style="--kx:91%;--ky:38%;--kr:0deg;--ks:0.75;">
+      <img class="knoll-item" data-modes="management"      src="/knolling/compass.png"     alt="" loading="eager" style="--kx:91%;--ky:62%;--kr:0deg;--ks:0.65;">
+      <img class="knoll-item" data-modes="human"           src="/knolling/plant.png"       alt="" loading="eager" style="--kx:91%;--ky:86%;--kr:0deg;--ks:0.72;">
     </div>
 
-
-<main class="entry-main" id="main-content">
+    <main class="entry-main" id="main-content">
 
       <header class="entry-header" id="entry-header">
         <p class="entry-label" id="entry-label">Digital CV</p>
@@ -38,13 +39,11 @@ import '../styles/index-page.css';
           <span class="name-word" aria-hidden="true">Occhipinti</span>
         </h1>
         <p class="entry-tagline" id="entry-tagline">
-          "Scopri l'ecosistema digitale."
+          "Explore the digital ecosystem."
         </p>
       </header>
 
-      <!-- Mobile knolling zone — grid 15 col, 3+5, visible only below 640px -->
-      <!-- Riga 1 (4+7+4): Megafono · Laptop · Bussola -->
-      <!-- Riga 2 (3×5):   Pianta · Torcia(120°→laptop) · Scacchi · Camera · Multitool -->
+      <!-- Mobile knolling zone -->
       <div class="knolling-mob" aria-hidden="true">
         <div class="knoll-wrap"><img class="knoll-m" data-modes="creative human"  src="/knolling/megaphone.png"   alt="" loading="eager"></div>
         <div class="knoll-wrap"><img class="knoll-m" data-modes="tech"            src="/knolling/laptop.png"      alt="" loading="eager"></div>
@@ -56,29 +55,29 @@ import '../styles/index-page.css';
         <div class="knoll-wrap"><img class="knoll-m" data-modes="management"      src="/knolling/multitool.png"   alt="" loading="eager"></div>
       </div>
 
-      <section class="mode-cards" id="mode-cards" aria-label="Scegli prospettiva">
+      <section class="mode-cards" id="mode-cards" aria-label="Choose your perspective">
         <button class="mode-card" data-mode="tech" id="card-tech" type="button">
           <span class="mode-card__label">Tech</span>
-          <span class="mode-card__desc">Architetture, codice, sistemi</span>
-          <span class="mode-card__go" data-href="/tech" role="link" tabindex="-1" aria-hidden="true"><span class="go-text">GO to Tech</span><span class="go-icon">↗</span></span>
+          <span class="mode-card__desc">Architectures, code, systems</span>
+          <span class="mode-card__go" data-href="/en/cv" role="link" tabindex="-1" aria-hidden="true"><span class="go-text">GO to Tech</span><span class="go-icon">↗</span></span>
         </button>
 
         <button class="mode-card" data-mode="creative" id="card-creative" type="button">
           <span class="mode-card__label">Creative</span>
-          <span class="mode-card__desc">Racconto, immagine, suono</span>
-          <span class="mode-card__go" data-href="/creative" role="link" tabindex="-1" aria-hidden="true"><span class="go-text">GO to Creative</span><span class="go-icon">↗</span></span>
+          <span class="mode-card__desc">Story, image, sound</span>
+          <span class="mode-card__go" data-href="/en/cv" role="link" tabindex="-1" aria-hidden="true"><span class="go-text">GO to Creative</span><span class="go-icon">↗</span></span>
         </button>
 
         <button class="mode-card" data-mode="management" id="card-management" type="button">
           <span class="mode-card__label">Management</span>
-          <span class="mode-card__desc">Strategia, metodo, risultati</span>
-          <span class="mode-card__go" data-href="/management" role="link" tabindex="-1" aria-hidden="true"><span class="go-text">GO to Management</span><span class="go-icon">↗</span></span>
+          <span class="mode-card__desc">Strategy, method, results</span>
+          <span class="mode-card__go" data-href="/en/cv" role="link" tabindex="-1" aria-hidden="true"><span class="go-text">GO to Management</span><span class="go-icon">↗</span></span>
         </button>
 
         <button class="mode-card" data-mode="human" id="card-human" type="button">
           <span class="mode-card__label">Human</span>
-          <span class="mode-card__desc">Impatto, relazione, presenza</span>
-          <span class="mode-card__go" data-href="/human" role="link" tabindex="-1" aria-hidden="true"><span class="go-text">GO to Human</span><span class="go-icon">↗</span></span>
+          <span class="mode-card__desc">Impact, connection, presence</span>
+          <span class="mode-card__go" data-href="/en/cv" role="link" tabindex="-1" aria-hidden="true"><span class="go-text">GO to Human</span><span class="go-icon">↗</span></span>
         </button>
       </section>
 
@@ -88,12 +87,10 @@ import '../styles/index-page.css';
   <div id="launch-overlay" aria-hidden="true"></div>
 
   <!-- Language switch — fixed top-right -->
-  <a href="/en" class="lang-switch" aria-label="Switch to English version">EN</a>
+  <a href="/" class="lang-switch" aria-label="Passa alla versione italiana">IT</a>
 
 </Layout>
 
-
 <script>
-  import '../scripts/index-init.ts';
+  import '../../scripts/index-init.ts';
 </script>
-

@@ -756,5 +756,6 @@ class FloatingMenu extends LitElement {
       </button>
     `;
   }
+}
 
 customElements.define("floating-menu", FloatingMenu);
