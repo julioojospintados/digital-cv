@@ -51,20 +51,30 @@ export function setMode(mode: Mode): void {
   }
 }
 
+// Pagine che usano il mode system ma non hanno una route di mode nel path
+// (es. /en/cv, /cv) — leggono il mode da localStorage invece di azzerarlo.
+const MODE_AWARE_PATHS = ['/en/cv', '/cv'];
+
 export function initMode(): void {
   if (typeof window === 'undefined') return;
   // La route è la source of truth: se siamo su /tech, usiamo 'tech'
   // indipendentemente da cosa c'è in localStorage.
   // Evita il flash di colore sbagliato quando localStorage ha un mode diverso.
-  const pathSegment = window.location.pathname.split('/').filter(Boolean)[0] ?? '';
+  const pathname = window.location.pathname;
+  const pathSegment = pathname.split('/').filter(Boolean)[0] ?? '';
   const routeMode = VALID_MODES.includes(pathSegment as Mode) ? (pathSegment as Mode) : null;
 
   if (routeMode) {
     // Siamo su una pagina di mode (/tech, /creative, ecc.) — applica
     document.documentElement.dataset.mode = routeMode;
     modeStore.set(routeMode);
+  } else if (MODE_AWARE_PATHS.some(p => pathname.startsWith(p))) {
+    // Pagina mode-aware senza route di mode (/en/cv) — usa localStorage o default 'tech'
+    const stored = modeStore.get();
+    const mode = VALID_MODES.includes(stored) ? stored : 'tech';
+    document.documentElement.dataset.mode = mode;
   } else {
-    // Siamo sulla home (/) — nessun colore di mode, torna a neutro
+    // Home (/) o altre route non-mode — torna a neutro
     delete document.documentElement.dataset.mode;
   }
 }

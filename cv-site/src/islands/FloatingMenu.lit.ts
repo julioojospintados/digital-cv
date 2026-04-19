@@ -607,9 +607,34 @@ class FloatingMenu extends LitElement {
   render() {
     // Guard window/sessionStorage access for SSR compatibility (window is undefined in Node.js)
     const isClient = typeof window !== "undefined";
+
+    // i18n: legge il lang dal <html lang="..."> — fallback IT
+    const lang = isClient ? (document.documentElement.lang ?? "it") : "it";
+    const isEN = lang === "en";
+
+    const t = {
+      contactLabel: isEN ? "Contact me" : "Contattami",
+      contactAriaLabel: isEN ? "Send email to Giulio" : "Invia email a Giulio",
+      feedbackLabel: isEN ? "Feedback" : "Feedback",
+      feedbackAriaLabel: isEN ? "Leave feedback" : "Lascia un feedback",
+      aiLabel: isEN ? "AI Workflow" : "AI Workflow",
+      aiAriaLabel: isEN ? "AI Workflow — how AI amplifies the work" : "AI Workflow — come l'AI amplifica il lavoro",
+      fpAriaLabel: isEN ? "Feedback form" : "Modulo feedback",
+      fpClose: isEN ? "Close" : "Chiudi",
+      fpSent: isEN ? "✓ Thanks! Opening email…" : "✓ Grazie! Apertura email…",
+      fpHintSent: isEN ? "Send the message in your email client." : "Invia il messaggio nel client di posta che si è aperto.",
+      fpNamePlaceholder: isEN ? "Name (optional)" : "Nome (opzionale)",
+      fpNotePlaceholder: isEN ? "Leave a comment…" : "Lascia un commento…",
+      fpSubmit: isEN ? "Send" : "Invia",
+      fpHint: isEN ? "Opens your email client — no database, no account required." : "Apre il tuo client email — nessun DB, nessun account richiesto.",
+      menuOpen: isEN ? "Open menu" : "Apri menu interazioni",
+      menuClose: isEN ? "Close menu" : "Chiudi menu",
+      badgeTitle: (n: number) => isEN ? `${n} feedback sent this session` : `${n} feedback inviati in questa sessione`,
+    };
+
     const href =
       isClient &&
-      window.location.pathname.match(/^\/(tech|creative|human|management|cv)/)
+        window.location.pathname.match(/^\/(tech|creative|human|management|cv|en)/)
         ? "#ai-section"
         : "/tech#ai-section";
 
@@ -631,31 +656,29 @@ class FloatingMenu extends LitElement {
             <div
               class="feedback-panel"
               role="dialog"
-              aria-label="Modulo feedback"
+              aria-label="${t.fpAriaLabel}"
             >
               <div class="fp-header">
                 <span class="fp-title">✦ Feedback</span>
                 <button
                   class="fp-close"
                   @click=${this._closeFeedback}
-                  aria-label="Chiudi"
+                  aria-label="${t.fpClose}"
                 >
                   ✕
                 </button>
               </div>
               ${this._feedbackSent
                 ? html`
-                    <p class="fp-sent">✓ Grazie! Apertura email…</p>
-                    <p class="fp-hint">
-                      Invia il messaggio nel client di posta che si è aperto.
-                    </p>
+                    <p class="fp-sent">${t.fpSent}</p>
+                    <p class="fp-hint">${t.fpHintSent}</p>
                   `
                 : html`
                     <input
                       class="fp-input"
                       type="text"
                       id="fp-name"
-                      placeholder="Nome (opzionale)"
+                      placeholder="${t.fpNamePlaceholder}"
                       autocomplete="off"
                       .value=${this._draftName}
                       @input=${this._onNameInput}
@@ -663,7 +686,7 @@ class FloatingMenu extends LitElement {
                     <textarea
                       class="fp-textarea"
                       id="fp-note"
-                      placeholder="Lascia un commento…"
+                      placeholder="${t.fpNotePlaceholder}"
                       .value=${this._draftNote}
                       @input=${this._onNoteInput}
                     ></textarea>
@@ -672,12 +695,9 @@ class FloatingMenu extends LitElement {
                       @click=${this._submitFeedback}
                       type="button"
                     >
-                      Invia
+                      ${t.fpSubmit}
                     </button>
-                    <p class="fp-hint">
-                      Apre il tuo client email — nessun DB, nessun account
-                      richiesto.
-                    </p>
+                    <p class="fp-hint">${t.fpHint}</p>
                   `}
             </div>
           `
@@ -686,29 +706,29 @@ class FloatingMenu extends LitElement {
               <a
                 class="fab-item"
                 href="mailto:giulio.occhipinti.g@gmail.com"
-                aria-label="Invia email a Giulio"
+                aria-label="${t.contactAriaLabel}"
                 @click=${this._closeOnNav}
               >
                 <span class="fab-item__icon">✉</span>
-                <span>Contattami</span>
+                <span>${t.contactLabel}</span>
               </a>
               <button
                 class="fab-item"
                 @click=${this._openFeedback}
-                aria-label="Lascia un feedback"
+                aria-label="${t.feedbackAriaLabel}"
                 type="button"
               >
                 <span class="fab-item__icon">✦</span>
-                <span>Feedback</span>
+                <span>${t.feedbackLabel}</span>
               </button>
               <a
                 class="fab-item"
                 href="${href}"
-                aria-label="AI Workflow — come l'AI amplifica il lavoro"
+                aria-label="${t.aiAriaLabel}"
                 @click=${this._handleAI}
               >
                 <span class="fab-item__icon">⚡</span>
-                <span>AI Workflow</span>
+                <span>${t.aiLabel}</span>
               </a>
             </div>
           `}
@@ -716,7 +736,7 @@ class FloatingMenu extends LitElement {
       <button
         class="fab-trigger"
         @click=${this._toggle}
-        aria-label="${this._open ? "Chiudi menu" : "Apri menu interazioni"}"
+        aria-label="${this._open ? t.menuClose : t.menuOpen}"
         aria-expanded="${this._open}"
         aria-haspopup="menu"
         type="button"
@@ -727,7 +747,7 @@ class FloatingMenu extends LitElement {
           ? html`
               <span
                 class="fab-badge"
-                title="${feedbackCount} feedback inviati in questa sessione"
+                title="${t.badgeTitle(feedbackCount)}"
               >
                 ${feedbackCount}
               </span>
@@ -736,6 +756,5 @@ class FloatingMenu extends LitElement {
       </button>
     `;
   }
-}
 
 customElements.define("floating-menu", FloatingMenu);

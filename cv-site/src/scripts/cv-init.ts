@@ -507,6 +507,13 @@ const initialRouteMode = window.location.pathname
   .filter(Boolean)[0] as CVMode;
 if ((CV_MODES as readonly string[]).includes(initialRouteMode)) {
   setMode(initialRouteMode);
+} else {
+  // Pagina mode-aware senza route di mode (es. /en/cv) — usa lo store (già inizializzato
+  // da initMode() in Layout.astro) oppure default 'tech'.
+  const stored = modeStore.get();
+  if (!(CV_MODES as readonly string[]).includes(stored)) {
+    setMode("tech");
+  }
 }
 
 // ── Subscribe to modeStore (fires immediately with current value) ─────
@@ -532,7 +539,24 @@ modeStore.subscribe((mode) => {
   }
 
   // Un solo ScrollTrigger.refresh() per ciclo mode — qui nel subscribe, non in applyMode.
-  setTimeout(() => ScrollTrigger.refresh(), 320);
+  // Dopo il refresh, forza la visibilità degli elementi .reveal già nel viewport
+  // (possono essere "saltati" da ScrollTrigger quando l'accordion si chiude e le sezioni
+  // sottostanti si trovano già sopra il threshold senza aver mai triggerato onEnter).
+  setTimeout(() => {
+    ScrollTrigger.refresh();
+    // Breve attesa per lasciar riposizionare i trigger dopo il refresh
+    requestAnimationFrame(() => {
+      const unrevealedEls = document.querySelectorAll<HTMLElement>(".reveal:not(.is-visible)");
+      const viewH = window.innerHeight;
+      unrevealedEls.forEach((el) => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < viewH * 0.95) {
+          gsap.to(el, { opacity: 1, y: 0, duration: 0.6, ease: "power3.out" });
+          el.classList.add("is-visible");
+        }
+      });
+    });
+  }, 320);
 });
 
 // ── GSAP ScrollTrigger reveals — batch (1 istanza vs N) ────────────────────
