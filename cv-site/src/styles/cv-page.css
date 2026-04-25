@@ -11,7 +11,8 @@
 .exp-section,
 .ai-section,
 .soft-section,
-.edu-section {
+.edu-section,
+.projects-section {
   position: relative;
 }
 
@@ -25,27 +26,51 @@
 }
 
 /* Knolling objects in hero — laptop top-right */
+/* rotation is set by GSAP (cv-init.ts) — do not add transform here */
 .bg-knoll--laptop {
-  top: -1rem;
+  top: 8rem;
   right: -3rem;
-  width: 240px;
-  transform: rotate(-10deg);
+  width: 20rem;
 }
 
 /* Knolling in skills section — multitool right */
+/* rotation is set by GSAP (cv-init.ts) — do not add transform here */
 .bg-knoll--multitool {
   top: 0;
   right: -2.5rem;
   width: 180px;
-  transform: rotate(8deg);
 }
 
 /* Knolling in experience section — flashlight right */
+/* rotation is set by GSAP (cv-init.ts) — do not add transform here */
 .bg-knoll--flashlight {
   top: 2rem;
   right: -2rem;
   width: 280px;
-  transform: rotate(45deg);
+}
+
+/* Knolling in ai section — chess left */
+/* rotation is set by GSAP (cv-init.ts) — do not add transform here */
+.bg-knoll--chess {
+  bottom: 2rem;
+  left: -3rem;
+  width: 16rem;
+}
+
+/* Knolling in soft section — plant right */
+/* rotation is set by GSAP (cv-init.ts) — do not add transform here */
+.bg-knoll--plant {
+  bottom: 0;
+  right: -2rem;
+  width: 14rem;
+}
+
+/* Knolling in projects section — compass right */
+/* rotation is set by GSAP (cv-init.ts) — do not add transform here */
+.bg-knoll--compass {
+  top: 1rem;
+  right: -2rem;
+  width: 14rem;
 }
 
 /* Mobile: keep the objects visible but smaller so they stay decorative without covering text */
@@ -708,6 +733,8 @@ go-logo:not(:defined) {
   border: 1px solid var(--color-border);
   border-radius: 2px;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
   transition: border-color var(--duration-state) var(--ease-standard);
 }
 
@@ -805,24 +832,46 @@ go-logo:not(:defined) {
   font-family: var(--font-mono);
   font-size: 0.55rem;
   color: var(--color-text-muted);
-  padding: 0.1rem 0.35rem;
+  width: 1.4rem;
+  height: 1.4rem;
   border: 1px solid var(--color-border);
   border-radius: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.exp-cluster__count span {
+  line-height: 1;
+  display: block;
 }
 
 .exp-cluster__chevron {
-  font-size: 0.95rem;
-  color: var(--color-text-muted);
+  /* Larger, bolder — clear affordance for accordion */
+  font-size: 1.15rem;
+  font-weight: 300;
+  color: rgba(192, 220, 215, 0.55);
   transition:
-    transform 0.35s var(--ease-standard),
-    color 0.2s ease;
+    transform 0.4s var(--ease-standard),
+    color 0.25s ease;
   line-height: 1;
   flex-shrink: 0;
+  /* Subtle pulse outline on closed clusters to hint at interactivity */
+  border: 1px solid transparent;
+  border-radius: 2px;
+  padding: 0.1rem 0.25rem;
+}
+
+.exp-cluster__header:hover .exp-cluster__chevron {
+  color: var(--color-text-primary);
+  border-color: var(--color-border);
 }
 
 .exp-cluster[data-open] .exp-cluster__chevron {
   transform: rotate(90deg);
   color: var(--color-accent);
+  border-color: transparent;
 }
 
 .exp-cluster__body {
@@ -840,6 +889,92 @@ go-logo:not(:defined) {
 /* Inner grid: padding-top 1rem for AI clip badges */
 .exp-cluster__body .exp-grid {
   padding: 1rem 1.25rem 1.25rem;
+}
+
+/* ── exp-drawer: extra cards hidden until "GO deeper" is clicked ──── */
+.exp-drawer {
+  height: 0;
+  overflow: hidden;
+}
+
+/* Cards inside the drawer start invisible for GSAP to animate */
+.exp-drawer .exp-card {
+  opacity: 0;
+  transform: translateY(16px);
+}
+
+/* Featured cards start invisible — GSAP scroll-reveal handles entrance */
+.exp-grid--featured .exp-card {
+  opacity: 0;
+  transform: translateY(24px);
+}
+
+/* ── GO deeper CTA — plain inline text, no border ───────────────── */
+.exp-deeper-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  align-self: flex-end;
+  margin: 0.5rem;
+  padding: 0;
+  background: transparent;
+  border: none;
+  cursor: none;
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: color var(--duration-micro) ease;
+  width: fit-content;
+}
+
+.exp-deeper-btn:hover {
+  color: var(--color-accent);
+}
+
+.exp-deeper-btn__count {
+  display: none;
+}
+
+.exp-deeper-btn__arrow {
+  display: inline-block;
+  font-size: 0.75rem;
+  transition: opacity 0.2s ease;
+}
+
+/* Swap arrow character via content when open */
+.exp-deeper-btn[aria-expanded="true"] .exp-deeper-btn__arrow {
+  font-size: 0;
+}
+
+.exp-deeper-btn[aria-expanded="true"] .exp-deeper-btn__arrow::before {
+  content: "↑";
+  font-size: 0.75rem;
+}
+
+/* Label swap via data-open-label attribute */
+.exp-deeper-btn[aria-expanded="true"] .exp-deeper-btn__label {
+  font-size: 0;
+}
+
+.exp-deeper-btn[aria-expanded="true"] .exp-deeper-btn__label::before {
+  content: attr(data-open-label);
+  font-size: 0.6rem;
+}
+
+/* When open: right-aligned text, accent colour */
+.exp-deeper-btn[aria-expanded="true"] {
+  color: var(--color-accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .exp-drawer .exp-card,
+  .exp-grid--featured .exp-card {
+    opacity: 1 !important;
+    transform: none !important;
+  }
 }
 
 .exp-grid {
@@ -860,23 +995,10 @@ go-logo:not(:defined) {
   }
 }
 
-/* Mobile touch hints & touch-action for accordion headers */
+/* Mobile touch-action for accordion headers */
 @media (max-width: 640px) {
   .exp-cluster__header {
     touch-action: manipulation;
-  }
-
-  .exp-cluster__header::after {
-    content: "Tocca per espandere";
-    display: block;
-    font-size: 0.55rem;
-    color: rgba(192, 220, 215, 0.45);
-    margin-top: 0.25rem;
-    font-family: var(--font-sans, 'Lexend', sans-serif);
-  }
-
-  .exp-cluster[data-open] .exp-cluster__header::after {
-    content: "Scorri il cluster per esplorare";
   }
 }
 

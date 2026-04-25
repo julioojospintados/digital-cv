@@ -5,6 +5,11 @@ import '../styles/index-page.css';
 
 <Layout title="Giulio Occhipinti — Digital CV" description="CV interattivo di Giulio Occhipinti">
 
+  <!-- Nasconde il FAB durante il preloader; rimosso da index-init.ts dopo la timeline -->
+  <script is:inline>
+    document.documentElement.setAttribute('data-fab-hidden', '');
+  </script>
+
 
   <div id="preloader" aria-hidden="true">
     <div class="pre-logo">
@@ -38,7 +43,7 @@ import '../styles/index-page.css';
           <span class="name-word" aria-hidden="true">Occhipinti</span>
         </h1>
         <p class="entry-tagline" id="entry-tagline">
-          "Scopri l'ecosistema digitale."
+          Accelero la crescita delle PMI con Tecnologia, Design e Metodo.
         </p>
       </header>
 
@@ -59,25 +64,25 @@ import '../styles/index-page.css';
       <section class="mode-cards" id="mode-cards" aria-label="Scegli prospettiva">
         <button class="mode-card" data-mode="tech" id="card-tech" type="button">
           <span class="mode-card__label">Tech</span>
-          <span class="mode-card__desc">Architetture, codice, sistemi</span>
+          <span class="mode-card__desc">Automazione, architetture e AI workflow</span>
           <span class="mode-card__go" data-href="/tech" role="link" tabindex="-1" aria-hidden="true"><span class="go-text">GO to Tech</span><span class="go-icon">↗</span></span>
         </button>
 
         <button class="mode-card" data-mode="creative" id="card-creative" type="button">
           <span class="mode-card__label">Creative</span>
-          <span class="mode-card__desc">Racconto, immagine, suono</span>
+          <span class="mode-card__desc">Brand, UX e comunicazione che convertono</span>
           <span class="mode-card__go" data-href="/creative" role="link" tabindex="-1" aria-hidden="true"><span class="go-text">GO to Creative</span><span class="go-icon">↗</span></span>
         </button>
 
         <button class="mode-card" data-mode="management" id="card-management" type="button">
           <span class="mode-card__label">Management</span>
-          <span class="mode-card__desc">Strategia, metodo, risultati</span>
+          <span class="mode-card__desc">Agile snello, sprint brevi, autonomia operativa</span>
           <span class="mode-card__go" data-href="/management" role="link" tabindex="-1" aria-hidden="true"><span class="go-text">GO to Management</span><span class="go-icon">↗</span></span>
         </button>
 
         <button class="mode-card" data-mode="human" id="card-human" type="button">
           <span class="mode-card__label">Human</span>
-          <span class="mode-card__desc">Impatto, relazione, presenza</span>
+          <span class="mode-card__desc">Il perché dietro ogni scelta — impatto e relazione</span>
           <span class="mode-card__go" data-href="/human" role="link" tabindex="-1" aria-hidden="true"><span class="go-text">GO to Human</span><span class="go-icon">↗</span></span>
         </button>
       </section>

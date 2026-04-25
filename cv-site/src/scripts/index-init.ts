@@ -21,6 +21,15 @@ const knolls = document.querySelectorAll<HTMLImageElement>(
 // Desktop (.knoll-item): listener sull'img — area precisa via clip-path CSS.
 // Mobile (.knoll-wrap): listener sul div wrapper — evita che la zona
 //   trasparente dell'img intercetti il click sulle celle adiacenti.
+// Torcia (flashlight): solo click entro 1rem dal centro attivano la card,
+//   così le zone trasparenti intorno al corpo della torcia non interferiscono.
+
+// Utility: distanza in px del click dal centro dell'elemento.
+function _distFromCenter(rect: DOMRect, clientX: number, clientY: number): number {
+  return Math.hypot(clientX - (rect.left + rect.width / 2), clientY - (rect.top + rect.height / 2));
+}
+const _1rem = (): number => parseFloat(getComputedStyle(document.documentElement).fontSize);
+
 document.querySelectorAll<HTMLImageElement>(".knoll-item").forEach((img) => {
   const primaryMode = img.dataset.modes?.split(" ")[0];
   if (!primaryMode) return;
@@ -28,7 +37,17 @@ document.querySelectorAll<HTMLImageElement>(".knoll-item").forEach((img) => {
     `.mode-card[data-mode="${primaryMode}"]`,
   );
   if (!targetCard) return;
-  img.addEventListener("click", () => targetCard.click(), { passive: true });
+
+  if (img.src.includes("flashlight")) {
+    // Flashlight desktop: solo 1rem dal centro è cliccabile
+    img.addEventListener("click", (e) => {
+      if (_distFromCenter(img.getBoundingClientRect(), e.clientX, e.clientY) <= _1rem()) {
+        targetCard.click();
+      }
+    }, { passive: true });
+  } else {
+    img.addEventListener("click", () => targetCard.click(), { passive: true });
+  }
 });
 
 document.querySelectorAll<HTMLElement>(".knoll-wrap").forEach((wrap) => {
@@ -39,7 +58,17 @@ document.querySelectorAll<HTMLElement>(".knoll-wrap").forEach((wrap) => {
     `.mode-card[data-mode="${primaryMode}"]`,
   );
   if (!targetCard) return;
-  wrap.addEventListener("click", () => targetCard.click(), { passive: true });
+
+  if (img?.src.includes("flashlight")) {
+    // Flashlight mobile: solo 1rem dal centro dell'immagine è cliccabile
+    wrap.addEventListener("click", (e) => {
+      if (_distFromCenter(img.getBoundingClientRect(), e.clientX, e.clientY) <= _1rem()) {
+        targetCard.click();
+      }
+    }, { passive: true });
+  } else {
+    wrap.addEventListener("click", () => targetCard.click(), { passive: true });
+  }
 });
 
 let selectedMode: string | null = null;
@@ -260,6 +289,11 @@ gsap.delayedCall(1.25, () => {
       knoll.classList.add("do-enter");
     });
   }, undefined, "<");
+
+  // 11. FAB compare dopo le card — rimuove data-fab-hidden → CSS transition anima ingresso
+  tl.call(() => {
+    document.documentElement.removeAttribute("data-fab-hidden");
+  }, undefined, "+=0.35");
 });
 
 // ── Magnetic effect on mode cards ────────────────────────
@@ -504,7 +538,10 @@ function selectMode(targetCard: HTMLButtonElement, mode: string) {
     img.classList.remove("do-enter");
     img.classList.toggle("is-hero", isRelated);
     img.classList.toggle("is-dim", !isRelated);
+    // GSAP gestisce lo scale: anima smooth dal valore corrente al target,
+    // evitando il salto brusco che si aveva con il cambio istantaneo via CSS class.
     gsap.to(img, {
+      scale: isRelated ? 1.08 : 0.92,
       opacity: isRelated ? 0.8 : 0.18,
       duration: 0.5,
       ease: "power2.out",

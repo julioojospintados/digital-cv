@@ -375,6 +375,15 @@ document
 
           const isDesktop = !isMobile;
 
+          // Prima del feedback visivo: rivela tutte le sezioni ancora nascoste (opacity:0
+          // da gsap.set al init). Se l'utente non ha ancora scrollato oltre la hero,
+          // exp-section e sezioni successive sarebbero invisibili indipendentemente
+          // da qualsiasi manipolazione dei cluster figli.
+          document.querySelectorAll<HTMLElement>(".reveal:not(.is-visible)").forEach((el) => {
+            gsap.set(el, { opacity: 1, y: 0 });
+            el.classList.add("is-visible");
+          });
+
           // Mobile: mostra un breve highlight sul cluster target, niente scanner pesante
           if (!isDesktop) {
             if (scanTarget) {
@@ -445,6 +454,14 @@ document
             const NAV_HEIGHT = 72;
             const absoluteTop =
               scanTarget.getBoundingClientRect().top + window.scrollY - NAV_HEIGHT;
+
+            // Rivela SUBITO le sezioni .reveal ancora a opacity:0 (non scorse dallo scroll).
+            // Necessario prima del spotlight: se exp-section è opacity:0 inline (da gsap.set
+            // al init), le cluster figlie sarebbero invisibili indipendentemente dal loro opacity.
+            document.querySelectorAll<HTMLElement>(".reveal:not(.is-visible)").forEach((el) => {
+              gsap.set(el, { opacity: 1, y: 0 });
+              el.classList.add("is-visible");
+            });
 
             // Spotlight: dim gli altri, glow sul target
             gsap.to(allClusters, { opacity: 0.2, duration: 0.25 });
@@ -557,6 +574,15 @@ modeStore.subscribe((mode) => {
       });
     });
   }, 320);
+
+  // Re-init featured card reveal dopo il cambio mode: applyAccordions ha aperto
+  // nuovi cluster — le loro card devono essere resettate e rianiimate.
+  // Il delay 660ms > 550ms (durata CSS max-height transition) garantisce che le
+  // posizioni getBoundingClientRect siano calcolate sull'accordion completamente aperto.
+  setTimeout(() => {
+    initFeaturedCardReveal();
+    ScrollTrigger.refresh();
+  }, 660);
 });
 
 // ── GSAP ScrollTrigger reveals — batch (1 istanza vs N) ────────────────────
@@ -716,6 +742,205 @@ document
       setTimeout(() => ScrollTrigger.refresh(), 320);
     });
   });
+
+// ── "GO deeper" button — GSAP drawer open/close ─────────────────────────
+// Behaviour:
+//   • When closed  → "GO deeper": click ONLY opens, never closes.
+//   • When open    → button becomes sticky "← meno": click closes.
+document
+  .querySelectorAll<HTMLElement>(".exp-deeper-btn")
+  .forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const key = btn.dataset.drawer;
+      if (!key) return;
+      const drawer = document.getElementById(`exp-drawer-${key}`);
+      if (!drawer) return;
+
+      const isOpen = btn.getAttribute("aria-expanded") === "true";
+      const cards = drawer.querySelectorAll<HTMLElement>(".exp-card");
+      const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      if (isOpen) {
+        // ── Close (sticky "← meno" clicked) ──────────────────────────
+        btn.setAttribute("aria-expanded", "false");
+        drawer.setAttribute("aria-hidden", "true");
+        if (prefersReduced) {
+          gsap.set(drawer, { height: 0 });
+          gsap.set(cards, { opacity: 0, y: 16 });
+        } else {
+          gsap.to(cards, {
+            opacity: 0,
+            y: 16,
+            duration: 0.22,
+            stagger: { each: 0.04, from: "end" },
+            ease: "power2.in",
+            onComplete: () => {
+              gsap.to(drawer, {
+                height: 0,
+                duration: 0.35,
+                ease: "power3.inOut",
+                onComplete: () => ScrollTrigger.refresh(),
+              });
+            },
+          });
+        }
+      } else {
+        // ── Open ("GO deeper" clicked) ────────────────────────────────
+        btn.setAttribute("aria-expanded", "true");
+        drawer.setAttribute("aria-hidden", "false");
+
+        if (prefersReduced) {
+          gsap.set(drawer, { height: "auto" });
+          gsap.set(cards, { opacity: 1, y: 0 });
+        } else {
+          gsap.set(drawer, { height: "auto" });
+          const naturalH = drawer.offsetHeight;
+          gsap.fromTo(
+            drawer,
+            { height: 0 },
+            {
+              height: naturalH,
+              duration: 0.45,
+              ease: "power3.out",
+              onComplete: () => {
+                gsap.set(drawer, { height: "auto" });
+                setTimeout(() => ScrollTrigger.refresh(), 100);
+              },
+            },
+          );
+          gsap.fromTo(
+            cards,
+            { opacity: 0, y: 20 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.45,
+              stagger: { each: 0.07, from: "start" },
+              ease: "power3.out",
+              delay: 0.18,
+            },
+          );
+        }
+      }
+    });
+  });
+
+// ── ScrollTrigger stagger for featured exp cards ──────────────────────────
+function initFeaturedCardReveal() {
+  // Ripristina tutte le featured card: rimuove inline GSAP opacity/y da init precedenti.
+  document.querySelectorAll<HTMLElement>(".exp-grid--featured .exp-card").forEach((card) => {
+    gsap.killTweensOf(card);
+    gsap.set(card, { clearProps: "opacity,y" });
+  });
+
+  const featuredCards = Array.from(document.querySelectorAll<HTMLElement>(
+    ".exp-cluster[data-open] .exp-grid--featured .exp-card",
+  ));
+  if (!featuredCards.length) return;
+
+  gsap.set(featuredCards, { opacity: 0, y: 24 });
+
+  const viewH = window.innerHeight;
+  const inView: HTMLElement[] = [];
+  const belowFold: HTMLElement[] = [];
+
+  featuredCards.forEach((card) => {
+    // getBoundingClientRect().top è affidabile anche dentro overflow:hidden
+    if (card.getBoundingClientRect().top < viewH * 0.92) {
+      inView.push(card);
+    } else {
+      belowFold.push(card);
+    }
+  });
+
+  // Card già nel viewport → animazione diretta (ScrollTrigger.batch non fa scattare
+  // onEnter per elementi già visibili al momento della creazione del batch).
+  if (inView.length) {
+    gsap.to(inView, {
+      opacity: 1,
+      y: 0,
+      duration: 0.55,
+      stagger: { each: 0.08, from: "start" },
+      ease: "power3.out",
+    });
+  }
+
+  // Card sotto il fold → ScrollTrigger.batch (si attiva allo scroll)
+  if (belowFold.length) {
+    ScrollTrigger.batch(belowFold, {
+      start: "top 92%",
+      onEnter(batch) {
+        gsap.to(batch, {
+          opacity: 1,
+          y: 0,
+          duration: 0.55,
+          stagger: { each: 0.08, from: "start" },
+          ease: "power3.out",
+        });
+      },
+    });
+  }
+}
+initFeaturedCardReveal();
+
+// Re-init stagger when a cluster is opened so newly visible cards animate in.
+document.querySelectorAll<HTMLElement>(".exp-cluster__header").forEach((header) => {
+  header.addEventListener("click", () => {
+    // 600ms > 550ms CSS max-height transition — posizioni affidabili solo dopo
+    setTimeout(() => {
+      initFeaturedCardReveal();
+      ScrollTrigger.refresh();
+    }, 600);
+  });
+});
+
+// ── Parallax bg-knoll — movimento verticale sfalsato durante lo scroll ──────
+// GSAP gestisce l'intero transform (rotation + y) — il CSS non ha più transform sui bg-knoll.
+// La rotation viene impostata con gsap.set() prima di fromTo, così non va persa.
+// delta: desktop 500px (grande, visibile), mobile 300px (~50% meno).
+// scrub: true = risposta 1:1 allo scroll in entrambe le direzioni.
+if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+
+  // Imposta le rotazioni: GSAP prende ownership del transform prima dell'animazione
+  gsap.set(".bg-knoll--laptop", { rotation: -10 });
+  gsap.set(".bg-knoll--multitool", { rotation: 8 });
+  gsap.set(".bg-knoll--flashlight", { rotation: 45 });
+  gsap.set(".bg-knoll--chess", { rotation: -8 });
+  gsap.set(".bg-knoll--plant", { rotation: 6 });
+  gsap.set(".bg-knoll--compass", { rotation: 15 });
+
+  const isDesktop = window.matchMedia("(min-width: 900px)").matches;
+  const delta = isDesktop ? 500 : 300;
+
+  const knollParallax: Array<{ selector: string; trigger: string }> = [
+    { selector: ".bg-knoll--laptop", trigger: ".hero-section" },
+    { selector: ".bg-knoll--flashlight", trigger: ".exp-section" },
+    { selector: ".bg-knoll--multitool", trigger: ".skills-section" },
+    { selector: ".bg-knoll--chess", trigger: ".ai-section" },
+    { selector: ".bg-knoll--plant", trigger: ".soft-section" },
+    { selector: ".bg-knoll--compass", trigger: ".projects-section" },
+  ];
+
+  knollParallax.forEach(({ selector, trigger }) => {
+    const el = document.querySelector<HTMLElement>(selector);
+    const triggerEl = document.querySelector<HTMLElement>(trigger);
+    if (!el || !triggerEl) return;
+
+    gsap.fromTo(el,
+      { y: delta },
+      {
+        y: -delta,
+        ease: "none",
+        scrollTrigger: {
+          trigger: triggerEl,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: true,
+        },
+      }
+    );
+  });
+}
 
 // ── Lazy-load SkillForceGraph — D3 (~130 KB gzip) fuori dal percorso critico ──
 // Il grafo viene importato solo quando .skills-section entra nel viewport

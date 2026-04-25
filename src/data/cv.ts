@@ -258,12 +258,12 @@ export const cvData = {
       description:
         "Caso studio completo di Partnering Operativo su tre pilastri integrati: Tecnologia, Design e Metodo. Fase 1 — Analisi strategica: mappatura dei processi aziendali e identificazione dei colli di bottiglia operativi prima di scrivere una riga di codice. Fase 2 — Costruzione del motore: architettura MCP (Model Context Protocol) con tool, resource e prompt come API per agenti AI, integrata nativamente con VS Code Copilot e Cursor. Fase 3 — Design per non tecnici: UX semplificata per operatori interni, progettata per ridurre i tempi di formazione e l'errore operativo. Fase 4 — Consegna Agile: pipeline Cursor → GitLab CI/CD → deploy automatizzata, sprint da 1–2 settimane con impactScore misurato a ogni rilascio, team autonomo alla fine dell'ingaggio.",
       highlights: [
-        "Analisi strategica dei processi aziendali come punto di partenza — zero codice scritto prima di capire il problema reale",
-        "Architettura MCP con tool, resource e prompt come API per agenti AI — integrazione nativa con VS Code Copilot e Cursor",
-        "UX semplificata per operatori non tecnici: riduzione del 40% del tempo di formazione sui nuovi flussi",
-        "Pipeline automatizzata Cursor → GitLab CI/CD → deploy senza intervento manuale",
-        "Agile snello applicato al contesto PMI: sprint da 1–2 settimane, backlog orientato al business, retrospective con impactScore reale misurato a ogni rilascio",
-        "Riduzione dell'80% del tempo di sviluppo grazie all'AI-augmented workflow (progetto ancora in lavorazione)",
+        "Analizzare i processi aziendali come punto di partenza — zero codice scritto prima di capire il problema reale",
+        "Progettare un'architettura MCP con tool, resource e prompt come API per agenti AI — integrazione nativa con VS Code Copilot e Cursor",
+        "Progettare una UX semplificata per operatori non tecnici: –40% tempo di formazione sui nuovi flussi",
+        "Automatizzare la pipeline Cursor → GitLab CI/CD → deploy senza intervento manuale",
+        "Applicare Agile snello al contesto PMI: sprint da 1–2 settimane, backlog orientato al business, impactScore reale misurato a ogni rilascio",
+        "Ridurre dell'80% il tempo medio di sviluppo con AI-augmented workflow (progetto in corso)",
       ],
       skills: [
         "MCP",
@@ -289,12 +289,12 @@ export const cvData = {
       description:
         "Progettazione e sviluppo di un CV interattivo come banco di prova sistematico per un flusso di lavoro AI end-to-end. L'intero ciclo — architettura, UI, animazioni GSAP, server MCP, API HTTP con Hono — è stato costruito con GitHub Copilot e Claude come assistenti operativi, applicando Prompt Engineering strutturato per ogni fase: specifica, revisione, debug, refactoring. Il risultato è un sistema a due livelli: sito Astro + Lit per il CV visuale, e un server MCP che espone i dati CV come API per agenti AI. Il progetto è anche la dimostrazione live che un singolo sviluppatore, con l'AI come moltiplicatore, può produrre in settimane ciò che richiederebbe un team in mesi.",
       highlights: [
-        "Architettura MCP con tool, resource e prompt template che espongono i dati CV come API per agenti AI (VS Code Copilot, Claude Desktop)",
-        "Sito Astro + Lit con animazioni GSAP avanzate: preloader narrativo, wave hold effect con SVG sine wave, distortion filter sott'acqua via feTurbulence",
-        "Flusso di lavoro AI completo: GitHub Copilot + Claude per architettura, codice, debug e refactoring — zero codice ripetitivo scritto a mano",
-        "Server HTTP Hono con OpenAPI spec, validazione Zod, route tipizzate e test automatizzati con Vitest",
-        "Prompt Engineering strutturato: skill file, agent instructions, prompt slash riutilizzabili — l'AI conosce il progetto come un membro senior del team",
-        "Completato in 5 giorni con flusso di lavoro AI — stima tradizionale: 1+ mese. Riduzione del 70% del tempo di sviluppo, copertura dei test >80%, qualità Awwwards-level sull'UI",
+        "Progettare un'architettura MCP con tool, resource e prompt template che espongono i dati CV come API per agenti AI (VS Code Copilot, Claude Desktop)",
+        "Costruire un sito Astro + Lit con animazioni GSAP avanzate: preloader narrativo, wave hold effect SVG, distortion filter via feTurbulence",
+        "Costruire un flusso di lavoro AI end-to-end con GitHub Copilot e Claude — zero codice ripetitivo scritto a mano",
+        "Sviluppare un server HTTP Hono con OpenAPI spec, validazione Zod e test automatizzati con Vitest",
+        "Strutturare il Prompt Engineering con skill file, agent instructions e prompt slash riutilizzabili — l'AI conosce il progetto come un membro senior",
+        "Consegnare in 5 giorni con AI workflow — stima tradizionale: 1+ mese. –70% tempo di sviluppo, copertura test >80%, qualità Awwwards-level",
       ],
       skills: [
         "MCP Protocol",
@@ -384,9 +384,9 @@ export const cvData = {
       description:
         "Produzione e regia video per matrimoni indiani di alto livello in Toscana. Settore che richiede estrema attenzione ai dettagli, gestione di logistica complessa e sensibilità estetica internazionale.",
       highlights: [
-        "Regia video per cerimonie con centinaia di ospiti internazionali",
-        "Gestione di crew in contesti multiculturali con eventi che si estendono su più giornate",
-        "Post-produzione completa: correzione colore, montaggio narrativo, consegna in formati premium",
+        "Dirigere video per cerimonie con centinaia di ospiti internazionali",
+        "Gestire crew in contesti multiculturali su eventi multi-giornata",
+        "Curare la post-produzione completa: correzione colore, montaggio narrativo, consegna in formati premium",
       ],
       skills: [
         "Videomaking",
@@ -406,10 +406,10 @@ export const cvData = {
       description:
         "In piena emergenza pandemica i sistemi sanitari statunitensi avevano bisogno di strumenti digitali capaci di nascere in settimane, non in anni. Ho contribuito in full remote — da Torino con un team di Los Angeles — allo sviluppo di un'applicazione per la gestione e visualizzazione dei dati Covid-19 in strutture ospedaliere USA. La prova concreta che un frontend efficace può diventare infrastruttura critica in una crisi globale.",
       highlights: [
-        "Sviluppo di dashboard React per il monitoraggio e la gestione dei dati Covid-19 in ospedali statunitensi",
-        "Refactor CSS con pattern BEM su codebase da 20.000 righe: riduzione di 800 righe duplicate, miglioramento della manutenibilità e coerenza del layer presentazione",
-        "Integrazione con API REST e backend per la visualizzazione di dati clinici in tempo reale",
-        "Collaborazione in full remote con team cross-culturale USA/Italia in metodologia Agile",
+        "Sviluppare dashboard React per il monitoraggio dati Covid-19 in ospedali statunitensi",
+        "Refactorare il CSS con pattern BEM su codebase da 20.000 righe: –800 righe duplicate, migliore manutenibilità e coerenza del layer presentazione",
+        "Integrare API REST e backend per la visualizzazione di dati clinici in tempo reale",
+        "Collaborare in full remote con team cross-culturale USA/Italia in metodologia Agile",
       ],
       skills: [
         "React",
@@ -431,9 +431,9 @@ export const cvData = {
       description:
         "I processi interni di organizzazioni media e bancarie spesso vivono in sistemi legacy rigidi e poco ergonomici. Ho progettato e sviluppato applicativi gestionali per Rai Pubblicità e Intesa San Paolo — ogni tool consegnato ha ridotto l'attrito operativo quotidiano per gli utenti finali, trasformando procedure lente in flussi fluidi.",
       highlights: [
-        "Sviluppo di applicativi gestionali interni per Rai Pubblicità con Angular, Spring e Bootstrap",
-        "Sviluppo di un tool per la gestione documentale e revisionale in Intesa San Paolo tramite JSF",
-        "Traduzione di requisiti di business complessi in interfacce usabili da operatori non tecnici",
+        "Sviluppare applicativi gestionali interni per Rai Pubblicità con Angular, Spring e Bootstrap",
+        "Sviluppare un tool per la gestione documentale e revisionale in Intesa San Paolo tramite JSF",
+        "Tradurre requisiti di business complessi in interfacce usabili da operatori non tecnici",
       ],
       skills: [
         "Angular",
@@ -468,9 +468,9 @@ export const cvData = {
       description:
         "Presentatore e moderatore per eventi, festival culturali e serate live in tutta Italia. Le competenze di improvvisazione teatrale vengono applicate per gestire il palco, il pubblico e le situazioni impreviste con naturalezza.",
       highlights: [
-        "Conduzione di festival culturali multidisciplinari (musica, arte, teatro)",
-        "Moderazione di panel e talk con ospiti internazionali",
-        "Gestione dell'imprevisto in diretta grazie alla formazione in improvvisazione teatrale",
+        "Condurre festival culturali multidisciplinari (musica, arte, teatro)",
+        "Moderare panel e talk con ospiti internazionali",
+        "Gestire l'imprevisto in diretta grazie alla formazione in improvvisazione teatrale",
       ],
       skills: [
         "Public speaking",
@@ -515,7 +515,7 @@ export const cvData = {
         "Cofondatore e organizzatore dello Square Festival nel Quadrilatero Romano di Torino, evento culturale multidisciplinare (musica, teatro, arti visive) ideato e realizzato in 6 mesi con circa 100 persone coinvolte tra staff, artisti e collaboratori. Responsabile della sezione teatrale: selezione degli spettacoli, coordinamento con le compagnie e gestione degli slot in calendario attorno agli altri impegni del festival.",
       highlights: [
         "Cofondatore dello Square Festival: dall’ideazione alla realizzazione in 6 mesi, circa 100 persone coinvolte tra staff e artisti",
-        "Responsabile della sezione teatrale: ricerca e selezione degli spettacoli, trattativa con le compagnie, scheduling integrato col programma generale del festival",
+        "Coordinare la sezione teatrale: ricerca e selezione degli spettacoli, trattativa con le compagnie, scheduling integrato col programma del festival",
       ],
       skills: ["Event management", "Comunicazione", "Coordinamento"],
     },
@@ -529,8 +529,8 @@ export const cvData = {
       description:
         "La comunicazione visiva è problem solving applicato all'estetica: ogni brief è un problema di attenzione da risolvere in pochi secondi. Ho creato visual e materiali di brand identity per clienti locali, integrando la formazione tecnica in graphic design con una sensibilità estetica maturata in anni di fotografia — e ogni progetto ha rafforzato il collegamento tra pensiero strategico e produzione creativa.",
       highlights: [
-        "Progettazione di materiali grafici e brand identity per clienti nel settore locale e culturale",
-        "Applicazione dei principi di visual hierarchy e typography per massimizzare l'impatto comunicativo",
+        "Progettare materiali grafici e brand identity per clienti nel settore locale e culturale",
+        "Applicare i principi di visual hierarchy e typography per massimizzare l'impatto comunicativo",
       ],
       skills: [
         "Graphic design",
@@ -562,8 +562,8 @@ export const cvData = {
       description:
         "L'improvvisazione teatrale si insegna solo se chi la insegna sa già abitare l'incertezza. Ho condotto corsi per allievi di None Teatro trasmettendo il metodo 'Yes, and...' come pratica di ascolto attivo e costruzione collettiva — e ogni sessione ha affinato la mia capacità di leggere velocemente i bisogni delle persone e adattare il registro comunicativo in tempo reale.",
       highlights: [
-        "Conduzione di corsi di improvvisazione e teatro per allievi di livelli diversi",
-        "Applicazione del metodo 'Yes, and...' come strumento didattico per sviluppare creatività e problem solving",
+        "Condurre corsi di improvvisazione e teatro per allievi di livelli diversi",
+        "Applicare il metodo 'Yes, and...' come strumento didattico per sviluppare creatività e problem solving",
       ],
       skills: [
         "Insegnamento",
@@ -583,7 +583,7 @@ export const cvData = {
       description:
         "Gestione tecnica audio e luci per spettacoli teatrali. Partecipazione come attore e improvvisatore in spettacoli in Italia e Lussemburgo.",
       highlights: [
-        "Spettacoli di improvvisazione teatrale in Italia e in Lussemburgo",
+        "Recitare in spettacoli di improvvisazione teatrale in Italia e in Lussemburgo",
       ],
       skills: [
         "Regia tecnica",
@@ -655,8 +655,8 @@ export const cvData = {
       description:
         "Gestire un team di animatori in strutture balneari ad alta stagionalità significa fare leadership nell'imprevedibile, ogni giorno. Ho coordinato programmi di intrattenimento e gestione staff per strutture a Ravenna e Crotone — e ho scoperto che la leadership si costruisce nell'improvvisazione, non nel controllo: una convinzione che oggi informa il mio approccio a qualsiasi lavoro di team.",
       highlights: [
-        "Coordinamento di team di animatori in contesti ad alta variabilità e pressione stagionale",
-        "Progettazione e conduzione di programmi di intrattenimento per ospiti internazionali",
+        "Coordinare team di animatori in contesti ad alta variabilità e pressione stagionale",
+        "Progettare e condurre programmi di intrattenimento per ospiti internazionali",
       ],
       skills: [
         "Leadership",

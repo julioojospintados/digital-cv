@@ -184,11 +184,17 @@ const EXP_CLUSTER_DEFS = [
   },
 ];
 
-const expClusters = EXP_CLUSTER_DEFS.map(cluster => ({
-  ...cluster,
-  isDefaultOpen: cluster.openForModes.includes(mode),
-  items: cluster.indices.map(i => featuredExpData[i]).filter(Boolean),
-}));
+const FEATURED_N = 3;
+const expClusters = EXP_CLUSTER_DEFS.map(cluster => {
+  const items = cluster.indices.map(i => featuredExpData[i]).filter(Boolean);
+  return {
+    ...cluster,
+    isDefaultOpen: cluster.openForModes.includes(mode),
+    items,
+    featured: items.slice(0, FEATURED_N),
+    extra: items.slice(FEATURED_N),
+  };
+});
 
 const skillViewLabels = {
   graph: 'Grafico',
@@ -383,17 +389,38 @@ const modeLabel = mode.charAt(0).toUpperCase() + mode.slice(1);
                 {cluster.tags.split(' ').map(tag => (
                   <span class="exp-cluster__tag-dot" data-tag={tag}></span>
                 ))}
-                <span class="exp-cluster__count">{cluster.items.length}</span>
+                <div class="exp-cluster__count"><span>{cluster.items.length}</span></div>
               </div>
               <span class="exp-cluster__chevron" aria-hidden="true">›</span>
             </button>
             <div class="exp-cluster__body" id={`cluster-body-${cluster.key}`}>
-              <div class="exp-grid">
-                {cluster.items.map(exp => (
+              <div class="exp-grid exp-grid--featured">
+                {cluster.featured.map(exp => (
                   <ExpCard {...exp} />
                 ))}
               </div>
+              {cluster.extra.length > 0 && (
+                <div class="exp-drawer" id={`exp-drawer-${cluster.key}`} aria-hidden="true">
+                  <div class="exp-grid">
+                    {cluster.extra.map(exp => (
+                      <ExpCard {...exp} />
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
+            {cluster.extra.length > 0 && (
+              <button
+                class="exp-deeper-btn"
+                type="button"
+                data-drawer={cluster.key}
+                aria-expanded="false"
+                aria-controls={`exp-drawer-${cluster.key}`}
+              >
+                <span class="exp-deeper-btn__label" data-open-label="chiudi">GO deeper</span>
+                <span class="exp-deeper-btn__arrow" aria-hidden="true">↓</span>
+              </button>
+            )}
           </div>
         ))}
       </div>
@@ -401,7 +428,7 @@ const modeLabel = mode.charAt(0).toUpperCase() + mode.slice(1);
 
     <!-- ── AI WORKFLOW ─────────────────────────────────────────────── -->
     <section class="ai-section reveal delay-300" id="ai-section" aria-label="AI-Enhanced Workflow">
-      <h2 class="section-title ai-title">
+      <img class="bg-knoll bg-knoll--chess" src="/knolling/chess.png" aria-hidden="true" alt="">
         <span>AI-Enhanced Workflow</span>
         <span class="ai-title__clip" aria-hidden="true">
           <span class="ai-title__clip-pin"></span>
@@ -418,7 +445,7 @@ const modeLabel = mode.charAt(0).toUpperCase() + mode.slice(1);
 
     <!-- ── SOFT SKILLS + METODOLOGIA ───────────────────────────────── -->
     <section class="soft-section reveal" aria-label="Soft skills e metodologia">
-      <div class="two-col-grid">
+      <img class="bg-knoll bg-knoll--plant" src="/knolling/plant.png" aria-hidden="true" alt="">
         <div class="soft-block">
           <h2 class="section-title"><span>Soft Skills</span></h2>
           <ul class="soft-list">
@@ -459,6 +486,7 @@ const modeLabel = mode.charAt(0).toUpperCase() + mode.slice(1);
 
     <!-- ── PROJECTS ────────────────────────────────────────────────── -->
     <section class="projects-section reveal" aria-label="Progetti personali">
+      <img class="bg-knoll bg-knoll--compass" src="/knolling/compass.png" aria-hidden="true" alt="">
       <h2 class="section-title"><span>Progetti</span></h2>
       <div class="projects-grid">
         {projectsData.map(project => (

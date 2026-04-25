@@ -171,20 +171,10 @@
   }
 }
 
-/* ── Knolling stage — visible only on true desktop (≥ 900px) ── */
-.knolling-stage {
-  display: none; /* nascosto su mobile/tablet — usa knolling-mob */
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-}
-
-@media (--desktop) {
-  .knolling-stage {
-    display: block;
-  }
-}
+/* ── Knolling items — base mobile-first styles ──────────────────────────────
+   ORDINE CRITICO: queste regole devono precedere il blocco @media (--desktop).
+   Su desktop il media query sovrascrive transform e position con regole più
+   tarde nella cascade — se le regole base venissero dopo, vincerebbero loro. */
 
 .knoll-item {
   position: absolute;
@@ -195,13 +185,11 @@
   width: clamp(80px, 12vw, 200px);
   object-fit: contain;
   opacity: 0;
-  scale: 1; /* CSS scale — separato da transform, no conflitto GSAP */
-  will-change: transform, opacity, scale;
+  will-change: transform, opacity;
   cursor: pointer;
   transition:
     filter 0.4s ease,
-    opacity 0.5s ease,
-    scale 0.5s ease;
+    opacity 0.5s ease;
 }
 
 /* Torcia — l'immagine ha molto spazio trasparente attorno all'oggetto visibile.
@@ -215,7 +203,7 @@ img[src*="flashlight"] {
 .knoll-m.is-dim {
   filter: brightness(0.3) saturate(0.4);
   opacity: 0.18 !important;
-  scale: 0.92;
+  /* scale gestito da GSAP in selectMode per animazione smooth */
 }
 
 .knoll-item.is-hero,
@@ -223,19 +211,19 @@ img[src*="flashlight"] {
   filter: brightness(1.25) drop-shadow(0 8px 32px rgba(0, 0, 0, 0.6))
     saturate(1.1);
   z-index: 1;
-  scale: 1.08;
+  /* scale gestito da GSAP in selectMode per animazione smooth */
 }
 
 @keyframes knollLand {
   0% {
     opacity: 0;
     filter: blur(4px) brightness(0.4);
-    transform: translateY(10px);
+    transform: translateY(10px) scaleX(var(--kfx, 1));
   }
   100% {
     opacity: 0.4;
     filter: none;
-    transform: translateY(0);
+    transform: translateY(0) scaleX(var(--kfx, 1));
   }
 }
 
@@ -243,6 +231,54 @@ img[src*="flashlight"] {
 .knoll-m.do-enter {
   animation: knollLand 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
   animation-delay: var(--knoll-delay, 0ms);
+}
+
+/* ── Knolling stage — visible only on true desktop (≥ 900px) ── */
+.knolling-stage {
+  display: none; /* nascosto su mobile/tablet — usa knolling-mob */
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@media (--desktop) {
+  .knolling-stage {
+    display: grid;
+    grid-template-columns: 13% 74% 13%;
+    grid-template-rows: repeat(4, 1fr);
+    height: 100vh;
+    padding: 2vh 1vw;
+    gap: 0;
+    overflow: hidden;
+  }
+
+  /* Desktop grid: ogni img è vincolata in altezza — width scala proporzionalmente.
+     Questa sezione viene DOPO le regole base .knoll-item → vince la cascade su desktop. */
+  .knoll-item {
+    position: relative !important;
+    left: 0 !important;
+    top: 0 !important;
+    transform: rotate(var(--kr)) scaleX(var(--kfx, 1));
+    width: auto;
+    height: clamp(48px, 16vh, 140px);
+    max-width: 100%;
+    object-fit: contain;
+    justify-self: center;
+    align-self: center;
+  }
+
+  /* Colonna sinistra — item 1-4 */
+  .knoll-item:nth-child(1) { grid-column: 1; grid-row: 1; } /* megaphone  */
+  .knoll-item:nth-child(2) { grid-column: 1; grid-row: 2; } /* flashlight */
+  .knoll-item:nth-child(3) { grid-column: 1; grid-row: 3; } /* multitool  */
+  .knoll-item:nth-child(4) { grid-column: 1; grid-row: 4; } /* camera     */
+
+  /* Colonna destra — item 5-8 */
+  .knoll-item:nth-child(5) { grid-column: 3; grid-row: 1; } /* chess   */
+  .knoll-item:nth-child(6) { grid-column: 3; grid-row: 2; } /* laptop  */
+  .knoll-item:nth-child(7) { grid-column: 3; grid-row: 3; } /* compass */
+  .knoll-item:nth-child(8) { grid-column: 3; grid-row: 4; } /* plant   */
 }
 
 /* ── Inline knolling zone — mobile + tablet (< 900px), desktop hidden ── */
@@ -325,9 +361,27 @@ img[src*="flashlight"] {
   .knoll-wrap:nth-child(3) {
     padding: 0% 10%;
   } /* compass — più piccola della cella */
+
+  /* Pianta: z-index superiore alla torcia — le celle si sovrappongono nella col 3
+     (plant: 1/4, flashlight: 3/8) e la pianta deve ricevere i click nell'area condivisa */
+  .knoll-wrap:nth-child(4) {
+    position: relative;
+    z-index: 2;
+  } /* plant — sopra la flashlight */
+
   .knoll-wrap:nth-child(5) {
     padding-bottom: 5%;
-  } /* flashlight — leggero margine inferiore */
+    position: relative;
+    z-index: 1;
+  } /* flashlight */
+
+  /* Torcia: `rotate` CSS property standalone — NON `transform: rotate()`.
+     GSAP scrive su `transform` (scale inline), la prop `rotate` separata
+     viene composta dal browser: risultato = rotate(135deg) + scale(X) coesistono. */
+  .knoll-wrap:nth-child(5) .knoll-m {
+    rotate: 135deg;
+  }
+
   .knoll-wrap:nth-child(6) {
     padding: 4%;
   } /* chess — leggero margine */
@@ -335,10 +389,6 @@ img[src*="flashlight"] {
     padding: 0% 8%;
   } /* camera — piccoli nella cella */
 
-  /* Torcia: ruotata 120° — luce verso il laptop (in alto a destra) */
-  .knoll-wrap:nth-child(5) .knoll-m {
-    transform: rotate(120deg);
-  }
 }
 
 /* ── Main content ── */
@@ -363,12 +413,15 @@ img[src*="flashlight"] {
   body {
     height: 100vh;
     height: 100svh;
-    overflow: hidden;
+    /* NON overflow:hidden su html/body — impedisce al browser mobile
+       di fare zoom-out dopo un pinch-zoom. Il contenimento è gestito
+       da .entry-root e .entry-main che hanno overflow:hidden localmente. */
   }
 
   .entry-root {
     height: 100vh;
     height: 100svh;
+    overflow: hidden;
   }
 
   /* CSS grid 3-righe: header si comprime (auto), images e cards
@@ -513,7 +566,7 @@ img[src*="flashlight"] {
 /* Su touch la tagline è più piccola per non rubare spazio a card e img */
 @media (--touch) {
   .entry-tagline {
-    font-size: 0.7rem;
+    font-size: 0.8rem; /* min leggibile: 12px = 0.75rem, 0.8rem = 12.8px */
     margin-top: 0.25rem;
   }
 }

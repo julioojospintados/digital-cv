@@ -28,5 +28,8 @@
   "search.exclude": {
     "dist/": true,
     "node_modules/": true
+  },
+  "chat.tools.terminal.autoApprove": {
+    "npx astro": true
   }
 }

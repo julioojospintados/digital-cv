@@ -186,11 +186,17 @@ const featuredExpData = cvDataEn.experience.map((exp, i) => ({
     exp.skills?.some((s: string) => ['MCP Protocol','Prompt Engineering','GitHub Copilot','Claude','Cursor','AI Orchestration','MCP'].includes(s))),
 }));
 
-const expClustersEn = EXP_CLUSTER_DEFS_EN.map(cluster => ({
-  ...cluster,
-  isDefaultOpen: cluster.key === 'tech', // EN page is always static at 'tech'
-  items: cluster.indices.map(i => featuredExpData[i]).filter(Boolean),
-}));
+const FEATURED_N = 3;
+const expClustersEn = EXP_CLUSTER_DEFS_EN.map(cluster => {
+  const items = cluster.indices.map(i => featuredExpData[i]).filter(Boolean);
+  return {
+    ...cluster,
+    isDefaultOpen: cluster.key === 'tech', // EN page is always static at 'tech'
+    items,
+    featured: items.slice(0, FEATURED_N),
+    extra: items.slice(FEATURED_N),
+  };
+});
 
 // ── Soft skills mode tags ─────────────────────────────────────────────────
 const SOFT_MODE_TAGS = [
@@ -307,6 +313,7 @@ const projectsData = cvDataEn.projects.slice(0, 6).map(p => {
 
     <!-- ── HERO ────────────────────────────────────────────────────── -->
     <section class="hero-section" id="hero">
+      <img class="bg-knoll bg-knoll--laptop" src="/knolling/laptop.png" aria-hidden="true" alt="">
       <h1 class="hero-name" id="hero-name" aria-label={cvDataEn.personal.name}>
         {cvDataEn.personal.name.split('').map((char, i) => (
           <span
@@ -346,6 +353,7 @@ const projectsData = cvDataEn.projects.slice(0, 6).map(p => {
 
     <!-- ── SKILLS BENTO + FORCE NETWORK ──────────────────────── -->
     <section class="skills-section reveal delay-100" aria-label="Technical skills">
+      <img class="bg-knoll bg-knoll--multitool" src="/knolling/multitool.png" aria-hidden="true" alt="">
       <h2 class="section-title">
         <span>Skills</span>
         <span class="section-subtitle">Force-directed skill network - hover and drag to explore</span>
@@ -369,11 +377,12 @@ const projectsData = cvDataEn.projects.slice(0, 6).map(p => {
       </div>
     </section>
 
-    <!-- ── EXPERIENCE (clustered) ──────────────────────────────────── -->
+    <!-- ── EXPERIENCE ─────────────────────────────────────────────── -->
     <section class="exp-section reveal delay-200" aria-label="Work experience">
+      <img class="bg-knoll bg-knoll--flashlight" src="/knolling/flashlight.webp" aria-hidden="true" alt="">
       <h2 class="section-title">
         <span>Experience</span>
-        <span class="section-subtitle">{cvDataEn.experience.length} roles — 4 clusters</span>
+        <span class="section-subtitle">{cvDataEn.experience.length} roles in 5 countries — expand a cluster to explore</span>
       </h2>
       <div class="exp-clusters">
         {expClustersEn.map(cluster => (
@@ -384,17 +393,38 @@ const projectsData = cvDataEn.projects.slice(0, 6).map(p => {
                 {cluster.tags.split(' ').map(tag => (
                   <span class="exp-cluster__tag-dot" data-tag={tag}></span>
                 ))}
-                <span class="exp-cluster__count">{cluster.items.length}</span>
+                <div class="exp-cluster__count"><span>{cluster.items.length}</span></div>
               </div>
               <span class="exp-cluster__chevron" aria-hidden="true">›</span>
             </button>
             <div class="exp-cluster__body" id={`cluster-body-${cluster.key}`}>
-              <div class="exp-grid">
-                {cluster.items.map(exp => (
+              <div class="exp-grid exp-grid--featured">
+                {cluster.featured.map(exp => (
                   <ExpCard {...exp} />
                 ))}
               </div>
+              {cluster.extra.length > 0 && (
+                <div class="exp-drawer" id={`exp-drawer-${cluster.key}`} aria-hidden="true">
+                  <div class="exp-grid">
+                    {cluster.extra.map(exp => (
+                      <ExpCard {...exp} />
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
+            {cluster.extra.length > 0 && (
+              <button
+                class="exp-deeper-btn"
+                type="button"
+                data-drawer={cluster.key}
+                aria-expanded="false"
+                aria-controls={`exp-drawer-${cluster.key}`}
+              >
+                <span class="exp-deeper-btn__label" data-open-label="close">GO deeper</span>
+                <span class="exp-deeper-btn__arrow" aria-hidden="true">↓</span>
+              </button>
+            )}
           </div>
         ))}
       </div>
@@ -402,6 +432,7 @@ const projectsData = cvDataEn.projects.slice(0, 6).map(p => {
 
     <!-- ── AI WORKFLOW ─────────────────────────────────────────────── -->
     <section class="ai-section reveal delay-300" id="ai-section" aria-label="AI-Enhanced Workflow">
+      <img class="bg-knoll bg-knoll--chess" src="/knolling/chess.png" aria-hidden="true" alt="">
       <h2 class="section-title ai-title">
         <span>AI-Enhanced Workflow</span>
         <span class="ai-title__clip" aria-hidden="true">
@@ -419,6 +450,7 @@ const projectsData = cvDataEn.projects.slice(0, 6).map(p => {
 
     <!-- ── SOFT SKILLS + METHODOLOGY ───────────────────────────────── -->
     <section class="soft-section reveal" aria-label="Soft skills and methodology">
+      <img class="bg-knoll bg-knoll--plant" src="/knolling/plant.png" aria-hidden="true" alt="">
       <div class="two-col-grid">
         <div class="soft-block">
           <h2 class="section-title"><span>Soft Skills</span></h2>
@@ -460,6 +492,7 @@ const projectsData = cvDataEn.projects.slice(0, 6).map(p => {
 
     <!-- ── PROJECTS ────────────────────────────────────────────────── -->
     <section class="projects-section reveal" aria-label="Personal projects">
+      <img class="bg-knoll bg-knoll--compass" src="/knolling/compass.png" aria-hidden="true" alt="">
       <h2 class="section-title"><span>Projects</span></h2>
       <div class="projects-grid">
         {projectsData.map(project => (
