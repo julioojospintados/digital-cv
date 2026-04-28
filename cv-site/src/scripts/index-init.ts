@@ -576,6 +576,14 @@ function selectMode(targetCard: HTMLButtonElement, mode: string) {
 cards.forEach((card) => {
   const mode = card.dataset.mode ?? "tech";
   card.addEventListener("click", (e) => {
+    // Secondo tap su card già selezionata = naviga (equivale a premere GO)
+    if (card.classList.contains("is-selected")) {
+      const goBtn = card.querySelector<HTMLElement>(".mode-card__go");
+      const href = goBtn?.dataset.href ?? `/${mode}`;
+      launchJourney(href);
+      return;
+    }
+
     // Ripple
     const rect = card.getBoundingClientRect();
     const clickEvent = e as MouseEvent;
