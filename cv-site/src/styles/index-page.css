@@ -6,10 +6,10 @@
    --desktop     → true desktop: knolling-stage visibile, layout orizzontale
    --mobile-only → solo smartphone: nasconde scroll-cue, GO button compatto
    --tablet-up   → tablet landscape + desktop: GO button più grande          */
-@custom-media --touch       (max-width: 899px);
-@custom-media --desktop     (min-width: 900px);
-@custom-media --mobile-only (max-width: 639px);
-@custom-media --tablet-up   (min-width: 640px);
+@custom-media --touch       (max-width: 56.1875rem);
+@custom-media --desktop     (min-width: 56.25rem);
+@custom-media --mobile-only (max-width: 39.9375rem);
+@custom-media --tablet-up   (min-width: 40rem);
 
 /* ── Scroll cue — desktop only, fade dopo 2s, sparisce allo scroll ——————— */
 .scroll-cue {
@@ -114,7 +114,7 @@
 }
 
 .pre-bar {
-  width: 80px;
+  width: 5rem;
   height: 1.5px;
   background: rgba(255, 255, 255, 0.12);
   position: relative;
@@ -182,7 +182,7 @@
   top: var(--ky);
   transform: translate(-50%, -50%) rotate(var(--kr)) scaleX(var(--kfx, 1))
     scale(var(--ks));
-  width: clamp(80px, 12vw, 200px);
+  width: clamp(5rem, 12vw, 12.5rem);
   object-fit: contain;
   opacity: 0;
   will-change: transform, opacity;
@@ -261,7 +261,7 @@ img[src*="flashlight"] {
     top: 0 !important;
     transform: rotate(var(--kr)) scaleX(var(--kfx, 1));
     width: auto;
-    height: clamp(48px, 16vh, 140px);
+    height: clamp(3rem, 16vh, 8.75rem);
     max-width: 100%;
     object-fit: contain;
     justify-self: center;
@@ -401,7 +401,7 @@ img[src*="flashlight"] {
   gap: 2.5rem;
   padding: 2rem 1.5rem;
   width: 100%;
-  max-width: 520px;
+  max-width: 32.5rem;
 }
 
 /* Layout touch (<900px): tutta la home vive in 100svh.
@@ -603,7 +603,7 @@ img[src*="flashlight"] {
     gap: 1rem;
   }
   .entry-main {
-    max-width: 943px;
+    max-width: 58.9375rem;
   }
 }
 
@@ -841,7 +841,7 @@ img[src*="flashlight"] {
   background: var(--card-go-bg, rgba(255, 255, 255, 0.07));
   width: 100%;
   color: var(--card-go-color, var(--color-accent));
-  font-size: 0.56rem;
+  font-size: 0.65rem;
   font-weight: 700;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -860,7 +860,7 @@ img[src*="flashlight"] {
   .mode-card__go {
     margin-top: 1.1rem;
     padding: 0.55rem 0.8rem;
-    font-size: 0.62rem;
+    font-size: 0.65rem;
     letter-spacing: 0.22em;
   }
 }
@@ -890,7 +890,7 @@ img[src*="flashlight"] {
   position: absolute;
   bottom: 0.75rem;
   right: 0.85rem;
-  font-size: 0.58rem;
+  font-size: 0.65rem;
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;

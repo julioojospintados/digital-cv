@@ -31,6 +31,9 @@
   top: 8rem;
   right: -3rem;
   width: 20rem;
+  @media (max-width: 48rem) {
+    top: 15rem;
+  }
 }
 
 /* Knolling in skills section — multitool right */
@@ -38,7 +41,7 @@
 .bg-knoll--multitool {
   top: 0;
   right: -2.5rem;
-  width: 180px;
+  width: 11.25rem;
 }
 
 /* Knolling in experience section — flashlight right */
@@ -46,7 +49,7 @@
 .bg-knoll--flashlight {
   top: 2rem;
   right: -2rem;
-  width: 280px;
+  width: 17.5rem;
 }
 
 /* Knolling in ai section — chess left */
@@ -74,10 +77,10 @@
 }
 
 /* Mobile: keep the objects visible but smaller so they stay decorative without covering text */
-@media (max-width: 768px) {
+@media (max-width: 48rem) {
   .bg-knoll {
     opacity: 0.25 !important;
-    width: 120px;
+    width: 7.5rem;
   }
 }
 
@@ -123,7 +126,7 @@ skill-force-graph {
   border-bottom: 1px solid var(--color-border);
   /* Prevent nav content from creating horizontal document overflow on mobile */
   overflow: hidden;
-  @media (max-width: 640px) {
+  @media (max-width: 40rem) {
     padding: 0 0.75rem;
     gap: 0.25rem;
   }
@@ -218,7 +221,7 @@ go-logo:not(:defined) {
 }
 
 /* ── Desktop: label sempre visibile, abbr nascosta ── */
-@media (min-width: 641px) {
+@media (min-width: 40.0625rem) {
   .mode-btn {
     width: 7.75rem;
     flex: 0 0 7.75rem;
@@ -265,7 +268,7 @@ go-logo:not(:defined) {
 .cv-main {
   padding-top: 5rem;
   padding-bottom: 4rem;
-  max-width: 1200px;
+  max-width: 75rem;
   margin: 0 auto;
   padding-left: 1.25rem;
   padding-right: 1.25rem;
@@ -276,7 +279,7 @@ go-logo:not(:defined) {
   overflow-x: visible;
 }
 
-@media (max-width: 639px) {
+@media (max-width: 39.9375rem) {
   .cv-main {
     overflow-x: clip;
   }
@@ -394,7 +397,7 @@ go-logo:not(:defined) {
 }
 
 /* ── Hero name — mobile: two lines, smaller size ─────────── */
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
   .hero-name {
     display: flex;
     flex-wrap: wrap;
@@ -409,7 +412,7 @@ go-logo:not(:defined) {
 }
 
 /* ── Hero name — desktop: -10% rispetto al default ─────────── */
-@media (min-width: 641px) {
+@media (min-width: 40.0625rem) {
   .hero-name {
     font-size: clamp(2.7rem, 7.2vw, 6.3rem);
   }
@@ -537,6 +540,8 @@ go-logo:not(:defined) {
 }
 
 .skills-view-btn {
+  /* --sweep-x: posizione orizzontale dello scan sweep (animato da GSAP) */
+  --sweep-x: -110%;
   width: 7rem;
   min-width: 7rem;
   flex: 0 0 7rem;
@@ -548,17 +553,34 @@ go-logo:not(:defined) {
   justify-content: center;
   text-align: center;
   font-family: var(--font-mono);
-  font-size: 0.56rem;
+  font-size: 0.65rem;
   font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
   cursor: pointer;
+  overflow: hidden; /* contiene lo pseudo-sweep */
+  position: relative;
   transition:
     transform var(--duration-micro) var(--ease-standard),
     color var(--duration-micro) var(--ease-standard),
     border-color var(--duration-micro) var(--ease-standard),
     background-color var(--duration-micro) var(--ease-standard),
     box-shadow var(--duration-micro) var(--ease-standard);
+}
+
+/* Scan sweep — linea luminosa coerente con .mode-card-scan */
+.skills-view-btn::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.18) 50%,
+    transparent 100%
+  );
+  transform: translateX(var(--sweep-x));
+  pointer-events: none;
 }
 
 .skills-view-btn.is-active {
@@ -631,7 +653,7 @@ go-logo:not(:defined) {
 }
 
 /* Mobile: fewer columns, still dense and full-width */
-@media (max-width: 639px) {
+@media (max-width: 39.9375rem) {
   .skills-grid {
     grid-template-columns: repeat(6, minmax(0, 1fr));
     grid-auto-rows: clamp(2.3rem, 7vw, 3.2rem);
@@ -688,7 +710,7 @@ go-logo:not(:defined) {
   background: var(--color-accent);
   border-radius: 2px;
   color: rgba(8, 73, 67, 1);
-  font-size: 0.5rem;
+  font-size: 0.65rem;
   font-weight: 900;
   letter-spacing: 0.2em;
   text-transform: uppercase;
@@ -789,7 +811,7 @@ go-logo:not(:defined) {
   flex-shrink: 0;
   opacity: 1;
   font-family: var(--font-mono);
-  font-size: 0.5rem;
+  font-size: 0.65rem;
   font-weight: 800;
   letter-spacing: 0.08em;
   color: rgba(8, 73, 67, 1);
@@ -830,7 +852,7 @@ go-logo:not(:defined) {
 
 .exp-cluster__count {
   font-family: var(--font-mono);
-  font-size: 0.55rem;
+  font-size: 0.65rem;
   color: var(--color-text-muted);
   width: 1.4rem;
   height: 1.4rem;
@@ -983,20 +1005,20 @@ go-logo:not(:defined) {
   gap: 1rem;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48rem) {
   .exp-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-@media (min-width: 1100px) {
+@media (min-width: 68.75rem) {
   .exp-grid {
     grid-template-columns: repeat(3, 1fr);
   }
 }
 
 /* Mobile touch-action for accordion headers */
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
   .exp-cluster__header {
     touch-action: manipulation;
   }
@@ -1011,13 +1033,13 @@ go-logo:not(:defined) {
   gap: 0.75rem;
 }
 
-@media (min-width: 480px) {
+@media (min-width: 30rem) {
   .ai-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 64rem) {
   .ai-grid {
     grid-template-columns: repeat(3, 1fr);
   }
@@ -1036,7 +1058,7 @@ go-logo:not(:defined) {
   gap: 2rem;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48rem) {
   .two-col-grid {
     grid-template-columns: 1fr 1fr;
   }
@@ -1061,13 +1083,13 @@ go-logo:not(:defined) {
   gap: 0.75rem;
 }
 
-@media (min-width: 480px) {
+@media (min-width: 30rem) {
   .projects-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 64rem) {
   .projects-grid {
     grid-template-columns: repeat(3, 1fr);
   }
@@ -1082,7 +1104,7 @@ go-logo:not(:defined) {
   gap: 0.75rem;
 }
 
-@media (min-width: 640px) {
+@media (min-width: 40rem) {
   .growth-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -1179,7 +1201,7 @@ go-logo:not(:defined) {
   gap: 0.75rem;
 }
 
-@media (min-width: 640px) {
+@media (min-width: 40rem) {
   .social-impact-grid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -1427,7 +1449,7 @@ go-logo:not(:defined) {
 }
 
 /* Mobile: colonna date scompare, tutto in griglia 2-col */
-@media (max-width: 639px) {
+@media (max-width: 39.9375rem) {
   .timeline::before {
     left: calc(0.75rem + 0.69rem);
   }
@@ -1465,7 +1487,7 @@ go-logo:not(:defined) {
   align-items: center;
   flex-wrap: wrap;
   gap: 1rem;
-  max-width: 1200px;
+  max-width: 75rem;
   margin: 0 auto;
 }
 

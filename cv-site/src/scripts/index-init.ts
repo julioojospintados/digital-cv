@@ -166,7 +166,7 @@ gsap.set(goChars, { opacity: 0, scale: 1.8, y: -20 });
 // Resto del nome: 18px sotto (semplice fade-up, senza clip)
 gsap.set(otherChars, { opacity: 0, y: 18 });
 // Label e tagline
-gsap.set(["#entry-label", "#entry-tagline"], { opacity: 0, y: 10 });
+gsap.set(["#entry-label", "#entry-tagline", "#lang-switch"], { opacity: 0, y: 10 });
 
 // ── Preloader refs ────────────────────────────────────────────────────────
 const preGEl = document.getElementById("pre-G")!;
@@ -253,9 +253,9 @@ gsap.delayedCall(1.25, () => {
     if (firstOChar) firstOChar.classList.add("name-go-o");
   });
 
-  // 8. "Digital CV" + tagline compaiono insieme, subito dopo il nome completo
+  // 8. "Digital CV" + tagline + lang-switch compaiono insieme, subito dopo il nome completo
   tl.to(
-    ["#entry-label", "#entry-tagline"],
+    ["#entry-label", "#entry-tagline", "#lang-switch"],
     {
       opacity: 1,
       y: 0,
@@ -470,7 +470,7 @@ function selectMode(targetCard: HTMLButtonElement, mode: string) {
   selectedMode = mode;
   setMode(mode as "tech" | "creative" | "human" | "management");
   nameEl.setAttribute("data-mode-preview", mode);
-  const isMobile = !window.matchMedia("(min-width: 900px)").matches;
+  const isMobile = !window.matchMedia("(min-width: 56.25rem)").matches;
   cards.forEach((c) => {
     const goBtn = c.querySelector<HTMLElement>(".mode-card__go");
     if (c === targetCard) {

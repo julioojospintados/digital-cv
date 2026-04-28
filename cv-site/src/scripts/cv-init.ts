@@ -195,7 +195,7 @@ function getActiveW(): string {
 let navInitialized = false;
 
 function updateNavButtons(mode: string) {
-  const isDesktop = window.matchMedia("(min-width: 641px)").matches;
+  const isDesktop = window.matchMedia("(min-width: 40.0625rem)").matches;
 
   document.querySelectorAll<HTMLElement>("[data-nav-mode]").forEach((btn) => {
     const isActive = btn.dataset.navMode === mode;
@@ -269,7 +269,7 @@ document
         | "management";
       if (!mode) return;
 
-      const isMobile = !window.matchMedia("(min-width: 641px)").matches;
+      const isMobile = !window.matchMedia("(min-width: 40.0625rem)").matches;
       const isAlreadyActive = btn.classList.contains("is-active");
 
       // Mobile: primo tap = attiva il mode; secondo tap = scroll al contenuto
@@ -542,7 +542,7 @@ modeStore.subscribe((mode) => {
   // Mobile-first: focus the first open cluster body so keyboard/touch users
   // land inside content immediately (only on small screens).
   try {
-    if (typeof window !== "undefined" && window.matchMedia("(max-width: 640px)").matches) {
+    if (typeof window !== "undefined" && window.matchMedia("(max-width: 40rem)").matches) {
       const openBody = document.querySelector<HTMLElement>(
         ".exp-cluster[data-open] .exp-cluster__body",
       );
@@ -710,7 +710,7 @@ document
       const cluster = header.closest<HTMLElement>(".exp-cluster");
       if (!cluster) return;
       const isOpen = cluster.hasAttribute("data-open");
-      const isMobile = typeof window !== "undefined" && window.matchMedia("(max-width: 640px)").matches;
+      const isMobile = typeof window !== "undefined" && window.matchMedia("(max-width: 40rem)").matches;
 
       if (isOpen) {
         cluster.removeAttribute("data-open");
@@ -909,7 +909,7 @@ if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
   gsap.set(".bg-knoll--plant", { rotation: 6 });
   gsap.set(".bg-knoll--compass", { rotation: 15 });
 
-  const isDesktop = window.matchMedia("(min-width: 900px)").matches;
+  const isDesktop = window.matchMedia("(min-width: 56.25rem)").matches;
   const delta = isDesktop ? 500 : 300;
 
   const knollParallax: Array<{ selector: string; trigger: string }> = [
@@ -940,6 +940,354 @@ if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       }
     );
   });
+}
+
+// ── Skills toggle hint: pulse glow (A) + scan sweep (C) ───────────────────
+// A: pulse glow sui due bottoni → cattura l'attenzione periferica.
+// C: scan sweep via CSS custom property --sweep-x animata da GSAP CSSPlugin.
+// Una sola volta (once: true). Rispetta prefers-reduced-motion.
+if (skillsViewButtons.length) {
+  const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!prefersReduced) {
+    ScrollTrigger.create({
+      trigger: ".skills-view-toggle",
+      start: "top 82%",
+      once: true,
+      onEnter() {
+        const btns = Array.from(skillsViewButtons);
+        const tl = gsap.timeline({ delay: 0.35 });
+
+        // ── A: Pulse glow — entrambi i bottoni, stagger 0.15s ────────────
+        tl.fromTo(
+          btns,
+          { boxShadow: "0 0 0px transparent" },
+          {
+            boxShadow: "0 0 14px color-mix(in srgb, var(--color-accent) 55%, transparent)",
+            duration: 0.45,
+            stagger: 0.15,
+            ease: "power2.inOut",
+            yoyo: true,
+            repeat: 1,
+          },
+        );
+
+        // ── C: Scan sweep — --sweep-x da -110% → 110%, stagger 0.2s ─────
+        // GSAP CSSPlugin supporta nativamente l'animazione di CSS custom
+        // properties su elementi — nessun plugin aggiuntivo richiesto.
+        tl.add(() => {
+          btns.forEach((btn, i) => {
+            gsap.delayedCall(i * 0.2, () => {
+              gsap.fromTo(
+                btn,
+                { "--sweep-x": "-110%" },
+                { "--sweep-x": "110%", duration: 0.55, ease: "power2.inOut" },
+              );
+            });
+          });
+        }, "+=0.15");
+      },
+    });
+  }
+}
+
+// ── Card peek → Mode Connectors (bracket + thread) ───────────────────────────
+// Bracket: SVG iniettato come figlio DIRETTO della card (position:absolute).
+//   Usa offsetWidth/offsetHeight → segue automaticamente la card su scroll
+//   e scala con qualsiasi CSS transform applicato alla card.
+//   LinearGradient stroke: bottom=dim → top=bright (effetto "bordo che sale").
+//   Dot luminoso al top-inner come giunzione visibile col thread.
+// Thread: SVG position:fixed separato (non soggetto a overflow:hidden della card).
+//   Parte dalla posizione viewport del top-inner del bracket verso il nav button.
+//   Viene cancellato su scroll via listener passivo once:true.
+// Reset: auto 3.5s o click fuori o scroll.
+{
+  const PEEK_ACCENT: Record<string, string> = {
+    tech: "rgba(0,255,200,1)",
+    creative: "rgba(255,107,53,1)",
+    human: "rgba(240,200,127,1)",
+    management: "rgba(180,100,255,1)",
+  };
+  const CV_MODE_KEYS = ["tech", "creative", "human", "management"] as const;
+  const O = 4;  // px fuori dal bordo card
+  const CW = 18; // lunghezza ala orizzontale del bracket
+
+  let _peekCard: HTMLElement | null = null;
+  let _peekEls: Element[] = [];
+  let _peekTimer: ReturnType<typeof setTimeout> | null = null;
+  let _scrollCancel: (() => void) | null = null;
+
+  const resetPeek = () => {
+    if (_peekTimer) { clearTimeout(_peekTimer); _peekTimer = null; }
+    if (_scrollCancel) { window.removeEventListener("scroll", _scrollCancel); _scrollCancel = null; }
+    _peekEls.forEach((el) => el.remove());
+    _peekEls = [];
+    if (_peekCard) {
+      const card = _peekCard;
+      _peekCard = null;
+      gsap.killTweensOf(card);
+      // Rimuove tutti gli inline style impostati da GSAP durante il peek.
+      // CSS transitions su .cv-card animano automaticamente verso i valori
+      // corretti del mode attivo: var(--card-opacity-passive) e var(--card-scale-passive).
+      gsap.set(card, { clearProps: "opacity,scale,transform,boxShadow,borderColor" });
+      card.dataset.state = "passive";
+    }
+  };
+
+  const reducedMotionPeek = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /**
+   * Disegna:
+   *  - bracket SVG come figlio absolute della card (allineamento perfetto)
+   *  - thread SVG come fixed overlay verso il nav button (solo se withThreads)
+   *
+   * rect = card.getBoundingClientRect() già letto DOPO scale:1 (viewport coords corretti).
+   */
+  function drawConnectors(
+    card: HTMLElement,
+    rect: DOMRect,
+    modes: readonly string[],
+    withThreads: boolean,
+    managed: boolean,
+  ) {
+    if (reducedMotionPeek) return;
+    const ns = "http://www.w3.org/2000/svg";
+    const W = card.offsetWidth;
+    const H = card.offsetHeight;
+    const svgW = W + 2 * O;
+    const svgH = H + 2 * O;
+
+    // Assicura che la card sia positioning context
+    if (getComputedStyle(card).position === "static") {
+      card.style.position = "relative";
+    }
+
+    modes.forEach((mode, i) => {
+      const accent = PEEK_ACCENT[mode];
+      const accentDim = accent.replace("1)", "0.22)");
+
+      const side: "left" | "right" | "center" =
+        modes.length === 1 ? "left" :
+          i === 0 ? "left" :
+            i === modes.length - 1 ? "right" :
+              "center";
+
+      // ── BRACKET: figlio absolute della card ─────────────────────────────
+      if (side !== "center") {
+        const gradId = `pkg-${mode}-${i}-${Date.now()}`;
+
+        const bSvg = document.createElementNS(ns, "svg") as SVGSVGElement;
+        Object.assign(bSvg.style, {
+          position: "absolute",
+          top: `${-O}px`,
+          left: `${-O}px`,
+          width: `${svgW}px`,
+          height: `${svgH}px`,
+          overflow: "visible",
+          pointerEvents: "none",
+          zIndex: "10",
+        });
+
+        // Gradient stroke: bottom dim → top bright
+        const defs = document.createElementNS(ns, "defs");
+        const grad = document.createElementNS(ns, "linearGradient");
+        grad.setAttribute("id", gradId);
+        grad.setAttribute("x1", "0"); grad.setAttribute("y1", "1");
+        grad.setAttribute("x2", "0"); grad.setAttribute("y2", "0");
+        grad.setAttribute("gradientUnits", "objectBoundingBox");
+        const s0 = document.createElementNS(ns, "stop");
+        s0.setAttribute("offset", "0%");
+        s0.setAttribute("stop-color", accent);
+        s0.setAttribute("stop-opacity", "0.2");
+        const s1 = document.createElementNS(ns, "stop");
+        s1.setAttribute("offset", "100%");
+        s1.setAttribute("stop-color", accent);
+        s1.setAttribute("stop-opacity", "0.92");
+        grad.appendChild(s0); grad.appendChild(s1);
+        defs.appendChild(grad); bSvg.appendChild(defs);
+
+        // Path del bracket in coordinate locali SVG
+        let d: string;
+        let tipX: number;
+        if (side === "left") {
+          // bottom-inner → bottom-corner → top-corner → top-inner
+          d = `M ${CW} ${svgH} L 0 ${svgH} L 0 0 L ${CW} 0`;
+          tipX = CW;
+        } else {
+          d = `M ${svgW - CW} ${svgH} L ${svgW} ${svgH} L ${svgW} 0 L ${svgW - CW} 0`;
+          tipX = svgW - CW;
+        }
+
+        const bPath = document.createElementNS(ns, "path") as SVGPathElement;
+        bPath.setAttribute("d", d);
+        bPath.setAttribute("fill", "none");
+        bPath.setAttribute("stroke", `url(#${gradId})`);
+        bPath.setAttribute("stroke-width", "2.5");
+        bPath.setAttribute("stroke-linecap", "round");
+        bPath.setAttribute("stroke-linejoin", "round");
+        bPath.style.filter = `drop-shadow(0 0 5px ${accentDim})`;
+
+        // Dot luminoso al top-inner (giunzione con thread)
+        const dot = document.createElementNS(ns, "circle") as SVGCircleElement;
+        dot.setAttribute("cx", String(tipX));
+        dot.setAttribute("cy", "0");
+        dot.setAttribute("r", "3.5");
+        dot.setAttribute("fill", accent);
+        dot.style.opacity = "0";
+        dot.style.filter = `drop-shadow(0 0 7px ${accent})`;
+
+        bSvg.appendChild(bPath); bSvg.appendChild(dot);
+        card.appendChild(bSvg);
+        if (managed) _peekEls.push(bSvg);
+
+        const len = bPath.getTotalLength();
+        bPath.setAttribute("stroke-dasharray", String(len));
+        bPath.setAttribute("stroke-dashoffset", String(len));
+
+        const holdDelay = withThreads ? 1.1 : 0.5;
+        const bTl = gsap.timeline({ delay: i * 0.14 });
+        bTl.to(bPath, { attr: { "stroke-dashoffset": 0 }, duration: 0.65, ease: "power2.inOut" });
+        bTl.set(dot, { opacity: 1 }, "-=0.08");
+        bTl.fromTo(dot, { attr: { r: "0" } }, { attr: { r: "3.5" }, duration: 0.22, ease: "back.out(3)" }, "<");
+        bTl.to({}, { duration: holdDelay });
+        bTl.to([bPath, dot], {
+          opacity: 0, duration: 0.3, ease: "power2.in",
+          onComplete() {
+            bSvg.remove();
+            if (managed) _peekEls = _peekEls.filter((el) => el !== bSvg);
+          },
+        });
+      }
+
+      // ── THREAD: fixed overlay da bracket-top-inner → nav button ─────────
+      if (withThreads) {
+        const navBtn = document.querySelector<HTMLElement>(`[data-nav-mode="${mode}"]`);
+        if (!navBtn) return;
+
+        const nRect = navBtn.getBoundingClientRect();
+        const nx = nRect.left + nRect.width / 2;
+        const ny = nRect.top + nRect.height / 2;
+
+        // Posizione viewport del top-inner del bracket
+        // (rect è già letto dopo scale:1, quindi è accurata)
+        let startX: number;
+        if (side === "left") startX = rect.left - O + CW;
+        else if (side === "right") startX = rect.right + O - CW;
+        else startX = rect.left + rect.width / 2;
+        const startY = rect.top - O;
+
+        const cpx = startX + (nx - startX) * 0.25;
+        const cpy = startY - Math.abs(startY - ny) * 0.45;
+
+        const tSvg = document.createElementNS(ns, "svg") as SVGSVGElement;
+        const tPath = document.createElementNS(ns, "path") as SVGPathElement;
+        Object.assign(tSvg.style, {
+          position: "fixed",
+          inset: "0",
+          width: "100dvw",
+          height: "100dvh",
+          pointerEvents: "none",
+          zIndex: "9991",
+          overflow: "visible",
+        });
+
+        tPath.setAttribute("d", `M ${startX} ${startY} Q ${cpx} ${cpy} ${nx} ${ny}`);
+        tPath.setAttribute("fill", "none");
+        tPath.setAttribute("stroke", accent);
+        tPath.setAttribute("stroke-width", "1.5");
+        tPath.setAttribute("stroke-linecap", "round");
+        tPath.style.opacity = "0.8";
+        tPath.style.filter = `drop-shadow(0 0 4px ${accent.replace("1)", "0.5)")})`;
+
+        tSvg.appendChild(tPath);
+        document.body.appendChild(tSvg);
+        if (managed) _peekEls.push(tSvg);
+
+        const tLen = tPath.getTotalLength();
+        tPath.setAttribute("stroke-dasharray", String(tLen));
+        tPath.setAttribute("stroke-dashoffset", String(tLen));
+
+        // Il thread parte dopo che il bracket ha raggiunto il top (~0.65s + stagger)
+        const tDelay = (i * 0.14) + 0.55;
+        gsap.to(tPath, {
+          attr: { "stroke-dashoffset": 0 },
+          duration: 0.45,
+          delay: tDelay,
+          ease: "power2.inOut",
+          onComplete() {
+            gsap.to(tPath, {
+              attr: { "stroke-dashoffset": -tLen },
+              duration: 0.35,
+              delay: 0.9,
+              ease: "power2.in",
+              onComplete() {
+                tSvg.remove();
+                if (managed) _peekEls = _peekEls.filter((el) => el !== tSvg);
+              },
+            });
+          },
+        });
+      }
+    });
+  }
+
+  document.querySelectorAll<HTMLElement>(".cv-card[data-tags]").forEach((card) => {
+    card.addEventListener("click", (e) => {
+      if (card.dataset.state === "peeking") return;
+
+      const isPassive = card.dataset.state === "passive";
+      const tags = (card.dataset.tags ?? "").split(" ");
+      const modes = CV_MODE_KEYS.filter((m) => tags.includes(m));
+      if (!modes.length) return;
+
+      e.stopPropagation();
+
+      if (isPassive) {
+        resetPeek();
+        _peekCard = card;
+        card.dataset.state = "peeking";
+
+        // Porta subito la card a scale:1 e opacity:1 per leggere il rect corretto,
+        // poi anima solo le proprietà visive (box-shadow, borderColor).
+        gsap.set(card, { scale: 1, opacity: 1 });
+        const rect = card.getBoundingClientRect();
+
+        if (!reducedMotionPeek) {
+          const glowLayers = modes.map((m) => {
+            const c = PEEK_ACCENT[m];
+            return `0 0 22px ${c.replace("1)", "0.22)")}, 0 0 8px ${c.replace("1)", "0.1)")}`;
+          }).join(", ");
+          gsap.fromTo(card,
+            { borderColor: "rgba(255,255,255,0.12)", boxShadow: "none" },
+            { borderColor: PEEK_ACCENT[modes[0]], boxShadow: glowLayers, duration: 0.4, ease: "power2.out" },
+          );
+        }
+
+        // Nav punch per ogni mode
+        if (!reducedMotionPeek) {
+          modes.forEach((mode, i) => {
+            const navBtn = document.querySelector<HTMLElement>(`[data-nav-mode="${mode}"]`);
+            if (!navBtn) return;
+            const accent = PEEK_ACCENT[mode];
+            const abbr = navBtn.querySelector<HTMLElement>(".mode-btn__abbr");
+            const label = navBtn.querySelector<HTMLElement>(".mode-btn__label");
+            const tl = gsap.timeline({ delay: i * 0.12 });
+            tl.to(navBtn, { scale: 1.15, duration: 0.18, ease: "power2.out" })
+              .to(navBtn, { scale: 1, duration: 0.4, ease: "elastic.out(1.8, 0.4)" });
+            if (abbr) tl.to(abbr, { color: accent, duration: 0.28, yoyo: true, repeat: 1, repeatDelay: 1.55 }, "<");
+            if (label) tl.to(label, { color: accent, duration: 0.28, yoyo: true, repeat: 1, repeatDelay: 1.55 }, "<");
+          });
+        }
+
+        drawConnectors(card, rect, modes, true, true);
+        _peekTimer = setTimeout(resetPeek, 3500);
+        _scrollCancel = () => resetPeek();
+        window.addEventListener("scroll", _scrollCancel, { once: true, passive: true });
+
+      }
+    });
+  });
+
+  document.addEventListener("click", () => { if (_peekCard) resetPeek(); });
 }
 
 // ── Lazy-load SkillForceGraph — D3 (~130 KB gzip) fuori dal percorso critico ──

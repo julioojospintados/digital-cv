@@ -349,7 +349,7 @@ body::after {
 }
 
 /* Mobile: bordo sinistro luminoso sulla card attiva */
-@media (max-width: 639px) {
+@media (max-width: 39.9375rem) {
   .cv-card[data-state="active"] {
     border-left-width: 3px;
     border-left-color: var(--color-accent);
@@ -367,7 +367,7 @@ body::after {
 
 .reveal {
   opacity: 0;
-  transform: translateY(28px);
+  transform: translateY(1.75rem);
   transition:
     opacity 0.7s var(--ease-standard),
     transform 0.7s var(--ease-standard);
@@ -426,7 +426,7 @@ floating-menu {
   pointer-events: none !important;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 40rem) {
   floating-menu {
     bottom: 1.25rem;
     right: 1rem;
@@ -435,7 +435,7 @@ floating-menu {
 
 /* Safe-area padding solo quando viewport-fit=cover è attivo (iOS notch/home-indicator) */
 @supports (bottom: env(safe-area-inset-bottom)) {
-  @media (max-width: 640px) {
+  @media (max-width: 40rem) {
     floating-menu {
       bottom: max(1.25rem, env(safe-area-inset-bottom) + 0.75rem);
     }
@@ -473,7 +473,7 @@ floating-menu {
 }
 
 #preloader .pre-bar {
-  width: 120px;
+  width: 7.5rem;
   height: 1px;
   background: var(--color-border);
   position: relative;

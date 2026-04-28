@@ -271,7 +271,7 @@ class SkillForceGraph extends LitElement {
 
     .force-node-label {
       font-family: "Lexend", sans-serif;
-      font-size: 11px;
+      font-size: 0.6875rem;
       font-weight: 600;
       letter-spacing: 0.02em;
       fill: rgba(245, 240, 230, 0.92);
@@ -327,9 +327,9 @@ class SkillForceGraph extends LitElement {
     /* Mobile: il viewBox (1080×760) porta le label a ~4px reali su 390px.
        Si aumenta la dimensione SVG e si usa uno stroke più spesso.
        Lo zoom iniziale 1.9× porta le label a ~9px effettivi. */
-    @media (max-width: 899px) {
+    @media (max-width: 56.1875rem) {
       .force-node-label {
-        font-size: 13px;
+        font-size: 0.8125rem;
         font-weight: 400;
         stroke-width: 2.5px;
       }
@@ -337,6 +337,19 @@ class SkillForceGraph extends LitElement {
         padding: 0.1rem 0.65rem 0.15rem;
         font-size: 0.5rem;
       }
+    }
+
+    /* ── Expand button hint animation ── */
+    /* Durata totale 6s: il pulse avviene nel primo 20% (~1.2s), poi pausa fino al prossimo ciclo */
+    @keyframes expand-btn-hint {
+      0%   { box-shadow: 0 0 0px transparent;
+             border-color: rgba(255,255,255,0.18); }
+      10%  { box-shadow: 0 0 14px color-mix(in srgb, var(--color-accent, rgba(0,255,200,1)) 65%, transparent);
+             border-color: var(--color-accent, rgba(0,255,200,1)); }
+      20%  { box-shadow: 0 0 0px transparent;
+             border-color: rgba(255,255,255,0.18); }
+      100% { box-shadow: 0 0 0px transparent;
+             border-color: rgba(255,255,255,0.18); }
     }
 
     /* ── Expand button — position:absolute relativo a graph-svg-clip ── */
@@ -361,10 +374,16 @@ class SkillForceGraph extends LitElement {
       transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
       z-index: 3;
     }
+    @media (prefers-reduced-motion: no-preference) {
+      .graph-expand-btn {
+        animation: expand-btn-hint 2.5s ease 1.5s infinite;
+      }
+    }
     .graph-expand-btn:hover {
       border-color: var(--color-accent, rgba(0,255,200,1));
       color: var(--color-accent, rgba(0,255,200,1));
       background: rgba(8,73,67,0.98);
+      animation: none;
     }
     .graph-expand-btn:focus-visible {
       outline: 2px solid var(--color-accent, rgba(0,255,200,1));

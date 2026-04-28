@@ -211,7 +211,7 @@ class FloatingMenu extends LitElement {
     }
 
     /* ── Mobile adjustments ── */
-    @media (max-width: 640px) {
+    @media (max-width: 40rem) {
       .fab-trigger {
         width: 3rem;
         height: 3rem;
