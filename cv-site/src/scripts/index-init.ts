@@ -72,6 +72,8 @@ document.querySelectorAll<HTMLElement>(".knoll-wrap").forEach((wrap) => {
 });
 
 let selectedMode: string | null = null;
+// Tweens del pulse sulle card — salvati per poterli killare alla selezione
+const cardPulseTweens: gsap.core.Tween[] = [];
 
 // ── Mobile grid expansion — stato modulo ─────────────────────────────────
 // Quando l'utente seleziona una card su touch, il grid si espande (60/40)
@@ -265,52 +267,61 @@ gsap.delayedCall(1.25, () => {
     },
   );
 
-  // 9. Mode cards e oggetti knolling — partono insieme dopo label+tagline, ordine casuale
-  const shuffledCards = Array.from(cards).sort(() => Math.random() - 0.5);
+  // 9. Mode cards — ordine spaziale TL→BR (ordine DOM = tech→creative→management→human)
+  // Segue la diagonale naturale di lettura: l'occhio è guidato senza sorprese.
+  const orderedCards = Array.from(cards); // già in ordine DOM row-by-row (2x2 grid)
   tl.fromTo(
-    shuffledCards,
+    orderedCards,
     { y: 30, opacity: 0, scale: 0.94 },
     {
       y: 0,
       opacity: 1,
       scale: 1,
       duration: 0.8,
-      stagger: 0.12,
+      stagger: 0.07, // 70ms — quasi simultanee, sembrano un gruppo compatto
       ease: "back.out(1.4)",
     },
     "+=0.05",
   );
 
-  // 10. Knolling: parte assieme alle card, ordine casuale
+  // 10. Knolling — ordine spaziale: sort per posizione Y (peso 0.7) + X (peso 0.3)
+  // Crea un'onda diagonale TL→BR: prima le immagini in alto, poi quelle in basso.
+  // offsetTop/offsetLeft invece di getBoundingClientRect → immune ai GSAP transform.
+  // Inizia 0.25s dopo l'inizio delle card (overlap parziale: le ultime card escono
+  // mentre le prime immagini entrano — composizione knolling che si assembla).
   tl.call(() => {
-    const shuffledKnolls = Array.from(knolls).sort(() => Math.random() - 0.5);
-    shuffledKnolls.forEach((knoll, i) => {
-      knoll.style.setProperty("--knoll-delay", `${i * 55}ms`);
+    const sortedKnolls = Array.from(knolls).sort((a, b) => {
+      const scoreA = a.offsetTop * 0.7 + a.offsetLeft * 0.3;
+      const scoreB = b.offsetTop * 0.7 + b.offsetLeft * 0.3;
+      return scoreA - scoreB;
+    });
+    sortedKnolls.forEach((knoll, i) => {
+      knoll.style.setProperty("--knoll-delay", `${i * 60}ms`);
       knoll.classList.add("do-enter");
     });
-  }, undefined, "<");
+  }, undefined, "-=0.55");
 
-  // 10b. Pulse attenzione sulle card — bordo che lampeggia una sola volta
-  // per comunicare interattività senza spiegarlo a parole.
+  // 10b. Pulse attenzione sulle card — bordo che pulsa ogni 1.5s in loop
+  // per comunicare interattività persistente. Si ferma quando una card viene selezionata.
   // Inizia 0.6s dopo che le card sono apparse (durata entrata = 0.8s + stagger 0.36s ≈ 1.16s totale).
   tl.call(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    // up (0.32s) + down (0.32s) = 0.64s — repeatDelay = 1.5 - 0.64 = 0.86s → ciclo totale 1.5s
     cards.forEach((card, i) => {
-      gsap.fromTo(
+      const tw = gsap.fromTo(
         card,
         { boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.08)" },
         {
           boxShadow: "inset 0 0 0 1.5px rgba(255,255,255,0.55), 0 0 14px 2px rgba(255,255,255,0.12)",
           duration: 0.32,
-          delay: i * 0.08,
+          delay: i * 0.12,
           ease: "power2.out",
           yoyo: true,
-          repeat: 1,
-          onComplete: () => {
-            gsap.set(card, { clearProps: "boxShadow" });
-          },
+          repeat: -1,
+          repeatDelay: 0.86,
         },
       );
+      cardPulseTweens.push(tw);
     });
   }, undefined, "+=0.6");
 
@@ -495,6 +506,12 @@ function selectMode(targetCard: HTMLButtonElement, mode: string) {
   setMode(mode as "tech" | "creative" | "human" | "management");
   nameEl.setAttribute("data-mode-preview", mode);
   const isMobile = !window.matchMedia("(min-width: 56.25rem)").matches;
+  // Ferma il pulse sulle card e rimuove il boxShadow residuo
+  if (cardPulseTweens.length) {
+    cardPulseTweens.forEach((tw) => tw.kill());
+    cardPulseTweens.length = 0;
+    cards.forEach((c) => gsap.set(c, { clearProps: "boxShadow" }));
+  }
   cards.forEach((c) => {
     const goBtn = c.querySelector<HTMLElement>(".mode-card__go");
     if (c === targetCard) {

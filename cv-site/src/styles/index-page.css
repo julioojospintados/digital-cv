@@ -870,8 +870,8 @@ img[src*="flashlight"] {
   letter-spacing: 0.18em;
   text-transform: uppercase;
   cursor: pointer;
-  /* Hint sempre visibile: il bottone è riconoscibile come tale anche prima del tap.
-     GSAP lo porta a opacity:1 (is-ready) dopo la selezione della card. */
+  /* Desktop: hint visibile a opacity ridotta — GSAP porta a 1 dopo la selezione.
+     Touch: parte da 0 — compare solo quando la card è attivata (progressive disclosure). */
   opacity: 0.38;
   pointer-events: none;
   user-select: none;
@@ -881,6 +881,14 @@ img[src*="flashlight"] {
     box-shadow 0.2s ease,
     color 0.2s ease,
     opacity 0.2s ease;
+}
+
+@media (--touch) {
+  /* Su touch il bottone è invisibile finché la card non viene attivata.
+     GSAP lo anima da opacity:0 → 1 in selectMode(). */
+  .mode-card__go {
+    opacity: 0;
+  }
 }
 
 @media (--tablet-up) {
