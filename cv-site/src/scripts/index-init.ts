@@ -522,6 +522,9 @@ function selectMode(targetCard: HTMLButtonElement, mode: string) {
       if (goBtn) {
         goBtn.setAttribute("tabindex", "0");
         goBtn.removeAttribute("aria-hidden");
+        // Aggiunge is-ready subito: rimuove height:0/margin:0 dal CSS touch
+        // così GSAP anima da uno stato "visibile nel layout" e non c'è jump.
+        goBtn.classList.add("is-ready");
         gsap
           .timeline({ delay: 0.2 })
           .fromTo(
@@ -533,7 +536,6 @@ function selectMode(targetCard: HTMLButtonElement, mode: string) {
               scale: 1,
               duration: 0.6,
               ease: "back.out(3)",
-              onStart: () => goBtn.classList.add("is-ready"),
             },
           )
           .to(

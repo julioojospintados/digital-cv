@@ -884,10 +884,17 @@ img[src*="flashlight"] {
 }
 
 @media (--touch) {
-  /* Su touch il bottone è invisibile finché la card non viene attivata.
-     GSAP lo anima da opacity:0 → 1 in selectMode(). */
-  .mode-card__go {
+  /* Su touch il bottone è invisibile E non occupa spazio finché la card
+     non viene attivata. height: 0 + overflow: hidden rimuove dal layout
+     senza usare display:none (che GSAP non anima bene). */
+  .mode-card__go:not(.is-ready) {
     opacity: 0;
+    height: 0;
+    margin-top: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    overflow: hidden;
+    border-width: 0;
   }
 }
 
