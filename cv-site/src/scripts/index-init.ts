@@ -308,11 +308,14 @@ gsap.delayedCall(1.25, () => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     // up (0.32s) + down (0.32s) = 0.64s — repeatDelay = 1.5 - 0.64 = 0.86s → ciclo totale 1.5s
     cards.forEach((card, i) => {
+      const style = getComputedStyle(card);
+      const goColor = style.getPropertyValue("--card-go-color").trim() || "rgba(255,255,255,1)";
+      const goShadow = style.getPropertyValue("--card-go-shadow").trim() || "rgba(255,255,255,0.12)";
       const tw = gsap.fromTo(
         card,
-        { boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.08)" },
+        { boxShadow: `inset 0 0 0 1px rgba(255,255,255,0.08)` },
         {
-          boxShadow: "inset 0 0 0 1.5px rgba(255,255,255,0.55), 0 0 14px 2px rgba(255,255,255,0.12)",
+          boxShadow: `inset 0 0 0 1.5px ${goColor.replace("1)", "0.55)")}, 0 0 14px 2px ${goShadow.replace("0.35)", "0.18)")}`,
           duration: 0.32,
           delay: i * 0.12,
           ease: "power2.out",
