@@ -33,6 +33,8 @@ const classes = [
   data-tags={modeTags}
   style={`--skill-border: ${borderPx}px; grid-column: span ${spanCol}; grid-row: span ${spanRow};`}
   title={`${name} — ${level}`}
+  role="listitem"
+  aria-label={`${name} — ${level}`}
 >
   <span class="skill-sq__name">{name}</span>
   <span class="skill-sq__level">{levelAbbr}</span>

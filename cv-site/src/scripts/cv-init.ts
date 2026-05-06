@@ -450,34 +450,41 @@ document
         // ── Fase 4+5: scroll + spotlight (layout stabile a 650ms) ─────────
         if (scanTarget) {
           setTimeout(() => {
-            const lenis = window.__lenis;
-            const NAV_HEIGHT = 72;
-            const absoluteTop =
-              scanTarget.getBoundingClientRect().top + window.scrollY - NAV_HEIGHT;
-
-            // Rivela SUBITO le sezioni .reveal ancora a opacity:0 (non scorse dallo scroll).
-            // Necessario prima del spotlight: se exp-section è opacity:0 inline (da gsap.set
-            // al init), le cluster figlie sarebbero invisibili indipendentemente dal loro opacity.
+            // 1. Svela PRIMA le sezioni .reveal ancora nascoste (y:32 da gsap.set al init).
+            //    Questo deve accadere PRIMA del calcolo della posizione —
+            //    se una sezione sopra il target ha ancora transform:translateY(32px),
+            //    getBoundingClientRect() restituirebbe una posizione errata (32px in più).
+            //    Sul primo click il timeout a 450ms può arrivare tardi (main thread occupato),
+            //    quindi qui è il posto sicuro per garantire il flush prima del calcolo.
             document.querySelectorAll<HTMLElement>(".reveal:not(.is-visible)").forEach((el) => {
               gsap.set(el, { opacity: 1, y: 0 });
               el.classList.add("is-visible");
             });
 
-            // Spotlight: dim gli altri, glow sul target
-            gsap.to(allClusters, { opacity: 0.2, duration: 0.25 });
-            gsap.to(scanTarget, {
-              opacity: 1,
-              boxShadow:
-                "0 0 0 2px var(--color-accent), 0 0 28px color-mix(in srgb, var(--color-accent) 35%, transparent)",
-              duration: 0.25,
-            });
+            // 2. Attendi il prossimo frame di layout per garantire che i transform
+            //    rimossi siano stati applicati prima di leggere getBoundingClientRect().
+            requestAnimationFrame(() => {
+              const navEl = document.querySelector<HTMLElement>("#cv-nav");
+              const NAV_HEIGHT = navEl ? navEl.getBoundingClientRect().height : 52;
+              const absoluteTop =
+                scanTarget.getBoundingClientRect().top + window.scrollY - NAV_HEIGHT;
 
-            // Usa helper scrollToPositionThen per attendere l'arrivo e spegnere
-            // lo spotlight in modo affidabile (gestisce Lenis o fallback).
-            scrollToPositionThen(absoluteTop).then(() => {
-              gsap.to(allClusters, { opacity: 1, duration: 0.5, ease: "power2.out" });
-              gsap.to(scanTarget, { boxShadow: "none", duration: 0.5 });
-            });
+              // Spotlight: dim gli altri, glow sul target
+              gsap.to(allClusters, { opacity: 0.2, duration: 0.25 });
+              gsap.to(scanTarget, {
+                opacity: 1,
+                boxShadow:
+                  "0 0 0 2px var(--color-accent), 0 0 28px color-mix(in srgb, var(--color-accent) 35%, transparent)",
+                duration: 0.25,
+              });
+
+              // Usa helper scrollToPositionThen per attendere l'arrivo e spegnere
+              // lo spotlight in modo affidabile (gestisce Lenis o fallback).
+              scrollToPositionThen(absoluteTop).then(() => {
+                gsap.to(allClusters, { opacity: 1, duration: 0.5, ease: "power2.out" });
+                gsap.to(scanTarget, { boxShadow: "none", duration: 0.5 });
+              });
+            }); // end requestAnimationFrame
           }, 650);
         }
       }

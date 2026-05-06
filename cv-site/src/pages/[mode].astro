@@ -276,9 +276,17 @@ const projectsData = cvData.projects.slice(0, 6).map(p => {
 });
 
 const modeLabel = mode.charAt(0).toUpperCase() + mode.slice(1);
+
+const modeDescriptions: Record<string, string> = {
+  tech: 'Senior Frontend Developer con 6+ anni su Angular, Lit, TypeScript e architetture MCP. Specializzato in AI workflow, automazione e sistemi enterprise ad alto traffico.',
+  creative: 'UX/UI Designer e Creative Technologist certificato IBM. Progetto esperienze digitali che uniscono estetica, usabilità e impatto sul brand per PMI.',
+  human: 'Consulente per l\'Innovazione Digitale con background multidisciplinare: sviluppo software, design, teatro e comunicazione. Orientato all\'impatto reale sulle persone e sui processi.',
+  management: 'Partner Tecnico Agile per PMI. Sprint brevi, backlog orientato al business, autonomia del team. Tecnologia + Design + Metodo in ogni ingaggio.',
+};
+const modeDescription = modeDescriptions[mode] ?? 'CV interattivo di Giulio Occhipinti: Consulente per l\'Innovazione Digitale & Partner Tecnico per PMI.';
 ---
 
-<Layout title={`CV ${modeLabel} — Giulio Occhipinti`} description="CV interattivo: Senior Frontend Developer, UX Designer, Creative Technologist." mode={mode}>
+<Layout title={`CV ${modeLabel} — Giulio Occhipinti`} description={modeDescription} mode={mode}>
 
   <!-- ────────────────────────────────────────────────────────── NAV -->
   <nav class="cv-nav" id="cv-nav" aria-label="Navigazione principale">
@@ -323,7 +331,7 @@ const modeLabel = mode.charAt(0).toUpperCase() + mode.slice(1);
       <div class="hero-footer">
         <div class="hero-socials">
           {cvData.social.map(s => (
-            <a href={s.url} class="social-link" target="_blank" rel="noopener noreferrer">
+            <a href={s.url} class="social-link" target="_blank" rel="noopener noreferrer" aria-label={`${s.platform}${s.label ? ` — ${s.label}` : ''} (apre in nuova scheda)`}>
               {s.platform}
             </a>
           ))}
@@ -355,7 +363,7 @@ const modeLabel = mode.charAt(0).toUpperCase() + mode.slice(1);
         <span class="section-subtitle">Force-directed network delle competenze - hover e drag per esplorare</span>
       </h2>
       <h3 class="skills-sub-title">Competenze tecniche, management e human — livello &amp; glow proporzionale</h3>
-      <div class="skills-view-toggle" role="tablist" aria-label="Scegli vista competenze">
+      <div class="skills-view-toggle" role="group" aria-label="Scegli vista competenze">
         <button class="skills-view-btn is-active" type="button" data-skills-view-button="graph" aria-pressed="true">{skillViewLabels.graph}</button>
         <button class="skills-view-btn" type="button" data-skills-view-button="cards" aria-pressed="false">{skillViewLabels.cards}</button>
       </div>
@@ -364,7 +372,7 @@ const modeLabel = mode.charAt(0).toUpperCase() + mode.slice(1);
           <skill-force-graph></skill-force-graph>
         </div>
         <div class="skills-stage__panel skills-stage__panel--cards">
-          <div class="skills-grid">
+          <div class="skills-grid" role="list" aria-label="Competenze tecniche, creative e trasversali">
             {skillSquares.map(skill => (
               <SkillSquare {...skill} />
             ))}

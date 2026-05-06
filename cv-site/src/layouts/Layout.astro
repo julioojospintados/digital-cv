@@ -15,6 +15,33 @@ const {
   mode,
   lang = 'it',
 } = Astro.props;
+
+const siteUrl = 'https://giulioocchipinti.vercel.app';
+const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
+const ogImage = `${siteUrl}/og-image.png`;
+
+// JSON-LD — Person schema (schema.org) — indicizzato direttamente da Google
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Giulio Occhipinti',
+  jobTitle: "Consulente per l'Innovazione Digitale & Partner Tecnico per PMI",
+  url: siteUrl,
+  email: 'mailto:giulio.occhipinti.g@gmail.com',
+  sameAs: [
+    'https://www.linkedin.com/in/giulio-occhipinti',
+    'https://github.com/julioojospintados',
+  ],
+  knowsAbout: [
+    'Angular', 'TypeScript', 'Lit', 'WebComponents', 'Node.js',
+    'MCP Protocol', 'Agile', 'UX Design', 'GSAP', 'Astro',
+  ],
+  address: {
+    '@type': 'PostalAddress',
+    addressLocality: 'Torino',
+    addressCountry: 'IT',
+  },
+};
 ---
 
 <!doctype html>
@@ -24,10 +51,14 @@ const {
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={description} />
+    <meta name="author" content="Giulio Occhipinti" />
     <meta name="robots" content="index, follow" />
     <!-- Tells browsers this page is already dark — prevents OS dark mode from
          force-inverting colors (lines, overlays) on Chrome/Safari Android/iOS -->
     <meta name="color-scheme" content="dark" />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href={canonicalUrl} />
 
     <!-- View Transitions API -->
     <meta name="view-transition" content="same-origin" />
@@ -36,14 +67,26 @@ const {
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content={Astro.url} />
-    <meta property="og:image" content="/og-image.png" />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImage} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content={lang === 'en' ? 'en_US' : 'it_IT'} />
+    <meta property="og:site_name" content="Giulio Occhipinti — Digital CV" />
+
+    <!-- Twitter / X Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <!-- JSON-LD structured data — Person schema (schema.org) -->
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 
     <!-- Preload critical fonts — 400 for body text, 800 for preloader & entry name -->
     <!-- font-display: block in global.css prevents FOUC during the preloader animation -->
-    <link rel="preload" as="font" type="font/woff2" href="/fonts/Lexend/lexend-latin-400-normal.woff2" crossorigin />
+    <!-- 400: prefetch (not preload) — GSAP hides text at opacity:0 initially, preload would trigger an "unused preload" warning -->
+    <link rel="prefetch" as="font" type="font/woff2" href="/fonts/Lexend/lexend-latin-400-normal.woff2" crossorigin />
     <link rel="preload" as="font" type="font/woff2" href="/fonts/Lexend/lexend-latin-800-normal.woff2" crossorigin />
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />

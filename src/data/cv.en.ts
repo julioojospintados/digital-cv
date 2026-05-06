@@ -198,24 +198,23 @@ export const cvDataEn = {
     },
     {
       company: "Freelance",
-      role: "Videographer – High-End Weddings",
+      role: "Assistant Videographer – High-End Weddings",
       startDate: "2022-01",
       endDate: "present",
       location: "Tuscany, Italy",
       remote: false,
       description:
-        "Video production and direction for high-end Indian weddings in Tuscany. A sector demanding extreme attention to detail, complex logistics management and international aesthetic sensibility.",
+        "Support role in video production for high-end international weddings in Tuscany. Assisted the lead videographer in a sector demanding extreme attention to detail and international aesthetic sensibility.",
       highlights: [
-        "Direct video for ceremonies with hundreds of international guests",
-        "Manage crew in multicultural and multi-day event contexts",
-        "Deliver full post-production: color grading, narrative editing, in premium formats",
+        "Support video shoots for ceremonies with hundreds of international guests",
+        "Collaborate in multicultural and multi-day event contexts",
+        "Operate in high-complexity logistical and cultural contexts, adapting to on-set needs in real time",
       ],
       skills: [
         "Videography",
-        "Direction",
         "Post-production",
         "Color grading",
-        "Logistics management",
+        "Aesthetic sensibility",
       ],
     },
     {
@@ -1248,7 +1247,7 @@ export const cvDataEn = {
     {
       name: "Videography",
       description:
-        "Direction and video production for high-end weddings in Tuscany: crew management in multicultural contexts, color grading and narrative editing for an international premium market.",
+        "Support role in video production for high-end weddings in Tuscany: assisting the lead videographer, color grading and narrative editing in multicultural premium contexts.",
       links: [
         { target: "Photography", type: "technical" },
         { target: "Applied creativity", type: "cross-domain" },

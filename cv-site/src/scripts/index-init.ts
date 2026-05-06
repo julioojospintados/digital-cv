@@ -290,6 +290,30 @@ gsap.delayedCall(1.25, () => {
     });
   }, undefined, "<");
 
+  // 10b. Pulse attenzione sulle card — bordo che lampeggia una sola volta
+  // per comunicare interattività senza spiegarlo a parole.
+  // Inizia 0.6s dopo che le card sono apparse (durata entrata = 0.8s + stagger 0.36s ≈ 1.16s totale).
+  tl.call(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    cards.forEach((card, i) => {
+      gsap.fromTo(
+        card,
+        { boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.08)" },
+        {
+          boxShadow: "inset 0 0 0 1.5px rgba(255,255,255,0.55), 0 0 14px 2px rgba(255,255,255,0.12)",
+          duration: 0.32,
+          delay: i * 0.08,
+          ease: "power2.out",
+          yoyo: true,
+          repeat: 1,
+          onComplete: () => {
+            gsap.set(card, { clearProps: "boxShadow" });
+          },
+        },
+      );
+    });
+  }, undefined, "+=0.6");
+
   // 11. FAB compare dopo le card — rimuove data-fab-hidden → CSS transition anima ingresso
   tl.call(() => {
     document.documentElement.removeAttribute("data-fab-hidden");

@@ -376,24 +376,23 @@ export const cvData = {
     },
     {
       company: "Freelance",
-      role: "Videomaker – Matrimoni di alto livello",
+      role: "Aiuto Videomaker – Matrimoni di alto livello",
       startDate: "2022-01",
       endDate: "present",
       location: "Toscana, Italia",
       remote: false,
       description:
-        "Produzione e regia video per matrimoni indiani di alto livello in Toscana. Settore che richiede estrema attenzione ai dettagli, gestione di logistica complessa e sensibilità estetica internazionale.",
+        "Supporto alla produzione video per matrimoni esteri di alto livello in Toscana. Affiancamento al videomaker principale in un settore che richiede estrema attenzione ai dettagli e sensibilità estetica internazionale.",
       highlights: [
-        "Dirigere video per cerimonie con centinaia di ospiti internazionali",
-        "Gestire crew in contesti multiculturali su eventi multi-giornata",
-        "Curare la post-produzione completa: correzione colore, montaggio narrativo, consegna in formati premium",
+        "Supportare le riprese video in cerimonie con centinaia di ospiti internazionali",
+        "Collaborare in contesti multiculturali su eventi multi-giornata",
+        "Operare in contesti ad alta complessità logistica e culturale, adattando il proprio ruolo alle esigenze del set in tempo reale",
       ],
       skills: [
         "Videomaking",
-        "Regia",
         "Post-produzione",
         "Correzione colore",
-        "Gestione logistica",
+        "Sensibilità estetica",
       ],
     },
     {
@@ -1648,7 +1647,7 @@ export const cvData = {
     {
       name: "Videomaking",
       description:
-        "Regia e produzione video per matrimoni di alto livello in Toscana: gestione di crew in contesti multiculturali, color grading e montaggio narrativo per un mercato premium internazionale.",
+        "Supporto alla produzione video per matrimoni di alto livello in Toscana: affiancamento al videomaker principale, color grading e montaggio narrativo in contesti multiculturali premium.",
       domain: "creative",
       weight: 2,
       mastery: 68,

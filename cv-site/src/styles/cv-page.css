@@ -1052,6 +1052,13 @@ go-logo:not(:defined) {
 /* AiCard styles → cards/AiCard.astro */
 
 /* ── Soft skills + Methodology ────────────────────────────────── */
+/* method-block: stessa spaziatura superiore degli altri titoli di sezione
+   (gli altri section-title ereditano il padding-top dal parent <section>).
+   Qui il two-col-grid non è usato quindi il gap manca — gap simulato con margin-top. */
+.method-block {
+  margin-top: 2rem;
+}
+
 .two-col-grid {
   display: grid;
   grid-template-columns: 1fr;

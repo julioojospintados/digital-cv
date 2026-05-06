@@ -558,9 +558,25 @@ class FloatingMenu extends LitElement {
       return;
     }
 
-    const NAV_HEIGHT = 72;
-    const absoluteTop = target.getBoundingClientRect().top + window.scrollY - NAV_HEIGHT;
+    const NAV_HEIGHT = (() => {
+      const nav = document.querySelector("#cv-nav");
+      return nav ? (nav as HTMLElement).getBoundingClientRect().height : 52;
+    })();
     const lenis = window.__lenis;
+
+    // Calcola absoluteTop usando offsetTop (non affetto da GSAP transform: translateY)
+    // getBoundingClientRect() includerebbe il translateY(32px) degli elementi pre-reveal
+    // causando una destinazione sbagliata al primo click.
+    const getOffsetTop = (el: HTMLElement): number => {
+      let top = 0;
+      let current: HTMLElement | null = el;
+      while (current) {
+        top += current.offsetTop;
+        current = current.offsetParent as HTMLElement | null;
+      }
+      return top;
+    };
+    const absoluteTop = getOffsetTop(target) - NAV_HEIGHT;
 
     const waitForArrival = (targetY: number) =>
       new Promise<void>((resolve) => {
@@ -702,7 +718,7 @@ class FloatingMenu extends LitElement {
             </div>
           `
         : html`
-            <div class="fab-items" aria-hidden="${!this._open}">
+            <div class="fab-items" ?inert="${!this._open}" aria-hidden="${!this._open}">
               <a
                 class="fab-item"
                 href="mailto:giulio.occhipinti.g@gmail.com"
