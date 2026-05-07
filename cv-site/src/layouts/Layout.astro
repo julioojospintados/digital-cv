@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import Analytics from '@vercel/analytics/astro';
 import SpeedInsights from '@vercel/speed-insights/astro';
 
 interface Props {
@@ -47,6 +48,7 @@ const jsonLd = {
 <!doctype html>
 <html lang={lang} class="scroll-smooth" data-mode={mode ?? 'tech'}>
   <head>
+    <Analytics />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="generator" content={Astro.generator} />
@@ -178,4 +180,3 @@ const jsonLd = {
     </script>
   </body>
 </html>
-
