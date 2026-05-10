@@ -261,5 +261,14 @@
     //   "command": "npx",
     //   "args": ["-y", "sec-edgar-mcp"]
     // },
+    // ─── VERCEL ───────────────────────────────────────────────────────────
+    // VERCEL (official) — projects, deployments, logs, domains, toolbar comments
+    // Remote MCP con OAuth — richiede login Vercel al primo avvio
+    // Setup: Ctrl+Shift+P → "MCP: List Servers" → Vercel → Start Server → Allow → autenticati
+    // Docs: https://vercel.com/docs/agent-resources/vercel-mcp
+    "vercel": {
+      "type": "http",
+      "url": "https://mcp.vercel.com"
+    },
   }
 }
