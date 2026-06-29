@@ -29,6 +29,6 @@ Thumbs.db
 .playwright-mcp/
 
 # todo
-.todo.md
+todo.md
 bash.exe.stackdump
 tmp-diff.mjs

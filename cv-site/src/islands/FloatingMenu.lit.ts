@@ -648,6 +648,12 @@ class FloatingMenu extends LitElement {
       badgeTitle: (n: number) => isEN ? `${n} feedback sent this session` : `${n} feedback inviati in questa sessione`,
     };
 
+    const isHome =
+      isClient &&
+      (window.location.pathname === "/" ||
+        window.location.pathname === "/index" ||
+        window.location.pathname === "/index.html");
+
     const href =
       isClient &&
         window.location.pathname.match(/^\/(tech|creative|human|management|cv|en)/)
@@ -737,15 +743,17 @@ class FloatingMenu extends LitElement {
                 <span class="fab-item__icon">✦</span>
                 <span>${t.feedbackLabel}</span>
               </button>
-              <a
-                class="fab-item"
-                href="${href}"
-                aria-label="${t.aiAriaLabel}"
-                @click=${this._handleAI}
-              >
-                <span class="fab-item__icon">⚡</span>
-                <span>${t.aiLabel}</span>
-              </a>
+              ${!isHome
+                ? html`<a
+                    class="fab-item"
+                    href="${href}"
+                    aria-label="${t.aiAriaLabel}"
+                    @click=${this._handleAI}
+                  >
+                    <span class="fab-item__icon">⚡</span>
+                    <span>${t.aiLabel}</span>
+                  </a>`
+                : ""}
             </div>
           `}
 
