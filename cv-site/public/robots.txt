@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://giulioocchipinti.vercel.app/sitemap-index.xml
+Sitemap: https://giulio-occhipinti.com/sitemap-index.xml

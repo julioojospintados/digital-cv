@@ -5,7 +5,7 @@ import QRCode from "qrcode";
  * QR Code Generator Route
  *
  * GET /api/qr?url=<URL> — generates PNG QR code pointing to the given URL
- * Default: https://giulioocchipinti.vercel.app
+ * Default: https://giulio-occhipinti.com
  *
  * Colors:
  *  - dark: #084945 (ottanio — brand primary)
@@ -16,7 +16,7 @@ export const qrRouter = new Hono();
 qrRouter.get("/qr", async (c) => {
   try {
     const url =
-      c.req.query("url") || "https://giulioocchipinti.vercel.app";
+      c.req.query("url") || "https://giulio-occhipinti.com";
 
     // Validate URL format
     try {
@@ -55,7 +55,7 @@ qrRouter.get("/qr", async (c) => {
 qrRouter.get("/qr/png", async (c) => {
   try {
     const url =
-      c.req.query("url") || "https://giulioocchipinti.vercel.app";
+      c.req.query("url") || "https://giulio-occhipinti.com";
 
     // Validate URL format
     try {
@@ -88,7 +88,7 @@ qrRouter.get("/qr/png", async (c) => {
 qrRouter.get("/qr/svg", async (c) => {
   try {
     const url =
-      c.req.query("url") || "https://giulioocchipinti.vercel.app";
+      c.req.query("url") || "https://giulio-occhipinti.com";
 
     // Validate URL format
     try {

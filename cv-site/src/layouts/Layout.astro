@@ -1,54 +1,65 @@
 ---
-import '../styles/global.css';
-import SpeedInsights from '@vercel/speed-insights/astro';
+import "../styles/global.css";
+import SpeedInsights from "@vercel/speed-insights/astro";
 
 interface Props {
   title?: string;
   description?: string;
-  mode?: 'tech' | 'creative' | 'human' | 'management';
-  lang?: 'it' | 'en';
+  mode?: "tech" | "creative" | "human" | "management";
+  lang?: "it" | "en";
 }
 
 const {
-  title = 'Giulio Occhipinti — Digital CV',
-  description = 'CV interattivo di Giulio Occhipinti: Senior Frontend Developer, UX Designer, Creative Technologist.',
+  title = "Giulio Occhipinti — Digital CV",
+  description = "CV interattivo di Giulio Occhipinti: Senior Frontend Developer, UX Designer, Creative Technologist.",
   mode,
-  lang = 'it',
+  lang = "it",
 } = Astro.props;
 
-const siteUrl = 'https://giulioocchipinti.vercel.app';
+const siteUrl = "https://giulio-occhipinti.com";
 const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
 const ogImage = `${siteUrl}/og-image.png`;
 
 // JSON-LD — Person schema (schema.org) — indicizzato direttamente da Google
 const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'Person',
-  name: 'Giulio Occhipinti',
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: "Giulio Occhipinti",
   jobTitle: "Consulente per l'Innovazione Digitale & Partner Tecnico per PMI",
   url: siteUrl,
-  email: 'mailto:giulio.occhipinti.g@gmail.com',
+  email: "mailto:giulio.occhipinti.g@gmail.com",
   sameAs: [
-    'https://www.linkedin.com/in/giulio-occhipinti',
-    'https://github.com/julioojospintados',
+    "https://www.linkedin.com/in/giulio-occhipinti",
+    "https://github.com/julioojospintados",
   ],
   knowsAbout: [
-    'Angular', 'TypeScript', 'Lit', 'WebComponents', 'Node.js',
-    'MCP Protocol', 'Agile', 'UX Design', 'GSAP', 'Astro',
+    "Angular",
+    "TypeScript",
+    "Lit",
+    "WebComponents",
+    "Node.js",
+    "MCP Protocol",
+    "Agile",
+    "UX Design",
+    "GSAP",
+    "Astro",
   ],
   address: {
-    '@type': 'PostalAddress',
-    addressLocality: 'Torino',
-    addressCountry: 'IT',
+    "@type": "PostalAddress",
+    addressLocality: "Torino",
+    addressCountry: "IT",
   },
 };
 ---
 
 <!doctype html>
-<html lang={lang} class="scroll-smooth" data-mode={mode ?? 'tech'}>
+<html lang={lang} class="scroll-smooth" data-mode={mode ?? "tech"}>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={description} />
     <meta name="author" content="Giulio Occhipinti" />
@@ -71,7 +82,7 @@ const jsonLd = {
     <meta property="og:image" content={ogImage} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:locale" content={lang === 'en' ? 'en_US' : 'it_IT'} />
+    <meta property="og:locale" content={lang === "en" ? "en_US" : "it_IT"} />
     <meta property="og:site_name" content="Giulio Occhipinti — Digital CV" />
 
     <!-- Twitter / X Card -->
@@ -86,8 +97,20 @@ const jsonLd = {
     <!-- Preload critical fonts — 400 for body text, 800 for preloader & entry name -->
     <!-- font-display: block in global.css prevents FOUC during the preloader animation -->
     <!-- 400: prefetch (not preload) — GSAP hides text at opacity:0 initially, preload would trigger an "unused preload" warning -->
-    <link rel="prefetch" as="font" type="font/woff2" href="/fonts/Lexend/lexend-latin-400-normal.woff2" crossorigin />
-    <link rel="preload" as="font" type="font/woff2" href="/fonts/Lexend/lexend-latin-800-normal.woff2" crossorigin />
+    <link
+      rel="prefetch"
+      as="font"
+      type="font/woff2"
+      href="/fonts/Lexend/lexend-latin-400-normal.woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="/fonts/Lexend/lexend-latin-800-normal.woff2"
+      crossorigin
+    />
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
@@ -111,21 +134,23 @@ const jsonLd = {
 
     <!-- Init mode from store on client -->
     <script>
-      import { initMode } from '../islands/stores/modeStore';
+      import { initMode } from "../islands/stores/modeStore";
       initMode();
     </script>
 
     <!-- Lenis smooth scroll + GSAP ScrollTrigger wiring -->
     <script>
-      import Lenis from 'lenis';
-      import { gsap } from 'gsap';
-      import { ScrollTrigger } from 'gsap/ScrollTrigger';
+      import Lenis from "lenis";
+      import { gsap } from "gsap";
+      import { ScrollTrigger } from "gsap/ScrollTrigger";
 
       gsap.registerPlugin(ScrollTrigger);
 
       const lenis = new Lenis({ lerp: 0.08, syncTouch: true });
-      lenis.on('scroll', ScrollTrigger.update);
-      gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+      lenis.on("scroll", ScrollTrigger.update);
+      gsap.ticker.add((time) => {
+        lenis.raf(time * 1000);
+      });
       gsap.ticker.lagSmoothing(0);
 
       // Expose for pages that need direct access
@@ -134,49 +159,55 @@ const jsonLd = {
 
     <!-- Custom cursor script -->
     <script>
-      import { gsap } from 'gsap';
+      import { gsap } from "gsap";
 
-      const dot  = document.getElementById('cursor-dot')!;
-      const ring = document.getElementById('cursor-ring')!;
+      const dot = document.getElementById("cursor-dot")!;
+      const ring = document.getElementById("cursor-ring")!;
 
       // cursor: none è già in global.css con `* { cursor: none !important }` —
       // nessun loop JS necessario.
 
-      window.addEventListener('mousemove', (e) => {
+      window.addEventListener("mousemove", (e) => {
         const mx = e.clientX;
         const my = e.clientY;
         // Dot: segue immediato il puntatore
-        gsap.to(dot, { x: mx - 4, y: my - 4, duration: 0.05, ease: 'none' });
+        gsap.to(dot, { x: mx - 4, y: my - 4, duration: 0.05, ease: "none" });
         // Ring: lerp via GSAP to — aggiorna solo on mousemove, nessun ticker aggiuntivo
-        gsap.to(ring, { x: mx - 20, y: my - 20, duration: 0.22, ease: 'power2.out' });
+        gsap.to(ring, {
+          x: mx - 20,
+          y: my - 20,
+          duration: 0.22,
+          ease: "power2.out",
+        });
       });
 
       // Hover states
-      const interactives = document.querySelectorAll('a, button, [role="button"], .cv-card, .knoll-item');
-      interactives.forEach(el => {
-        el.addEventListener('mouseenter', () => {
-          dot.classList.add('cursor--hover');
-          ring.classList.add('cursor--hover');
+      const interactives = document.querySelectorAll(
+        'a, button, [role="button"], .cv-card, .knoll-item',
+      );
+      interactives.forEach((el) => {
+        el.addEventListener("mouseenter", () => {
+          dot.classList.add("cursor--hover");
+          ring.classList.add("cursor--hover");
         });
-        el.addEventListener('mouseleave', () => {
-          dot.classList.remove('cursor--hover');
-          ring.classList.remove('cursor--hover');
+        el.addEventListener("mouseleave", () => {
+          dot.classList.remove("cursor--hover");
+          ring.classList.remove("cursor--hover");
         });
       });
 
       // Hide on leave, show on enter
-      document.addEventListener('mouseleave', () => {
+      document.addEventListener("mouseleave", () => {
         gsap.to([dot, ring], { opacity: 0, duration: 0.3 });
       });
-      document.addEventListener('mouseenter', () => {
+      document.addEventListener("mouseenter", () => {
         gsap.to([dot, ring], { opacity: 1, duration: 0.3 });
       });
     </script>
 
     <!-- FloatingMenu Lit island — sempre attivo su tutte le pagine -->
     <script>
-      import '../islands/FloatingMenu.lit.ts';
+      import "../islands/FloatingMenu.lit.ts";
     </script>
   </body>
 </html>
-

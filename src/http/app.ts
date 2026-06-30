@@ -42,7 +42,7 @@ const openApiPaths: Record<string, unknown> = {
           required: false,
           schema: {
             type: "string",
-            example: "https://giulioocchipinti.vercel.app",
+            example: "https://giulio-occhipinti.com",
           },
           description:
             "URL to encode in QR code (defaults to digital CV domain)",
@@ -76,7 +76,7 @@ const openApiPaths: Record<string, unknown> = {
           required: false,
           schema: {
             type: "string",
-            example: "https://giulioocchipinti.vercel.app",
+            example: "https://giulio-occhipinti.com",
           },
         },
       ],
@@ -102,7 +102,7 @@ const openApiPaths: Record<string, unknown> = {
           required: false,
           schema: {
             type: "string",
-            example: "https://giulioocchipinti.vercel.app",
+            example: "https://giulio-occhipinti.com",
           },
         },
       ],

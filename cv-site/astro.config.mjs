@@ -10,7 +10,7 @@ const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://giulioocchipinti.vercel.app',
+  site: 'https://giulio-occhipinti.com',
   // Comprime l'HTML in output: rimuove commenti <!-- -->, spazi ridondanti, newline
   compressHTML: true,
   integrations: [lit(), sitemap()],
