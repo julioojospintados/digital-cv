@@ -1,6 +1,7 @@
 import { Hono } from "hono";
 import { logger as httpLogger } from "hono/logger";
 import { AppError } from "./errors.js";
+import { qrRouter } from "./routes/qr.js";
 
 /**
  * OpenAPI-style schema registry.
@@ -25,6 +26,92 @@ const openApiPaths: Record<string, unknown> = {
                   timestamp: { type: "string", format: "date-time" },
                 },
               },
+            },
+          },
+        },
+      },
+    },
+  },
+  "/api/qr": {
+    get: {
+      summary: "Generate QR code (JSON response with base64 PNG)",
+      parameters: [
+        {
+          name: "url",
+          in: "query",
+          required: false,
+          schema: {
+            type: "string",
+            example: "https://giulioocchipinti.vercel.app",
+          },
+          description:
+            "URL to encode in QR code (defaults to digital CV domain)",
+        },
+      ],
+      responses: {
+        "200": {
+          description: "QR code generated successfully",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  qr: { type: "string", description: "Base64 PNG data URL" },
+                  url: { type: "string", description: "Encoded URL" },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  },
+  "/api/qr/png": {
+    get: {
+      summary: "Generate QR code (PNG image response)",
+      parameters: [
+        {
+          name: "url",
+          in: "query",
+          required: false,
+          schema: {
+            type: "string",
+            example: "https://giulioocchipinti.vercel.app",
+          },
+        },
+      ],
+      responses: {
+        "200": {
+          description: "PNG image",
+          content: {
+            "image/png": {
+              schema: { type: "string", format: "binary" },
+            },
+          },
+        },
+      },
+    },
+  },
+  "/api/qr/svg": {
+    get: {
+      summary: "Generate QR code (SVG vector response)",
+      parameters: [
+        {
+          name: "url",
+          in: "query",
+          required: false,
+          schema: {
+            type: "string",
+            example: "https://giulioocchipinti.vercel.app",
+          },
+        },
+      ],
+      responses: {
+        "200": {
+          description: "SVG image",
+          content: {
+            "image/svg+xml": {
+              schema: { type: "string" },
             },
           },
         },
@@ -70,8 +157,7 @@ export function createApp(): Hono {
   );
 
   // ── Mount feature routes here ─────────────────────────────────────────────
-  // import { myRoute } from "./routes/my-route.js";
-  // app.route("/my-path", myRoute);
+  app.route("/api", qrRouter);
 
   return app;
 }

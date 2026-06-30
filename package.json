@@ -28,6 +28,7 @@
     "@modelcontextprotocol/sdk": "^1.29.0",
     "hono": "^4.12.12",
     "pdf-parse": "^1.1.1",
+    "qrcode": "^1.5.3",
     "zod": "^4.3.6",
     "zod-to-json-schema": "^3.25.2"
   },
