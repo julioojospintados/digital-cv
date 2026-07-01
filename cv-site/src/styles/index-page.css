@@ -701,19 +701,6 @@ img[src*="flashlight"] {
   }
 }
 
-/* Schermi molto piccoli (≤ 639px): padding ridotto e label più compatta
-   per garantire visibilità su iPhone SE e dispositivi simili. */
-@media (--mobile-only) {
-  .mode-card {
-    padding: 0.5rem 0.7rem;
-    gap: 0.2rem;
-  }
-
-  .mode-card__label {
-    font-size: clamp(1rem, 4vw, 1.4rem);
-  }
-}
-
 .mode-card {
   flex: 1;
   display: flex;
@@ -881,8 +868,21 @@ img[src*="flashlight"] {
   letter-spacing: -0.03em;
 }
 
+/* Schermi molto piccoli (≤ 639px): padding ridotto e label più compatta
+   per garantire visibilità su iPhone SE e dispositivi simili. */
+@media (--mobile-only) {
+  .mode-card {
+    padding: 0.5rem 0.7rem;
+    gap: 0.2rem;
+  }
+
+  .mode-card__label {
+    font-size: 1rem;
+  }
+}
+
 .mode-card__desc {
-  font-size: 0.75rem;
+  font-size: 0.875rem;
   color: var(--color-text-muted);
   line-height: 1.4;
 }
