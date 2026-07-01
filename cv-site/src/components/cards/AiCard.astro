@@ -72,7 +72,7 @@ const { tool, title, desc, impact, tags } = Astro.props;
     border: 1px solid color-mix(in srgb, var(--color-accent) 60%, transparent);
     border-radius: 2px;
     color: var(--color-accent);
-    font-size: 0.5rem;
+    font-size: 0.75rem;
     font-weight: 900;
     letter-spacing: 0.2em;
     text-transform: uppercase;
@@ -84,7 +84,8 @@ const { tool, title, desc, impact, tags } = Astro.props;
   }
 
   @keyframes ai-clip-breathe {
-    0%, 100% {
+    0%,
+    100% {
       border-color: color-mix(in srgb, var(--color-accent) 55%, transparent);
       box-shadow:
         0 0 10px color-mix(in srgb, var(--color-accent) 28%, transparent),
@@ -106,7 +107,7 @@ const { tool, title, desc, impact, tags } = Astro.props;
   }
 
   .ai-card__tool {
-    font-size: 0.58rem;
+    font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -114,7 +115,7 @@ const { tool, title, desc, impact, tags } = Astro.props;
   }
 
   .ai-card__impact {
-    font-size: 0.62rem;
+    font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 0.04em;
     color: var(--color-accent);
@@ -134,7 +135,7 @@ const { tool, title, desc, impact, tags } = Astro.props;
   }
 
   .ai-card__desc {
-    font-size: 0.72rem;
+    font-size: 0.75rem;
     line-height: 1.6;
     color: rgba(192, 220, 215, 0.85);
     margin: 0;

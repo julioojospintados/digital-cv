@@ -174,27 +174,27 @@ gsap.set(["#entry-label", "#entry-tagline", "#lang-switch"], { opacity: 0, y: 10
 const preGEl = document.getElementById("pre-G")!;
 const preOEl = document.getElementById("pre-O")!;
 
-// La barra CSS impiega 0.2s (delay) + 1.0s (fill) = 1.2s. Partiamo a 1.25s.
-gsap.delayedCall(1.25, () => {
+// La barra CSS impiega 0.2s (delay) + 0.7s (fill) = 0.9s. Partiamo a 0.9s.
+gsap.delayedCall(0.9, () => {
   const tl = gsap.timeline();
 
   // 1. Glow flash sulle lettere del preloader — identità rivelata
   tl.to([preGEl, preOEl], {
     textShadow: "0 0 40px rgba(255,255,255,0.75)",
-    duration: 0.2,
-    stagger: 0.08,
+    duration: 0.15,
+    stagger: 0.06,
     ease: "power2.out",
   });
   tl.to([preGEl, preOEl], {
     textShadow: "0 0 0px transparent",
-    duration: 0.15,
+    duration: 0.1,
     ease: "power2.in",
   });
 
   // 2. Preloader sfuma — G e O si "trasformano" nel nome
   tl.to(preloader, {
     opacity: 0,
-    duration: 0.45,
+    duration: 0.3,
     ease: "power2.inOut",
     onComplete: () => {
       preloader.style.display = "none";
@@ -212,8 +212,8 @@ gsap.delayedCall(1.25, () => {
       opacity: 1,
       scale: 1,
       y: 0,
-      duration: 0.55,
-      stagger: 0.18,
+      duration: 0.45,
+      stagger: 0.12,
       ease: "back.out(1.7)",
     },
     "+=0.02",
@@ -225,14 +225,14 @@ gsap.delayedCall(1.25, () => {
     {
       textShadow:
         "0 0 28px rgba(255,255,255,0.65), 0 0 12px rgba(255,255,255,0.4)",
-      duration: 0.3,
+      duration: 0.2,
       ease: "power2.out",
     },
     "-=0.1",
   );
   tl.to(goChars, {
     textShadow: "0 0 0px transparent",
-    duration: 0.65,
+    duration: 0.45,
     ease: "power2.in",
   });
 
@@ -242,11 +242,11 @@ gsap.delayedCall(1.25, () => {
     {
       opacity: 1,
       y: 0,
-      duration: 0.55,
-      stagger: { each: 0.05, from: "start" },
+      duration: 0.45,
+      stagger: { each: 0.04, from: "start" },
       ease: "power3.out",
     },
-    "-=0.55",
+    "-=0.35",
   );
 
   // 7. Tag G e O per il glow mode-reactive (hover sulle card)
@@ -261,7 +261,7 @@ gsap.delayedCall(1.25, () => {
     {
       opacity: 1,
       y: 0,
-      duration: 0.45,
+      duration: 0.35,
       stagger: 0,
       ease: "power3.out",
     },
@@ -277,8 +277,8 @@ gsap.delayedCall(1.25, () => {
       y: 0,
       opacity: 1,
       scale: 1,
-      duration: 0.8,
-      stagger: 0.07, // 70ms — quasi simultanee, sembrano un gruppo compatto
+      duration: 0.6,
+      stagger: 0.05, // 50ms — quasi simultanee, sembrano un gruppo compatto
       ease: "back.out(1.4)",
     },
     "+=0.05",
@@ -296,7 +296,7 @@ gsap.delayedCall(1.25, () => {
       return scoreA - scoreB;
     });
     sortedKnolls.forEach((knoll, i) => {
-      knoll.style.setProperty("--knoll-delay", `${i * 60}ms`);
+      knoll.style.setProperty("--knoll-delay", `${i * 45}ms`);
       knoll.classList.add("do-enter");
     });
   }, undefined, "-=0.55");

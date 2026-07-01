@@ -292,19 +292,19 @@ const modeDescription = modeDescriptions[mode] ?? 'CV interattivo di Giulio Occh
   <nav class="cv-nav" id="cv-nav" aria-label="Navigazione principale">
     <go-logo></go-logo>
     <div class="mode-buttons" role="group" aria-label="Scegli modalità di visualizzazione">
-      <button class="mode-btn" data-nav-mode="tech" type="button" aria-pressed={mode === 'tech' ? 'true' : 'false'}>
+      <button class:list={["mode-btn", { "is-active": mode === "tech" }]} data-nav-mode="tech" type="button" aria-pressed={mode === 'tech' ? 'true' : 'false'}>
         <span class="mode-btn__abbr" aria-hidden="true">TC</span>
         <span class="mode-btn__label">Tech</span>
       </button>
-      <button class="mode-btn" data-nav-mode="creative" type="button" aria-pressed={mode === 'creative' ? 'true' : 'false'}>
+      <button class:list={["mode-btn", { "is-active": mode === "creative" }]} data-nav-mode="creative" type="button" aria-pressed={mode === 'creative' ? 'true' : 'false'}>
         <span class="mode-btn__abbr" aria-hidden="true">CR</span>
         <span class="mode-btn__label">Creative</span>
       </button>
-      <button class="mode-btn" data-nav-mode="management" type="button" aria-pressed={mode === 'management' ? 'true' : 'false'}>
+      <button class:list={["mode-btn", { "is-active": mode === "management" }]} data-nav-mode="management" type="button" aria-pressed={mode === 'management' ? 'true' : 'false'}>
         <span class="mode-btn__abbr" aria-hidden="true">MG</span>
         <span class="mode-btn__label">Management</span>
       </button>
-      <button class="mode-btn" data-nav-mode="human" type="button" aria-pressed={mode === 'human' ? 'true' : 'false'}>
+      <button class:list={["mode-btn", { "is-active": mode === "human" }]} data-nav-mode="human" type="button" aria-pressed={mode === 'human' ? 'true' : 'false'}>
         <span class="mode-btn__abbr" aria-hidden="true">HU</span>
         <span class="mode-btn__label">Human</span>
       </button>

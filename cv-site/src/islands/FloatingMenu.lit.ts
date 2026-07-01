@@ -35,7 +35,7 @@ class FloatingMenu extends LitElement {
         color-mix(in srgb, var(--color-accent, rgba(0, 255, 200, 1)) 33%, rgba(14, 90, 82, 0.98)),
         rgba(8, 73, 67, 0.97)
       );
-      border: 1.5px solid var(--color-accent, rgba(0, 255, 200, 1));
+      border: none;
       cursor: none;
       pointer-events: all;
       display: flex;
@@ -46,8 +46,7 @@ class FloatingMenu extends LitElement {
         0 4px 18px rgba(0, 0, 0, 0.45);
       transition:
         transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
-        box-shadow 0.3s ease,
-        border-color 0.3s ease;
+        box-shadow 0.3s ease;
       will-change: transform;
       flex-shrink: 0;
       position: relative;
@@ -65,7 +64,7 @@ class FloatingMenu extends LitElement {
         0 4px 22px rgba(0, 0, 0, 0.5);
     }
 
-    /* ── Icon swap (⚡ ↔ ✕) ── */
+    /* ── Icon swap (✦ ↔ ✕) ── */
     .fab-icon {
       position: absolute;
       inset: 0;
@@ -75,7 +74,7 @@ class FloatingMenu extends LitElement {
       color: var(--color-accent, rgba(0, 255, 200, 1)); /* accent su ottanio — legibile in tutti i mode */
       font-size: 1.25rem;
       font-weight: 900;
-      line-height: 1;
+      line-height: 1.5;
       transition:
         opacity 0.18s ease,
         transform 0.28s ease;
@@ -134,7 +133,7 @@ class FloatingMenu extends LitElement {
         );
       color: var(--color-text-primary, rgba(245, 240, 230, 1));
       font-family: "Lexend", ui-sans-serif, sans-serif;
-      font-size: 0.68rem;
+      font-size: 0.875rem;
       font-weight: 600;
       letter-spacing: 0.08em;
       text-transform: uppercase;
@@ -161,8 +160,8 @@ class FloatingMenu extends LitElement {
     }
 
     .fab-item__icon {
-      font-size: 0.9rem;
-      line-height: 1;
+      font-size: 1rem;
+      line-height: 1.5;
     }
 
     /* ── Open state: items appear with stagger ── */
@@ -248,7 +247,7 @@ class FloatingMenu extends LitElement {
     }
     .fp-title {
       font-family: "Lexend", sans-serif;
-      font-size: 0.6rem;
+      font-size: 0.875rem;
       font-weight: 700;
       letter-spacing: 0.15em;
       text-transform: uppercase;
@@ -259,8 +258,8 @@ class FloatingMenu extends LitElement {
       border: none;
       cursor: pointer;
       color: rgba(192, 220, 215, 0.6);
-      font-size: 0.85rem;
-      line-height: 1;
+      font-size: 0.875rem;
+      line-height: 1.5;
       padding: 0;
       display: flex;
       align-items: center;
@@ -276,7 +275,7 @@ class FloatingMenu extends LitElement {
       border-radius: 0.35rem;
       color: rgba(245, 240, 230, 1);
       font-family: "Lexend", sans-serif;
-      font-size: 0.62rem;
+      font-size: 0.875rem;
       padding: 0.45rem 0.6rem;
       margin-bottom: 0.5rem;
       box-sizing: border-box;
@@ -314,7 +313,7 @@ class FloatingMenu extends LitElement {
       border-radius: 0.35rem;
       color: var(--color-accent, rgba(0, 255, 200, 1));
       font-family: "Lexend", sans-serif;
-      font-size: 0.6rem;
+      font-size: 0.875rem;
       font-weight: 700;
       letter-spacing: 0.1em;
       text-transform: uppercase;
@@ -332,13 +331,13 @@ class FloatingMenu extends LitElement {
     .fp-sent {
       text-align: center;
       font-family: "Lexend", sans-serif;
-      font-size: 0.62rem;
+      font-size: 0.875rem;
       color: var(--color-accent, rgba(0, 255, 200, 1));
       padding: 0.5rem 0;
     }
     .fp-hint {
       font-family: "Lexend", sans-serif;
-      font-size: 0.5rem;
+      font-size: 0.875rem;
       color: rgba(192, 220, 215, 0.4);
       text-align: center;
       margin-top: 0.45rem;
@@ -354,7 +353,7 @@ class FloatingMenu extends LitElement {
       background: rgba(0, 255, 200, 1);
       color: rgba(8, 73, 67, 1);
       font-family: "Lexend", sans-serif;
-      font-size: 0.45rem;
+      font-size: 0.875rem;
       font-weight: 800;
       display: flex;
       align-items: center;
@@ -441,6 +440,17 @@ class FloatingMenu extends LitElement {
     this._feedbackSent = false;
     this.requestUpdate();
   }
+
+  private _handleContact = (e: Event) => {
+    // Avoid flaky behavior caused by menu re-render before anchor default navigation.
+    e.preventDefault();
+    this._closeOnNav();
+    try {
+      window.location.href = "mailto:giulio.occhipinti.g@gmail.com";
+    } catch {
+      window.open("mailto:giulio.occhipinti.g@gmail.com", "_self");
+    }
+  };
 
   private _openFeedback() {
     // Ensure draft is loaded before showing the panel
@@ -530,7 +540,7 @@ class FloatingMenu extends LitElement {
     if (typeof window !== "undefined") {
       try {
         sessionStorage.removeItem(FloatingMenu.DRAFT_KEY);
-      } catch {}
+      } catch { }
     }
     this._draftName = "";
     this._draftNote = "";
@@ -691,11 +701,11 @@ class FloatingMenu extends LitElement {
                 </button>
               </div>
               ${this._feedbackSent
-                ? html`
+            ? html`
                     <p class="fp-sent">${t.fpSent}</p>
                     <p class="fp-hint">${t.fpHintSent}</p>
                   `
-                : html`
+            : html`
                     <input
                       class="fp-input"
                       type="text"
@@ -729,7 +739,7 @@ class FloatingMenu extends LitElement {
                 class="fab-item"
                 href="mailto:giulio.occhipinti.g@gmail.com"
                 aria-label="${t.contactAriaLabel}"
-                @click=${this._closeOnNav}
+                @click=${this._handleContact}
               >
                 <span class="fab-item__icon">✉</span>
                 <span>${t.contactLabel}</span>
@@ -744,16 +754,16 @@ class FloatingMenu extends LitElement {
                 <span>${t.feedbackLabel}</span>
               </button>
               ${!isHome
-                ? html`<a
+            ? html`<a
                     class="fab-item"
                     href="${href}"
                     aria-label="${t.aiAriaLabel}"
                     @click=${this._handleAI}
                   >
-                    <span class="fab-item__icon">⚡</span>
+                    <span class="fab-item__icon">✦</span>
                     <span>${t.aiLabel}</span>
                   </a>`
-                : ""}
+            : ""}
             </div>
           `}
 
@@ -766,9 +776,9 @@ class FloatingMenu extends LitElement {
         type="button"
       >
         <span class="fab-icon fab-icon--open" aria-hidden="true">✕</span>
-        <span class="fab-icon fab-icon--close" aria-hidden="true">⚡</span>
+        <span class="fab-icon fab-icon--close" aria-hidden="true">✦</span>
         ${feedbackCount > 0
-          ? html`
+        ? html`
               <span
                 class="fab-badge"
                 title="${t.badgeTitle(feedbackCount)}"
@@ -776,7 +786,7 @@ class FloatingMenu extends LitElement {
                 ${feedbackCount}
               </span>
             `
-          : ""}
+        : ""}
       </button>
     `;
   }

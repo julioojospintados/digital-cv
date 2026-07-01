@@ -32,3 +32,4 @@ Thumbs.db
 todo.md
 bash.exe.stackdump
 tmp-diff.mjs
+.tmp-lh*

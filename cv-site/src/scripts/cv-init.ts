@@ -27,7 +27,7 @@ const heroFooter = heroEl.querySelector<HTMLElement>(".hero-footer");
 const heroTl = gsap.timeline({ delay: 0 });
 
 // 1. Hero section surfaces
-heroTl.to(heroEl, { opacity: 1, duration: 0.4, ease: "power2.out" });
+heroTl.to(heroEl, { opacity: 1, duration: 0.3, ease: "power2.out" });
 
 // 2. G and O arrivano per primi — punch + scala (come volano verso il nome nel preloader)
 heroTl.fromTo(
@@ -37,8 +37,8 @@ heroTl.fromTo(
     opacity: 1,
     scale: 1,
     y: 0,
-    duration: 0.55,
-    stagger: 0.18,
+    duration: 0.45,
+    stagger: 0.12,
     ease: "back.out(1.7)",
   },
   "+=0.05",
@@ -49,14 +49,14 @@ heroTl.to(
   goChars,
   {
     textShadow: "0 0 28px var(--color-accent), 0 0 10px var(--color-accent)",
-    duration: 0.3,
+    duration: 0.2,
     ease: "power2.out",
   },
   "-=0.15",
 );
 heroTl.to(goChars, {
   textShadow: "0 0 0px transparent",
-  duration: 0.7,
+  duration: 0.5,
   ease: "power2.in",
 });
 
@@ -66,11 +66,11 @@ heroTl.to(
   {
     opacity: 1,
     y: 0,
-    duration: 0.55,
-    stagger: { each: 0.05, from: "start" },
+    duration: 0.45,
+    stagger: { each: 0.04, from: "start" },
     ease: "power3.out",
   },
-  "-=0.5",
+  "-=0.4",
 );
 
 // 5. Resto della sezione hero (titolo, summary, footer)
@@ -79,11 +79,11 @@ heroTl.to(
   {
     opacity: 1,
     y: 0,
-    duration: 0.55,
-    stagger: 0.09,
+    duration: 0.45,
+    stagger: 0.07,
     ease: "power2.out",
   },
-  "-=0.25",
+  "-=0.2",
 );
 
 // ── Scroll progress bar ───────────────────────────────────────────────
@@ -167,6 +167,28 @@ function applySkillsView(view: "graph" | "cards") {
     button.classList.toggle("is-active", isActive);
     button.setAttribute("aria-pressed", String(isActive));
   });
+
+  // // Gestione fullscreen + landscape su mobile per il grafico
+  // const isMobile = window.matchMedia("(max-width: 40rem)").matches;
+  // if (isMobile && view === "graph") {
+  //   const panel = skillsSection.querySelector(
+  //     ".skills-stage__panel--graph",
+  //   ) as HTMLElement | null;
+  //   if (panel) {
+  //     // Richiedi fullscreen
+  //     if (panel.requestFullscreen && !document.fullscreenElement) {
+  //       panel.requestFullscreen().catch(() => {
+  //         /* fallback: il fullscreen potrebbe non essere disponibile */
+  //       });
+  //     }
+  //     // Richiedi orientation landscape
+  //     if (screen.orientation && screen.orientation.lock) {
+  //       screen.orientation.lock("landscape").catch(() => {
+  //         /* fallback: lock potrebbe non essere disponibile */
+  //       });
+  //     }
+  //   }
+  // }
 }
 
 skillsViewButtons.forEach((button) => {
@@ -180,6 +202,8 @@ skillsViewButtons.forEach((button) => {
   });
 });
 
+// Set default view: cards su mobile, graph su desktop
+// const isMobileInit = window.matchMedia("(max-width: 40rem)").matches;
 applySkillsView("graph");
 
 // ── Update nav buttons: morph larghezza + crossfade testo ───────────
@@ -225,32 +249,20 @@ function updateNavButtons(mode: string) {
     }
 
     if (isActive) {
-      gsap.to(btn, {
-        width: getActiveW(),
-        duration: 0.36,
-        ease: "power3.inOut",
-      });
-      gsap.to(abbr, { opacity: 0, duration: 0.1, ease: "power2.in" });
-      gsap.to(label, {
-        opacity: 1,
-        duration: 0.22,
-        delay: 0.14,
-        ease: "power2.out",
-      });
+      // Testo istantaneo: niente finestra di tempo tra abbr e label.
+      gsap.set(abbr, { opacity: 0 });
+      gsap.set(label, { opacity: 1 });
+      // Larghezza istantanea sul bottone attivo: evita fase intermedia con label "tagliata".
+      gsap.set(btn, { width: getActiveW() });
       // Nessun punch qui — il feedback fisico è solo sul secondo tap (scroll confirm)
     } else {
-      gsap.to(label, { opacity: 0, duration: 0.1, ease: "power2.in" });
+      gsap.set(label, { opacity: 0 });
+      gsap.set(abbr, { opacity: 1 });
       gsap.to(btn, {
         width: INACTIVE_W,
         duration: 0.36,
-        delay: 0.06,
+        delay: 0,
         ease: "power3.inOut",
-      });
-      gsap.to(abbr, {
-        opacity: 1,
-        duration: 0.22,
-        delay: 0.22,
-        ease: "power2.out",
       });
     }
   });

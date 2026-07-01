@@ -18,7 +18,7 @@ const {
 
 const siteUrl = "https://giulio-occhipinti.com";
 const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
-const ogImage = `${siteUrl}/og-image.png`;
+const ogImage = `${siteUrl}/favicon.svg`;
 
 // JSON-LD — Person schema (schema.org) — indicizzato direttamente da Google
 const jsonLd = {
@@ -61,7 +61,10 @@ const jsonLd = {
       content="width=device-width, initial-scale=1, viewport-fit=cover"
     />
     <meta name="generator" content={Astro.generator} />
-    <meta name="description" content={description} />
+    <meta
+      name="description"
+      content="Mi piace risolvere i problemi digitali e di comunicazione"
+    />
     <meta name="author" content="Giulio Occhipinti" />
     <meta name="robots" content="index, follow" />
     <!-- Tells browsers this page is already dark — prevents OS dark mode from

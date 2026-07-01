@@ -31,7 +31,6 @@ qrRouter.get("/qr", async (c) => {
     const png = await QRCode.toDataURL(url, {
       errorCorrectionLevel: "H",
       type: "image/png",
-      quality: 0.95,
       margin: 1,
       width: 300,
       color: {
@@ -66,8 +65,11 @@ qrRouter.get("/qr/png", async (c) => {
 
     const buffer = await QRCode.toBuffer(url, {
       errorCorrectionLevel: "H",
-      type: "image/png",
-      quality: 0.95,
+      type: "png",
+      rendererOpts: {
+        // PNG renderer accepts compression options; keep defaults explicit.
+        deflateLevel: 9,
+      },
       margin: 1,
       width: 300,
       color: {
@@ -76,7 +78,7 @@ qrRouter.get("/qr/png", async (c) => {
       },
     });
 
-    return c.body(buffer, 200, { "Content-Type": "image/png" });
+    return c.body(Uint8Array.from(buffer), 200, { "Content-Type": "image/png" });
   } catch (error) {
     return c.text("QR generation failed", 500);
   }
@@ -99,8 +101,7 @@ qrRouter.get("/qr/svg", async (c) => {
 
     const svg = await QRCode.toString(url, {
       errorCorrectionLevel: "H",
-      type: "image/svg+xml",
-      quality: 0.95,
+      type: "svg",
       margin: 1,
       width: 300,
       color: {

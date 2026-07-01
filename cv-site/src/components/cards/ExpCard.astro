@@ -50,45 +50,60 @@ const abroadLabel =
 ---
 
 <article class="exp-card cv-card" data-tags={modeTags}>
-  {aiAugmented && (
-    <span class="ai-clip" aria-label="AI-augmented workflow">
-      <span class="ai-clip__pin" aria-hidden="true"></span>
-      <span class="ai-clip__text" aria-hidden="true">⚡ AI</span>
-    </span>
-  )}
+  {
+    aiAugmented && (
+      <span class="ai-clip" aria-label="AI-augmented workflow">
+        <span class="ai-clip__pin" aria-hidden="true" />
+        <span class="ai-clip__text" aria-hidden="true">
+          ⚡ AI
+        </span>
+      </span>
+    )
+  }
   <header class="exp-card__header">
     <div class="exp-card__top">
       <span class="exp-card__company">{company}</span>
       <span class="exp-card__dates">{startYear} — {endYear}</span>
     </div>
     <h3 class="exp-card__role">{role}</h3>
-    {location && (
-      <p class="exp-card__location">
-        <span class="exp-card__location-text">{location}{remote ? ' · Remote' : ''}</span>
-        {abroadLabel && <span class="exp-card__abroad-chip">{abroadLabel}</span>}
-      </p>
-    )}
+    {
+      location && (
+        <p class="exp-card__location">
+          <span class="exp-card__location-text">
+            {location}
+            {remote ? " · Remote" : ""}
+          </span>
+          {abroadLabel && (
+            <span class="exp-card__abroad-chip">{abroadLabel}</span>
+          )}
+        </p>
+      )
+    }
   </header>
   <p class="exp-card__desc">{description}</p>
-  {highlights.length > 0 && (
-    <ul class="exp-card__highlights">
-      {highlights.slice(0, 3).map(h => (
-        <li>{h}</li>
-      ))}
-    </ul>
-  )}
-  {skills.length > 0 && (
-    <div class="exp-card__skills">
-      {skills.slice(0, 7).map(s => (
-        <span class="skill-chip">{s}</span>
-      ))}
-    </div>
-  )}
+  {
+    highlights.length > 0 && (
+      <ul class="exp-card__highlights">
+        {highlights.slice(0, 3).map((h) => (
+          <li>{h}</li>
+        ))}
+      </ul>
+    )
+  }
+  {
+    skills.length > 0 && (
+      <div class="exp-card__skills">
+        {skills.slice(0, 7).map((s) => (
+          <span class="skill-chip">{s}</span>
+        ))}
+      </div>
+    )
+  }
 </article>
 
 <style>
   .exp-card {
-    position: relative;          /* anchor for .ai-clip absolute badge  */
+    position: relative; /* anchor for .ai-clip absolute badge  */
     padding: 1.25rem;
     border: 1px solid var(--color-border);
     border-radius: 2px;
@@ -105,7 +120,7 @@ const abroadLabel =
   /* ── AI clip badge — straddles the top border like a physical label ── */
   .ai-clip {
     position: absolute;
-    top: -13px;           /* half above card top border */
+    top: -13px; /* half above card top border */
     right: 1.1rem;
     display: inline-flex;
     flex-direction: column;
@@ -133,7 +148,7 @@ const abroadLabel =
     border: 1px solid color-mix(in srgb, var(--color-accent) 60%, transparent);
     border-radius: 2px;
     color: var(--color-accent);
-    font-size: 0.5rem;
+    font-size: 0.75rem;
     font-weight: 900;
     letter-spacing: 0.2em;
     text-transform: uppercase;
@@ -145,7 +160,8 @@ const abroadLabel =
   }
 
   @keyframes ai-clip-breathe {
-    0%, 100% {
+    0%,
+    100% {
       border-color: color-mix(in srgb, var(--color-accent) 55%, transparent);
       box-shadow:
         0 0 10px color-mix(in srgb, var(--color-accent) 28%, transparent),
@@ -159,7 +175,7 @@ const abroadLabel =
     }
   }
 
-  .exp-card[data-state='active'] {
+  .exp-card[data-state="active"] {
     border-color: color-mix(in srgb, var(--color-accent) 35%, transparent);
     background: rgba(255, 255, 255, 0.05);
   }
@@ -179,7 +195,7 @@ const abroadLabel =
   }
 
   .exp-card__company {
-    font-size: 0.62rem;
+    font-size: 0.75rem;
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
@@ -220,9 +236,14 @@ const abroadLabel =
     align-items: center;
     padding: 0.16rem 0.45rem;
     border-radius: 999px;
-    border: 1px solid color-mix(in srgb, var(--color-accent) 48%, var(--color-border));
-    background: color-mix(in srgb, var(--color-accent) 18%, rgba(8, 73, 67, 0.88));
-    font-size: 0.5rem;
+    border: 1px solid
+      color-mix(in srgb, var(--color-accent) 48%, var(--color-border));
+    background: color-mix(
+      in srgb,
+      var(--color-accent) 18%,
+      rgba(8, 73, 67, 0.88)
+    );
+    font-size: 0.75rem;
     font-weight: 800;
     letter-spacing: 0.14em;
     text-transform: uppercase;
@@ -233,7 +254,7 @@ const abroadLabel =
   }
 
   .exp-card__desc {
-    font-size: 0.78rem;
+    font-size: 0.75rem;
     line-height: 1.65;
     color: rgba(192, 220, 215, 0.85);
     margin: 0;
@@ -243,7 +264,7 @@ const abroadLabel =
     overflow: hidden;
   }
 
-  .exp-card[data-state='active'] .exp-card__desc {
+  .exp-card[data-state="active"] .exp-card__desc {
     -webkit-line-clamp: 10;
   }
 
@@ -256,7 +277,7 @@ const abroadLabel =
   }
 
   .exp-card__highlights li {
-    font-size: 0.72rem;
+    font-size: 0.75rem;
     line-height: 1.5;
     color: rgba(192, 220, 215, 0.85);
   }

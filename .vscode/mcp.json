@@ -43,7 +43,10 @@
     "memory": {
       "type": "stdio",
       "command": "cmd",
-      "args": ["/c", "mcp-server-memory"]
+      "args": [
+        "/c",
+        "mcp-server-memory"
+      ]
     },
     // SEQUENTIAL THINKING — ragionamento strutturato step-by-step
     // Attivare per decisioni architetturali, copy complesso, UX analysis
@@ -51,7 +54,10 @@
     "sequential-thinking": {
       "type": "stdio",
       "command": "cmd",
-      "args": ["/c", "mcp-server-sequential-thinking"]
+      "args": [
+        "/c",
+        "mcp-server-sequential-thinking"
+      ]
     },
     // FILESYSTEM — accesso completo al workspace (anche fuori dalla finestra contesto)
     // Legge file grandi, cartelle, strutture senza copy-paste manuale
@@ -68,7 +74,6 @@
     // ═══════════════════════════════════════════════════════════════════════
     // ○ ON-DEMAND — attivare solo quando servono (richiedono token/auth)
     // ═══════════════════════════════════════════════════════════════════════
-
     // GITHUB — repos, issues, PRs, branches, commits, file search
     // Create token: https://github.com/settings/tokens
     "github": {
@@ -84,18 +89,18 @@
     },
     // GITLAB — repos, MRs, issues, pipelines, groups
     // Create token: https://gitlab.com/-/profile/personal_access_tokens
-    "gitlab": {
-      "type": "stdio",
-      "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-gitlab"
-      ],
-      "env": {
-        "GITLAB_PERSONAL_ACCESS_TOKEN": "${input:gitlab-token}",
-        "GITLAB_API_URL": "https://gitlab.com"
-      }
-    },
+    // "gitlab": {
+    //   "type": "stdio",
+    //   "command": "npx",
+    //   "args": [
+    //     "-y",
+    //     "@modelcontextprotocol/server-gitlab"
+    //   ],
+    //   "env": {
+    //     "GITLAB_PERSONAL_ACCESS_TOKEN": "${input:gitlab-token}",
+    //     "GITLAB_API_URL": "https://gitlab.com"
+    //   }
+    // },
     // GOOGLE MAPS — geocoding, places, directions, distance matrix, elevation, time zones
     // Create API key: https://console.cloud.google.com/apis/credentials
     // Enable APIs: Maps JavaScript API, Geocoding API, Places API, Directions API
@@ -261,10 +266,22 @@
     //   "command": "npx",
     //   "args": ["-y", "sec-edgar-mcp"]
     // },
+    "gsc": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "suganthan-gsc-mcp"
+      ],
+      "env": {
+        "GSC_KEY_FILE": "C:\\Users\\Giulio\\Desktop\\CODE\\mcp\\gsc-mcp-project-501010-b08eaa4ff319.json",
+        "GSC_AUTH_MODE": "service_account",
+        "GSC_SITE_URL": "sc-domain:giulio-occhipinti.com"
+      }
+    },
     // ─── VERCEL ───────────────────────────────────────────────────────────
     // VERCEL (official) — projects, deployments, logs, domains, toolbar comments
     // Remote MCP con OAuth — richiede login Vercel al primo avvio
-    // Setup: Ctrl+Shift+P → "MCP: List Servers" → Vercel → Start Server → Allow → autenticati
     // Docs: https://vercel.com/docs/agent-resources/vercel-mcp
     "vercel": {
       "type": "http",

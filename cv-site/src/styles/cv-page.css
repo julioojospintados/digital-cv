@@ -31,6 +31,7 @@
   top: 8rem;
   right: -3rem;
   width: 20rem;
+
   @media (max-width: 48rem) {
     top: 15rem;
   }
@@ -80,7 +81,7 @@
 @media (max-width: 48rem) {
   .bg-knoll {
     opacity: 0.25 !important;
-    width: 7.5rem;
+    width: 10.5rem;
   }
 }
 
@@ -94,7 +95,7 @@ skill-force-graph {
 }
 
 .skills-sub-title {
-  font-size: 0.6rem;
+  font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.15em;
   text-transform: uppercase;
@@ -126,6 +127,7 @@ skill-force-graph {
   border-bottom: 1px solid var(--color-border);
   /* Prevent nav content from creating horizontal document overflow on mobile */
   overflow: hidden;
+
   @media (max-width: 40rem) {
     padding: 0 0.75rem;
     gap: 0.25rem;
@@ -176,7 +178,8 @@ go-logo:not(:defined) {
   justify-content: center;
   overflow: hidden;
   white-space: nowrap;
-  width: 2.2rem; /* GSAP sovrascrive ad ogni cambio mode */
+  width: 2.2rem;
+  /* GSAP sovrascrive ad ogni cambio mode */
   height: 1.9rem;
   padding: 0 0.5rem;
   font-size: 0.62rem;
@@ -206,6 +209,16 @@ go-logo:not(:defined) {
     inset 0 0 8px color-mix(in srgb, var(--color-accent) 10%, transparent);
 }
 
+.mode-btn[aria-pressed="true"] {
+  color: var(--color-accent);
+  border-color: var(--color-accent);
+  border-width: 2px;
+  background: color-mix(in srgb, var(--color-accent) 18%, transparent);
+  box-shadow:
+    0 0 10px color-mix(in srgb, var(--color-accent) 35%, transparent),
+    inset 0 0 8px color-mix(in srgb, var(--color-accent) 10%, transparent);
+}
+
 /* abbr: centrata nel bottone stretto — visibile solo su mobile */
 .mode-btn__abbr {
   position: absolute;
@@ -220,6 +233,25 @@ go-logo:not(:defined) {
   pointer-events: none;
 }
 
+/* SSR fallback: avoid first-frame mismatch before JS init on mobile */
+.mode-btn[aria-pressed="true"] {
+  width: 7.5rem;
+}
+
+.mode-btn[aria-pressed="true"] .mode-btn__abbr {
+  opacity: 0;
+}
+
+.mode-btn[aria-pressed="true"] .mode-btn__label {
+  opacity: 1;
+}
+
+@media (max-width: 23.375rem) {
+  .mode-btn[aria-pressed="true"] {
+    width: 5.5rem;
+  }
+}
+
 /* ── Desktop: label sempre visibile, abbr nascosta ── */
 @media (min-width: 40.0625rem) {
   .mode-btn {
@@ -229,9 +261,11 @@ go-logo:not(:defined) {
     padding: 0.3rem 0.75rem;
     will-change: auto;
   }
+
   .mode-btn__abbr {
     display: none;
   }
+
   .mode-btn__label {
     opacity: 1;
     position: static;
@@ -275,7 +309,8 @@ go-logo:not(:defined) {
   display: flex;
   flex-direction: column;
   gap: 4rem;
-  --bento-gap: 0.75rem; /* Knolling constant gutter */
+  --bento-gap: 0.75rem;
+  /* Knolling constant gutter */
   overflow-x: visible;
 }
 
@@ -288,9 +323,10 @@ go-logo:not(:defined) {
 /* ── Section title ────────────────────────────────────────────── */
 .section-title {
   display: flex;
+  flex-direction: column;
   align-items: baseline;
   gap: 1rem;
-  font-size: 0.65rem;
+  font-size: 0.875rem;
   font-weight: 600;
   letter-spacing: 0.2em;
   text-transform: uppercase;
@@ -298,12 +334,12 @@ go-logo:not(:defined) {
   margin: 0 0 1.5rem 0;
 }
 
-.section-title > span:first-child {
+.section-title>span:first-child {
   color: var(--color-text-primary);
 }
 
 .section-subtitle {
-  font-size: 0.6rem;
+  font-size: 0.75rem;
   font-weight: 400;
   letter-spacing: 0.05em;
   text-transform: none;
@@ -316,14 +352,16 @@ go-logo:not(:defined) {
 .hero-section {
   border-bottom: 1px solid var(--color-border);
   padding-bottom: 3rem;
-  opacity: 0; /* GSAP animates to 1 */
+  opacity: 0;
+  /* GSAP animates to 1 */
 }
 
 .hero-badges,
 .hero-title,
 .hero-summary,
 .hero-footer {
-  opacity: 0; /* GSAP animates to 1 */
+  opacity: 0;
+  /* GSAP animates to 1 */
   transform: translateY(14px);
 }
 
@@ -387,7 +425,8 @@ go-logo:not(:defined) {
 .hero-char {
   display: inline-block;
   white-space: pre;
-  opacity: 0; /* GSAP animates to 1 */
+  opacity: 0;
+  /* GSAP animates to 1 */
   transform: translateY(18px);
   will-change: transform, opacity;
 }
@@ -404,6 +443,7 @@ go-logo:not(:defined) {
     font-size: clamp(2rem, 11vw, 2.75rem);
     line-height: 1.1;
   }
+
   .hero-char--space {
     flex-basis: 100%;
     height: 0;
@@ -524,11 +564,9 @@ go-logo:not(:defined) {
   --skills-panel-bg: rgba(0, 0, 0, 0.14);
   --skills-panel-border: rgba(255, 255, 255, 0.08);
   --skills-panel-overlay:
-    radial-gradient(
-      circle at 50% 35%,
+    radial-gradient(circle at 50% 35%,
       rgba(255, 255, 255, 0.03),
-      transparent 45%
-    ),
+      transparent 45%),
     linear-gradient(160deg, rgba(255, 255, 255, 0.02), transparent 60%);
 }
 
@@ -558,7 +596,8 @@ go-logo:not(:defined) {
   letter-spacing: 0.16em;
   text-transform: uppercase;
   cursor: pointer;
-  overflow: hidden; /* contiene lo pseudo-sweep */
+  overflow: hidden;
+  /* contiene lo pseudo-sweep */
   position: relative;
   transition:
     transform var(--duration-micro) var(--ease-standard),
@@ -573,28 +612,22 @@ go-logo:not(:defined) {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.18) 50%,
-    transparent 100%
-  );
+  background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.18) 50%,
+      transparent 100%);
   transform: translateX(var(--sweep-x));
   pointer-events: none;
 }
 
 .skills-view-btn.is-active {
   color: var(--color-text-primary);
-  border-color: color-mix(
-    in srgb,
-    var(--color-accent) 65%,
-    var(--skills-panel-border)
-  );
-  background: color-mix(
-    in srgb,
-    var(--color-accent) 10%,
-    var(--skills-panel-bg)
-  );
+  border-color: color-mix(in srgb,
+      var(--color-accent) 65%,
+      var(--skills-panel-border));
+  background: color-mix(in srgb,
+      var(--color-accent) 10%,
+      var(--skills-panel-bg));
   box-shadow: 0 0 12px color-mix(in srgb, var(--color-accent) 18%, transparent);
 }
 
@@ -608,7 +641,8 @@ go-logo:not(:defined) {
   background: var(--skills-panel-bg);
   border-radius: 2px;
   overflow: hidden;
-  padding: 0; /* nessun padding quando mostra il grafico */
+  padding: 0;
+  /* nessun padding quando mostra il grafico */
 }
 
 .skills-stage::before {
@@ -637,7 +671,8 @@ go-logo:not(:defined) {
 }
 
 .skills-section[data-skills-view="cards"] .skills-stage {
-  padding: 0.75rem; /* padding solo con le card, non con il grafico */
+  padding: 0.75rem;
+  /* padding solo con le card, non con il grafico */
 }
 
 .skills-grid {
@@ -672,11 +707,9 @@ go-logo:not(:defined) {
 }
 
 .ai-title span:first-child {
-  background: linear-gradient(
-    135deg,
-    var(--color-accent) 0%,
-    color-mix(in srgb, var(--color-accent) 70%, var(--color-text-primary)) 100%
-  );
+  background: linear-gradient(135deg,
+      var(--color-accent) 0%,
+      color-mix(in srgb, var(--color-accent) 70%, var(--color-text-primary)) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -685,10 +718,10 @@ go-logo:not(:defined) {
 }
 
 .ai-title__clip {
-  display: inline-flex;
-  flex-direction: column;
+  /* display: inline-flex;
+  flex-direction: column; */
   align-items: center;
-  gap: 2px;
+  /* gap: 2px; */
   margin-left: auto;
   pointer-events: none;
   user-select: none;
@@ -724,6 +757,7 @@ go-logo:not(:defined) {
 }
 
 @keyframes ai-clip-breathe {
+
   0%,
   100% {
     box-shadow:
@@ -761,11 +795,9 @@ go-logo:not(:defined) {
 }
 
 .exp-cluster[data-open] {
-  border-color: color-mix(
-    in srgb,
-    var(--color-accent) 28%,
-    var(--color-border)
-  );
+  border-color: color-mix(in srgb,
+      var(--color-accent) 28%,
+      var(--color-border));
 }
 
 .exp-cluster__header {
@@ -820,12 +852,15 @@ go-logo:not(:defined) {
 .exp-cluster__tag-dot[data-tag="tech"] {
   background: rgba(0, 255, 200, 0.8);
 }
+
 .exp-cluster__tag-dot[data-tag="creative"] {
   background: rgba(255, 107, 53, 0.8);
 }
+
 .exp-cluster__tag-dot[data-tag="human"] {
   background: rgba(240, 200, 127, 0.8);
 }
+
 .exp-cluster__tag-dot[data-tag="management"] {
   background: rgba(180, 100, 255, 0.8);
 }
@@ -992,6 +1027,7 @@ go-logo:not(:defined) {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .exp-drawer .exp-card,
   .exp-grid--featured .exp-card {
     opacity: 1 !important;
@@ -1316,8 +1352,7 @@ go-logo:not(:defined) {
 
 .tl-legend-chip--cert::before {
   background: var(--color-accent);
-  box-shadow: 0 0 4px 1px
-    color-mix(in srgb, var(--color-accent) 40%, transparent);
+  box-shadow: 0 0 4px 1px color-mix(in srgb, var(--color-accent) 40%, transparent);
 }
 
 .tl-legend-chip--edu {
@@ -1340,9 +1375,8 @@ go-logo:not(:defined) {
 .timeline::before {
   content: "";
   position: absolute;
-  left: calc(
-    7rem + 0.75rem + 0.69rem
-  ); /* date(7rem) + gap(0.75rem) + dot-col-center(1.375rem/2) */
+  left: calc(7rem + 0.75rem + 0.69rem);
+  /* date(7rem) + gap(0.75rem) + dot-col-center(1.375rem/2) */
   top: 0.45rem;
   bottom: 2rem;
   width: 1px;
@@ -1392,8 +1426,7 @@ go-logo:not(:defined) {
 
 .tl-item[data-type="cert"] .tl-dot {
   background: var(--color-accent);
-  box-shadow: 0 0 5px 1px
-    color-mix(in srgb, var(--color-accent) 40%, transparent);
+  box-shadow: 0 0 5px 1px color-mix(in srgb, var(--color-accent) 40%, transparent);
 }
 
 .tl-item[data-type="edu"] .tl-dot {
