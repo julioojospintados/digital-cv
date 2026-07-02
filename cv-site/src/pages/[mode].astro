@@ -451,7 +451,10 @@ const modeDescription =
         <li class:list={["mode-dropdown__option", { "is-selected": mode === "human" }]} role="option" data-dropdown-mode="human" tabindex="-1">AI &amp; Digital Specialist</li>
       </ul>
     </div>
-    <a href="/en/cv" class="cv-nav__lang" aria-label="English version">EN</a>
+    <div class="lang-switch" aria-label="Lingua / Language">
+      <span class="lang-switch__opt lang-switch__opt--active" aria-current="true">IT</span>
+      <a href="/en/cv" class="lang-switch__opt" lang="en" aria-label="Switch to English">EN</a>
+    </div>
   </nav>
 
   <!-- ────────────────────────────────────────────────────────── MAIN -->

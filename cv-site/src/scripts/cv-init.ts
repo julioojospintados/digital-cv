@@ -168,28 +168,40 @@ function applySkillsView(view: "graph" | "cards") {
     button.setAttribute("aria-pressed", String(isActive));
   });
 
-  // // Gestione fullscreen + landscape su mobile per il grafico
-  // const isMobile = window.matchMedia("(max-width: 40rem)").matches;
-  // if (isMobile && view === "graph") {
-  //   const panel = skillsSection.querySelector(
-  //     ".skills-stage__panel--graph",
-  //   ) as HTMLElement | null;
-  //   if (panel) {
-  //     // Richiedi fullscreen
-  //     if (panel.requestFullscreen && !document.fullscreenElement) {
-  //       panel.requestFullscreen().catch(() => {
-  //         /* fallback: il fullscreen potrebbe non essere disponibile */
-  //       });
-  //     }
-  //     // Richiedi orientation landscape
-  //     if (screen.orientation && screen.orientation.lock) {
-  //       screen.orientation.lock("landscape").catch(() => {
-  //         /* fallback: lock potrebbe non essere disponibile */
-  //       });
-  //     }
-  //   }
-  // }
+  // Gestione fullscreen + landscape su mobile per il grafico
+  const isMobile = window.matchMedia("(max-width: 40rem)").matches;
+  if (isMobile && view === "graph") {
+    const panel = skillsSection.querySelector(
+      ".skills-stage__panel--graph",
+    ) as HTMLElement | null;
+    if (panel && panel.requestFullscreen && !document.fullscreenElement) {
+      panel.requestFullscreen().catch(() => {
+        /* fullscreen non disponibile — rimane inline */
+      });
+    }
+    if (screen.orientation && screen.orientation.lock) {
+      screen.orientation.lock("landscape").catch(() => {
+        /* orientation lock non supportato */
+      });
+    }
+  } else if (isMobile && view === "cards" && document.fullscreenElement) {
+    document.exitFullscreen?.().catch(() => {});
+  }
 }
+
+// Resync view → cards quando l'utente esce dal fullscreen via ESC
+document.addEventListener("fullscreenchange", () => {
+  if (!document.fullscreenElement) {
+    const isMobile = window.matchMedia("(max-width: 40rem)").matches;
+    if (isMobile && skillsSection?.dataset.skillsView === "graph") {
+      applySkillsView("cards");
+    }
+    // Rilascia orientation lock se supportato
+    if (screen.orientation && screen.orientation.unlock) {
+      screen.orientation.unlock();
+    }
+  }
+});
 
 skillsViewButtons.forEach((button) => {
   button.addEventListener("click", () => {
@@ -202,9 +214,9 @@ skillsViewButtons.forEach((button) => {
   });
 });
 
-// Set default view: cards su mobile, graph su desktop
-// const isMobileInit = window.matchMedia("(max-width: 40rem)").matches;
-applySkillsView("graph");
+// Set default view: cards su mobile (il grafico è la seconda scelta), graph su desktop
+const isMobileInit = window.matchMedia("(max-width: 40rem)").matches;
+applySkillsView(isMobileInit ? "cards" : "graph");
 
 // ── Update nav buttons: morph larghezza + crossfade testo ───────────
 // Larghezze FISSE anche su desktop: evitano jitter e tengono le 4 voci allineate.
@@ -563,7 +575,7 @@ document
 (
   [
     document.querySelector<HTMLElement>("go-logo"),
-    document.querySelector<HTMLElement>(".cv-nav__lang"),
+    document.querySelector<HTMLElement>(".lang-switch"),
   ] as (HTMLElement | null)[]
 ).forEach((el) => {
   if (!el) return;

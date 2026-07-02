@@ -354,7 +354,7 @@ class FloatingMenu extends LitElement {
       color: rgba(8, 73, 67, 1);
       font-family: "Lexend", sans-serif;
       font-size: 0.875rem;
-      font-weight: 800;
+      font-weight: 700;
       display: flex;
       align-items: center;
       justify-content: center;

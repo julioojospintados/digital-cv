@@ -189,7 +189,7 @@ go-logo:not(:defined) {
   /* GSAP sovrascrive ad ogni cambio mode */
   height: 1.9rem;
   padding: 0 0.5rem;
-  font-size: 0.62rem;
+  font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -307,8 +307,8 @@ go-logo:not(:defined) {
   border-radius: 2px;
   color: var(--color-accent);
   font-family: var(--font-mono);
-  font-size: 0.6rem;
-  font-weight: 700;
+  font-size: 0.75rem;
+  font-weight: 500;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   cursor: pointer;
@@ -365,7 +365,7 @@ go-logo:not(:defined) {
 .mode-dropdown__option {
   padding: 0.65rem 0.75rem;
   font-family: var(--font-mono);
-  font-size: 0.6rem;
+  font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -389,29 +389,53 @@ go-logo:not(:defined) {
   background: color-mix(in srgb, var(--color-accent) 8%, transparent);
 }
 
-.cv-nav__lang {
-  padding: 0.3rem 0.75rem;
-  font-size: 0.65rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  background: transparent;
-  border: 1px solid transparent;
-  border-radius: 1px;
-  color: rgba(192, 220, 215, 0.85);
-  text-decoration: none;
-  transition:
-    color 0.2s ease,
-    border-color 0.2s ease,
-    background 0.2s ease;
+/* ── Language switch — doppio chip IT/EN coerente con mode-btn ──────────── */
+.lang-switch {
+  display: flex;
+  align-items: stretch;
+  border: 1px solid var(--color-border);
+  border-radius: 2px;
+  overflow: hidden;
   flex-shrink: 0;
-  white-space: nowrap;
+  transition: border-color 0.2s ease;
 }
 
-.cv-nav__lang:hover {
+.lang-switch:hover {
+  border-color: color-mix(in srgb, var(--color-accent) 40%, var(--color-border));
+}
+
+.lang-switch__opt {
+  padding: 0.28rem 0.55rem;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: rgba(192, 220, 215, 0.45);
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  transition:
+    color 0.2s ease,
+    background 0.2s ease;
+  user-select: none;
+}
+
+/* Separatore tra i due chip — bordo destro sul primo elemento */
+.lang-switch__opt:first-child {
+  border-right: 1px solid var(--color-border);
+}
+
+.lang-switch__opt--active {
+  background: color-mix(in srgb, var(--color-accent) 15%, transparent);
+  color: var(--color-accent);
+  box-shadow: inset 0 0 6px color-mix(in srgb, var(--color-accent) 10%, transparent);
+}
+
+a.lang-switch__opt:hover {
   color: var(--color-text-primary);
-  border-color: var(--color-accent);
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.07);
 }
 
 /* ── Main layout ─────────────────────────────────────────────── */
@@ -490,7 +514,7 @@ go-logo:not(:defined) {
 
 .avail-badge {
   display: inline-block;
-  font-size: 0.6rem;
+  font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -518,7 +542,7 @@ go-logo:not(:defined) {
 }
 
 .loc-badge {
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   font-weight: 500;
   letter-spacing: 0.08em;
   color: rgba(192, 220, 215, 0.85);
@@ -630,7 +654,7 @@ go-logo:not(:defined) {
 }
 
 .lang-chip {
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   color: rgba(192, 220, 215, 0.85);
   display: flex;
   align-items: center;
@@ -707,7 +731,7 @@ go-logo:not(:defined) {
   justify-content: center;
   text-align: center;
   font-family: var(--font-mono);
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -776,6 +800,28 @@ go-logo:not(:defined) {
 
 .skills-stage__panel--cards {
   display: none;
+}
+
+/* Fullscreen: il pannello grafico riempie lo schermo con sfondo ottanio */
+.skills-stage__panel--graph:fullscreen,
+.skills-stage__panel--graph:-webkit-full-screen {
+  background: var(--color-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.skills-stage__panel--graph:fullscreen skill-force-graph,
+.skills-stage__panel--graph:-webkit-full-screen skill-force-graph {
+  width: 100%;
+  height: 100%;
+}
+
+.skills-stage__panel--graph::backdrop {
+  background: var(--color-bg);
 }
 
 .skills-section[data-skills-view="cards"] .skills-stage__panel--graph {
@@ -859,7 +905,7 @@ go-logo:not(:defined) {
   background: var(--color-accent);
   border-radius: 2px;
   color: rgba(8, 73, 67, 1);
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   font-weight: 900;
   letter-spacing: 0.2em;
   text-transform: uppercase;
@@ -935,7 +981,7 @@ go-logo:not(:defined) {
 
 .exp-cluster__name {
   flex: 1;
-  font-size: 0.6rem;
+  font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.15em;
   text-transform: uppercase;
@@ -959,7 +1005,7 @@ go-logo:not(:defined) {
   flex-shrink: 0;
   opacity: 1;
   font-family: var(--font-mono);
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   font-weight: 800;
   letter-spacing: 0.08em;
   color: rgba(8, 73, 67, 1);
@@ -1003,7 +1049,7 @@ go-logo:not(:defined) {
 
 .exp-cluster__count {
   font-family: var(--font-mono);
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   color: var(--color-text-muted);
   width: 1.4rem;
   height: 1.4rem;
@@ -1095,7 +1141,7 @@ go-logo:not(:defined) {
   cursor: none;
   color: var(--color-text-muted);
   font-family: var(--font-mono);
-  font-size: 0.6rem;
+  font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -1134,7 +1180,7 @@ go-logo:not(:defined) {
 
 .exp-deeper-btn[aria-expanded="true"] .exp-deeper-btn__label::before {
   content: attr(data-open-label);
-  font-size: 0.6rem;
+  font-size: 0.75rem;
 }
 
 /* When open: right-aligned text, accent colour */
@@ -1322,7 +1368,7 @@ go-logo:not(:defined) {
 
 .interests-label {
   font-family: var(--font-mono);
-  font-size: 0.62rem;
+  font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -1407,7 +1453,7 @@ go-logo:not(:defined) {
 }
 
 .social-impact-card__tag {
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   color: var(--color-text-primary);
   padding: 0.1rem 0.4rem;
   border: 1px solid rgba(255 255 255 / 0.1);
@@ -1514,7 +1560,7 @@ go-logo:not(:defined) {
 .tl-date {
   grid-column: 1;
   text-align: right;
-  font-size: 0.6rem;
+  font-size: 0.75rem;
   font-variant-numeric: tabular-nums;
   color: rgba(192, 220, 215, 0.6);
   padding-top: 0.12rem;
@@ -1584,7 +1630,7 @@ go-logo:not(:defined) {
 }
 
 .tl-inst {
-  font-size: 0.62rem;
+  font-size: 0.75rem;
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -1648,7 +1694,7 @@ go-logo:not(:defined) {
 }
 
 .cv-footer__credit {
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   color: rgba(192, 220, 215, 0.85);
   margin: 0;
 }
@@ -1664,7 +1710,7 @@ go-logo:not(:defined) {
 }
 
 .cv-footer__back {
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   font-weight: 500;
   letter-spacing: 0.05em;
   color: rgba(192, 220, 215, 0.85);
