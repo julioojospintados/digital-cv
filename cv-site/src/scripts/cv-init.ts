@@ -212,6 +212,12 @@ applySkillsView("graph");
 // killTweensOf previene ghosting su click rapido.
 const INACTIVE_W = "2.2rem";
 const DESKTOP_W = "7.75rem";
+const MODE_LABELS: Record<string, string> = {
+  tech: "Software Developer",
+  creative: "Web & UX Designer",
+  management: "Project Manager",
+  human: "AI & Digital Specialist",
+};
 // Su schermi <= 374px comprimiamo la label del bottone attivo
 function getActiveW(): string {
   return window.innerWidth <= 374 ? "5.5rem" : "7.5rem";
@@ -265,6 +271,12 @@ function updateNavButtons(mode: string) {
         ease: "power3.inOut",
       });
     }
+  });
+  // Sync mobile dropdown label + selected option
+  const dropdownLabel = document.querySelector<HTMLElement>("#mode-dropdown-label");
+  if (dropdownLabel) dropdownLabel.textContent = MODE_LABELS[mode] ?? mode;
+  document.querySelectorAll<HTMLElement>("#mode-dropdown-list [data-dropdown-mode]").forEach((opt) => {
+    opt.classList.toggle("is-selected", opt.dataset.dropdownMode === mode);
   });
   navInitialized = true;
 }
@@ -514,6 +526,38 @@ document
       gsap.to(btn, { x: 0, y: 0, duration: 0.5, ease: "elastic.out(1, 0.4)" });
     });
   });
+
+// ── Mode dropdown (mobile) ──────────────────────────────────────────────
+{
+  const dropdownBtn = document.querySelector<HTMLButtonElement>("#mode-dropdown-btn");
+  const dropdownList = document.querySelector<HTMLElement>("#mode-dropdown-list");
+  if (dropdownBtn && dropdownList) {
+    dropdownBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const isOpen = dropdownList.classList.toggle("is-open");
+      dropdownBtn.setAttribute("aria-expanded", String(isOpen));
+    });
+
+    dropdownList.querySelectorAll<HTMLElement>("[data-dropdown-mode]").forEach((opt) => {
+      opt.addEventListener("click", () => {
+        const mode = opt.dataset.dropdownMode;
+        if (!mode) return;
+        dropdownList.classList.remove("is-open");
+        dropdownBtn.setAttribute("aria-expanded", "false");
+        // Proxy: click sul pulsante nascosto — riusa tutta la logica mode + animazioni
+        document.querySelector<HTMLButtonElement>(`button[data-nav-mode="${mode}"]`)?.click();
+      });
+    });
+
+    // Chiudi al click fuori
+    document.addEventListener("click", () => {
+      if (dropdownList.classList.contains("is-open")) {
+        dropdownList.classList.remove("is-open");
+        dropdownBtn.setAttribute("aria-expanded", "false");
+      }
+    });
+  }
+}
 
 // ── Magnetic hover on GO logo + lang switcher ────────────────────────
 (
@@ -1177,12 +1221,19 @@ if (skillsViewButtons.length) {
         });
       }
 
-      // ── THREAD: fixed overlay da bracket-top-inner → nav button ─────────
+      // ── THREAD: fixed overlay da bracket-top-inner → nav button / dropdown ──
       if (withThreads) {
-        const navBtn = document.querySelector<HTMLElement>(`[data-nav-mode="${mode}"]`);
-        if (!navBtn) return;
+        const isMobileThread = window.matchMedia("(max-width: 40rem)").matches;
+        // Mobile: un solo thread verso il dropdown trigger; saltiamo i mode successivi
+        if (isMobileThread && i > 0) return;
 
-        const nRect = navBtn.getBoundingClientRect();
+        const targetBtn = isMobileThread
+          ? document.querySelector<HTMLElement>("#mode-dropdown-btn")
+          : document.querySelector<HTMLElement>(`[data-nav-mode="${mode}"]`);
+        if (!targetBtn) return;
+
+        const nRect = targetBtn.getBoundingClientRect();
+        if (!nRect.width && !nRect.height) return; // elemento nascosto
         const nx = nRect.left + nRect.width / 2;
         const ny = nRect.top + nRect.height / 2;
 
@@ -1281,20 +1332,32 @@ if (skillsViewButtons.length) {
           );
         }
 
-        // Nav punch per ogni mode
+        // Nav punch: desktop → ogni pulsante; mobile → dropdown trigger (una sola volta)
         if (!reducedMotionPeek) {
-          modes.forEach((mode, i) => {
-            const navBtn = document.querySelector<HTMLElement>(`[data-nav-mode="${mode}"]`);
-            if (!navBtn) return;
-            const accent = PEEK_ACCENT[mode];
-            const abbr = navBtn.querySelector<HTMLElement>(".mode-btn__abbr");
-            const label = navBtn.querySelector<HTMLElement>(".mode-btn__label");
-            const tl = gsap.timeline({ delay: i * 0.12 });
-            tl.to(navBtn, { scale: 1.15, duration: 0.18, ease: "power2.out" })
-              .to(navBtn, { scale: 1, duration: 0.4, ease: "elastic.out(1.8, 0.4)" });
-            if (abbr) tl.to(abbr, { color: accent, duration: 0.28, yoyo: true, repeat: 1, repeatDelay: 1.55 }, "<");
-            if (label) tl.to(label, { color: accent, duration: 0.28, yoyo: true, repeat: 1, repeatDelay: 1.55 }, "<");
-          });
+          const isMobileNavPunch = window.matchMedia("(max-width: 40rem)").matches;
+          if (isMobileNavPunch) {
+            const dropdownTrigger = document.querySelector<HTMLElement>("#mode-dropdown-btn");
+            if (dropdownTrigger) {
+              const accent = PEEK_ACCENT[modes[0]];
+              gsap.timeline()
+                .to(dropdownTrigger, { scale: 1.08, duration: 0.18, ease: "power2.out" })
+                .to(dropdownTrigger, { scale: 1, duration: 0.4, ease: "elastic.out(1.8, 0.4)" })
+                .to(dropdownTrigger, { boxShadow: `0 0 20px ${accent.replace("1)", "0.55)")}`, duration: 0.28, yoyo: true, repeat: 1, repeatDelay: 1.2 }, "<");
+            }
+          } else {
+            modes.forEach((mode, i) => {
+              const navBtn = document.querySelector<HTMLElement>(`[data-nav-mode="${mode}"]`);
+              if (!navBtn) return;
+              const accent = PEEK_ACCENT[mode];
+              const abbr = navBtn.querySelector<HTMLElement>(".mode-btn__abbr");
+              const label = navBtn.querySelector<HTMLElement>(".mode-btn__label");
+              const tl = gsap.timeline({ delay: i * 0.12 });
+              tl.to(navBtn, { scale: 1.15, duration: 0.18, ease: "power2.out" })
+                .to(navBtn, { scale: 1, duration: 0.4, ease: "elastic.out(1.8, 0.4)" });
+              if (abbr) tl.to(abbr, { color: accent, duration: 0.28, yoyo: true, repeat: 1, repeatDelay: 1.55 }, "<");
+              if (label) tl.to(label, { color: accent, duration: 0.28, yoyo: true, repeat: 1, repeatDelay: 1.55 }, "<");
+            });
+          }
         }
 
         drawConnectors(card, rect, modes, true, true);

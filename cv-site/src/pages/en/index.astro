@@ -57,31 +57,99 @@ import '../../styles/index-page.css';
 
       <section class="mode-cards" id="mode-cards" aria-label="Choose your perspective">
         <button class="mode-card" data-mode="tech" id="card-tech" type="button">
-          <span class="mode-card__label">Tech</span>
-          <span class="mode-card__desc">Automation, architectures and AI workflow</span>
-          <span class="mode-card__go" data-href="/en/cv" role="link" tabindex="-1" aria-hidden="true"><span class="go-text">GO to Tech</span><span class="go-icon">↗</span></span>
+          <span class="mode-card__label">Software Developer</span>
+          <span class="mode-card__desc">Automation, AI and architectures</span>
+          <span class="mode-card__go" data-href="/en/cv" role="link" tabindex="-1" aria-hidden="true"><span class="go-text">GO to Software Developer</span><span class="go-icon">↗</span></span>
         </button>
 
         <button class="mode-card" data-mode="creative" id="card-creative" type="button">
-          <span class="mode-card__label">Creative</span>
-          <span class="mode-card__desc">Brand, UX and communication that converts</span>
-          <span class="mode-card__go" data-href="/en/cv" role="link" tabindex="-1" aria-hidden="true"><span class="go-text">GO to Creative</span><span class="go-icon">↗</span></span>
+          <span class="mode-card__label">Web &amp; UX Designer</span>
+          <span class="mode-card__desc">Brand, aesthetics and interfaces</span>
+          <span class="mode-card__go" data-href="/en/cv" role="link" tabindex="-1" aria-hidden="true"><span class="go-text">GO to Web &amp; UX Designer</span><span class="go-icon">↗</span></span>
         </button>
 
         <button class="mode-card" data-mode="management" id="card-management" type="button">
-          <span class="mode-card__label">Management</span>
-          <span class="mode-card__desc">Lean Agile, short sprints, operational autonomy</span>
-          <span class="mode-card__go" data-href="/en/cv" role="link" tabindex="-1" aria-hidden="true"><span class="go-text">GO to Management</span><span class="go-icon">↗</span></span>
+          <span class="mode-card__label">Project Manager</span>
+          <span class="mode-card__desc">Lean Agile and short sprints</span>
+          <span class="mode-card__go" data-href="/en/cv" role="link" tabindex="-1" aria-hidden="true"><span class="go-text">GO to Project Manager</span><span class="go-icon">↗</span></span>
         </button>
 
         <button class="mode-card" data-mode="human" id="card-human" type="button">
-          <span class="mode-card__label">Human</span>
-          <span class="mode-card__desc">The why behind every choice — impact and relationship</span>
-          <span class="mode-card__go" data-href="/en/cv" role="link" tabindex="-1" aria-hidden="true"><span class="go-text">GO to Human</span><span class="go-icon">↗</span></span>
+          <span class="mode-card__label">AI &amp; Digital Specialist</span>
+          <span class="mode-card__desc">Storytelling and strategy</span>
+          <span class="mode-card__go" data-href="/en/cv" role="link" tabindex="-1" aria-hidden="true"><span class="go-text">GO to AI &amp; Digital Specialist</span><span class="go-icon">↗</span></span>
         </button>
       </section>
 
     </main>
+  </div>
+
+  <!-- Scroll cue -->
+  <p class="scroll-cue" aria-hidden="true">scroll ↓</p>
+
+  <!-- ── PROFILE SECTIONS ── -->
+  <div class="profiles-root" aria-label="Professional profiles">
+
+    <section class="profile-section" data-mode="tech">
+      <div class="profile-inner">
+        <div class="profile-content">
+          <p class="profile-eyebrow">Software Developer</p>
+          <h2 class="profile-title">Automation,<br>AI and architectures.</h2>
+          <p class="profile-desc">6+ years on Angular, Lit, TypeScript and MCP architectures. High-traffic enterprise systems, AI workflows and automation for SMBs that want to scale without hiring an entire team.</p>
+          <ul class="profile-chips" role="list">
+            <li>Angular</li><li>TypeScript</li><li>MCP</li><li>AI Workflow</li><li>Node.js</li>
+          </ul>
+          <a href="/en/cv" class="profile-cta">GO to Software Developer <span aria-hidden="true">↗</span></a>
+        </div>
+        <div class="profile-deco" aria-hidden="true"><span class="profile-deco__text">SD</span><img class="profile-knoll-img" src="/knolling/laptop.png" alt="" loading="lazy" decoding="async"></div>
+      </div>
+    </section>
+
+    <section class="profile-section" data-mode="creative">
+      <div class="profile-inner">
+        <div class="profile-content">
+          <p class="profile-eyebrow">Web &amp; UX Designer</p>
+          <h2 class="profile-title">Brand,<br>aesthetics and interfaces.</h2>
+          <p class="profile-desc">IBM certified. UX Research, wireframing, Figma, design systems and advanced GSAP animations. Digital experiences that blend beauty, usability and measurable brand impact.</p>
+          <ul class="profile-chips" role="list">
+            <li>Figma</li><li>UX Research</li><li>GSAP</li><li>Design System</li><li>Brand</li>
+          </ul>
+          <a href="/en/cv" class="profile-cta">GO to Web &amp; UX Designer <span aria-hidden="true">↗</span></a>
+        </div>
+        <div class="profile-deco" aria-hidden="true"><span class="profile-deco__text">WD</span><img class="profile-knoll-img" src="/knolling/camera.png" alt="" loading="lazy" decoding="async"></div>
+      </div>
+    </section>
+
+    <section class="profile-section" data-mode="management">
+      <div class="profile-inner">
+        <div class="profile-content">
+          <p class="profile-eyebrow">Project Manager</p>
+          <h2 class="profile-title">Lean Agile<br>and short sprints.</h2>
+          <p class="profile-desc">Technical Partner for SMBs. 1–2 week sprints, business-oriented backlog, real impactScore at every release. The team becomes autonomous — no dependency on the consultant.</p>
+          <ul class="profile-chips" role="list">
+            <li>Agile</li><li>Scrum</li><li>Sprint</li><li>impactScore</li><li>SMB</li>
+          </ul>
+          <a href="/en/cv" class="profile-cta">GO to Project Manager <span aria-hidden="true">↗</span></a>
+        </div>
+        <div class="profile-deco" aria-hidden="true"><span class="profile-deco__text">PM</span><img class="profile-knoll-img" src="/knolling/chess.png" alt="" loading="lazy" decoding="async"></div>
+      </div>
+    </section>
+
+    <section class="profile-section" data-mode="human">
+      <div class="profile-inner">
+        <div class="profile-content">
+          <p class="profile-eyebrow">AI &amp; Digital Specialist</p>
+          <h2 class="profile-title">Storytelling<br>and strategy.</h2>
+          <p class="profile-desc">Artificial intelligence won't replace people, but it will reward those who know how to govern it. I build automated workflows to triple project productivity, combining technical skills with digital storytelling from my background in marketing and theatre. Because code without a story goes nowhere.</p>
+          <ul class="profile-chips" role="list">
+            <li>Prompt Engineering</li><li>Claude</li><li>Copilot</li><li>Storytelling</li><li>Digital Strategy</li>
+          </ul>
+          <a href="/en/cv" class="profile-cta">GO to AI &amp; Digital Specialist <span aria-hidden="true">↗</span></a>
+        </div>
+        <div class="profile-deco" aria-hidden="true"><span class="profile-deco__text">AI</span><img class="profile-knoll-img" src="/knolling/plant.png" alt="" loading="lazy" decoding="async"></div>
+      </div>
+    </section>
+
   </div>
 
   <div id="launch-overlay" aria-hidden="true"></div>

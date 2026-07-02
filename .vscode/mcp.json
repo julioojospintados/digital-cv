@@ -52,7 +52,6 @@
     // Attivare per decisioni architetturali, copy complesso, UX analysis
     // Installato globalmente: npm i -g @modelcontextprotocol/server-sequential-thinking
     "sequential-thinking": {
-      "type": "stdio",
       "command": "cmd",
       "args": [
         "/c",

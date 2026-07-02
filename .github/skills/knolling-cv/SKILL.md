@@ -32,10 +32,10 @@ Questo progetto ha 4 skill specializzate. Carica quella piu pertinente alla rich
 
 | Mode | Accent | Focus |
 |---|---|---|
-| tech | Cyan `rgba(0,255,200,1)` | Architetture, codice, AI |
-| creative | Arancione `rgba(255,107,53,1)` | Storytelling, estetica, fotografia |
-| human | Oro `rgba(240,200,127,1)` | Impatto, relazione, autonomia strategica |
-| management | Viola `rgba(180,100,255,1)` | Metodo, Agile, PMI, consulenza strategica |
+| tech (Software Developer) | Cyan `rgba(0,255,200,1)` | Architetture, codice, AI |
+| creative (Web & UX Designer) | Arancione `rgba(255,107,53,1)` | Storytelling, estetica, fotografia |
+| human (AI & Digital Specialist) | Oro `rgba(240,200,127,1)` | Impatto, relazione, autonomia strategica |
+| management (Project Manager) | Viola `rgba(180,100,255,1)` | Metodo, Agile, PMI, consulenza strategica |
 
 Il mode cambia **solo l'enfasi visiva** — mai il template, mai la struttura.
 Lo sfondo è **sempre ottanio** rgba(8,73,67,1). Mai hardcodare colori.

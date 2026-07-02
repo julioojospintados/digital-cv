@@ -1,27 +1,29 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import { cvData } from '@cv-data';
-import '../styles/cv-page.css';
-import ExpCard     from '../components/cards/ExpCard.astro';
-import AiCard      from '../components/cards/AiCard.astro';
-import ProjectCard from '../components/cards/ProjectCard.astro';
-import SkillSquare from '../components/cards/SkillSquare.astro';
-import SoftItem    from '../components/cards/SoftItem.astro';
+import Layout from "../layouts/Layout.astro";
+import { cvData } from "@cv-data";
+import "../styles/cv-page.css";
+import ExpCard from "../components/cards/ExpCard.astro";
+import AiCard from "../components/cards/AiCard.astro";
+import ProjectCard from "../components/cards/ProjectCard.astro";
+import SkillSquare from "../components/cards/SkillSquare.astro";
+import SoftItem from "../components/cards/SoftItem.astro";
 
 export function getStaticPaths() {
   return [
-    { params: { mode: 'tech' } },
-    { params: { mode: 'creative' } },
-    { params: { mode: 'human' } },
-    { params: { mode: 'management' } },
+    { params: { mode: "tech" } },
+    { params: { mode: "creative" } },
+    { params: { mode: "human" } },
+    { params: { mode: "management" } },
   ];
 }
 
-const { mode } = Astro.params as { mode: 'tech' | 'creative' | 'human' | 'management' };
+const { mode } = Astro.params as {
+  mode: "tech" | "creative" | "human" | "management";
+};
 
 type SkillSquareSource = {
   name: string;
-  domain?: 'tech' | 'human' | 'creative' | 'management' | 'ai';
+  domain?: "tech" | "human" | "creative" | "management" | "ai";
   level?: string;
   weight?: number;
   mastery?: number;
@@ -29,52 +31,88 @@ type SkillSquareSource = {
 
 // ── Skill mode-tag sets ────────────────────────────────────────────────────
 const TECH_SKILL_SET = new Set([
-  'Angular', 'HTML5', 'CSS / SCSS', 'TypeScript', 'JavaScript', 'Lit',
-  'RXJS', 'NGRX', 'WebComponents', 'React', 'Git', 'Bootstrap',
-  'Material Design', 'GraphQL', 'SQL', 'Jest', 'Node.js', 'REST API', 'Spring', 'JSF',
-  'MCP Protocol', 'Prompt Engineering', 'GSAP', 'Astro', 'Hono',
+  "Angular",
+  "HTML5",
+  "CSS / SCSS",
+  "TypeScript",
+  "JavaScript",
+  "Lit",
+  "RXJS",
+  "NGRX",
+  "WebComponents",
+  "React",
+  "Git",
+  "Bootstrap",
+  "Material Design",
+  "GraphQL",
+  "SQL",
+  "Jest",
+  "Node.js",
+  "REST API",
+  "Spring",
+  "JSF",
+  "MCP Protocol",
+  "Prompt Engineering",
+  "GSAP",
+  "Astro",
+  "Hono",
 ]);
 const CREATIVE_SKILL_SET = new Set([
-  'Figma', 'SEO', 'SEM', 'UX Research', 'Wireframing', 'Video editing',
-  'Wordpress', 'Adobe Suite', 'Typography',
+  "Figma",
+  "SEO",
+  "SEM",
+  "UX Research",
+  "Wireframing",
+  "Video editing",
+  "Wordpress",
+  "Adobe Suite",
+  "Typography",
 ]);
-const DUAL_SKILL_SET = new Set(['Accessibility / WCAG', 'UX Research', 'Wireframing', 'Figma']);
+const DUAL_SKILL_SET = new Set([
+  "Accessibility / WCAG",
+  "UX Research",
+  "Wireframing",
+  "Figma",
+]);
 
 function deriveSkillLevel(mastery = 65): string {
-  if (mastery >= 85) return 'Esperto';
-  if (mastery >= 70) return 'Avanzato';
-  if (mastery >= 50) return 'Intermedio';
-  return 'Base';
+  if (mastery >= 85) return "Esperto";
+  if (mastery >= 70) return "Avanzato";
+  if (mastery >= 50) return "Intermedio";
+  return "Base";
 }
 
 function skillModeTags(skill: SkillSquareSource): string {
   const tags = new Set<string>();
 
   if (skill.domain) {
-    tags.add(skill.domain === 'ai' ? 'tech' : skill.domain);
+    tags.add(skill.domain === "ai" ? "tech" : skill.domain);
   }
 
   if (TECH_SKILL_SET.has(skill.name)) {
-    tags.add('tech');
+    tags.add("tech");
   }
 
   if (CREATIVE_SKILL_SET.has(skill.name) || DUAL_SKILL_SET.has(skill.name)) {
-    tags.add('creative');
+    tags.add("creative");
   }
 
   if (tags.size === 0) {
-    tags.add('tech');
-    tags.add('creative');
-    tags.add('human');
-    tags.add('management');
+    tags.add("tech");
+    tags.add("creative");
+    tags.add("human");
+    tags.add("management");
   }
 
-  return Array.from(tags).join(' ');
+  return Array.from(tags).join(" ");
 }
 
 // ── Skill Grid ─────────────────────────────────────────────────────────────
 const LEVEL_BORDERS: Record<string, number> = {
-  'Base': 1, 'Intermedio': 2, 'Avanzato': 3, 'Esperto': 4,
+  Base: 1,
+  Intermedio: 2,
+  Avanzato: 3,
+  Esperto: 4,
 };
 function toSkillSquare(skill: SkillSquareSource) {
   const level = skill.level ?? deriveSkillLevel(skill.mastery);
@@ -82,27 +120,32 @@ function toSkillSquare(skill: SkillSquareSource) {
     name: skill.name,
     level,
     borderPx: LEVEL_BORDERS[level] ?? 1,
-    isGlow: level === 'Avanzato' || level === 'Esperto',
+    isGlow: level === "Avanzato" || level === "Esperto",
     modeTags: skillModeTags(skill),
     weight: skill.weight ?? 1,
   };
 }
 
 function isActiveSkill(modeTags: string): boolean {
-  const tags = modeTags.split(' ');
-  return tags.includes(mode) || (mode === 'tech' && tags.includes('ai'));
+  const tags = modeTags.split(" ");
+  return tags.includes(mode) || (mode === "tech" && tags.includes("ai"));
 }
 
 const skillSquares = [
   ...cvData.technicalSkills.map((skill) => toSkillSquare(skill)),
   ...cvData.softSkills
-    .filter((skill) => skill.domain === 'human' || skill.domain === 'management')
+    .filter(
+      (skill) => skill.domain === "human" || skill.domain === "management",
+    )
     .map((skill) => toSkillSquare(skill)),
   ...cvData.transversalSkills
-    .filter((skill) => skill.domain === 'human' || skill.domain === 'management')
+    .filter(
+      (skill) => skill.domain === "human" || skill.domain === "management",
+    )
     .map((skill) => toSkillSquare(skill)),
 ].sort((a, b) => {
-  const activeDelta = Number(isActiveSkill(b.modeTags)) - Number(isActiveSkill(a.modeTags));
+  const activeDelta =
+    Number(isActiveSkill(b.modeTags)) - Number(isActiveSkill(a.modeTags));
   if (activeDelta !== 0) return activeDelta;
 
   const areaA = (a.weight ?? 1) * (LEVEL_BORDERS[a.level] ?? 1);
@@ -113,80 +156,92 @@ const skillSquares = [
 });
 
 const EXP_MODE_TAGS = [
-  'tech management',       // 0 — Progetto Interno — Gestionale PMI
-  'tech',                   // 1 — Digital CV AI-Augmented
-  'tech management',        // 2 — ALTEN Italia (Angular/WebComponents enterprise)
-  'creative human',         // 3 — Music Agency
-  'creative',               // 4 — Freelance Videomaker
-  'tech',                    // 5 — ForgeLab (React/Covid dashboard)
-  'tech management',        // 6 — Consoft (Angular gestionali)
-  'tech management',        // 7 — Satispay
-  'human creative',         // 8 — Festival ed eventi culturali
-  'creative human',         // 9 — Freelance Fotografo
-  'creative human',         // 10 — Corriere di Chieri
-  'creative human',         // 11 — Artiversum
-  'creative',               // 12 — FreeGinevro / Grafico Pubblicitario
-  'human',                  // 13 — Gruppo Mondadori
-  'human creative',         // 14 — None Teatro
-  'human creative',         // 15 — B-Teatro
-  'human',                  // 16 — Bestar Hotel
-  'human',                  // 17 — UCI Cinemas
-  'human',                  // 18 — Starbucks Coffee
-  'creative human',         // 19 — Sogni Animazione
-  'human management',       // 20 — Metamorfosi / Fun Factory
-  'human',                  // 21 — Caveja srl
+  "tech management", // 0 — Progetto Interno — Gestionale PMI
+  "tech", // 1 — Digital CV AI-Augmented
+  "tech management", // 2 — ALTEN Italia (Angular/WebComponents enterprise)
+  "creative human", // 3 — Music Agency
+  "creative", // 4 — Freelance Videomaker
+  "tech", // 5 — ForgeLab (React/Covid dashboard)
+  "tech management", // 6 — Consoft (Angular gestionali)
+  "tech management", // 7 — Satispay
+  "human creative", // 8 — Festival ed eventi culturali
+  "creative human", // 9 — Freelance Fotografo
+  "creative human", // 10 — Corriere di Chieri
+  "creative human", // 11 — Artiversum
+  "creative", // 12 — FreeGinevro / Grafico Pubblicitario
+  "human", // 13 — Gruppo Mondadori
+  "human creative", // 14 — None Teatro
+  "human creative", // 15 — B-Teatro
+  "human", // 16 — Bestar Hotel
+  "human", // 17 — UCI Cinemas
+  "human", // 18 — Starbucks Coffee
+  "creative human", // 19 — Sogni Animazione
+  "human management", // 20 — Metamorfosi / Fun Factory
+  "human", // 21 — Caveja srl
 ];
 
 const featuredExpData = cvData.experience.map((exp, i) => ({
   company: exp.company,
   role: exp.role,
   startYear: exp.startDate.substring(0, 4),
-  endYear: exp.endDate === 'present' ? 'oggi' : exp.endDate.substring(0, 4),
-  location: exp.location ?? '',
+  endYear: exp.endDate === "present" ? "oggi" : exp.endDate.substring(0, 4),
+  location: exp.location ?? "",
   remote: exp.remote ?? false,
   description: exp.description,
   highlights: exp.highlights ?? [],
   skills: exp.skills ?? [],
-  modeTags: EXP_MODE_TAGS[i] ?? 'tech creative human',
-  aiAugmented: !!(exp.tags?.includes('ai-orchestration') ||
-    exp.skills?.some(s => ['MCP Protocol','Prompt Engineering','GitHub Copilot','Claude','Cursor','AI Orchestration','MCP'].includes(s))),
+  modeTags: EXP_MODE_TAGS[i] ?? "tech creative human",
+  aiAugmented: !!(
+    exp.tags?.includes("ai-orchestration") ||
+    exp.skills?.some((s) =>
+      [
+        "MCP Protocol",
+        "Prompt Engineering",
+        "GitHub Copilot",
+        "Claude",
+        "Cursor",
+        "AI Orchestration",
+        "MCP",
+      ].includes(s),
+    )
+  ),
 }));
 
 // ── Experience clusters ────────────────────────────────────────────────────
 const EXP_CLUSTER_DEFS = [
   {
-    key: 'tech',
-    label: 'Sviluppo Software & AI',
-    tags: 'tech management',
-    openForModes: ['tech', 'management'],
+    key: "tech",
+    label: "Sviluppo Software & AI",
+    tags: "tech management",
+    openForModes: ["tech", "management"],
     indices: [0, 1, 2, 5, 6, 7],
   },
   {
-    key: 'creative',
-    label: 'Design & Comunicazione',
-    tags: 'creative',
-    openForModes: ['creative'],
+    key: "creative",
+    label: "Design & Comunicazione",
+    tags: "creative",
+    openForModes: ["creative"],
     indices: [3, 4, 9, 10, 11, 12],
   },
   {
-    key: 'human',
-    label: 'Facilitazione & Cultura',
-    tags: 'human management',
-    openForModes: ['human', 'management'],
+    key: "human",
+    label: "Facilitazione & Cultura",
+    tags: "human management",
+    openForModes: ["human", "management"],
     indices: [8, 13, 20, 21],
   },
   {
-    key: 'roots',
-    label: 'Radici',
-    tags: 'human creative',
-    openForModes: ['human', 'creative'],
+    key: "roots",
+    label: "Radici",
+    tags: "human creative",
+    openForModes: ["human", "creative"],
     indices: [14, 15, 16, 17, 18, 19],
   },
 ];
 
 const FEATURED_N = 3;
-const expClusters = EXP_CLUSTER_DEFS.map(cluster => {
-  const items = cluster.indices.map(i => featuredExpData[i]).filter(Boolean);
+const expClusters = EXP_CLUSTER_DEFS.map((cluster) => {
+  const items = cluster.indices.map((i) => featuredExpData[i]).filter(Boolean);
   return {
     ...cluster,
     isDefaultOpen: cluster.openForModes.includes(mode),
@@ -197,392 +252,586 @@ const expClusters = EXP_CLUSTER_DEFS.map(cluster => {
 });
 
 const skillViewLabels = {
-  graph: 'Grafico',
-  cards: 'Card',
+  graph: "Grafico",
+  cards: "Card",
 } as const;
 
 const SOFT_MODE_TAGS = [
-  'human creative',
-  'creative human',
-  'human',
-  'human management',
-  'tech human management',
-  'tech human management',
-  'human management',
-  'creative',
-  'tech creative human management',
+  "human creative",
+  "creative human",
+  "human",
+  "human management",
+  "tech human management",
+  "tech human management",
+  "human management",
+  "creative",
+  "tech creative human management",
 ];
 
 const softSkillsData = cvData.softSkills.map((skill, i) => ({
   name: skill.name,
-  description: skill.description ?? '',
-  modeTags: SOFT_MODE_TAGS[i] ?? 'tech creative human',
+  description: skill.description ?? "",
+  modeTags: SOFT_MODE_TAGS[i] ?? "tech creative human",
 }));
 
-const MONTHS_IT = ['Gen','Feb','Mar','Apr','Mag','Giu','Lug','Ago','Set','Ott','Nov','Dic'];
+const MONTHS_IT = [
+  "Gen",
+  "Feb",
+  "Mar",
+  "Apr",
+  "Mag",
+  "Giu",
+  "Lug",
+  "Ago",
+  "Set",
+  "Ott",
+  "Nov",
+  "Dic",
+];
 function isoToLabel(iso: string): string {
-  const [y, m] = iso.split('-');
+  const [y, m] = iso.split("-");
   return m ? `${MONTHS_IT[parseInt(m, 10) - 1]} ${y}` : y;
 }
 const timelineItems = [
-  ...cvData.education.map(e => ({
+  ...cvData.education.map((e) => ({
     date: e.endDate,
     dateLabel: isoToLabel(e.endDate),
-    title: `${e.degree}${e.field ? ` — ${e.field}` : ''}`,
+    title: `${e.degree}${e.field ? ` — ${e.field}` : ""}`,
     institution: e.institution,
-    type: 'edu' as const,
+    type: "edu" as const,
     inProgress: false,
     credentialId: undefined as string | undefined,
   })),
-  ...cvData.certifications.map(c => ({
+  ...cvData.certifications.map((c) => ({
     date: c.date,
     dateLabel: isoToLabel(c.date),
     title: c.name,
     institution: c.issuer,
-    type: 'cert' as const,
+    type: "cert" as const,
     inProgress: c.inProgress ?? false,
     credentialId: c.credentialId,
   })),
 ].sort((a, b) => b.date.localeCompare(a.date));
 
 const CEFR_STEPS: Record<string, number> = {
-  'Madrelingua': 6, 'Native': 6,
-  'C2': 6, 'C1': 5, 'B2': 4, 'B1': 3, 'A2': 2, 'A1': 1,
+  Madrelingua: 6,
+  Native: 6,
+  C2: 6,
+  C1: 5,
+  B2: 4,
+  B1: 3,
+  A2: 2,
+  A1: 1,
 };
-const langsWithSteps = cvData.languages.map(l => ({
+const langsWithSteps = cvData.languages.map((l) => ({
   ...l,
   steps: CEFR_STEPS[l.level] ?? 3,
 }));
 
 const PROJECT_TAGS_MAP: Record<string, string> = {
-  'Cinema': 'creative',
-  'React': 'tech',
-  'Lit': 'tech',
-  'WebComponents': 'tech',
-  'Event management': 'human',
-  'Poesia': 'creative human',
-  'Creativity': 'creative',
+  Cinema: "creative",
+  React: "tech",
+  Lit: "tech",
+  WebComponents: "tech",
+  "Event management": "human",
+  Poesia: "creative human",
+  Creativity: "creative",
 };
 
-const projectsData = cvData.projects.slice(0, 6).map(p => {
+const projectsData = cvData.projects.slice(0, 6).map((p) => {
   const tags = p.tags ?? [];
   const modes = new Set<string>();
-  tags.forEach(t => {
+  tags.forEach((t) => {
     const mapped = PROJECT_TAGS_MAP[t];
-    if (mapped) mapped.split(' ').forEach(m => modes.add(m));
+    if (mapped) mapped.split(" ").forEach((m) => modes.add(m));
   });
-  const modeTags = modes.size > 0 ? Array.from(modes).join(' ') : 'tech creative human';
+  const modeTags =
+    modes.size > 0 ? Array.from(modes).join(" ") : "tech creative human";
   return { name: p.name, description: p.description, tags, modeTags };
 });
 
-const modeLabel = mode.charAt(0).toUpperCase() + mode.slice(1);
+const MODE_LABELS: Record<string, string> = {
+  tech: 'Software Developer',
+  creative: 'Web & UX Designer',
+  management: 'Project Manager',
+  human: 'AI & Digital Specialist',
+};
+const modeLabel = MODE_LABELS[mode] ?? mode;
 
 const modeDescriptions: Record<string, string> = {
-  tech: 'Senior Frontend Developer con 6+ anni su Angular, Lit, TypeScript e architetture MCP. Specializzato in AI workflow, automazione e sistemi enterprise ad alto traffico.',
-  creative: 'UX/UI Designer e Creative Technologist certificato IBM. Progetto esperienze digitali che uniscono estetica, usabilità e impatto sul brand per PMI.',
-  human: 'Consulente per l\'Innovazione Digitale con background multidisciplinare: sviluppo software, design, teatro e comunicazione. Orientato all\'impatto reale sulle persone e sui processi.',
-  management: 'Partner Tecnico Agile per PMI. Sprint brevi, backlog orientato al business, autonomia del team. Tecnologia + Design + Metodo in ogni ingaggio.',
+  tech: "Senior Frontend Developer con 6+ anni su Angular, Lit, TypeScript e architetture MCP. Specializzato in AI workflow, automazione e sistemi enterprise ad alto traffico.",
+  creative:
+    "UX/UI Designer e Creative Technologist certificato IBM. Progetto esperienze digitali che uniscono estetica, usabilità e impatto sul brand per PMI.",
+  human:
+    "Consulente per l'Innovazione Digitale con background multidisciplinare: sviluppo software, design, teatro e comunicazione. Orientato all'impatto reale sulle persone e sui processi.",
+  management:
+    "Partner Tecnico Agile per PMI. Sprint brevi, backlog orientato al business, autonomia del team. Tecnologia + Design + Metodo in ogni ingaggio.",
 };
-const modeDescription = modeDescriptions[mode] ?? 'CV interattivo di Giulio Occhipinti: Consulente per l\'Innovazione Digitale & Partner Tecnico per PMI.';
+const modeDescription =
+  modeDescriptions[mode] ??
+  "CV interattivo di Giulio Occhipinti: Consulente per l'Innovazione Digitale & Partner Tecnico per PMI.";
 ---
 
-<Layout title={`CV ${modeLabel} — Giulio Occhipinti`} description={modeDescription} mode={mode}>
-
+<Layout
+  title={`CV ${modeLabel} — Giulio Occhipinti`}
+  description={modeDescription}
+  mode={mode}
+>
   <!-- ────────────────────────────────────────────────────────── NAV -->
   <nav class="cv-nav" id="cv-nav" aria-label="Navigazione principale">
     <go-logo></go-logo>
-    <div class="mode-buttons" role="group" aria-label="Scegli modalità di visualizzazione">
-      <button class:list={["mode-btn", { "is-active": mode === "tech" }]} data-nav-mode="tech" type="button" aria-pressed={mode === 'tech' ? 'true' : 'false'}>
-        <span class="mode-btn__abbr" aria-hidden="true">TC</span>
-        <span class="mode-btn__label">Tech</span>
+    <div
+      class="mode-buttons"
+      role="group"
+      aria-label="Scegli modalità di visualizzazione"
+    >
+      <button
+        class:list={["mode-btn", { "is-active": mode === "tech" }]}
+        data-nav-mode="tech"
+        type="button"
+        aria-pressed={mode === "tech" ? "true" : "false"}
+      >
+        <span class="mode-btn__abbr" aria-hidden="true">SD</span>
+        <span class="mode-btn__label">Software Dev</span>
       </button>
-      <button class:list={["mode-btn", { "is-active": mode === "creative" }]} data-nav-mode="creative" type="button" aria-pressed={mode === 'creative' ? 'true' : 'false'}>
-        <span class="mode-btn__abbr" aria-hidden="true">CR</span>
-        <span class="mode-btn__label">Creative</span>
+      <button
+        class:list={["mode-btn", { "is-active": mode === "creative" }]}
+        data-nav-mode="creative"
+        type="button"
+        aria-pressed={mode === "creative" ? "true" : "false"}
+      >
+        <span class="mode-btn__abbr" aria-hidden="true">WD</span>
+        <span class="mode-btn__label">Web &amp; UX</span>
       </button>
-      <button class:list={["mode-btn", { "is-active": mode === "management" }]} data-nav-mode="management" type="button" aria-pressed={mode === 'management' ? 'true' : 'false'}>
-        <span class="mode-btn__abbr" aria-hidden="true">MG</span>
-        <span class="mode-btn__label">Management</span>
+      <button
+        class:list={["mode-btn", { "is-active": mode === "management" }]}
+        data-nav-mode="management"
+        type="button"
+        aria-pressed={mode === "management" ? "true" : "false"}
+      >
+        <span class="mode-btn__abbr" aria-hidden="true">PM</span>
+        <span class="mode-btn__label">Project Mgr</span>
       </button>
-      <button class:list={["mode-btn", { "is-active": mode === "human" }]} data-nav-mode="human" type="button" aria-pressed={mode === 'human' ? 'true' : 'false'}>
-        <span class="mode-btn__abbr" aria-hidden="true">HU</span>
-        <span class="mode-btn__label">Human</span>
+      <button
+        class:list={["mode-btn", { "is-active": mode === "human" }]}
+        data-nav-mode="human"
+        type="button"
+        aria-pressed={mode === "human" ? "true" : "false"}
+      >
+        <span class="mode-btn__abbr" aria-hidden="true">AI</span>
+        <span class="mode-btn__label">AI &amp; Digital</span>
       </button>
+    </div>
+    <!-- Mobile dropdown — sostituisce i 4 pulsanti su ≤640px -->
+    <div class="mode-dropdown" id="mode-dropdown">
+      <button
+        class="mode-dropdown__trigger"
+        id="mode-dropdown-btn"
+        type="button"
+        aria-haspopup="listbox"
+        aria-expanded="false"
+      >
+        <span class="mode-dropdown__label" id="mode-dropdown-label">
+          {mode === "tech" ? "Software Developer"
+            : mode === "creative" ? "Web &amp; UX Designer"
+            : mode === "management" ? "Project Manager"
+            : "AI &amp; Digital Specialist"}
+        </span>
+        <span class="mode-dropdown__chevron" aria-hidden="true">›</span>
+      </button>
+      <ul
+        class="mode-dropdown__list"
+        id="mode-dropdown-list"
+        role="listbox"
+        aria-labelledby="mode-dropdown-btn"
+      >
+        <li class:list={["mode-dropdown__option", { "is-selected": mode === "tech" }]} role="option" data-dropdown-mode="tech" tabindex="-1">Software Developer</li>
+        <li class:list={["mode-dropdown__option", { "is-selected": mode === "creative" }]} role="option" data-dropdown-mode="creative" tabindex="-1">Web &amp; UX Designer</li>
+        <li class:list={["mode-dropdown__option", { "is-selected": mode === "management" }]} role="option" data-dropdown-mode="management" tabindex="-1">Project Manager</li>
+        <li class:list={["mode-dropdown__option", { "is-selected": mode === "human" }]} role="option" data-dropdown-mode="human" tabindex="-1">AI &amp; Digital Specialist</li>
+      </ul>
     </div>
     <a href="/en/cv" class="cv-nav__lang" aria-label="English version">EN</a>
   </nav>
 
   <!-- ────────────────────────────────────────────────────────── MAIN -->
   <main class="cv-main" id="main-content">
-
     <!-- ── HERO ────────────────────────────────────────────────────── -->
     <section class="hero-section" id="hero">
-      <img class="bg-knoll bg-knoll--laptop" src="/knolling/laptop.png" aria-hidden="true" alt="">
+      <img
+        class="bg-knoll bg-knoll--laptop"
+        src="/knolling/laptop.png"
+        aria-hidden="true"
+        alt=""
+      />
       <h1 class="hero-name" id="hero-name" aria-label={cvData.personal.name}>
-        {cvData.personal.name.split('').map((char, i) => (
-          <span
-            class:list={['hero-char', { 'hero-char--go': i === 0 || i === 7 }, { 'hero-char--space': char === ' ' }]}
-          >{char === ' ' ? '\u00A0' : char}</span>
-        ))}
+        {
+          cvData.personal.name
+            .split("")
+            .map((char, i) => (
+              <span
+                class:list={[
+                  "hero-char",
+                  { "hero-char--go": i === 0 || i === 7 },
+                  { "hero-char--space": char === " " },
+                ]}
+              >
+                {char === " " ? "\u00A0" : char}
+              </span>
+            ))
+        }
       </h1>
       <p class="hero-title">{cvData.personal.title}</p>
       <p class="hero-summary">{cvData.personal.summary}</p>
 
       <div class="hero-footer">
         <div class="hero-socials">
-          {cvData.social.map(s => (
-            <a href={s.url} class="social-link" target="_blank" rel="noopener noreferrer" aria-label={`${s.platform}${s.label ? ` — ${s.label}` : ''} (apre in nuova scheda)`}>
-              {s.platform}
-            </a>
-          ))}
+          {
+            cvData.social.map((s) => (
+              <a
+                href={s.url}
+                class="social-link"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={`${s.platform}${s.label ? ` — ${s.label}` : ""} (apre in nuova scheda)`}
+              >
+                {s.platform}
+              </a>
+            ))
+          }
         </div>
         <div class="hero-langs">
-          {langsWithSteps.map(l => (
-            <span class="lang-chip">
-              <b>{l.name}</b>
-              <span class="lang-cefr" aria-label={l.level} title={l.level}>
-                {Array.from({ length: 6 }, (_, i) => (
-                  <span class:list={[
-                    'lang-dot',
-                    { 'lang-dot--filled': i < l.steps },
-                    { 'lang-dot--native': l.steps === 6 },
-                  ]}></span>
-                ))}
+          {
+            langsWithSteps.map((l) => (
+              <span class="lang-chip">
+                <b>{l.name}</b>
+                <span class="lang-cefr" aria-label={l.level} title={l.level}>
+                  {Array.from({ length: 6 }, (_, i) => (
+                    <span
+                      class:list={[
+                        "lang-dot",
+                        { "lang-dot--filled": i < l.steps },
+                        { "lang-dot--native": l.steps === 6 },
+                      ]}
+                    />
+                  ))}
+                </span>
               </span>
-            </span>
-          ))}
+            ))
+          }
         </div>
       </div>
     </section>
 
     <!-- ── SKILLS BENTO + FORCE NETWORK ─────────────────────────── -->
-    <section class="skills-section reveal delay-100" aria-label="Competenze tecniche">
-      <img class="bg-knoll bg-knoll--multitool" src="/knolling/multitool.png" aria-hidden="true" alt="">
+    <section
+      class="skills-section reveal delay-100"
+      aria-label="Competenze tecniche"
+    >
+      <img
+        class="bg-knoll bg-knoll--multitool"
+        src="/knolling/multitool.png"
+        aria-hidden="true"
+        alt=""
+      />
       <h2 class="section-title">
         <span>Skills</span>
-        <span class="section-subtitle">Force-directed network delle competenze - hover e drag per esplorare</span>
+        <span class="section-subtitle"
+          >Force-directed network delle competenze - hover e drag per esplorare</span
+        >
       </h2>
-      <h3 class="skills-sub-title">Competenze tecniche, management e human — livello &amp; glow proporzionale</h3>
-      <div class="skills-view-toggle" role="group" aria-label="Scegli vista competenze">
-        <button class="skills-view-btn is-active" type="button" data-skills-view-button="graph" aria-pressed="true">{skillViewLabels.graph}</button>
-        <button class="skills-view-btn" type="button" data-skills-view-button="cards" aria-pressed="false">{skillViewLabels.cards}</button>
+      <h3 class="skills-sub-title">
+        Competenze tecniche, management e human — livello &amp; glow
+        proporzionale
+      </h3>
+      <div
+        class="skills-view-toggle"
+        role="group"
+        aria-label="Scegli vista competenze"
+      >
+        <button
+          class="skills-view-btn is-active"
+          type="button"
+          data-skills-view-button="graph"
+          aria-pressed="true">{skillViewLabels.graph}</button
+        >
+        <button
+          class="skills-view-btn"
+          type="button"
+          data-skills-view-button="cards"
+          aria-pressed="false">{skillViewLabels.cards}</button
+        >
       </div>
       <div class="skills-stage" data-skills-view="graph">
         <div class="skills-stage__panel skills-stage__panel--graph">
           <skill-force-graph></skill-force-graph>
         </div>
         <div class="skills-stage__panel skills-stage__panel--cards">
-          <div class="skills-grid" role="list" aria-label="Competenze tecniche, creative e trasversali">
-            {skillSquares.map(skill => (
-              <SkillSquare {...skill} />
-            ))}
+          <div
+            class="skills-grid"
+            role="list"
+            aria-label="Competenze tecniche, creative e trasversali"
+          >
+            {skillSquares.map((skill) => <SkillSquare {...skill} />)}
           </div>
         </div>
       </div>
     </section>
 
     <!-- ── EXPERIENCE ─────────────────────────────────────────────── -->
-    <section class="exp-section reveal delay-200" aria-label="Esperienze lavorative">
-      <img class="bg-knoll bg-knoll--flashlight" src="/knolling/flashlight.webp" aria-hidden="true" alt="">
+    <section
+      class="exp-section reveal delay-200"
+      aria-label="Esperienze lavorative"
+    >
+      <img
+        class="bg-knoll bg-knoll--flashlight"
+        src="/knolling/flashlight.webp"
+        aria-hidden="true"
+        alt=""
+      />
       <h2 class="section-title">
         <span>Esperienze</span>
-        <span class="section-subtitle">{cvData.experience.length} ruoli in 5 paesi — espandi il cluster per esplorare</span>
+        <span class="section-subtitle"
+          >{cvData.experience.length} ruoli in 5 paesi — espandi il cluster per esplorare</span
+        >
       </h2>
       <div class="exp-clusters">
-        {expClusters.map(cluster => (
-          <div class="exp-cluster" data-cluster={cluster.key} {...(cluster.isDefaultOpen ? { 'data-open': '' } : {})}>
-            <button class="exp-cluster__header" type="button" aria-expanded={cluster.isDefaultOpen ? 'true' : 'false'} aria-controls={`cluster-body-${cluster.key}`}>
-              <span class="exp-cluster__name">{cluster.label}</span>
-              <div class="exp-cluster__meta">
-                {cluster.tags.split(' ').map(tag => (
-                  <span class="exp-cluster__tag-dot" data-tag={tag}></span>
-                ))}
-                <div class="exp-cluster__count"><span>{cluster.items.length}</span></div>
-              </div>
-              <span class="exp-cluster__chevron" aria-hidden="true">›</span>
-            </button>
-            <div class="exp-cluster__body" id={`cluster-body-${cluster.key}`}>
-              <div class="exp-grid exp-grid--featured">
-                {cluster.featured.map(exp => (
-                  <ExpCard {...exp} />
-                ))}
-              </div>
-              {cluster.extra.length > 0 && (
-                <div class="exp-drawer" id={`exp-drawer-${cluster.key}`} aria-hidden="true">
-                  <div class="exp-grid">
-                    {cluster.extra.map(exp => (
-                      <ExpCard {...exp} />
-                    ))}
+        {
+          expClusters.map((cluster) => (
+            <div
+              class="exp-cluster"
+              data-cluster={cluster.key}
+              {...(cluster.isDefaultOpen ? { "data-open": "" } : {})}
+            >
+              <button
+                class="exp-cluster__header"
+                type="button"
+                aria-expanded={cluster.isDefaultOpen ? "true" : "false"}
+                aria-controls={`cluster-body-${cluster.key}`}
+              >
+                <span class="exp-cluster__name">{cluster.label}</span>
+                <div class="exp-cluster__meta">
+                  {cluster.tags.split(" ").map((tag) => (
+                    <span class="exp-cluster__tag-dot" data-tag={tag} />
+                  ))}
+                  <div class="exp-cluster__count">
+                    <span>{cluster.items.length}</span>
                   </div>
                 </div>
+                <span class="exp-cluster__chevron" aria-hidden="true">
+                  ›
+                </span>
+              </button>
+              <div class="exp-cluster__body" id={`cluster-body-${cluster.key}`}>
+                <div class="exp-grid exp-grid--featured">
+                  {cluster.featured.map((exp) => (
+                    <ExpCard {...exp} />
+                  ))}
+                </div>
+                {cluster.extra.length > 0 && (
+                  <div
+                    class="exp-drawer"
+                    id={`exp-drawer-${cluster.key}`}
+                    aria-hidden="true"
+                  >
+                    <div class="exp-grid">
+                      {cluster.extra.map((exp) => (
+                        <ExpCard {...exp} />
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+              {cluster.extra.length > 0 && (
+                <button
+                  class="exp-deeper-btn"
+                  type="button"
+                  data-drawer={cluster.key}
+                  aria-expanded="false"
+                  aria-controls={`exp-drawer-${cluster.key}`}
+                >
+                  <span class="exp-deeper-btn__label" data-open-label="chiudi">
+                    GO deeper
+                  </span>
+                  <span class="exp-deeper-btn__arrow" aria-hidden="true">
+                    ↓
+                  </span>
+                </button>
               )}
             </div>
-            {cluster.extra.length > 0 && (
-              <button
-                class="exp-deeper-btn"
-                type="button"
-                data-drawer={cluster.key}
-                aria-expanded="false"
-                aria-controls={`exp-drawer-${cluster.key}`}
-              >
-                <span class="exp-deeper-btn__label" data-open-label="chiudi">GO deeper</span>
-                <span class="exp-deeper-btn__arrow" aria-hidden="true">↓</span>
-              </button>
-            )}
-          </div>
-        ))}
+          ))
+        }
       </div>
     </section>
 
     <!-- ── AI WORKFLOW ─────────────────────────────────────────────── -->
-    <section class="ai-section reveal delay-300" id="ai-section" aria-label="AI-Enhanced Workflow">
-      <img class="bg-knoll bg-knoll--chess" src="/knolling/chess.png" aria-hidden="true" alt="">
-        <span>AI-Enhanced Workflow</span>
-        <span class="section-subtitle">Come l'AI moltiplica l'output senza sostituire il giudizio</span>
-        <span class="ai-title__clip" aria-hidden="true">
-          <span class="ai-title__clip-pin"></span>
-          <span class="ai-title__clip-text">⚡ AI</span>
-        </span>
-      </h2>
-      <div class="ai-grid">
-        {cvData.aiWorkflow.map(item => (
-          <AiCard {...item} />
-        ))}
-      </div>
+    <section
+      class="ai-section reveal delay-300"
+      id="ai-section"
+      aria-label="AI-Enhanced Workflow"
+    >
+      <img
+        class="bg-knoll bg-knoll--chess"
+        src="/knolling/chess.png"
+        aria-hidden="true"
+        alt=""
+      />
+      <span>AI-Enhanced Workflow</span>
+      <span class="section-subtitle"
+        >Come l'AI moltiplica l'output senza sostituire il giudizio</span
+      >
+      <span class="ai-title__clip" aria-hidden="true">
+        <span class="ai-title__clip-pin"></span>
+        <span class="ai-title__clip-text">⚡ AI</span>
+      </span>
     </section>
-
-    <!-- ── SOFT SKILLS + METODOLOGIA ───────────────────────────────── -->
-    <section class="soft-section reveal" aria-label="Soft skills e metodologia">
-      <img class="bg-knoll bg-knoll--plant" src="/knolling/plant.png" aria-hidden="true" alt="">
-        <div class="soft-block">
-          <h2 class="section-title"><span>Soft Skills</span></h2>
-          <ul class="soft-list">
-            {softSkillsData.map(skill => (
-              <SoftItem name={skill.name} description={skill.description} modeTags={skill.modeTags} variant="soft" />
-            ))}
-          </ul>
-        </div>
-        <div class="method-block">
-          <h2 class="section-title"><span>Mindset</span></h2>
-          <ul class="method-list">
-            {cvData.methodology.map(m => (
-              <SoftItem name={m.name} description={m.description ?? ''} modeTags="tech creative human management" variant="method" />
-            ))}
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <!-- ── GROWTH AREAS ─────────────────────────────────────────────── -->
-    {cvData.growthAreas.length > 0 && (
-      <section class="growth-section reveal" aria-label="Aree di crescita consapevole">
-        <h2 class="section-title">
-          <span>Consapevolezza</span>
-          <span class="section-subtitle">Aree in evoluzione reincorniciate come risorse</span>
-        </h2>
-        <div class="growth-grid">
-          {cvData.growthAreas.map(area => (
-            <article class="growth-card cv-card" data-tags="tech creative human management">
-              <p class="growth-card__label">Area in evoluzione</p>
-              <p class="growth-card__name">{area.name}</p>
-              <p class="growth-card__reframe">{area.reframe}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-    )}
-
-    <!-- ── PROJECTS ────────────────────────────────────────────────── -->
-    <section class="projects-section reveal" aria-label="Progetti personali">
-      <img class="bg-knoll bg-knoll--compass" src="/knolling/compass.png" aria-hidden="true" alt="">
-      <h2 class="section-title"><span>Progetti</span></h2>
-      <div class="projects-grid">
-        {projectsData.map(project => (
-          <ProjectCard {...project} />
-        ))}
-      </div>
-    </section>
-    <!-- ── SOCIAL IMPACT ────────────────────────────────────────────────── -->
-    {cvData.socialImpact.length > 0 && (
-      <section class="social-impact-section reveal" aria-label="Impatto sociale">
-        <h2 class="section-title">
-          <span>Impatto</span>
-          <span class="section-subtitle">Oltre il codice — azioni concrete nel mondo reale</span>
-        </h2>
-        <div class="social-impact-grid">
-          {cvData.socialImpact.map(item => (
-            <article class="social-impact-card cv-card" data-tags="human management">
-              <p class="social-impact-card__label">Impatto</p>
-              <p class="social-impact-card__name">{item.name}</p>
-              {item.tags && item.tags.length > 0 && (
-                <div class="social-impact-card__tags">
-                  {item.tags.map(tag => (
-                    <span class="social-impact-card__tag">{tag}</span>
-                  ))}
-                </div>
-              )}
-            </article>
-          ))}
-        </div>
-      </section>
-    )}
-    <!-- ── FORMAZIONE & CERTIFICAZIONI ────────────────────────────── -->
-    <section class="edu-section reveal" aria-label="Formazione e certificazioni">
-      <div class="edu-header">
-        <h2 class="section-title">
-          <span>Formazione &amp; Certificazioni</span>
-          <span class="section-subtitle">cronologia completamento</span>
-        </h2>
-        <div class="timeline-legend" aria-hidden="true">
-          <span class="tl-legend-chip tl-legend-chip--cert">Certificazione</span>
-          <span class="tl-legend-chip tl-legend-chip--edu">Formazione</span>
-        </div>
-      </div>
-      <ol class="timeline" role="list">
-        {timelineItems.map(item => (
-          <li class="tl-item" data-type={item.type}>
-            <time class="tl-date" datetime={item.date} title={item.date}>{item.dateLabel}</time>
-            <span class="tl-dot-col" aria-hidden="true">
-              <span class="tl-dot"></span>
-            </span>
-            <div class="tl-body">
-              <p class="tl-title">
-                {item.title}
-                {item.inProgress && <span class="tl-wip">in corso</span>}
-              </p>
-              <p class="tl-inst">{item.institution}</p>
-              {item.credentialId && (
-                <p class="tl-cred">ID: {item.credentialId}</p>
-              )}
-            </div>
-          </li>
-        ))}
-      </ol>
-    </section>
-
+    <div class="ai-grid">
+      {cvData.aiWorkflow.map((item) => <AiCard {...item} />)}
+    </div>
   </main>
 
-  <!-- ────────────────────────────────────────────────────────── FOOTER -->
-  <footer class="cv-footer">
-    {cvData.interests.length > 0 && (
+  <!-- ── SOFT SKILLS + METODOLOGIA ───────────────────────────────── -->
+  <section class="soft-section reveal" aria-label="Soft skills e metodologia">
+    <img
+      class="bg-knoll bg-knoll--plant"
+      src="/knolling/plant.png"
+      aria-hidden="true"
+      alt=""
+    />
+    <div class="soft-block">
+      <h2 class="section-title"><span>Soft Skills</span></h2>
+      <ul class="soft-list">
+        {
+          softSkillsData.map((skill) => (
+            <SoftItem
+              name={skill.name}
+              description={skill.description}
+              modeTags={skill.modeTags}
+              variant="soft"
+            />
+          ))
+        }
+      </ul>
+    </div>
+    <div class="method-block">
+      <h2 class="section-title"><span>Mindset</span></h2>
+      <ul class="method-list">
+        {
+          cvData.methodology.map((m) => (
+            <SoftItem
+              name={m.name}
+              description={m.description ?? ""}
+              modeTags="tech creative human management"
+              variant="method"
+            />
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+</Layout>
+
+<!-- ── GROWTH AREAS ─────────────────────────────────────────────── -->
+{
+  cvData.growthAreas.length > 0 && (
+    <section
+      class="growth-section reveal"
+      aria-label="Aree di crescita consapevole"
+    >
+      <h2 class="section-title">
+        <span>Consapevolezza</span>
+        <span class="section-subtitle">
+          Aree in evoluzione reincorniciate come risorse
+        </span>
+      </h2>
+      <div class="growth-grid">
+        {cvData.growthAreas.map((area) => (
+          <article
+            class="growth-card cv-card"
+            data-tags="tech creative human management"
+          >
+            <p class="growth-card__label">Area in evoluzione</p>
+            <p class="growth-card__name">{area.name}</p>
+            <p class="growth-card__reframe">{area.reframe}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+  )
+}
+
+<!-- ── PROJECTS ────────────────────────────────────────────────── -->
+<section class="projects-section reveal" aria-label="Progetti personali">
+  <img
+    class="bg-knoll bg-knoll--compass"
+    src="/knolling/compass.png"
+    aria-hidden="true"
+    alt=""
+  />
+  <h2 class="section-title"><span>Progetti</span></h2>
+  <div class="projects-grid">
+    {projectsData.map((project) => <ProjectCard {...project} />)}
+  </div>
+</section>
+<!-- ── FORMAZIONE & CERTIFICAZIONI ────────────────────────────── -->
+<section class="edu-section reveal" aria-label="Formazione e certificazioni">
+  <div class="edu-header">
+    <h2 class="section-title">
+      <span>Formazione &amp; Certificazioni</span>
+      <span class="section-subtitle">cronologia completamento</span>
+    </h2>
+    <div class="timeline-legend" aria-hidden="true">
+      <span class="tl-legend-chip tl-legend-chip--cert">Certificazione</span>
+      <span class="tl-legend-chip tl-legend-chip--edu">Formazione</span>
+    </div>
+  </div>
+  <ol class="timeline" role="list">
+    {
+      timelineItems.map((item) => (
+        <li class="tl-item" data-type={item.type}>
+          <time class="tl-date" datetime={item.date} title={item.date}>
+            {item.dateLabel}
+          </time>
+          <span class="tl-dot-col" aria-hidden="true">
+            <span class="tl-dot" />
+          </span>
+          <div class="tl-body">
+            <p class="tl-title">
+              {item.title}
+              {item.inProgress && <span class="tl-wip">in corso</span>}
+            </p>
+            <p class="tl-inst">{item.institution}</p>
+            {item.credentialId && (
+              <p class="tl-cred">ID: {item.credentialId}</p>
+            )}
+          </div>
+        </li>
+      ))
+    }
+  </ol>
+</section>
+
+<!-- ────────────────────────────────────────────────────────── FOOTER -->
+<footer class="cv-footer">
+  {
+    cvData.interests.length > 0 && (
       <div class="interests-strip">
         <p class="interests-label">Interessi</p>
         <ul class="interests-chips" role="list">
-          {cvData.interests.map(interest => (
+          {cvData.interests.map((interest) => (
             <li class="interest-chip">{interest}</li>
           ))}
         </ul>
       </div>
-    )}
-    <p class="cv-footer__credit">
-      Giulio Occhipinti · <a href="mailto:giulio.occhipinti.g@gmail.com">giulio.occhipinti.g@gmail.com</a>
-    </p>
-  </footer>
-
-
-</Layout>
-
+    )
+  }
+  <p class="cv-footer__credit">
+    Giulio Occhipinti · <a href="mailto:giulio.occhipinti.g@gmail.com"
+      >giulio.occhipinti.g@gmail.com</a
+    >
+  </p>
+</footer>
 
 <script>
-  import '../scripts/cv-init.ts';
+  import "../scripts/cv-init.ts";
 </script>

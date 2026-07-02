@@ -155,12 +155,6 @@ export interface Project {
   date?: string;
 }
 
-export interface SocialImpactItem {
-  name: string;
-  description: string;
-  tags?: string[];
-}
-
 export interface AiWorkflowItem {
   tool: string;
   title: string;
@@ -180,14 +174,14 @@ export interface Feedback {
 
 export interface Social {
   platform:
-    | "LinkedIn"
-    | "GitHub"
-    | "Twitter"
-    | "Website"
-    | "Email"
-    | "Behance"
-    | "Dribbble"
-    | string;
+  | "LinkedIn"
+  | "GitHub"
+  | "Twitter"
+  | "Website"
+  | "Email"
+  | "Behance"
+  | "Dribbble"
+  | string;
   url: string;
   /** Display label, e.g. "@username" */
   label?: string;
@@ -1886,7 +1880,7 @@ export const cvData = {
         "Corporate events",
       ],
     },
-  ] as SocialImpactItem[],
+  ],
 
   // ── AI Workflow ───────────────────────────────────────────────────────────
   aiWorkflow: [

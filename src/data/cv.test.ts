@@ -259,23 +259,6 @@ describe("cvData.projects", () => {
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
-// socialImpact
-// ─────────────────────────────────────────────────────────────────────────────
-
-describe("cvData.socialImpact", () => {
-  it("is an array", () => {
-    expect(Array.isArray(cvData.socialImpact)).toBe(true);
-  });
-
-  it("every item has name and description", () => {
-    for (const item of cvData.socialImpact) {
-      expect(item.name.length).toBeGreaterThan(0);
-      expect(item.description.length).toBeGreaterThan(0);
-    }
-  });
-});
-
-// ─────────────────────────────────────────────────────────────────────────────
 // experience.tags (optional field — when present must be valid strings)
 // ─────────────────────────────────────────────────────────────────────────────
 

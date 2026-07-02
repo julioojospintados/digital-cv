@@ -192,10 +192,17 @@ const jsonLd = {
         el.addEventListener("mouseenter", () => {
           dot.classList.add("cursor--hover");
           ring.classList.add("cursor--hover");
+          // Passive card: mostra cursore speciale (freccia su + anello tratteggiato pulsante)
+          if ((el as HTMLElement).dataset?.state === "passive") {
+            dot.classList.add("cursor--passive-card");
+            ring.classList.add("cursor--passive-card");
+          }
         });
         el.addEventListener("mouseleave", () => {
           dot.classList.remove("cursor--hover");
           ring.classList.remove("cursor--hover");
+          dot.classList.remove("cursor--passive-card");
+          ring.classList.remove("cursor--passive-card");
         });
       });
 

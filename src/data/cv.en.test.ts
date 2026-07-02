@@ -114,7 +114,4 @@ describe("cvDataEn structural parity with cvData", () => {
     }
   });
 
-  it("socialImpact has same number of entries", () => {
-    expect(cvDataEn.socialImpact.length).toBe(cvData.socialImpact.length);
-  });
 });

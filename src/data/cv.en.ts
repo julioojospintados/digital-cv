@@ -17,7 +17,6 @@ import type {
   MethodologyItem,
   GrowthArea,
   Project,
-  SocialImpactItem,
   AiWorkflowItem,
   ValueFlow,
   Feedback,
@@ -1424,49 +1423,6 @@ export const cvDataEn = {
     "Travel and international cultures",
     "Open source",
   ] as string[],
-
-  // ── Social impact ─────────────────────────────────────────────────────────
-  socialImpact: [
-    {
-      name: "Crisis intervention",
-      description:
-        "Direct intervention in a suicide risk situation: signal recognition, active listening and guidance towards professional support. One of the most formative experiences in terms of full presence and the capacity to sit with the unexpected without fleeing from emotional complexity. 'Yes, and...' in its most radical form: accepting the other person's reality and adding presence.",
-      tags: [
-        "Empathy",
-        "Active listening",
-        "Crisis management",
-        "Human skills",
-      ],
-    },
-    {
-      name: "Legal assistance for an immigrant in difficulty",
-      description:
-        "Concrete support for a Bangladeshi young man struggling with the Italian legal system: navigation through the bureaucratic maze, translation of the normative context and connection with available resources. The 'Yes, and...' applied to real life: accepting the situation without stepping back and adding value where others walk past.",
-      tags: [
-        "Solidarity",
-        "Interculturalism",
-        "Assistance",
-        "Civic engagement",
-      ],
-    },
-    {
-      name: "Public intervention in defence of a third party",
-      description:
-        "Prompt intervention in a street danger situation in defence of a third party. Theatre improvisation teaches you to stay in the moment without being paralysed: this capability, applied off-stage, translates into clarity and action when others hesitate. A form of situational leadership that cannot be learned from books.",
-      tags: ["Civic courage", "Situational leadership", "Rapid thinking"],
-    },
-    {
-      name: "Charity auction MC at a European corporate event (Burger King)",
-      description:
-        "Ran a charity auction in English during a European Burger King event with international participants. Managing the audience, auction rhythm and live communication in a foreign language under pressure — a context where theatre improvisation and English fluency merged into a single live performance.",
-      tags: [
-        "Professional English",
-        "Public speaking",
-        "Event hosting",
-        "Corporate events",
-      ],
-    },
-  ] as SocialImpactItem[],
 
   // ── AI Workflow ───────────────────────────────────────────────────────────
   aiWorkflow: [

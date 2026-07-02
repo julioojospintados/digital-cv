@@ -94,10 +94,10 @@ Il sito è strutturato come un gioco narrativo, ma il GO si estende anche al wor
 ### GO nel sito (narrativa utente)
 
 - **Preloader**: `G` e `O` volano verso il nome (G→Giulio, O→Occhipinti) — rituale iniziatico
-- **Landing `/`**: scegliere TECH / CREATIVE / HUMAN è come **scegliere il proprio personaggio**
+- **Landing `/`**: scegliere Software Developer / Web & UX Designer / Project Manager / AI & Digital Specialist è come **scegliere il proprio personaggio**
 - **`/cv`**: le card passive diventano sussurri — l'utente esplora senza mai ricominciare da zero
 - **`<go-logo>`**: sempre visibile, click = Master Reset a `/` — mode-reactivo (cyan/orange/gold)
-- **CTA semantica**: sempre `GO Tech`, `GO Creative`, `GO Human` — mai "Scopri", "Vedi", "Leggi"
+- **CTA semantica**: sempre `GO Software Developer`, `GO Web & UX Designer`, ecc. — mai "Scopri", "Vedi", "Leggi"
 
 ### GO nel metodo (identità professionale)
 
@@ -172,10 +172,10 @@ Il sito si chiama **Knolling / Flat Lay CV**: ogni elemento (esperienza, skill, 
 
 | Mode       | Route         | Accent                   | Focus                                                |
 | ---------- | ------------- | ------------------------ | ---------------------------------------------------- |
-| TECH       | `/tech`       | Cyan `rgba(0,255,200,1)` | Architetture, codice, sistemi                        |
-| CREATIVE   | `/creative`   | Arancione `rgba(255,107,53,1)` | Racconto, immagine, suono                      |
-| HUMAN      | `/human`      | Oro `rgba(240,200,127,1)` | Impatto, relazione, presenza                        |
-| MANAGEMENT | `/management` | Viola `rgba(180,100,255,1)` | Metodo, Agile, PMI, consulenza strategica         |
+| SOFTWARE DEVELOPER   | `/tech`       | Cyan `rgba(0,255,200,1)` | Architetture, codice, sistemi                        |
+| WEB & UX DESIGNER    | `/creative`   | Arancione `rgba(255,107,53,1)` | Racconto, immagine, suono                      |
+| AI & DIGITAL SPECIALIST | `/human`   | Oro `rgba(240,200,127,1)` | Impatto, relazione, presenza                        |
+| PROJECT MANAGER      | `/management` | Viola `rgba(180,100,255,1)` | Metodo, Agile, PMI, consulenza strategica         |
 
 Tutti e 4 i mode usano sfondo ottanio `rgba(8,73,67,1)` — solo `--color-accent` cambia.
 

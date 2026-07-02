@@ -1,5 +1,8 @@
 import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { setMode } from "../islands/stores/modeStore.ts";
+
+gsap.registerPlugin(ScrollTrigger);
 
 // ── Reduced motion: GSAP bypassa le regole CSS, occorre controllo JS ────────
 // Accelera tutte le timeline a x50 → effetto "immediato" senza rimuovere la
@@ -684,4 +687,56 @@ if (scrollCue) {
   window.addEventListener("scroll", hideScrollCue, { passive: true });
   window.addEventListener("wheel", hideScrollCue, { passive: true });
   window.addEventListener("touchmove", hideScrollCue, { passive: true });
+}
+
+// ── Profile sections — reveal + parallax doppia profondità ────────────────────────
+if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  const isDesktopView = window.matchMedia("(min-width: 56.25rem)").matches;
+  // Rotazioni solo desktop (su mobile l'img è bg assoluto, la rotazione disturba)
+  if (isDesktopView) {
+    gsap.set('.profile-section[data-mode="tech"] .profile-knoll-img', { rotation: -5 });
+    gsap.set('.profile-section[data-mode="creative"] .profile-knoll-img', { rotation: 8 });
+    gsap.set('.profile-section[data-mode="human"] .profile-knoll-img', { rotation: -4 });
+  }
+
+  // Fade-up del contenuto testo al primo enter della sezione
+  document.querySelectorAll<HTMLElement>(".profile-content").forEach((el) => {
+    gsap.fromTo(
+      el,
+      { opacity: 0, y: 40 },
+      {
+        opacity: 1,
+        y: 0,
+        duration: 0.7,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: el.closest(".profile-section"),
+          start: "top 78%",
+          once: true,
+        },
+      },
+    );
+  });
+
+  // Parallax immagini — delta ampio: desktop 160px, mobile 90px
+  // L'overflow:hidden della section crea un reveal dai bordi (effetto voluto)
+  const profileDelta = isDesktopView ? 300 : 90;
+  document.querySelectorAll<HTMLElement>(".profile-knoll-img").forEach((img) => {
+    const section = img.closest<HTMLElement>(".profile-section");
+    if (!section) return;
+    gsap.fromTo(
+      img,
+      { y: profileDelta },
+      {
+        y: -profileDelta,
+        ease: "none",
+        scrollTrigger: {
+          trigger: section,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: true,
+        },
+      },
+    );
+  });
 }

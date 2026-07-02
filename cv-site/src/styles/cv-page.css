@@ -125,8 +125,9 @@ skill-force-graph {
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--color-border);
-  /* Prevent nav content from creating horizontal document overflow on mobile */
-  overflow: hidden;
+  /* overflow: visible allows the mobile mode dropdown list to escape the nav bounds */
+  overflow: visible;
+  max-width: 100dvw;
 
   @media (max-width: 40rem) {
     padding: 0 0.75rem;
@@ -169,6 +170,12 @@ go-logo:not(:defined) {
   justify-content: center;
   overflow: hidden;
   min-width: 0;
+}
+
+@media (max-width: 40rem) {
+  .mode-buttons {
+    display: none;
+  }
 }
 
 .mode-btn {
@@ -271,6 +278,115 @@ go-logo:not(:defined) {
     position: static;
     transform: none;
   }
+}
+
+/* ── Mode dropdown — mobile only ───────────────────────────────── */
+.mode-dropdown {
+  display: none;
+}
+
+@media (max-width: 40rem) {
+  .mode-dropdown {
+    flex: 1;
+    min-width: 0;
+    position: relative;
+    display: block;
+    max-width: 50%;
+  }
+}
+
+.mode-dropdown__trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  width: 100%;
+  height: 1.9rem;
+  padding: 0 0.6rem;
+  background: color-mix(in srgb, var(--color-accent) 10%, transparent);
+  border: 1.5px solid var(--color-accent);
+  border-radius: 2px;
+  color: var(--color-accent);
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  box-shadow: 0 0 8px color-mix(in srgb, var(--color-accent) 20%, transparent);
+}
+
+.mode-dropdown__trigger[aria-expanded="true"] {
+  border-radius: 2px 2px 0 0;
+  background: color-mix(in srgb, var(--color-accent) 16%, transparent);
+}
+
+.mode-dropdown__label {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+}
+
+.mode-dropdown__chevron {
+  flex-shrink: 0;
+  font-size: 0.9rem;
+  transition: transform 0.2s ease;
+  line-height: 1;
+}
+
+.mode-dropdown__trigger[aria-expanded="true"] .mode-dropdown__chevron {
+  transform: rotate(90deg);
+}
+
+.mode-dropdown__list {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: rgba(8, 73, 67, 0.98);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1.5px solid var(--color-accent);
+  border-top: none;
+  border-radius: 0 0 2px 2px;
+  list-style: none;
+  margin: 0;
+  padding: 0.2rem 0;
+  z-index: 200;
+}
+
+.mode-dropdown__list.is-open {
+  display: block;
+}
+
+.mode-dropdown__option {
+  padding: 0.65rem 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(192, 220, 215, 0.85);
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.mode-dropdown__option:last-child {
+  border-bottom: none;
+}
+
+.mode-dropdown__option:active {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.mode-dropdown__option.is-selected {
+  color: var(--color-accent);
+  background: color-mix(in srgb, var(--color-accent) 8%, transparent);
 }
 
 .cv-nav__lang {
@@ -424,7 +540,7 @@ go-logo:not(:defined) {
 /* ── Hero name — char animation ─────────── */
 .hero-char {
   display: inline-block;
-  white-space: pre;
+  /* white-space: pre removed — spaces are already  , pre caused excess gap between chars */
   opacity: 0;
   /* GSAP animates to 1 */
   transform: translateY(18px);
