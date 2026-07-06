@@ -304,32 +304,57 @@ gsap.delayedCall(0.9, () => {
     });
   }, undefined, "-=0.55");
 
-  // 10b. Pulse attenzione sulle card — bordo che pulsa ogni 1.5s in loop
-  // per comunicare interattività persistente. Si ferma quando una card viene selezionata.
-  // Inizia 0.6s dopo che le card sono apparse (durata entrata = 0.8s + stagger 0.36s ≈ 1.16s totale).
-  tl.call(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    // up (0.32s) + down (0.32s) = 0.64s — repeatDelay = 1.5 - 0.64 = 0.86s → ciclo totale 1.5s
-    cards.forEach((card, i) => {
-      const style = getComputedStyle(card);
-      const goColor = style.getPropertyValue("--card-go-color").trim() || "rgba(255,255,255,1)";
-      const goShadow = style.getPropertyValue("--card-go-shadow").trim() || "rgba(255,255,255,0.12)";
-      const tw = gsap.fromTo(
-        card,
-        { boxShadow: `inset 0 0 0 1px rgba(255,255,255,0.08)` },
-        {
-          boxShadow: `inset 0 0 0 1.5px ${goColor.replace("1)", "0.55)")}, 0 0 14px 2px ${goShadow.replace("0.35)", "0.18)")}`,
-          duration: 0.32,
-          delay: i * 0.12,
-          ease: "power2.out",
-          yoyo: true,
-          repeat: -1,
-          repeatDelay: 0.86,
-        },
-      );
-      cardPulseTweens.push(tw);
-    });
-  }, undefined, "+=0.6");
+   // 10b. Pulse attenzione sulle card — bordo che pulsa ogni 1.5s in loop
+   // per comunicare interattività persistente. Si ferma quando una card viene selezionata.
+   // Inizia 0.6s dopo che le card sono apparse (durata entrata = 0.8s + stagger 0.36s ≈ 1.16s totale).
+   tl.call(() => {
+     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+     // up (0.32s) + down (0.32s) = 0.64s — repeatDelay = 1.5 - 0.64 = 0.86s → ciclo totale 1.5s
+     cards.forEach((card, i) => {
+       const style = getComputedStyle(card);
+       const goColor = style.getPropertyValue("--card-go-color").trim() || "rgba(255,255,255,1)";
+       const goShadow = style.getPropertyValue("--card-go-shadow").trim() || "rgba(255,255,255,0.12)";
+       const tw = gsap.fromTo(
+         card,
+         { boxShadow: `inset 0 0 0 1px rgba(255,255,255,0.08)` },
+         {
+           boxShadow: `inset 0 0 0 1.5px ${goColor.replace("1)", "0.55)")}, 0 0 14px 2px ${goShadow.replace("0.35)", "0.18)")}`,
+           duration: 0.32,
+           delay: i * 0.12,
+           ease: "power2.out",
+           yoyo: true,
+           repeat: -1,
+           repeatDelay: 0.86,
+         },
+       );
+       cardPulseTweens.push(tw);
+     });
+   }, undefined, "+=0.6");
+
+   // 10c. Pulse attenzione sulle profile-cta — stesso effetto delle mode-card
+   // Inizia quando le card sono completamente visibili
+   tl.call(() => {
+     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+     document.querySelectorAll<HTMLElement>(".profile-cta").forEach((cta, i) => {
+       const section = cta.closest<HTMLElement>(".profile-section");
+       if (!section) return;
+       const style = getComputedStyle(section);
+       const psAccent = style.getPropertyValue("--ps-accent").trim() || "rgba(255,255,255,1)";
+       const tw = gsap.fromTo(
+         cta,
+         { boxShadow: `0 0 0 1px color-mix(in srgb, ${psAccent} 20%, transparent)` },
+         {
+           boxShadow: `0 0 0 1.5px color-mix(in srgb, ${psAccent} 50%, transparent), 0 0 14px 2px color-mix(in srgb, ${psAccent} 14%, transparent)`,
+           duration: 0.32,
+           delay: i * 0.12,
+           ease: "power2.out",
+           yoyo: true,
+           repeat: -1,
+           repeatDelay: 0.86,
+         },
+       );
+     });
+   }, undefined, "+=0.6");
 
   // 11. FAB compare dopo le card — rimuove data-fab-hidden → CSS transition anima ingresso
   tl.call(() => {
@@ -520,11 +545,19 @@ function selectMode(targetCard: HTMLButtonElement, mode: string) {
   }
   cards.forEach((c) => {
     const goBtn = c.querySelector<HTMLElement>(".mode-card__go");
+    const desc = c.querySelector<HTMLElement>(".mode-card__desc");
     if (c === targetCard) {
       c.classList.add("is-selected");
       c.classList.remove("is-passive");
-      // Su mobile il grid fa l'espansione — scale: 1 evita l'overflow nella cella
-      gsap.to(c, { scale: isMobile ? 1 : 1.04, duration: 0.3, ease: "back.out(2)" });
+      // Change desc to "Go To ↗"
+      if (desc && !desc.classList.contains("is-go")) {
+        desc.dataset.originalText = desc.textContent ?? "";
+        desc.innerHTML = 'Go To <span class="go-arrow" aria-hidden="true"><div class="cta-icon-touch"><svg viewBox="0 0 24 24" class="mio-svg">    <path d="M12 2L2 22h20L12 2z" />  </svg></div></span>';
+        desc.classList.add("is-go");
+      }
+      // Ingrandimento visibile (knolling effect) — prendi lo strumento dal tavolo
+      // Stesso comportamento su mobile e desktop, solo la forma cambia (orizzontale vs quadrata)
+      gsap.to(c, { scaleX: 1.05, scaleY: 1.18,  duration: 0.4, ease: "back.out(1.8)" });
       if (goBtn) {
         goBtn.setAttribute("tabindex", "0");
         goBtn.removeAttribute("aria-hidden");
@@ -566,6 +599,12 @@ function selectMode(targetCard: HTMLButtonElement, mode: string) {
     } else {
       c.classList.add("is-passive");
       c.classList.remove("is-selected");
+      // Restore original desc text
+      if (desc && desc.classList.contains("is-go")) {
+        desc.textContent = desc.dataset.originalText ?? "";
+        delete desc.dataset.originalText;
+        desc.classList.remove("is-go");
+      }
       // Su mobile: scale: 1 (il grid riduce la cella, scale causerebbe overflow)
       gsap.to(c, { scale: isMobile ? 1 : 0.96, duration: 0.25, ease: "power2.out" });
       if (goBtn && goBtn.classList.contains("is-ready")) {
@@ -580,21 +619,6 @@ function selectMode(targetCard: HTMLButtonElement, mode: string) {
         });
       }
     }
-  });
-  knolls.forEach((img) => {
-    const modes = img.dataset.modes?.split(" ") ?? [];
-    const isRelated = modes.includes(mode);
-    img.classList.remove("do-enter");
-    img.classList.toggle("is-hero", isRelated);
-    img.classList.toggle("is-dim", !isRelated);
-    // GSAP gestisce lo scale: anima smooth dal valore corrente al target,
-    // evitando il salto brusco che si aveva con il cambio istantaneo via CSS class.
-    gsap.to(img, {
-      scale: isRelated ? 1.08 : 0.92,
-      opacity: isRelated ? 0.8 : 0.18,
-      duration: 0.5,
-      ease: "power2.out",
-    });
   });
 
   // Mobile: espandi la cella del grid + scan sweep per feedback tattile
@@ -662,6 +686,21 @@ document.querySelectorAll<HTMLElement>(".mode-card__go").forEach((btn) => {
     const href = btn.dataset.href ?? "/cv";
     launchJourney(href);
   });
+});
+
+// ── Profile CTA: click → launchJourney (stessa animazione delle mode-card) ───────────────────────
+document.querySelectorAll<HTMLElement>(".profile-cta").forEach((cta) => {
+  cta.addEventListener("click", (e) => {
+    e.preventDefault();
+    const href = cta.getAttribute("href") ?? "/";
+    launchJourney(href);
+  });
+});
+
+// ── Skills Marquee: duplica il contenuto per loop infinito ───────────────────────
+document.querySelectorAll<HTMLElement>(".skills-marquee__track").forEach((track) => {
+  const content = track.innerHTML;
+  track.innerHTML = content + content; // Duplica il contenuto per loop seamless
 });
 
 // Bfcache restore (swipe-back mobile): forza ricaricamento pulito + replays GO animation
