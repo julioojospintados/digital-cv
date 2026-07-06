@@ -26,7 +26,8 @@ of this codebase is for, what conventions apply, and where to make changes.
 
 Both export all CV sections: `personal`, `social`, `languages`, `experience`, `education`,
 `certifications`, `technicalSkills`, `softSkills`, `transversalSkills`, `methodology`,
-`growthAreas`, `projects`, `interests`, `socialImpact`.
+`growthAreas`, `projects`, `interests`, `socialImpact`, `aiWorkflow`, `valueFlows`, `feedbacks`.
+The `Feedback` interface has: `name`, `role?`, `quote?`, `keywords[]`.
 
 **Never change the type structure in `cv.ts` without updating `cv.en.ts` too.**
 
@@ -37,17 +38,20 @@ Both export all CV sections: `personal`, `social`, `languages`, `experience`, `e
 The site is a **Knolling / Flat Lay CV**: each element is an "object" laid out on a flat surface
 like items in a knolling photograph.
 
-**4 global modes** (set via URL `?mode=...` and `localStorage`):
+**4 global modes** — each mode is an Astro route (`[mode].astro`), not a URL param:
 
-| Mode         | Focus                           | Theme                 |
-| ------------ | ------------------------------- | --------------------- |
-| `tech`       | Architectures, code, systems    | Dark, neon green/blue |
-| `creative`   | Story, image, sound             | Warm, editorial       |
-| `human`      | Impact, relationships, presence | Neutral paper         |
-| `management` | Strategy, Agile, PMI consulting | Navy, gold            |
+| Route         | Persona                  | Accent                        |
+| ------------- | ------------------------ | ------------------------------ |
+| `/tech`       | Software Developer       | Cyan `rgba(0,255,200,1)`      |
+| `/creative`   | Web & UX Designer        | Orange `rgba(255,107,53,1)`   |
+| `/human`      | AI & Digital Specialist  | Gold `rgba(240,200,127,1)`    |
+| `/management` | Project Manager          | Purple `rgba(180,100,255,1)`  |
+
+All 4 modes share the ottanio background `rgba(8,73,67,1)` — only `--color-accent` changes.
+The mode changes visual emphasis only, never the template or structure.
 
 Full spec → `cv-site/DESIGN.md`
-Operative rules for Copilot → `.vscode/design.instructions.md` (auto-injected on `cv-site/src/**`)
+Operative rules → `.vscode/design.instructions.md` (Copilot, auto-injected on `cv-site/src/**`) or `.claude/skills/design-system/SKILL.md` (Claude Code)
 
 ---
 
@@ -85,6 +89,14 @@ Operative rules for Copilot → `.vscode/design.instructions.md` (auto-injected 
 
 → Declare in `src/config/env.ts` (Zod schema), add to `.env.example`.
 
+### Throwing HTTP errors
+
+→ Use typed errors from `src/http/errors.ts` (`NotFoundError`, `ValidationError`, etc.).
+
+### Adding tests
+
+→ Create `src/<module>/<name>.test.ts`. Use `vitest`. See `src/http/app.test.ts` as example.
+
 ---
 
 ## Full file reference
@@ -111,7 +123,13 @@ src/                      ← MCP server + HTTP API (Node.js / TypeScript)
 cv-site/                  ← Astro site (the actual CV)
   DESIGN.md               ← Full visual system specification
   src/
-    pages/                ← Astro pages (index.astro, cv.astro, en/)
+    pages/
+      index.astro         ← Entry point with GO preloader
+      home.astro          ← Landing with the 4 mode-cards (knolling)
+      [mode].astro        ← CV page for /tech /creative /human /management
+      cv.astro            ← Legacy — redirects to /tech
+      en/cv.astro         ← English CV
+      en/index.astro      ← English entry point
     components/           ← Static Astro components
       cards/              ← Reusable card components
         ExpCard.astro     ← Experience card (mode tags, impactScore, company logo)
@@ -136,7 +154,10 @@ cv-site/                  ← Astro site (the actual CV)
 
 .github/
   copilot-instructions.md ← Always injected in every Copilot chat
-  skills/
+  skills/                 ← Copilot skills (same domains as .claude/skills below)
+
+.claude/
+  skills/                 ← Claude Code skills — mirrors .github/skills, loaded on demand
     knolling-cv/SKILL.md         ← Global project context — load FIRST for any request
     design-system/SKILL.md       ← UI, animations (Emil Kowalski rules), knolling, GSAP, Tailwind 4
     design-system/knolling-reference.png  ← Visual reference for knolling layout
@@ -144,8 +165,11 @@ cv-site/                  ← Astro site (the actual CV)
     agile-methodology/SKILL.md   ← Agile, Lean, PM for SMBs, impactScore, sprints
     mcp-architecture/SKILL.md    ← MCP tools, Hono, cv.ts, tests, AI workflow
     partnership-strategy/SKILL.md ← Fractional partner, SMB consulting positioning
+    caveman/SKILL.md             ← Utility skill — ultra-compressed response mode (/caveman)
 
-AGENTS.md                 ← This file
+.mcp.json                 ← Project-scoped MCP servers for Claude Code (mcp-base-template, sequential-thinking)
+CLAUDE.md                 ← Claude Code entry point (imports this file, adds skill-loading + MCP notes)
+AGENTS.md                 ← This file — tool-agnostic project guide
 ```
 
 ---
@@ -159,98 +183,3 @@ AGENTS.md                 ← This file
 - Use progress bars for skills in the site — use the square/glow system from `DESIGN.md`.
 - Hardcode colors in cv-site — use CSS custom properties (`--color-bg`, `--color-accent`, etc.).
 
----
-
-## Where to make changes
-
-### Adding an MCP tool
-
-→ Create `src/tools/<name>.ts`, export `register<Name>Tool(server)`, register in `src/tools/index.ts`.
-
-### Adding an MCP resource
-
-→ Create `src/resources/<name>.ts`, export `register<Name>Resource(server)`, register in `src/resources/index.ts`.
-
-### Adding an MCP prompt template
-
-→ Create `src/prompts/<name>.ts`, export `register<Name>Prompt(server)`, register in `src/prompts/index.ts`.
-
-### Adding an HTTP route
-
-→ Create `src/http/routes/<name>.ts`, export a `Hono` instance, mount in `src/http/app.ts`.
-→ Add the route schema to `openApiPaths` in `src/http/app.ts`.
-
-### Adding environment variables
-
-→ Declare in `src/config/env.ts` (Zod schema), add to `.env.example`.
-
-### Throwing HTTP errors
-
-→ Use typed errors from `src/http/errors.ts` (`NotFoundError`, `ValidationError`, etc.).
-
-### Adding tests
-
-→ Create `src/<module>/<name>.test.ts`. Use `vitest`. See `src/http/app.test.ts` as example.
-
----
-
-## File reference
-
-```
-src/
-  index.ts            ← MCP entry point (stdio transport) — do not add HTTP here
-  http.ts             ← HTTP entry point (Hono/Node) — do not add MCP here
-  server.ts           ← McpServer factory — only MCP wiring goes here
-  config/
-    env.ts            ← Zod-validated env vars — single source of truth for config
-  http/
-    app.ts            ← Hono app factory + global error handler + /openapi.json
-    errors.ts         ← Typed HTTP error classes (AppError and subclasses)
-    routes/           ← One file per feature route (create as needed)
-  tools/
-    index.ts          ← MCP tool registry
-    echo.ts           ← Example tool — copy as template
-  resources/
-    index.ts          ← MCP resource registry
-  prompts/
-    index.ts          ← MCP prompt template registry
-  utils/
-    logger.ts         ← stderr-only logger (stdout reserved for MCP JSON-RPC)
-cv-site/
-  DESIGN.md           ← Full visual system specification
-  src/
-    pages/            ← Astro pages (index.astro, cv.astro, en/)
-    components/       ← Static Astro components
-      cards/          ← Reusable cards (ExpCard, AiCard, ProjectCard, SkillSquare, SoftItem)
-    islands/          ← Lit interactive web components
-      GoLogo.lit.ts          ← <go-logo> web component
-      FloatingMenu.lit.ts    ← <floating-menu> FAB
-      SkillForceGraph.lit.ts ← <skill-force-graph> D3 network
-      stores/modeStore.ts    ← NanoStore for global mode (tech/creative/human/management)
-    styles/global.css ← CSS custom properties for 4 modes
-    layouts/Layout.astro ← Base layout
-.vscode/
-  mcp.json            ← External MCP servers active in VS Code (GitHub, Sequential Thinking, Google Maps, etc.)
-  prompts/            ← Reusable /slash prompts for Copilot
-  typescript.instructions.md  ← TypeScript conventions auto-injected into Copilot
-  http.instructions.md        ← Hono/HTTP conventions auto-injected into Copilot
-.github/
-  copilot-instructions.md         ← Global Copilot behavior rules
-  skills/
-    knolling-cv/SKILL.md          ← Global project context — load FIRST for any request
-    design-system/SKILL.md        ← UI, Emil Kowalski animation rules, knolling, GSAP, Tailwind 4
-    design-system/knolling-reference.png  ← Visual reference for knolling layout
-    identity/SKILL.md             ← Bio, tone of voice, GO narrative, job hunting
-    agile-methodology/SKILL.md    ← Agile, Lean, PM for SMBs, impactScore, sprints
-    mcp-architecture/SKILL.md     ← MCP tools, Hono, cv.ts, tests, AI workflow
-    partnership-strategy/SKILL.md ← Fractional partner, SMB consulting positioning
-```
-
----
-
-## Do NOT
-
-- Write to `stdout` — it is reserved for MCP JSON-RPC protocol. Use `logger` from `src/utils/logger.ts`.
-- Put HTTP logic in `src/index.ts` or MCP logic in `src/http.ts`.
-- Commit `.env` — only `.env.example` is tracked.
-- Skip Zod validation for tool parameters or env vars.

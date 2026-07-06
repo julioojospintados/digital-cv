@@ -47,9 +47,9 @@ document.querySelectorAll<HTMLImageElement>(".knoll-item").forEach((img) => {
       if (_distFromCenter(img.getBoundingClientRect(), e.clientX, e.clientY) <= _1rem()) {
         targetCard.click();
       }
-    }, { passive: true });
+    });
   } else {
-    img.addEventListener("click", () => targetCard.click(), { passive: true });
+    img.addEventListener("click", () => targetCard.click());
   }
 });
 
@@ -68,9 +68,9 @@ document.querySelectorAll<HTMLElement>(".knoll-wrap").forEach((wrap) => {
       if (_distFromCenter(img.getBoundingClientRect(), e.clientX, e.clientY) <= _1rem()) {
         targetCard.click();
       }
-    }, { passive: true });
+    });
   } else {
-    wrap.addEventListener("click", () => targetCard.click(), { passive: true });
+    wrap.addEventListener("click", () => targetCard.click());
   }
 });
 
@@ -643,6 +643,20 @@ function selectMode(targetCard: HTMLButtonElement, mode: string) {
       },
     );
   }
+
+  // Knolling: evidenzia le immagini associate al mode selezionato
+  knolls.forEach((knoll) => {
+    const modes = knoll.dataset.modes?.split(" ") || [];
+    if (modes.includes(mode)) {
+      knoll.classList.add("is-hero");
+      knoll.classList.remove("is-dim");
+      gsap.to(knoll, { scale: 1.15, duration: 0.4, ease: "back.out(1.7)" });
+    } else {
+      knoll.classList.add("is-dim");
+      knoll.classList.remove("is-hero");
+      gsap.to(knoll, { scale: 0.85, duration: 0.3, ease: "power2.out" });
+    }
+  });
 }
 
 // ── Per-card: tap/click = selezione, GO button = navigazione ───────────────

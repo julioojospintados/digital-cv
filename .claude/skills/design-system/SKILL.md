@@ -8,7 +8,7 @@ description: "Regole visual e tecniche del Digital CV. Carica quando: crei compo
 ## Riferimento Visivo Knolling — CARICA SEMPRE
 
 **BLOCKING:** Prima di qualsiasi lavoro su layout, card, griglia o mobile — usa `view_image` per caricare:
-`.cline-skills/skills/design-system/knolling-reference.png`
+`.claude/skills/design-system/knolling-reference.png`
 
 Questa foto mostra i TUOI oggetti (megafono, laptop, bussola, fotocamera, torcia, scacchi, pianta, multitool)
 disposti in una fotografia knolling reale. È la **referenza visiva assoluta** per ogni decisione di layout.

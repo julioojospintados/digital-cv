@@ -4,7 +4,7 @@
 			"type": "stdio",
 			"command": "node",
 			"args": [
-				"${workspaceFolder}/dist/index.js"
+				"${CLAUDE_PROJECT_DIR:-.}/dist/index.js"
 			]
 		},
 		"sequential-thinking": {

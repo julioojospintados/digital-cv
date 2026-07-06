@@ -9,11 +9,11 @@ Questo progetto ha 5 skill specializzate. Carica quella più pertinente alla ric
 
 | Skill | Quando caricare |
 |---|---|
-| **identity** `.cline-skills/skills/identity/SKILL.md` | Testi, bio, tone of voice, narrativa GO, job hunting |
-| **design-system** `.cline-skills/skills/design-system/SKILL.md` | UI, animazioni, card, knolling, GSAP, Awwwards |
-| **agile-methodology** `.cline-skills/skills/agile-methodology/SKILL.md` | Esperienze, Agile, UX/UI, certificazioni, sprint |
-| **mcp-architecture** `.cline-skills/skills/mcp-architecture/SKILL.md` | Backend, MCP tools, Hono, test, cv.ts, env |
-| **partnership-strategy** `.cline-skills/skills/partnership-strategy/SKILL.md` | Offerta Fractional, bio servizi, tono PMI, posizionamento |
+| **identity** `.claude/skills/identity/SKILL.md` | Testi, bio, tone of voice, narrativa GO, job hunting |
+| **design-system** `.claude/skills/design-system/SKILL.md` | UI, animazioni, card, knolling, GSAP, Awwwards |
+| **agile-methodology** `.claude/skills/agile-methodology/SKILL.md` | Esperienze, Agile, UX/UI, certificazioni, sprint |
+| **mcp-architecture** `.claude/skills/mcp-architecture/SKILL.md` | Backend, MCP tools, Hono, test, cv.ts, env |
+| **partnership-strategy** `.claude/skills/partnership-strategy/SKILL.md` | Offerta Fractional, bio servizi, tono PMI, posizionamento |
 
 ---
 

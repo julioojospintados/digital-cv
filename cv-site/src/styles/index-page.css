@@ -221,7 +221,7 @@ img[src*="flashlight"] {
   }
 
   100% {
-    opacity: 0.4;
+    opacity: 0.8;
     filter: none;
     transform: translateY(0) scaleX(var(--kfx, 1));
   }
@@ -349,6 +349,14 @@ img[src*="flashlight"] {
     justify-content: center;
     overflow: visible;
     cursor: pointer;
+    /* overflow:visible attiva il "content-based automatic minimum size" del
+       grid item (spec CSS Grid §6.6): senza questo reset, la cella non può
+       restringersi sotto il min-content dell'img figlia. Tra 640-899px la
+       colonna cresce in px (larghezza = frazione del viewport) e il
+       min-content basato sull'aspect-ratio dell'immagine supera la riga 1fr
+       di .knolling-mob, facendo sforare le immagini sulla riga delle card. */
+    min-width: 0;
+    min-height: 0;
   }
 
   /* Riga 1: 4+7+4 = 15 — laptop centrale occupa 47% della larghezza */
@@ -414,7 +422,7 @@ img[src*="flashlight"] {
     /* il click è gestito dal .knoll-wrap */
     transition:
       filter 0.4s ease,
-      opacity 0.5s ease;
+      opacity 0.8s ease;
     transform-origin: center;
     display: block;
   }
@@ -447,7 +455,7 @@ img[src*="flashlight"] {
      GSAP scrive su `transform` (scale inline), la prop `rotate` separata
      viene composta dal browser: risultato = rotate(135deg) + scale(X) coesistono. */
   .knoll-wrap:nth-child(5) .knoll-m {
-    rotate: 135deg;
+    rotate: 135deg !important;
   }
 
   .knoll-wrap:nth-child(6) {
@@ -1215,9 +1223,15 @@ img[src*="flashlight"] {
   line-height: 1.72;
   color: var(--color-text-muted);
   margin: 0;
-  max-width: 48ch;
 }
-
+@media (--mobile-only) {
+  .profile-desc {
+    width: 100%;
+    max-width: 90vw;
+    box-sizing: border-box;
+    overflow-x: hidden;
+  }
+}
 .profile-cta {
    display: inline-flex;
    align-items: center;

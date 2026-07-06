@@ -33,5 +33,13 @@ todo.md
 bash.exe.stackdump
 tmp-diff.mjs
 .tmp-lh*
+
+#cline and roo
 .roo
 .rooignore
+.clinerules.md
+clinerules.md
+.clineignore
+.cline-skills/
+\.clineignore
+

@@ -153,7 +153,12 @@ Digital_CV/
 │       └── partnership-strategy/
 │           └── SKILL.md            ← Fractional partner, posizionamento consulente PMI
 │
+├── .claude/                         ← Configurazione Claude Code
+│   └── skills/                     ← Mirror delle skill sopra + `caveman/` (modalità risposta ultra-compressa, `/caveman`)
+│
 ├── AGENTS.md                       ← Guida per agenti AI (struttura, convenzioni, where to make changes)
+├── CLAUDE.md                       ← Entry point Claude Code (importa AGENTS.md + regole skill-loading/MCP)
+├── .mcp.json                       ← Server MCP di progetto per Claude Code (mcp-base-template, sequential-thinking)
 ├── .env.example                    ← Template variabili d'ambiente (non committare .env)
 ├── package.json                    ← Dipendenze e script npm per il layer MCP/HTTP
 ├── tsconfig.json                   ← Configurazione TypeScript per src/
@@ -199,13 +204,18 @@ Oppure manualmente:
 
 ---
 
-## Copilot AI — meccanismi di personalizzazione
+## Personalizzazione AI — Copilot & Claude Code
 
-Quattro livelli di personalizzazione, dal più specifico al più generale:
+Il progetto supporta due agenti AI in parallelo, con struttura equivalente ma cartelle separate:
 
-### 1. Skills (`.github/skills/`)
+| Livello | Copilot (VS Code) | Claude Code |
+| --- | --- | --- |
+| Istruzioni globali | `.github/copilot-instructions.md` | `CLAUDE.md` (importa `AGENTS.md`) |
+| Skill di dominio, caricate su richiesta | `.github/skills/*/SKILL.md` | `.claude/skills/*/SKILL.md` |
+| Instructions scoped per path (`applyTo`) | `.vscode/*.instructions.md` | — (regole equivalenti dentro le skill) |
+| Prompt/comandi riutilizzabili | `.vscode/prompts/*.prompt.md` | `.claude/skills/<nome>/SKILL.md` (slash command) |
 
-Conoscenza dominio avanzata caricata **su richiesta** da Copilot prima di rispondere.
+Le skill di dominio sono le stesse in entrambi gli strumenti:
 
 | Skill                  | Quando si carica                                               |
 | ---------------------- | -------------------------------------------------------------- |
@@ -216,9 +226,7 @@ Conoscenza dominio avanzata caricata **su richiesta** da Copilot prima di rispon
 | `mcp-architecture`     | Backend, MCP tools, Hono, test, cv.ts, AI workflow             |
 | `partnership-strategy` | Posizionamento Fractional Partner, offerta per PMI             |
 
-### 2. Prompt riutilizzabili (`.vscode/prompts/*.prompt.md`)
-
-Invocabili con `/nome-file` in chat. Usali per workflow ripetuti.
+Prompt Copilot riutilizzabili (`.vscode/prompts/*.prompt.md`, invocabili con `/nome-file`):
 
 ```
 /implement-feature   ← aggiunge una feature rispettando le convenzioni
@@ -228,24 +236,13 @@ Invocabili con `/nome-file` in chat. Usali per workflow ripetuti.
 /cv-intake           ← intake strutturato per aggiornare i dati CV
 ```
 
-### 3. Instructions scoped (`.vscode/*.instructions.md`)
-
-Iniettate **automaticamente** nel contesto Copilot in base al pattern `applyTo`:
-
-- `design.instructions.md` → attivo su `cv-site/src/**` (regole visual design)
-- `typescript.instructions.md` → attivo su `src/**/*.ts` (convenzioni TypeScript/MCP)
-- `http.instructions.md` → attivo su `src/http/**` (convenzioni Hono/HTTP)
-
-### 4. Istruzioni globali (`.github/copilot-instructions.md`)
-
-Sempre attive per qualsiasi conversazione in questo workspace.
-Contiene: scopo professionale, GO concept, struttura progetto, comportamento Copilot.
+Solo Claude Code: `.claude/skills/caveman/SKILL.md` — modalità di risposta ultra-compressa, invocabile con `/caveman` (installata via `skills-lock.json`, mirror in `.agents/skills/caveman/`).
 
 ---
 
 ## MCP server integrati
 
-Configurati in `.vscode/mcp.json`:
+Configurati in `.vscode/mcp.json` (Copilot/VS Code):
 
 | Server                | Stato     | Cosa fa                                             |
 | --------------------- | --------- | --------------------------------------------------- |
@@ -260,6 +257,8 @@ Configurati in `.vscode/mcp.json`:
 
 Server commentati (attivabili rimuovendo `//`): `fetch`, `postgres`, `sqlite`, `git`, `context7`,
 `tavily`, `n8n`, `notion`, `figma`, `office-word/excel/powerpoint`, `task-master`, `tam`, `fred`.
+
+Claude Code legge invece `.mcp.json` (root del progetto, non `.vscode/`): solo `mcp-base-template` e `sequential-thinking`.
 
 ---
 

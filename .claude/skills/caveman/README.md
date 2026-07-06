@@ -45,4 +45,4 @@ Caveman (ultra):
 ## See also
 
 - [`SKILL.md`](./SKILL.md) — full LLM-facing instructions
-- [Caveman README](../../README.md) — repo overview, install, benchmarks
+- Installed from [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman) (tracked in `skills-lock.json`, mirrored at `.agents/skills/caveman/`)
