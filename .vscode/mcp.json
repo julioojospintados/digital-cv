@@ -46,6 +46,18 @@
         "mcp-server-sequential-thinking"
       ]
     },
+    // PLAYWRIGHT — automazione browser: naviga, clicca, screenshot, verifica UI
+    // Scarica on-demand via npx al primo avvio (nessuna install globale richiesta)
+    "playwright": {
+      "type": "stdio",
+      "command": "cmd",
+      "args": [
+        "/c",
+        "npx",
+        "-y",
+        "@playwright/mcp@latest"
+      ]
+    },
 
     // ═══════════════════════════════════════════════════════════════════════
     // ○ ON-DEMAND — attivare solo quando servono (richiedono token/auth)

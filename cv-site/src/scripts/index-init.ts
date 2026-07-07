@@ -524,6 +524,37 @@ function launchJourney(href: string) {
   journey.call(() => { window.location.href = href; }, undefined, navigateAt);
 }
 
+// ── Scroll alla profile-section — hero card ancora la preview sotto ────────
+// invece di lasciare la pagina con launchJourney(). Il vero "commit" di
+// navigazione resta solo sul .profile-cta in fondo a ogni sezione: così
+// chi tocca la card in hero vede prima un'anteprima del mode, a costo zero.
+function getOffsetTop(el: HTMLElement): number {
+  let top = 0;
+  let current: HTMLElement | null = el;
+  while (current) {
+    top += current.offsetTop;
+    current = current.offsetParent as HTMLElement | null;
+  }
+  return top;
+}
+
+function scrollToProfile(mode: string) {
+  const target = document.querySelector<HTMLElement>(
+    `.profile-section[data-mode="${mode}"]`,
+  );
+  if (!target) {
+    window.location.href = `/${mode}`;
+    return;
+  }
+  const absoluteTop = getOffsetTop(target);
+  const lenis = window.__lenis;
+  if (lenis && typeof lenis.scrollTo === "function") {
+    lenis.scrollTo(absoluteTop, { duration: 1.2 });
+  } else {
+    window.scrollTo({ top: absoluteTop, behavior: "smooth" });
+  }
+}
+
 // ── Seleziona mode: aggiorna card UI, knolling, modeStore ───────────────
 const modeGlow: Record<string, string> = {
   tech: "0 0 24px 4px rgba(0,255,200,0.45)",
@@ -545,16 +576,9 @@ function selectMode(targetCard: HTMLButtonElement, mode: string) {
   }
   cards.forEach((c) => {
     const goBtn = c.querySelector<HTMLElement>(".mode-card__go");
-    const desc = c.querySelector<HTMLElement>(".mode-card__desc");
     if (c === targetCard) {
       c.classList.add("is-selected");
       c.classList.remove("is-passive");
-      // Change desc to "Go To ↗"
-      if (desc && !desc.classList.contains("is-go")) {
-        desc.dataset.originalText = desc.textContent ?? "";
-        desc.innerHTML = 'Go To <span class="go-arrow" aria-hidden="true"><div class="cta-icon-touch"><svg viewBox="0 0 24 24" class="mio-svg">    <path d="M12 2L2 22h20L12 2z" />  </svg></div></span>';
-        desc.classList.add("is-go");
-      }
       // Ingrandimento visibile (knolling effect) — prendi lo strumento dal tavolo
       // Stesso comportamento su mobile e desktop, solo la forma cambia (orizzontale vs quadrata)
       gsap.to(c, { scaleX: 1.05, scaleY: 1.18,  duration: 0.4, ease: "back.out(1.8)" });
@@ -599,12 +623,6 @@ function selectMode(targetCard: HTMLButtonElement, mode: string) {
     } else {
       c.classList.add("is-passive");
       c.classList.remove("is-selected");
-      // Restore original desc text
-      if (desc && desc.classList.contains("is-go")) {
-        desc.textContent = desc.dataset.originalText ?? "";
-        delete desc.dataset.originalText;
-        desc.classList.remove("is-go");
-      }
       // Su mobile: scale: 1 (il grid riduce la cella, scale causerebbe overflow)
       gsap.to(c, { scale: isMobile ? 1 : 0.96, duration: 0.25, ease: "power2.out" });
       if (goBtn && goBtn.classList.contains("is-ready")) {
@@ -659,18 +677,10 @@ function selectMode(targetCard: HTMLButtonElement, mode: string) {
   });
 }
 
-// ── Per-card: tap/click = selezione, GO button = navigazione ───────────────
+// ── Per-card: un solo click = seleziona ED effettua lo scroll alla preview ──
 cards.forEach((card) => {
   const mode = card.dataset.mode ?? "tech";
   card.addEventListener("click", (e) => {
-    // Secondo tap su card già selezionata = naviga (equivale a premere GO)
-    if (card.classList.contains("is-selected")) {
-      const goBtn = card.querySelector<HTMLElement>(".mode-card__go");
-      const href = goBtn?.dataset.href ?? `/${mode}`;
-      launchJourney(href);
-      return;
-    }
-
     // Ripple
     const rect = card.getBoundingClientRect();
     const clickEvent = e as MouseEvent;
@@ -690,15 +700,16 @@ cards.forEach((card) => {
     ripple.addEventListener("animationend", () => ripple.remove());
 
     selectMode(card, mode);
+    scrollToProfile(mode);
   });
 });
 
-// GO button desktop: click → naviga — stopPropagation evita il double-fire con card click
+// GO button desktop: click → scrolla alla preview — stopPropagation evita il double-fire con card click
 document.querySelectorAll<HTMLElement>(".mode-card__go").forEach((btn) => {
   btn.addEventListener("click", (e) => {
     e.stopPropagation();
-    const href = btn.dataset.href ?? "/cv";
-    launchJourney(href);
+    const mode = btn.closest<HTMLElement>(".mode-card")?.dataset.mode ?? "tech";
+    scrollToProfile(mode);
   });
 });
 
@@ -722,25 +733,6 @@ window.addEventListener("pageshow", (e) => {
   if (e.persisted) window.location.reload();
 });
 
-// ── Scroll cue: scompare al primo evento scroll/wheel/touch ───────────────
-const scrollCue = document.querySelector<HTMLElement>(".scroll-cue");
-if (scrollCue) {
-  const hideScrollCue = () => {
-    scrollCue.classList.add("is-hidden");
-    window.removeEventListener("scroll", hideScrollCue, {
-      passive: true,
-    } as EventListenerOptions);
-    window.removeEventListener("wheel", hideScrollCue, {
-      passive: true,
-    } as EventListenerOptions);
-    window.removeEventListener("touchmove", hideScrollCue, {
-      passive: true,
-    } as EventListenerOptions);
-  };
-  window.addEventListener("scroll", hideScrollCue, { passive: true });
-  window.addEventListener("wheel", hideScrollCue, { passive: true });
-  window.addEventListener("touchmove", hideScrollCue, { passive: true });
-}
 
 // ── Profile sections — reveal + parallax doppia profondità ────────────────────────
 if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
