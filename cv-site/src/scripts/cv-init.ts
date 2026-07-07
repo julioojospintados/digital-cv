@@ -811,6 +811,20 @@ document
           body.setAttribute("tabindex", "-1");
           body.focus({ preventScroll: true });
         }
+
+        // Il body transiziona max-height 0 → 9000px (cv-page.css) per permettere
+        // contenuto di altezza arbitraria: durante quella transizione alcuni
+        // browser "inseguono" l'elemento a fuoco e finiscono per allineare la
+        // FINE del contenuto appena aperto invece dell'inizio. Controlliamo lo
+        // scroll esplicitamente sull'header (che non si sposta) una volta che
+        // la transizione (0.55s) e l'eventuale chiusura di altri cluster
+        // (mobile) si sono assestate.
+        setTimeout(() => {
+          const navEl = document.querySelector<HTMLElement>("#cv-nav");
+          const navHeight = navEl ? navEl.getBoundingClientRect().height : 52;
+          const targetY = header.getBoundingClientRect().top + window.scrollY - navHeight - 8;
+          scrollToPositionThen(targetY);
+        }, 600);
       }
 
       // After layout change, refresh ScrollTrigger to recompute offsets

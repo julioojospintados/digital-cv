@@ -41,15 +41,19 @@ document.querySelectorAll<HTMLImageElement>(".knoll-item").forEach((img) => {
   );
   if (!targetCard) return;
 
+  // Click sull'oggetto knolling = solo "giochino" (attiva la card, come un
+  // hover fisico) — mai scrollToProfile: quello resta un'azione esplicita
+  // sulla card stessa. selectMode è hoisted (function declaration), quindi
+  // richiamabile qui anche se definita più sotto nel file.
   if (img.src.includes("flashlight")) {
     // Flashlight desktop: solo 1rem dal centro è cliccabile
     img.addEventListener("click", (e) => {
       if (_distFromCenter(img.getBoundingClientRect(), e.clientX, e.clientY) <= _1rem()) {
-        targetCard.click();
+        selectMode(targetCard, primaryMode);
       }
     });
   } else {
-    img.addEventListener("click", () => targetCard.click());
+    img.addEventListener("click", () => selectMode(targetCard, primaryMode));
   }
 });
 
@@ -66,11 +70,11 @@ document.querySelectorAll<HTMLElement>(".knoll-wrap").forEach((wrap) => {
     // Flashlight mobile: solo 1rem dal centro dell'immagine è cliccabile
     wrap.addEventListener("click", (e) => {
       if (_distFromCenter(img.getBoundingClientRect(), e.clientX, e.clientY) <= _1rem()) {
-        targetCard.click();
+        selectMode(targetCard, primaryMode);
       }
     });
   } else {
-    wrap.addEventListener("click", () => targetCard.click());
+    wrap.addEventListener("click", () => selectMode(targetCard, primaryMode));
   }
 });
 
