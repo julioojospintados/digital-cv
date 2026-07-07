@@ -64,7 +64,7 @@ src/
 ## Data Layer — Source of Truth
 
 Dettaglio completo (file, sezioni, interfaccia Feedback) in `knolling-cv/SKILL.md`.
-Regola da ricordare qui: **non modificare la struttura dei tipi in `cv.ts` senza aggiornare anche `cv.en.ts`.**
+Regola da ricordare qui: **ogni modifica a `cv.ts` va rispecchiata in `cv.en.ts`** — non solo la struttura dei tipi, ma anche i contenuti (description, highlights, summary, ecc.). Se cambi una frase in italiano e non tocchi `cv.en.ts`, le due lingue divergono silenziosamente: nessun errore TypeScript te lo segnala, perché i tipi restano compatibili. Aggiorna entrambi i file nella stessa modifica, non "poi".
 
 ---
 

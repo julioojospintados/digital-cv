@@ -432,10 +432,10 @@ const modeDescription =
         aria-expanded="false"
       >
         <span class="mode-dropdown__label" id="mode-dropdown-label">
-          {mode === "tech" ? "Software Developer"
-            : mode === "creative" ? "Web &amp; UX Designer"
+          {mode === "tech" ? "Software Dev"
+            : mode === "creative" ? "Web &amp; UX"
             : mode === "management" ? "Project Manager"
-            : "AI &amp; Digital Specialist"}
+            : "AI &amp; Digital"}
         </span>
         <span class="mode-dropdown__chevron" aria-hidden="true">›</span>
       </button>
@@ -445,10 +445,10 @@ const modeDescription =
         role="listbox"
         aria-labelledby="mode-dropdown-btn"
       >
-        <li class:list={["mode-dropdown__option", { "is-selected": mode === "tech" }]} role="option" data-dropdown-mode="tech" tabindex="-1">Software Developer</li>
-        <li class:list={["mode-dropdown__option", { "is-selected": mode === "creative" }]} role="option" data-dropdown-mode="creative" tabindex="-1">Web &amp; UX Designer</li>
+        <li class:list={["mode-dropdown__option", { "is-selected": mode === "tech" }]} role="option" data-dropdown-mode="tech" tabindex="-1">Software Dev</li>
+        <li class:list={["mode-dropdown__option", { "is-selected": mode === "creative" }]} role="option" data-dropdown-mode="creative" tabindex="-1">Web &amp; UX</li>
         <li class:list={["mode-dropdown__option", { "is-selected": mode === "management" }]} role="option" data-dropdown-mode="management" tabindex="-1">Project Manager</li>
-        <li class:list={["mode-dropdown__option", { "is-selected": mode === "human" }]} role="option" data-dropdown-mode="human" tabindex="-1">AI &amp; Digital Specialist</li>
+        <li class:list={["mode-dropdown__option", { "is-selected": mode === "human" }]} role="option" data-dropdown-mode="human" tabindex="-1">AI &amp; Digital</li>
       </ul>
     </div>
     <div class="lang-switch" aria-label="Lingua / Language">
@@ -635,7 +635,6 @@ const modeDescription =
                   <div
                     class="exp-drawer"
                     id={`exp-drawer-${cluster.key}`}
-                    aria-hidden="true"
                   >
                     <div class="exp-grid">
                       {cluster.extra.map((exp) => (
@@ -650,11 +649,10 @@ const modeDescription =
                   class="exp-deeper-btn"
                   type="button"
                   data-drawer={cluster.key}
-                  aria-expanded="false"
                   aria-controls={`exp-drawer-${cluster.key}`}
                 >
-                  <span class="exp-deeper-btn__label" data-open-label="chiudi">
-                    GO deeper
+                  <span class="exp-deeper-btn__label">
+                    Leggi altre {Math.min(3, cluster.extra.length)}
                   </span>
                   <span class="exp-deeper-btn__arrow" aria-hidden="true">
                     ↓
@@ -691,10 +689,9 @@ const modeDescription =
     <div class="ai-grid">
       {cvData.aiWorkflow.map((item) => <AiCard {...item} />)}
     </div>
-  </main>
 
-  <!-- ── SOFT SKILLS + METODOLOGIA ───────────────────────────────── -->
-  <section class="soft-section reveal" aria-label="Soft skills e metodologia">
+    <!-- ── SOFT SKILLS + METODOLOGIA ───────────────────────────────── -->
+    <section class="soft-section reveal" aria-label="Soft skills e metodologia">
     <img
       class="bg-knoll bg-knoll--plant"
       src="/knolling/plant.png"
@@ -731,91 +728,91 @@ const modeDescription =
         }
       </ul>
     </div>
-  </section>
-</Layout>
+    </section>
 
-<!-- ── GROWTH AREAS ─────────────────────────────────────────────── -->
-{
-  cvData.growthAreas.length > 0 && (
-    <section
-      class="growth-section reveal"
-      aria-label="Aree di crescita consapevole"
-    >
-      <h2 class="section-title">
-        <span>Consapevolezza</span>
-        <span class="section-subtitle">
-          Aree in evoluzione reincorniciate come risorse
-        </span>
-      </h2>
-      <div class="growth-grid">
-        {cvData.growthAreas.map((area) => (
-          <article
-            class="growth-card cv-card"
-            data-tags="tech creative human management"
-          >
-            <p class="growth-card__label">Area in evoluzione</p>
-            <p class="growth-card__name">{area.name}</p>
-            <p class="growth-card__reframe">{area.reframe}</p>
-          </article>
-        ))}
+    <!-- ── GROWTH AREAS ─────────────────────────────────────────────── -->
+    {
+      cvData.growthAreas.length > 0 && (
+        <section
+          class="growth-section reveal"
+          aria-label="Aree di crescita consapevole"
+        >
+          <h2 class="section-title">
+            <span>Consapevolezza</span>
+            <span class="section-subtitle">
+              Aree in evoluzione reincorniciate come risorse
+            </span>
+          </h2>
+          <div class="growth-grid">
+            {cvData.growthAreas.map((area) => (
+              <article
+                class="growth-card cv-card"
+                data-tags="tech creative human management"
+              >
+                <p class="growth-card__label">Area in evoluzione</p>
+                <p class="growth-card__name">{area.name}</p>
+                <p class="growth-card__reframe">{area.reframe}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    <!-- ── PROJECTS ────────────────────────────────────────────────── -->
+    <section class="projects-section reveal" aria-label="Progetti personali">
+      <img
+        class="bg-knoll bg-knoll--compass"
+        src="/knolling/compass.png"
+        aria-hidden="true"
+        alt=""
+      />
+      <h2 class="section-title"><span>Progetti</span></h2>
+      <div class="projects-grid">
+        {projectsData.map((project) => <ProjectCard {...project} />)}
       </div>
     </section>
-  )
-}
+    <!-- ── FORMAZIONE & CERTIFICAZIONI ────────────────────────────── -->
+    <section class="edu-section reveal" aria-label="Formazione e certificazioni">
+      <div class="edu-header">
+        <h2 class="section-title">
+          <span>Formazione &amp; Certificazioni</span>
+          <span class="section-subtitle">cronologia completamento</span>
+        </h2>
+        <div class="timeline-legend" aria-hidden="true">
+          <span class="tl-legend-chip tl-legend-chip--cert">Certificazione</span>
+          <span class="tl-legend-chip tl-legend-chip--edu">Formazione</span>
+        </div>
+      </div>
+      <ol class="timeline" role="list">
+        {
+          timelineItems.map((item) => (
+            <li class="tl-item" data-type={item.type}>
+              <time class="tl-date" datetime={item.date} title={item.date}>
+                {item.dateLabel}
+              </time>
+              <span class="tl-dot-col" aria-hidden="true">
+                <span class="tl-dot" />
+              </span>
+              <div class="tl-body">
+                <p class="tl-title">
+                  {item.title}
+                  {item.inProgress && <span class="tl-wip">in corso</span>}
+                </p>
+                <p class="tl-inst">{item.institution}</p>
+                {item.credentialId && (
+                  <p class="tl-cred">ID: {item.credentialId}</p>
+                )}
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+  </main>
 
-<!-- ── PROJECTS ────────────────────────────────────────────────── -->
-<section class="projects-section reveal" aria-label="Progetti personali">
-  <img
-    class="bg-knoll bg-knoll--compass"
-    src="/knolling/compass.png"
-    aria-hidden="true"
-    alt=""
-  />
-  <h2 class="section-title"><span>Progetti</span></h2>
-  <div class="projects-grid">
-    {projectsData.map((project) => <ProjectCard {...project} />)}
-  </div>
-</section>
-<!-- ── FORMAZIONE & CERTIFICAZIONI ────────────────────────────── -->
-<section class="edu-section reveal" aria-label="Formazione e certificazioni">
-  <div class="edu-header">
-    <h2 class="section-title">
-      <span>Formazione &amp; Certificazioni</span>
-      <span class="section-subtitle">cronologia completamento</span>
-    </h2>
-    <div class="timeline-legend" aria-hidden="true">
-      <span class="tl-legend-chip tl-legend-chip--cert">Certificazione</span>
-      <span class="tl-legend-chip tl-legend-chip--edu">Formazione</span>
-    </div>
-  </div>
-  <ol class="timeline" role="list">
-    {
-      timelineItems.map((item) => (
-        <li class="tl-item" data-type={item.type}>
-          <time class="tl-date" datetime={item.date} title={item.date}>
-            {item.dateLabel}
-          </time>
-          <span class="tl-dot-col" aria-hidden="true">
-            <span class="tl-dot" />
-          </span>
-          <div class="tl-body">
-            <p class="tl-title">
-              {item.title}
-              {item.inProgress && <span class="tl-wip">in corso</span>}
-            </p>
-            <p class="tl-inst">{item.institution}</p>
-            {item.credentialId && (
-              <p class="tl-cred">ID: {item.credentialId}</p>
-            )}
-          </div>
-        </li>
-      ))
-    }
-  </ol>
-</section>
-
-<!-- ────────────────────────────────────────────────────────── FOOTER -->
-<footer class="cv-footer">
+  <!-- ────────────────────────────────────────────────────────── FOOTER -->
+  <footer class="cv-footer">
   {
     cvData.interests.length > 0 && (
       <div class="interests-strip">
@@ -834,6 +831,7 @@ const modeDescription =
     >
   </p>
 </footer>
+</Layout>
 
 <script>
   import "../scripts/cv-init.ts";

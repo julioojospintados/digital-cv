@@ -1090,6 +1090,23 @@ img[src*="flashlight"] {
   background: var(--color-bg);
 }
 
+/* ── Luce ambientale di sezione — usa il token --ps-glow (per-mode) ────
+   --ambient è animata da GSAP (index-init.ts, scrub) da 0 a 1 mentre la
+   sezione entra nel viewport. Con reduced-motion resta 0: la sezione è
+   comunque leggibile, perde solo l'alone. */
+.profile-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 90% 70% at 50% 25%,
+    var(--ps-glow),
+    transparent 70%
+  );
+  opacity: var(--ambient, 0);
+}
+
 .profile-section {
   position: relative;
   padding: 4rem 1.5rem;
@@ -1223,6 +1240,16 @@ img[src*="flashlight"] {
   border-color: color-mix(in srgb, var(--ps-accent) 70%, transparent);
   box-shadow: 0 0 16px color-mix(in srgb, var(--ps-accent) 28%, transparent);
   outline: none;
+}
+
+.profile-cta__arrow {
+  flex-shrink: 0;
+  transition: transform 0.22s ease;
+}
+
+.profile-cta:hover .profile-cta__arrow,
+.profile-cta:focus-visible .profile-cta__arrow {
+  transform: translate(3px, -3px);
 }
 
 /* ── Profile CTA pulse — same visual as mode-card pulse ─── */

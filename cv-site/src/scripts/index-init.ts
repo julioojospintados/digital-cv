@@ -763,6 +763,25 @@ if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     );
   });
 
+  // Luce ambientale — l'alone accent (--ps-glow via ::before) sale mentre
+  // la sezione entra: stesso linguaggio della pagina [mode] (cv-init.ts).
+  document.querySelectorAll<HTMLElement>(".profile-section").forEach((section) => {
+    gsap.fromTo(
+      section,
+      { "--ambient": 0 },
+      {
+        "--ambient": 1,
+        ease: "none",
+        scrollTrigger: {
+          trigger: section,
+          start: "top 85%",
+          end: "top 25%",
+          scrub: true,
+        },
+      },
+    );
+  });
+
   // Parallax immagini — delta ampio: desktop 160px, mobile 90px
   // L'overflow:hidden della section crea un reveal dai bordi (effetto voluto)
   const profileDelta = isDesktopView ? 300 : 90;

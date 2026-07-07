@@ -25,16 +25,34 @@
   z-index: 0;
 }
 
+/* ── Luce ambientale di sezione — alone accent che sale con lo scroll ────
+   --ambient è animata da GSAP (cv-init.ts, scrub) da 0 a 1 mentre la sezione
+   entra nel viewport: il "passaggio di sezione" si percepisce come un cambio
+   di luce, non solo come un fade del contenuto. Con reduced-motion resta 0. */
+.skills-section::before,
+.exp-section::before,
+.ai-section::before,
+.soft-section::before,
+.projects-section::before,
+.edu-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 80% 60% at 50% 12%,
+    color-mix(in srgb, var(--color-accent) 5%, transparent),
+    transparent 70%
+  );
+  opacity: var(--ambient, 0);
+}
+
 /* Knolling objects in hero — laptop top-right */
 /* rotation is set by GSAP (cv-init.ts) — do not add transform here */
 .bg-knoll--laptop {
   top: 8rem;
   right: -3rem;
   width: 20rem;
-
-  @media (max-width: 48rem) {
-    top: 15rem;
-  }
 }
 
 /* Knolling in skills section — multitool right */
@@ -129,10 +147,6 @@ skill-force-graph {
   overflow: visible;
   max-width: 100dvw;
 
-  @media (max-width: 40rem) {
-    padding: 0 0.75rem;
-    gap: 0.25rem;
-  }
 }
 
 .cv-nav__logo {
@@ -170,12 +184,30 @@ go-logo:not(:defined) {
   justify-content: center;
   overflow: hidden;
   min-width: 0;
+  height: 100%;
 }
 
-@media (max-width: 40rem) {
+@media (max-width: 43.5rem) {
+
   .mode-buttons {
     display: none;
   }
+}
+
+/* Accent fisso per-mode del bottone — indipendente dal --color-accent globale
+   (che segue il mode ATTIVO della pagina). Serve per dare a ogni voce non
+   selezionata il proprio colore, a bassa intensità, su desktop. */
+.mode-btn[data-nav-mode="tech"] {
+  --btn-accent: rgba(0, 255, 200, 1);
+}
+.mode-btn[data-nav-mode="creative"] {
+  --btn-accent: rgba(255, 107, 53, 1);
+}
+.mode-btn[data-nav-mode="management"] {
+  --btn-accent: rgba(180, 100, 255, 1);
+}
+.mode-btn[data-nav-mode="human"] {
+  --btn-accent: rgba(240, 200, 127, 1);
 }
 
 .mode-btn {
@@ -210,6 +242,7 @@ go-logo:not(:defined) {
   color: var(--color-accent);
   border-color: var(--color-accent);
   border-width: 2px;
+  opacity: 1;
   background: color-mix(in srgb, var(--color-accent) 18%, transparent);
   box-shadow:
     0 0 10px color-mix(in srgb, var(--color-accent) 35%, transparent),
@@ -267,6 +300,7 @@ go-logo:not(:defined) {
     overflow: visible;
     padding: 0.3rem 0.75rem;
     will-change: auto;
+    opacity: 0.50;
   }
 
   .mode-btn__abbr {
@@ -278,6 +312,19 @@ go-logo:not(:defined) {
     position: static;
     transform: none;
   }
+
+  /* Voci non selezionate: bordo e testo nel proprio accent, a bassa intensità —
+     il colore resta "intuibile" senza competere con quella attiva. */
+  .mode-btn:not([aria-pressed="true"]) {
+    border-color: color-mix(in srgb, var(--btn-accent, transparent) 30%, transparent);
+    color: color-mix(in srgb, var(--btn-accent, rgba(192, 220, 215, 0.85)) 55%, rgba(192, 220, 215, 0.85));
+  }
+
+  .mode-btn:not([aria-pressed="true"]):hover {
+    border-color: color-mix(in srgb, var(--btn-accent, transparent) 60%, transparent);
+    color: color-mix(in srgb, var(--btn-accent, rgba(192, 220, 215, 0.85)) 85%, rgba(192, 220, 215, 0.85));
+    background: color-mix(in srgb, var(--btn-accent, transparent) 8%, transparent);
+  }
 }
 
 /* ── Mode dropdown — mobile only ───────────────────────────────── */
@@ -285,7 +332,7 @@ go-logo:not(:defined) {
   display: none;
 }
 
-@media (max-width: 40rem) {
+@media (max-width: 43.5rem) {
   .mode-dropdown {
     flex: 1;
     min-width: 0;
@@ -308,7 +355,7 @@ go-logo:not(:defined) {
   color: var(--color-accent);
   font-family: var(--font-mono);
   font-size: 0.75rem;
-  font-weight: 500;
+  font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   cursor: pointer;
@@ -1110,10 +1157,11 @@ a.lang-switch__opt:hover {
   padding: 1rem 1.25rem 1.25rem;
 }
 
-/* ── exp-drawer: extra cards hidden until "GO deeper" is clicked ──── */
-.exp-drawer {
-  height: 0;
-  overflow: hidden;
+/* ── exp-drawer: card extra rivelate a lotti di 3 da "Leggi altro" ──── */
+/* L'altezza segue le card visibili — niente height animata.
+   [hidden] va forzato: .exp-card ha display:flex che vincerebbe sul default UA. */
+.exp-drawer .exp-card[hidden] {
+  display: none;
 }
 
 /* Cards inside the drawer start invisible for GSAP to animate */
@@ -1153,6 +1201,12 @@ a.lang-switch__opt:hover {
   color: var(--color-accent);
 }
 
+/* [hidden] da solo perde contro display:inline-flex sopra (stessa specificità,
+   l'autore vince sullo UA stylesheet) — va forzato esplicitamente. */
+.exp-deeper-btn[hidden] {
+  display: none;
+}
+
 .exp-deeper-btn__count {
   display: none;
 }
@@ -1161,31 +1215,6 @@ a.lang-switch__opt:hover {
   display: inline-block;
   font-size: 0.75rem;
   transition: opacity 0.2s ease;
-}
-
-/* Swap arrow character via content when open */
-.exp-deeper-btn[aria-expanded="true"] .exp-deeper-btn__arrow {
-  font-size: 0;
-}
-
-.exp-deeper-btn[aria-expanded="true"] .exp-deeper-btn__arrow::before {
-  content: "↑";
-  font-size: 0.75rem;
-}
-
-/* Label swap via data-open-label attribute */
-.exp-deeper-btn[aria-expanded="true"] .exp-deeper-btn__label {
-  font-size: 0;
-}
-
-.exp-deeper-btn[aria-expanded="true"] .exp-deeper-btn__label::before {
-  content: attr(data-open-label);
-  font-size: 0.75rem;
-}
-
-/* When open: right-aligned text, accent colour */
-.exp-deeper-btn[aria-expanded="true"] {
-  color: var(--color-accent);
 }
 
 @media (prefers-reduced-motion: reduce) {

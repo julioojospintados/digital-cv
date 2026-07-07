@@ -412,7 +412,7 @@ const projectsData = cvDataEn.projects.slice(0, 6).map((p) => {
         aria-haspopup="listbox"
         aria-expanded="false"
       >
-        <span class="mode-dropdown__label" id="mode-dropdown-label">Software Developer</span>
+        <span class="mode-dropdown__label" id="mode-dropdown-label">Software Dev</span>
         <span class="mode-dropdown__chevron" aria-hidden="true">›</span>
       </button>
       <ul
@@ -421,10 +421,10 @@ const projectsData = cvDataEn.projects.slice(0, 6).map((p) => {
         role="listbox"
         aria-labelledby="mode-dropdown-btn"
       >
-        <li class="mode-dropdown__option is-selected" role="option" data-dropdown-mode="tech" tabindex="-1">Software Developer</li>
-        <li class="mode-dropdown__option" role="option" data-dropdown-mode="creative" tabindex="-1">Web &amp; UX Designer</li>
+        <li class="mode-dropdown__option is-selected" role="option" data-dropdown-mode="tech" tabindex="-1">Software Dev</li>
+        <li class="mode-dropdown__option" role="option" data-dropdown-mode="creative" tabindex="-1">Web &amp; UX</li>
         <li class="mode-dropdown__option" role="option" data-dropdown-mode="management" tabindex="-1">Project Manager</li>
-        <li class="mode-dropdown__option" role="option" data-dropdown-mode="human" tabindex="-1">AI &amp; Digital Specialist</li>
+        <li class="mode-dropdown__option" role="option" data-dropdown-mode="human" tabindex="-1">AI &amp; Digital</li>
       </ul>
     </div>
     <div class="lang-switch" aria-label="Lingua / Language">
@@ -604,7 +604,6 @@ const projectsData = cvDataEn.projects.slice(0, 6).map((p) => {
                   <div
                     class="exp-drawer"
                     id={`exp-drawer-${cluster.key}`}
-                    aria-hidden="true"
                   >
                     <div class="exp-grid">
                       {cluster.extra.map((exp) => (
@@ -619,11 +618,10 @@ const projectsData = cvDataEn.projects.slice(0, 6).map((p) => {
                   class="exp-deeper-btn"
                   type="button"
                   data-drawer={cluster.key}
-                  aria-expanded="false"
                   aria-controls={`exp-drawer-${cluster.key}`}
                 >
-                  <span class="exp-deeper-btn__label" data-open-label="close">
-                    GO deeper
+                  <span class="exp-deeper-btn__label">
+                    Read {Math.min(3, cluster.extra.length)} more
                   </span>
                   <span class="exp-deeper-btn__arrow" aria-hidden="true">
                     ↓

@@ -7,10 +7,14 @@ interface Props {
   tags: string;
 }
 
-const { tool, title, desc, impact, tags } = Astro.props;
+const { tool, title, desc, impact } = Astro.props;
 ---
 
-<div class="ai-card cv-card" data-tags={tags}>
+<!-- Niente cv-card/data-tags: la sezione AI Workflow è sempre visibile a
+     piena opacità, indipendentemente dal mode (vedi mcp-architecture skill).
+     Con cv-card[data-tags] applyCardStates() la trattava come le altre card
+     e la sbiadiva su qualunque mode privo del tag corrispondente (es. management). -->
+<div class="ai-card">
   <span class="ai-clip" aria-label="AI-augmented workflow">
     <span class="ai-clip__pin" aria-hidden="true"></span>
     <span class="ai-clip__text" aria-hidden="true">⚡ AI</span>

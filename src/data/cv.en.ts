@@ -77,14 +77,11 @@ export const cvDataEn = {
       location: "Turin, Italy",
       remote: true,
       description:
-        "Complete Operational Partnering case study across three integrated pillars: Technology, Design and Method. Phase 1 — Strategic analysis: mapping business processes and identifying operational bottlenecks before writing a single line of code. Phase 2 — Engine build: MCP (Model Context Protocol) architecture with tools, resources and prompts as APIs for AI agents, natively integrated with VS Code Copilot and Cursor. Phase 3 — Design for non-technical users: simplified UX for internal operators, designed to reduce onboarding time and operational error. Phase 4 — Agile delivery: Cursor → GitLab CI/CD → automated deploy pipeline, 1–2 week sprints with a measured impactScore at every release, team autonomous at end of engagement.",
+        "Internal management software for SMEs, from process analysis to deploy: MCP architecture with tools, resources and prompts as APIs for AI agents (integrated with VS Code Copilot and Cursor), simplified UX for non-technical operators, automated Cursor → GitLab CI/CD → deploy pipeline. 1–2 week sprints, impactScore measured at every release.",
       highlights: [
-        "Analyse business processes as the starting point — zero code written before understanding the real problem",
-        "Design an MCP architecture with tools, resources and prompts as APIs for AI agents — native integration with VS Code Copilot and Cursor",
-        "Design simplified UX for non-technical operators: 40% reduction in onboarding time for new workflows",
-        "Automate the Cursor → GitLab CI/CD → deploy pipeline with no manual intervention",
-        "Apply lean Agile to the SME context: 1–2 week sprints, business-oriented backlog, retrospectives with a real impactScore at every release",
-        "Reduce average development time by 80% through AI-augmented workflow (project still in progress)",
+        "Simplified UX for non-technical operators: 40% reduction in onboarding time for new workflows",
+        "Automated Cursor → GitLab CI/CD → deploy pipeline, zero manual intervention",
+        "Reduced average development time by 80% with AI-augmented workflow (project ongoing)",
       ],
       skills: [
         "MCP",
@@ -108,14 +105,11 @@ export const cvDataEn = {
       location: "Turin, Italy",
       remote: true,
       description:
-        "Design and development of an interactive CV as a systematic proving ground for an end-to-end AI-augmented workflow. The entire cycle — architecture, UI, GSAP animations, MCP server, HTTP API with Hono — was built with GitHub Copilot and Claude as operational co-pilots, applying structured Prompt Engineering at every phase: specification, review, debugging, refactoring. The result is a two-layer system: an Astro + Lit site for the visual CV, and an MCP server that exposes CV data as an API for AI agents. The project is also a live demonstration that a solo developer, with AI as a force multiplier, can produce in weeks what a team would need months to deliver.",
+        "Interactive CV built end-to-end with GitHub Copilot and Claude as operational co-pilots: architecture, UI, GSAP animations, MCP server and Hono HTTP API. An Astro + Lit site for the visual CV, plus an MCP server exposing the data as an API for AI agents. Delivered in 5 days, against a traditional estimate of over a month.",
       highlights: [
-        "Design an MCP architecture with tools, resources and prompt templates that expose CV data as an API for AI agents (VS Code Copilot, Claude Desktop)",
-        "Build an Astro + Lit site with advanced GSAP animations: narrative preloader, SVG sine wave hold effect, distortion filter via feTurbulence",
-        "Build a complete AI-augmented workflow with GitHub Copilot and Claude — zero boilerplate written by hand",
-        "Develop a Hono HTTP server with OpenAPI spec, Zod validation and automated tests with Vitest",
-        "Structure Prompt Engineering with skill files, agent instructions and reusable slash prompts — the AI knows the project like a senior team member",
-        "Deliver in 5 days with AI workflow — traditional estimate: 1+ month. –70% development time, test coverage >80%, Awwwards-level UI quality",
+        "MCP server with tools, resources and prompt templates exposing CV data to AI agents (VS Code Copilot, Claude Desktop)",
+        "Astro + Lit site with advanced GSAP animations: narrative preloader, SVG wave hold effect, distortion filter via feTurbulence",
+        "Hono HTTP server with OpenAPI spec, Zod validation and Vitest tests — test coverage >80%",
       ],
       skills: [
         "MCP Protocol",
@@ -141,13 +135,11 @@ export const cvDataEn = {
       location: "Turin, Italy",
       remote: false,
       description:
-        "Enterprise systems in banking and technology operate at scale and demand interfaces that are both architecturally solid and usable by millions of people. I designed design systems, WebComponent libraries and microfrontend architectures for Intesa San Paolo and Aruba — every solution built to withstand time, stack changes and unexpected growth.",
+        "Senior Frontend Developer on enterprise systems for Intesa San Paolo and Aruba: design systems, WebComponent libraries and microfrontend architectures used by millions of people.",
       highlights: [
-        "Lead as Tech Lead and Scrum Master the Aruba Design System team (3+ years, 30+ people): sprint coordination, systematic code reviews and technical roadmap of a library with over 100 WebComponents adopted cross-product",
-        "Contribute to Intesa San Paolo digital products in a 50+ person team: enterprise-scale Angular architecture, shared standards and code review processes",
-        "Deliver an enterprise application with microfrontend and microservices architecture, with advanced state management via NGRX",
-        "Introduce systematic unit testing with Jest, with direct impact on release stability and code coverage",
-        "Develop a brand interface in Angular with GraphQL integration for dynamic data access",
+        "Tech Lead and Scrum Master of the Aruba Design System team (3+ years, 30+ people): a library of over 100 WebComponents adopted cross-product",
+        "Enterprise-scale Angular architecture for Intesa San Paolo in a 50+ person team: shared standards and code review",
+        "Systematic unit testing with Jest, with direct impact on release stability and coverage",
       ],
       skills: [
         "Angular",
@@ -172,14 +164,11 @@ export const cvDataEn = {
       location: "Italy",
       remote: true,
       description:
-        "External collaboration with an Italian music agency in a dual capacity: booking and tour management for the roster artists, combined with a strategic contribution to digital communications. I brought my competencies in UX, content strategy and AI tools to optimise existing workflows — without disrupting the agency's operations, but making them more efficient.",
+        "Booking and tour management for the roster artists of an Italian music agency, plus consultancy on digital communication and content strategy.",
       highlights: [
-        "Grow follower count by 100% with a highly targeted audience (musicians, record labels, agents, promoters) — organic and qualitative, not pure volume",
-        "Organise a live event at Arci Bellezza in Milan: venue coordination, artist logistics and event communications from start to finish",
-        "Develop a digital growth plan with a dedicated Spotify playlist proposal to increase organic engagement for roster artists",
-        "Coordinate concert booking: venue research, promoter negotiation, contract management and event timelines",
-        "Build and maintain a structured contact list (promoters, venues, agents, media) to streamline the booking process",
-        "Produce communication materials (copy, emails, artist presentations) with AI support to reduce turnaround time",
+        "Grew follower count by 100% with a highly targeted audience (musicians, labels, promoters) — organic, not pure volume",
+        "Organised a live event at Arci Bellezza in Milan, from booking to communications",
+        "Coordinated concert booking: venue research, promoter negotiation, contract management",
       ],
       skills: [
         "Booking",
@@ -203,11 +192,11 @@ export const cvDataEn = {
       location: "Tuscany, Italy",
       remote: false,
       description:
-        "Support role in video production for high-end international weddings in Tuscany. Assisted the lead videographer in a sector demanding extreme attention to detail and international aesthetic sensibility.",
+        "Support role in video production for high-end international weddings in Tuscany, assisting the lead videographer in a sector demanding extreme attention to detail.",
       highlights: [
-        "Support video shoots for ceremonies with hundreds of international guests",
-        "Collaborate in multicultural and multi-day event contexts",
-        "Operate in high-complexity logistical and cultural contexts, adapting to on-set needs in real time",
+        "Supported video shoots for ceremonies with hundreds of international guests",
+        "Collaborated in multicultural, multi-day event contexts",
+        "Adapted to on-set needs in real time, in high-complexity logistical contexts",
       ],
       skills: [
         "Videography",
@@ -226,10 +215,9 @@ export const cvDataEn = {
       description:
         "Full-remote frontend development within a distributed Turin–Los Angeles team, building a web application for managing and visualising clinical data in US hospital facilities. A technically complex project: an established React codebase, large-scale CSS refactoring, and integration with real-time clinical APIs.",
       highlights: [
-        "Develop React dashboards for visualising and monitoring Covid-19 clinical data in US hospital environments",
-        "Refactor CSS with BEM pattern on a 20,000-line codebase: 800 duplicate lines removed, improved maintainability and visual consistency",
-        "Integrate REST and GraphQL APIs for real-time clinical data visualisation",
-        "Operate fully remotely with a cross-cultural USA/Italy team using Agile methodology",
+        "Developed React dashboards for visualising and monitoring Covid-19 clinical data in US hospital environments",
+        "Refactored CSS with BEM pattern on a 20,000-line codebase: 800 duplicate lines removed",
+        "Integrated REST and GraphQL APIs for real-time clinical data visualisation",
       ],
       skills: [
         "React",
@@ -249,7 +237,7 @@ export const cvDataEn = {
       location: "Turin, Italy",
       remote: false,
       description:
-        "Internal processes at media and banking organisations often live inside rigid, poorly ergonomic legacy systems. I designed and developed management applications for Rai Pubblicità and Intesa San Paolo — every tool delivered reduced daily operational friction for end users, transforming slow procedures into fluid workflows.",
+        "Management applications for Rai Pubblicità and Intesa San Paolo, replacing internal processes running on legacy systems with faster workflows for end users.",
       highlights: [
         "Develop internal management applications for Rai Pubblicità with Angular, Spring and Bootstrap",
         "Develop a document and revision management tool for Intesa San Paolo via JSF",
@@ -274,7 +262,7 @@ export const cvDataEn = {
       location: "Milan, Italy",
       remote: false,
       description:
-        "External collaboration with Satispay, one of the most relevant fintech scale-ups in the Italian market. A fast-growth context where every contribution had to be immediate and impact-oriented — and where I consolidated the habit of working in high-velocity environments with still-evolving processes.",
+        "External collaboration with Satispay during a fast-growth phase, with processes still evolving and contributions oriented to immediate impact.",
       highlights: [],
       skills: ["Fintech", "Startup mindset", "Digital communication"],
     },
@@ -286,7 +274,7 @@ export const cvDataEn = {
       location: "Italy",
       remote: false,
       description:
-        "Presenter and moderator for events, cultural festivals and live shows across Italy. Theatre improvisation skills applied to manage the stage, the audience and unexpected situations with composure and authority.",
+        "Presenter and moderator for cultural festivals and live shows across Italy, managing the stage and the unexpected with theatre improvisation techniques.",
       highlights: [
         "Host multidisciplinary cultural festivals (music, art, theatre)",
         "Moderate panels and talks with international guests",
@@ -320,7 +308,7 @@ export const cvDataEn = {
       location: "Chieri, Turin",
       remote: false,
       description:
-        "Every article is an exercise in listening, synthesis and storytelling within strict constraints. I collaborated as a writer for the Corriere di Chieri, covering cultural events and local news — and I refined the ability to transform raw information into stories people want to read. A skill I apply daily in copy, technical documentation and product storytelling.",
+        "Writer for the Corriere di Chieri: local news and cultural events. Where I sharpened the ability to turn raw information into readable stories, still useful today in copy and technical documentation.",
       highlights: [],
       skills: ["Journalism", "Writing", "Editing", "Editorial work"],
     },
@@ -332,7 +320,7 @@ export const cvDataEn = {
       location: "Turin, Italy",
       remote: false,
       description:
-        "Co-founder and organiser of the Square Festival in the Quadrilatero Romano district of Turin, a multidisciplinary cultural event (music, theatre, visual arts) conceived and delivered in 6 months with around 100 people involved across staff, artists and collaborators. Responsible for the theatre section: selection of shows, coordination with theatre companies and scheduling within the festival calendar.",
+        "Co-founder of the Square Festival in the Quadrilatero Romano district of Turin: a multidisciplinary cultural event (music, theatre, visual arts) conceived and delivered in 6 months with around 100 people across staff and artists. Responsible for the theatre section.",
       highlights: [
         "Co-found the Square Festival: from concept to delivery in 6 months, ~100 people involved across staff and artists",
         "Lead the theatre section: research and select shows, negotiate with companies and schedule within the festival programme",
@@ -347,7 +335,7 @@ export const cvDataEn = {
       location: "Turin, Italy",
       remote: false,
       description:
-        "Visual communication is problem solving applied to aesthetics: every brief is an attention problem to solve in seconds. I created visual materials and brand identity assets for local clients, combining technical graphic design training with an aesthetic sensibility developed through years of photography — and each project reinforced the link between strategic thinking and creative production.",
+        "Visual materials and brand identity for local clients, combining technical graphic design training with an aesthetic sensibility built over years of photography.",
       highlights: [
         "Design graphic materials and brand identity for clients in the local and cultural sector",
         "Apply visual hierarchy and typography principles to maximise communicative impact",
@@ -380,7 +368,7 @@ export const cvDataEn = {
       location: "None, Turin",
       remote: false,
       description:
-        "Theatre improvisation can only be taught by someone who already knows how to inhabit uncertainty. I led courses for None Teatro students, transmitting the 'Yes, and...' method as a practice of active listening and collective building — and each session sharpened my ability to read people's needs quickly and adapt my communication register in real time.",
+        "Improvisation courses for None Teatro students, using the 'Yes, and...' method as a practice of active listening and collective building.",
       highlights: [
         "Deliver improvisation and theatre courses for students at different levels",
         "Apply the 'Yes, and...' method as a pedagogical tool to develop creativity and problem solving",
@@ -433,7 +421,7 @@ export const cvDataEn = {
       location: "Turin, Italy",
       remote: false,
       description:
-        "At one of Italy's most-visited cinema chains, every day brought hundreds of guests with different expectations. I managed theatre operations, box office and front-of-house — and learned that every touchpoint with the public, however brief, builds or breaks an experience. A lesson I carry into every UX project.",
+        "Theatre operations, box office and front-of-house at one of Italy's most-visited cinema chains, hundreds of guests a day — the root of my attention to every user touchpoint in UX.",
       highlights: [],
       skills: ["Customer service", "Audience management", "Theatre operations"],
     },
@@ -469,7 +457,7 @@ export const cvDataEn = {
       location: "Ravenna and Crotone, Italy",
       remote: false,
       description:
-        "Managing an entertainment team at highly seasonal beach resorts means leading in the unpredictable, every single day. I coordinated entertainment programmes and staff management at facilities in Ravenna and Crotone — and discovered that leadership is built through improvisation, not control: a conviction that now shapes my approach to any team effort.",
+        "Coordination of entertainment teams and programmes at seasonal beach resorts in Ravenna and Crotone, in highly variable seasonal contexts.",
       highlights: [
         "Coordinate entertainment teams in high-variability, high-pressure seasonal contexts",
         "Design and deliver entertainment programmes for international guests",
@@ -490,7 +478,7 @@ export const cvDataEn = {
       location: "Turin, Italy",
       remote: false,
       description:
-        "Intense operational pace, minimal margin for error and demanding clientele: the kitchen and the bar teach you to work under pressure with precision and no excuses. I managed the counter and supported the kitchen on often late-night shifts — and I carried this operational discipline into every subsequent context, from London to Zanzibar, from the stage to software architecture.",
+        "Counter management and kitchen support on often late-night shifts, in a high-pace context with minimal margin for error.",
       highlights: [],
       skills: [
         "Teamwork",

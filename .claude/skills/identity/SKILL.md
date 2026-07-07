@@ -85,6 +85,13 @@ un piano visivo come un inventario. Tutto è visibile, catalogato, intenzionale.
 Mai "Scopri di più", mai "Vedi", "Leggi", "Clicca qui".
 Usa sempre: `GO Tech` · `GO Creative` · `GO Management` · `GO Human` · "Esplora" · "Entra"
 
+**Eccezione (decisione 2026-07-07):** per le liste a rivelazione progressiva
+(es. esperienze extra nei cluster) si usa il pattern read-more con conteggio —
+"Leggi altre N" / "Read N more" — perché è la convenzione che l'utente già
+conosce (Legge di Jakob: LinkedIn, Medium, ogni feed). Il CTA brandizzato "GO"
+resta per le azioni di *navigazione* (cambiare pagina/mondo), non per il
+disclosure incrementale dentro una lista.
+
 Ogni componente di navigazione usa il prefisso `go-` (es. `<go-button>`, `<go-card>`) e implementa
 micro-interazioni che danno la sensazione di "partenza/lancio".
 

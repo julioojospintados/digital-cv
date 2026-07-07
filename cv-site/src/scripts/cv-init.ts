@@ -225,10 +225,10 @@ applySkillsView(isMobileInit ? "cards" : "graph");
 const INACTIVE_W = "2.2rem";
 const DESKTOP_W = "7.75rem";
 const MODE_LABELS: Record<string, string> = {
-  tech: "Software Developer",
-  creative: "Web & UX Designer",
+  tech: "Software Dev",
+  creative: "Web & UX",
   management: "Project Manager",
-  human: "AI & Digital Specialist",
+  human: "AI & Digital",
 };
 // Su schermi <= 374px comprimiamo la label del bottone attivo
 function getActiveW(): string {
@@ -346,7 +346,7 @@ document
 
         // ── Crea stamp fullscreen ──────────────────────────────────────────
         const stamp = document.createElement("div");
-        stamp.textContent = mode.toUpperCase();
+        stamp.textContent = (MODE_LABELS[mode] ?? mode).toUpperCase();
         Object.assign(stamp.style, {
           position: "fixed",
           inset: "0",
@@ -818,85 +818,66 @@ document
     });
   });
 
-// ── "GO deeper" button — GSAP drawer open/close ─────────────────────────
-// Behaviour:
-//   • When closed  → "GO deeper": click ONLY opens, never closes.
-//   • When open    → button becomes sticky "← meno": click closes.
+// ── "Leggi altro" — reveal incrementale delle card extra (3 per click) ────
+// Pattern read-more (Legge di Jakob): ogni click rivela il batch successivo;
+// quando non resta nulla il bottone scompare. Nessuno stato "chiudi".
+// Le card partono con [hidden] (display:none via CSS) — il drawer non ha più
+// height animata: l'altezza segue naturalmente le card visibili.
+const REVEAL_BATCH = 3;
+const isEnglishPage = document.documentElement.lang.startsWith("en");
 document
   .querySelectorAll<HTMLElement>(".exp-deeper-btn")
   .forEach((btn) => {
+    const key = btn.dataset.drawer;
+    const drawer = key ? document.getElementById(`exp-drawer-${key}`) : null;
+    if (!drawer) return;
+
+    const cards = Array.from(drawer.querySelectorAll<HTMLElement>(".exp-card"));
+    cards.forEach((card) => card.setAttribute("hidden", ""));
+    // La visibilità è per-card via [hidden] — il drawer stesso resta nel flusso
+    drawer.removeAttribute("aria-hidden");
+
+    const label = btn.querySelector<HTMLElement>(".exp-deeper-btn__label");
+    const updateLabel = () => {
+      const remaining = cards.filter((c) => c.hasAttribute("hidden")).length;
+      const next = Math.min(REVEAL_BATCH, remaining);
+      if (label)
+        label.textContent = isEnglishPage
+          ? `Read ${next} more`
+          : `Leggi altre ${next}`;
+    };
+    updateLabel();
+
     btn.addEventListener("click", () => {
-      const key = btn.dataset.drawer;
-      if (!key) return;
-      const drawer = document.getElementById(`exp-drawer-${key}`);
-      if (!drawer) return;
+      const batch = cards
+        .filter((c) => c.hasAttribute("hidden"))
+        .slice(0, REVEAL_BATCH);
+      if (!batch.length) return;
 
-      const isOpen = btn.getAttribute("aria-expanded") === "true";
-      const cards = drawer.querySelectorAll<HTMLElement>(".exp-card");
-      const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-      if (isOpen) {
-        // ── Close (sticky "← meno" clicked) ──────────────────────────
-        btn.setAttribute("aria-expanded", "false");
-        drawer.setAttribute("aria-hidden", "true");
-        if (prefersReduced) {
-          gsap.set(drawer, { height: 0 });
-          gsap.set(cards, { opacity: 0, y: 16 });
-        } else {
-          gsap.to(cards, {
-            opacity: 0,
-            y: 16,
-            duration: 0.22,
-            stagger: { each: 0.04, from: "end" },
-            ease: "power2.in",
-            onComplete: () => {
-              gsap.to(drawer, {
-                height: 0,
-                duration: 0.35,
-                ease: "power3.inOut",
-                onComplete: () => ScrollTrigger.refresh(),
-              });
-            },
-          });
-        }
+      batch.forEach((card) => card.removeAttribute("hidden"));
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        gsap.set(batch, { opacity: 1, y: 0 });
       } else {
-        // ── Open ("GO deeper" clicked) ────────────────────────────────
-        btn.setAttribute("aria-expanded", "true");
-        drawer.setAttribute("aria-hidden", "false");
-
-        if (prefersReduced) {
-          gsap.set(drawer, { height: "auto" });
-          gsap.set(cards, { opacity: 1, y: 0 });
-        } else {
-          gsap.set(drawer, { height: "auto" });
-          const naturalH = drawer.offsetHeight;
-          gsap.fromTo(
-            drawer,
-            { height: 0 },
-            {
-              height: naturalH,
-              duration: 0.45,
-              ease: "power3.out",
-              onComplete: () => {
-                gsap.set(drawer, { height: "auto" });
-                setTimeout(() => ScrollTrigger.refresh(), 100);
-              },
-            },
-          );
-          gsap.fromTo(
-            cards,
-            { opacity: 0, y: 20 },
-            {
-              opacity: 1,
-              y: 0,
-              duration: 0.45,
-              stagger: { each: 0.07, from: "start" },
-              ease: "power3.out",
-              delay: 0.18,
-            },
-          );
-        }
+        gsap.fromTo(
+          batch,
+          { opacity: 0, y: 20 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.45,
+            stagger: { each: 0.07, from: "start" },
+            ease: "power3.out",
+          },
+        );
       }
+
+      const remaining = cards.filter((c) => c.hasAttribute("hidden")).length;
+      if (remaining === 0) {
+        btn.setAttribute("hidden", "");
+      } else {
+        updateLabel();
+      }
+      setTimeout(() => ScrollTrigger.refresh(), 100);
     });
   });
 
@@ -1013,6 +994,48 @@ if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
           scrub: true,
         },
       }
+    );
+  });
+
+  // ── Luce ambientale — l'alone accent (::before in cv-page.css) sale
+  // mentre la sezione entra: il passaggio di sezione è un cambio di luce.
+  document
+    .querySelectorAll<HTMLElement>(
+      ".skills-section, .exp-section, .ai-section, .soft-section, .projects-section, .edu-section",
+    )
+    .forEach((section) => {
+      gsap.fromTo(
+        section,
+        { "--ambient": 0 },
+        {
+          "--ambient": 1,
+          ease: "none",
+          scrollTrigger: {
+            trigger: section,
+            start: "top 85%",
+            end: "top 25%",
+            scrub: true,
+          },
+        },
+      );
+    });
+
+  // ── Profondità tra sezioni — i titoli scorrono un filo più lenti del
+  // contenuto (delta ±24px, scrub): layering percettivo in stile knolling.
+  document.querySelectorAll<HTMLElement>(".section-title").forEach((title) => {
+    gsap.fromTo(
+      title,
+      { y: 24 },
+      {
+        y: -24,
+        ease: "none",
+        scrollTrigger: {
+          trigger: title,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: true,
+        },
+      },
     );
   });
 }
