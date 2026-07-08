@@ -199,6 +199,8 @@ body {
 /* ─── Selection ─── */
 
 ::selection {
+  background-color: rgba(255, 255, 255, 0.25);
+  /* fallback: Safari < 16.2 / Firefox < 113 non supportano color-mix() */
   background-color: color-mix(in srgb, var(--color-accent) 30%, transparent);
 }
 
@@ -272,6 +274,8 @@ body {
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: var(--color-text-primary);
+  background: rgba(8, 73, 67, 0.95);
+  /* fallback: Safari < 16.2 / Firefox < 113 non supportano color-mix() */
   background: color-mix(in srgb, var(--color-bg) 92%, transparent);
   padding: 0.25rem 0.55rem;
   border: 1px solid rgba(255, 255, 255, 0.12);
@@ -454,7 +458,11 @@ body::after {
 /* Active: card in primo piano con bordo colorato e glow leggero */
 .cv-card[data-state="active"] {
   opacity: 1;
+  border-color: var(--color-accent);
+  /* fallback: Safari < 16.2 / Firefox < 113 non supportano color-mix() */
   border-color: color-mix(in srgb, var(--color-accent) 55%, transparent);
+  box-shadow: 0 0 16px rgba(255, 255, 255, 0.12);
+  /* fallback: Safari < 16.2 / Firefox < 113 non supportano color-mix() */
   box-shadow:
     0 0 16px color-mix(in srgb, var(--color-accent) 12%, transparent),
     inset 0 0 24px color-mix(in srgb, var(--color-accent) 4%, transparent);
@@ -465,6 +473,8 @@ body::after {
   .cv-card[data-state="active"] {
     border-left-width: 3px;
     border-left-color: var(--color-accent);
+    box-shadow: -4px 0 20px rgba(255, 255, 255, 0.18);
+    /* fallback: Safari < 16.2 / Firefox < 113 non supportano color-mix() */
     box-shadow: -4px 0 20px
       color-mix(in srgb, var(--color-accent) 30%, transparent);
   }

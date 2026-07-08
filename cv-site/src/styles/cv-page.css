@@ -243,6 +243,9 @@ go-logo:not(:defined) {
   border-color: var(--color-accent);
   border-width: 2px;
   opacity: 1;
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.18);
+  /* fallback: Safari < 16.2 / Firefox < 113 non supportano color-mix() */
   background: color-mix(in srgb, var(--color-accent) 18%, transparent);
   box-shadow:
     0 0 10px color-mix(in srgb, var(--color-accent) 35%, transparent),
@@ -253,6 +256,9 @@ go-logo:not(:defined) {
   color: var(--color-accent);
   border-color: var(--color-accent);
   border-width: 2px;
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.18);
+  /* fallback: Safari < 16.2 / Firefox < 113 non supportano color-mix() */
   background: color-mix(in srgb, var(--color-accent) 18%, transparent);
   box-shadow:
     0 0 10px color-mix(in srgb, var(--color-accent) 35%, transparent),
@@ -773,6 +779,8 @@ a.lang-switch__opt:hover {
   padding: 0.35rem 0.8rem;
   border: 1px solid var(--skills-panel-border);
   border-radius: 2px;
+  background: rgba(0, 0, 0, 0.1);
+  /* fallback: Safari < 16.2 / Firefox < 113 non supportano color-mix() */
   background: color-mix(in srgb, var(--skills-panel-bg) 72%, transparent);
   color: var(--color-text-muted);
   justify-content: center;
@@ -809,6 +817,10 @@ a.lang-switch__opt:hover {
 
 .skills-view-btn.is-active {
   color: var(--color-text-primary);
+  border-color: var(--color-accent);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.15);
+  /* fallback: Safari < 16.2 / Firefox < 113 non supportano color-mix() */
   border-color: color-mix(in srgb,
       var(--color-accent) 65%,
       var(--skills-panel-border));

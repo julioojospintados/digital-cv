@@ -131,6 +131,8 @@
 /* Force entry content to fit inside the viewport and avoid vertical scroll
    on both desktop and mobile: the home is a single-screen hero/knolling stage. */
 .entry-main {
+  max-height: 100vh;
+  /* fallback iOS < 15.4 / Chromium < 108 */
   max-height: 100svh;
   overflow: hidden;
 }
@@ -471,6 +473,8 @@ img[src*="flashlight"] {
     /* min-height garantisce il fullscreen iniziale del hero (entry-root 100svh)
        senza bloccare lo scroll verso le sezioni profilo sottostanti.
        NON overflow:hidden — gestito da .entry-root e .entry-main localmente. */
+    min-height: 100vh;
+    /* fallback iOS < 15.4 / Chromium < 108 */
     min-height: 100svh;
   }
 
@@ -1116,8 +1120,12 @@ img[src*="flashlight"] {
    gap: 0.45rem;
    margin-top: 0.75rem;
    padding: 0.6rem 1rem;
+   border: 1px solid rgba(255, 255, 255, 0.35);
+   /* fallback: Safari < 16.2 / Firefox < 113 non supportano color-mix() */
    border: 1px solid color-mix(in srgb, var(--ps-accent) 40%, transparent);
    border-radius: 2px;
+   background: rgba(255, 255, 255, 0.06);
+   /* fallback: Safari < 16.2 / Firefox < 113 non supportano color-mix() */
    background: color-mix(in srgb, var(--ps-accent) 7%, transparent);
    color: var(--ps-accent);
    font-family: var(--font-mono);
@@ -1152,6 +1160,10 @@ img[src*="flashlight"] {
 
 .profile-cta:hover,
 .profile-cta:focus-visible {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.55);
+  box-shadow: 0 0 16px rgba(255, 255, 255, 0.22);
+  /* fallback: Safari < 16.2 / Firefox < 113 non supportano color-mix() */
   background: color-mix(in srgb, var(--ps-accent) 15%, transparent);
   border-color: color-mix(in srgb, var(--ps-accent) 70%, transparent);
   box-shadow: 0 0 16px color-mix(in srgb, var(--ps-accent) 28%, transparent);
