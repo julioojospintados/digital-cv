@@ -852,22 +852,6 @@ img[src*="flashlight"] {
   letter-spacing: -0.03em;
 }
 
-/* Touch: cartellino quadrato accent prima della label — come le etichette
-   d'inventario nelle foto knolling. Sostituisce il color-coding del GO button
-   (nascosto su touch fino alla selezione) senza essere l'unico differenziatore
-   (WCAG 1.4.1: c'è sempre la label testuale). */
-@media (--touch) {
-  .mode-card__label::before {
-    content: "";
-    display: inline-block;
-    width: 0.4rem;
-    height: 0.4rem;
-    margin-right: 0.4rem;
-    background: var(--card-go-color, var(--color-accent));
-    vertical-align: 0.05em;
-  }
-}
-
 /* Schermi molto piccoli (≤ 639px): 4 schede knolling in griglia 2×2 —
    stessa griglia del breakpoint touch, tipografia compressa per celle strette.
    Gap costante in entrambe le direzioni (regola knolling: lo spazio tra gli
