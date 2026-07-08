@@ -335,28 +335,21 @@ gsap.delayedCall(0.9, () => {
      });
    }, undefined, "+=0.6");
 
-   // 10c. Pulse attenzione sulle profile-cta — stesso effetto delle mode-card
-   // Inizia quando le card sono completamente visibili
+   // 10c. Pulse attenzione sulle profile-cta — nudge della freccia.
+   // La CTA è un link underline (niente box): la freccia che "parte" è
+   // l'invito all'azione, coerente con il concept GO.
    tl.call(() => {
      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-     document.querySelectorAll<HTMLElement>(".profile-cta").forEach((cta, i) => {
-       const section = cta.closest<HTMLElement>(".profile-section");
-       if (!section) return;
-       const style = getComputedStyle(section);
-       const psAccent = style.getPropertyValue("--ps-accent").trim() || "rgba(255,255,255,1)";
-       const tw = gsap.fromTo(
-         cta,
-         { boxShadow: `0 0 0 1px color-mix(in srgb, ${psAccent} 20%, transparent)` },
-         {
-           boxShadow: `0 0 0 1.5px color-mix(in srgb, ${psAccent} 50%, transparent), 0 0 14px 2px color-mix(in srgb, ${psAccent} 14%, transparent)`,
-           duration: 0.32,
-           delay: i * 0.12,
-           ease: "power2.out",
-           yoyo: true,
-           repeat: -1,
-           repeatDelay: 0.86,
-         },
-       );
+     document.querySelectorAll<HTMLElement>(".profile-cta .profile-cta__arrow").forEach((arrow, i) => {
+       gsap.to(arrow, {
+         x: 5,
+         duration: 0.45,
+         delay: i * 0.12,
+         ease: "power2.inOut",
+         yoyo: true,
+         repeat: -1,
+         repeatDelay: 0.8,
+       });
      });
    }, undefined, "+=0.6");
 

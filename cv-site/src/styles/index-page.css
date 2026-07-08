@@ -11,6 +11,44 @@
 @custom-media --mobile-only (max-width: 39.9375rem);
 @custom-media --tablet-up (min-width: 40rem);
 
+/* ── Step scroll — CSS scroll-snap nativo (questa pagina non usa Lenis) ──
+   Ogni scroll "atterra" sulla sezione successiva come uno step: hero → 4
+   profili. Nativo = niente lerp che rallenta in coda, il trackpad resta
+   reattivo. Non è scroll-jacking: dentro una sezione più alta del viewport
+   lo scroll resta libero (il browser gestisce le snap area grandi).
+   Desktop: mandatory + snap-stop (un passo alla volta). Touch: proximity —
+   le sezioni mobile superano il viewport, mandatory le renderebbe rigide. */
+html {
+  scroll-snap-type: y proximity;
+  scroll-behavior: smooth;
+}
+
+@media (--desktop) {
+  html {
+    scroll-snap-type: y mandatory;
+  }
+
+  .entry-root,
+  .profile-section {
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+}
+
+@media (--touch) {
+
+  .entry-root,
+  .profile-section {
+    scroll-snap-align: start;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
 @keyframes fade-in-cue {
   from {
     opacity: 0;
@@ -1033,9 +1071,21 @@ img[src*="flashlight"] {
   overflow: hidden;
 }
 
+/* Desktop: ogni profilo è uno "step" full-viewport — lo snap mandatory
+   atterra sempre su una schermata piena, contenuto centrato in verticale. */
 @media (--desktop) {
   .profile-section {
-    padding: 6rem clamp(2rem, 8vw, 6rem);
+    padding: 4rem clamp(2rem, 8vw, 6rem);
+    min-height: 100vh;
+    /* fallback iOS < 15.4 / Chromium < 108 */
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .profile-inner {
+    width: 100%;
   }
 }
 
@@ -1114,111 +1164,80 @@ img[src*="flashlight"] {
     overflow-x: hidden;
   }
 }
+/* ── Profile CTA — link tipografico con underline che si disegna.
+   Niente box: baseline neutra sempre visibile (affordance), tratto accent
+   che cresce da sinistra su hover/focus, freccia che parte. ── */
 .profile-cta {
-   display: inline-flex;
-   align-items: center;
-   gap: 0.45rem;
-   margin-top: 0.75rem;
-   padding: 0.6rem 1rem;
-   border: 1px solid rgba(255, 255, 255, 0.35);
-   /* fallback: Safari < 16.2 / Firefox < 113 non supportano color-mix() */
-   border: 1px solid color-mix(in srgb, var(--ps-accent) 40%, transparent);
-   border-radius: 2px;
-   background: rgba(255, 255, 255, 0.06);
-   /* fallback: Safari < 16.2 / Firefox < 113 non supportano color-mix() */
-   background: color-mix(in srgb, var(--ps-accent) 7%, transparent);
-   color: var(--ps-accent);
-   font-family: var(--font-mono);
-   font-size: 1rem;
-   font-weight: 700;
-   letter-spacing: 0.18em;
-   text-transform: uppercase;
-   text-decoration: none;
-   align-self: flex-start;
-   position: relative;
-   overflow: hidden;
-   /* GSAP gestisce box-shadow per il pulse */
-   will-change: transform, opacity, box-shadow;
-   transition:
-     background 0.2s ease,
-     border-color 0.2s ease,
-     transform 0.2s ease;
- }
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  padding: 0.45rem 0;
+  color: var(--ps-accent);
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-decoration: none;
+  align-self: flex-start;
+  position: relative;
+  will-change: transform;
+  transition: transform 0.16s ease;
+}
 
- /* .cta-icon-touch {
-  height: 2rem;
-  width: 2rem;
-  fill: var(--card-go-color, var(--color-accent));
-  background-color: var(--card-go-color, var(--color-accent));
-  /* Iniettiamo l'SVG come maschera */
-  /*-webkit-mask-image: url('/public/touch-icon.svg');
-  mask-image: url('/public/touch-icon.svg');
-  -webkit-mask-size: contain;
-  mask-size: contain;
-  mask-repeat: no-repeat;
- } */
+/* Baseline neutra — sempre presente, comunica "questo è un link" */
+.profile-cta::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.22);
+}
 
-.profile-cta:hover,
-.profile-cta:focus-visible {
-  background: rgba(255, 255, 255, 0.12);
-  border-color: rgba(255, 255, 255, 0.55);
-  box-shadow: 0 0 16px rgba(255, 255, 255, 0.22);
-  /* fallback: Safari < 16.2 / Firefox < 113 non supportano color-mix() */
-  background: color-mix(in srgb, var(--ps-accent) 15%, transparent);
-  border-color: color-mix(in srgb, var(--ps-accent) 70%, transparent);
-  box-shadow: 0 0 16px color-mix(in srgb, var(--ps-accent) 28%, transparent);
-  outline: none;
+/* Tratto accent — si disegna da sinistra su hover/focus */
+.profile-cta::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: var(--ps-accent);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+
+  .profile-cta:hover::after {
+    transform: scaleX(1);
+  }
+
+  .profile-cta:hover .profile-cta__arrow {
+    transform: translate(3px, -3px);
+  }
+}
+
+.profile-cta:focus-visible::after {
+  transform: scaleX(1);
+}
+
+.profile-cta:active {
+  transform: scale(0.97);
 }
 
 .profile-cta__arrow {
   flex-shrink: 0;
+  display: inline-block;
   transition: transform 0.22s ease;
 }
 
-.profile-cta:hover .profile-cta__arrow,
 .profile-cta:focus-visible .profile-cta__arrow {
   transform: translate(3px, -3px);
-}
-
-/* ── Profile CTA pulse — same visual as mode-card pulse ─── */
-.profile-cta.has-pulse {
-  animation: cta-pulse 1.5s ease-in-out infinite;
-}
-
-@keyframes cta-pulse {
-  0%, 100% {
-    box-shadow:
-      0 0 0 1px color-mix(in srgb, var(--ps-accent) 20%, transparent),
-      0 0 0 0 transparent;
-  }
-  50% {
-    box-shadow:
-      0 0 0 1.5px color-mix(in srgb, var(--ps-accent) 50%, transparent),
-      0 0 14px 2px color-mix(in srgb, var(--ps-accent) 14%, transparent);
-  }
-}
-
-/* Scan sweep for profile CTA — same as mode-card-scan */
-.profile-cta-scan {
-  position: absolute;
-  left: -2px;
-  right: -2px;
-  top: 0;
-  height: 2px;
-  background: linear-gradient(90deg,
-      transparent 0%,
-      var(--ps-accent, rgba(255,255,255,0.6)) 25%,
-      rgba(255,255,255,0.95) 50%,
-      var(--ps-accent, rgba(255,255,255,0.6)) 75%,
-      transparent 100%);
-  box-shadow: 0 0 10px 3px var(--ps-accent, rgba(255,255,255,0.3));
-  pointer-events: none;
-  z-index: 4;
-}
-
-/* Profile section needs position:relative for scan sweep absolute positioning */
-.profile-section {
-  position: relative;
 }
 
 /* Profile deco base */
