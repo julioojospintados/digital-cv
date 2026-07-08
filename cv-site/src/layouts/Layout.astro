@@ -149,7 +149,7 @@ const jsonLd = {
 
       gsap.registerPlugin(ScrollTrigger);
 
-      const lenis = new Lenis({ lerp: 0.08, syncTouch: true });
+      const lenis = new Lenis({ lerp: 0.15, syncTouch: true });
       lenis.on("scroll", ScrollTrigger.update);
       gsap.ticker.add((time) => {
         lenis.raf(time * 1000);

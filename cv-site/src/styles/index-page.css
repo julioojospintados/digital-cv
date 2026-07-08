@@ -756,9 +756,6 @@ img[src*="flashlight"] {
   --card-glow: rgba(0, 255, 200, 0.15);
   --card-go-color: rgba(0, 255, 200, 1);
   --card-go-border: rgba(0, 255, 200, 0.45);
-  --card-go-bg: rgba(0, 255, 200, 0.08);
-  --card-go-hover-bg: rgba(0, 255, 200, 0.16);
-  --card-go-hover-border: rgba(0, 255, 200, 0.75);
   --card-go-shadow: rgba(0, 255, 200, 0.35);
   --card-desc-color: rgba(0, 255, 200, 0.70);
 }
@@ -767,9 +764,6 @@ img[src*="flashlight"] {
   --card-glow: rgba(255, 107, 53, 0.15);
   --card-go-color: rgba(255, 107, 53, 1);
   --card-go-border: rgba(255, 107, 53, 0.45);
-  --card-go-bg: rgba(255, 107, 53, 0.08);
-  --card-go-hover-bg: rgba(255, 107, 53, 0.16);
-  --card-go-hover-border: rgba(255, 107, 53, 0.75);
   --card-go-shadow: rgba(255, 107, 53, 0.35);
   --card-desc-color: rgba(255, 195, 155, 0.82);
 }
@@ -778,9 +772,6 @@ img[src*="flashlight"] {
   --card-glow: rgba(240, 200, 127, 0.15);
   --card-go-color: rgba(240, 200, 127, 1);
   --card-go-border: rgba(240, 200, 127, 0.45);
-  --card-go-bg: rgba(240, 200, 127, 0.08);
-  --card-go-hover-bg: rgba(240, 200, 127, 0.16);
-  --card-go-hover-border: rgba(240, 200, 127, 0.75);
   --card-go-shadow: rgba(240, 200, 127, 0.35);
   --card-desc-color: rgba(240, 210, 148, 0.75);
 }
@@ -789,9 +780,6 @@ img[src*="flashlight"] {
   --card-glow: rgba(180, 100, 255, 0.15);
   --card-go-color: rgba(180, 100, 255, 1);
   --card-go-border: rgba(180, 100, 255, 0.45);
-  --card-go-bg: rgba(180, 100, 255, 0.08);
-  --card-go-hover-bg: rgba(180, 100, 255, 0.16);
-  --card-go-hover-border: rgba(180, 100, 255, 0.75);
   --card-go-shadow: rgba(180, 100, 255, 0.35);
   --card-desc-color: rgba(200, 170, 255, 0.78);
 }
@@ -846,7 +834,7 @@ img[src*="flashlight"] {
 
 .mode-card__label {
   font-family: var(--font-display);
-  font-size: clamp(1.2rem, 3vw, 1.6rem);
+  font-size: 1.5rem;
   font-weight: 800;
   color: var(--color-text-primary);
   letter-spacing: -0.03em;
@@ -864,7 +852,7 @@ img[src*="flashlight"] {
   }
 
   .mode-card__label {
-    font-size: 0.85rem;
+    font-size: 1rem;
     line-height: 1.15;
     margin: 0;
   }
@@ -899,10 +887,6 @@ img[src*="flashlight"] {
     margin: 0;
   }
 
-  /* Bottone GO nascosto su mobile: la card stessa gestisce lo scroll al tap */
-  .mode-card__go {
-    display: none !important;
-  }
 }
 
 /* Ripple effect su card */
@@ -946,84 +930,6 @@ img[src*="flashlight"] {
   box-shadow: 0 0 10px 3px var(--card-go-color, rgba(255, 255, 255, 0.3));
   pointer-events: none;
   z-index: 4;
-}
-
-/* ── Mode card GO button — disponibile anche su mobile (Option B) ── */
-.mode-card__go {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  margin-top: auto;
-  padding: 0.5rem 0.7rem;
-  border: 1px solid var(--card-go-border, rgba(255, 255, 255, 0.45));
-  border-radius: 2px;
-  background: var(--card-go-bg, rgba(255, 255, 255, 0.07));
-  width: 100%;
-  color: var(--card-go-color, var(--color-accent));
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  cursor: pointer;
-  /* Desktop: hint visibile a opacity ridotta — GSAP porta a 1 dopo la selezione.
-     Touch: parte da 0 — compare solo quando la card è attivata (progressive disclosure). */
-  /* opacity: 0.38; */
-  pointer-events: none;
-  user-select: none;
-  transition:
-    background 0.2s ease,
-    border-color 0.2s ease,
-    box-shadow 0.2s ease,
-    color 0.2s ease,
-    opacity 0.2s ease;
-}
-
-@media (--touch) {
-
-  /* Su touch il bottone è invisibile E non occupa spazio finché la card
-     non viene attivata. height: 0 + overflow: hidden rimuove dal layout
-     senza usare display:none (che GSAP non anima bene). */
-  .mode-card__go:not(.is-ready) {
-    opacity: 0;
-    height: 0;
-    margin-top: 0;
-    padding-top: 0;
-    padding-bottom: 0;
-    overflow: hidden;
-    border-width: 0;
-
-  }
-}
-
-@media (--tablet-up) {
-  .mode-card__go {
-    margin-top: auto;
-    padding: 0.55rem 0.8rem;
-    font-size: 0.75rem;
-    letter-spacing: 0.22em;
-  }
-}
-
-.mode-card__go.is-ready {
-  pointer-events: auto;
-  margin-top: auto;
-}
-
-.mode-card__go.is-ready:hover {
-  background: var(--card-go-hover-bg, rgba(255, 255, 255, 0.16));
-  border-color: var(--card-go-hover-border, rgba(255, 255, 255, 0.75));
-  box-shadow: 0 0 16px var(--card-go-shadow, rgba(255, 255, 255, 0.28));
-}
-
-.go-icon {
-  display: inline-block;
-  margin-left: auto;
-  font-size: 0.95rem;
-  transition: transform 0.22s ease;
-}
-
-.mode-card__go.is-ready:hover .go-icon {
-  transform: translate(4px, -4px);
 }
 
 /* ── Tap hint — copy coerente con tap-to-select ── */
@@ -1078,6 +984,20 @@ img[src*="flashlight"] {
 .profile-section[data-mode="human"] {
   --ps-accent: rgba(240, 200, 127, 1);
   --ps-glow: rgba(240, 200, 127, 0.09);
+}
+
+/* Dot-nav: stessi 4 accent, applicati al dot invece che alla sezione */
+.section-dot[data-mode="tech"] {
+  --dot-accent: rgba(0, 255, 200, 1);
+}
+.section-dot[data-mode="creative"] {
+  --dot-accent: rgba(255, 107, 53, 1);
+}
+.section-dot[data-mode="management"] {
+  --dot-accent: rgba(180, 100, 255, 1);
+}
+.section-dot[data-mode="human"] {
+  --dot-accent: rgba(240, 200, 127, 1);
 }
 
 .profiles-root {

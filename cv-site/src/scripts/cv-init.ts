@@ -682,6 +682,32 @@ if (revealEls.length) {
   });
 }
 
+// ── Section dot-nav — jump diretto + stato attivo (nessuno scroll-jacking) ──
+const sectionDots = document.querySelectorAll<HTMLAnchorElement>(".section-dot");
+sectionDots.forEach((dot) => {
+  const targetId = dot.getAttribute("href")?.slice(1);
+  const target = targetId ? document.getElementById(targetId) : null;
+  if (!target) return;
+
+  dot.addEventListener("click", (e) => {
+    e.preventDefault();
+    const lenis = window.__lenis;
+    const targetY = target.getBoundingClientRect().top + window.scrollY;
+    if (lenis && typeof lenis.scrollTo === "function") {
+      lenis.scrollTo(targetY, { duration: 0.8 });
+    } else {
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  });
+
+  ScrollTrigger.create({
+    trigger: target,
+    start: "top center",
+    end: "bottom center",
+    onToggle: (self) => dot.classList.toggle("is-active", self.isActive),
+  });
+});
+
 // ── Timeline stagger (separate from .reveal — items start invisible) ────
 const tlItems = document.querySelectorAll<HTMLElement>(".tl-item");
 if (tlItems.length) {

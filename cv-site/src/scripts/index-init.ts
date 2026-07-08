@@ -553,20 +553,13 @@ function scrollToProfile(mode: string) {
   const absoluteTop = getOffsetTop(target);
   const lenis = window.__lenis;
   if (lenis && typeof lenis.scrollTo === "function") {
-    lenis.scrollTo(absoluteTop, { duration: 1.2 });
+    lenis.scrollTo(absoluteTop, { duration: 0.8 });
   } else {
     window.scrollTo({ top: absoluteTop, behavior: "smooth" });
   }
 }
 
 // ── Seleziona mode: aggiorna card UI, knolling, modeStore ───────────────
-const modeGlow: Record<string, string> = {
-  tech: "0 0 24px 4px rgba(0,255,200,0.45)",
-  creative: "0 0 24px 4px rgba(255,107,53,0.45)",
-  human: "0 0 24px 4px rgba(240,200,127,0.45)",
-  management: "0 0 24px 4px rgba(180,100,255,0.45)",
-};
-
 function selectMode(targetCard: HTMLButtonElement, mode: string) {
   selectedMode = mode;
   setMode(mode as "tech" | "creative" | "human" | "management");
@@ -579,67 +572,17 @@ function selectMode(targetCard: HTMLButtonElement, mode: string) {
     cards.forEach((c) => gsap.set(c, { clearProps: "boxShadow" }));
   }
   cards.forEach((c) => {
-    const goBtn = c.querySelector<HTMLElement>(".mode-card__go");
     if (c === targetCard) {
       c.classList.add("is-selected");
       c.classList.remove("is-passive");
       // Ingrandimento visibile (knolling effect) — prendi lo strumento dal tavolo
       // Stesso comportamento su mobile e desktop, solo la forma cambia (orizzontale vs quadrata)
       gsap.to(c, { scaleX: 1.05, scaleY: 1.18,  duration: 0.4, ease: "back.out(1.8)" });
-      if (goBtn) {
-        goBtn.setAttribute("tabindex", "0");
-        goBtn.removeAttribute("aria-hidden");
-        // Aggiunge is-ready subito: rimuove height:0/margin:0 dal CSS touch
-        // così GSAP anima da uno stato "visibile nel layout" e non c'è jump.
-        goBtn.classList.add("is-ready");
-        gsap
-          .timeline({ delay: 0.2 })
-          .fromTo(
-            goBtn,
-            { opacity: 0, y: 20, scale: 0.92 },
-            {
-              opacity: 1,
-              y: 0,
-              scale: 1,
-              duration: 0.6,
-              ease: "back.out(3)",
-            },
-          )
-          .to(
-            goBtn,
-            {
-              boxShadow: modeGlow[mode] ?? modeGlow.management,
-              duration: 0.28,
-              ease: "power2.out",
-              yoyo: true,
-              repeat: 1,
-            },
-            0.5,
-          );
-        if (isMobile) {
-          goBtn.scrollIntoView({
-            behavior: "smooth",
-            block: "nearest",
-            inline: "nearest",
-          });
-        }
-      }
     } else {
       c.classList.add("is-passive");
       c.classList.remove("is-selected");
       // Su mobile: scale: 1 (il grid riduce la cella, scale causerebbe overflow)
       gsap.to(c, { scale: isMobile ? 1 : 0.96, duration: 0.25, ease: "power2.out" });
-      if (goBtn && goBtn.classList.contains("is-ready")) {
-        goBtn.setAttribute("tabindex", "-1");
-        goBtn.setAttribute("aria-hidden", "true");
-        gsap.to(goBtn, {
-          opacity: 0,
-          y: 5,
-          duration: 0.2,
-          ease: "power2.in",
-          onComplete: () => goBtn.classList.remove("is-ready"),
-        });
-      }
     }
   });
 
@@ -708,21 +651,32 @@ cards.forEach((card) => {
   });
 });
 
-// GO button desktop: click → scrolla alla preview — stopPropagation evita il double-fire con card click
-document.querySelectorAll<HTMLElement>(".mode-card__go").forEach((btn) => {
-  btn.addEventListener("click", (e) => {
-    e.stopPropagation();
-    const mode = btn.closest<HTMLElement>(".mode-card")?.dataset.mode ?? "tech";
-    scrollToProfile(mode);
-  });
-});
-
 // ── Profile CTA: click → launchJourney (stessa animazione delle mode-card) ───────────────────────
 document.querySelectorAll<HTMLElement>(".profile-cta").forEach((cta) => {
   cta.addEventListener("click", (e) => {
     e.preventDefault();
     const href = cta.getAttribute("href") ?? "/";
     launchJourney(href);
+  });
+});
+
+// ── Dot-nav profili: jump diretto (click) + stato attivo (ScrollTrigger) ──
+document.querySelectorAll<HTMLAnchorElement>(".section-dot[data-mode]").forEach((dot) => {
+  const mode = dot.dataset.mode;
+  if (!mode) return;
+
+  dot.addEventListener("click", (e) => {
+    e.preventDefault();
+    scrollToProfile(mode);
+  });
+
+  const section = document.querySelector<HTMLElement>(`.profile-section[data-mode="${mode}"]`);
+  if (!section) return;
+  ScrollTrigger.create({
+    trigger: section,
+    start: "top center",
+    end: "bottom center",
+    onToggle: (self) => dot.classList.toggle("is-active", self.isActive),
   });
 });
 

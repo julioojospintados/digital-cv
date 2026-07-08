@@ -460,6 +460,24 @@ const modeDescription =
     </div>
   </nav>
 
+  <!-- Dot-nav verticale — jump diretto tra le sezioni, desktop only -->
+  <nav class="section-dots" aria-label="Naviga tra le sezioni">
+    <a href="#hero" class="section-dot" aria-label="Home"><span class="section-dot__tip">Home</span></a>
+    <a href="#skills" class="section-dot" aria-label="Competenze"><span class="section-dot__tip">Competenze</span></a>
+    <a href="#experience" class="section-dot" aria-label="Esperienze"><span class="section-dot__tip">Esperienze</span></a>
+    <a href="#ai-section" class="section-dot" aria-label="AI Workflow"><span class="section-dot__tip">AI Workflow</span></a>
+    <a href="#soft-skills" class="section-dot" aria-label="Soft Skills"><span class="section-dot__tip">Soft Skills</span></a>
+    {
+      cvData.growthAreas.length > 0 && (
+        <a href="#growth" class="section-dot" aria-label="Crescita">
+          <span class="section-dot__tip">Crescita</span>
+        </a>
+      )
+    }
+    <a href="#projects" class="section-dot" aria-label="Progetti"><span class="section-dot__tip">Progetti</span></a>
+    <a href="#education" class="section-dot" aria-label="Formazione"><span class="section-dot__tip">Formazione</span></a>
+  </nav>
+
   <!-- ────────────────────────────────────────────────────────── MAIN -->
   <main class="cv-main" id="main-content">
     <!-- ── HERO ────────────────────────────────────────────────────── -->
@@ -534,6 +552,7 @@ const modeDescription =
          è l'opt-in "wow": D3 viene caricato solo al primo switch (cv-init.ts). -->
     <section
       class="skills-section reveal delay-100"
+      id="skills"
       aria-label="Competenze tecniche"
       data-skills-view="cards"
     >
@@ -590,6 +609,7 @@ const modeDescription =
     <!-- ── EXPERIENCE ─────────────────────────────────────────────── -->
     <section
       class="exp-section reveal delay-200"
+      id="experience"
       aria-label="Esperienze lavorative"
     >
       <img
@@ -697,7 +717,7 @@ const modeDescription =
     </div>
 
     <!-- ── SOFT SKILLS + METODOLOGIA ───────────────────────────────── -->
-    <section class="soft-section reveal" aria-label="Soft skills e metodologia">
+    <section class="soft-section reveal" id="soft-skills" aria-label="Soft skills e metodologia">
     <img
       class="bg-knoll bg-knoll--plant"
       src="/knolling/plant.png"
@@ -741,6 +761,7 @@ const modeDescription =
       cvData.growthAreas.length > 0 && (
         <section
           class="growth-section reveal"
+          id="growth"
           aria-label="Aree di crescita consapevole"
         >
           <h2 class="section-title">
@@ -766,7 +787,7 @@ const modeDescription =
     }
 
     <!-- ── PROJECTS ────────────────────────────────────────────────── -->
-    <section class="projects-section reveal" aria-label="Progetti personali">
+    <section class="projects-section reveal" id="projects" aria-label="Progetti personali">
       <img
         class="bg-knoll bg-knoll--compass"
         src="/knolling/compass.png"
@@ -779,7 +800,7 @@ const modeDescription =
       </div>
     </section>
     <!-- ── FORMAZIONE & CERTIFICAZIONI ────────────────────────────── -->
-    <section class="edu-section reveal" aria-label="Formazione e certificazioni">
+    <section class="edu-section reveal" id="education" aria-label="Formazione e certificazioni">
       <div class="edu-header">
         <h2 class="section-title">
           <span>Formazione &amp; Certificazioni</span>

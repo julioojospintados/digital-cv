@@ -59,25 +59,21 @@ import '../../styles/index-page.css';
         <button class="mode-card" data-mode="tech" id="card-tech" type="button">
           <span class="mode-card__label">Software Developer</span>
           <span class="mode-card__desc">Automation, AI and architectures</span>
-          <span class="mode-card__go" data-href="/en/cv" role="link" tabindex="-1" aria-hidden="true"><span class="go-text">GO to Software Developer</span><span class="go-icon">↗</span></span>
         </button>
 
         <button class="mode-card" data-mode="creative" id="card-creative" type="button">
           <span class="mode-card__label">Web &amp; UX Designer</span>
           <span class="mode-card__desc">Brand, aesthetics and interfaces</span>
-          <span class="mode-card__go" data-href="/en/cv" role="link" tabindex="-1" aria-hidden="true"><span class="go-text">GO to Web &amp; UX Designer</span><span class="go-icon">↗</span></span>
         </button>
 
         <button class="mode-card" data-mode="management" id="card-management" type="button">
           <span class="mode-card__label">Project Manager</span>
           <span class="mode-card__desc">Lean Agile and short sprints</span>
-          <span class="mode-card__go" data-href="/en/cv" role="link" tabindex="-1" aria-hidden="true"><span class="go-text">GO to Project Manager</span><span class="go-icon">↗</span></span>
         </button>
 
         <button class="mode-card" data-mode="human" id="card-human" type="button">
           <span class="mode-card__label">AI &amp; Digital Specialist</span>
           <span class="mode-card__desc">Storytelling and strategy</span>
-          <span class="mode-card__go" data-href="/en/cv" role="link" tabindex="-1" aria-hidden="true"><span class="go-text">GO to AI &amp; Digital Specialist</span><span class="go-icon">↗</span></span>
         </button>
       </section>
 
@@ -86,11 +82,18 @@ import '../../styles/index-page.css';
 
   <!-- Scroll cue -->
 
+  <!-- Vertical dot-nav — direct jump between the 4 profiles, desktop only -->
+  <nav class="section-dots" aria-label="Jump between profiles">
+    <a href="#profile-tech" class="section-dot" data-mode="tech" aria-label="Software Developer"><span class="section-dot__tip">Software Developer</span></a>
+    <a href="#profile-creative" class="section-dot" data-mode="creative" aria-label="Web & UX Designer"><span class="section-dot__tip">Web &amp; UX Designer</span></a>
+    <a href="#profile-management" class="section-dot" data-mode="management" aria-label="Project Manager"><span class="section-dot__tip">Project Manager</span></a>
+    <a href="#profile-human" class="section-dot" data-mode="human" aria-label="AI & Digital Specialist"><span class="section-dot__tip">AI &amp; Digital Specialist</span></a>
+  </nav>
 
   <!-- ── PROFILE SECTIONS ── -->
   <div class="profiles-root" aria-label="Professional profiles">
 
-    <section class="profile-section" data-mode="tech">
+    <section class="profile-section" id="profile-tech" data-mode="tech">
       <div class="profile-inner">
         <div class="profile-content">
           <p class="profile-eyebrow">Software Developer</p>
@@ -102,7 +105,7 @@ import '../../styles/index-page.css';
       </div>
     </section>
 
-    <section class="profile-section" data-mode="creative">
+    <section class="profile-section" id="profile-creative" data-mode="creative">
       <div class="profile-inner">
         <div class="profile-content">
           <p class="profile-eyebrow">Web &amp; UX Designer</p>
@@ -114,7 +117,7 @@ import '../../styles/index-page.css';
       </div>
     </section>
 
-    <section class="profile-section" data-mode="management">
+    <section class="profile-section" id="profile-management" data-mode="management">
       <div class="profile-inner">
         <div class="profile-content">
           <p class="profile-eyebrow">Project Manager</p>
@@ -126,7 +129,7 @@ import '../../styles/index-page.css';
       </div>
     </section>
 
-    <section class="profile-section" data-mode="human">
+    <section class="profile-section" id="profile-human" data-mode="human">
       <div class="profile-inner">
         <div class="profile-content">
           <p class="profile-eyebrow">AI &amp; Digital Specialist</p>

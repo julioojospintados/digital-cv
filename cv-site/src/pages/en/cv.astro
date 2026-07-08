@@ -436,6 +436,24 @@ const projectsData = cvDataEn.projects.slice(0, 6).map((p) => {
     </div>
   </nav>
 
+  <!-- Vertical dot-nav — direct jump between sections, desktop only -->
+  <nav class="section-dots" aria-label="Jump between sections">
+    <a href="#hero" class="section-dot" aria-label="Home"><span class="section-dot__tip">Home</span></a>
+    <a href="#skills" class="section-dot" aria-label="Skills"><span class="section-dot__tip">Skills</span></a>
+    <a href="#experience" class="section-dot" aria-label="Experience"><span class="section-dot__tip">Experience</span></a>
+    <a href="#ai-section" class="section-dot" aria-label="AI Workflow"><span class="section-dot__tip">AI Workflow</span></a>
+    <a href="#soft-skills" class="section-dot" aria-label="Soft Skills"><span class="section-dot__tip">Soft Skills</span></a>
+    {
+      cvDataEn.growthAreas.length > 0 && (
+        <a href="#growth" class="section-dot" aria-label="Growth">
+          <span class="section-dot__tip">Growth</span>
+        </a>
+      )
+    }
+    <a href="#projects" class="section-dot" aria-label="Projects"><span class="section-dot__tip">Projects</span></a>
+    <a href="#education" class="section-dot" aria-label="Education"><span class="section-dot__tip">Education</span></a>
+  </nav>
+
   <!-- ────────────────────────────────────────────────────────── MAIN -->
   <main class="cv-main" id="main-content">
     <!-- ── HERO ────────────────────────────────────────────────────── -->
@@ -509,6 +527,7 @@ const projectsData = cvDataEn.projects.slice(0, 6).map((p) => {
          is the opt-in "wow": D3 loads only on first switch (cv-init.ts). -->
     <section
       class="skills-section reveal delay-100"
+      id="skills"
       aria-label="Technical skills"
       data-skills-view="cards"
     >
@@ -559,7 +578,7 @@ const projectsData = cvDataEn.projects.slice(0, 6).map((p) => {
     </section>
 
     <!-- ── EXPERIENCE ─────────────────────────────────────────────── -->
-    <section class="exp-section reveal delay-200" aria-label="Work experience">
+    <section class="exp-section reveal delay-200" id="experience" aria-label="Work experience">
       <img
         class="bg-knoll bg-knoll--flashlight"
         src="/knolling/flashlight.webp"
@@ -670,6 +689,7 @@ const projectsData = cvDataEn.projects.slice(0, 6).map((p) => {
     <!-- ── SOFT SKILLS + METHODOLOGY ───────────────────────────────── -->
     <section
       class="soft-section reveal"
+      id="soft-skills"
       aria-label="Soft skills and methodology"
     >
       <img
@@ -717,6 +737,7 @@ const projectsData = cvDataEn.projects.slice(0, 6).map((p) => {
       cvDataEn.growthAreas.length > 0 && (
         <section
           class="growth-section reveal"
+          id="growth"
           aria-label="Areas of conscious growth"
         >
           <h2 class="section-title">
@@ -742,7 +763,7 @@ const projectsData = cvDataEn.projects.slice(0, 6).map((p) => {
     }
 
     <!-- ── PROJECTS ────────────────────────────────────────────────── -->
-    <section class="projects-section reveal" aria-label="Personal projects">
+    <section class="projects-section reveal" id="projects" aria-label="Personal projects">
       <img
         class="bg-knoll bg-knoll--compass"
         src="/knolling/compass.png"
@@ -757,6 +778,7 @@ const projectsData = cvDataEn.projects.slice(0, 6).map((p) => {
     <!-- ── EDUCATION & CERTIFICATIONS ─────────────────────────────── -->
     <section
       class="edu-section reveal"
+      id="education"
       aria-label="Education and certifications"
     >
       <div class="edu-header">
