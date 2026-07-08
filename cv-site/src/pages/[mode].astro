@@ -214,7 +214,10 @@ const EXP_CLUSTER_DEFS = [
     label: "Sviluppo Software & AI",
     tags: "tech management",
     openForModes: ["tech", "management"],
-    indices: [0, 1, 2, 5, 6, 7],
+    // ALTEN (2) per primo: i recruiter cercano "dove lavora ora" in cima
+    // (reverse-chronological, Legge di Jakob). Poi i progetti personali (0, 1 —
+    // già etichettati come caso studio nel nome), poi i ruoli passati.
+    indices: [2, 0, 1, 5, 6, 7],
   },
   {
     key: "creative",
@@ -527,9 +530,12 @@ const modeDescription =
     </section>
 
     <!-- ── SKILLS BENTO + FORCE NETWORK ─────────────────────────── -->
+    <!-- Default: vista CARD (scannabile in 5s — Legge di Jakob). Il force graph
+         è l'opt-in "wow": D3 viene caricato solo al primo switch (cv-init.ts). -->
     <section
       class="skills-section reveal delay-100"
       aria-label="Competenze tecniche"
+      data-skills-view="cards"
     >
       <img
         class="bg-knoll bg-knoll--multitool"
@@ -540,7 +546,7 @@ const modeDescription =
       <h2 class="section-title">
         <span>Skills</span>
         <span class="section-subtitle"
-          >Force-directed network delle competenze - hover e drag per esplorare</span
+          >livello &amp; glow proporzionali — apri il Grafico per esplorare le connessioni</span
         >
       </h2>
       <h3 class="skills-sub-title">
@@ -555,17 +561,17 @@ const modeDescription =
         <button
           class="skills-view-btn is-active"
           type="button"
-          data-skills-view-button="graph"
-          aria-pressed="true">{skillViewLabels.graph}</button
+          data-skills-view-button="cards"
+          aria-pressed="true">{skillViewLabels.cards}</button
         >
         <button
           class="skills-view-btn"
           type="button"
-          data-skills-view-button="cards"
-          aria-pressed="false">{skillViewLabels.cards}</button
+          data-skills-view-button="graph"
+          aria-pressed="false">{skillViewLabels.graph}</button
         >
       </div>
-      <div class="skills-stage" data-skills-view="graph">
+      <div class="skills-stage">
         <div class="skills-stage__panel skills-stage__panel--graph">
           <skill-force-graph></skill-force-graph>
         </div>

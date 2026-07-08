@@ -214,9 +214,9 @@ skillsViewButtons.forEach((button) => {
   });
 });
 
-// Set default view: cards su mobile (il grafico è la seconda scelta), graph su desktop
-const isMobileInit = window.matchMedia("(max-width: 40rem)").matches;
-applySkillsView(isMobileInit ? "cards" : "graph");
+// Default view: CARD su tutti i viewport (scannabile — Legge di Jakob).
+// Il grafico è l'opt-in "wow": D3 viene caricato solo al primo switch.
+applySkillsView("cards");
 
 // ── Update nav buttons: morph larghezza + crossfade testo ───────────
 // Larghezze FISSE anche su desktop: evitano jitter e tengono le 4 voci allineate.
@@ -1422,19 +1422,19 @@ if (skillsViewButtons.length) {
 }
 
 // ── Lazy-load SkillForceGraph — D3 (~130 KB gzip) fuori dal percorso critico ──
-// Il grafo viene importato solo quando .skills-section entra nel viewport
-// (con 200px di anticipo), così D3 non blocca il caricamento iniziale.
-if (skillsSection) {
-  const graphObserver = new IntersectionObserver(
-    (entries, obs) => {
-      if (!entries[0].isIntersecting) return;
-      obs.disconnect();
-      import("../islands/SkillForceGraph.lit.ts").then(() => {
-        // Custom element ora registrato — ricalcola trigger ScrollTrigger
-        requestAnimationFrame(() => ScrollTrigger.refresh());
-      });
-    },
-    { rootMargin: "200px 0px" },
-  );
-  graphObserver.observe(skillsSection);
+// Con la vista CARD come default, il grafo è opt-in: D3 viene importato solo
+// al primo click su "Grafico" — chi non lo apre non lo scarica mai.
+let _graphLoadStarted = false;
+function ensureGraphLoaded(): void {
+  if (_graphLoadStarted) return;
+  _graphLoadStarted = true;
+  import("../islands/SkillForceGraph.lit.ts").then(() => {
+    // Custom element ora registrato — ricalcola trigger ScrollTrigger
+    requestAnimationFrame(() => ScrollTrigger.refresh());
+  });
 }
+skillsViewButtons.forEach((button) => {
+  if (button.dataset.skillsViewButton === "graph") {
+    button.addEventListener("click", ensureGraphLoaded);
+  }
+});

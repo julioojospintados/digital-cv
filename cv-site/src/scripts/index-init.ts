@@ -730,6 +730,17 @@ document.querySelectorAll<HTMLElement>(".profile-cta").forEach((cta) => {
 document.querySelectorAll<HTMLElement>(".skills-marquee__track").forEach((track) => {
   const content = track.innerHTML;
   track.innerHTML = content + content; // Duplica il contenuto per loop seamless
+
+  // Il CSS anima verso var(--marquee-shift), non verso -50%: con `gap` la
+  // larghezza raddoppiata è 2×(un set) + UN gap di raccordo, quindi 50% della
+  // larghezza totale non coincide con la fine del primo set — lo scroll
+  // "saltava" di mezzo gap ad ogni loop. Calcoliamo qui il valore esatto dopo
+  // che il layout del contenuto duplicato si è assestato.
+  requestAnimationFrame(() => {
+    const gap = parseFloat(getComputedStyle(track).columnGap) || 0;
+    const shift = (track.scrollWidth + gap) / 2;
+    track.style.setProperty("--marquee-shift", `-${shift}px`);
+  });
 });
 
 // Bfcache restore (swipe-back mobile): forza ricaricamento pulito + replays GO animation

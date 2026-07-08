@@ -25,6 +25,13 @@ const cls = variant === 'method' ? 'method-item' : 'soft-item';
   /* ── Soft item ── */
   .soft-item,
   .method-item {
+    /* Sussurro leggibile: il default globale (0.2) rende la lista un muro
+       quasi invisibile quando la maggior parte degli item è passiva (es. mode
+       tech). 0.55 resta chiaramente secondario ma scannabile — la regola
+       "sussurri, non silenzi" vale in entrambe le direzioni. Override via
+       custom property: vince sul valore ereditato da html[data-mode] senza
+       lotte di specificità (global.css legge già var(--card-opacity-passive)). */
+    --card-opacity-passive: 0.55;
     padding: 0.85rem 1rem;
     border: 1px solid var(--color-border);
     border-radius: 2px;
@@ -32,6 +39,14 @@ const cls = variant === 'method' ? 'method-item' : 'soft-item';
     transition:
       opacity var(--duration-state) var(--ease-standard),
       border-color var(--duration-state) var(--ease-standard);
+  }
+
+  /* Attive in cima: .soft-list/.method-list sono flex column, order riordina
+     solo visivamente — le attive (order 0 default) salgono, le passive scendono.
+     Il recruiter vede subito le skill pertinenti al mode corrente. */
+  .soft-item[data-state='passive'],
+  .method-item[data-state='passive'] {
+    order: 1;
   }
 
   .soft-item[data-state='active'],
