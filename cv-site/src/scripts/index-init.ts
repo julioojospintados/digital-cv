@@ -335,23 +335,10 @@ gsap.delayedCall(0.9, () => {
      });
    }, undefined, "+=0.6");
 
-   // 10c. Pulse attenzione sulle profile-cta — nudge della freccia.
-   // La CTA è un link underline (niente box): la freccia che "parte" è
-   // l'invito all'azione, coerente con il concept GO.
-   tl.call(() => {
-     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-     document.querySelectorAll<HTMLElement>(".profile-cta .profile-cta__arrow").forEach((arrow, i) => {
-       gsap.to(arrow, {
-         x: 5,
-         duration: 0.45,
-         delay: i * 0.12,
-         ease: "power2.inOut",
-         yoyo: true,
-         repeat: -1,
-         repeatDelay: 0.8,
-       });
-     });
-   }, undefined, "+=0.6");
+   // Il nudge orizzontale della freccia .profile-cta__arrow è CSS puro
+   // (@keyframes cta-arrow-nudge in index-page.css) — un tween GSAP infinito
+   // scriverebbe uno style inline che vince sempre su :hover/:focus-visible,
+   // rendendo l'hover incoerente. Animazione predeterminata → CSS, non GSAP.
 });
 
 // ── Magnetic effect on mode cards ────────────────────────

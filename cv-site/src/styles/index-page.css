@@ -11,45 +11,6 @@
 @custom-media --mobile-only (max-width: 39.9375rem);
 @custom-media --tablet-up (min-width: 40rem);
 
-/* ── Step scroll — CSS scroll-snap nativo (questa pagina non usa Lenis) ──
-   Ogni scroll "atterra" sulla sezione successiva come uno step: hero → 4
-   profili. Nativo = niente lerp che rallenta in coda, il trackpad resta
-   reattivo. Non è scroll-jacking: dentro una sezione più alta del viewport
-   lo scroll resta libero (il browser gestisce le snap area grandi).
-   Desktop: mandatory + snap-stop (un passo alla volta). Touch: proximity —
-   le sezioni mobile superano il viewport, mandatory le renderebbe rigide. */
-html {
-  scroll-snap-type: y proximity;
-  scroll-behavior: smooth;
-}
-
-@media (--desktop) {
-  html {
-    scroll-snap-type: y mandatory;
-  }
-
-  .entry-root,
-  .profile-section {
-    scroll-snap-align: start;
-    scroll-snap-stop: always;
-  }
-}
-
-@media (--touch) {
-
-  .entry-root,
-  .profile-section {
-    scroll-snap-align: start;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-}
-
-
 /* ── Language switch chip — fixed top-right, visible on home + en/home ─── */
 .lang-switch {
   position: fixed;
@@ -1081,8 +1042,9 @@ img[src*="flashlight"] {
   overflow: hidden;
 }
 
-/* Desktop: ogni profilo è uno "step" full-viewport — lo snap mandatory
-   atterra sempre su una schermata piena, contenuto centrato in verticale. */
+/* Desktop: ogni profilo occupa (almeno) uno schermo pieno, contenuto
+   centrato in verticale — respiro generoso tra un profilo e l'altro,
+   scroll libero via Lenis (niente snap: vedi reveal in index-init.ts). */
 @media (--desktop) {
   .profile-section {
     padding: 4rem clamp(2rem, 8vw, 6rem);
@@ -1166,6 +1128,7 @@ img[src*="flashlight"] {
   color: var(--color-text-muted);
   margin: 0;
 }
+
 @media (--mobile-only) {
   .profile-desc {
     width: 100%;
@@ -1228,7 +1191,8 @@ img[src*="flashlight"] {
   }
 
   .profile-cta:hover .profile-cta__arrow {
-    transform: translate(3px, -3px);
+    translate: 4px 0;
+    animation-play-state: paused;
   }
 }
 
@@ -1240,28 +1204,13 @@ img[src*="flashlight"] {
   transform: scale(0.97);
 }
 
-/* Icona touch da /touch-icon.svg via CSS mask: il background usa
-   currentColor, quindi eredita automaticamente il colore della CTA
-   (--ps-accent) — un solo file SVG, quattro tinte. */
-.profile-cta__arrow {
-  flex-shrink: 0;
-  display: inline-block;
-  width: 0.95em;
-  height: 1.05em;
-  background-color: currentColor;
-  -webkit-mask-image: url("/touch-icon.svg");
-  mask-image: url("/touch-icon.svg");
-  -webkit-mask-size: contain;
-  mask-size: contain;
-  -webkit-mask-repeat: no-repeat;
-  mask-repeat: no-repeat;
-  -webkit-mask-position: center;
-  mask-position: center;
-  transition: transform 0.22s ease;
-}
-
+/* Base + keyframes di .profile-cta__arrow spostati in global.css — l'icona
+   è condivisa anche dalla CV page (hero-portfolio-cta, cv-page.css). Qui
+   restano solo gli stati hover/focus, che dipendono dal parent .profile-cta
+   specifico di questa pagina (vedi blocco hover sopra). */
 .profile-cta:focus-visible .profile-cta__arrow {
-  transform: translate(3px, -3px);
+  translate: 4px 0;
+  animation-play-state: paused;
 }
 
 /* Profile deco base */

@@ -1,0 +1,416 @@
+/* ── /work/[slug] — pagina case study, IT + EN ────────────────────────
+   Header minimale (go-logo + back + lang-switch), non il cv-nav completo:
+   questa pagina può essere raggiunta via link diretto (LinkedIn, email a
+   un recruiter) senza passare dal mode-switcher, quindi non ha senso
+   riproporre qui tutta la navigazione a 4 mode. */
+
+.work-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+  max-width: 48rem;
+  margin: 0 auto;
+}
+
+.work-nav__right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.work-back {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  transition: color var(--duration-micro) ease;
+}
+
+.work-back:hover,
+.work-back:focus-visible {
+  color: var(--color-accent);
+}
+
+.work-lang {
+  font-family: var(--font-display);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 2rem;
+  padding: 0.25rem 0.65rem;
+  transition:
+    color var(--duration-micro) ease,
+    border-color var(--duration-micro) ease;
+}
+
+.work-lang:hover,
+.work-lang:focus-visible {
+  color: var(--color-text-primary);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+.work-main {
+  max-width: 48rem;
+  margin: 0 auto;
+  padding: 1.5rem 1.5rem 6rem;
+  display: flex;
+  flex-direction: column;
+  gap: 3.5rem;
+}
+
+/* ── Hero ── */
+.work-hero {
+  position: relative;
+  padding-top: 1.5rem;
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: 2.5rem;
+  overflow: hidden;
+}
+
+.work-hero__icon {
+  position: absolute;
+  top: -1rem;
+  right: -1rem;
+  width: clamp(6rem, 22vw, 11rem);
+  opacity: 0.14;
+  pointer-events: none;
+  user-select: none;
+}
+
+.work-hero__eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin: 0 0 0.75rem;
+}
+
+.work-hero__title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5.5vw, 3.75rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  color: var(--color-text-primary);
+  margin: 0 0 0.75rem;
+  max-width: 34rem;
+  position: relative;
+  z-index: 1;
+}
+
+.work-hero__role {
+  font-size: 1rem;
+  color: rgba(192, 220, 215, 0.85);
+  margin: 0 0 1.25rem;
+  max-width: 34rem;
+  position: relative;
+  z-index: 1;
+}
+
+.work-hero__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  position: relative;
+  z-index: 1;
+}
+
+.work-tag {
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  color: rgba(192, 220, 215, 0.85);
+  padding: 0.2rem 0.55rem;
+  border: 1px solid var(--color-border);
+  border-radius: 1px;
+}
+
+/* ── Sezioni testuali (problema / processo) ── */
+.work-section__title {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin: 0 0 1rem;
+}
+
+.work-section__text {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: rgba(192, 220, 215, 0.92);
+  max-width: 40rem;
+  margin: 0;
+}
+
+/* ── Processo — step numerati, stile "inventario" coerente col resto del sito ── */
+.work-process {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.work-process__step {
+  display: grid;
+  grid-template-columns: 2.5rem 1fr;
+  gap: 1rem;
+  align-items: baseline;
+}
+
+.work-process__index {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  font-weight: 800;
+  color: rgba(192, 220, 215, 0.4);
+  line-height: 1.7;
+}
+
+.work-process__step p {
+  margin: 0;
+  font-size: 0.98rem;
+  line-height: 1.7;
+  color: rgba(192, 220, 215, 0.92);
+}
+
+/* ── Risultati — stesso linguaggio del badge impactScore (AiCard) ── */
+.work-outcomes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.work-outcomes__item {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--color-text-primary);
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--color-accent) 6%, transparent);
+}
+
+.work-outcomes__item::before {
+  content: "";
+  flex-shrink: 0;
+  width: 6px;
+  height: 6px;
+  margin-top: 0.5em;
+  background: var(--color-accent);
+  box-shadow: 0 0 6px 1px var(--color-accent);
+}
+
+/* ── CTA finale — chi finisce il case study è il visitatore più caldo ── */
+.work-cta {
+  text-align: center;
+  padding: 2.5rem 1.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.work-cta__text {
+  font-size: 1.1rem;
+  color: var(--color-text-primary);
+  margin: 0 0 1.25rem;
+}
+
+.work-cta__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.work-cta__link {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding: 0.65rem 1.25rem;
+  border-radius: 2px;
+  transition:
+    background var(--duration-micro) ease,
+    border-color var(--duration-micro) ease,
+    color var(--duration-micro) ease;
+}
+
+.work-cta__link--primary {
+  color: rgba(8, 73, 67, 1);
+  background: var(--color-accent);
+  border: 1px solid var(--color-accent);
+}
+
+.work-cta__link--primary:hover,
+.work-cta__link--primary:focus-visible {
+  filter: brightness(1.1);
+}
+
+.work-cta__link--secondary {
+  color: var(--color-text-muted);
+  background: transparent;
+  border: 1px solid var(--color-border);
+}
+
+.work-cta__link--secondary:hover,
+.work-cta__link--secondary:focus-visible {
+  color: var(--color-text-primary);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+@media (max-width: 30rem) {
+  .work-process__step {
+    grid-template-columns: 1.75rem 1fr;
+  }
+}
+
+/* ── /work — pagina indice portfolio (griglia case study) ────────────── */
+.work-index-hero {
+  padding-top: 1.5rem;
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: 2rem;
+}
+
+.work-index-hero__title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5.5vw, 3.5rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  color: var(--color-text-primary);
+  margin: 0 0 0.85rem;
+  max-width: 32rem;
+}
+
+.work-index-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+}
+
+@media (min-width: 36rem) {
+  .work-index-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.work-index-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.02);
+  text-decoration: none;
+  overflow: hidden;
+  transition:
+    border-color var(--duration-state) var(--ease-standard),
+    background var(--duration-state) var(--ease-standard);
+}
+
+.work-index-card:hover,
+.work-index-card:focus-visible {
+  border-color: var(--color-accent);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.work-index-card__icon {
+  position: absolute;
+  top: -0.75rem;
+  right: -0.75rem;
+  width: clamp(5rem, 18vw, 8rem);
+  opacity: 0.12;
+  pointer-events: none;
+  user-select: none;
+}
+
+.work-index-card__eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.work-index-card__name {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+  color: var(--color-text-primary);
+  margin: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.work-index-card__role {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: rgba(192, 220, 215, 0.85);
+  margin: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.work-index-card__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: auto;
+  padding-top: 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  position: relative;
+  z-index: 1;
+  transition: gap 0.2s ease;
+}
+
+.work-index-card:hover .work-index-card__cta,
+.work-index-card:focus-visible .work-index-card__cta {
+  gap: 0.6rem;
+}
+
+/* Chevron destro condiviso — stessa tecnica "bordo ruotato" usata in
+   .exp-cluster__chevron (cv-page.css) e .project-card__case-study-arrow
+   (ProjectCard.astro): mai un glifo Unicode. */
+.work-chevron {
+  display: inline-block;
+  width: 0.4rem;
+  height: 0.4rem;
+  flex-shrink: 0;
+  border: solid currentColor;
+  border-width: 0 1.5px 1.5px 0;
+  rotate: -45deg;
+}

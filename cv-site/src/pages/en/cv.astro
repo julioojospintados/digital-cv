@@ -345,6 +345,9 @@ const PROJECT_TAGS_MAP: Record<string, string> = {
   Poetry: "creative human",
   Poesia: "creative human",
   Creativity: "creative",
+  "Tour management": "creative management",
+  "Content Strategy": "creative",
+  "Digital marketing": "creative management",
 };
 
 const projectsData = cvDataEn.projects.slice(0, 6).map((p) => {
@@ -354,9 +357,10 @@ const projectsData = cvDataEn.projects.slice(0, 6).map((p) => {
     const mapped = PROJECT_TAGS_MAP[t];
     if (mapped) mapped.split(" ").forEach((m) => modes.add(m));
   });
+  if (p.primaryMode) modes.add(p.primaryMode);
   const modeTags =
     modes.size > 0 ? Array.from(modes).join(" ") : "tech creative human";
-  return { name: p.name, description: p.description, tags, modeTags };
+  return { name: p.name, description: p.description, tags, modeTags, slug: p.slug };
 });
 ---
 
@@ -484,6 +488,9 @@ const projectsData = cvDataEn.projects.slice(0, 6).map((p) => {
       </h1>
       <p class="hero-title">{cvDataEn.personal.title}</p>
       <p class="hero-summary">{cvDataEn.personal.summary}</p>
+      <a href="/en/work" class="hero-portfolio-cta">
+        The full process behind every project — problem, decisions, measurable outcomes — is told in the portfolio<span class="profile-cta__arrow" aria-hidden="true"></span>
+      </a>
 
       <div class="hero-footer">
         <div class="hero-socials">
@@ -499,6 +506,10 @@ const projectsData = cvDataEn.projects.slice(0, 6).map((p) => {
               </a>
             ))
           }
+          <a href="/en/work" class="social-link social-link--portfolio" aria-label="Go to the portfolio with case studies">
+            <span class="social-link__icon" aria-hidden="true"></span>
+            Portfolio
+          </a>
         </div>
         <div class="hero-langs">
           {
@@ -613,11 +624,9 @@ const projectsData = cvDataEn.projects.slice(0, 6).map((p) => {
                 <span class="exp-cluster__name">{cluster.label}</span>
                 <span class="exp-cluster__meta">
                   <span class="exp-cluster__count">
-                    {cluster.items.length} item
+                    {cluster.items.length} roles
                   </span>
-                  <span class="exp-cluster__chevron" aria-hidden="true">
-                    ↓
-                  </span>
+                  <span class="exp-cluster__chevron" aria-hidden="true" />
                 </span>
               </button>
               <div class="exp-cluster__body" id={`cluster-body-${cluster.key}`}>
@@ -649,9 +658,7 @@ const projectsData = cvDataEn.projects.slice(0, 6).map((p) => {
                   <span class="exp-deeper-btn__label">
                     Read {Math.min(3, cluster.extra.length)} more
                   </span>
-                  <span class="exp-deeper-btn__arrow" aria-hidden="true">
-                    ↓
-                  </span>
+                  <span class="exp-deeper-btn__arrow" aria-hidden="true" />
                 </button>
               )}
             </div>
@@ -773,7 +780,7 @@ const projectsData = cvDataEn.projects.slice(0, 6).map((p) => {
       />
       <h2 class="section-title"><span>Projects</span></h2>
       <div class="projects-grid">
-        {projectsData.map((project) => <ProjectCard {...project} />)}
+        {projectsData.map((project) => <ProjectCard {...project} workHref="/en/work" />)}
       </div>
     </section>
     <!-- ── EDUCATION & CERTIFICATIONS ─────────────────────────────── -->

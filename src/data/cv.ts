@@ -153,6 +153,17 @@ export interface Project {
   tags?: string[];
   /** ISO format: "2024-01" */
   date?: string;
+  // ── Case study — solo per i progetti con pagina dedicata /work/[slug] ──
+  /** URL slug: /work/{slug} */
+  slug?: string;
+  /** Accent/mode primario della pagina case study */
+  primaryMode?: "tech" | "creative" | "human" | "management";
+  role?: string;
+  problem?: string;
+  /** 3-4 step del processo, in ordine */
+  process?: string[];
+  /** Risultati misurabili — stesso stile impactScore di aiWorkflow */
+  outcomes?: string[];
 }
 
 export interface AiWorkflowItem {
@@ -1766,6 +1777,49 @@ export const cvData = {
         "Hono",
         "Prompt Engineering",
         "GitHub Copilot",
+      ],
+      slug: "digital-cv",
+      primaryMode: "tech",
+      role: "AI Workflow Designer & Full-Stack Developer — ideazione, design e sviluppo in solitaria",
+      problem:
+        "Un CV in PDF non dimostra un profilo T-shaped: elenca competenze, non le fa vedere in azione. Serve uno strumento che un recruiter, un CTO e un art director possano valutare in pochi secondi, ciascuno dal proprio punto di vista — senza scrivere tre CV diversi.",
+      process: [
+        "Design system \"knolling\": ogni competenza come un oggetto disposto su un piano — 4 mode (tech/creative/human/management) che raccontano lo stesso profilo da quattro prospettive, senza nascondere il resto.",
+        "Architettura a due livelli: il sito Astro + Lit che si vede, e un server MCP con tool, resource e prompt template che espone gli stessi dati come API per agenti AI (VS Code Copilot, Claude Desktop) — non solo dichiarato, dimostrato.",
+        "Sviluppo end-to-end con GitHub Copilot e Claude come assistenti operativi: architettura, UI, animazioni GSAP, server MCP e API HTTP — il sito stesso è la controprova del metodo.",
+      ],
+      outcomes: [
+        "Consegnato in 5 giorni, contro una stima tradizionale di oltre un mese",
+        "Copertura test >80% (Vitest) sul layer MCP/HTTP",
+        "MCP server con tool, resource e prompt template — API dati CV per agenti AI, dimostrazione live",
+      ],
+    },
+    {
+      name: "Music Agency — Tour Management & Digital Strategy",
+      description:
+        "Booking, tour management e comunicazione digitale per gli artisti del roster di un'agenzia musicale italiana: dalla trattativa con i promoter alla crescita organica dei canali social verso un pubblico di settore.",
+      date: "2023-01",
+      tags: [
+        "Tour management",
+        "Booking",
+        "Content Strategy",
+        "Digital marketing",
+        "Event management",
+      ],
+      slug: "music-agency",
+      primaryMode: "creative",
+      role: "Collaboratore — Tour Manager & Digital Strategist (2023–2024, remoto)",
+      problem:
+        "Il roster dell'agenzia aveva bisogno di due cose insieme: date live organizzate bene — venue, promoter, contratti — e una presenza digitale che parlasse alla filiera del settore (musicisti, etichette, promoter), non solo al pubblico generico. Follower e date live erano scollegati tra loro.",
+      process: [
+        "Booking e tour management: ricerca venue, trattativa con i promoter, gestione contratti — dalla proposta alla data confermata.",
+        "Content strategy mirata al settore: comunicazione pensata per la filiera (etichette, promoter, altri artisti), non per il volume generico.",
+        "Un evento live gestito end-to-end, dal booking alla comunicazione: Arci Bellezza, Milano.",
+      ],
+      outcomes: [
+        "+100% crescita follower — organica, audience mirata (musicisti, etichette, promoter), non volume puro",
+        "Evento live realizzato all'Arci Bellezza di Milano, dal booking alla comunicazione",
+        "Booking e coordinamento concerti su tutto il roster, in autonomia",
       ],
     },
     {

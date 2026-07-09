@@ -1352,6 +1352,49 @@ export const cvDataEn = {
         "Prompt Engineering",
         "GitHub Copilot",
       ],
+      slug: "digital-cv",
+      primaryMode: "tech",
+      role: "AI Workflow Designer & Full-Stack Developer — solo ideation, design and development",
+      problem:
+        "A PDF CV can't demonstrate a T-shaped profile: it lists skills, it doesn't show them in action. What's needed is a tool a recruiter, a CTO and an art director can each evaluate in seconds, from their own angle — without writing three different CVs.",
+      process: [
+        "\"Knolling\" design system: every skill as an object laid out on a plane — 4 modes (tech/creative/human/management) telling the same profile from four perspectives, without hiding the rest.",
+        "Two-layer architecture: the Astro + Lit site you see, and an MCP server with tools, resources and prompt templates exposing the same data as an API for AI agents (VS Code Copilot, Claude Desktop) — not just claimed, demonstrated.",
+        "End-to-end development with GitHub Copilot and Claude as operational co-pilots: architecture, UI, GSAP animations, MCP server and HTTP API — the site itself is the proof of the method.",
+      ],
+      outcomes: [
+        "Delivered in 5 days, against a traditional estimate of over a month",
+        ">80% test coverage (Vitest) on the MCP/HTTP layer",
+        "MCP server with tools, resources and prompt templates — CV data API for AI agents, live demonstration",
+      ],
+    },
+    {
+      name: "Music Agency — Tour Management & Digital Strategy",
+      description:
+        "Booking, tour management and digital communication for the roster artists of an Italian music agency: from promoter negotiations to organic growth of social channels aimed at an industry audience.",
+      date: "2023-01",
+      tags: [
+        "Tour management",
+        "Booking",
+        "Content Strategy",
+        "Digital marketing",
+        "Event management",
+      ],
+      slug: "music-agency",
+      primaryMode: "creative",
+      role: "Collaborator — Tour Manager & Digital Strategist (2023–2024, remote)",
+      problem:
+        "The agency's roster needed two things at once: well-organised live dates — venues, promoters, contracts — and a digital presence that spoke to the industry itself (musicians, labels, promoters), not just a generic audience. Followers and live dates were disconnected from each other.",
+      process: [
+        "Booking and tour management: venue research, promoter negotiation, contract handling — from proposal to confirmed date.",
+        "Industry-targeted content strategy: communication built for the trade (labels, promoters, fellow artists), not for generic volume.",
+        "One live event managed end-to-end, from booking to communications: Arci Bellezza, Milan.",
+      ],
+      outcomes: [
+        "+100% follower growth — organic, targeted audience (musicians, labels, promoters), not pure volume",
+        "Live event delivered at Arci Bellezza in Milan, from booking to communications",
+        "Concert booking and coordination across the whole roster, independently",
+      ],
     },
     {
       name: 'Film "Double"',

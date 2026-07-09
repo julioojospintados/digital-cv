@@ -563,6 +563,7 @@ a.lang-switch__opt:hover {
 .hero-badges,
 .hero-title,
 .hero-summary,
+.hero-portfolio-cta,
 .hero-footer {
   opacity: 0;
   /* GSAP animates to 1 */
@@ -675,7 +676,45 @@ a.lang-switch__opt:hover {
   line-height: 1.75;
   color: rgba(192, 220, 215, 0.85);
   max-width: 72ch;
-  margin: 0 0 2rem 0;
+  margin: 0 0 0.75rem 0;
+}
+
+/* CTA sotto il summary — stessa icona/animazione di .profile-cta__arrow
+   (home, definita in global.css): "questo porta a un case study" ha
+   sempre la stessa firma visiva sul sito, non solo sulla home. */
+.hero-portfolio-cta {
+  display: block;
+  max-width: 72ch;
+  margin: 0 0 2rem;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: var(--color-accent);
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--color-accent) 40%, transparent);
+  text-underline-offset: 0.2em;
+  transition: text-decoration-color 0.2s ease;
+}
+
+.hero-portfolio-cta:hover,
+.hero-portfolio-cta:focus-visible {
+  text-decoration-color: var(--color-accent);
+}
+
+.hero-portfolio-cta .profile-cta__arrow {
+  margin-left: 0.4rem;
+  vertical-align: -0.08em;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .hero-portfolio-cta:hover .profile-cta__arrow {
+    translate: 4px 0;
+    animation-play-state: paused;
+  }
+}
+
+.hero-portfolio-cta:focus-visible .profile-cta__arrow {
+  translate: 4px 0;
+  animation-play-state: paused;
 }
 
 .hero-footer {
@@ -709,6 +748,46 @@ a.lang-switch__opt:hover {
 .social-link:hover {
   color: var(--color-text-primary);
   border-color: var(--color-accent);
+}
+
+/* Portfolio: non è un'identità social come LinkedIn/GitHub/Email, è la
+   prova del lavoro — merita un peso visivo diverso, non lo stesso outline
+   neutro. Pillola accent-filled, stesso linguaggio di .work-cta__link--primary
+   (work-page.css) così il click "promette" coerentemente cosa trova dopo. */
+.social-link--portfolio {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: rgba(8, 73, 67, 1);
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  font-weight: 700;
+}
+
+.social-link--portfolio:hover,
+.social-link--portfolio:focus-visible {
+  color: rgba(8, 73, 67, 1);
+  border-color: var(--color-accent);
+  filter: brightness(1.1);
+}
+
+/* Icona da /touch-icon.svg via CSS mask — stessa tecnica e stesso file di
+   .profile-cta__arrow (index-page.css): background currentColor, un solo
+   SVG che eredita automaticamente il colore del contesto. */
+.social-link__icon {
+  display: inline-block;
+  width: 0.65em;
+  height: 0.72em;
+  flex-shrink: 0;
+  background-color: currentColor;
+  -webkit-mask-image: url("/touch-icon.svg");
+  mask-image: url("/touch-icon.svg");
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
 }
 
 .hero-langs {
@@ -1106,33 +1185,42 @@ a.lang-switch__opt:hover {
 .exp-cluster__count {
   font-family: var(--font-mono);
   font-size: 0.68rem;
+  font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--color-text-muted);
   flex-shrink: 0;
 }
 
-/* Freccia ↓: indica dove si apre il contenuto; ruota a ↑ quando aperto.
-   Su hover scende di 2px — micro-hint della direzione di apertura. */
+/* Chevron disegnato in CSS (bordo ad angolo ruotato) — mai un glifo
+   Unicode "↓/↑": lo spessore del tratto dipende dal font di sistema e
+   rende inconsistente/sgraziato tra piattaforme. `rotate` (proprietà
+   individuale) definisce la forma fissa del chevron; `translate` sotto
+   è indipendente e compone in screen-space vero — nessun conflitto tra
+   forma e nudge (stessa logica di .profile-cta__arrow in index-page.css). */
 .exp-cluster__chevron {
-  font-size: 1rem;
-  color: rgba(192, 220, 215, 0.55);
-  transition:
-    transform 0.4s var(--ease-standard),
-    color 0.25s ease;
-  line-height: 1;
+  width: 0.5rem;
+  height: 0.5rem;
   flex-shrink: 0;
+  border: solid rgba(192, 220, 215, 0.55);
+  border-width: 0 1.5px 1.5px 0;
+  rotate: 45deg;
+  transition:
+    rotate 0.4s var(--ease-standard),
+    border-color 0.25s ease,
+    translate 0.2s ease;
 }
 
 .exp-cluster__header:hover .exp-cluster__chevron {
-  color: var(--color-text-primary);
-  transform: translateY(2px);
+  border-color: var(--color-text-primary);
+  translate: 0 2px;
 }
 
-/* Dopo la regola hover: a parità di specificità vince sul translateY */
 .exp-cluster[data-open] .exp-cluster__chevron {
-  transform: rotate(180deg);
-  color: var(--color-accent);
+  /* 45deg (forma base) + 180deg (aperto) — le rotazioni 2D commutano,
+     l'ordine con translate qui sopra non conta. */
+  rotate: 225deg;
+  border-color: var(--color-accent);
 }
 
 .exp-cluster__body {
@@ -1214,9 +1302,16 @@ a.lang-switch__opt:hover {
   display: none;
 }
 
+/* Stesso chevron CSS di .exp-cluster__chevron — currentColor eredita il
+   colore del bottone (muted → accent in hover, già gestito da .exp-deeper-btn). */
 .exp-deeper-btn__arrow {
   display: inline-block;
-  font-size: 0.75rem;
+  width: 0.42rem;
+  height: 0.42rem;
+  flex-shrink: 0;
+  border: solid currentColor;
+  border-width: 0 1.5px 1.5px 0;
+  rotate: 45deg;
   transition: opacity 0.2s ease;
 }
 

@@ -339,6 +339,9 @@ const PROJECT_TAGS_MAP: Record<string, string> = {
   "Event management": "human",
   Poesia: "creative human",
   Creativity: "creative",
+  "Tour management": "creative management",
+  "Content Strategy": "creative",
+  "Digital marketing": "creative management",
 };
 
 const projectsData = cvData.projects.slice(0, 6).map((p) => {
@@ -348,9 +351,10 @@ const projectsData = cvData.projects.slice(0, 6).map((p) => {
     const mapped = PROJECT_TAGS_MAP[t];
     if (mapped) mapped.split(" ").forEach((m) => modes.add(m));
   });
+  if (p.primaryMode) modes.add(p.primaryMode);
   const modeTags =
     modes.size > 0 ? Array.from(modes).join(" ") : "tech creative human";
-  return { name: p.name, description: p.description, tags, modeTags };
+  return { name: p.name, description: p.description, tags, modeTags, slug: p.slug };
 });
 
 const MODE_LABELS: Record<string, string> = {
@@ -508,6 +512,9 @@ const modeDescription =
       </h1>
       <p class="hero-title">{cvData.personal.title}</p>
       <p class="hero-summary">{cvData.personal.summary}</p>
+      <a href="/work" class="hero-portfolio-cta">
+        Il processo completo di ogni progetto — problema, decisioni, risultati misurabili — è raccontato nel portfolio<span class="profile-cta__arrow" aria-hidden="true"></span>
+      </a>
 
       <div class="hero-footer">
         <div class="hero-socials">
@@ -524,6 +531,10 @@ const modeDescription =
               </a>
             ))
           }
+          <a href="/work" class="social-link social-link--portfolio" aria-label="Vai al portfolio con i case study">
+            <span class="social-link__icon" aria-hidden="true"></span>
+            Portfolio
+          </a>
         </div>
         <div class="hero-langs">
           {
@@ -645,11 +656,9 @@ const modeDescription =
                 <span class="exp-cluster__name">{cluster.label}</span>
                 <span class="exp-cluster__meta">
                   <span class="exp-cluster__count">
-                    {cluster.items.length} item
+                    {cluster.items.length} ruoli
                   </span>
-                  <span class="exp-cluster__chevron" aria-hidden="true">
-                    ↓
-                  </span>
+                  <span class="exp-cluster__chevron" aria-hidden="true" />
                 </span>
               </button>
               <div class="exp-cluster__body" id={`cluster-body-${cluster.key}`}>
@@ -681,9 +690,7 @@ const modeDescription =
                   <span class="exp-deeper-btn__label">
                     Leggi altre {Math.min(3, cluster.extra.length)}
                   </span>
-                  <span class="exp-deeper-btn__arrow" aria-hidden="true">
-                    ↓
-                  </span>
+                  <span class="exp-deeper-btn__arrow" aria-hidden="true" />
                 </button>
               )}
             </div>

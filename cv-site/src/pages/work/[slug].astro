@@ -1,0 +1,96 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { cvData } from "@cv-data";
+import "../../styles/work-page.css";
+
+export function getStaticPaths() {
+  return cvData.projects
+    .filter((p) => !!p.slug)
+    .map((p) => ({ params: { slug: p.slug } }));
+}
+
+const { slug } = Astro.params;
+const project = cvData.projects.find((p) => p.slug === slug)!;
+
+const KNOLL_ICON: Record<string, string> = {
+  tech: "laptop.webp",
+  creative: "camera.webp",
+  human: "plant.webp",
+  management: "chess.webp",
+};
+const mode = project.primaryMode ?? "tech";
+const icon = KNOLL_ICON[mode];
+const email = cvData.social.find((s) => s.platform === "Email")?.url ?? "mailto:giulio.occhipinti.g@gmail.com";
+---
+
+<Layout
+  title={`${project.name} — Case Study — Giulio Occhipinti`}
+  description={project.description}
+  mode={mode}
+  showFab
+>
+  <nav class="work-nav">
+    <go-logo></go-logo>
+    <div class="work-nav__right">
+      <a href={`/${mode}`} class="work-back">← Torna al CV</a>
+      <a href={`/en/work/${slug}`} class="work-lang" lang="en" aria-label="Switch to English">EN</a>
+    </div>
+  </nav>
+
+  <main class="work-main" id="main-content">
+    <header class="work-hero">
+      <img class="work-hero__icon" src={`/knolling/${icon}`} alt="" aria-hidden="true" loading="eager" decoding="async" />
+      <p class="work-hero__eyebrow">Case Study</p>
+      <h1 class="work-hero__title">{project.name}</h1>
+      {project.role && <p class="work-hero__role">{project.role}</p>}
+      {project.tags && project.tags.length > 0 && (
+        <div class="work-hero__tags">
+          {project.tags.map((t) => <span class="work-tag">{t}</span>)}
+        </div>
+      )}
+    </header>
+
+    {project.problem && (
+      <section class="work-section" aria-labelledby="work-problem-title">
+        <h2 class="work-section__title" id="work-problem-title">Il problema</h2>
+        <p class="work-section__text">{project.problem}</p>
+      </section>
+    )}
+
+    {project.process && project.process.length > 0 && (
+      <section class="work-section" aria-labelledby="work-process-title">
+        <h2 class="work-section__title" id="work-process-title">Il processo</h2>
+        <ol class="work-process">
+          {project.process.map((step, i) => (
+            <li class="work-process__step">
+              <span class="work-process__index" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
+              <p>{step}</p>
+            </li>
+          ))}
+        </ol>
+      </section>
+    )}
+
+    {project.outcomes && project.outcomes.length > 0 && (
+      <section class="work-section" aria-labelledby="work-outcomes-title">
+        <h2 class="work-section__title" id="work-outcomes-title">Risultato misurabile</h2>
+        <ul class="work-outcomes">
+          {project.outcomes.map((o) => <li class="work-outcomes__item">{o}</li>)}
+        </ul>
+      </section>
+    )}
+
+    <footer class="work-cta">
+      <p class="work-cta__text">Ti interessa lavorare insieme?</p>
+      <div class="work-cta__actions">
+        <a href={email} class="work-cta__link work-cta__link--primary">Scrivimi</a>
+        <a href={`/${mode}`} class="work-cta__link work-cta__link--secondary">Torna al CV</a>
+      </div>
+    </footer>
+  </main>
+</Layout>
+
+<script>
+  import "../../islands/GoLogo.lit.ts";
+  import "../../islands/FloatingMenu.lit.ts";
+</script>

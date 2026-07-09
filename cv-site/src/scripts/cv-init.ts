@@ -21,6 +21,7 @@ const restChars = [...allChars].filter(
 );
 const heroTitle = heroEl.querySelector<HTMLElement>(".hero-title");
 const heroSummary = heroEl.querySelector<HTMLElement>(".hero-summary");
+const heroPortfolioCta = heroEl.querySelector<HTMLElement>(".hero-portfolio-cta");
 const heroFooter = heroEl.querySelector<HTMLElement>(".hero-footer");
 
 // Initial states are set in CSS (.hero-section, .hero-char, .hero-title, etc.)
@@ -102,9 +103,11 @@ heroTl.to(
   "-=0.4",
 );
 
-// 5. Resto della sezione hero (titolo, summary, footer)
+// 5. Resto della sezione hero (titolo, summary, CTA portfolio, footer)
 heroTl.to(
-  [heroTitle, heroSummary, heroFooter],
+  [heroTitle, heroSummary, heroPortfolioCta, heroFooter].filter(
+    (el): el is HTMLElement => el !== null,
+  ),
   {
     opacity: 1,
     y: 0,

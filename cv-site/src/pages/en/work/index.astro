@@ -1,0 +1,68 @@
+---
+import Layout from "../../../layouts/Layout.astro";
+import { cvDataEn } from "@cv-data-en";
+import "../../../styles/work-page.css";
+
+const KNOLL_ICON: Record<string, string> = {
+  tech: "laptop.webp",
+  creative: "camera.webp",
+  human: "plant.webp",
+  management: "chess.webp",
+};
+
+const caseStudies = cvDataEn.projects.filter((p) => !!p.slug);
+---
+
+<Layout
+  title="Portfolio — Giulio Occhipinti"
+  description="Case studies: UX/UI analysis, technical decisions and AI-augmented workflow behind Giulio Occhipinti's projects — from problem to measurable outcome."
+  lang="en"
+  showFab
+>
+  <nav class="work-nav">
+    <go-logo></go-logo>
+    <div class="work-nav__right">
+      <a href="/tech" class="work-back">← Back to CV</a>
+      <a href="/work" class="work-lang" lang="it" aria-label="Passa alla versione italiana">IT</a>
+    </div>
+  </nav>
+
+  <main class="work-main" id="main-content">
+    <header class="work-index-hero">
+      <p class="work-hero__eyebrow">Portfolio</p>
+      <h1 class="work-index-hero__title">Case studies, not a list.</h1>
+      <p class="work-section__text">
+        Every project below is told from problem to measurable outcome: UX/UI analysis, technical decisions, AI-augmented workflow — everything behind "how it went".
+      </p>
+    </header>
+
+    <div class="work-index-grid">
+      {
+        caseStudies.map((p) => (
+          <a class="work-index-card" href={`/en/work/${p.slug}`}>
+            <img
+              class="work-index-card__icon"
+              src={`/knolling/${KNOLL_ICON[p.primaryMode ?? "tech"]}`}
+              alt=""
+              aria-hidden="true"
+              loading="lazy"
+              decoding="async"
+            />
+            <p class="work-index-card__eyebrow">Case Study</p>
+            <h2 class="work-index-card__name">{p.name}</h2>
+            {p.role && <p class="work-index-card__role">{p.role}</p>}
+            <span class="work-index-card__cta">
+              Read the case study
+              <span class="work-chevron" aria-hidden="true" />
+            </span>
+          </a>
+        ))
+      }
+    </div>
+  </main>
+</Layout>
+
+<script>
+  import "../../../islands/GoLogo.lit.ts";
+  import "../../../islands/FloatingMenu.lit.ts";
+</script>

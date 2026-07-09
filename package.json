@@ -20,8 +20,9 @@
     "model-context-protocol",
     "template"
   ],
-  "author": "",
-  "license": "MIT",
+  "author": "Giulio Occhipinti",
+  "license": "UNLICENSED",
+  "private": true,
   "type": "module",
   "dependencies": {
     "@hono/node-server": "^1.19.13",

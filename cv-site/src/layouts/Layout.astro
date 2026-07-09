@@ -7,8 +7,6 @@ interface Props {
   description?: string;
   mode?: "tech" | "creative" | "human" | "management";
   lang?: "it" | "en";
-  /** Pagine a "step" (home): scroll-snap CSS nativo al posto di Lenis */
-  snapScroll?: boolean;
   /** FAB contatti — solo sulle pagine CV ([mode], en/cv) */
   showFab?: boolean;
 }
@@ -18,7 +16,6 @@ const {
   description = "CV interattivo di Giulio Occhipinti: UX/UI & Web Designer certificato IBM, Creative Technologist e AI Specialist.",
   mode,
   lang = "it",
-  snapScroll = false,
   showFab = false,
 } = Astro.props;
 
@@ -125,7 +122,7 @@ const jsonLd = {
     <slot name="head" />
   </head>
 
-  <body data-snap-scroll={snapScroll ? "" : undefined}>
+  <body>
     <!-- Skip to main content — keyboard/screen reader accessibility -->
     <a href="#main-content" class="skip-link">Vai al contenuto principale</a>
 
@@ -146,10 +143,9 @@ const jsonLd = {
       initMode();
     </script>
 
-    <!-- Lenis smooth scroll + GSAP ScrollTrigger wiring.
-         Sulle pagine step (data-snap-scroll, home) Lenis NON parte: lo scroll
-         resta nativo e lo snap CSS gestisce il passaggio sezione-per-sezione.
-         ScrollTrigger funziona comunque (ascolta lo scroll nativo). -->
+    <!-- Lenis smooth scroll + GSAP ScrollTrigger wiring — attivo su tutte
+         le pagine, home inclusa. Niente più CSS scroll-snap: coerenza
+         site-wide, i reveal per-sezione sono in index-init.ts (ScrollTrigger). -->
     <script>
       import Lenis from "lenis";
       import { gsap } from "gsap";
@@ -157,17 +153,15 @@ const jsonLd = {
 
       gsap.registerPlugin(ScrollTrigger);
 
-      if (!document.body.hasAttribute("data-snap-scroll")) {
-        const lenis = new Lenis({ lerp: 0.15, syncTouch: true });
-        lenis.on("scroll", ScrollTrigger.update);
-        gsap.ticker.add((time) => {
-          lenis.raf(time * 1000);
-        });
-        gsap.ticker.lagSmoothing(0);
+      const lenis = new Lenis({ lerp: 0.15, syncTouch: true });
+      lenis.on("scroll", ScrollTrigger.update);
+      gsap.ticker.add((time) => {
+        lenis.raf(time * 1000);
+      });
+      gsap.ticker.lagSmoothing(0);
 
-        // Expose for pages that need direct access
-        window.__lenis = lenis;
-      }
+      // Expose for pages that need direct access
+      window.__lenis = lenis;
     </script>
 
     <!-- FAB visibile solo dopo il primo scroll — attributo SSR su <html>,
