@@ -3,6 +3,8 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { modeStore, setMode } from "../islands/stores/modeStore.ts";
 import { applyAccordions, applyCardStates, CLUSTER_OPEN_FOR } from "./mode-helpers.ts";
 import "../islands/GoLogo.lit.ts";
+// FAB contatti — solo le pagine CV lo renderizzano (Layout, prop showFab)
+import "../islands/FloatingMenu.lit.ts";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -43,6 +45,33 @@ heroTl.fromTo(
   },
   "+=0.05",
 );
+
+// 2b. Controlli nav (mode buttons, dropdown mobile, lang switch) — entrano
+// insieme al GO, stesso punch back.out. Partono opacity:0 da CSS
+// (cv-page.css): maschera il FOUC delle label a larghezza naturale.
+const navControls = [
+  document.querySelector<HTMLElement>(".cv-nav .mode-buttons"),
+  document.querySelector<HTMLElement>("#mode-dropdown"),
+  document.querySelector<HTMLElement>(".cv-nav .lang-switch"),
+].filter((el): el is HTMLElement => el !== null);
+if (navControls.length) {
+  heroTl.fromTo(
+    navControls,
+    { opacity: 0, y: -10, scale: 0.94 },
+    {
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      duration: 0.45,
+      stagger: 0.08,
+      ease: "back.out(1.7)",
+      // via il transform residuo: la dropdown list è position:absolute
+      // dentro il trigger — un transform sul parent ne sposterebbe l'ancora
+      clearProps: "transform",
+    },
+    "<",
+  );
+}
 
 // 3. Glow pulse accent su G e O
 heroTl.to(

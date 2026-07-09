@@ -333,6 +333,17 @@ go-logo:not(:defined) {
   }
 }
 
+/* ── Entrance nav controls — partono invisibili, GSAP li rivela in
+   sincrono con l'atterraggio dei caratteri G/O (cv-init, heroTl).
+   Maschera anche il FOUC del primo paint: i bottoni/dropdown mostravano
+   la label a larghezza naturale ("parola lunga") prima che GSAP
+   applicasse le larghezze fisse. ── */
+.mode-buttons,
+.mode-dropdown,
+.cv-nav .lang-switch {
+  opacity: 0;
+}
+
 /* ── Mode dropdown — mobile only ───────────────────────────────── */
 .mode-dropdown {
   display: none;
@@ -1019,6 +1030,8 @@ a.lang-switch__opt:hover {
   border-color: color-mix(in srgb,
       var(--color-accent) 28%,
       var(--color-border));
+  /* Bordo sinistro accent — inset shadow: nessun reflow del contenuto */
+  box-shadow: inset 2px 0 0 var(--color-accent);
 }
 
 .exp-cluster__header {
@@ -1050,106 +1063,76 @@ a.lang-switch__opt:hover {
 .exp-cluster__meta {
   display: flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: 0.6rem;
   flex-shrink: 0;
 }
 
-.exp-cluster__tag-dot {
-  width: 1.1rem;
-  height: 1.1rem;
-  border-radius: 1px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  opacity: 1;
+/* ── Header "inventario knolling" ─────────────────────────────────
+   Numero progressivo 01-04 in mono: outline quando il cluster è chiuso
+   (oggetto catalogato, in attesa), pieno accent quando è aperto (oggetto
+   preso dal tavolo). Via i chip-lettera: il colore mode arriva già dalle
+   card dentro il cluster. */
+.exp-cluster__index {
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: 1.05rem;
   font-weight: 800;
-  letter-spacing: 0.08em;
-  color: rgba(8, 73, 67, 1);
-}
-
-.exp-cluster__tag-dot[data-tag="tech"] {
-  background: rgba(0, 255, 200, 0.8);
-}
-
-.exp-cluster__tag-dot[data-tag="creative"] {
-  background: rgba(255, 107, 53, 0.8);
-}
-
-.exp-cluster__tag-dot[data-tag="human"] {
-  background: rgba(240, 200, 127, 0.8);
-}
-
-.exp-cluster__tag-dot[data-tag="management"] {
-  background: rgba(180, 100, 255, 0.8);
-}
-
-.exp-cluster__tag-dot::after {
   line-height: 1;
+  flex-shrink: 0;
+  color: rgba(192, 220, 215, 0.45);
+  transition: color var(--duration-state) ease;
 }
 
-.exp-cluster__tag-dot[data-tag="tech"]::after {
-  content: "T";
+/* Separatore d'inventario "01 /" — mai in stroke, colore proprio */
+.exp-cluster__index::after {
+  content: " /";
+  font-weight: 400;
+  color: rgba(192, 220, 215, 0.35);
+  -webkit-text-stroke: 0;
 }
 
-.exp-cluster__tag-dot[data-tag="creative"]::after {
-  content: "C";
+@supports (-webkit-text-stroke: 1px black) {
+  .exp-cluster__index {
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(192, 220, 215, 0.5);
+  }
 }
 
-.exp-cluster__tag-dot[data-tag="human"]::after {
-  content: "H";
+.exp-cluster[data-open] .exp-cluster__index {
+  color: var(--color-accent);
+  -webkit-text-stroke: 0px transparent;
 }
 
-.exp-cluster__tag-dot[data-tag="management"]::after {
-  content: "M";
-}
-
+/* Conteggio parlante — etichetta d'inventario, non un badge */
 .exp-cluster__count {
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
   color: var(--color-text-muted);
-  width: 1.4rem;
-  height: 1.4rem;
-  border: 1px solid var(--color-border);
-  border-radius: 1px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   flex-shrink: 0;
 }
 
-.exp-cluster__count span {
-  line-height: 1;
-  display: block;
-}
-
+/* Freccia ↓: indica dove si apre il contenuto; ruota a ↑ quando aperto.
+   Su hover scende di 2px — micro-hint della direzione di apertura. */
 .exp-cluster__chevron {
-  /* Larger, bolder — clear affordance for accordion */
-  font-size: 1.15rem;
-  font-weight: 300;
+  font-size: 1rem;
   color: rgba(192, 220, 215, 0.55);
   transition:
     transform 0.4s var(--ease-standard),
     color 0.25s ease;
   line-height: 1;
   flex-shrink: 0;
-  /* Subtle pulse outline on closed clusters to hint at interactivity */
-  border: 1px solid transparent;
-  border-radius: 2px;
-  padding: 0.1rem 0.25rem;
 }
 
 .exp-cluster__header:hover .exp-cluster__chevron {
   color: var(--color-text-primary);
-  border-color: var(--color-border);
+  transform: translateY(2px);
 }
 
+/* Dopo la regola hover: a parità di specificità vince sul translateY */
 .exp-cluster[data-open] .exp-cluster__chevron {
-  transform: rotate(90deg);
+  transform: rotate(180deg);
   color: var(--color-accent);
-  border-color: transparent;
 }
 
 .exp-cluster__body {
@@ -1216,6 +1199,14 @@ a.lang-switch__opt:hover {
 /* [hidden] da solo perde contro display:inline-flex sopra (stessa specificità,
    l'autore vince sullo UA stylesheet) — va forzato esplicitamente. */
 .exp-deeper-btn[hidden] {
+  display: none;
+}
+
+/* Visibile solo a cluster ESPANSO: il bottone è sibling del body (fuori
+   dall'area collassata), senza questa regola resterebbe a schermo anche
+   sotto un header chiuso. Il conteggio/esaurimento resta gestito dal JS
+   via [hidden]. */
+.exp-cluster:not([data-open]) .exp-deeper-btn {
   display: none;
 }
 

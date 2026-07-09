@@ -379,6 +379,7 @@ const modeDescription =
   title={`CV ${modeLabel} — Giulio Occhipinti`}
   description={modeDescription}
   mode={mode}
+  showFab
 >
   <!-- ────────────────────────────────────────────────────────── NAV -->
   <nav class="cv-nav" id="cv-nav" aria-label="Navigazione principale">
@@ -436,9 +437,9 @@ const modeDescription =
       >
         <span class="mode-dropdown__label" id="mode-dropdown-label">
           {mode === "tech" ? "Software Dev"
-            : mode === "creative" ? "Web &amp; UX"
+            : mode === "creative" ? "Web & UX"
             : mode === "management" ? "Project Manager"
-            : "AI &amp; Digital"}
+            : "AI & Digital"}
         </span>
         <span class="mode-dropdown__chevron" aria-hidden="true">›</span>
       </button>
@@ -626,7 +627,7 @@ const modeDescription =
       </h2>
       <div class="exp-clusters">
         {
-          expClusters.map((cluster) => (
+          expClusters.map((cluster, clusterIdx) => (
             <div
               class="exp-cluster"
               data-cluster={cluster.key}
@@ -638,17 +639,17 @@ const modeDescription =
                 aria-expanded={cluster.isDefaultOpen ? "true" : "false"}
                 aria-controls={`cluster-body-${cluster.key}`}
               >
+                <span class="exp-cluster__index" aria-hidden="true">
+                  {String(clusterIdx + 1).padStart(2, "0")}
+                </span>
                 <span class="exp-cluster__name">{cluster.label}</span>
-                <div class="exp-cluster__meta">
-                  {cluster.tags.split(" ").map((tag) => (
-                    <span class="exp-cluster__tag-dot" data-tag={tag} />
-                  ))}
-                  <div class="exp-cluster__count">
-                    <span>{cluster.items.length}</span>
-                  </div>
-                </div>
-                <span class="exp-cluster__chevron" aria-hidden="true">
-                  ›
+                <span class="exp-cluster__meta">
+                  <span class="exp-cluster__count">
+                    {cluster.items.length} item
+                  </span>
+                  <span class="exp-cluster__chevron" aria-hidden="true">
+                    ↓
+                  </span>
                 </span>
               </button>
               <div class="exp-cluster__body" id={`cluster-body-${cluster.key}`}>

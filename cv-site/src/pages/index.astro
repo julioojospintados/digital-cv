@@ -10,12 +10,6 @@ import '../styles/index-page.css';
   <!-- Preload LCP image desktop — megaphone è il più grande (colonna sinistra riga 1) -->
   <link slot="head" rel="preload" as="image" href="/knolling/megaphone.webp" fetchpriority="high" media="(min-width: 900px)" />
 
-  <!-- Nasconde il FAB durante il preloader; rimosso da index-init.ts dopo la timeline -->
-  <script is:inline>
-    document.documentElement.setAttribute('data-fab-hidden', '');
-  </script>
-
-
   <div id="preloader" aria-hidden="true">
     <div class="pre-logo">
       <span id="pre-G" class="pre-go-letter">G</span>
@@ -116,7 +110,7 @@ import '../styles/index-page.css';
               <span>Angular</span><span>TypeScript</span><span>Lit</span><span>Node.js</span><span>MCP</span><span>AI Workflow</span><span>GSAP</span><span>RxJS</span><span>REST API</span><span>GraphQL</span><span>PostgreSQL</span><span>MongoDB</span><span>Docker</span><span>Git</span><span>Agile</span><span>TDD</span><span>CI/CD</span><span>Microservices</span><span>WebSockets</span><span>PWA</span>
             </div>
           </div>
-          <a href="/tech" class="profile-cta">GO to Software Developer <svg class="profile-cta__arrow" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7V17" /></svg></a>
+          <a href="/tech" class="profile-cta">GO to Software Developer <span class="profile-cta__arrow" aria-hidden="true"></span></a>
         </div>
         <div class="profile-deco" aria-hidden="true"><span class="profile-deco__text">SD</span><img class="profile-knoll-img" src="/knolling/laptop.webp" alt="" loading="lazy" decoding="async"></div>
       </div>
@@ -133,7 +127,7 @@ import '../styles/index-page.css';
               <span>Figma</span><span>Adobe XD</span><span>Sketch</span><span>UX Research</span><span>Wireframing</span><span>Prototyping</span><span>Design System</span><span>GSAP</span><span>CSS Animations</span><span>Responsive Design</span><span>Accessibility</span><span>Brand Identity</span><span>Typography</span><span>Color Theory</span><span>UI Design</span><span>User Testing</span><span>Photoshop</span><span>Illustrator</span><span>After Effects</span><span>Webflow</span>
             </div>
           </div>
-          <a href="/creative" class="profile-cta">GO to Web &amp; UX Designer <svg class="profile-cta__arrow" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7V17" /></svg></a>
+          <a href="/creative" class="profile-cta">GO to Web &amp; UX Designer <span class="profile-cta__arrow" aria-hidden="true"></span></a>
         </div>
         <div class="profile-deco" aria-hidden="true"><span class="profile-deco__text">WD</span><img class="profile-knoll-img" src="/knolling/camera.webp" alt="" loading="lazy" decoding="async"></div>
       </div>
@@ -150,7 +144,7 @@ import '../styles/index-page.css';
               <span>Agile</span><span>Scrum</span><span>Kanban</span><span>Sprint 1–2 settimane</span><span>Backlog orientato al business</span><span>impactScore</span><span>Jira</span><span>Trello</span><span>Asana</span><span>Facilitatore</span><span>Risk Management</span><span>Budget Planning</span><span>Referente Unico</span><span>Lean</span><span>Rilasci misurabili</span><span>Velocità di rilascio</span><span>Retrospettive</span><span>Daily Standup</span><span>PMI</span><span>Autonomia del team</span>
             </div>
           </div>
-          <a href="/management" class="profile-cta">GO to Project Manager <svg class="profile-cta__arrow" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7V17" /></svg></a>
+          <a href="/management" class="profile-cta">GO to Project Manager <span class="profile-cta__arrow" aria-hidden="true"></span></a>
         </div>
         <div class="profile-deco" aria-hidden="true"><span class="profile-deco__text">PM</span><img class="profile-knoll-img" src="/knolling/chess.webp" alt="" loading="lazy" decoding="async"></div>
       </div>
@@ -167,7 +161,7 @@ import '../styles/index-page.css';
               <span>Claude</span><span>ChatGPT</span><span>GitHub Copilot</span><span>Prompt Engineering</span><span>AI Workflow</span><span>Automation</span><span>Storytelling</span><span>Content Strategy</span><span>Digital Marketing</span><span>SEO</span><span>Copywriting</span><span>Social Media</span><span>Brand Strategy</span><span>Communication</span><span>Public Speaking</span><span>Theater</span><span>Creative Writing</span><span>Video Editing</span><span>Podcast</span><span>Community Building</span>
             </div>
           </div>
-          <a href="/human" class="profile-cta">GO to AI &amp; Digital Specialist <svg class="profile-cta__arrow" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7V17" /></svg></a>
+          <a href="/human" class="profile-cta">GO to AI &amp; Digital Specialist <span class="profile-cta__arrow" aria-hidden="true"></span></a>
         </div>
         <div class="profile-deco" aria-hidden="true"><span class="profile-deco__text">AI</span><img class="profile-knoll-img" src="/knolling/compass.webp" alt="" loading="lazy" decoding="async"></div>
       </div>

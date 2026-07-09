@@ -653,8 +653,8 @@ class FloatingMenu extends LitElement {
       fpNotePlaceholder: isEN ? "Leave a comment…" : "Lascia un commento…",
       fpSubmit: isEN ? "Send" : "Invia",
       fpHint: isEN ? "Opens your email client — no database, no account required." : "Apre il tuo client email — nessun DB, nessun account richiesto.",
-      menuOpen: isEN ? "Open menu" : "Apri menu interazioni",
-      menuClose: isEN ? "Close menu" : "Chiudi menu",
+      menuOpen: isEN ? "Open contacts" : "Apri contatti",
+      menuClose: isEN ? "Close contacts" : "Chiudi contatti",
       badgeTitle: (n: number) => isEN ? `${n} feedback sent this session` : `${n} feedback inviati in questa sessione`,
     };
 
@@ -776,7 +776,12 @@ class FloatingMenu extends LitElement {
         type="button"
       >
         <span class="fab-icon fab-icon--open" aria-hidden="true">✕</span>
-        <span class="fab-icon fab-icon--close" aria-hidden="true">✦</span>
+        <span class="fab-icon fab-icon--close" aria-hidden="true">
+          <!-- Icona contatti: il FAB è l'hub per mail/telefono/canali futuri -->
+          <svg viewBox="0 0 24 24" width="21" height="21" fill="currentColor">
+            <path d="M12 12c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm0 2.5c-3.34 0-10 1.67-10 5V21h20v-1.5c0-3.33-6.66-5-10-5z"/>
+          </svg>
+        </span>
         ${feedbackCount > 0
         ? html`
               <span

@@ -352,11 +352,6 @@ gsap.delayedCall(0.9, () => {
        });
      });
    }, undefined, "+=0.6");
-
-  // 11. FAB compare dopo le card — rimuove data-fab-hidden → CSS transition anima ingresso
-  tl.call(() => {
-    document.documentElement.removeAttribute("data-fab-hidden");
-  }, undefined, "+=0.35");
 });
 
 // ── Magnetic effect on mode cards ────────────────────────
