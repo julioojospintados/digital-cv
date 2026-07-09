@@ -13,7 +13,7 @@ interface Props {
 
 const {
   title = "Giulio Occhipinti — Digital CV",
-  description = "CV interattivo di Giulio Occhipinti: Senior Frontend Developer, UX Designer, Creative Technologist.",
+  description = "CV interattivo di Giulio Occhipinti: UX/UI & Web Designer certificato IBM, Creative Technologist e AI Specialist.",
   mode,
   lang = "it",
   snapScroll = false,
@@ -21,7 +21,8 @@ const {
 
 const siteUrl = "https://giulio-occhipinti.com";
 const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
-const ogImage = `${siteUrl}/favicon.svg`;
+// PNG reale 1200×600 — LinkedIn/WhatsApp non renderizzano SVG come preview
+const ogImage = `${siteUrl}/og-image.png`;
 
 // JSON-LD — Person schema (schema.org) — indicizzato direttamente da Google
 const jsonLd = {
@@ -36,16 +37,17 @@ const jsonLd = {
     "https://github.com/julioojospintados",
   ],
   knowsAbout: [
+    "UX Design",
+    "UI Design",
+    "Figma",
+    "GSAP",
+    "Astro",
     "Angular",
     "TypeScript",
     "Lit",
     "WebComponents",
-    "Node.js",
-    "MCP Protocol",
     "Agile",
-    "UX Design",
-    "GSAP",
-    "Astro",
+    "MCP Protocol",
   ],
   address: {
     "@type": "PostalAddress",
@@ -56,7 +58,7 @@ const jsonLd = {
 ---
 
 <!doctype html>
-<html lang={lang} class="scroll-smooth" data-mode={mode ?? "tech"}>
+<html lang={lang} class="scroll-smooth cursor-idle" data-mode={mode ?? "tech"}>
   <head>
     <meta charset="utf-8" />
     <meta
@@ -64,10 +66,7 @@ const jsonLd = {
       content="width=device-width, initial-scale=1, viewport-fit=cover"
     />
     <meta name="generator" content={Astro.generator} />
-    <meta
-      name="description"
-      content="Mi piace risolvere i problemi digitali e di comunicazione"
-    />
+    <meta name="description" content={description} />
     <meta name="author" content="Giulio Occhipinti" />
     <meta name="robots" content="index, follow" />
     <!-- Tells browsers this page is already dark — prevents OS dark mode from
@@ -87,7 +86,7 @@ const jsonLd = {
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:image" content={ogImage} />
     <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
+    <meta property="og:image:height" content="600" />
     <meta property="og:locale" content={lang === "en" ? "en_US" : "it_IT"} />
     <meta property="og:site_name" content="Giulio Occhipinti — Digital CV" />
 
@@ -179,6 +178,8 @@ const jsonLd = {
       // nessun loop JS necessario.
 
       window.addEventListener("mousemove", (e) => {
+        // Primo movimento: rivela il cursore (era parcheggiato invisibile a 0,0)
+        document.documentElement.classList.remove("cursor-idle");
         const mx = e.clientX;
         const my = e.clientY;
         // Dot: segue immediato il puntatore

@@ -3,12 +3,12 @@ import Layout from '../layouts/Layout.astro';
 import '../styles/index-page.css';
 ---
 
-<Layout title="Giulio Occhipinti — Digital CV" description="Mi piace risolvere i problemi digitali e di comunicazione" snapScroll>
+<Layout title="Giulio Occhipinti — Digital CV" description="CV interattivo di Giulio Occhipinti: UX/UI & Web Designer certificato IBM, Creative Technologist (Angular, Lit, GSAP), AI & Digital Specialist e Project Manager Agile per PMI." snapScroll>
 
   <!-- Preload LCP image — laptop è l'elemento più largo della knolling-mob (7/15 col) -->
-  <link slot="head" rel="preload" as="image" href="/knolling/laptop.png" fetchpriority="high" media="(max-width: 899px)" />
-  <!-- Preload LCP image desktop — megaphone è il più grande (244KB, colonna sinistra riga 1) -->
-  <link slot="head" rel="preload" as="image" href="/knolling/megaphone.png" fetchpriority="high" media="(min-width: 900px)" />
+  <link slot="head" rel="preload" as="image" href="/knolling/laptop.webp" fetchpriority="high" media="(max-width: 899px)" />
+  <!-- Preload LCP image desktop — megaphone è il più grande (colonna sinistra riga 1) -->
+  <link slot="head" rel="preload" as="image" href="/knolling/megaphone.webp" fetchpriority="high" media="(min-width: 900px)" />
 
   <!-- Nasconde il FAB durante il preloader; rimosso da index-init.ts dopo la timeline -->
   <script is:inline>
@@ -28,14 +28,14 @@ import '../styles/index-page.css';
 
 
     <div class="knolling-stage" id="knolling-stage" aria-hidden="true">
-      <img class="knoll-item" data-modes="creative human"  src="/knolling/megaphone.png"  alt="" loading="eager" fetchpriority="high" decoding="async" style="--kx:7%;--ky:14%;--kr:0deg;--ks:0.82;">
+      <img class="knoll-item" data-modes="creative human"  src="/knolling/megaphone.webp"  alt="" loading="eager" fetchpriority="high" decoding="async" style="--kx:7%;--ky:14%;--kr:0deg;--ks:0.82;">
       <img class="knoll-item" data-modes="tech"            src="/knolling/flashlight.webp" alt="" loading="eager" decoding="async" style="--kx:9%;--ky:38%;--kr:0deg;--ks:1.2;--kfx:-1;">
-      <img class="knoll-item" data-modes="management"      src="/knolling/multitool.png"  alt="" loading="eager" decoding="async" style="--kx:7%;--ky:62%;--kr:0deg;--ks:0.85;">
-      <img class="knoll-item" data-modes="creative"        src="/knolling/camera.png"     alt="" loading="eager" decoding="async" style="--kx:7%;--ky:86%;--kr:0deg;--ks:0.8;">
-      <img class="knoll-item" data-modes="management"      src="/knolling/chess.png"      alt="" loading="eager" decoding="async" style="--kx:91%;--ky:14%;--kr:0deg;--ks:0.52;">
-      <img class="knoll-item" data-modes="tech"            src="/knolling/laptop.png"     alt="" loading="eager" decoding="async" style="--kx:91%;--ky:38%;--kr:0deg;--ks:0.75;">
-      <img class="knoll-item" data-modes="management"      src="/knolling/compass.png"    alt="" loading="eager" decoding="async" style="--kx:91%;--ky:62%;--kr:0deg;--ks:0.65;">
-      <img class="knoll-item" data-modes="human"           src="/knolling/plant.png"      alt="" loading="eager" decoding="async" style="--kx:91%;--ky:86%;--kr:0deg;--ks:0.72;">
+      <img class="knoll-item" data-modes="management"      src="/knolling/multitool.webp"  alt="" loading="eager" decoding="async" style="--kx:7%;--ky:62%;--kr:0deg;--ks:0.85;">
+      <img class="knoll-item" data-modes="creative"        src="/knolling/camera.webp"     alt="" loading="eager" decoding="async" style="--kx:7%;--ky:86%;--kr:0deg;--ks:0.8;">
+      <img class="knoll-item" data-modes="management"      src="/knolling/chess.webp"      alt="" loading="eager" decoding="async" style="--kx:91%;--ky:14%;--kr:0deg;--ks:0.52;">
+      <img class="knoll-item" data-modes="tech"            src="/knolling/laptop.webp"     alt="" loading="eager" decoding="async" style="--kx:91%;--ky:38%;--kr:0deg;--ks:0.75;">
+      <img class="knoll-item" data-modes="management"      src="/knolling/compass.webp"    alt="" loading="eager" decoding="async" style="--kx:91%;--ky:62%;--kr:0deg;--ks:0.65;">
+      <img class="knoll-item" data-modes="human"           src="/knolling/plant.webp"      alt="" loading="eager" decoding="async" style="--kx:91%;--ky:86%;--kr:0deg;--ks:0.72;">
     </div>
 
 
@@ -50,20 +50,23 @@ import '../styles/index-page.css';
         <p class="entry-tagline" id="entry-tagline">
           Se esiste una verità assoluta, dev'essere molto annoiata.
         </p>
+        <p class="entry-cred" id="entry-cred">
+          UX/UI certificato IBM · 6+ anni di web · AI workflow
+        </p>
       </header>
 
       <!-- Mobile knolling zone — grid 15 col, 3+5, visible only below 640px -->
       <!-- Riga 1 (4+7+4): Megafono · Laptop · Bussola -->
       <!-- Riga 2 (3×5):   Pianta · Torcia(120°→laptop) · Scacchi · Camera · Multitool -->
       <div class="knolling-mob" aria-hidden="true">
-        <div class="knoll-wrap"><img class="knoll-m" data-modes="creative human"  src="/knolling/megaphone.png"   alt="" loading="eager" decoding="async"></div>
-        <div class="knoll-wrap"><img class="knoll-m" data-modes="tech"            src="/knolling/laptop.png"      alt="" loading="eager" decoding="sync" fetchpriority="high"></div>
-        <div class="knoll-wrap"><img class="knoll-m" data-modes="management"      src="/knolling/compass.png"     alt="" loading="eager" decoding="async"></div>
-        <div class="knoll-wrap"><img class="knoll-m" data-modes="human"           src="/knolling/plant.png"       alt="" loading="eager" decoding="async"></div>
+        <div class="knoll-wrap"><img class="knoll-m" data-modes="creative human"  src="/knolling/megaphone.webp"   alt="" loading="eager" decoding="async"></div>
+        <div class="knoll-wrap"><img class="knoll-m" data-modes="tech"            src="/knolling/laptop.webp"      alt="" loading="eager" decoding="sync" fetchpriority="high"></div>
+        <div class="knoll-wrap"><img class="knoll-m" data-modes="management"      src="/knolling/compass.webp"     alt="" loading="eager" decoding="async"></div>
+        <div class="knoll-wrap"><img class="knoll-m" data-modes="human"           src="/knolling/plant.webp"       alt="" loading="eager" decoding="async"></div>
         <div class="knoll-wrap"><img class="knoll-m" data-modes="tech"            src="/knolling/flashlight.webp" alt="" loading="eager" decoding="async"></div>
-        <div class="knoll-wrap"><img class="knoll-m" data-modes="management"      src="/knolling/chess.png"       alt="" loading="eager" decoding="async"></div>
-        <div class="knoll-wrap"><img class="knoll-m" data-modes="creative"        src="/knolling/camera.png"      alt="" loading="eager" decoding="async"></div>
-        <div class="knoll-wrap"><img class="knoll-m" data-modes="management"      src="/knolling/multitool.png"   alt="" loading="eager" decoding="async"></div>
+        <div class="knoll-wrap"><img class="knoll-m" data-modes="management"      src="/knolling/chess.webp"       alt="" loading="eager" decoding="async"></div>
+        <div class="knoll-wrap"><img class="knoll-m" data-modes="creative"        src="/knolling/camera.webp"      alt="" loading="eager" decoding="async"></div>
+        <div class="knoll-wrap"><img class="knoll-m" data-modes="management"      src="/knolling/multitool.webp"   alt="" loading="eager" decoding="async"></div>
       </div>
 
       <section class="mode-cards" id="mode-cards" aria-label="Scegli prospettiva">
@@ -91,8 +94,6 @@ import '../styles/index-page.css';
     </main>
   </div>
 
-  <!-- Scroll cue — scompare al primo scroll (gestito da index-init.ts) -->
-
   <!-- Dot-nav verticale — jump diretto tra i 4 profili, desktop only -->
   <nav class="section-dots" aria-label="Naviga tra i profili">
     <a href="#profile-tech" class="section-dot" data-mode="tech" aria-label="Software Developer"><span class="section-dot__tip">Software Developer</span></a>
@@ -109,7 +110,7 @@ import '../styles/index-page.css';
         <div class="profile-content">
           <p class="profile-eyebrow">Software Developer</p>
           <h2 class="profile-title">Automazione,<br>AI e architetture.</h2>
-          <p class="profile-desc">6+ anni su Angular, Lit, TypeScript e architetture MCP. Sistemi enterprise ad alto traffico, AI workflow e automazione per PMI che vogliono scalare senza assumere un team intero.</p>
+          <p class="profile-desc">Angular, Lit e TypeScript al servizio del design: interfacce curate che arrivano in produzione. AI workflow e automazione per PMI che vogliono scalare senza assumere un team intero.</p>
           <div class="skills-marquee" aria-hidden="true">
             <div class="skills-marquee__track">
               <span>Angular</span><span>TypeScript</span><span>Lit</span><span>Node.js</span><span>MCP</span><span>AI Workflow</span><span>GSAP</span><span>RxJS</span><span>REST API</span><span>GraphQL</span><span>PostgreSQL</span><span>MongoDB</span><span>Docker</span><span>Git</span><span>Agile</span><span>TDD</span><span>CI/CD</span><span>Microservices</span><span>WebSockets</span><span>PWA</span>
@@ -117,7 +118,7 @@ import '../styles/index-page.css';
           </div>
           <a href="/tech" class="profile-cta">GO to Software Developer <svg class="profile-cta__arrow" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7V17" /></svg></a>
         </div>
-        <div class="profile-deco" aria-hidden="true"><span class="profile-deco__text">SD</span><img class="profile-knoll-img" src="/knolling/laptop.png" alt="" loading="lazy" decoding="async"></div>
+        <div class="profile-deco" aria-hidden="true"><span class="profile-deco__text">SD</span><img class="profile-knoll-img" src="/knolling/laptop.webp" alt="" loading="lazy" decoding="async"></div>
       </div>
     </section>
 
@@ -134,7 +135,7 @@ import '../styles/index-page.css';
           </div>
           <a href="/creative" class="profile-cta">GO to Web &amp; UX Designer <svg class="profile-cta__arrow" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7V17" /></svg></a>
         </div>
-        <div class="profile-deco" aria-hidden="true"><span class="profile-deco__text">WD</span><img class="profile-knoll-img" src="/knolling/camera.png" alt="" loading="lazy" decoding="async"></div>
+        <div class="profile-deco" aria-hidden="true"><span class="profile-deco__text">WD</span><img class="profile-knoll-img" src="/knolling/camera.webp" alt="" loading="lazy" decoding="async"></div>
       </div>
     </section>
 
@@ -146,12 +147,12 @@ import '../styles/index-page.css';
           <p class="profile-desc">Partner Tecnico per PMI. Sprint da 1–2 settimane, backlog orientato al business, impactScore reale a ogni rilascio. Il team diventa autonomo — nessuna dipendenza dal consulente.</p>
           <div class="skills-marquee" aria-hidden="true">
             <div class="skills-marquee__track">
-              <span>Agile</span><span>Scrum</span><span>Kanban</span><span>Sprint Planning</span><span>Backlog Management</span><span>impactScore</span><span>Jira</span><span>Trello</span><span>Asana</span><span>Stakeholder Management</span><span>Risk Management</span><span>Budget Planning</span><span>Team Leadership</span><span>Lean</span><span>OKR</span><span>KPI</span><span>Retrospectives</span><span>Daily Standup</span><span>PMI</span><span>Product Owner</span>
+              <span>Agile</span><span>Scrum</span><span>Kanban</span><span>Sprint 1–2 settimane</span><span>Backlog orientato al business</span><span>impactScore</span><span>Jira</span><span>Trello</span><span>Asana</span><span>Facilitatore</span><span>Risk Management</span><span>Budget Planning</span><span>Referente Unico</span><span>Lean</span><span>Rilasci misurabili</span><span>Velocità di rilascio</span><span>Retrospettive</span><span>Daily Standup</span><span>PMI</span><span>Autonomia del team</span>
             </div>
           </div>
           <a href="/management" class="profile-cta">GO to Project Manager <svg class="profile-cta__arrow" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7V17" /></svg></a>
         </div>
-        <div class="profile-deco" aria-hidden="true"><span class="profile-deco__text">PM</span><img class="profile-knoll-img" src="/knolling/chess.png" alt="" loading="lazy" decoding="async"></div>
+        <div class="profile-deco" aria-hidden="true"><span class="profile-deco__text">PM</span><img class="profile-knoll-img" src="/knolling/chess.webp" alt="" loading="lazy" decoding="async"></div>
       </div>
     </section>
 
@@ -168,7 +169,7 @@ import '../styles/index-page.css';
           </div>
           <a href="/human" class="profile-cta">GO to AI &amp; Digital Specialist <svg class="profile-cta__arrow" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M17 7H7M17 7V17" /></svg></a>
         </div>
-        <div class="profile-deco" aria-hidden="true"><span class="profile-deco__text">AI</span><img class="profile-knoll-img" src="/knolling/compass.png" alt="" loading="lazy" decoding="async"></div>
+        <div class="profile-deco" aria-hidden="true"><span class="profile-deco__text">AI</span><img class="profile-knoll-img" src="/knolling/compass.webp" alt="" loading="lazy" decoding="async"></div>
       </div>
     </section>
 

@@ -4,8 +4,8 @@
 
    --touch       → mobile + tablet portrait: knolling-mob, layout a 3 righe
    --desktop     → true desktop: knolling-stage visibile, layout orizzontale
-   --mobile-only → solo smartphone: nasconde scroll-cue, GO button compatto
-   --tablet-up   → tablet landscape + desktop: GO button più grande          */
+   --mobile-only → solo smartphone: griglia 2×2 compressa, tipografia ridotta
+   --tablet-up   → tablet landscape + desktop                                */
 @custom-media --touch (max-width: 56.1875rem);
 @custom-media --desktop (min-width: 56.25rem);
 @custom-media --mobile-only (max-width: 39.9375rem);
@@ -49,17 +49,6 @@ html {
   }
 }
 
-@keyframes fade-in-cue {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-}
-
-/* Scroll cue visible on all viewports — le sezioni profilo si estendono sotto l'hero */
 
 /* ── Language switch chip — fixed top-right, visible on home + en/home ─── */
 .lang-switch {
@@ -673,6 +662,26 @@ img[src*="flashlight"] {
   }
 }
 
+/* Credenziali verificabili sotto la tagline — i 3 pilastri per chi valuta
+   un'assunzione (recruiter/CTO): concreti, neutri, scansionabili in 3s. */
+.entry-cred {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin: 0;
+  margin-top: 0.6rem;
+}
+
+@media (--touch) {
+  .entry-cred {
+    font-size: 0.65rem;
+    margin-top: 0.35rem;
+  }
+}
+
 /* ── Mode cards ── */
 .mode-cards {
   display: flex;
@@ -1067,7 +1076,8 @@ img[src*="flashlight"] {
 
 .profile-section {
   position: relative;
-  padding: 4rem 1.5rem;
+  /* Compatto su mobile (todo #8): meno verde vuoto tra le sezioni */
+  padding: 2.75rem 1.5rem;
   overflow: hidden;
 }
 

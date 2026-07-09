@@ -28,7 +28,7 @@ export const cvDataEn = {
     name: "Giulio Occhipinti",
     title: "Digital Innovation Consultant & Technical Partner for SMBs",
     summary:
-      "Generalist expert who supports SMBs by orchestrating three integrated pillars: Technology (Angular, Lit, MCP, Node.js), Design (UX/UI — IBM + SkillUp certified) and Method (lean Agile, short sprints, team autonomy). 6+ years on high-traffic enterprise systems (Intesa San Paolo, Aruba, Rai Pubblicità). Framework-agnostic, impact-driven, with hands-on experience across 5 countries. Doesn't deliver slide decks — gets inside the business, understands the real problem, builds the solution and runs it.",
+      "Generalist expert who supports SMBs by orchestrating three integrated pillars: Design (UX/UI — IBM + SkillUp certified), Technology (Angular, Lit, MCP, Node.js) and Method (lean Agile, short sprints, team autonomy). 6+ years designing and building web interfaces for enterprise brands (Intesa San Paolo, Aruba, Rai Pubblicità). Framework-agnostic, impact-driven, with hands-on experience across 5 countries. Doesn't deliver slide decks — gets inside the business, understands the real problem, builds the solution and runs it.",
     location: "Turin, Italy",
     age: 36,
     avatar: "",

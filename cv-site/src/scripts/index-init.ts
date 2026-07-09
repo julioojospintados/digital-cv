@@ -175,7 +175,7 @@ gsap.set(goChars, { opacity: 0, scale: 1.8, y: -20 });
 // Resto del nome: 18px sotto (semplice fade-up, senza clip)
 gsap.set(otherChars, { opacity: 0, y: 18 });
 // Label e tagline
-gsap.set(["#entry-label", "#entry-tagline", "#lang-switch"], { opacity: 0, y: 10 });
+gsap.set(["#entry-label", "#entry-tagline", "#entry-cred", "#lang-switch"], { opacity: 0, y: 10 });
 
 // ── Preloader refs ────────────────────────────────────────────────────────
 const preGEl = document.getElementById("pre-G")!;
@@ -264,7 +264,7 @@ gsap.delayedCall(0.9, () => {
 
   // 8. "Digital CV" + tagline + lang-switch compaiono insieme, subito dopo il nome completo
   tl.to(
-    ["#entry-label", "#entry-tagline", "#lang-switch"],
+    ["#entry-label", "#entry-tagline", "#entry-cred", "#lang-switch"],
     {
       opacity: 1,
       y: 0,

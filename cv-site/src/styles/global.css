@@ -345,6 +345,15 @@ body {
   will-change: transform;
 }
 
+/* Nascosti finché il mouse non si muove — altrimenti dot+ring restano
+   parcheggiati a 0,0 (angolo alto-sinistra) al load, visibili in ogni
+   screenshot. La classe è nel markup di Layout.astro; il primo mousemove
+   la rimuove. Specificità (1,1,1): vince su base e stati hover. */
+html.cursor-idle #cursor-dot,
+html.cursor-idle #cursor-ring {
+  opacity: 0;
+}
+
 #cursor-dot.cursor--hover {
   width: 12px;
   height: 12px;

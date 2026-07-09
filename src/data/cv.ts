@@ -197,7 +197,7 @@ export const cvData = {
     name: "Giulio Occhipinti",
     title: "Consulente per l'Innovazione Digitale & Partner Tecnico per PMI",
     summary:
-      "Generalista esperto che supporta le PMI orchestrando tre pilastri integrati: Tecnologia (Angular, Lit, MCP, Node.js), Design (UX/UI — cert. IBM + SkillUp) e Metodo (Agile snello, sprint brevi, autonomia del team). 6+ anni su sistemi enterprise ad alto traffico (Intesa San Paolo, Aruba, Rai Pubblicità). Framework-agnostic, orientato all'impatto, con esperienze dirette in 5 paesi. Non consegna slide — entra in azienda, capisce il problema reale, costruisce la soluzione e la fa girare.",
+      "Generalista esperto che supporta le PMI orchestrando tre pilastri integrati: Design (UX/UI — cert. IBM + SkillUp), Tecnologia (Angular, Lit, MCP, Node.js) e Metodo (Agile snello, sprint brevi, autonomia del team). 6+ anni di interfacce web progettate e costruite per realtà enterprise (Intesa San Paolo, Aruba, Rai Pubblicità). Framework-agnostic, orientato all'impatto, con esperienze dirette in 5 paesi. Non consegna slide — entra in azienda, capisce il problema reale, costruisce la soluzione e la fa girare.",
     location: "Torino, Italia",
     age: 36,
     avatar: "",

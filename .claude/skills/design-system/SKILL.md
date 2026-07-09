@@ -55,7 +55,7 @@ Lo sfondo è **sempre ottanio** `rgba(8,73,67,1)` in tutti e 3 i mode. Solo `--c
 
 Accent viola `rgba(180,100,255,1)`. Target: recruiter, PMI, contenuti su metodo e consulenza.
 Le card con `data-tags="management"` sono attive in questo mode.
-L'oggetto knolling associato al management è `chess.png` (strategia) e `compass.png` (orientamento).
+L'oggetto knolling associato al management è `chess.webp` (strategia) e `compass.webp` (orientamento).
 
 ---
 
@@ -114,14 +114,14 @@ Il CSS gestisce `opacity` e `transform` in base a `data-state`.
 
 | File              | Mode                    | Significato simbolico         |
 | ----------------- | ----------------------- | ----------------------------- |
-| `laptop.png`      | tech + management       | Il lavoro digitale, il codice |
+| `laptop.webp`      | tech + management       | Il lavoro digitale, il codice |
 | `flashlight.webp` | tech + management       | Illuminare problemi complessi |
-| `multitool.png`   | tech + creative + mgmt  | Versatilità, problem solving  |
-| `camera.png`      | creative                | Fotografia, visione estetica  |
-| `megaphone.png`   | creative + human + mgmt | Comunicazione, palco, voce    |
-| `chess.png`       | human + management      | Strategia, pensiero laterale  |
-| `plant.png`       | human + management      | Crescita, cura, impatto       |
-| `compass.png`     | creative + human + mgmt | Orientamento, esplorazione    |
+| `multitool.webp`   | tech + creative + mgmt  | Versatilità, problem solving  |
+| `camera.webp`      | creative                | Fotografia, visione estetica  |
+| `megaphone.webp`   | creative + human + mgmt | Comunicazione, palco, voce    |
+| `chess.webp`       | human + management      | Strategia, pensiero laterale  |
+| `plant.webp`       | human + management      | Crescita, cura, impatto       |
+| `compass.webp`     | creative + human + mgmt | Orientamento, esplorazione    |
 
 Posizionamento via CSS custom properties `--kx`, `--ky`, `--kr`, `--ks` (e `--kfx` per flip X).
 GSAP anima ingresso (`.do-enter`) e cambio mode (`.is-hero` / `.is-dim`).
