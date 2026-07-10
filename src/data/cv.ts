@@ -220,6 +220,7 @@ export const cvData = {
     age: 36,
     avatar: "",
     availability: "available" as "available" | "open" | "not-available",
+    phone: "[REDACTED]",
   },
 
   // ── Contact & social ───────────────────────────────────────────────────────

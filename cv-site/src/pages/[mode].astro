@@ -377,6 +377,27 @@ const modeDescriptions: Record<string, string> = {
 const modeDescription =
   modeDescriptions[mode] ??
   "CV interattivo di Giulio Occhipinti: Consulente per l'Innovazione Digitale & Partner Tecnico per PMI.";
+
+// Hero mode-aware: chi arriva su /tech o /creative cercando un profilo
+// specifico non deve leggere il posizionamento PMI generico (quello resta
+// su home e /management) — vedi memoria "posizionamento-ux-ui-first":
+// Design/UX-UI sempre prima, Tecnologia come strumento, mai "Senior
+// Frontend Developer" come identità.
+const heroTitles: Record<string, string> = {
+  tech: "Sviluppo al servizio del design — Angular, Lit, AI Workflow",
+  creative: "UX/UI & Web Designer certificato IBM — Creative Technologist",
+  human: "Consulente per l'Innovazione Digitale — Comunicazione e Impatto",
+  management: "Partner Tecnico Agile per PMI — Design, Tecnologia, Metodo",
+};
+const heroTitle = heroTitles[mode] ?? cvData.personal.title;
+
+const heroSummaries: Record<string, string> = {
+  tech: "Costruisco interfacce con Angular, Lit e TypeScript, integrando strumenti AI per velocizzare senza perdere qualità. In ALTEN Italia ho lavorato su design system e architetture per Aruba e Intesa San Paolo. Questo sito, ad esempio, è stato realizzato in cinque giorni con GitHub Copilot e Claude come assistenti operativi.",
+  creative: "Progetto esperienze digitali unendo estetica, usabilità e attenzione al dettaglio, con certificazione IBM in UX/UI Design. Per Aruba ho contribuito a una libreria di componenti riutilizzabile cross-prodotto; in questo sito ho curato animazioni GSAP e un sistema knolling documentato passo per passo nel design system.",
+  human: "Il mio percorso unisce design, sviluppo, teatro e comunicazione. Una formazione in improvvisazione teatrale con B-Teatro mi ha insegnato ad ascoltare prima di rispondere, un'attitudine che porto anche nella progettazione dei workflow AI. Ho condotto festival e panel con ospiti internazionali e collaborato con un'agenzia musicale nella comunicazione digitale del roster.",
+  management: "Applico Scrum e Kanban in contesti diversi: team enterprise distribuiti come Intesa San Paolo e Aruba, e collaborazioni più snelle come il tour management per un'agenzia musicale, dove ho seguito booking e strategia digitale in autonomia. Lavoro per sprint brevi e backlog orientato al risultato.",
+};
+const heroSummary = heroSummaries[mode] ?? cvData.personal.summary;
 ---
 
 <Layout
@@ -510,8 +531,19 @@ const modeDescription =
             ))
         }
       </h1>
-      <p class="hero-title">{cvData.personal.title}</p>
-      <p class="hero-summary">{cvData.personal.summary}</p>
+      <p class="hero-title">{heroTitle}</p>
+      <p class="hero-summary">{heroSummary}</p>
+      <div class="hero-tshape" aria-label="Profilo T-shaped: profondità e ampiezza">
+        <span class="hero-tshape__item">
+          <span class="hero-tshape__label">Profondità</span>
+          <span class="hero-tshape__value">Frontend · 6+ anni</span>
+        </span>
+        <span class="hero-tshape__glyph" aria-hidden="true">⊤</span>
+        <span class="hero-tshape__item">
+          <span class="hero-tshape__label">Ampiezza</span>
+          <span class="hero-tshape__value">Design · Metodo · AI · Palco</span>
+        </span>
+      </div>
                <a href="/work" class="profile-portfolio-cta">
             Portfolio:
           </a>
@@ -862,7 +894,25 @@ const modeDescription =
     )
   }
   <p class="cv-footer__credit">
-    Giulio Occhipinti · <a href="mailto:giulio.occhipinti.g@gmail.com"
+    {cvData.personal.name}
+    {cvData.personal.phone && (
+      <>
+        {" · "}
+        <a href={`tel:${cvData.personal.phone.replace(/\s+/g, "")}`}>{cvData.personal.phone}</a>
+      </>
+    )}
+    {cvData.social.find((s) => s.platform === "LinkedIn") && (
+      <>
+        {" · "}
+        <a
+          href={cvData.social.find((s) => s.platform === "LinkedIn")!.url}
+          target="_blank"
+          rel="noopener noreferrer"
+        >LinkedIn</a>
+      </>
+    )}
+    {" · "}
+    <a href="mailto:giulio.occhipinti.g@gmail.com"
       >giulio.occhipinti.g@gmail.com</a
     >
   </p>
