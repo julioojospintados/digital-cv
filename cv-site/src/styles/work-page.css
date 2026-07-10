@@ -367,105 +367,6 @@
   max-width: 32rem;
 }
 
-.work-index-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.25rem;
-}
-
-@media (min-width: 36rem) {
-  .work-index-grid {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-.work-index-card {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  padding: 1.5rem;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-16);
-  background: rgba(255, 255, 255, 0.02);
-  text-decoration: none;
-  overflow: hidden;
-  transition:
-    border-color var(--duration-state) var(--ease-standard),
-    background var(--duration-state) var(--ease-standard);
-}
-
-.work-index-card:hover,
-.work-index-card:focus-visible {
-  border-color: var(--color-accent);
-  background: rgba(255, 255, 255, 0.04);
-}
-
-.work-index-card__icon {
-  position: absolute;
-  top: -0.75rem;
-  right: -0.75rem;
-  width: clamp(5rem, 18vw, 8rem);
-  opacity: 0.12;
-  pointer-events: none;
-  user-select: none;
-}
-
-.work-index-card__eyebrow {
-  font-family: var(--font-mono);
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--color-accent);
-  margin: 0;
-  position: relative;
-  z-index: 1;
-}
-
-.work-index-card__name {
-  font-family: var(--font-display);
-  font-size: 1.35rem;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  line-height: 1.25;
-  color: var(--color-text-primary);
-  margin: 0;
-  position: relative;
-  z-index: 1;
-}
-
-.work-index-card__role {
-  font-size: 0.85rem;
-  line-height: 1.5;
-  color: rgba(192, 220, 215, 0.85);
-  margin: 0;
-  position: relative;
-  z-index: 1;
-}
-
-.work-index-card__cta {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  margin-top: auto;
-  padding-top: 0.75rem;
-  font-family: var(--font-mono);
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--color-accent);
-  position: relative;
-  z-index: 1;
-  transition: gap 0.2s ease;
-}
-
-.work-index-card:hover .work-index-card__cta,
-.work-index-card:focus-visible .work-index-card__cta {
-  gap: 0.6rem;
-}
-
 /* Chevron destro condiviso — stessa tecnica "bordo ruotato" usata in
    .exp-cluster__chevron (cv-page.css) e .project-card__case-study-arrow
    (ProjectCard.astro): mai un glifo Unicode. */
@@ -504,4 +405,352 @@
 .work-hero__ds-link:hover,
 .work-hero__ds-link:focus-visible {
   gap: 0.75rem;
+}
+
+/* ── /work — Journey orizzontale ──────────────────────────────────────────
+   La strada da percorrere: scroll verticale scrubbato in traslazione
+   orizzontale (work-journey.ts). Le regole base qui sotto sono il fallback
+   verticale — no-JS e prefers-reduced-motion vedono uno stack di card
+   normale. `.is-active` (aggiunta dal JS) attiva la modalità strada. */
+
+.journey {
+  /* Full-bleed dentro .work-main (max-width 48rem): html ha overflow-x:clip,
+     il breakout 100vw non genera scrollbar orizzontale. */
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  position: relative;
+}
+
+.journey__track {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 0 1.5rem;
+  max-width: 48rem;
+  margin: 0 auto;
+}
+
+/* Elementi solo-journey: nascosti nel fallback verticale */
+.journey__road,
+.journey__hud,
+.journey__traveler,
+.journey__hint {
+  display: none;
+}
+
+/* ── Journey attivo — la strada ── */
+.journey.is-active {
+  height: 100svh;
+  overflow: hidden;
+}
+
+.journey.is-active .journey__track {
+  flex-direction: row;
+  align-items: center;
+  height: 100%;
+  width: max-content;
+  max-width: none;
+  margin: 0;
+  gap: clamp(3.5rem, 9vw, 8rem);
+  padding: 0 16vw 0 14vw;
+  will-change: transform;
+}
+
+.journey.is-active .journey__panel {
+  position: relative;
+  /* Sopra la bussola viaggiatrice (z-index 1): quando si incrociano, la
+     card-stazione resta leggibile e cliccabile, la bussola passa dietro
+     come oggetto di scena. */
+  z-index: 2;
+  flex-shrink: 0;
+  width: clamp(19rem, 36vw, 25rem);
+  will-change: transform, opacity;
+}
+
+@media (max-width: 40rem) {
+  .journey.is-active .journey__panel {
+    width: min(82vw, 21rem);
+  }
+}
+
+.journey.is-active .journey__road {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.journey.is-active .journey__hint {
+  display: inline-flex;
+}
+
+.journey.is-active .journey__traveler {
+  display: block;
+}
+
+.journey.is-active .journey__hud {
+  display: flex;
+}
+
+/* ── Strada SVG ── */
+.journey__road-base {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.16);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-dasharray: 2 14;
+}
+
+.journey__road-progress {
+  fill: none;
+  stroke: var(--color-accent);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  opacity: 0.85;
+}
+
+.journey__dot {
+  fill: var(--color-bg);
+  stroke: rgba(255, 255, 255, 0.35);
+  stroke-width: 2;
+  transform-box: fill-box;
+  transform-origin: center;
+  transition:
+    fill var(--duration-state) var(--ease-standard),
+    stroke var(--duration-state) var(--ease-standard),
+    transform var(--duration-state) var(--ease-standard);
+}
+
+.journey__dot.is-passed {
+  fill: var(--color-accent);
+  stroke: var(--color-accent);
+  transform: scale(1.35);
+  filter: drop-shadow(0 0 8px var(--color-accent));
+}
+
+/* ── HUD di viaggio — dati in mono, come un cruscotto ── */
+.journey__hud {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.5rem;
+  z-index: 2;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.45rem;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  pointer-events: none;
+}
+
+.journey__hud b {
+  color: var(--color-accent);
+  font-weight: 700;
+}
+
+.journey__hud-bar {
+  width: 8.5rem;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.14);
+  overflow: hidden;
+}
+
+.journey__hud-bar b {
+  display: block;
+  width: 0%;
+  height: 100%;
+  background: var(--color-accent);
+}
+
+.journey__hud-km {
+  font-size: 0.62rem;
+  opacity: 0.75;
+}
+
+/* ── Bussola viaggiatrice — appoggiata sulla strada, oscilla nel bob ── */
+.journey__traveler {
+  position: absolute;
+  left: 7vw;
+  z-index: 1;
+  width: clamp(3.25rem, 6.5vw, 5rem);
+  pointer-events: none;
+  user-select: none;
+  filter: drop-shadow(0 10px 22px rgba(0, 0, 0, 0.45));
+  animation: journey-bob 2.6s ease-in-out infinite;
+}
+
+@keyframes journey-bob {
+
+  0%,
+  100% {
+    translate: 0 0;
+  }
+
+  50% {
+    translate: 0 -7px;
+  }
+}
+
+/* ── Pannelli ── */
+.journey__eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin: 0 0 0.6rem;
+}
+
+.journey__text {
+  font-size: 0.9rem;
+  line-height: 1.65;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+/* Partenza: il GO gigante — il brand è il segnale di via */
+.journey__go {
+  font-family: var(--font-display);
+  font-size: clamp(4rem, 10vw, 7rem);
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  line-height: 0.9;
+  color: var(--color-accent);
+  margin: 0 0 0.5rem;
+  text-shadow: 0 0 34px color-mix(in srgb, var(--color-accent) 30%, transparent);
+}
+
+.journey__start-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 3.6vw, 2.4rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: var(--color-text-primary);
+  margin: 0 0 0.75rem;
+}
+
+.journey__hint {
+  align-items: center;
+  gap: 0.55rem;
+  margin: 1.5rem 0 0;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.journey__hint .work-chevron {
+  animation: cta-arrow-nudge 1.3s ease-in-out infinite;
+}
+
+/* Tappa: card-stazione — stesso linguaggio delle work-index-card */
+.journey__stop {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-16);
+  background: rgba(255, 255, 255, 0.02);
+  text-decoration: none;
+  transition:
+    border-color var(--duration-state) var(--ease-standard),
+    background var(--duration-state) var(--ease-standard),
+    box-shadow var(--duration-state) var(--ease-standard);
+}
+
+.journey__stop:hover,
+.journey__stop:focus-visible {
+  border-color: var(--color-accent);
+  background: rgba(255, 255, 255, 0.045);
+  box-shadow: 0 0 22px color-mix(in srgb, var(--color-accent) 14%, transparent);
+}
+
+/* Landmark knolling: oggetto a bordo strada, sopra la card — non watermark */
+.journey__stop-icon {
+  width: clamp(4.5rem, 9vw, 6.5rem);
+  margin: 0 0 0.25rem;
+  align-self: flex-end;
+  user-select: none;
+  pointer-events: none;
+  filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.4));
+}
+
+.journey.is-active .journey__stop-icon {
+  position: absolute;
+  top: calc(clamp(4.5rem, 9vw, 6.5rem) * -0.62);
+  right: 1rem;
+  margin: 0;
+  will-change: transform;
+}
+
+.journey__stop-name {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.journey__stop-role {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--color-text-muted);
+  margin: 0;
+}
+
+/* impactScore della tappa: un dato, in mono — la prova prima del click */
+.journey__stop-impact {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--color-accent);
+  margin: 0.25rem 0 0;
+  padding-top: 0.6rem;
+  border-top: 1px dashed color-mix(in srgb, var(--color-accent) 30%, transparent);
+}
+
+.journey__stop-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  text-decoration: none;
+  transition: gap 0.2s ease;
+}
+
+.journey__stop:hover .journey__stop-cta,
+.journey__stop:focus-visible .journey__stop-cta,
+.journey__panel--end .journey__stop-cta:hover,
+.journey__panel--end .journey__stop-cta:focus-visible {
+  gap: 0.65rem;
+}
+
+/* Fine strada: la prossima tappa è fuori dal sito */
+.journey__end-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 4.2vw, 2.8rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.08;
+  color: var(--color-text-primary);
+  margin: 0 0 0.75rem;
 }
