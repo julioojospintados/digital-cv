@@ -8,6 +8,16 @@ import ProjectCard from "../../components/cards/ProjectCard.astro";
 import SkillSquare from "../../components/cards/SkillSquare.astro";
 import SoftItem from "../../components/cards/SoftItem.astro";
 
+// Hero copy — EN page is always static, default persona is 'tech' (see
+// mode-buttons comment below: mode switch only filters cards client-side,
+// it doesn't re-render hero text). Mirrors the "tech" entry of heroTitles/
+// heroSummaries in [mode].astro — same "Design first, Tech as a tool"
+// framing (see memory "posizionamento-ux-ui-first").
+const heroTitle =
+  "Development in service of design — Angular, Lit, AI Workflow";
+const heroSummary =
+  "I build interfaces with Angular, Lit and TypeScript, integrating AI tooling to move faster without losing quality. At ALTEN Italia I worked on design systems and architecture for Aruba and Intesa San Paolo. This site itself was built in five days with GitHub Copilot and Claude as operational assistants.";
+
 // ── Skill level labels (English) ───────────────────────────────────────────
 const LEVEL_EN: Record<string, string> = {
   Base: "Basic",
@@ -486,8 +496,19 @@ const projectsData = cvDataEn.projects.slice(0, 6).map((p) => {
             ))
         }
       </h1>
-      <p class="hero-title">{cvDataEn.personal.title}</p>
-      <p class="hero-summary">{cvDataEn.personal.summary}</p>
+      <p class="hero-title">{heroTitle}</p>
+      <p class="hero-summary">{heroSummary}</p>
+      <div class="hero-tshape" aria-label="T-shaped profile: depth and breadth">
+        <span class="hero-tshape__item">
+          <span class="hero-tshape__label">Depth</span>
+          <span class="hero-tshape__value">Frontend · 6+ years</span>
+        </span>
+        <span class="hero-tshape__glyph" aria-hidden="true">⊤</span>
+        <span class="hero-tshape__item">
+          <span class="hero-tshape__label">Breadth</span>
+          <span class="hero-tshape__value">Design · Method · AI · Stage</span>
+        </span>
+      </div>
       <a href="/en/work" class="hero-portfolio-cta">
         The full process behind every project — problem, decisions, measurable outcomes — is told in the portfolio
       </a>
@@ -841,7 +862,25 @@ const projectsData = cvDataEn.projects.slice(0, 6).map((p) => {
       )
     }
     <p class="cv-footer__credit">
-      Giulio Occhipinti · <a href="mailto:giulio.occhipinti.g@gmail.com"
+      {cvDataEn.personal.name}
+      {cvDataEn.personal.phone && (
+        <>
+          {" · "}
+          <a href={`tel:${cvDataEn.personal.phone.replace(/\s+/g, "")}`}>{cvDataEn.personal.phone}</a>
+        </>
+      )}
+      {cvDataEn.social.find((s) => s.platform === "LinkedIn") && (
+        <>
+          {" · "}
+          <a
+            href={cvDataEn.social.find((s) => s.platform === "LinkedIn")!.url}
+            target="_blank"
+            rel="noopener noreferrer"
+          >LinkedIn</a>
+        </>
+      )}
+      {" · "}
+      <a href="mailto:giulio.occhipinti.g@gmail.com"
         >giulio.occhipinti.g@gmail.com</a
       >
     </p>
