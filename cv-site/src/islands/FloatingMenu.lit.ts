@@ -235,7 +235,7 @@ class FloatingMenu extends LitElement {
           transparent
         );
       /* custom property attraversa lo Shadow DOM — token in global.css */
-      border-radius: var(--radius-card, 1rem);
+      border-radius: var(--radius-16, 1rem);
       padding: 1rem;
       backdrop-filter: blur(16px);
       pointer-events: all;

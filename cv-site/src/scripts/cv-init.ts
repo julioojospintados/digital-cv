@@ -21,6 +21,7 @@ const restChars = [...allChars].filter(
 );
 const heroTitle = heroEl.querySelector<HTMLElement>(".hero-title");
 const heroSummary = heroEl.querySelector<HTMLElement>(".hero-summary");
+const heroPortfolioLink = heroEl.querySelector<HTMLElement>(".profile-portfolio-cta");
 const heroPortfolioCta = heroEl.querySelector<HTMLElement>(".hero-portfolio-cta");
 const heroFooter = heroEl.querySelector<HTMLElement>(".hero-footer");
 
@@ -103,9 +104,9 @@ heroTl.to(
   "-=0.4",
 );
 
-// 5. Resto della sezione hero (titolo, summary, CTA portfolio, footer)
+// 5. Resto della sezione hero (titolo, summary, link portfolio, CTA portfolio, footer)
 heroTl.to(
-  [heroTitle, heroSummary, heroPortfolioCta, heroFooter].filter(
+  [heroTitle, heroSummary, heroPortfolioLink, heroPortfolioCta, heroFooter].filter(
     (el): el is HTMLElement => el !== null,
   ),
   {

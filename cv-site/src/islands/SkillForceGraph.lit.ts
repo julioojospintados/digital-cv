@@ -359,7 +359,7 @@ class SkillForceGraph extends LitElement {
       right: 1.5rem;
       width: 2rem;
       height: 2rem;
-      border-radius: 4px;
+      border-radius: var(--radius-4);
       border: 1px solid rgba(255,255,255,0.18);
       background: rgba(8,73,67,0.92);
       color: rgba(192,220,215,0.8);
@@ -455,7 +455,7 @@ class SkillForceGraph extends LitElement {
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: 4px;
+      border-radius: var(--radius-4);
       transition: color 0.2s ease;
     }
     .graph-dialog-close:hover {
@@ -592,7 +592,7 @@ class SkillForceGraph extends LitElement {
           z-index: 9999;
           width: min(300px, calc(100vw - 2.5rem));
           padding: 0.75rem 0.85rem;
-          border-radius: 3px;
+          border-radius: var(--radius-4);
           border-top: 1px solid rgba(255,255,255,0.12);
           border-right: 1px solid rgba(255,255,255,0.12);
           border-bottom: 1px solid rgba(255,255,255,0.12);

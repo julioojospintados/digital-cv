@@ -699,7 +699,7 @@ img[src*="flashlight"] {
   padding: 1.25rem 1.5rem;
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: var(--radius-card);
+  border-radius: var(--radius-16);
   cursor: pointer;
   text-align: left;
   user-select: none;
@@ -1123,7 +1123,7 @@ img[src*="flashlight"] {
 }
 
 .profile-desc {
-  font-size: 0.9rem;
+  font-size: 1rem;
   line-height: 1.72;
   color: var(--color-text-muted);
   margin: 0;
@@ -1137,26 +1137,26 @@ img[src*="flashlight"] {
     overflow-x: hidden;
   }
 }
-/* ── Profile CTAs — pill solide, stessa gerarchia delle CTA di /work
-   (.work-cta__link--primary/--secondary): piena = azione primaria (entra
-   nel mode), outline = azione secondaria (portfolio). Colore = --ps-accent
-   sempre: è il sistema di wayfinding del sito (stesso linguaggio di nav,
-   glow, chevron, dot-nav), non va uniformato su un colore unico — la
-   gerarchia primaria/secondaria si ottiene con pieno vs outline, non col
-   colore. Icona sempre .profile-cta__arrow (global.css): sulla primaria
-   segue il testo (→ "prosegui dentro"), sulla secondaria lo precede
-   (☞ "guarda qui") — stessa rotazione, cambia solo la posizione nel
-   markup/flex, mai il verso. */
+/* ── Profile CTAs — outline, stessa estetica delle mode-card (bordo
+   colorato + glow su sfondo scuro, MAI fill solido): piena rimossa a
+   favore dell'outline anche per la primaria, la gerarchia primaria/
+   secondaria si ottiene con intensità del bordo/glow, non col fill.
+   Colore = --ps-accent sempre: è il sistema di wayfinding del sito
+   (stesso linguaggio di nav, glow, chevron, dot-nav), non va uniformato
+   su un colore unico. Icona sempre .profile-cta__arrow (global.css):
+   sulla primaria segue il testo (→ "prosegui dentro"), sulla secondaria
+   lo precede (☞ "guarda qui") — stessa rotazione, cambia solo la
+   posizione nel markup/flex, mai il verso. */
 .profile-cta {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
   margin-top: 0.85rem;
   padding: 0.65rem 1.25rem;
-  color: rgba(8, 73, 67, 1);
-  background: var(--ps-accent);
+  color: var(--ps-accent);
+  background: rgba(255, 255, 255, 0.03);
   border: 1px solid var(--ps-accent);
-  border-radius: 2px;
+  border-radius: var(--radius-4);
   font-family: var(--font-mono);
   font-size: 0.8rem;
   font-weight: 700;
@@ -1164,14 +1164,55 @@ img[src*="flashlight"] {
   text-transform: uppercase;
   text-decoration: none;
   align-self: flex-start;
+  /* Glow bordo luminescente — stessa formula di .cv-card[data-state="active"]
+     in global.css, ma ancorata a --ps-accent (colore della sezione) invece
+     di --color-accent (colore del mode globale). */
+  box-shadow:
+    0 0 16px rgba(255, 255, 255, 0.12),
+    inset 0 0 24px rgba(255, 255, 255, 0.04);
+  box-shadow:
+    0 0 16px color-mix(in srgb, var(--ps-accent) 35%, transparent),
+    inset 0 0 24px color-mix(in srgb, var(--ps-accent) 10%, transparent);
   transition:
     transform 0.16s ease,
-    filter 0.2s ease;
+    filter 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+  /* Pulse persistente sul bordo — stessa cadenza (1.5s, ease-in-out, loop)
+     del pulse GSAP delle mode-card (index-init.ts, "10b. Pulse attenzione
+     sulle card"): qui in CSS puro perché la CTA vive fuori dalla timeline
+     d'ingresso dell'hero. Si interrompe su hover/focus (l'utente sta già
+     interagendo, non serve più richiamare l'attenzione) e rispetta
+     prefers-reduced-motion via la regola globale in global.css. */
+  animation: profile-cta-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes profile-cta-pulse {
+  0%,
+  100% {
+    box-shadow:
+      0 0 16px color-mix(in srgb, var(--ps-accent) 35%, transparent),
+      inset 0 0 24px color-mix(in srgb, var(--ps-accent) 10%, transparent);
+  }
+
+  50% {
+    box-shadow:
+      0 0 26px color-mix(in srgb, var(--ps-accent) 62%, transparent),
+      inset 0 0 30px color-mix(in srgb, var(--ps-accent) 18%, transparent);
+  }
 }
 
 @media (hover: hover) and (pointer: fine) {
   .profile-cta:hover {
-    filter: brightness(1.1);
+    animation: none;
+    background: rgba(255, 255, 255, 0.08);
+    background: color-mix(in srgb, var(--ps-accent) 10%, transparent);
+    box-shadow:
+      0 0 22px rgba(255, 255, 255, 0.18),
+      inset 0 0 28px rgba(255, 255, 255, 0.06);
+    box-shadow:
+      0 0 22px color-mix(in srgb, var(--ps-accent) 50%, transparent),
+      inset 0 0 28px color-mix(in srgb, var(--ps-accent) 14%, transparent);
   }
 
   .profile-cta:hover .profile-cta__arrow {
@@ -1181,7 +1222,9 @@ img[src*="flashlight"] {
 }
 
 .profile-cta:focus-visible {
-  filter: brightness(1.1);
+  animation: none;
+  background: rgba(255, 255, 255, 0.08);
+  background: color-mix(in srgb, var(--ps-accent) 10%, transparent);
 }
 
 .profile-cta:active {
@@ -1193,39 +1236,53 @@ img[src*="flashlight"] {
   animation-play-state: paused;
 }
 
-/* Secondaria — outline, stessa famiglia della primaria ma senza riempimento:
-   meno peso visivo, coerente con "azione di approfondimento" invece di
-   "azione principale della sezione". */
+/* Secondaria — link testuale con underline animato (niente più bordo/fill/
+   glow): il peso visivo scende rispetto alla primaria .profile-cta, che
+   resta un bottone outline con pulse. L'underline "a tenda" entra da
+   sinistra su hover ed esce verso destra al mouse-out (transform-origin
+   che cambia tra i due stati) — tecnica standard delle CTA testuali
+   Awwwards. Anima solo transform/opacity (regola GPU-only del design
+   system), mai transform-origin stesso. */
 .profile-portfolio-cta {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
   margin-top: 0.6rem;
-  padding: 0.55rem 1.1rem;
+  padding-bottom: 0.2rem;
+  position: relative;
   color: var(--ps-accent);
   background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  /* fallback: Safari < 16.2 / Firefox < 113 non supportano color-mix() */
-  border: 1px solid color-mix(in srgb, var(--ps-accent) 45%, transparent);
-  border-radius: 2px;
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: 1rem;
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   text-decoration: none;
   align-self: flex-start;
-  transition:
-    border-color 0.2s ease,
-    background 0.2s ease;
+  transition: filter 0.2s ease;
+}
+
+.profile-portfolio-cta::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: var(--ps-accent);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s var(--ease-standard);
 }
 
 @media (hover: hover) and (pointer: fine) {
   .profile-portfolio-cta:hover {
-    border-color: var(--ps-accent);
-    background: rgba(255, 255, 255, 0.08);
-    /* fallback: Safari < 16.2 / Firefox < 113 non supportano color-mix() */
-    background: color-mix(in srgb, var(--ps-accent) 10%, transparent);
+    filter: brightness(1.2);
+  }
+
+  .profile-portfolio-cta:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
   }
 
   .profile-portfolio-cta:hover .profile-cta__arrow {
@@ -1235,15 +1292,22 @@ img[src*="flashlight"] {
 }
 
 .profile-portfolio-cta:focus-visible {
-  border-color: var(--ps-accent);
-  background: rgba(255, 255, 255, 0.08);
-  /* fallback: Safari < 16.2 / Firefox < 113 non supportano color-mix() */
-  background: color-mix(in srgb, var(--ps-accent) 10%, transparent);
+  filter: brightness(1.2);
+}
+
+.profile-portfolio-cta:focus-visible::after {
+  transform: scaleX(1);
+  transform-origin: left;
 }
 
 .profile-portfolio-cta:focus-visible .profile-cta__arrow {
   translate: 4px 0;
   animation-play-state: paused;
+}
+
+.profile-portfolio-cta:active {
+  transform: scale(0.97);
+  transition: transform 0.1s var(--ease-standard);
 }
 
 /* Profile deco base */

@@ -368,7 +368,7 @@ go-logo:not(:defined) {
   padding: 0 0.6rem;
   background: color-mix(in srgb, var(--color-accent) 10%, transparent);
   border: 1.5px solid var(--color-accent);
-  border-radius: 2px;
+  border-radius: var(--radius-4);
   color: var(--color-accent);
   font-family: var(--font-mono);
   font-size: 0.75rem;
@@ -458,7 +458,7 @@ go-logo:not(:defined) {
   display: flex;
   align-items: stretch;
   border: 1px solid var(--color-border);
-  border-radius: 2px;
+  border-radius: var(--radius-4);
   overflow: hidden;
   flex-shrink: 0;
   transition: border-color 0.2s ease;
@@ -563,6 +563,7 @@ a.lang-switch__opt:hover {
 .hero-badges,
 .hero-title,
 .hero-summary,
+.profile-portfolio-cta,
 .hero-portfolio-cta,
 .hero-footer {
   opacity: 0;
@@ -752,23 +753,58 @@ a.lang-switch__opt:hover {
 
 /* Portfolio: non è un'identità social come LinkedIn/GitHub/Email, è la
    prova del lavoro — merita un peso visivo diverso, non lo stesso outline
-   neutro. Pillola accent-filled, stesso linguaggio di .work-cta__link--primary
-   (work-page.css) così il click "promette" coerentemente cosa trova dopo. */
-.social-link--portfolio {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  color: rgba(8, 73, 67, 1);
-  background: var(--color-accent);
-  border-color: var(--color-accent);
+   neutro. Stesso trattamento del link "Portfolio" in home
+   (.profile-portfolio-cta, index-page.css): underline animato, niente
+   bordo/fill, qui ancorato a --color-accent (colore del mode corrente)
+   invece di --ps-accent (colore di sezione, esiste solo in home). */
+.profile-portfolio-cta {
+  position: relative;
+  color: var(--color-accent);
+  font-size: 1rem;
   font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  padding-bottom: 0.15rem;
+  transition: filter 0.2s ease;
 }
 
-.social-link--portfolio:hover,
-.social-link--portfolio:focus-visible {
-  color: rgba(8, 73, 67, 1);
-  border-color: var(--color-accent);
-  filter: brightness(1.1);
+.profile-portfolio-cta::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: var(--color-accent);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s var(--ease-standard);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .profile-portfolio-cta:hover {
+    filter: brightness(1.2);
+  }
+
+  .profile-portfolio-cta:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+}
+
+.profile-portfolio-cta:focus-visible {
+  filter: brightness(1.2);
+}
+
+.profile-portfolio-cta:focus-visible::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.profile-portfolio-cta:active {
+  transform: scale(0.97);
+  transition: transform 0.1s var(--ease-standard);
 }
 
 /* Icona da /touch-icon.svg via CSS mask — stessa tecnica e stesso file di
@@ -868,7 +904,7 @@ a.lang-switch__opt:hover {
   flex: 0 0 7rem;
   padding: 0.35rem 0.8rem;
   border: 1px solid var(--skills-panel-border);
-  border-radius: 2px;
+  border-radius: var(--radius-4);
   background: rgba(0, 0, 0, 0.1);
   /* fallback: Safari < 16.2 / Firefox < 113 non supportano color-mix() */
   background: color-mix(in srgb, var(--skills-panel-bg) 72%, transparent);
@@ -928,7 +964,7 @@ a.lang-switch__opt:hover {
   position: relative;
   border: 1px solid var(--skills-panel-border);
   background: var(--skills-panel-bg);
-  border-radius: var(--radius-card);
+  border-radius: var(--radius-16);
   overflow: hidden;
   padding: 0;
   /* nessun padding quando mostra il grafico */
@@ -1052,7 +1088,7 @@ a.lang-switch__opt:hover {
   align-items: center;
   padding: 0.22rem 0.55rem;
   background: var(--color-accent);
-  border-radius: 2px;
+  border-radius: var(--radius-4);
   color: rgba(8, 73, 67, 1);
   font-size: 0.75rem;
   font-weight: 900;
@@ -1098,7 +1134,7 @@ a.lang-switch__opt:hover {
 
 .exp-cluster {
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-card);
+  border-radius: var(--radius-16);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -1445,7 +1481,7 @@ a.lang-switch__opt:hover {
 .growth-card {
   padding: 1.25rem;
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-card);
+  border-radius: var(--radius-16);
   background: rgba(255, 255, 255, 0.02);
   display: flex;
   flex-direction: column;
@@ -1542,7 +1578,7 @@ a.lang-switch__opt:hover {
 .social-impact-card {
   padding: 1.25rem;
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-card);
+  border-radius: var(--radius-16);
   background: rgba(255, 255, 255, 0.02);
   display: flex;
   flex-direction: column;
