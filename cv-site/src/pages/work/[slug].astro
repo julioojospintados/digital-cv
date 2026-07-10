@@ -1,5 +1,6 @@
 ---
 import Layout from "../../layouts/Layout.astro";
+import WorkDesignSystem from "../../components/WorkDesignSystem.astro";
 import { cvData } from "@cv-data";
 import "../../styles/work-page.css";
 
@@ -48,6 +49,12 @@ const email = cvData.social.find((s) => s.platform === "Email")?.url ?? "mailto:
           {project.tags.map((t) => <span class="work-tag">{t}</span>)}
         </div>
       )}
+      {slug === "digital-cv" && (
+        <a href="#design-system" class="work-hero__ds-link">
+          Esplora il design system
+          <span class="work-chevron work-chevron--down" aria-hidden="true" />
+        </a>
+      )}
     </header>
 
     {project.problem && (
@@ -84,6 +91,8 @@ const email = cvData.social.find((s) => s.platform === "Email")?.url ?? "mailto:
         </div>
       </section>
     )}
+
+    {slug === "digital-cv" && <WorkDesignSystem lang="it" />}
 
     {project.outcomes && project.outcomes.length > 0 && (
       <section class="work-section" aria-labelledby="work-outcomes-title">

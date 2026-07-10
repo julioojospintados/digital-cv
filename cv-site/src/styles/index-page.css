@@ -1137,57 +1137,41 @@ img[src*="flashlight"] {
     overflow-x: hidden;
   }
 }
-/* ── Profile CTA — link tipografico con underline che si disegna.
-   Niente box: baseline neutra sempre visibile (affordance), tratto accent
-   che cresce da sinistra su hover/focus, freccia che parte. ── */
+/* ── Profile CTAs — pill solide, stessa gerarchia delle CTA di /work
+   (.work-cta__link--primary/--secondary): piena = azione primaria (entra
+   nel mode), outline = azione secondaria (portfolio). Colore = --ps-accent
+   sempre: è il sistema di wayfinding del sito (stesso linguaggio di nav,
+   glow, chevron, dot-nav), non va uniformato su un colore unico — la
+   gerarchia primaria/secondaria si ottiene con pieno vs outline, non col
+   colore. Icona sempre .profile-cta__arrow (global.css): sulla primaria
+   segue il testo (→ "prosegui dentro"), sulla secondaria lo precede
+   (☞ "guarda qui") — stessa rotazione, cambia solo la posizione nel
+   markup/flex, mai il verso. */
 .profile-cta {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  margin-top: 0.75rem;
-  padding: 0.45rem 0;
-  color: var(--ps-accent);
+  margin-top: 0.85rem;
+  padding: 0.65rem 1.25rem;
+  color: rgba(8, 73, 67, 1);
+  background: var(--ps-accent);
+  border: 1px solid var(--ps-accent);
+  border-radius: 2px;
   font-family: var(--font-mono);
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 700;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   text-decoration: none;
   align-self: flex-start;
-  position: relative;
-  will-change: transform;
-  transition: transform 0.16s ease;
-}
-
-/* Baseline neutra — sempre presente, comunica "questo è un link" */
-.profile-cta::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 1px;
-  background: rgba(255, 255, 255, 0.22);
-}
-
-/* Tratto accent — si disegna da sinistra su hover/focus */
-.profile-cta::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 2px;
-  background: var(--ps-accent);
-  transform: scaleX(0);
-  transform-origin: left center;
-  transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  transition:
+    transform 0.16s ease,
+    filter 0.2s ease;
 }
 
 @media (hover: hover) and (pointer: fine) {
-
-  .profile-cta:hover::after {
-    transform: scaleX(1);
+  .profile-cta:hover {
+    filter: brightness(1.1);
   }
 
   .profile-cta:hover .profile-cta__arrow {
@@ -1196,19 +1180,68 @@ img[src*="flashlight"] {
   }
 }
 
-.profile-cta:focus-visible::after {
-  transform: scaleX(1);
+.profile-cta:focus-visible {
+  filter: brightness(1.1);
 }
 
 .profile-cta:active {
   transform: scale(0.97);
 }
 
-/* Base + keyframes di .profile-cta__arrow spostati in global.css — l'icona
-   è condivisa anche dalla CV page (hero-portfolio-cta, cv-page.css). Qui
-   restano solo gli stati hover/focus, che dipendono dal parent .profile-cta
-   specifico di questa pagina (vedi blocco hover sopra). */
 .profile-cta:focus-visible .profile-cta__arrow {
+  translate: 4px 0;
+  animation-play-state: paused;
+}
+
+/* Secondaria — outline, stessa famiglia della primaria ma senza riempimento:
+   meno peso visivo, coerente con "azione di approfondimento" invece di
+   "azione principale della sezione". */
+.profile-portfolio-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.6rem;
+  padding: 0.55rem 1.1rem;
+  color: var(--ps-accent);
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  /* fallback: Safari < 16.2 / Firefox < 113 non supportano color-mix() */
+  border: 1px solid color-mix(in srgb, var(--ps-accent) 45%, transparent);
+  border-radius: 2px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  align-self: flex-start;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .profile-portfolio-cta:hover {
+    border-color: var(--ps-accent);
+    background: rgba(255, 255, 255, 0.08);
+    /* fallback: Safari < 16.2 / Firefox < 113 non supportano color-mix() */
+    background: color-mix(in srgb, var(--ps-accent) 10%, transparent);
+  }
+
+  .profile-portfolio-cta:hover .profile-cta__arrow {
+    translate: 4px 0;
+    animation-play-state: paused;
+  }
+}
+
+.profile-portfolio-cta:focus-visible {
+  border-color: var(--ps-accent);
+  background: rgba(255, 255, 255, 0.08);
+  /* fallback: Safari < 16.2 / Firefox < 113 non supportano color-mix() */
+  background: color-mix(in srgb, var(--ps-accent) 10%, transparent);
+}
+
+.profile-portfolio-cta:focus-visible .profile-cta__arrow {
   translate: 4px 0;
   animation-play-state: paused;
 }

@@ -1,0 +1,373 @@
+---
+/**
+ * Design System del Digital CV — sezione documentale per /work/digital-cv.
+ * Tutti i valori sono i token REALI del progetto (global.css + design-system
+ * skill): questa pagina li mostra, non li ridefinisce. I colori letterali
+ * qui sotto sono dati documentali (la palette è il contenuto), non stile UI.
+ */
+interface Props {
+  lang?: "it" | "en";
+}
+const { lang = "it" } = Astro.props;
+const isEN = lang === "en";
+
+const t = {
+  title: "Design System",
+  intro: isEN
+    ? "The rules were set before the components: fixed teal stage, one accent per mode, two typefaces, motion only where it carries meaning. Everything below is rendered live from the site's real tokens."
+    : "Le regole sono nate prima dei componenti: palco ottanio fisso, un accent per mode, due famiglie tipografiche, animazione solo dove porta significato. Tutto ciò che vedi qui sotto è renderizzato dai token reali del sito.",
+  colors: isEN ? "Color — one stage, four lights" : "Colore — un palco, quattro luci",
+  colorsNote: isEN
+    ? "The teal background never changes: switching mode changes the accent, like stage lighting. Every accent has a muted variant recalibrated for WCAG AA contrast (≥4.5:1) on teal."
+    : "Lo sfondo ottanio non cambia mai: cambiare mode cambia l'accent, come luci di scena. Ogni accent ha una variante muted ricalibrata per contrasto WCAG AA (≥4.5:1) su ottanio.",
+  type: isEN ? "Typography — spoken vs. measured" : "Tipografia — parlato vs misurato",
+  typeNote: isEN
+    ? "Lexend for everything \"spoken\" (titles, body); JetBrains Mono for everything \"measured\" (labels, counts, data, impactScore). Self-hosted via Fontsource — no external requests. Lexend 800 loads with font-display: block to keep the preloader flash-free."
+    : "Lexend per tutto ciò che è \"parlato\" (titoli, testo); JetBrains Mono per tutto ciò che è \"misurato\" (label, conteggi, dati, impactScore). Self-hosted via Fontsource — zero richieste esterne. Il peso 800 di Lexend carica con font-display: block per un preloader senza flash.",
+  squares: isEN ? "Skill levels — square & glow, never bars" : "Livelli skill — square & glow, mai barre",
+  squaresNote: isEN
+    ? "Percentage bars promise a precision that doesn't exist. Here the border grows with the level (1→4px) and the glow marks mastery — a visual inventory, consistent with knolling."
+    : "Le barre percentuali promettono una precisione che non esiste. Qui il bordo cresce col livello (1→4px) e il glow segna la padronanza — un inventario visivo, coerente col knolling.",
+  sqLevels: isEN
+    ? ["Basic", "Intermediate", "Advanced", "Expert"]
+    : ["Base", "Intermedio", "Avanzato", "Esperto"],
+  motion: isEN ? "Motion — rules, not moods" : "Motion — regole, non umori",
+  motionRules: isEN
+    ? [
+        "UI durations: 150ms micro-interactions, 300ms state changes — never beyond 300ms outside hero/preloader",
+        "Only transform and opacity are animated (GPU) — never width, height, margin",
+        "Slow deliberate enters, fast exits — the system responds",
+        "Hover effects gated behind (hover: hover) — no sticky hovers on touch",
+        "prefers-reduced-motion always respected: motion removed, meaning kept",
+      ]
+    : [
+        "Durate UI: 150ms micro-interazioni, 300ms cambi di stato — mai oltre 300ms fuori da hero/preloader",
+        "Si animano solo transform e opacity (GPU) — mai width, height, margin",
+        "Entrate lente e deliberate, uscite veloci — il sistema risponde",
+        "Hover solo dietro (hover: hover) — niente hover appiccicosi su touch",
+        "prefers-reduced-motion sempre rispettato: si toglie il movimento, non il significato",
+      ],
+  surfaces: isEN ? "Surfaces & signs" : "Superfici & segni",
+  surfacesRules: isEN
+    ? [
+        "Cards and sections: 1px border, near-transparent background, 1rem radius (--radius-card) — content gives the shape, not decoration",
+        "One SVG icon (touch-icon) applied via CSS mask + currentColor: a single file, tinted by context across all four modes",
+        "Chevrons drawn in CSS (rotated borders) — never Unicode glyphs, whose stroke depends on the OS font",
+        "8 knolling objects in WebP (~15KB each): every mode has its physical counterparts on the table",
+      ]
+    : [
+        "Card e sezioni: bordo 1px, background quasi trasparente, raggio 1rem (--radius-card) — la forma la dà il contenuto, non la decorazione",
+        "Una sola icona SVG (touch-icon) applicata via CSS mask + currentColor: un file unico, tinto dal contesto in tutti e quattro i mode",
+        "Chevron disegnati in CSS (bordi ruotati) — mai glifi Unicode, il cui tratto dipende dal font di sistema",
+        "8 oggetti knolling in WebP (~15KB l'uno): ogni mode ha i suoi corrispettivi fisici sul tavolo",
+      ],
+  modes: isEN ? "Mode system — emphasis, never structure" : "Mode system — enfasi, mai struttura",
+  modesNote: isEN
+    ? "Switching mode never changes template or content: active cards come forward, the others drop to low opacity — whispers, not silences. Anyone assessing a T-shaped profile must see the breadth even while examining one depth."
+    : "Cambiare mode non cambia mai template né contenuti: le card attive avanzano, le altre scendono a bassa opacità — sussurri, non silenzi. Chi valuta un profilo T-shaped deve vedere l'ampiezza anche mentre esamina una profondità.",
+};
+
+const modes = [
+  { key: "tech", label: "Software Developer", accent: "rgba(0, 255, 200, 1)", muted: "rgba(0, 255, 200, 0.70)", ratio: "4.8:1" },
+  { key: "creative", label: "Web & UX Designer", accent: "rgba(255, 107, 53, 1)", muted: "rgba(255, 195, 155, 0.82)", ratio: "4.9:1" },
+  { key: "human", label: "AI & Digital Specialist", accent: "rgba(240, 200, 127, 1)", muted: "rgba(240, 210, 148, 0.75)", ratio: "4.6:1" },
+  { key: "management", label: "Project Manager", accent: "rgba(180, 100, 255, 1)", muted: "rgba(200, 170, 255, 0.78)", ratio: "4.6:1" },
+];
+
+const baseTokens = [
+  { name: "--color-bg", value: "rgba(8, 73, 67, 1)", note: isEN ? "teal — invariant" : "ottanio — invariabile" },
+  { name: "--color-surface", value: "rgba(12, 95, 87, 0.5)", note: isEN ? "card surfaces" : "superfici card" },
+  { name: "--color-border", value: "rgba(255, 255, 255, 0.12)", note: isEN ? "1px borders" : "bordi 1px" },
+  { name: "--color-text-primary", value: "rgba(245, 240, 230, 1)", note: isEN ? "titles, body" : "titoli, testo" },
+  { name: "--color-text-muted", value: "rgba(192, 220, 215, 0.85)", note: "~5.7:1 AA" },
+];
+---
+
+<section class="work-section ds" id="design-system" aria-labelledby="work-ds-title">
+  <h2 class="work-section__title" id="work-ds-title">{t.title}</h2>
+  <p class="work-section__text ds__intro">{t.intro}</p>
+
+  <!-- Colore -->
+  <h3 class="ds__sub">{t.colors}</h3>
+  <p class="ds__note">{t.colorsNote}</p>
+  <div class="ds__swatches">
+    {baseTokens.map((tok) => (
+      <div class="ds__swatch">
+        <span class="ds__chip" style={`background:${tok.value}`}></span>
+        <span class="ds__tok">{tok.name}</span>
+        <span class="ds__val">{tok.value} · {tok.note}</span>
+      </div>
+    ))}
+  </div>
+  <div class="ds__accents">
+    {modes.map((m) => (
+      <div class="ds__accent">
+        <span class="ds__chip ds__chip--lg" style={`background:${m.accent}`}></span>
+        <span class="ds__chip" style={`background:${m.muted}`}></span>
+        <span class="ds__tok">{m.key}</span>
+        <span class="ds__val">{m.label} · muted {m.ratio}</span>
+      </div>
+    ))}
+  </div>
+
+  <!-- Tipografia -->
+  <h3 class="ds__sub">{t.type}</h3>
+  <p class="ds__note">{t.typeNote}</p>
+  <div class="ds__typo">
+    <p class="ds__typo-display" aria-hidden="true">GO</p>
+    <div class="ds__typo-meta">
+      <p class="ds__typo-row"><span class="ds__tok">Lexend</span> 400 · 500 · 600 · 700 · <b>800</b></p>
+      <p class="ds__typo-row ds__typo-row--mono"><span class="ds__tok">JetBrains Mono</span> -87% · 04 / · 6 {isEN ? "roles" : "ruoli"} · impactScore</p>
+      <p class="ds__typo-row ds__typo-scale">h2 clamp(2rem, 5vw, 4.5rem) · label 0.65rem / 0.25em · body ≤ 1.1rem / 1.65</p>
+    </div>
+  </div>
+
+  <!-- Square & glow -->
+  <h3 class="ds__sub">{t.squares}</h3>
+  <p class="ds__note">{t.squaresNote}</p>
+  <div class="ds__squares">
+    {t.sqLevels.map((label, i) => (
+      <div class="ds__square-wrap">
+        <span class:list={["ds__square", { "ds__square--glow": i >= 2 }]} style={`border-width:${i + 1}px`}></span>
+        <span class="ds__val">{label} · {i + 1}px</span>
+      </div>
+    ))}
+  </div>
+
+  <!-- Motion -->
+  <h3 class="ds__sub">{t.motion}</h3>
+  <ul class="ds__rules">
+    {t.motionRules.map((r) => <li>{r}</li>)}
+  </ul>
+  <p class="ds__typo-row ds__typo-row--mono ds__tokens-line">--duration-micro 150ms · --duration-state 300ms · --ease-standard cubic-bezier(0.4, 0, 0.2, 1)</p>
+
+  <!-- Superfici & segni -->
+  <h3 class="ds__sub">{t.surfaces}</h3>
+  <ul class="ds__rules">
+    {t.surfacesRules.map((r) => <li>{r}</li>)}
+  </ul>
+
+  <!-- Mode system -->
+  <h3 class="ds__sub">{t.modes}</h3>
+  <p class="ds__note">{t.modesNote}</p>
+  <div class="ds__modes-demo" aria-hidden="true">
+    {modes.map((m, i) => (
+      <span class:list={["ds__mode-pill", { "ds__mode-pill--passive": i !== 0 }]} style={`--pill-accent:${m.accent}`}>{m.key}</span>
+    ))}
+  </div>
+</section>
+
+<style>
+  .ds {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .ds__intro {
+    margin-bottom: 1rem;
+  }
+
+  .ds__sub {
+    font-family: var(--font-display);
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--color-text-primary);
+    margin: 2.25rem 0 0.4rem;
+  }
+
+  .ds__note {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: rgba(192, 220, 215, 0.9);
+    max-width: 40rem;
+    margin: 0 0 1.1rem;
+  }
+
+  /* Swatches */
+  .ds__swatches,
+  .ds__accents {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+
+  .ds__accents {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .ds__swatch,
+  .ds__accent {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+  }
+
+  .ds__chip {
+    width: 1.35rem;
+    height: 1.35rem;
+    border-radius: 0.45rem;
+    border: 1px solid var(--color-border);
+    flex-shrink: 0;
+  }
+
+  .ds__chip--lg {
+    width: 2.1rem;
+  }
+
+  .ds__tok {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    color: var(--color-text-primary);
+  }
+
+  .ds__val {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    color: var(--color-text-muted);
+  }
+
+  /* Tipografia */
+  .ds__typo {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-card);
+    padding: 1rem 1.25rem;
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  .ds__typo-display {
+    font-family: var(--font-display);
+    font-size: 3.2rem;
+    font-weight: 800;
+    letter-spacing: -0.05em;
+    line-height: 1;
+    color: var(--color-accent);
+    margin: 0;
+  }
+
+  .ds__typo-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    min-width: 0;
+  }
+
+  .ds__typo-row {
+    margin: 0;
+    font-size: 0.85rem;
+    color: rgba(192, 220, 215, 0.9);
+  }
+
+  .ds__typo-row--mono {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+  }
+
+  .ds__typo-scale {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    color: var(--color-text-muted);
+  }
+
+  .ds__tokens-line {
+    margin: 0.75rem 0 0;
+    color: var(--color-text-muted);
+  }
+
+  /* Square & glow */
+  .ds__squares {
+    display: flex;
+    gap: 1.25rem;
+    flex-wrap: wrap;
+  }
+
+  .ds__square-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.45rem;
+  }
+
+  .ds__square {
+    width: 3rem;
+    height: 3rem;
+    border-style: solid;
+    border-color: var(--color-accent);
+    border-radius: 0.6rem;
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  .ds__square--glow {
+    box-shadow: 0 0 12px 3px color-mix(in srgb, var(--color-accent) 40%, transparent);
+  }
+
+  /* Regole */
+  .ds__rules {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    max-width: 40rem;
+  }
+
+  .ds__rules li {
+    position: relative;
+    padding-left: 1.2rem;
+    font-size: 0.92rem;
+    line-height: 1.65;
+    color: rgba(192, 220, 215, 0.9);
+  }
+
+  .ds__rules li::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0.62em;
+    width: 6px;
+    height: 6px;
+    border-radius: 1px;
+    background: var(--color-accent);
+  }
+
+  /* Mode demo */
+  .ds__modes-demo {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .ds__mode-pill {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--pill-accent);
+    border: 1px solid var(--pill-accent);
+    border-radius: 2rem;
+    padding: 0.3rem 0.8rem;
+    transition: opacity var(--duration-state) var(--ease-standard);
+  }
+
+  .ds__mode-pill--passive {
+    opacity: 0.35;
+  }
+
+  @media (max-width: 30rem) {
+    .ds__typo {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>

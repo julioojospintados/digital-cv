@@ -478,3 +478,30 @@
   border-width: 0 1.5px 1.5px 0;
   rotate: -45deg;
 }
+
+.work-chevron--down {
+  rotate: 45deg;
+}
+
+/* CTA ancorata al Design System — solo sul case study digital-cv */
+.work-hero__ds-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  text-decoration: none;
+  position: relative;
+  z-index: 1;
+  transition: gap 0.2s ease;
+}
+
+.work-hero__ds-link:hover,
+.work-hero__ds-link:focus-visible {
+  gap: 0.75rem;
+}

@@ -704,6 +704,7 @@ floating-menu {
   display: inline-block;
   width: 0.95em;
   height: 1.05em;
+  margin-right: 1rem;
   background-color: currentColor;
   -webkit-mask-image: url("/touch-icon.svg");
   mask-image: url("/touch-icon.svg");
