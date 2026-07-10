@@ -22,6 +22,18 @@ const KNOLL_ICON: Record<string, string> = {
 const mode = project.primaryMode ?? "tech";
 const icon = KNOLL_ICON[mode];
 const email = cvDataEn.social.find((s) => s.platform === "Email")?.url ?? "mailto:giulio.occhipinti.g@gmail.com";
+
+// Steps in cv.en.ts follow the "Research — text..." format: the prefix
+// becomes the stop name along the road. A step without the prefix simply
+// renders without a title — nothing breaks.
+const SEP = " — ";
+const processSteps = (project.process ?? []).map((step) => {
+  const i = step.indexOf(SEP);
+  return i > 0 && i < 48
+    ? { title: step.slice(0, i), body: step.slice(i + SEP.length) }
+    : { title: null, body: step };
+});
+const totalSteps = String(processSteps.length).padStart(2, "0");
 ---
 
 <Layout
@@ -58,24 +70,72 @@ const email = cvDataEn.social.find((s) => s.platform === "Email")?.url ?? "mailt
       )}
     </header>
 
-    {project.problem && (
-      <section class="work-section" aria-labelledby="work-problem-title">
-        <h2 class="work-section__title" id="work-problem-title">The problem</h2>
-        <p class="work-section__text">{project.problem}</p>
-      </section>
-    )}
+    <!-- Horizontal journey: the project's timeline is the road — Problem
+         (departure) → process steps (stops) → Measurable outcome (arrival).
+         Without JS or with reduced-motion it stays a vertical stack. -->
+    {processSteps.length > 0 && (
+      <section class="journey" data-journey aria-label="From problem to outcome — the project journey">
+        <div class="journey__hud" aria-hidden="true">
+          <span>Step <b data-j-current>00</b>/{totalSteps}</span>
+          <span class="journey__hud-bar"><b data-j-bar></b></span>
+          <span class="journey__hud-km" data-j-km>0 m</span>
+        </div>
 
-    {project.process && project.process.length > 0 && (
-      <section class="work-section" aria-labelledby="work-process-title">
-        <h2 class="work-section__title" id="work-process-title">The process</h2>
-        <ol class="work-process">
-          {project.process.map((step, i) => (
-            <li class="work-process__step">
-              <span class="work-process__index" aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
-              <p>{step}</p>
-            </li>
+        <img
+          class="journey__traveler"
+          data-j-traveler
+          src="/knolling/compass.webp"
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+          decoding="async"
+        />
+
+        <div class="journey__track" data-j-track>
+          <svg class="journey__road" data-j-road aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+            <path class="journey__road-base" data-j-road-base d=""></path>
+            <path class="journey__road-progress" data-j-road-progress d=""></path>
+          </svg>
+
+          {project.problem && (
+            <article class="journey__panel journey__panel--start">
+              <img
+                class="journey__stop-icon"
+                data-j-parallax
+                src={`/knolling/${icon}`}
+                alt=""
+                aria-hidden="true"
+                loading="lazy"
+                decoding="async"
+              />
+              <p class="journey__eyebrow">Departure</p>
+              <h2 class="journey__start-title">The problem</h2>
+              <p class="journey__text">{project.problem}</p>
+              <p class="journey__hint" aria-hidden="true">
+                Scroll to depart <span class="work-chevron"></span>
+              </p>
+            </article>
+          )}
+
+          {processSteps.map((step, i) => (
+            <article class="journey__panel journey__stop" data-stop>
+              <p class="journey__step-num" aria-hidden="true">{String(i + 1).padStart(2, "0")}</p>
+              <p class="journey__eyebrow">Step {String(i + 1).padStart(2, "0")}/{totalSteps}</p>
+              {step.title && <h3 class="journey__stop-title">{step.title}</h3>}
+              <p class="journey__text">{step.body}</p>
+            </article>
           ))}
-        </ol>
+
+          {project.outcomes && project.outcomes.length > 0 && (
+            <article class="journey__panel journey__panel--end">
+              <p class="journey__eyebrow">Arrival</p>
+              <h2 class="journey__end-title">Measurable outcome</h2>
+              <ul class="journey__outcomes">
+                {project.outcomes.map((o) => <li>{o}</li>)}
+              </ul>
+            </article>
+          )}
+        </div>
       </section>
     )}
 
@@ -94,15 +154,6 @@ const email = cvDataEn.social.find((s) => s.platform === "Email")?.url ?? "mailt
     )}
 
     {slug === "digital-cv" && <WorkDesignSystem lang="en" />}
-
-    {project.outcomes && project.outcomes.length > 0 && (
-      <section class="work-section" aria-labelledby="work-outcomes-title">
-        <h2 class="work-section__title" id="work-outcomes-title">Measurable outcome</h2>
-        <ul class="work-outcomes">
-          {project.outcomes.map((o) => <li class="work-outcomes__item">{o}</li>)}
-        </ul>
-      </section>
-    )}
 
     {project.learnings && project.learnings.length > 0 && (
       <section class="work-section" aria-labelledby="work-learnings-title">
@@ -126,4 +177,5 @@ const email = cvDataEn.social.find((s) => s.platform === "Email")?.url ?? "mailt
 <script>
   import "../../../islands/GoLogo.lit.ts";
   import "../../../islands/FloatingMenu.lit.ts";
+  import "../../../scripts/work-journey.ts";
 </script>

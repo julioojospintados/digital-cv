@@ -54,8 +54,12 @@ function initJourney(root: HTMLElement) {
     let up = true;
     while (x < w) {
       const nx = Math.min(x + seg, w);
-      const dy = up ? -amp : amp;
-      d += ` C ${x + seg * 0.38} ${roadY + dy}, ${nx - seg * 0.38} ${roadY + dy}, ${nx} ${roadY}`;
+      // Control point proporzionati alla larghezza REALE del segmento:
+      // l'ultimo tratto può essere più corto di `seg` e control point
+      // oltre nx disegnerebbero un ricciolo a fine strada.
+      const sw = nx - x;
+      const dy = (up ? -amp : amp) * Math.min(1, sw / seg);
+      d += ` C ${x + sw * 0.38} ${roadY + dy}, ${nx - sw * 0.38} ${roadY + dy}, ${nx} ${roadY}`;
       x = nx;
       up = !up;
     }
