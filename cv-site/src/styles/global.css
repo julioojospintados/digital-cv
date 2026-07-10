@@ -64,6 +64,8 @@ button { background: none; border: 0; padding: 0; cursor: pointer; }
   /* Animation durations */
   --duration-micro: 150ms;
   --duration-state: 300ms;
+  /* Raggio unico per card, sezioni e sottosezioni (decisione 2026-07-10) */
+  --radius-card: 1rem;
   --duration-page: 500ms;
   --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
 }

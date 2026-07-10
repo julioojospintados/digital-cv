@@ -1354,18 +1354,47 @@ export const cvDataEn = {
       ],
       slug: "digital-cv",
       primaryMode: "tech",
-      role: "AI Workflow Designer & Full-Stack Developer — solo ideation, design and development",
+      role: "AI Workflow Designer & Full-Stack Developer — solo ideation, UX/UI and development",
       problem:
-        "A PDF CV can't demonstrate a T-shaped profile: it lists skills, it doesn't show them in action. What's needed is a tool a recruiter, a CTO and an art director can each evaluate in seconds, from their own angle — without writing three different CVs.",
+        "I had started working with AI, MCP and vibe coding, and I needed a real proving ground — not a tutorial. At the same time my PDF CV couldn't demonstrate a T-shaped profile: it listed skills without showing them in action, forcing three very different readers — recruiter, CTO, art director — into the same flat format. I merged the two needs: building the tool I was missing, using the very method I wanted to prove.",
       process: [
-        "\"Knolling\" design system: every skill as an object laid out on a plane — 4 modes (tech/creative/human/management) telling the same profile from four perspectives, without hiding the rest.",
-        "Two-layer architecture: the Astro + Lit site you see, and an MCP server with tools, resources and prompt templates exposing the same data as an API for AI agents (VS Code Copilot, Claude Desktop) — not just claimed, demonstrated.",
-        "End-to-end development with GitHub Copilot and Claude as operational co-pilots: architecture, UI, GSAP animations, MCP server and HTTP API — the site itself is the proof of the method.",
+        "Research — I defined the CV's three real readers (generalist recruiter, CTO, art director) and what each must find within the first 3 seconds: reliability and readability, stack and architecture, aesthetics and storytelling. Every later decision answers to one of them — if it can't be defended in an interview, it doesn't ship.",
+        "Concept — Knolling: order and variety at once. My skills are heterogeneous (code, design, stage, method) and the most honest way to present them is to lay them on the table like objects in a knolling photograph: everything visible, catalogued, intentional — no closed drawers.",
+        "Information architecture — One profile, four perspectives: the /tech /creative /human /management routes change emphasis and accent colour, never structure or content. Readers choose their own point of view; the other sides stay visible as low-opacity whispers, never hidden.",
+        "Design system — Fixed teal background with 4 per-mode accents, Lexend + JetBrains Mono typography, a square/glow system for skill levels instead of percentage bars, animations on transform/opacity only with reduced-motion respected. Constraints decided before writing components.",
+        "AI-augmented build — Vibe coding with GitHub Copilot and Claude as operational pairs: architecture, UI, GSAP animations, and an MCP server with tools, resources and prompt templates exposing the CV as an API for AI agents. The site is the proof of the workflow it claims.",
+      ],
+      decisions: [
+        {
+          title: "Cards by default, the graph as a reward",
+          body: "The most spectacular skills view is a D3 force graph — but graphs are admired, not scanned. The default became the card view, readable in 5 seconds (Jakob's law); the graph remains an opt-in exploration, and D3 (~130KB) only loads for those who actually open it. The \"wow\" must never cost readability for someone with 30 seconds.",
+        },
+        {
+          title: "Whispers, not silences",
+          body: "When you pick a mode, off-topic cards don't disappear: they drop to low opacity. Hiding them would have contradicted the site's thesis — knolling is radical transparency, and anyone assessing a T-shaped profile must be able to see the breadth even while examining the depth.",
+        },
+        {
+          title: "Conventions where the reader is in a hurry",
+          body: "Extra experiences are revealed with \"Read 3 more\" — the LinkedIn and Medium pattern — instead of the branded CTA I tried first: where readers are in a hurry, convention beats originality. For the same reason the current role sits at the top of the experience cluster: recruiters read reverse-chronologically and look for \"where do they work now\".",
+        },
+        {
+          title: "Accessibility as a constraint, not a polish pass",
+          body: "Every accent across the 4 modes has a muted variant recalibrated for WCAG AA contrast (≥4.5:1) on the teal background. Visible focus, skip link and prefers-reduced-motion are design-system rules set at the start — not patches added at the end.",
+        },
+        {
+          title: "Iteration: the wrong scroll",
+          body: "The first version of the home used native \"stepped\" scroll-snap: in real testing it felt rigid and inconsistent with the fluid scroll of the CV pages. I scrapped it and replaced it with one smooth scroll across the whole site plus per-section reveals — consistency of gesture is worth more than a single effect.",
+        },
       ],
       outcomes: [
         "Delivered in 5 days, against a traditional estimate of over a month",
         ">80% test coverage (Vitest) on the MCP/HTTP layer",
         "MCP server with tools, resources and prompt templates — CV data API for AI agents, live demonstration",
+      ],
+      learnings: [
+        "AI truly accelerates only inside constraints set beforehand: with tokens, animation rules and explicit DO NOTs, vibe coding delivers; without them, it delivers chaos to redo.",
+        "Every detail must survive the question \"why?\": if a visual choice has no interview-ready answer, it's decoration.",
+        "Test your own certainties early: the most \"wow\" ideas — the graph as default view, the stepped scroll — were the first I had to scale back in front of real use.",
       ],
     },
     {
@@ -1384,16 +1413,35 @@ export const cvDataEn = {
       primaryMode: "creative",
       role: "Collaborator — Tour Manager & Digital Strategist (2023–2024, remote)",
       problem:
-        "The agency's roster needed two things at once: well-organised live dates — venues, promoters, contracts — and a digital presence that spoke to the industry itself (musicians, labels, promoters), not just a generic audience. Followers and live dates were disconnected from each other.",
+        "The agency's roster needed two things at once: well-organised live dates — venues, promoters, contracts — and a digital presence that spoke to the industry itself, not just a generic audience. The social channels were growing in volume but opening no doors: followers and the agency's real work were two disconnected worlds.",
       process: [
-        "Booking and tour management: venue research, promoter negotiation, contract handling — from proposal to confirmed date.",
-        "Industry-targeted content strategy: communication built for the trade (labels, promoters, fellow artists), not for generic volume.",
-        "One live event managed end-to-end, from booking to communications: Arci Bellezza, Milan.",
+        "Research — Interviews and conversations with the agency's people to understand the work from the inside: how live dates actually come together, who the interlocutors that matter really are, and where contact with musicians, producers and labels breaks down.",
+        "Insight — The problem wasn't \"more followers\" but the right followers: communication had to work as a contact channel with the industry, not as a showcase for a generic audience. Every piece of content had to be rethought as an opportunity for a professional relationship.",
+        "Ideation — A curated playlist of emerging artists as a networking tool: every addition opens a direct, specific contact with musicians, producers and labels — mutual discovery instead of passive follows. On the same logic I proposed a radio show format to extend the idea beyond streaming platforms.",
+        "Execution — Content strategy on the channels, copywriting for the agency's birthday party event, and the operational work of booking and tour management: venue research, promoter negotiation, contracts, all the way to the live event at Arci Bellezza in Milan managed end-to-end.",
+      ],
+      decisions: [
+        {
+          title: "Listen first, propose later",
+          body: "No proposal came before the interviews with the people who work at the agency every day. The ideas that were then embraced — the playlist, the radio format — grew out of needs that had been heard, not out of a marketing playbook applied from the outside: the same principle as user research, taken beyond software.",
+        },
+        {
+          title: "The playlist as a tool, not as content",
+          body: "A playlist of emerging artists is not a post to publish: it's a reason to reach out. Every addition opens a concrete conversation with a musician, a producer, a label — mutual discovery instead of passive follows. The radio format proposal extended the same logic beyond streaming platforms.",
+        },
+        {
+          title: "Speak to the industry, not to the crowd",
+          body: "Growing in volume would have been easy and useless. Content was rethought for specific professional interlocutors: it's the difference between a shop window and a channel that opens doors — and it's why the +100% follower growth is made of contacts that matter, not numbers.",
+        },
       ],
       outcomes: [
         "+100% follower growth — organic, targeted audience (musicians, labels, promoters), not pure volume",
         "Live event delivered at Arci Bellezza in Milan, from booking to communications",
         "Concert booking and coordination across the whole roster, independently",
+      ],
+      learnings: [
+        "Qualitative research works outside software too: interviewing the agency the way you interview users made the proposals relevant on the first try.",
+        "A channel's value isn't measured in followers but in conversations opened with the right people.",
       ],
     },
     {

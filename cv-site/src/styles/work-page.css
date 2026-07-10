@@ -186,6 +186,70 @@
   color: rgba(192, 220, 215, 0.92);
 }
 
+/* ── Decisioni chiave — blocchi "perché X e non Y", il cuore del case
+   study: bordo sinistro neutro che diventa accent su hover, come una
+   scheda d'inventario che si accende quando la esamini. ── */
+.work-decisions {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+.work-decision {
+  padding-left: 1.1rem;
+  border-left: 2px solid var(--color-border);
+  transition: border-color var(--duration-state) var(--ease-standard);
+}
+
+.work-decision:hover {
+  border-left-color: var(--color-accent);
+}
+
+.work-decision__title {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--color-text-primary);
+  margin: 0 0 0.4rem;
+}
+
+.work-decision__body {
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: rgba(192, 220, 215, 0.9);
+  max-width: 40rem;
+  margin: 0;
+}
+
+/* ── Learnings — riflessioni finali, tono più quieto dei risultati ── */
+.work-learnings {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.work-learnings__item {
+  position: relative;
+  padding-left: 1.4rem;
+  font-size: 0.98rem;
+  line-height: 1.7;
+  font-style: italic;
+  color: rgba(192, 220, 215, 0.9);
+  max-width: 40rem;
+}
+
+.work-learnings__item::before {
+  content: "—";
+  position: absolute;
+  left: 0;
+  color: var(--color-accent);
+  font-style: normal;
+}
+
 /* ── Risultati — stesso linguaggio del badge impactScore (AiCard) ── */
 .work-outcomes {
   list-style: none;
@@ -205,7 +269,7 @@
   color: var(--color-text-primary);
   padding: 0.85rem 1rem;
   border: 1px solid var(--color-border);
-  border-radius: 2px;
+  border-radius: var(--radius-card);
   background: color-mix(in srgb, var(--color-accent) 6%, transparent);
 }
 
@@ -224,7 +288,7 @@
   text-align: center;
   padding: 2.5rem 1.5rem;
   border: 1px solid var(--color-border);
-  border-radius: 2px;
+  border-radius: var(--radius-card);
   background: rgba(255, 255, 255, 0.02);
 }
 
@@ -322,7 +386,7 @@
   gap: 0.5rem;
   padding: 1.5rem;
   border: 1px solid var(--color-border);
-  border-radius: 2px;
+  border-radius: var(--radius-card);
   background: rgba(255, 255, 255, 0.02);
   text-decoration: none;
   overflow: hidden;

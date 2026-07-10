@@ -160,10 +160,17 @@ export interface Project {
   primaryMode?: "tech" | "creative" | "human" | "management";
   role?: string;
   problem?: string;
-  /** 3-4 step del processo, in ordine */
+  /** 3-5 step del processo, in ordine — struttura da case study UX:
+   *  ricerca → insight → ideazione → esecuzione (label nel testo dello step) */
   process?: string[];
+  /** Decisioni chiave — mini "perché X e non Y" con trade-off espliciti;
+   *  includere almeno un'iterazione/scarto reale: è ciò che rende credibile
+   *  un case study UX */
+  decisions?: { title: string; body: string }[];
   /** Risultati misurabili — stesso stile impactScore di aiWorkflow */
   outcomes?: string[];
+  /** Cosa ho imparato — riflessioni finali, 2-3 righe ciascuna */
+  learnings?: string[];
 }
 
 export interface AiWorkflowItem {
@@ -1780,18 +1787,47 @@ export const cvData = {
       ],
       slug: "digital-cv",
       primaryMode: "tech",
-      role: "AI Workflow Designer & Full-Stack Developer — ideazione, design e sviluppo in solitaria",
+      role: "AI Workflow Designer & Full-Stack Developer — ideazione, UX/UI e sviluppo in solitaria",
       problem:
-        "Un CV in PDF non dimostra un profilo T-shaped: elenca competenze, non le fa vedere in azione. Serve uno strumento che un recruiter, un CTO e un art director possano valutare in pochi secondi, ciascuno dal proprio punto di vista — senza scrivere tre CV diversi.",
+        "Avevo iniziato a lavorare con AI, MCP e vibe coding e mi serviva un banco di prova reale, non un tutorial. Allo stesso tempo il mio CV in PDF non dimostrava un profilo T-shaped: elencava competenze senza farle vedere in azione, e costringeva tre lettori molto diversi — recruiter, CTO, art director — nello stesso formato piatto. Ho unito le due esigenze: costruire lo strumento che mi mancava, usando proprio il metodo che volevo dimostrare.",
       process: [
-        "Design system \"knolling\": ogni competenza come un oggetto disposto su un piano — 4 mode (tech/creative/human/management) che raccontano lo stesso profilo da quattro prospettive, senza nascondere il resto.",
-        "Architettura a due livelli: il sito Astro + Lit che si vede, e un server MCP con tool, resource e prompt template che espone gli stessi dati come API per agenti AI (VS Code Copilot, Claude Desktop) — non solo dichiarato, dimostrato.",
-        "Sviluppo end-to-end con GitHub Copilot e Claude come assistenti operativi: architettura, UI, animazioni GSAP, server MCP e API HTTP — il sito stesso è la controprova del metodo.",
+        "Ricerca — Ho definito i tre lettori reali del CV (recruiter generalista, CTO, art director) e cosa ciascuno deve trovare nei primi 3 secondi: affidabilità e leggibilità, stack e architettura, estetica e storytelling. Ogni scelta successiva risponde a uno di loro — se non è argomentabile in colloquio, non entra.",
+        "Concept — Il knolling: ordine e varietà insieme. Le mie competenze sono eterogenee (codice, design, palco, metodo) e il modo più onesto di presentarle è disporle sul tavolo come oggetti in una fotografia knolling: tutto visibile, catalogato, intenzionale — nessun cassetto chiuso.",
+        "Architettura dell'informazione — Un solo profilo, quattro prospettive: le route /tech /creative /human /management cambiano enfasi e accento cromatico, mai struttura o contenuto. Chi legge sceglie il proprio punto di vista; le altre anime restano visibili come sussurri a bassa opacità, mai nascoste.",
+        "Design system — Sfondo ottanio fisso con 4 accent per mode, tipografia Lexend + JetBrains Mono, sistema square/glow per i livelli skill al posto delle barre percentuali, animazioni solo su transform/opacity con reduced-motion rispettato. Vincoli decisi prima di scrivere componenti.",
+        "Build AI-augmented — Vibe coding con GitHub Copilot e Claude come pair operativi: architettura, UI, animazioni GSAP, e un server MCP con tool, resource e prompt template che espone il CV come API per agenti AI. Il sito è la controprova del workflow che dichiara.",
+      ],
+      decisions: [
+        {
+          title: "Card di default, grafo come premio",
+          body: "La vista skills più spettacolare è un force graph D3 — ma i grafi si guardano, non si scansionano. Il default è diventato la vista card, leggibile in 5 secondi (Legge di Jakob); il grafo resta come esplorazione opt-in, e D3 (~130KB) si carica solo per chi lo apre davvero. Il \"wow\" non deve mai costare la leggibilità a chi ha 30 secondi.",
+        },
+        {
+          title: "Sussurri, non silenzi",
+          body: "Quando scegli un mode, le card fuori tema non spariscono: scendono a bassa opacità. Nasconderle avrebbe contraddetto la tesi del sito — il knolling è trasparenza radicale, e chi valuta un profilo T-shaped deve poter vedere l'ampiezza anche mentre esamina la profondità.",
+        },
+        {
+          title: "Convenzioni dove l'utente ha fretta",
+          body: "Le esperienze extra si rivelano con \"Leggi altre 3\" — il pattern di LinkedIn e Medium — al posto di un CTA brandizzato che avevo provato prima: dove chi legge ha fretta, la convenzione batte l'originalità. Per lo stesso motivo il ruolo attuale sta in cima al cluster esperienze: i recruiter leggono in reverse-chronological e cercano \"dove lavora ora\".",
+        },
+        {
+          title: "Accessibilità come vincolo, non rifinitura",
+          body: "Ogni accent dei 4 mode ha una variante muted ricalibrata per contrasto WCAG AA (≥4.5:1) sullo sfondo ottanio. Focus visibile, skip link e prefers-reduced-motion sono regole del design system decise all'inizio — non patch aggiunte a fine progetto.",
+        },
+        {
+          title: "Iterazione: lo scroll sbagliato",
+          body: "La prima versione della home usava scroll-snap nativo \"a step\": al test reale risultava rigido e incoerente con lo scroll fluido delle pagine CV. L'ho scartato e sostituito con smooth scroll unico su tutto il sito e reveal per sezione — la coerenza del gesto vale più dell'effetto singolo.",
+        },
       ],
       outcomes: [
         "Consegnato in 5 giorni, contro una stima tradizionale di oltre un mese",
         "Copertura test >80% (Vitest) sul layer MCP/HTTP",
         "MCP server con tool, resource e prompt template — API dati CV per agenti AI, dimostrazione live",
+      ],
+      learnings: [
+        "L'AI accelera davvero solo dentro vincoli decisi prima: con token, regole di animazione e DO NOT espliciti il vibe coding produce; senza, produce caos da rifare.",
+        "Ogni dettaglio deve sopravvivere alla domanda \"perché?\": se una scelta visiva non ha una risposta da colloquio, è decorazione.",
+        "Le proprie certezze vanno testate presto: le idee più \"wow\" — il grafo come vista di default, lo scroll a step — sono le prime che ho dovuto ridimensionare davanti all'uso reale.",
       ],
     },
     {
@@ -1810,16 +1846,35 @@ export const cvData = {
       primaryMode: "creative",
       role: "Collaboratore — Tour Manager & Digital Strategist (2023–2024, remoto)",
       problem:
-        "Il roster dell'agenzia aveva bisogno di due cose insieme: date live organizzate bene — venue, promoter, contratti — e una presenza digitale che parlasse alla filiera del settore (musicisti, etichette, promoter), non solo al pubblico generico. Follower e date live erano scollegati tra loro.",
+        "Il roster dell'agenzia aveva bisogno di due cose insieme: date live organizzate bene — venue, promoter, contratti — e una presenza digitale che parlasse alla filiera del settore, non solo al pubblico generico. I canali social crescevano di volume ma non aprivano contatti: follower e lavoro reale dell'agenzia erano due mondi scollegati.",
       process: [
-        "Booking e tour management: ricerca venue, trattativa con i promoter, gestione contratti — dalla proposta alla data confermata.",
-        "Content strategy mirata al settore: comunicazione pensata per la filiera (etichette, promoter, altri artisti), non per il volume generico.",
-        "Un evento live gestito end-to-end, dal booking alla comunicazione: Arci Bellezza, Milano.",
+        "Ricerca — Interviste e colloqui con le persone dell'agenzia per capire il lavoro dall'interno: come nascono le date, chi sono gli interlocutori che contano davvero, dove si inceppa il contatto con musicisti, produttori ed etichette.",
+        "Insight — Il problema non era \"più follower\", ma follower giusti: la comunicazione doveva funzionare da canale di contatto con la filiera, non da vetrina per il pubblico generico. Ogni contenuto andava ripensato come un'occasione di relazione professionale.",
+        "Ideazione — Una playlist curata di artisti emergenti come strumento di networking: ogni inserimento apre un contatto diretto e specifico con musicisti, produttori ed etichette — la scoperta reciproca al posto del follow passivo. Sulla stessa logica ho proposto un format radiofonico per estendere l'idea oltre le piattaforme streaming.",
+        "Esecuzione — Content strategy sui canali, copywriting per la serata di compleanno dell'agenzia, e il lavoro operativo di booking e tour management: ricerca venue, trattativa con i promoter, contratti, fino all'evento live all'Arci Bellezza di Milano gestito end-to-end.",
+      ],
+      decisions: [
+        {
+          title: "Prima ascoltare, poi proporre",
+          body: "Nessuna proposta è arrivata prima delle interviste con chi in agenzia ci lavora ogni giorno. Le idee poi accolte — playlist, format radio — sono nate da bisogni ascoltati, non da un playbook di marketing applicato dall'esterno: è lo stesso principio della user research, portato fuori dal software.",
+        },
+        {
+          title: "La playlist come strumento, non come contenuto",
+          body: "Una playlist di artisti emergenti non è un post da pubblicare: è un motivo di contatto. Ogni inserimento apre una conversazione concreta con un musicista, un produttore, un'etichetta — scoperta reciproca al posto del follow passivo. La proposta del format radiofonico estendeva la stessa logica oltre le piattaforme streaming.",
+        },
+        {
+          title: "Parlare alla filiera, non al pubblico",
+          body: "Crescere di volume sarebbe stato facile e inutile. I contenuti sono stati ripensati per interlocutori professionali specifici: è la differenza tra una vetrina e un canale che apre porte — ed è il motivo per cui il +100% di follower è fatto di contatti che contano, non di numeri.",
+        },
       ],
       outcomes: [
         "+100% crescita follower — organica, audience mirata (musicisti, etichette, promoter), non volume puro",
         "Evento live realizzato all'Arci Bellezza di Milano, dal booking alla comunicazione",
         "Booking e coordinamento concerti su tutto il roster, in autonomia",
+      ],
+      learnings: [
+        "La ricerca qualitativa funziona anche fuori dal software: intervistare l'agenzia come si intervistano gli utenti ha reso le proposte pertinenti al primo colpo.",
+        "Il valore di un canale non si misura in follower ma in conversazioni aperte con le persone giuste.",
       ],
     },
     {

@@ -71,11 +71,34 @@ const email = cvData.social.find((s) => s.platform === "Email")?.url ?? "mailto:
       </section>
     )}
 
+    {project.decisions && project.decisions.length > 0 && (
+      <section class="work-section" aria-labelledby="work-decisions-title">
+        <h2 class="work-section__title" id="work-decisions-title">Decisioni chiave</h2>
+        <div class="work-decisions">
+          {project.decisions.map((d) => (
+            <article class="work-decision">
+              <h3 class="work-decision__title">{d.title}</h3>
+              <p class="work-decision__body">{d.body}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+    )}
+
     {project.outcomes && project.outcomes.length > 0 && (
       <section class="work-section" aria-labelledby="work-outcomes-title">
         <h2 class="work-section__title" id="work-outcomes-title">Risultato misurabile</h2>
         <ul class="work-outcomes">
           {project.outcomes.map((o) => <li class="work-outcomes__item">{o}</li>)}
+        </ul>
+      </section>
+    )}
+
+    {project.learnings && project.learnings.length > 0 && (
+      <section class="work-section" aria-labelledby="work-learnings-title">
+        <h2 class="work-section__title" id="work-learnings-title">Cosa ho imparato</h2>
+        <ul class="work-learnings">
+          {project.learnings.map((l) => <li class="work-learnings__item">{l}</li>)}
         </ul>
       </section>
     )}

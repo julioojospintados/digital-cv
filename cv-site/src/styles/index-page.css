@@ -699,7 +699,7 @@ img[src*="flashlight"] {
   padding: 1.25rem 1.5rem;
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 2px;
+  border-radius: var(--radius-card);
   cursor: pointer;
   text-align: left;
   user-select: none;
