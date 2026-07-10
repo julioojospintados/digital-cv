@@ -154,38 +154,6 @@
   margin: 0;
 }
 
-/* ── Processo — step numerati, stile "inventario" coerente col resto del sito ── */
-.work-process {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.work-process__step {
-  display: grid;
-  grid-template-columns: 2.5rem 1fr;
-  gap: 1rem;
-  align-items: baseline;
-}
-
-.work-process__index {
-  font-family: var(--font-mono);
-  font-size: 1rem;
-  font-weight: 800;
-  color: rgba(192, 220, 215, 0.4);
-  line-height: 1.7;
-}
-
-.work-process__step p {
-  margin: 0;
-  font-size: 0.98rem;
-  line-height: 1.7;
-  color: rgba(192, 220, 215, 0.92);
-}
-
 /* ── Decisioni chiave — blocchi "perché X e non Y", il cuore del case
    study: bordo sinistro neutro che diventa accent su hover, come una
    scheda d'inventario che si accende quando la esamini. ── */
@@ -250,39 +218,6 @@
   font-style: normal;
 }
 
-/* ── Risultati — stesso linguaggio del badge impactScore (AiCard) ── */
-.work-outcomes {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.work-outcomes__item {
-  display: flex;
-  align-items: baseline;
-  gap: 0.75rem;
-  font-size: 0.95rem;
-  line-height: 1.5;
-  color: var(--color-text-primary);
-  padding: 0.85rem 1rem;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-16);
-  background: color-mix(in srgb, var(--color-accent) 6%, transparent);
-}
-
-.work-outcomes__item::before {
-  content: "";
-  flex-shrink: 0;
-  width: 6px;
-  height: 6px;
-  margin-top: 0.5em;
-  background: var(--color-accent);
-  box-shadow: 0 0 6px 1px var(--color-accent);
-}
-
 /* ── CTA finale — chi finisce il case study è il visitatore più caldo ── */
 .work-cta {
   text-align: center;
@@ -343,11 +278,6 @@
   border-color: rgba(255, 255, 255, 0.35);
 }
 
-@media (max-width: 30rem) {
-  .work-process__step {
-    grid-template-columns: 1.75rem 1fr;
-  }
-}
 
 /* ── /work — pagina indice portfolio (griglia case study) ────────────── */
 .work-index-hero {
@@ -365,6 +295,105 @@
   color: var(--color-text-primary);
   margin: 0 0 0.85rem;
   max-width: 32rem;
+}
+
+.work-index-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+}
+
+@media (min-width: 36rem) {
+  .work-index-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.work-index-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-16);
+  background: rgba(255, 255, 255, 0.02);
+  text-decoration: none;
+  overflow: hidden;
+  transition:
+    border-color var(--duration-state) var(--ease-standard),
+    background var(--duration-state) var(--ease-standard);
+}
+
+.work-index-card:hover,
+.work-index-card:focus-visible {
+  border-color: var(--color-accent);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.work-index-card__icon {
+  position: absolute;
+  top: -0.75rem;
+  right: -0.75rem;
+  width: clamp(5rem, 18vw, 8rem);
+  opacity: 0.12;
+  pointer-events: none;
+  user-select: none;
+}
+
+.work-index-card__eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.work-index-card__name {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+  color: var(--color-text-primary);
+  margin: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.work-index-card__role {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: rgba(192, 220, 215, 0.85);
+  margin: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.work-index-card__cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: auto;
+  padding-top: 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  position: relative;
+  z-index: 1;
+  transition: gap 0.2s ease;
+}
+
+.work-index-card:hover .work-index-card__cta,
+.work-index-card:focus-visible .work-index-card__cta {
+  gap: 0.6rem;
 }
 
 /* Chevron destro condiviso — stessa tecnica "bordo ruotato" usata in
@@ -407,11 +436,14 @@
   gap: 0.75rem;
 }
 
-/* ── /work — Journey orizzontale ──────────────────────────────────────────
-   La strada da percorrere: scroll verticale scrubbato in traslazione
-   orizzontale (work-journey.ts). Le regole base qui sotto sono il fallback
-   verticale — no-JS e prefers-reduced-motion vedono uno stack di card
-   normale. `.is-active` (aggiunta dal JS) attiva la modalità strada. */
+/* ── /work/[slug] — Journey orizzontale del case study ────────────────────
+   La spina temporale del progetto è letteralmente una strada: Problema
+   (partenza) → step del processo (tappe) → Risultato misurabile (arrivo).
+   Scroll verticale scrubbato in traslazione orizzontale (work-journey.ts).
+   Decisioni, design system e learnings restano sezioni verticali: sono
+   lettura riflessiva, non cronologica. Le regole base qui sotto sono il
+   fallback verticale — no-JS e prefers-reduced-motion vedono lo stack
+   di sezioni classico. `.is-active` (dal JS) attiva la modalità strada. */
 
 .journey {
   /* Full-bleed dentro .work-main (max-width 48rem): html ha overflow-x:clip,
@@ -467,9 +499,21 @@
   will-change: transform, opacity;
 }
 
+/* Partenza (il problema) e arrivo (risultato): testo più lungo delle
+   tappe-processo — pannello più largo per non superare l'altezza utile. */
+.journey.is-active .journey__panel--start,
+.journey.is-active .journey__panel--end {
+  width: clamp(21rem, 44vw, 31rem);
+}
+
 @media (max-width: 40rem) {
   .journey.is-active .journey__panel {
     width: min(82vw, 21rem);
+  }
+
+  .journey.is-active .journey__panel--start,
+  .journey.is-active .journey__panel--end {
+    width: min(86vw, 23rem);
   }
 }
 
@@ -614,18 +658,6 @@
   margin: 0;
 }
 
-/* Partenza: il GO gigante — il brand è il segnale di via */
-.journey__go {
-  font-family: var(--font-display);
-  font-size: clamp(4rem, 10vw, 7rem);
-  font-weight: 800;
-  letter-spacing: -0.05em;
-  line-height: 0.9;
-  color: var(--color-accent);
-  margin: 0 0 0.5rem;
-  text-shadow: 0 0 34px color-mix(in srgb, var(--color-accent) 30%, transparent);
-}
-
 .journey__start-title {
   font-family: var(--font-display);
   font-size: clamp(1.6rem, 3.6vw, 2.4rem);
@@ -652,7 +684,8 @@
   animation: cta-arrow-nudge 1.3s ease-in-out infinite;
 }
 
-/* Tappa: card-stazione — stesso linguaggio delle work-index-card */
+/* Tappa-processo: card-stazione — stesso linguaggio delle work-index-card.
+   È un <article>, non un link: nessuno stato hover che prometta un click. */
 .journey__stop {
   display: flex;
   flex-direction: column;
@@ -661,21 +694,9 @@
   border: 1px solid var(--color-border);
   border-radius: var(--radius-16);
   background: rgba(255, 255, 255, 0.02);
-  text-decoration: none;
-  transition:
-    border-color var(--duration-state) var(--ease-standard),
-    background var(--duration-state) var(--ease-standard),
-    box-shadow var(--duration-state) var(--ease-standard);
 }
 
-.journey__stop:hover,
-.journey__stop:focus-visible {
-  border-color: var(--color-accent);
-  background: rgba(255, 255, 255, 0.045);
-  box-shadow: 0 0 22px color-mix(in srgb, var(--color-accent) 14%, transparent);
-}
-
-/* Landmark knolling: oggetto a bordo strada, sopra la card — non watermark */
+/* Landmark knolling: l'oggetto del progetto a bordo strada, sulla partenza */
 .journey__stop-icon {
   width: clamp(4.5rem, 9vw, 6.5rem);
   margin: 0 0 0.25rem;
@@ -693,9 +714,20 @@
   will-change: transform;
 }
 
-.journey__stop-name {
+/* Numero dello step: grande, outlined — chilometrica della strada */
+.journey__step-num {
+  font-family: var(--font-mono);
+  font-size: 2.4rem;
+  font-weight: 700;
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1px color-mix(in srgb, var(--color-accent) 55%, transparent);
+  margin: 0;
+}
+
+.journey__stop-title {
   font-family: var(--font-display);
-  font-size: 1.35rem;
+  font-size: 1.25rem;
   font-weight: 700;
   letter-spacing: -0.01em;
   line-height: 1.25;
@@ -703,54 +735,33 @@
   margin: 0;
 }
 
-.journey__stop-role {
-  font-size: 0.85rem;
-  line-height: 1.5;
-  color: var(--color-text-muted);
-  margin: 0;
-}
-
-/* impactScore della tappa: un dato, in mono — la prova prima del click */
-.journey__stop-impact {
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  font-weight: 600;
-  line-height: 1.5;
-  color: var(--color-accent);
-  margin: 0.25rem 0 0;
-  padding-top: 0.6rem;
-  border-top: 1px dashed color-mix(in srgb, var(--color-accent) 30%, transparent);
-}
-
-.journey__stop-cta {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  margin-top: 0.75rem;
-  font-family: var(--font-mono);
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--color-accent);
-  text-decoration: none;
-  transition: gap 0.2s ease;
-}
-
-.journey__stop:hover .journey__stop-cta,
-.journey__stop:focus-visible .journey__stop-cta,
-.journey__panel--end .journey__stop-cta:hover,
-.journey__panel--end .journey__stop-cta:focus-visible {
+/* Arrivo: i risultati misurabili — dati in mono, il traguardo della strada */
+.journey__outcomes {
+  list-style: none;
+  margin: 0.5rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
   gap: 0.65rem;
 }
 
-/* Fine strada: la prossima tappa è fuori dal sito */
+.journey__outcomes li {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  font-weight: 600;
+  line-height: 1.55;
+  color: var(--color-accent);
+  padding-top: 0.65rem;
+  border-top: 1px dashed color-mix(in srgb, var(--color-accent) 30%, transparent);
+}
+
+/* Fine strada: titolo del traguardo */
 .journey__end-title {
   font-family: var(--font-display);
-  font-size: clamp(1.8rem, 4.2vw, 2.8rem);
+  font-size: clamp(1.6rem, 3.6vw, 2.4rem);
   font-weight: 800;
   letter-spacing: -0.02em;
   line-height: 1.08;
   color: var(--color-text-primary);
-  margin: 0 0 0.75rem;
+  margin: 0 0 0.5rem;
 }

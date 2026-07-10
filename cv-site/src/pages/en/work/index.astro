@@ -11,7 +11,6 @@ const KNOLL_ICON: Record<string, string> = {
 };
 
 const caseStudies = cvDataEn.projects.filter((p) => !!p.slug);
-const totalStops = String(caseStudies.length).padStart(2, "0");
 ---
 
 <Layout
@@ -37,83 +36,33 @@ const totalStops = String(caseStudies.length).padStart(2, "0");
       </p>
     </header>
 
-    <!-- Horizontal journey: vertical scroll → a road to travel.
-         Without JS or with reduced-motion it stays a vertical stack. -->
-    <section class="journey" data-journey aria-label="Case study journey">
-      <div class="journey__hud" aria-hidden="true">
-        <span>Stop <b data-j-current>00</b>/{totalStops}</span>
-        <span class="journey__hud-bar"><b data-j-bar></b></span>
-        <span class="journey__hud-km" data-j-km>0 m</span>
-      </div>
-
-      <img
-        class="journey__traveler"
-        data-j-traveler
-        src="/knolling/compass.webp"
-        alt=""
-        aria-hidden="true"
-        loading="lazy"
-        decoding="async"
-      />
-
-      <div class="journey__track" data-j-track>
-        <svg class="journey__road" data-j-road aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
-          <path class="journey__road-base" data-j-road-base d=""></path>
-          <path class="journey__road-progress" data-j-road-progress d=""></path>
-        </svg>
-
-        <article class="journey__panel journey__panel--start">
-          <p class="journey__eyebrow">Departure</p>
-          <p class="journey__go" aria-hidden="true">GO</p>
-          <h2 class="journey__start-title">Follow the road.</h2>
-          <p class="journey__text">
-            Every stop is a case study: problem, decisions, measurable outcome.
-          </p>
-          <p class="journey__hint" aria-hidden="true">
-            Scroll to depart <span class="work-chevron"></span>
-          </p>
-        </article>
-
-        {
-          caseStudies.map((p, i) => (
-            <a class="journey__panel journey__stop" href={`/en/work/${p.slug}`} data-stop>
-              <img
-                class="journey__stop-icon"
-                data-j-parallax
-                src={`/knolling/${KNOLL_ICON[p.primaryMode ?? "tech"]}`}
-                alt=""
-                aria-hidden="true"
-                loading="lazy"
-                decoding="async"
-              />
-              <p class="journey__eyebrow">Stop {String(i + 1).padStart(2, "0")}</p>
-              <h2 class="journey__stop-name">{p.name}</h2>
-              {p.role && <p class="journey__stop-role">{p.role}</p>}
-              {p.outcomes?.[0] && <p class="journey__stop-impact">{p.outcomes[0]}</p>}
-              <span class="journey__stop-cta">
-                Read the case study
-                <span class="work-chevron" aria-hidden="true" />
-              </span>
-            </a>
-          ))
-        }
-
-        <article class="journey__panel journey__panel--end">
-          <p class="journey__eyebrow">Next stop</p>
-          <h2 class="journey__end-title">Your project?</h2>
-          <p class="journey__text">The road continues beyond this site.</p>
-          <a class="journey__stop-cta" href="mailto:giulio.occhipinti.g@gmail.com">
-            Write me
-            <span class="work-chevron" aria-hidden="true"></span>
+    <div class="work-index-grid">
+      {
+        caseStudies.map((p) => (
+          <a class="work-index-card" href={`/en/work/${p.slug}`}>
+            <img
+              class="work-index-card__icon"
+              src={`/knolling/${KNOLL_ICON[p.primaryMode ?? "tech"]}`}
+              alt=""
+              aria-hidden="true"
+              loading="lazy"
+              decoding="async"
+            />
+            <p class="work-index-card__eyebrow">Case Study</p>
+            <h2 class="work-index-card__name">{p.name}</h2>
+            {p.role && <p class="work-index-card__role">{p.role}</p>}
+            <span class="work-index-card__cta">
+              Read the case study
+              <span class="work-chevron" aria-hidden="true" />
+            </span>
           </a>
-        </article>
-      </div>
-    </section>
+        ))
+      }
+    </div>
   </main>
 </Layout>
 
 <script>
   import "../../../islands/GoLogo.lit.ts";
   import "../../../islands/FloatingMenu.lit.ts";
-  import "../../../scripts/work-journey.ts";
 </script>
