@@ -41,7 +41,15 @@ function initJourney(root: HTMLElement) {
   function buildRoad() {
     const w = track.scrollWidth;
     const h = root.clientHeight;
-    const roadY = h * 0.72;
+    // Sotto i 40rem le card sono molto più strette (--panel width scende a
+    // min(82vw, 21rem)): lo stesso testo va a capo su molte più righe e le
+    // card "Il problema"/"Risultato misurabile" diventano abbastanza alte
+    // da estendersi, centrate verticalmente, fin sotto al 72% dell'altezza
+    // — proprio dove staziona la bussola. Sulla riga mobile la strada scende
+    // al 90%: molto più margine sopra per le card, la bussola resta libera
+    // sotto anche quando il testo è lungo.
+    const isMobileViewport = window.matchMedia("(max-width: 40rem)").matches;
+    const roadY = h * (isMobileViewport ? 0.9 : 0.72);
     const amp = Math.min(h * 0.045, 42);
 
     svg.setAttribute("width", String(w));

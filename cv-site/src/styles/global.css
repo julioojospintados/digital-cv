@@ -358,6 +358,15 @@ html.cursor-idle #cursor-ring {
   opacity: 0;
 }
 
+/* Un <dialog> aperto vive nel top layer del browser e dipinge sempre sopra
+   il cursore custom (div fixed normale) — inutile continuare ad animarlo
+   dietro le quinte. Classe attivata/rimossa da memory-drawer.ts su
+   showModal()/close(). */
+html.dialog-open #cursor-dot,
+html.dialog-open #cursor-ring {
+  opacity: 0;
+}
+
 #cursor-dot.cursor--hover {
   width: 12px;
   height: 12px;

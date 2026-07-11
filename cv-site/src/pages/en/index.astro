@@ -1,6 +1,69 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import '../../styles/index-page.css';
+
+// Photos in cv-site/public/photos/{trip,belongings} — user-uploaded, listed
+// by hand because they live in public/ (import.meta.glob only sees src/).
+// Used by the buttons under "About me" (memory-drawer.ts). Mirrors index.astro (IT).
+const tripPhotos = ["camp", "cave-light", "cave", "family-party", "ha-giang", "hoi-an", "lantern", "river"];
+const belongingsPhotos = ["acting", "cheers", "giulia", "kid", "lettera-natale", "libreria", "opera-lirica", "reading", "salone-del-libro", "songwriter", "square-festival", "stampa", "sunset", "concerto"];
+
+// Long story — "featured" card in the scatter, split into 2 book "pages"
+// (3D page-flip, memory-drawer.ts). white-space:pre-line in CSS preserves
+// the line rhythm within each page.
+// Translated from the IT original (index.astro) — comedic, rhythm-heavy
+// text, flagged for the user's review rather than treated as final.
+const funFactStoryTitle = "Budapest Drift";
+const funFactPage1 = `I woke up at 10:06 in Budapest.
+My flight home was at 11:10.
+I looked at the clock, I looked at the ceiling…
+and the first thing I did was curse in three languages.
+I jumped out of bed, called an Uber,
+and the moment the driver understood the situation,
+he turned into Fast & Furious: Budapest Drift.
+It was me, him, and my anxiety — which by that point had basically gotten Hungarian citizenship.
+I got to the airport; the gate closed at 10:40.
+I ran in with my backpack on, looking like a kid on his first day of school,
+plowing through luggage carts, suitcases, and possibly a few actual children.
+All I could say was "Sorry, sorry, sorry…"
+like it was some kind of magic spell.
+At security they asked me:
+"Anything to declare?"
+And in pure panic, I said: "Yes."
+They stared at me.
+"No, no, sorry — nothing. Just trauma."
+They made me take off my shoes and my dignity.
+There I was, barefoot, praying to Zeus.
+Then I ran for the gate.
+Over the speakers:
+"Final call for Giulio Occh…"
+I shouted "That's me!" somewhere between a collapsing lung and a panic attack.`;
+const funFactPage2 = `The flight attendant, in her best movie-Italian accent, goes:
+"Mamma miaaaa Giulio!"
+complete with hand gestures.
+I wanted to tell her I don't usually go around greeting Hungarians with
+"Hey Gulash!",
+but there was no time.
+I finally saw the line at the gate and relaxed —
+as much as you can relax after sprinting through an airport
+without a shower, without brushing your teeth, without even peeing.
+Then, the void:
+I'd left my wallet at security.
+I started running again, cursing in Dolby Surround.
+By some miracle, I found the agent still holding my wallet.
+I grabbed it, ran back to the gate again —
+they let me through…
+and the door wouldn't open.
+At that point I wanted to scream into a megaphone.
+I finally boarded the plane,
+sweaty, dehydrated, spiritually destroyed.
+I sat down, closed my eyes, and thought:
+God forgives.
+Köszönöm.`;
+
+// Fixed rotations (not modulo, intentional scatter look, not random per build)
+const SCATTER_ANGLES = [-6, 4, -3, 7, -8, 2, -5, 6, -4, 8, -7, 3, -2, 5];
+const scatterAngle = (i: number) => SCATTER_ANGLES[i % SCATTER_ANGLES.length];
 ---
 
 <Layout
@@ -111,6 +174,20 @@ import '../../styles/index-page.css';
           <p class="profile-eyebrow">About me</p>
           <h2 class="profile-title">Cultivating empathy, with jokes in my pocket.</h2>
           <p class="profile-desc">Countless different jobs behind me, a few plants at home, and a well-stamped passport. I lived in three different countries before moving back to Italy, but I did manage to swim in all three swimmable oceans — the other two are just too cold. An improviser of jokes and journeys, I've put down roots in the digital world while keeping a strong sensitivity — people tell me about it often — toward others and myself, with a wink toward poetry and photography. These days I'm trying to connect the dots in software development, applying the same logic chess requires. I play in Turin, but I'm looking for my next professional opponent to start a new match.</p>
+          <div class="about-actions" role="group" aria-label="Learn more about me">
+            <button class="about-action" type="button" data-drawer-open="funfact">
+              <span class="about-action__icon" aria-hidden="true">✦</span>
+              Fun fact
+            </button>
+            <button class="about-action" type="button" data-drawer-open="belongings">
+              <span class="about-action__icon" aria-hidden="true">✦</span>
+              Belongings
+            </button>
+            <button class="about-action" type="button" data-drawer-open="trip">
+              <span class="about-action__icon" aria-hidden="true">✦</span>
+              Travel
+            </button>
+          </div>
         </div>
         <div class="profile-deco" aria-hidden="true"><span class="profile-deco__text">ME</span><img class="profile-knoll-img" src="/knolling/plant.webp" alt="" loading="lazy" decoding="async"></div>
       </div>
@@ -189,6 +266,53 @@ import '../../styles/index-page.css';
 
   </div>
 
+  <!-- Memory drawers — "Fun fact / Belongings / Travel" buttons under About me.
+       Native <dialog>: focus trap, ESC and backdrop-click handled by the
+       browser. Scatter in knolling style animated on open by
+       memory-drawer.ts. data-lenis-prevent: without it Lenis hijacks the
+       wheel and scrolls the page behind instead of the dialog's own
+       content. Mirrors index.astro (IT). -->
+  <dialog class="memory-dialog memory-dialog--book" id="dialog-funfact" aria-labelledby="dialog-funfact-title" data-lenis-prevent>
+    <button class="memory-dialog__close" type="button" data-drawer-close aria-label="Close">✕</button>
+    <p class="memory-dialog__eyebrow" id="dialog-funfact-title">Fun fact</p>
+    <div class="memory-scatter memory-scatter--facts">
+      <article class="memory-fact memory-fact--story" style="--mr:0deg">
+        <p class="memory-fact__title">{funFactStoryTitle}</p>
+        <div class="story-book" aria-label="Two-page story, like an open book">
+          <div class="story-book__page story-book__page--left">
+            <p class="memory-fact__body">{funFactPage1}</p>
+            <span class="story-book__pagenum" aria-hidden="true">1</span>
+          </div>
+          <div class="story-book__spine" aria-hidden="true"></div>
+          <div class="story-book__page story-book__page--right">
+            <p class="memory-fact__body">{funFactPage2}</p>
+            <span class="story-book__pagenum" aria-hidden="true">2</span>
+          </div>
+        </div>
+      </article>
+    </div>
+  </dialog>
+
+  <dialog class="memory-dialog" id="dialog-belongings" aria-labelledby="dialog-belongings-title" data-lenis-prevent>
+    <button class="memory-dialog__close" type="button" data-drawer-close aria-label="Close">✕</button>
+    <p class="memory-dialog__eyebrow" id="dialog-belongings-title">Belongings</p>
+    <div class="memory-scatter">
+      {belongingsPhotos.map((name, i) => (
+        <img class="memory-photo" src={`/photos/belongings/${name}.webp`} alt="" loading="lazy" decoding="async" style={`--mr:${scatterAngle(i)}deg`} />
+      ))}
+    </div>
+  </dialog>
+
+  <dialog class="memory-dialog" id="dialog-trip" aria-labelledby="dialog-trip-title" data-lenis-prevent>
+    <button class="memory-dialog__close" type="button" data-drawer-close aria-label="Close">✕</button>
+    <p class="memory-dialog__eyebrow" id="dialog-trip-title">Travel</p>
+    <div class="memory-scatter">
+      {tripPhotos.map((name, i) => (
+        <img class="memory-photo" src={`/photos/trip/${name}.webp`} alt="" loading="lazy" decoding="async" style={`--mr:${scatterAngle(i)}deg`} />
+      ))}
+    </div>
+  </dialog>
+
   <div id="launch-overlay" aria-hidden="true"></div>
 
   <!-- Language switch — fixed top-right, hidden until hero reveal -->
@@ -198,4 +322,5 @@ import '../../styles/index-page.css';
 
 <script>
   import '../../scripts/index-init.ts';
+  import '../../scripts/memory-drawer.ts';
 </script>
