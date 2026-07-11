@@ -61,6 +61,16 @@ Operative rules → `.vscode/design.instructions.md` (Copilot, auto-injected on 
 
 → Edit `src/data/cv.ts` (Italian). Mirror changes in `src/data/cv.en.ts` (English).
 
+### Mirroring IT → EN copy outside cv.ts
+
+→ Not just CV data: any Italian copy added or changed directly in an Astro
+  page or component (e.g. narrative sections on `cv-site/src/pages/index.astro`)
+  must be mirrored the same session in its EN counterpart
+  (`cv-site/src/pages/en/index.astro`, `en/cv.astro`, `en/work/...`) —
+  translated, not just left out. If the text is personal/voice-heavy (bio,
+  storytelling, wordplay), translate carefully to preserve tone and flag the
+  translation to the user for review rather than treating it as final.
+
 ### Adding a page or component to the site
 
 → Astro static components go in `cv-site/src/components/`

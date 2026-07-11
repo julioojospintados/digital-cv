@@ -9,6 +9,11 @@ import '../../styles/index-page.css';
   lang="en"
 >
 
+  <!-- Preload LCP image — laptop is the widest element in the mobile knolling grid (7/15 col) -->
+  <link slot="head" rel="preload" as="image" href="/knolling/laptop.webp" fetchpriority="high" media="(max-width: 899px)" />
+  <!-- Preload LCP image desktop — megaphone is the largest (top-left column) -->
+  <link slot="head" rel="preload" as="image" href="/knolling/megaphone.webp" fetchpriority="high" media="(min-width: 900px)" />
+
   <div id="preloader" aria-hidden="true">
     <div class="pre-logo">
       <span id="pre-G" class="pre-go-letter">G</span>
@@ -20,14 +25,14 @@ import '../../styles/index-page.css';
   <div class="entry-root" id="entry-root">
 
     <div class="knolling-stage" id="knolling-stage" aria-hidden="true">
-      <img class="knoll-item" data-modes="creative human"  src="/knolling/megaphone.webp"   alt="" loading="eager" style="--kx:7%;--ky:14%;--kr:0deg;--ks:0.82;">
-      <img class="knoll-item" data-modes="tech"            src="/knolling/flashlight.webp" alt="" loading="eager" style="--kx:9%;--ky:38%;--kr:0deg;--ks:1.2;--kfx:-1;">
-      <img class="knoll-item" data-modes="management"      src="/knolling/multitool.webp"   alt="" loading="eager" style="--kx:7%;--ky:62%;--kr:0deg;--ks:0.85;">
-      <img class="knoll-item" data-modes="creative"        src="/knolling/camera.webp"      alt="" loading="eager" style="--kx:7%;--ky:86%;--kr:0deg;--ks:0.8;">
-      <img class="knoll-item" data-modes="management"      src="/knolling/chess.webp"       alt="" loading="eager" style="--kx:91%;--ky:14%;--kr:0deg;--ks:0.52;">
-      <img class="knoll-item" data-modes="tech"            src="/knolling/laptop.webp"      alt="" loading="eager" style="--kx:91%;--ky:38%;--kr:0deg;--ks:0.75;">
-      <img class="knoll-item" data-modes="management"      src="/knolling/compass.webp"     alt="" loading="eager" style="--kx:91%;--ky:62%;--kr:0deg;--ks:0.65;">
-      <img class="knoll-item" data-modes="human"           src="/knolling/plant.webp"       alt="" loading="eager" style="--kx:91%;--ky:86%;--kr:0deg;--ks:0.72;">
+      <img class="knoll-item" data-modes="creative human"  src="/knolling/megaphone.webp"  alt="" loading="eager" fetchpriority="high" decoding="async" style="--kx:7%;--ky:14%;--kr:0deg;--ks:0.82;">
+      <img class="knoll-item" data-modes="tech"            src="/knolling/flashlight.webp" alt="" loading="eager" decoding="async" style="--kx:9%;--ky:38%;--kr:0deg;--ks:1.2;--kfx:-1;">
+      <img class="knoll-item" data-modes="management"      src="/knolling/multitool.webp"  alt="" loading="eager" decoding="async" style="--kx:7%;--ky:62%;--kr:0deg;--ks:0.85;">
+      <img class="knoll-item" data-modes="creative"        src="/knolling/camera.webp"     alt="" loading="eager" decoding="async" style="--kx:7%;--ky:86%;--kr:0deg;--ks:0.8;">
+      <img class="knoll-item" data-modes="management"      src="/knolling/chess.webp"      alt="" loading="eager" decoding="async" style="--kx:91%;--ky:14%;--kr:0deg;--ks:0.52;">
+      <img class="knoll-item" data-modes="tech"            src="/knolling/laptop.webp"     alt="" loading="eager" decoding="async" style="--kx:91%;--ky:38%;--kr:0deg;--ks:0.75;">
+      <img class="knoll-item" data-modes="management"      src="/knolling/compass.webp"    alt="" loading="eager" decoding="async" style="--kx:91%;--ky:62%;--kr:0deg;--ks:0.65;">
+      <img class="knoll-item" data-modes="human"           src="/knolling/plant.webp"      alt="" loading="eager" decoding="async" style="--kx:91%;--ky:86%;--kr:0deg;--ks:0.72;">
     </div>
 
     <main class="entry-main" id="main-content">
@@ -46,16 +51,18 @@ import '../../styles/index-page.css';
         </p>
       </header>
 
-      <!-- Mobile knolling zone -->
+      <!-- Mobile knolling zone — 15-col grid, 3+5, visible only below 640px -->
+      <!-- Row 1 (4+7+4): Megaphone · Laptop · Compass -->
+      <!-- Row 2 (3×5):   Plant · Flashlight(120°→laptop) · Chess · Camera · Multitool -->
       <div class="knolling-mob" aria-hidden="true">
-        <div class="knoll-wrap"><img class="knoll-m" data-modes="creative human"  src="/knolling/megaphone.webp"   alt="" loading="eager"></div>
-        <div class="knoll-wrap"><img class="knoll-m" data-modes="tech"            src="/knolling/laptop.webp"      alt="" loading="eager"></div>
-        <div class="knoll-wrap"><img class="knoll-m" data-modes="management"      src="/knolling/compass.webp"     alt="" loading="eager"></div>
-        <div class="knoll-wrap"><img class="knoll-m" data-modes="human"           src="/knolling/plant.webp"       alt="" loading="eager"></div>
-        <div class="knoll-wrap"><img class="knoll-m" data-modes="tech"            src="/knolling/flashlight.webp" alt="" loading="eager"></div>
-        <div class="knoll-wrap"><img class="knoll-m" data-modes="management"      src="/knolling/chess.webp"       alt="" loading="eager"></div>
-        <div class="knoll-wrap"><img class="knoll-m" data-modes="creative"        src="/knolling/camera.webp"      alt="" loading="eager"></div>
-        <div class="knoll-wrap"><img class="knoll-m" data-modes="management"      src="/knolling/multitool.webp"   alt="" loading="eager"></div>
+        <div class="knoll-wrap"><img class="knoll-m" data-modes="creative human"  src="/knolling/megaphone.webp"   alt="" loading="eager" decoding="async"></div>
+        <div class="knoll-wrap"><img class="knoll-m" data-modes="tech"            src="/knolling/laptop.webp"      alt="" loading="eager" decoding="sync" fetchpriority="high"></div>
+        <div class="knoll-wrap"><img class="knoll-m" data-modes="management"      src="/knolling/compass.webp"     alt="" loading="eager" decoding="async"></div>
+        <div class="knoll-wrap"><img class="knoll-m" data-modes="human"           src="/knolling/plant.webp"       alt="" loading="eager" decoding="async"></div>
+        <div class="knoll-wrap"><img class="knoll-m" data-modes="tech"            src="/knolling/flashlight.webp" alt="" loading="eager" decoding="async"></div>
+        <div class="knoll-wrap"><img class="knoll-m" data-modes="management"      src="/knolling/chess.webp"       alt="" loading="eager" decoding="async"></div>
+        <div class="knoll-wrap"><img class="knoll-m" data-modes="creative"        src="/knolling/camera.webp"      alt="" loading="eager" decoding="async"></div>
+        <div class="knoll-wrap"><img class="knoll-m" data-modes="management"      src="/knolling/multitool.webp"   alt="" loading="eager" decoding="async"></div>
       </div>
 
       <section class="mode-cards" id="mode-cards" aria-label="Choose your perspective">
@@ -94,12 +101,32 @@ import '../../styles/index-page.css';
   <!-- ── PROFILE SECTIONS ── -->
   <div class="profiles-root" aria-label="Professional profiles">
 
+    <!-- About me — below the mode-cards, before the 4 professional lenses:
+         the person before the masks. No mode/CTA, not a clickable 5th
+         profile. Mirrors #profile-about in index.astro (IT), same icon
+         (plant). -->
+    <section class="profile-section profile-section--about" id="profile-about">
+      <div class="profile-inner">
+        <div class="profile-content">
+          <p class="profile-eyebrow">About me</p>
+          <h2 class="profile-title">Cultivating empathy, with jokes in my pocket.</h2>
+          <p class="profile-desc">Countless different jobs behind me, a few plants at home, and a well-stamped passport. I lived in three different countries before moving back to Italy, but I did manage to swim in all three swimmable oceans — the other two are just too cold. An improviser of jokes and journeys, I've put down roots in the digital world while keeping a strong sensitivity — people tell me about it often — toward others and myself, with a wink toward poetry and photography. These days I'm trying to connect the dots in software development, applying the same logic chess requires. I play in Turin, but I'm looking for my next professional opponent to start a new match.</p>
+        </div>
+        <div class="profile-deco" aria-hidden="true"><span class="profile-deco__text">ME</span><img class="profile-knoll-img" src="/knolling/plant.webp" alt="" loading="lazy" decoding="async"></div>
+      </div>
+    </section>
+
     <section class="profile-section" id="profile-tech" data-mode="tech">
       <div class="profile-inner">
         <div class="profile-content">
           <p class="profile-eyebrow">Software Developer</p>
           <h2 class="profile-title">Automation,<br>AI and architectures.</h2>
           <p class="profile-desc">Angular, Lit and TypeScript in service of design: polished interfaces that ship. AI workflows and automation for SMBs that want to scale without hiring an entire team.</p>
+          <div class="skills-marquee" aria-hidden="true">
+            <div class="skills-marquee__track">
+              <span>Angular</span><span>TypeScript</span><span>Lit</span><span>Node.js</span><span>MCP</span><span>AI Workflow</span><span>GSAP</span><span>RxJS</span><span>REST API</span><span>GraphQL</span><span>PostgreSQL</span><span>MongoDB</span><span>Docker</span><span>Git</span><span>Agile</span><span>TDD</span><span>CI/CD</span><span>Microservices</span><span>WebSockets</span><span>PWA</span>
+            </div>
+          </div>
           <a href="/en/cv" class="profile-cta">GO to Software Developer </a>
         </div>
         <div class="profile-deco" aria-hidden="true"><span class="profile-deco__text">SD</span><img class="profile-knoll-img" src="/knolling/laptop.webp" alt="" loading="lazy" decoding="async"></div>
@@ -113,9 +140,13 @@ import '../../styles/index-page.css';
           <h2 class="profile-title">Brand,<br>aesthetics and interfaces.</h2>
           <p class="profile-desc">IBM certified. UX Research, wireframing, Figma, design systems and advanced GSAP animations. Digital experiences that blend beauty, usability and measurable brand impact.</p>
           <a href="/en/work" class="profile-portfolio-cta">
-
             Portfolio
           </a>
+          <div class="skills-marquee" aria-hidden="true">
+            <div class="skills-marquee__track">
+              <span>Figma</span><span>Adobe XD</span><span>Sketch</span><span>UX Research</span><span>Wireframing</span><span>Prototyping</span><span>Design System</span><span>GSAP</span><span>CSS Animations</span><span>Responsive Design</span><span>Accessibility</span><span>Brand Identity</span><span>Typography</span><span>Color Theory</span><span>UI Design</span><span>User Testing</span><span>Photoshop</span><span>Illustrator</span><span>After Effects</span><span>Webflow</span>
+            </div>
+          </div>
           <a href="/en/cv" class="profile-cta">GO to Web &amp; UX Designer </a>
         </div>
         <div class="profile-deco" aria-hidden="true"><span class="profile-deco__text">WD</span><img class="profile-knoll-img" src="/knolling/camera.webp" alt="" loading="lazy" decoding="async"></div>
@@ -128,6 +159,11 @@ import '../../styles/index-page.css';
           <p class="profile-eyebrow">Project Manager</p>
           <h2 class="profile-title">Lean Agile<br>and short sprints.</h2>
           <p class="profile-desc">Technical Partner for SMBs. 1–2 week sprints, business-oriented backlog, real impactScore at every release. The team becomes autonomous — no dependency on the consultant.</p>
+          <div class="skills-marquee" aria-hidden="true">
+            <div class="skills-marquee__track">
+              <span>Agile</span><span>Scrum</span><span>Kanban</span><span>1–2 Week Sprints</span><span>Business-Oriented Backlog</span><span>impactScore</span><span>Jira</span><span>Trello</span><span>Asana</span><span>Facilitator</span><span>Risk Management</span><span>Budget Planning</span><span>Single Point of Contact</span><span>Lean</span><span>Measurable Releases</span><span>Release Velocity</span><span>Retrospectives</span><span>Daily Standup</span><span>SMBs</span><span>Team Autonomy</span>
+            </div>
+          </div>
           <a href="/en/cv" class="profile-cta">GO to Project Manager </a>
         </div>
         <div class="profile-deco" aria-hidden="true"><span class="profile-deco__text">PM</span><img class="profile-knoll-img" src="/knolling/chess.webp" alt="" loading="lazy" decoding="async"></div>
@@ -140,9 +176,14 @@ import '../../styles/index-page.css';
           <p class="profile-eyebrow">AI &amp; Digital Specialist</p>
           <h2 class="profile-title">Storytelling<br>and strategy.</h2>
           <p class="profile-desc">Artificial intelligence won't replace people, but it will reward those who know how to govern it. I build automated workflows to increase project productivity, combining technical skills with digital storytelling from my background in marketing and theatre. Because code without a story goes nowhere.</p>
+          <div class="skills-marquee" aria-hidden="true">
+            <div class="skills-marquee__track">
+              <span>Claude</span><span>ChatGPT</span><span>GitHub Copilot</span><span>Prompt Engineering</span><span>AI Workflow</span><span>Automation</span><span>Storytelling</span><span>Content Strategy</span><span>Digital Marketing</span><span>SEO</span><span>Copywriting</span><span>Social Media</span><span>Brand Strategy</span><span>Communication</span><span>Public Speaking</span><span>Theater</span><span>Creative Writing</span><span>Video Editing</span><span>Podcast</span><span>Community Building</span>
+            </div>
+          </div>
           <a href="/en/cv" class="profile-cta">GO to AI &amp; Digital Specialist </a>
         </div>
-        <div class="profile-deco" aria-hidden="true"><span class="profile-deco__text">AI</span><img class="profile-knoll-img" src="/knolling/plant.webp" alt="" loading="lazy" decoding="async"></div>
+        <div class="profile-deco" aria-hidden="true"><span class="profile-deco__text">AI</span><img class="profile-knoll-img" src="/knolling/compass.webp" alt="" loading="lazy" decoding="async"></div>
       </div>
     </section>
 
@@ -150,8 +191,8 @@ import '../../styles/index-page.css';
 
   <div id="launch-overlay" aria-hidden="true"></div>
 
-  <!-- Language switch — fixed top-right -->
-  <a href="/" class="lang-switch" aria-label="Passa alla versione italiana">IT</a>
+  <!-- Language switch — fixed top-right, hidden until hero reveal -->
+  <a href="/" class="lang-switch" id="lang-switch" aria-label="Passa alla versione italiana">IT</a>
 
 </Layout>
 
