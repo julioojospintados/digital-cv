@@ -998,6 +998,13 @@ img[src*="flashlight"] {
   --ps-glow: rgba(240, 200, 127, 0.09);
 }
 
+/* Chi sono — nessun mode, accent neutro (stesso default della tabella
+   colori del design system quando nessun mode è attivo). */
+.profile-section--about {
+  --ps-accent: rgba(255, 255, 255, 0.9);
+  --ps-glow: rgba(255, 255, 255, 0.06);
+}
+
 /* Dot-nav: stessi 4 accent, applicati al dot invece che alla sezione */
 .section-dot[data-mode="tech"] {
   --dot-accent: rgba(0, 255, 200, 1);
@@ -1393,6 +1400,10 @@ img[src*="flashlight"] {
 
   .profile-section[data-mode="human"] .profile-knoll-img {
     width: clamp(5rem, 10vw, 9rem);
+  }
+
+  .profile-section--about .profile-knoll-img {
+    width: clamp(8rem, 16vw, 13rem);
   }
 }
 
