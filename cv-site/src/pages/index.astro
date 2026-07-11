@@ -1,6 +1,67 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import '../styles/index-page.css';
+
+// Foto in cv-site/public/photos/{trip,belongings} — caricate dall'utente,
+// elencate qui a mano perché sono in public/ (import.meta.glob non le vede,
+// funziona solo su src/). Usate dai bottoni sotto "Chi sono" (memory-drawer.ts).
+const tripPhotos = ["camp", "cave-light", "cave", "family-party", "ha-giang", "hoi-an", "lantern", "river"];
+const belongingsPhotos = ["acting", "cheers", "giulia", "kid", "lettera-natale", "libreria", "opera-lirica", "reading", "salone-del-libro", "songwriter", "square-festival", "stampa", "sunset", "concerto"];
+
+// Racconto lungo — card "featured" nello scatter, diviso in 2 "pagine" di
+// libro (page-flip 3D, memory-drawer.ts). white-space:pre-line in CSS
+// preserva i ritmi di riga dentro ogni pagina.
+const funFactStoryTitle = "Budapest Drift";
+const funFactPage1 = `Mi sono svegliato alle 10:06 a Budapest.
+Il mio volo per tornare a casa era alle 11:10.
+Ho guardato l'orologio, ho guardato il soffitto…
+e la prima cosa che ho fatto è stata bestemmiare in tre lingue.
+Sono balzato fuori dal letto, ho chiamato un Uber,
+e non appena l'autista ha capito la situazione,
+si è trasformato in Fast & Furious: Budapest Drift.
+Eravamo io, lui e la mia ansia — che a quel punto aveva ormai la cittadinanza ungherese.
+Sono arrivato all'aeroporto; il gate chiudeva alle 10:40.
+Sono entrato correndo con lo zaino in spalla che sembravo un bambino delle elementari,
+travolgendo carrelli, valigie e, forse, anche dei bambini.
+Riuscivo solo a dire "Sorry, sorry, sorry..."
+come se fosse una specie di incantesimo magico.
+Ai controlli di sicurezza mi hanno chiesto:
+"Ha qualcosa da dichiarare?"
+E io, nel panico più totale, ho detto: "Sì."
+Mi hanno fissato.
+"No, no, scusi — niente. Solo un trauma."
+Mi hanno fatto togliere le scarpe e la dignità.
+Ero lì scalzo, a pregare Zeus.
+Poi sono corso verso il gate.
+Dagli altoparlanti:
+"Ultimo bando per Giulio Occh..."
+Ho urlato: "Sono io!" tra un polmone che cedeva e un attacco di panico.`;
+const funFactPage2 = `L'assistente di volo, con il suo miglior accento italiano da film, fa:
+"Mamma miaaaa Giulio!"
+con tanto di gesto con le mani.
+Avrei voluto dirle che io non vado in giro a salutare gli ungheresi dicendo
+"Ehi Gulash!",
+ma non c'era tempo.
+Finalmente ho visto la fila al gate e mi sono rilassato —
+per quanto ci si possa rilassare dopo aver fatto uno sprint in aeroporto
+senza essersi fatti la doccia, lavati i denti o aver fatto la pipì.
+Poi, il vuoto:
+avevo lasciato il portafoglio ai controlli di sicurezza.
+Ho ricominciato a correre, bestemmiando in Dolby Surround.
+Per qualche miracolo, ho trovato l'agente che aveva ancora in mano il mio portafoglio.
+L'ho afferrato, sono corso di nuovo al gate —
+mi hanno fatto passare…
+e la porta non si apriva.
+A quel punto volevo urlare dentro un megafono.
+Alla fine sono salito sull'aereo,
+sudato, disidratato, spiritualmente distrutto.
+Mi sono seduto, ho chiuso gli occhi e ho pensato:
+Dio perdona.
+Köszönöm.`;
+
+// Rotazioni fisse (non-modulo, look scatter intenzionale, non casuale ad ogni build)
+const SCATTER_ANGLES = [-6, 4, -3, 7, -8, 2, -5, 6, -4, 8, -7, 3, -2, 5];
+const scatterAngle = (i: number) => SCATTER_ANGLES[i % SCATTER_ANGLES.length];
 ---
 
 <Layout title="Giulio Occhipinti — Digital CV" description="CV interattivo di Giulio Occhipinti: UX/UI & Web Designer certificato IBM, Creative Technologist (Angular, Lit, GSAP), AI & Digital Specialist e Project Manager Agile per PMI.">
@@ -108,6 +169,20 @@ import '../styles/index-page.css';
           <p class="profile-eyebrow">Chi sono</p>
           <h2 class="profile-title">Coltivatore di empatia e battute in tasca.</h2>
           <p class="profile-desc">Tantissimi lavori diversi alle spalle, alcune piante in casa e un passaporto ben timbrato. Ho vissuto in tre Stati diversi prima di tornare in Italia, ma sono riuscito a fare il bagno nei tre oceani balneabili, gli altri due sono troppo freddi. Improvvisatore di battute e in viaggio, ho messo radici nel digitale, mantenendo una forte sensibilità, caratteristica che mi fanno notare spesso, verso le persone e se stessi, strizzando l'occhiolino alla poesia e alla fotografia. Attualmente cerco di unire i puntini nel mondo dello sviluppo software, applicando la stessa logica che serve negli scacchi. Gioco a Torino, ma cerco il prossimo avversario professionale per iniziare una nuova partita.</p>
+          <div class="about-actions" role="group" aria-label="Scopri di più su di me">
+            <button class="about-action" type="button" data-drawer-open="funfact">
+              <span class="about-action__icon" aria-hidden="true">✦</span>
+              Fun fact
+            </button>
+            <button class="about-action" type="button" data-drawer-open="belongings">
+              <span class="about-action__icon" aria-hidden="true">✦</span>
+              Cose mie
+            </button>
+            <button class="about-action" type="button" data-drawer-open="trip">
+              <span class="about-action__icon" aria-hidden="true">✦</span>
+              Viaggio
+            </button>
+          </div>
         </div>
         <div class="profile-deco" aria-hidden="true"><span class="profile-deco__text">IO</span><img class="profile-knoll-img" src="/knolling/plant.webp" alt="" loading="lazy" decoding="async"></div>
       </div>
@@ -186,6 +261,53 @@ import '../styles/index-page.css';
 
   </div>
 
+  <!-- Memory drawers — bottoni "Fun fact / Cose mie / Viaggio" sotto Chi sono.
+       <dialog> nativo: focus trap, ESC e backdrop-click gestiti dal browser,
+       nessun codice a11y custom da mantenere. Scatter in stile knolling
+       animato all'apertura da memory-drawer.ts. data-lenis-prevent: senza,
+       Lenis intercetta la rotellina e scrolla la pagina sotto invece del
+       contenuto interno del dialog (regola già nota del design system). -->
+  <dialog class="memory-dialog memory-dialog--book" id="dialog-funfact" aria-labelledby="dialog-funfact-title" data-lenis-prevent>
+    <button class="memory-dialog__close" type="button" data-drawer-close aria-label="Chiudi">✕</button>
+    <p class="memory-dialog__eyebrow" id="dialog-funfact-title">Fun fact</p>
+    <div class="memory-scatter memory-scatter--facts">
+      <article class="memory-fact memory-fact--story" style="--mr:0deg">
+        <p class="memory-fact__title">{funFactStoryTitle}</p>
+        <div class="story-book" aria-label="Racconto su due pagine, come un libro aperto">
+          <div class="story-book__page story-book__page--left">
+            <p class="memory-fact__body">{funFactPage1}</p>
+            <span class="story-book__pagenum" aria-hidden="true">1</span>
+          </div>
+          <div class="story-book__spine" aria-hidden="true"></div>
+          <div class="story-book__page story-book__page--right">
+            <p class="memory-fact__body">{funFactPage2}</p>
+            <span class="story-book__pagenum" aria-hidden="true">2</span>
+          </div>
+        </div>
+      </article>
+    </div>
+  </dialog>
+
+  <dialog class="memory-dialog" id="dialog-belongings" aria-labelledby="dialog-belongings-title" data-lenis-prevent>
+    <button class="memory-dialog__close" type="button" data-drawer-close aria-label="Chiudi">✕</button>
+    <p class="memory-dialog__eyebrow" id="dialog-belongings-title">Cose mie</p>
+    <div class="memory-scatter">
+      {belongingsPhotos.map((name, i) => (
+        <img class="memory-photo" src={`/photos/belongings/${name}.webp`} alt="" loading="lazy" decoding="async" style={`--mr:${scatterAngle(i)}deg`} />
+      ))}
+    </div>
+  </dialog>
+
+  <dialog class="memory-dialog" id="dialog-trip" aria-labelledby="dialog-trip-title" data-lenis-prevent>
+    <button class="memory-dialog__close" type="button" data-drawer-close aria-label="Chiudi">✕</button>
+    <p class="memory-dialog__eyebrow" id="dialog-trip-title">Viaggio</p>
+    <div class="memory-scatter">
+      {tripPhotos.map((name, i) => (
+        <img class="memory-photo" src={`/photos/trip/${name}.webp`} alt="" loading="lazy" decoding="async" style={`--mr:${scatterAngle(i)}deg`} />
+      ))}
+    </div>
+  </dialog>
+
   <div id="launch-overlay" aria-hidden="true"></div>
 
   <!-- Language switch — fixed top-right, hidden until hero reveal -->
@@ -196,5 +318,6 @@ import '../styles/index-page.css';
 
 <script>
   import '../scripts/index-init.ts';
+  import '../scripts/memory-drawer.ts';
 </script>
 
