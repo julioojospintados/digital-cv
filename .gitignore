@@ -5,10 +5,10 @@ dist/
 node_modules/
 
 # CV source files — non committare dati personali
-_cv-source/*.pdf
-_cv-source/*.docx
-_cv-source/*.doc
-_cv-source/extracted-text.txt
+# _cv-source/*.pdf
+# _cv-source/*.docx
+# _cv-source/*.doc
+# _cv-source/extracted-text.txt
 
 # TypeScript cache
 *.tsbuildinfo
@@ -29,7 +29,7 @@ Thumbs.db
 .playwright-mcp/
 
 # todo
-todo.md
+# todo.md
 bash.exe.stackdump
 tmp-diff.mjs
 .tmp-lh*
