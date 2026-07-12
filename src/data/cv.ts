@@ -215,7 +215,7 @@ export const cvData = {
     name: "Giulio Occhipinti",
     title: "Consulente per l'Innovazione Digitale & Partner Tecnico per PMI",
     summary:
-      "Generalista esperto che supporta le PMI orchestrando tre pilastri integrati: Design (UX/UI — cert. IBM + SkillUp), Tecnologia (Angular, Lit, MCP, Node.js) e Metodo (Agile snello, sprint brevi, autonomia del team). 6+ anni di interfacce web progettate e costruite per realtà enterprise (Intesa San Paolo, Aruba, Rai Pubblicità). Framework-agnostic, orientato all'impatto, con esperienze dirette in 5 paesi. Non consegna slide — entra in azienda, capisce il problema reale, costruisce la soluzione e la fa girare.",
+      "Supporto le PMI su tre pilastri integrati: Design (UX/UI, certificazioni IBM e SkillUp), Tecnologia (Angular, Lit, MCP, Node.js) e Metodo (Agile snello, sprint brevi, autonomia del team). Ho progettato e costruito interfacce web per oltre 6 anni in contesti enterprise (Intesa San Paolo, Aruba, Rai Pubblicità). Scelgo lo strumento in base al problema e ho lavorato in 5 paesi. Non consegno slide: entro in azienda, capisco il problema reale, costruisco la soluzione e la faccio girare.",
     location: "Torino, Italia",
     age: 36,
     avatar: "",
@@ -248,12 +248,12 @@ export const cvData = {
     {
       name: "Inglese",
       level: "B2",
-      note: "Corso intensivo Callan School, Londra. Usato professionalmente in contesti internazionali (event host, battitore d'asta per evento europeo Burger King)",
+      note: "Corso intensivo alla Callan School di Londra. L'ho usato professionalmente come event host e battitore d'asta per un evento europeo Burger King.",
     },
     {
       name: "Spagnolo",
       level: "B1",
-      note: "Esperienza lavorativa a Tulum, Messico",
+      note: "L'ho imparato lavorando a Tulum, in Messico.",
     },
     { name: "Francese", level: "A2" },
   ] as Language[],
@@ -269,11 +269,11 @@ export const cvData = {
       location: "Torino, Italia",
       remote: true,
       description:
-        "Gestionale interno per PMI, dall'analisi dei processi al deploy: architettura MCP con tool, resource e prompt come API per agenti AI (integrata con VS Code Copilot e Cursor), UX semplificata per operatori non tecnici, pipeline Cursor → GitLab CI/CD → deploy automatizzata. Sprint da 1–2 settimane, impactScore misurato a ogni rilascio.",
+        "Ho progettato e sviluppato un gestionale interno per PMI, dall'analisi dei processi al deploy: architettura MCP con tool, resource e prompt come API per agenti AI, integrata con VS Code Copilot e Cursor, UX semplificata per operatori non tecnici e pipeline Cursor → GitLab CI/CD → deploy automatizzata. Lavoro in sprint da 1 a 2 settimane e misuro l'impactScore a ogni rilascio.",
       highlights: [
-        "UX semplificata per operatori non tecnici: –40% tempo di formazione sui nuovi flussi",
-        "Pipeline Cursor → GitLab CI/CD → deploy automatizzata, zero intervento manuale",
-        "–80% tempo medio di sviluppo con AI-augmented workflow (progetto in corso)",
+        "Ho semplificato la UX per operatori non tecnici: –40% tempo di formazione sui nuovi flussi.",
+        "Ho automatizzato la pipeline Cursor → GitLab CI/CD → deploy: zero interventi manuali.",
+        "–80% tempo medio di sviluppo con workflow AI-augmented, progetto in corso.",
       ],
       skills: [
         "MCP",
@@ -297,11 +297,11 @@ export const cvData = {
       location: "Torino, Italia",
       remote: true,
       description:
-        "CV interattivo costruito end-to-end con GitHub Copilot e Claude come assistenti operativi: architettura, UI, animazioni GSAP, server MCP e API HTTP con Hono. Sito Astro + Lit per il CV visuale, più un server MCP che espone i dati come API per agenti AI. Consegnato in 5 giorni, contro una stima tradizionale di oltre un mese.",
+        "Ho costruito questo CV interattivo end-to-end con GitHub Copilot e Claude come assistenti operativi: architettura, UI, animazioni GSAP, server MCP e API HTTP con Hono. Il sito usa Astro e Lit, il server MCP espone i dati come API per agenti AI. L'ho consegnato in 5 giorni, contro una stima tradizionale di oltre un mese.",
       highlights: [
-        "Server MCP con tool, resource e prompt template che espongono i dati CV ad agenti AI (VS Code Copilot, Claude Desktop)",
-        "Sito Astro + Lit con animazioni GSAP avanzate: preloader narrativo, wave hold effect SVG, distortion filter via feTurbulence",
-        "Server HTTP Hono con OpenAPI spec, validazione Zod e test Vitest — copertura test >80%",
+        "Ho sviluppato un server MCP con tool, resource e prompt template che espone i dati del CV ad agenti AI (VS Code Copilot, Claude Desktop).",
+        "Ho sviluppato il sito con Astro, Lit e animazioni GSAP: preloader narrativo, wave hold effect SVG, distortion filter via feTurbulence.",
+        "Ho sviluppato il server HTTP con Hono, spec OpenAPI, validazione Zod e test Vitest: copertura oltre l'80%.",
       ],
       skills: [
         "MCP Protocol",
@@ -327,11 +327,11 @@ export const cvData = {
       location: "Torino, Italia",
       remote: false,
       description:
-        "Senior Frontend Developer su sistemi enterprise per Intesa San Paolo e Aruba: design system, librerie WebComponents e architetture a microfrontend usate da milioni di persone.",
+        "Sviluppo sistemi enterprise per Intesa San Paolo e Aruba: design system, librerie WebComponents e architetture a microfrontend usate da milioni di persone.",
       highlights: [
-        "Tech Lead e Scrum Master del team Aruba Design System (3+ anni, 30+ persone): libreria di oltre 100 componenti WebComponents adottata cross-prodotto",
-        "Architettura Angular enterprise per Intesa San Paolo in team da 50+ persone: standard condivisi e code review",
-        "Introduzione di test unitari sistematici con Jest, impatto diretto su stabilità dei rilasci e coverage",
+        "Ho guidato come Tech Lead e Scrum Master il team Aruba Design System, oltre 3 anni e più di 30 persone: libreria di oltre 100 componenti WebComponents adottata cross-prodotto.",
+        "Ho sviluppato architettura Angular enterprise per Intesa San Paolo in un team di oltre 50 persone, con standard condivisi e code review.",
+        "Ho introdotto test unitari sistematici con Jest, con impatto diretto su stabilità dei rilasci e coverage.",
       ],
       skills: [
         "Angular",
@@ -350,17 +350,17 @@ export const cvData = {
     },
     {
       company: "Music Agency (collaborazione)",
-      role: "Collaboratore — Tour Manager & Digital Strategist",
+      role: "Tour Manager & Digital Strategist",
       startDate: "2023-01",
       endDate: "2024-12",
       location: "Italia",
       remote: true,
       description:
-        "Booking e tour management per gli artisti del roster di un'agenzia musicale italiana, più consulenza su comunicazione digitale e content strategy.",
+        "Ho organizzato booking e tour per gli artisti del roster di un'agenzia musicale italiana e ho progettato la loro comunicazione digitale e content strategy.",
       highlights: [
-        "Crescita del 100% dei follower con audience mirata (musicisti, etichette, promoter) — organica, non volume puro",
-        "Organizzazione di un evento live all'Arci Bellezza di Milano, dal booking alla comunicazione",
-        "Booking e coordinamento concerti: ricerca venue, trattativa con promoter, gestione contratti",
+        "Ho raddoppiato i follower con audience mirata (musicisti, etichette, promoter): crescita organica, non volume puro.",
+        "Ho organizzato un evento live all'Arci Bellezza di Milano, dal booking alla comunicazione.",
+        "Ho coordinato booking e concerti: ricerca venue, trattativa con i promoter, contratti.",
       ],
       skills: [
         "Booking",
@@ -384,11 +384,11 @@ export const cvData = {
       location: "Toscana, Italia",
       remote: false,
       description:
-        "Supporto alla produzione video per matrimoni esteri di alto livello in Toscana, affiancando il videomaker principale in un settore che richiede estrema attenzione ai dettagli.",
+        "Affianco il videomaker principale nella produzione video per matrimoni esteri di alto livello in Toscana, un settore che richiede attenzione estrema ai dettagli.",
       highlights: [
-        "Supportare le riprese video in cerimonie con centinaia di ospiti internazionali",
-        "Collaborare in contesti multiculturali su eventi multi-giornata",
-        "Adattare il proprio ruolo alle esigenze del set in tempo reale, in contesti ad alta complessità logistica",
+        "Ho ripreso cerimonie con centinaia di ospiti internazionali come secondo operatore.",
+        "Ho lavorato su eventi multi-giornata in contesti multiculturali.",
+        "Ho adattato il mio ruolo alle esigenze del set in tempo reale, in contesti ad alta complessità logistica.",
       ],
       skills: [
         "Videomaking",
@@ -405,11 +405,11 @@ export const cvData = {
       location: "Los Angeles, USA",
       remote: true,
       description:
-        "Sviluppo frontend full remote in un team distribuito Torino–Los Angeles su un'applicazione web per la gestione e visualizzazione di dati clinici destinata a strutture ospedaliere statunitensi. Un progetto tecnicamente complesso: codebase React consolidata, refactoring CSS su larga scala e integrazione con API cliniche in tempo reale.",
+        "Ho sviluppato frontend full remote in un team distribuito tra Torino e Los Angeles, su un'applicazione web di dati clinici per strutture ospedaliere statunitensi: codebase React consolidata, refactoring CSS su larga scala e integrazione con API cliniche in tempo reale.",
       highlights: [
-        "Sviluppare dashboard React per la visualizzazione e il monitoraggio di dati clinici Covid-19 in contesti ospedalieri USA",
-        "Refactorare il CSS con pattern BEM su codebase da 20.000 righe: –800 righe duplicate",
-        "Integrare API REST e GraphQL per la visualizzazione di dati clinici in tempo reale",
+        "Ho sviluppato dashboard React per la visualizzazione e il monitoraggio di dati clinici Covid-19 in ospedali USA.",
+        "Ho riscritto il CSS con pattern BEM su una codebase da 20.000 righe: –800 righe duplicate.",
+        "Ho integrato API REST e GraphQL per la visualizzazione di dati clinici in tempo reale.",
       ],
       skills: [
         "React",
@@ -429,11 +429,11 @@ export const cvData = {
       location: "Torino, Italia",
       remote: false,
       description:
-        "Applicativi gestionali per Rai Pubblicità e Intesa San Paolo, a sostituzione di processi interni su sistemi legacy, con flussi più rapidi per gli utenti finali.",
+        "Ho sviluppato applicativi gestionali per Rai Pubblicità e Intesa San Paolo, in sostituzione di processi interni su sistemi legacy, con flussi più rapidi per gli utenti finali.",
       highlights: [
-        "Sviluppare applicativi gestionali interni per Rai Pubblicità con Angular, Spring e Bootstrap",
-        "Sviluppare un tool per la gestione documentale e revisionale in Intesa San Paolo tramite JSF",
-        "Tradurre requisiti di business complessi in interfacce usabili da operatori non tecnici",
+        "Ho sviluppato applicativi gestionali interni per Rai Pubblicità con Angular, Spring e Bootstrap.",
+        "Ho sviluppato un tool documentale e revisionale per Intesa San Paolo con JSF.",
+        "Ho tradotto requisiti di business complessi in interfacce usabili da operatori non tecnici.",
       ],
       skills: [
         "Angular",
@@ -454,7 +454,7 @@ export const cvData = {
       location: "Milano, Italia",
       remote: false,
       description:
-        "Collaborazione esterna con Satispay in una fase di rapida crescita, con processi ancora in evoluzione e contributi orientati all'impatto immediato.",
+        "Ho lavorato dall'esterno con Satispay durante una fase di rapida crescita, dentro processi ancora in evoluzione e con consegne a impatto immediato.",
       highlights: [],
       skills: ["Fintech", "Mentalità da startup", "Comunicazione digitale"],
     },
@@ -466,11 +466,11 @@ export const cvData = {
       location: "Italia",
       remote: false,
       description:
-        "Presentatore e moderatore per festival culturali e serate live in tutta Italia, gestendo palco e imprevisti con le tecniche di improvvisazione teatrale.",
+        "Conduco festival culturali e serate live in tutta Italia e risolvo gli imprevisti di palco con le tecniche dell'improvvisazione teatrale.",
       highlights: [
-        "Condurre festival culturali multidisciplinari (musica, arte, teatro)",
-        "Moderare panel e talk con ospiti internazionali",
-        "Gestire l'imprevisto in diretta grazie alla formazione in improvvisazione teatrale",
+        "Ho condotto festival culturali multidisciplinari (musica, arte, teatro).",
+        "Ho moderato panel e talk con ospiti internazionali.",
+        "Ho risolto imprevisti in diretta con la formazione in improvvisazione teatrale.",
       ],
       skills: [
         "Public speaking",
@@ -488,7 +488,7 @@ export const cvData = {
       location: "Torino, Italia",
       remote: false,
       description:
-        "Attività fotografica freelance continuativa in parallelo alle esperienze professionali, con progetti in Italia, Tanzania e altri paesi.",
+        "Lavoro come fotografo freelance dal 2009, in parallelo alle altre esperienze, con progetti in Italia, Tanzania e altri paesi.",
       highlights: [],
       skills: ["Fotografia", "Editing", "Post-produzione"],
     },
@@ -500,7 +500,7 @@ export const cvData = {
       location: "Chieri, Torino",
       remote: false,
       description:
-        "Redattore per il Corriere di Chieri: cronaca locale ed eventi culturali. Da qui la capacità di trasformare informazioni grezze in storie leggibili, utile ancora oggi nel copy e nella documentazione tecnica.",
+        "Ho scritto cronaca locale ed eventi culturali per il Corriere di Chieri. Lì ho imparato a trasformare informazioni grezze in storie leggibili, una capacità che uso ancora oggi nel copy e nella documentazione tecnica.",
       highlights: [],
       skills: ["Giornalismo", "Scrittura", "Editing", "Redazione"],
     },
@@ -512,10 +512,10 @@ export const cvData = {
       location: "Torino, Italia",
       remote: false,
       description:
-        "Cofondatore dello Square Festival nel Quadrilatero Romano di Torino: evento culturale multidisciplinare (musica, teatro, arti visive), ideato e realizzato in 6 mesi con circa 100 persone tra staff e artisti. Responsabile della sezione teatrale.",
+        "Ho cofondato lo Square Festival nel Quadrilatero Romano di Torino: evento culturale multidisciplinare (musica, teatro, arti visive), ideato e realizzato in 6 mesi con circa 100 persone tra staff e artisti. Ho diretto la sezione teatrale.",
       highlights: [
-        "Cofondatore dello Square Festival: dall’ideazione alla realizzazione in 6 mesi, circa 100 persone coinvolte tra staff e artisti",
-        "Coordinare la sezione teatrale: ricerca e selezione degli spettacoli, trattativa con le compagnie, scheduling integrato col programma del festival",
+        "Ho cofondato lo Square Festival: dall'ideazione alla realizzazione in 6 mesi, con circa 100 persone tra staff e artisti.",
+        "Ho coordinato la sezione teatrale: ricerca e selezione degli spettacoli, trattativa con le compagnie, scheduling integrato col programma del festival.",
       ],
       skills: ["Event management", "Comunicazione", "Coordinamento"],
     },
@@ -527,10 +527,10 @@ export const cvData = {
       location: "Torino, Italia",
       remote: false,
       description:
-        "Visual e materiali di brand identity per clienti locali, tra formazione tecnica in graphic design e sensibilità estetica maturata in anni di fotografia.",
+        "Ho progettato visual e materiali di brand identity per clienti locali, unendo la formazione tecnica in graphic design all'occhio maturato in anni di fotografia.",
       highlights: [
-        "Progettare materiali grafici e brand identity per clienti nel settore locale e culturale",
-        "Applicare i principi di visual hierarchy e typography per massimizzare l'impatto comunicativo",
+        "Ho progettato materiali grafici e brand identity per clienti del settore locale e culturale.",
+        "Ho applicato principi di visual hierarchy e typography ai materiali stampa e digitali.",
       ],
       skills: [
         "Graphic design",
@@ -548,7 +548,7 @@ export const cvData = {
       location: "Torino, Italia",
       remote: false,
       description:
-        "Vendita e consulenza clienti presso Mondadori Store, Area 12, Torino. Gestione del reparto libri e supporto alla clientela.",
+        "Ho lavorato nella vendita e nella consulenza clienti al Mondadori Store di Area 12, a Torino, con responsabilità sul reparto libri.",
       highlights: [],
       skills: ["Customer service", "Vendita", "Gestione del reparto"],
     },
@@ -560,10 +560,10 @@ export const cvData = {
       location: "None, Torino",
       remote: false,
       description:
-        "Corsi di improvvisazione teatrale per gli allievi di None Teatro, con il metodo 'Yes, and...' come pratica di ascolto attivo e costruzione collettiva.",
+        "Ho insegnato improvvisazione teatrale agli allievi di None Teatro, con il metodo 'Yes, and...' come pratica di ascolto attivo e costruzione collettiva.",
       highlights: [
-        "Condurre corsi di improvvisazione e teatro per allievi di livelli diversi",
-        "Applicare il metodo 'Yes, and...' come strumento didattico per sviluppare creatività e problem solving",
+        "Ho condotto corsi di improvvisazione e teatro per allievi di livelli diversi.",
+        "Ho applicato il metodo 'Yes, and...' come strumento didattico per sviluppare creatività e problem solving.",
       ],
       skills: [
         "Insegnamento",
@@ -581,9 +581,9 @@ export const cvData = {
       location: "Torino, Italia",
       remote: false,
       description:
-        "Gestione tecnica audio e luci per spettacoli teatrali. Partecipazione come attore e improvvisatore in spettacoli in Italia e Lussemburgo.",
+        "Ho fatto la regia tecnica audio e luci per spettacoli teatrali. Ho recitato come attore e improvvisatore in Italia e in Lussemburgo.",
       highlights: [
-        "Recitare in spettacoli di improvvisazione teatrale in Italia e in Lussemburgo",
+        "Ho recitato in spettacoli di improvvisazione teatrale in Italia e in Lussemburgo.",
       ],
       skills: [
         "Regia tecnica",
@@ -601,7 +601,7 @@ export const cvData = {
       location: "Tulum, Messico",
       remote: false,
       description:
-        "Gestione del front desk in struttura ricettiva internazionale a Tulum, con clientela prevalentemente anglofona e ispanofona.",
+        "Ho lavorato al front desk di una struttura ricettiva internazionale a Tulum, con clientela anglofona e ispanofona.",
       highlights: [],
       skills: ["Accoglienza", "Inglese", "Spagnolo", "Customer service"],
     },
@@ -613,7 +613,7 @@ export const cvData = {
       location: "Torino, Italia",
       remote: false,
       description:
-        "Gestione sala, biglietteria e accoglienza in uno dei circuiti cinema più frequentati d'Italia, centinaia di spettatori al giorno — la base della mia attenzione a ogni touchpoint utente in ambito UX.",
+        "Ho lavorato tra sala, biglietteria e accoglienza in uno dei circuiti cinema più frequentati d'Italia, centinaia di spettatori al giorno. Da lì viene la mia attenzione a ogni touchpoint utente in ambito UX.",
       highlights: [],
       skills: [
         "Customer service",
@@ -629,7 +629,7 @@ export const cvData = {
       location: "Londra, Regno Unito",
       remote: false,
       description:
-        "Ruolo operativo in uno dei punti vendita Starbucks di Londra, con gestione clienti internazionali.",
+        "Ho lavorato come barista in un punto vendita Starbucks di Londra, con clienti internazionali ogni giorno.",
       highlights: [],
       skills: ["Inglese", "Lavoro in team", "Customer service"],
     },
@@ -641,7 +641,7 @@ export const cvData = {
       location: "Zanzibar, Tanzania",
       remote: false,
       description:
-        "Responsabile centro fotografico presso struttura di animazione turistica a Zanzibar.",
+        "Ho diretto il centro fotografico di una struttura di animazione turistica a Zanzibar.",
       highlights: [],
       skills: ["Fotografia", "Animazione turistica"],
     },
@@ -653,13 +653,13 @@ export const cvData = {
       location: "Ravenna e Crotone, Italia",
       remote: false,
       description:
-        "Coordinamento di team di animatori e programmi di intrattenimento in strutture balneari a Ravenna e Crotone, in contesti stagionali ad alta variabilità.",
+        "Ho coordinato team di animatori e programmi di intrattenimento in strutture balneari a Ravenna e Crotone, in contesti stagionali ad alta variabilità.",
       highlights: [
-        "Coordinare team di animatori in contesti ad alta variabilità e pressione stagionale",
-        "Progettare e condurre programmi di intrattenimento per ospiti internazionali",
+        "Ho coordinato team di animatori in contesti ad alta variabilità e pressione stagionale.",
+        "Ho progettato e condotto programmi di intrattenimento per ospiti internazionali.",
       ],
       skills: [
-        "Leadership",
+        "Coordinamento",
         "Team management",
         "Event management",
         "Animazione",
@@ -674,7 +674,7 @@ export const cvData = {
       location: "Torino, Italia",
       remote: false,
       description:
-        "Gestione banco e supporto cucina in turni spesso notturni, in un contesto ad alto ritmo e margini di errore minimi.",
+        "Ho lavorato al banco e in cucina, spesso in turni notturni, in un contesto ad alto ritmo e margini di errore minimi.",
       highlights: [],
       skills: [
         "Lavoro in team",
@@ -835,7 +835,7 @@ export const cvData = {
           target: "Sensibilità estetica",
           type: "cross-domain",
           description:
-            "Ogni ritmo visivo e micro-interazione CSS è una scelta estetica prima che tecnica",
+            "Ogni ritmo visivo e micro-interazione CSS è una scelta estetica prima che tecnica.",
         },
       ],
     },
@@ -856,7 +856,7 @@ export const cvData = {
           target: "MCP Protocol",
           type: "workflow",
           description:
-            "Il sistema di tipi è la lingua comune tra sviluppatore e agente AI",
+            "Il sistema di tipi è la lingua comune tra sviluppatore e agente AI.",
         },
       ],
     },
@@ -1237,7 +1237,7 @@ export const cvData = {
           target: "AI-Augmented Productivity",
           type: "workflow",
           description:
-            "L'MCP trasforma l'AI da chatbot a collaboratore operativo del processo",
+            "L'MCP trasforma l'AI da chatbot a collaboratore operativo del processo.",
         },
       ],
     },
@@ -1256,7 +1256,7 @@ export const cvData = {
           target: "Pensiero T-shaped",
           type: "cross-domain",
           description:
-            "Prompt efficaci nascono da chi sa ragionare in più domini contemporaneamente",
+            "Prompt efficaci nascono da chi sa ragionare in più domini contemporaneamente.",
         },
         { target: "GitHub Copilot", type: "workflow" },
         { target: "Google Stitch", type: "workflow" },
@@ -1306,7 +1306,7 @@ export const cvData = {
           target: "Sensibilità estetica",
           type: "cross-domain",
           description:
-            "L'animazione non è decorazione — viene dall'occhio fotografico di chi la progetta",
+            "L'animazione non è decorazione: viene dall'occhio fotografico di chi la progetta.",
         },
         { target: "Creatività applicata", type: "cross-domain" },
       ],
@@ -1348,7 +1348,7 @@ export const cvData = {
     {
       name: "Comunicazione efficace",
       description:
-        "Oltre 10 anni di conduzione pubblica di eventi e formazione teatrale: capacità di trasmettere messaggi complessi in modo chiaro, coinvolgente e calibrato su ogni tipo di audience.",
+        "Ho condotto eventi in pubblico per oltre 10 anni, con formazione teatrale alle spalle: trasmetto messaggi complessi in modo chiaro e calibrato su ogni tipo di audience.",
       domain: "human",
       weight: 4,
       mastery: 90,
@@ -1363,7 +1363,7 @@ export const cvData = {
     {
       name: "Creatività applicata",
       description:
-        "Background multidisciplinare (sviluppo software, fotografia, teatro, scrittura, eventi) che genera approcci originali e soluzioni inaspettate anche in contesti tecnici.",
+        "Sviluppo software, fotografia, teatro, scrittura ed eventi: da questo background arrivano soluzioni che i percorsi lineari non vedono, anche in contesti tecnici.",
       domain: "creative",
       weight: 4,
       mastery: 85,
@@ -1380,7 +1380,7 @@ export const cvData = {
     {
       name: "Adattabilità culturale",
       description:
-        "Esperienze lavorative in 5 paesi (Italia, UK, Messico, Tanzania, Lussemburgo), ognuna con un contesto organizzativo, linguistico e culturale profondamente diverso.",
+        "Ho lavorato in 5 paesi (Italia, UK, Messico, Tanzania, Lussemburgo), ognuno con un contesto organizzativo, linguistico e culturale diverso.",
       domain: "human",
       weight: 4,
       mastery: 82,
@@ -1395,7 +1395,7 @@ export const cvData = {
     {
       name: "Intelligenza relazionale",
       description:
-        "Costruzione naturale di rapporti di fiducia con colleghi, clienti e stakeholder, maturata in ambienti ad alta variabilità: dal customer service internazionale alla gestione di team cross-funzionali.",
+        "Costruisco rapporti di fiducia con colleghi, clienti e referenti, in ambienti ad alta variabilità: dal customer service internazionale al coordinamento di team cross-funzionali.",
       domain: "human",
       weight: 4,
       mastery: 85,
@@ -1410,7 +1410,7 @@ export const cvData = {
     {
       name: "Problem solving laterale",
       description:
-        "Approccio analitico e trasversale ai problemi: esperienza in ambienti enterprise complessi (architetture a microfrontend, sistemi legacy) e in situazioni live ad alto stress (regia tecnica, conduzione di eventi).",
+        "Ho risolto problemi in ambienti enterprise (architetture a microfrontend, sistemi legacy) e in situazioni live ad alto stress (regia tecnica, conduzione di eventi): due palestre diverse, lo stesso metodo.",
       domain: "human",
       weight: 5,
       mastery: 87,
@@ -1425,7 +1425,7 @@ export const cvData = {
     {
       name: "Autonomia e ownership",
       description:
-        "Gestione autonoma di progetti paralleli (fotografia freelance, videomaking, consulenza strategica) con capacità di definire priorità, rispettare le scadenze e consegnare risultati senza supervisione diretta.",
+        "Porto avanti da solo progetti paralleli (fotografia freelance, videomaking, consulenza strategica): definisco le priorità, rispetto le scadenze e consegno senza supervisione diretta.",
       domain: "management",
       weight: 4,
       mastery: 88,
@@ -1440,7 +1440,7 @@ export const cvData = {
     {
       name: "Resilienza e pensiero adattivo",
       description:
-        "Lucidità sotto pressione allenata nella regia tecnica teatrale, nella conduzione live di eventi e nella gestione di sistemi enterprise in produzione. L'imprevisto viene trattato come dato da cui imparare.",
+        "Ho allenato la lucidità sotto pressione nella regia tecnica teatrale, nella conduzione live di eventi e sui sistemi enterprise in produzione. Tratto l'imprevisto come un dato da cui imparare.",
       domain: "human",
       weight: 4,
       mastery: 82,
@@ -1455,7 +1455,7 @@ export const cvData = {
     {
       name: "Ascolto attivo",
       description:
-        "Presenza reale nella conversazione: fare le domande giuste prima di rispondere, riconoscere ciò che non viene detto, mantenere attenzione sostenuta anche in sessioni tecniche lunghe. Base di ogni processo di consulenza efficace.",
+        "Faccio le domande giuste prima di rispondere, riconosco ciò che non viene detto e mantengo l'attenzione anche in sessioni tecniche lunghe. È la base di ogni consulenza che funziona.",
       domain: "human",
       weight: 4,
       mastery: 84,
@@ -1469,7 +1469,7 @@ export const cvData = {
     {
       name: "Assertività",
       description:
-        "Capacità di esprimere posizioni tecniche e strategiche con chiarezza e rispetto, anche in contesti di disaccordo. La dialettica costruttiva come strumento di avanzamento del progetto, non di conflitto.",
+        "Esprimo posizioni tecniche e strategiche con chiarezza e rispetto, anche in disaccordo. Uso la dialettica per far avanzare il progetto, non per vincere la discussione.",
       domain: "human",
       weight: 3,
       mastery: 80,
@@ -1483,7 +1483,7 @@ export const cvData = {
     {
       name: "Sensibilità estetica",
       description:
-        "Oltre 15 anni di pratica fotografica e produzione visiva si traducono in scelte UI più efficaci, con impatto diretto sulla percezione del brand e sulla qualità dell'esperienza utente.",
+        "Fotografo da oltre 15 anni: quell'occhio si traduce in scelte UI più precise, con impatto diretto sulla percezione del brand e sulla qualità dell'esperienza utente.",
       domain: "creative",
       weight: 4,
       mastery: 88,
@@ -1500,7 +1500,7 @@ export const cvData = {
     {
       name: "Pensiero T-shaped",
       description:
-        "Capacità di agire da ponte tra ingegneria (Frontend), design (UX/UI) e marketing (SEO/SEM), riducendo i silos comunicativi e accelerando il time-to-market di prodotti digitali.",
+        "Faccio da ponte tra ingegneria (frontend), design (UX/UI) e marketing (SEO/SEM): meno silos comunicativi, time-to-market più rapido.",
       domain: "management",
       weight: 5,
       mastery: 90,
@@ -1519,7 +1519,7 @@ export const cvData = {
     {
       name: "Event management",
       description:
-        "Ideazione e produzione di festival culturali multidisciplinari (Square Festival, Artiversum – Quadrilatero Romano, Torino): coordinamento artisti, logistica e comunicazione istituzionale.",
+        "Ho ideato e prodotto festival culturali multidisciplinari (Square Festival, Artiversum, Quadrilatero Romano di Torino): coordinamento artisti, logistica e comunicazione istituzionale.",
       domain: "management",
       weight: 3,
       mastery: 72,
@@ -1534,7 +1534,7 @@ export const cvData = {
     {
       name: "Fotografia",
       description:
-        "Attività freelance continuativa dal 2009, con portfolio internazionale (Tanzania, Messico, Italia). Specializzazione in reportage e ritratto.",
+        "Lavoro come fotografo freelance dal 2009, con portfolio internazionale (Tanzania, Messico, Italia). Reportage e ritratto.",
       domain: "creative",
       weight: 3,
       mastery: 80,
@@ -1549,7 +1549,7 @@ export const cvData = {
     {
       name: "Teatro e improvvisazione",
       description:
-        "Formazione e palcoscenico con B-Teatro (2013–2020), spettacoli in Italia e Lussemburgo. L'improvvisazione allena l'ascolto attivo, il pensiero rapido e la capacità di trasformare il fallimento in risorsa.",
+        "Mi sono formato e ho recitato con B-Teatro (2013–2020), con spettacoli in Italia e Lussemburgo. L'improvvisazione allena l'ascolto attivo, il pensiero rapido e la capacità di trasformare il fallimento in risorsa.",
       domain: "human",
       weight: 4,
       mastery: 85,
@@ -1562,14 +1562,14 @@ export const cvData = {
           target: "Agile Methodology",
           type: "conceptual",
           description:
-            "L'improvvisazione teatrale è il modello mentale originale dello sprint Agile",
+            "L'improvvisazione teatrale è il modello mentale originale dello sprint Agile.",
         },
       ],
     },
     {
       name: "Public speaking",
       description:
-        "Conduzione di festival, panel e talk con ospiti internazionali dal 2015. Capacità di gestire audience eterogenee e situazioni impreviste live con naturalezza e autorevolezza.",
+        "Conduco festival, panel e talk con ospiti internazionali dal 2015. Tengo audience eterogenee e risolvo imprevisti live senza perdere il ritmo.",
       domain: "human",
       weight: 4,
       mastery: 85,
@@ -1584,7 +1584,7 @@ export const cvData = {
     {
       name: "Graphic design",
       description:
-        "Formazione specialistica (Immaginazione e Lavoro, 2018) con applicazione continuativa nella produzione di materiali visivi per eventi, brand e comunicazione digitale.",
+        "Mi sono specializzato con Immaginazione e Lavoro (2018) e da allora produco materiali visivi per eventi, brand e comunicazione digitale.",
       domain: "creative",
       weight: 3,
       mastery: 65,
@@ -1600,7 +1600,7 @@ export const cvData = {
     {
       name: "Social media management",
       description:
-        "Formazione specialistica (Immaginazione e Lavoro, 2018) e applicazione pratica nella gestione editoriale dei canali per eventi culturali e per l'agenzia musicale.",
+        "Mi sono formato con Immaginazione e Lavoro (2018) e ho costruito il piano editoriale dei canali per eventi culturali e per l'agenzia musicale.",
       domain: "management",
       weight: 2,
       mastery: 60,
@@ -1615,7 +1615,7 @@ export const cvData = {
     {
       name: "Digital marketing",
       description:
-        "Master IED in Digital Communication (2022–2023): strategia di contenuto, SEO/SEM, analytics, campaign management e storytelling di brand in contesti B2C e B2B.",
+        "Ho completato il Master IED in Digital Communication (2022–2023): strategia di contenuto, SEO/SEM, analytics, campaign management e storytelling di brand in contesti B2C e B2B.",
       domain: "management",
       weight: 3,
       mastery: 65,
@@ -1631,7 +1631,7 @@ export const cvData = {
     {
       name: "UX / UI Design",
       description:
-        "IBM UX Design Professional Certificate in corso: User Research, Information Architecture, Wireframing e prototipazione ad alta fedeltà con Figma.",
+        "Sto completando l'IBM UX Design Professional Certificate: user research, information architecture, wireframing e prototipazione ad alta fedeltà con Figma.",
       domain: "creative",
       weight: 4,
       mastery: 70,
@@ -1648,7 +1648,7 @@ export const cvData = {
     {
       name: "Videomaking",
       description:
-        "Supporto alla produzione video per matrimoni di alto livello in Toscana: affiancamento al videomaker principale, color grading e montaggio narrativo in contesti multiculturali premium.",
+        "Affianco il videomaker principale su matrimoni di alto livello in Toscana: riprese, color grading e montaggio narrativo in contesti multiculturali.",
       domain: "creative",
       weight: 2,
       mastery: 68,
@@ -1663,7 +1663,7 @@ export const cvData = {
     {
       name: "Agile Methodology",
       description:
-        "Scrum e Kanban applicati in team enterprise distribuiti (ALTEN, Intesa San Paolo, Aruba) e in progetti creativi personali. Esperienza concreta in sprint planning, retrospective e gestione del backlog.",
+        "Ho applicato Scrum e Kanban in team enterprise distribuiti (ALTEN, Intesa San Paolo, Aruba) e in progetti creativi personali: sprint planning, retrospective e backlog.",
       domain: "management",
       weight: 5,
       mastery: 92,
@@ -1680,7 +1680,7 @@ export const cvData = {
     {
       name: "AI-Augmented Productivity",
       description:
-        "Integrazione sistematica di GitHub Copilot, ChatGPT e Midjourney nei flussi di sviluppo, UX research e produzione di contenuti. L'AI amplia la qualità e la velocità senza sostituire il giudizio critico.",
+        "Ho integrato GitHub Copilot, ChatGPT e Midjourney nei flussi di sviluppo, UX research e produzione di contenuti. L'AI amplia qualità e velocità, il giudizio critico resta mio.",
       domain: "ai",
       weight: 5,
       mastery: 92,
@@ -1695,7 +1695,7 @@ export const cvData = {
     {
       name: "Scrittura e poesia",
       description:
-        "Autore pluripremiato a livello internazionale (Italia, Australia). La pratica della scrittura creativa si traduce in copy più efficace, storytelling di prodotto e capacità di sintesi strategica.",
+        "Ho vinto premi di poesia in Italia e in Australia. La scrittura creativa si traduce in copy più preciso, storytelling di prodotto e sintesi.",
       domain: "creative",
       weight: 3,
       mastery: 80,
@@ -1710,7 +1710,7 @@ export const cvData = {
     {
       name: "Music industry",
       description:
-        "Coordinamento tra artisti, aggregatori digitali e piattaforme di streaming (Spotify, YouTube Music). Esperienza in release management, comunicazione strategica e project management editoriale (2023–2024).",
+        "Ho coordinato artisti, aggregatori digitali e piattaforme di streaming (Spotify, YouTube Music): release management, comunicazione e project management editoriale (2023–2024).",
       domain: "management",
       weight: 2,
       mastery: 58,
@@ -1734,17 +1734,17 @@ export const cvData = {
     {
       name: "AI come moltiplicatore di valore",
       description:
-        "L'intelligenza artificiale è integrata come estensione del processo cognitivo, non come scorciatoia. GitHub Copilot per velocity di sviluppo, ChatGPT per rapid prototyping concettuale, Midjourney per esplorazione visiva. L'obiettivo è ridurre il tempo sui task ripetitivi e ampliare lo spazio esplorabile nelle fasi creative.",
+        "Integro l'intelligenza artificiale come estensione del processo cognitivo, non come scorciatoia. GitHub Copilot per la velocità di sviluppo, ChatGPT per il rapid prototyping concettuale, Midjourney per l'esplorazione visiva. L'obiettivo è ridurre il tempo sui task ripetitivi e ampliare lo spazio esplorabile nelle fasi creative.",
     },
     {
       name: "T-shaped Problem Solving",
       description:
-        "Il background che attraversa ingegneria, design e marketing permette di individuare pattern di soluzione invisibili a team mono-disciplinari. Questa visione trasversale è il principale differenziale professionale: non solo eseguire, ma identificare il problema corretto da risolvere.",
+        "Il mio background attraversa ingegneria, design e marketing: individuo pattern di soluzione invisibili ai team mono-disciplinari. Non solo eseguo, identifico il problema corretto da risolvere.",
     },
     {
       name: "Framework-Agnostic Thinking",
       description:
-        "L'esposizione a Angular, React, Lit, WebComponents, Astro e a paradigmi creativi eterogenei ha sviluppato la capacità di scegliere lo strumento in base al problema — e non viceversa. Questo evita il soluzioneismo tecnico e garantisce architetture più solide, manutenibili e orientate al valore nel lungo periodo.",
+        "Ho lavorato con Angular, React, Lit, WebComponents, Astro e paradigmi creativi eterogenei: scelgo lo strumento in base al problema, non il contrario. Questo evita il soluzionismo tecnico e produce architetture manutenibili nel lungo periodo.",
     },
   ] as MethodologyItem[],
 
@@ -1753,17 +1753,17 @@ export const cvData = {
     {
       name: "Curiosità poliedrica",
       reframe:
-        "La tendenza naturale a esplorare campi diversi, pur richiedendo una gestione consapevole del focus, è la radice di un profilo genuinamente framework-agnostic. Non si tratta di dispersione, ma di una strategia adattiva: ogni competenza acquisita diventa un nuovo angolo da cui leggere i problemi tecnici e creativi. È la fonte del pensiero laterale che genera soluzioni che chi conosce un solo dominio non vede.",
+        "Esploro campi diversi per natura e questo richiede una gestione consapevole del focus. Non è dispersione: ogni competenza acquisita diventa un nuovo angolo da cui leggere i problemi tecnici e creativi, e genera soluzioni che chi conosce un solo dominio non vede.",
     },
     {
       name: "Pensiero parallelo",
       reframe:
-        "La capacità di tenere attivi in parallelo più scenari e connessioni non lineari — percepita come difficoltà di linearità — è esattamente ciò che genera soluzioni architetturali che i team mono-disciplinari non vedono. In fase di design di sistema o di debug complesso, permette di identificare il problema corretto da risolvere, non solo il sintomo più visibile.",
+        "Tengo attivi in parallelo più scenari e connessioni non lineari, una cosa che dall'esterno può sembrare mancanza di linearità. In fase di design di sistema o di debug complesso è ciò che mi porta a identificare il problema corretto da risolvere, non solo il sintomo più visibile.",
     },
     {
       name: "Comunicazione emotiva",
       reframe:
-        "L'attenzione naturale alle dinamiche relazionali e agli stati emotivi delle persone — che potrebbe sembrare lontana dal mondo tecnico — è il principale acceleratore della delivery in team distribuiti e con stakeholder non tecnici. Riduce l'attrito nei code review, facilita la raccolta di requisiti reali (non dichiarati) e costruisce fiducia con i clienti più velocemente di qualsiasi presentazione.",
+        "Presto attenzione alle dinamiche relazionali e agli stati emotivi delle persone, una cosa che può sembrare lontana dal mondo tecnico. In pratica accelera la delivery nei team distribuiti e con referenti non tecnici: riduce l'attrito nei code review, fa emergere i requisiti reali, quelli non dichiarati, e costruisce fiducia più velocemente di qualsiasi presentazione.",
     },
   ] as GrowthArea[],
 
@@ -1772,7 +1772,7 @@ export const cvData = {
     {
       name: "Digital CV — Progetto Open Source AI-Augmented",
       description:
-        "CV interattivo open source costruito interamente con un workflow AI-augmented (GitHub Copilot + Claude). Sistema a due livelli: sito Astro + Lit con animazioni GSAP avanzate e wave effect SVG, e server MCP che espone i dati CV come API per agenti AI. La dimostrazione live del metodo: un developer che produce in settimane ciò che un team produrrebbe in mesi.",
+        "Ho costruito questo CV interattivo open source con un workflow AI-augmented (GitHub Copilot e Claude). Sistema a due livelli: sito Astro e Lit con animazioni GSAP e wave effect SVG, più un server MCP che espone i dati del CV come API per agenti AI. È la dimostrazione live del metodo: da solo ho prodotto in giorni ciò che un team produrrebbe in mesi.",
       url: "https://github.com/julioojospintados/digital-cv",
       repoUrl: "https://github.com/julioojospintados/digital-cv",
       date: "2024-11",
@@ -1788,53 +1788,53 @@ export const cvData = {
       ],
       slug: "digital-cv",
       primaryMode: "tech",
-      role: "AI Workflow Designer & Full-Stack Developer — ideazione, UX/UI e sviluppo in solitaria",
+      role: "AI Workflow Designer & Full-Stack Developer. Ideazione, UX/UI e sviluppo in solitaria.",
       problem:
-        "Avevo iniziato a lavorare con AI, MCP e vibe coding e mi serviva un banco di prova reale, non un tutorial. Allo stesso tempo il mio CV in PDF non dimostrava un profilo T-shaped: elencava competenze senza farle vedere in azione, e costringeva tre lettori molto diversi — recruiter, CTO, art director — nello stesso formato piatto. Ho unito le due esigenze: costruire lo strumento che mi mancava, usando proprio il metodo che volevo dimostrare.",
+        "Avevo iniziato a lavorare con AI, MCP e vibe coding e mi serviva un banco di prova reale, non un tutorial. Allo stesso tempo il mio CV in PDF non dimostrava un profilo T-shaped: elencava competenze senza farle vedere in azione, e costringeva tre lettori molto diversi, recruiter, CTO e art director, nello stesso formato piatto. Ho unito le due esigenze: costruire lo strumento che mi mancava, usando proprio il metodo che volevo dimostrare.",
       process: [
-        "Ricerca — Ho definito i tre lettori reali del CV (recruiter generalista, CTO, art director) e cosa ciascuno deve trovare nei primi 3 secondi: affidabilità e leggibilità, stack e architettura, estetica e storytelling. Ogni scelta successiva risponde a uno di loro — se non è argomentabile in colloquio, non entra.",
-        "Concept — Il knolling: ordine e varietà insieme. Le mie competenze sono eterogenee (codice, design, palco, metodo) e il modo più onesto di presentarle è disporle sul tavolo come oggetti in una fotografia knolling: tutto visibile, catalogato, intenzionale — nessun cassetto chiuso.",
+        "Ricerca — Ho definito i tre lettori reali del CV (recruiter generalista, CTO, art director) e cosa ciascuno deve trovare nei primi 3 secondi: affidabilità e leggibilità, stack e architettura, estetica e storytelling. Ogni scelta successiva risponde a uno di loro: se non è argomentabile in colloquio, non entra.",
+        "Concept — Il knolling: ordine e varietà insieme. Le mie competenze sono eterogenee (codice, design, palco, metodo) e il modo più onesto di presentarle è disporle sul tavolo come oggetti in una fotografia knolling: tutto visibile, catalogato, intenzionale, nessun cassetto chiuso.",
         "Architettura dell'informazione — Un solo profilo, quattro prospettive: le route /tech /creative /human /management cambiano enfasi e accento cromatico, mai struttura o contenuto. Chi legge sceglie il proprio punto di vista; le altre anime restano visibili come sussurri a bassa opacità, mai nascoste.",
-        "Design system — Sfondo ottanio fisso con 4 accent per mode, tipografia Lexend + JetBrains Mono, sistema square/glow per i livelli skill al posto delle barre percentuali, animazioni solo su transform/opacity con reduced-motion rispettato. Vincoli decisi prima di scrivere componenti.",
+        "Design system — Sfondo ottanio fisso con 4 accent per mode, tipografia Lexend + JetBrains Mono, sistema square/glow per i livelli skill al posto delle barre percentuali, animazioni solo su transform/opacity con reduced-motion rispettato. Ho deciso i vincoli prima di scrivere i componenti.",
         "Build AI-augmented — Vibe coding con GitHub Copilot e Claude come pair operativi: architettura, UI, animazioni GSAP, e un server MCP con tool, resource e prompt template che espone il CV come API per agenti AI. Il sito è la controprova del workflow che dichiara.",
       ],
       decisions: [
         {
           title: "Card di default, grafo come premio",
-          body: "La vista skills più spettacolare è un force graph D3 — ma i grafi si guardano, non si scansionano. Il default è diventato la vista card, leggibile in 5 secondi (Legge di Jakob); il grafo resta come esplorazione opt-in, e D3 (~130KB) si carica solo per chi lo apre davvero. Il \"wow\" non deve mai costare la leggibilità a chi ha 30 secondi.",
+          body: "La vista skills più spettacolare è un force graph D3, ma i grafi si guardano, non si scansionano. Il default è diventato la vista card, leggibile in 5 secondi (Legge di Jakob); il grafo resta come esplorazione opt-in, e D3 (~130KB) si carica solo per chi lo apre davvero. Il \"wow\" non deve mai costare la leggibilità a chi ha 30 secondi.",
         },
         {
           title: "Sussurri, non silenzi",
-          body: "Quando scegli un mode, le card fuori tema non spariscono: scendono a bassa opacità. Nasconderle avrebbe contraddetto la tesi del sito — il knolling è trasparenza radicale, e chi valuta un profilo T-shaped deve poter vedere l'ampiezza anche mentre esamina la profondità.",
+          body: "Quando scegli un mode, le card fuori tema non spariscono: scendono a bassa opacità. Nasconderle avrebbe contraddetto la tesi del sito. Il knolling è trasparenza radicale, e chi valuta un profilo T-shaped deve poter vedere l'ampiezza anche mentre esamina la profondità.",
         },
         {
           title: "Convenzioni dove l'utente ha fretta",
-          body: "Le esperienze extra si rivelano con \"Leggi altre 3\" — il pattern di LinkedIn e Medium — al posto di un CTA brandizzato che avevo provato prima: dove chi legge ha fretta, la convenzione batte l'originalità. Per lo stesso motivo il ruolo attuale sta in cima al cluster esperienze: i recruiter leggono in reverse-chronological e cercano \"dove lavora ora\".",
+          body: "Le esperienze extra si rivelano con \"Leggi altre 3\", il pattern di LinkedIn e Medium, al posto di un CTA brandizzato che avevo provato prima: dove chi legge ha fretta, la convenzione batte l'originalità. Per lo stesso motivo il ruolo attuale sta in cima al cluster esperienze: i recruiter leggono in reverse-chronological e cercano \"dove lavora ora\".",
         },
         {
           title: "Accessibilità come vincolo, non rifinitura",
-          body: "Ogni accent dei 4 mode ha una variante muted ricalibrata per contrasto WCAG AA (≥4.5:1) sullo sfondo ottanio. Focus visibile, skip link e prefers-reduced-motion sono regole del design system decise all'inizio — non patch aggiunte a fine progetto.",
+          body: "Ogni accent dei 4 mode ha una variante muted ricalibrata per contrasto WCAG AA (≥4.5:1) sullo sfondo ottanio. Focus visibile, skip link e prefers-reduced-motion sono regole del design system decise all'inizio, non patch aggiunte a fine progetto.",
         },
         {
           title: "Iterazione: lo scroll sbagliato",
-          body: "La prima versione della home usava scroll-snap nativo \"a step\": al test reale risultava rigido e incoerente con lo scroll fluido delle pagine CV. L'ho scartato e sostituito con smooth scroll unico su tutto il sito e reveal per sezione — la coerenza del gesto vale più dell'effetto singolo.",
+          body: "La prima versione della home usava scroll-snap nativo \"a step\": al test reale risultava rigido e incoerente con lo scroll fluido delle pagine CV. L'ho scartato e sostituito con smooth scroll unico su tutto il sito e reveal per sezione: la coerenza del gesto vale più dell'effetto singolo.",
         },
       ],
       outcomes: [
-        "Consegnato in 5 giorni, contro una stima tradizionale di oltre un mese",
-        "Copertura test >80% (Vitest) sul layer MCP/HTTP",
-        "MCP server con tool, resource e prompt template — API dati CV per agenti AI, dimostrazione live",
+        "Consegnato in 5 giorni, contro una stima tradizionale di oltre un mese.",
+        "Copertura test >80% (Vitest) sul layer MCP/HTTP.",
+        "Server MCP con tool, resource e prompt template: API dei dati CV per agenti AI, dimostrazione live.",
       ],
       learnings: [
         "L'AI accelera davvero solo dentro vincoli decisi prima: con token, regole di animazione e DO NOT espliciti il vibe coding produce; senza, produce caos da rifare.",
         "Ogni dettaglio deve sopravvivere alla domanda \"perché?\": se una scelta visiva non ha una risposta da colloquio, è decorazione.",
-        "Le proprie certezze vanno testate presto: le idee più \"wow\" — il grafo come vista di default, lo scroll a step — sono le prime che ho dovuto ridimensionare davanti all'uso reale.",
+        "Le certezze vanno testate presto: le idee più \"wow\", il grafo come vista di default e lo scroll a step, sono le prime che ho ridimensionato davanti all'uso reale.",
       ],
     },
     {
       name: "Music Agency — Tour Management & Digital Strategy",
       description:
-        "Booking, tour management e comunicazione digitale per gli artisti del roster di un'agenzia musicale italiana: dalla trattativa con i promoter alla crescita organica dei canali social verso un pubblico di settore.",
+        "Ho organizzato booking e tour per gli artisti del roster di un'agenzia musicale italiana e ho progettato la comunicazione digitale: dalla trattativa con i promoter alla crescita organica dei canali social verso un pubblico di settore.",
       date: "2023-01",
       tags: [
         "Tour management",
@@ -1845,33 +1845,33 @@ export const cvData = {
       ],
       slug: "music-agency",
       primaryMode: "creative",
-      role: "Collaboratore — Tour Manager & Digital Strategist (2023–2024, remoto)",
+      role: "Tour Manager & Digital Strategist, collaborazione remota (2023–2024).",
       problem:
-        "Il roster dell'agenzia aveva bisogno di due cose insieme: date live organizzate bene — venue, promoter, contratti — e una presenza digitale che parlasse alla filiera del settore, non solo al pubblico generico. I canali social crescevano di volume ma non aprivano contatti: follower e lavoro reale dell'agenzia erano due mondi scollegati.",
+        "Il roster dell'agenzia aveva bisogno di due cose insieme: date live organizzate bene, tra venue, promoter e contratti, e una presenza digitale che parlasse alla filiera del settore, non solo al pubblico generico. I canali social crescevano di volume ma non aprivano contatti: follower e lavoro reale dell'agenzia erano due mondi scollegati.",
       process: [
-        "Ricerca — Interviste e colloqui con le persone dell'agenzia per capire il lavoro dall'interno: come nascono le date, chi sono gli interlocutori che contano davvero, dove si inceppa il contatto con musicisti, produttori ed etichette.",
+        "Ricerca — Ho intervistato le persone dell'agenzia per capire il lavoro dall'interno: come nascono le date, chi sono gli interlocutori che contano davvero, dove si inceppa il contatto con musicisti, produttori ed etichette.",
         "Insight — Il problema non era \"più follower\", ma follower giusti: la comunicazione doveva funzionare da canale di contatto con la filiera, non da vetrina per il pubblico generico. Ogni contenuto andava ripensato come un'occasione di relazione professionale.",
-        "Ideazione — Una playlist curata di artisti emergenti come strumento di networking: ogni inserimento apre un contatto diretto e specifico con musicisti, produttori ed etichette — la scoperta reciproca al posto del follow passivo. Sulla stessa logica ho proposto un format radiofonico per estendere l'idea oltre le piattaforme streaming.",
-        "Esecuzione — Content strategy sui canali, copywriting per la serata di compleanno dell'agenzia, e il lavoro operativo di booking e tour management: ricerca venue, trattativa con i promoter, contratti, fino all'evento live all'Arci Bellezza di Milano gestito end-to-end.",
+        "Ideazione — Ho proposto una playlist curata di artisti emergenti come strumento di networking: ogni inserimento apre un contatto diretto con musicisti, produttori ed etichette, la scoperta reciproca al posto del follow passivo. Sulla stessa logica ho proposto un format radiofonico per estendere l'idea oltre le piattaforme streaming.",
+        "Esecuzione — Ho definito la content strategy dei canali, ho scritto il copy per la serata di compleanno dell'agenzia e ho portato avanti il lavoro operativo di booking e tour management: ricerca venue, trattativa con i promoter, contratti, fino all'evento live all'Arci Bellezza di Milano, seguito end-to-end.",
       ],
       decisions: [
         {
           title: "Prima ascoltare, poi proporre",
-          body: "Nessuna proposta è arrivata prima delle interviste con chi in agenzia ci lavora ogni giorno. Le idee poi accolte — playlist, format radio — sono nate da bisogni ascoltati, non da un playbook di marketing applicato dall'esterno: è lo stesso principio della user research, portato fuori dal software.",
+          body: "Nessuna proposta è arrivata prima delle interviste con chi in agenzia ci lavora ogni giorno. Le idee poi accolte, playlist e format radio, sono nate da bisogni ascoltati, non da un playbook di marketing applicato dall'esterno: è lo stesso principio della user research, portato fuori dal software.",
         },
         {
           title: "La playlist come strumento, non come contenuto",
-          body: "Una playlist di artisti emergenti non è un post da pubblicare: è un motivo di contatto. Ogni inserimento apre una conversazione concreta con un musicista, un produttore, un'etichetta — scoperta reciproca al posto del follow passivo. La proposta del format radiofonico estendeva la stessa logica oltre le piattaforme streaming.",
+          body: "Una playlist di artisti emergenti non è un post da pubblicare: è un motivo di contatto. Ogni inserimento apre una conversazione concreta con un musicista, un produttore o un'etichetta, scoperta reciproca al posto del follow passivo. La proposta del format radiofonico estendeva la stessa logica oltre le piattaforme streaming.",
         },
         {
           title: "Parlare alla filiera, non al pubblico",
-          body: "Crescere di volume sarebbe stato facile e inutile. I contenuti sono stati ripensati per interlocutori professionali specifici: è la differenza tra una vetrina e un canale che apre porte — ed è il motivo per cui il +100% di follower è fatto di contatti che contano, non di numeri.",
+          body: "Crescere di volume sarebbe stato facile e inutile. Ho ripensato i contenuti per interlocutori professionali specifici: è la differenza tra una vetrina e un canale che apre porte, ed è il motivo per cui il +100% di follower è fatto di contatti che contano, non di numeri.",
         },
       ],
       outcomes: [
-        "+100% crescita follower — organica, audience mirata (musicisti, etichette, promoter), non volume puro",
-        "Evento live realizzato all'Arci Bellezza di Milano, dal booking alla comunicazione",
-        "Booking e coordinamento concerti su tutto il roster, in autonomia",
+        "+100% follower: crescita organica, audience mirata (musicisti, etichette, promoter), non volume puro.",
+        "Evento live all'Arci Bellezza di Milano, dal booking alla comunicazione.",
+        "Booking e coordinamento concerti su tutto il roster, in autonomia.",
       ],
       learnings: [
         "La ricerca qualitativa funziona anche fuori dal software: intervistare l'agenzia come si intervistano gli utenti ha reso le proposte pertinenti al primo colpo.",
@@ -1881,48 +1881,48 @@ export const cvData = {
     {
       name: 'Film "Double"',
       description:
-        'Deuteragonista nel film "Double", presentato all\'Independent Film Festival di San Francisco nel 2022.',
+        'Ho recitato come deuteragonista nel film "Double", presentato all\'Independent Film Festival di San Francisco nel 2022.',
       date: "2022-01",
       tags: ["Cinema", "Recitazione"],
     },
     {
       name: "App gestione dati Covid-19",
       description:
-        "Realizzazione tramite React di un applicativo per la gestione e visualizzazione di dati relativi al Covid-19 in numerosi ospedali negli USA.",
+        "Ho sviluppato con React un applicativo per la visualizzazione di dati Covid-19 usato in numerosi ospedali negli USA.",
       date: "2022-01",
       tags: ["React", "Healthcare", "USA"],
     },
     {
       name: "Design system WebComponents per Aruba",
       description:
-        "Libreria grafica WebComponents sviluppata con Lit, HTML e SASS per Aruba, riutilizzabile cross-prodotto.",
+        "Ho sviluppato con Lit, HTML e SASS la libreria grafica WebComponents di Aruba, riutilizzabile cross-prodotto.",
       date: "2022-06",
       tags: ["Lit", "WebComponents", "Design System", "Aruba"],
     },
     {
       name: "Square Festival – Artiversum",
       description:
-        "Cofondatore e organizzatore dello Square Festival nel Quadrilatero Romano di Torino, evento culturale multidisciplinare.",
+        "Ho cofondato e organizzato lo Square Festival nel Quadrilatero Romano di Torino, evento culturale multidisciplinare.",
       date: "2017-05",
       tags: ["Event management", "Cultura", "Torino"],
     },
     {
       name: "Invenzione di una parola — Salone Internazionale del Libro (Torino)",
       description:
-        "Ho creato e presentato pubblicamente una parola nuova — con radici, suono e significato — al Salone Internazionale del Libro di Torino. Un esercizio estremo di sintesi linguistica e poetica: la stessa capacità di dire il massimo con il minimo che applico ogni giorno nella scrittura di codice pulito e nella comunicazione di prodotto.",
+        "Ho creato e presentato pubblicamente una parola nuova, con radici, suono e significato, al Salone Internazionale del Libro di Torino. Un esercizio estremo di sintesi linguistica e poetica: la stessa capacità di dire il massimo con il minimo che applico ogni giorno nel codice pulito e nella comunicazione di prodotto.",
       date: "2019-05",
       tags: ["Poesia", "Linguistica", "Creatività", "Salone del Libro"],
     },
     {
       name: "Poesia premiata a livello internazionale",
       description:
-        "Autore di poesie premiate in concorsi nazionali e internazionali (Italia e Australia). La scrittura creativa e lo sviluppo software condividono una radice comune: entrambi richiedono sintesi, precisione formale e la capacità di generare significato con vincoli espliciti.",
+        "Ho scritto poesie premiate in concorsi nazionali e internazionali (Italia e Australia). La scrittura creativa e lo sviluppo software condividono la stessa radice: sintesi, precisione formale e significato dentro vincoli espliciti.",
       tags: ["Poesia", "Scrittura creativa", "Premi internazionali"],
     },
     {
       name: "La 'Tesina sui Baffi' — articolo su La Stampa",
       description:
-        "Una tesina scolastica sui baffi, caso involontario di marketing e curiosità antropologica, finisce sulle pagine de 'La Stampa'. La dimostrazione pratica che l'originalità del pensiero, anche in contesti giovanili e apparentemente marginali, può generare attenzione pubblica imprevista — e che la narrativa conta più del formato.",
+        "La mia tesina scolastica sui baffi, caso involontario di marketing e curiosità antropologica, è finita sulle pagine de 'La Stampa'. La prova pratica che l'originalità del pensiero genera attenzione imprevista, e che la narrativa conta più del formato.",
       tags: ["Storytelling", "Marketing involontario", "Media", "Scrittura"],
     },
   ] as Project[],
@@ -1942,7 +1942,7 @@ export const cvData = {
     {
       name: "Prevenzione in situazione di crisi",
       description:
-        "Intervento diretto in una situazione di rischio suicidio: riconoscimento dei segnali, ascolto attivo e accompagnamento verso supporto professionale. Una delle esperienze più formative in termini di presenza piena e capacità di stare nell'imprevisto senza fuggire dalla complessità emotiva. 'Yes, and...' nella sua forma più radicale: accettare la realtà dell'altro e aggiungere presenza.",
+        "Sono intervenuto in una situazione di rischio suicidio: ho riconosciuto i segnali, ho ascoltato e ho accompagnato la persona verso un supporto professionale. Una delle esperienze più formative in termini di presenza piena. 'Yes, and...' nella sua forma più radicale: accettare la realtà dell'altro e aggiungere presenza.",
       tags: [
         "Empatia",
         "Ascolto attivo",
@@ -1953,7 +1953,7 @@ export const cvData = {
     {
       name: "Assistenza legale a immigrato in difficoltà",
       description:
-        "Supporto concreto a un ragazzo bangladese in difficoltà con il sistema legale italiano: orientamento nel labirinto burocratico, traduzione del contesto normativo e raccordo con le risorse disponibili. Il 'Yes, and...' applicato alla vita reale: accettare la situazione senza tirarsi fuori e aggiungere valore dove gli altri passano oltre.",
+        "Ho aiutato un ragazzo bangladese in difficoltà con il sistema legale italiano: orientamento nel labirinto burocratico, traduzione del contesto normativo e raccordo con le risorse disponibili. Il 'Yes, and...' applicato alla vita reale: accettare la situazione senza tirarsi fuori e aggiungere valore dove gli altri passano oltre.",
       tags: [
         "Solidarietà",
         "Interculturalità",
@@ -1964,13 +1964,13 @@ export const cvData = {
     {
       name: "Intervento in difesa di terzi in spazio pubblico",
       description:
-        "Pronto intervento in una situazione di pericolo in strada per la tutela di terzi. L'improvvisazione teatrale insegna a stare nel momento senza paralizzarsi: questa capacità, applicata fuori dal palco, si traduce in lucidità e azione quando gli altri esitano. Una forma di leadership situazionale che non si impara nei libri.",
-      tags: ["Coraggio civile", "Leadership situazionale", "Pensiero rapido"],
+        "Sono intervenuto in una situazione di pericolo in strada per la tutela di terzi. L'improvvisazione teatrale insegna a stare nel momento senza paralizzarsi: fuori dal palco si traduce in lucidità e azione quando gli altri esitano.",
+      tags: ["Coraggio civile", "Lucidità sotto pressione", "Pensiero rapido"],
     },
     {
       name: "Battitore d'asta per gala di beneficenza europeo (Burger King)",
       description:
-        "Conduzione in inglese di un’asta di beneficenza durante un evento europeo Burger King con partecipanti internazionali. Gestione del pubblico, ritmo dell’asta e comunicazione in lingua straniera sotto pressione — un contesto in cui improvvisazione teatrale e padronanza dell’inglese si sono fusi in un’unica performance live.",
+        "Ho condotto in inglese un'asta di beneficenza durante un evento europeo Burger King con partecipanti internazionali. Pubblico, ritmo dell'asta e comunicazione in lingua straniera sotto pressione: improvvisazione teatrale e inglese fusi in un'unica performance live.",
       tags: [
         "Inglese professionale",
         "Public speaking",
@@ -1985,42 +1985,42 @@ export const cvData = {
     {
       tool: "GitHub Copilot",
       title: "Accelerazione sviluppo Angular enterprise",
-      desc: "Generazione di codice ripetitivo NGRX, test Jest e pattern architetturali, con validazione critica dell'output.",
+      desc: "Genero codice ripetitivo NGRX, test Jest e pattern architetturali, con validazione critica dell'output.",
       impact: "-87% codice ripetitivo",
       tags: "tech",
     },
     {
       tool: "ChatGPT / Claude",
       title: "Prompt Engineering per prototipazione UX",
-      desc: "User personas, flussi di navigazione e scenari di test da brief testuali. Applicato nella fase UX Research IBM.",
+      desc: "Ricavo user personas, flussi di navigazione e scenari di test da brief testuali. L'ho applicato nella fase UX Research IBM.",
       impact: "-90% discovery time",
       tags: "creative tech",
     },
     {
       tool: "Claude / GPT-4",
       title: "Revisione del codice e architettura Angular",
-      desc: "Analisi di problemi di qualità del codice, refactoring e revisione architetture a microfrontend con LLM come revisore tecnico.",
+      desc: "Analizzo problemi di qualità del codice, refactoring e architetture a microfrontend con un LLM come revisore tecnico.",
       impact: "-60% tempo di debug",
       tags: "tech",
     },
     {
       tool: "Midjourney",
       title: "Esplorazione visiva per brief UX/UI",
-      desc: "Moodboard e concept visivi veloci per allineare i referenti prima del wireframing, senza iterazioni costose.",
+      desc: "Genero moodboard e concept visivi per allineare i referenti prima del wireframing, senza iterazioni costose.",
       impact: "-70% cicli allineamento",
       tags: "creative",
     },
     {
       tool: "AI Tools",
       title: "Copywriting e documentazione tecnica",
-      desc: "SEO copy, varianti A/B per landing page e documentazione tecnica da codice annotato.",
+      desc: "Produco SEO copy, varianti A/B per landing page e documentazione tecnica da codice annotato.",
       impact: "+3x velocità contenuti",
       tags: "creative",
     },
     {
       tool: "Figma Make",
       title: "Da brief a prototipo interattivo in minuti",
-      desc: "Generazione di schermate e flussi di navigazione direttamente in Figma da descrizione in linguaggio naturale. Applicato nella fase di prototipazione rapida prima del wireframing strutturato.",
+      desc: "Genero schermate e flussi di navigazione direttamente in Figma da una descrizione in linguaggio naturale. L'ho applicato nella prototipazione rapida prima del wireframing strutturato.",
       impact: "-75% tempo prototipazione",
       tags: "creative tech",
     },
