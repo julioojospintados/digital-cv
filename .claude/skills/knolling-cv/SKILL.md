@@ -9,7 +9,7 @@ Questo progetto ha 5 skill specializzate. Carica quella più pertinente alla ric
 
 | Skill | Quando caricare |
 |---|---|
-| **identity** `.claude/skills/identity/SKILL.md` | Testi, bio, tone of voice, narrativa GO, job hunting |
+| **identity** `.claude/skills/identity/SKILL.md` | Testi, bio, tone of voice, narrativa GO, job hunting — per QUALSIASI testo leggi anche `identity/writing-style.md` (regole mandatorie di scrittura) |
 | **design-system** `.claude/skills/design-system/SKILL.md` | UI, animazioni, card, knolling, GSAP, Awwwards |
 | **agile-methodology** `.claude/skills/agile-methodology/SKILL.md` | Esperienze, Agile, UX/UI, certificazioni, sprint |
 | **mcp-architecture** `.claude/skills/mcp-architecture/SKILL.md` | Backend, MCP tools, Hono, test, cv.ts, env |

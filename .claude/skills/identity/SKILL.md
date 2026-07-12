@@ -3,6 +3,15 @@ name: identity
 description: "Chi è Giulio Occhipinti — Consulente per l'Innovazione Digitale & Partner Tecnico per PMI. Profilo multidisciplinare: Tech (Angular, Lit, MCP, Node.js), Design (UX/UI cert. IBM), Metodo (Agile snello). Carica quando: scrivi bio, testi di presentazione, copy delle card, descrizioni esperienze, tone of voice, storytelling, identità professionale, frasi guida, job hunting, target recruiter/CTO/art director/management, narrativa GO, 4 mode (tech/creative/human/management), preloader."
 ---
 
+## ⛔ BLOCKING — Writing Style di Giulio
+
+Prima di scrivere o revisionare QUALSIASI testo, leggi
+**`.claude/skills/identity/writing-style.md`**: regole sintattiche mandatorie
+(maiuscole, punti fermi anche negli elenchi, niente trattini come interruzione),
+banned words di marketing, sintassi diretta Soggetto + Verbo + Oggetto, verbi
+d'impatto, tono peer-to-peer e ironia deadpan. In caso di conflitto con le
+sezioni qui sotto, vincono le regole di writing-style.md.
+
 ## 🎯 Regole di Copywriting Strategico (AIDA/PAS)
 
 Ogni volta che generi un testo per il sito o per una proposta:

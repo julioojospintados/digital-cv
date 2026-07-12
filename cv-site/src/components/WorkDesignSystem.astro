@@ -4,6 +4,11 @@
  * Tutti i valori sono i token REALI del progetto (global.css + design-system
  * skill): questa pagina li mostra, non li ridefinisce. I colori letterali
  * qui sotto sono dati documentali (la palette è il contenuto), non stile UI.
+ *
+ * Struttura ad accordion: <details name="ds-section"> nativo — esclusivo
+ * (un pannello aperto alla volta), accessibile e funzionante senza JS.
+ * L'apertura non anima l'altezza (regola GPU-only del progetto): anima il
+ * contenuto in opacity/transform e la rotazione del chevron.
  */
 interface Props {
   lang?: "it" | "en";
@@ -14,57 +19,63 @@ const isEN = lang === "en";
 const t = {
   title: "Design System",
   intro: isEN
-    ? "The rules were set before the components: fixed teal stage, one accent per mode, two typefaces, motion only where it carries meaning. Everything below is rendered live from the site's real tokens."
-    : "Le regole sono nate prima dei componenti: palco ottanio fisso, un accent per mode, due famiglie tipografiche, animazione solo dove porta significato. Tutto ciò che vedi qui sotto è renderizzato dai token reali del sito.",
-  colors: isEN ? "Color — one stage, four lights" : "Colore — un palco, quattro luci",
+    ? "I set the rules before the components: a fixed teal stage, one accent per mode, two typefaces, motion only where it carries meaning. Every sample below is rendered from the site's real tokens."
+    : "Ho fissato le regole prima dei componenti: palco ottanio fisso, un accent per mode, due famiglie tipografiche, animazione solo dove porta significato. Ogni esempio qui sotto è renderizzato dai token reali del sito.",
+  colors: isEN ? "Color" : "Colore",
+  colorsTag: isEN ? "One stage, four lights." : "Un palco, quattro luci.",
   colorsNote: isEN
-    ? "The teal background never changes: switching mode changes the accent, like stage lighting. Every accent has a muted variant recalibrated for WCAG AA contrast (≥4.5:1) on teal."
-    : "Lo sfondo ottanio non cambia mai: cambiare mode cambia l'accent, come luci di scena. Ogni accent ha una variante muted ricalibrata per contrasto WCAG AA (≥4.5:1) su ottanio.",
-  type: isEN ? "Typography — spoken vs. measured" : "Tipografia — parlato vs misurato",
+    ? "The teal background never changes. Switching mode only changes the accent, like a stage light. Every accent has a muted variant recalibrated for WCAG AA contrast (≥4.5:1) on teal."
+    : "Lo sfondo ottanio non cambia mai. Cambiare mode cambia solo l'accent, come una luce di scena. Ogni accent ha una variante muted ricalibrata per contrasto WCAG AA (≥4.5:1) su ottanio.",
+  type: isEN ? "Typography" : "Tipografia",
+  typeTag: isEN ? "Spoken and measured." : "Parlato e misurato.",
   typeNote: isEN
-    ? "Lexend for everything \"spoken\" (titles, body); JetBrains Mono for everything \"measured\" (labels, counts, data, impactScore). Self-hosted via Fontsource — no external requests. Lexend 800 loads with font-display: block to keep the preloader flash-free."
-    : "Lexend per tutto ciò che è \"parlato\" (titoli, testo); JetBrains Mono per tutto ciò che è \"misurato\" (label, conteggi, dati, impactScore). Self-hosted via Fontsource — zero richieste esterne. Il peso 800 di Lexend carica con font-display: block per un preloader senza flash.",
-  squares: isEN ? "Skill levels — square & glow, never bars" : "Livelli skill — square & glow, mai barre",
+    ? "Lexend covers everything spoken, titles and body. JetBrains Mono covers everything measured: labels, counts, data, impactScore. Fonts are self-hosted via Fontsource, with zero external requests. Lexend 800 loads with font-display: block and keeps the preloader flash-free."
+    : "Lexend copre tutto ciò che è parlato, titoli e testo. JetBrains Mono copre tutto ciò che è misurato: label, conteggi, dati, impactScore. I font sono self-hosted via Fontsource, zero richieste esterne. Il peso 800 di Lexend carica con font-display: block e tiene il preloader senza flash.",
+  squares: isEN ? "Skill levels" : "Livelli skill",
+  squaresTag: isEN ? "Square and glow, never bars." : "Square e glow, mai barre.",
   squaresNote: isEN
-    ? "Percentage bars promise a precision that doesn't exist. Here the border grows with the level (1→4px) and the glow marks mastery — a visual inventory, consistent with knolling."
-    : "Le barre percentuali promettono una precisione che non esiste. Qui il bordo cresce col livello (1→4px) e il glow segna la padronanza — un inventario visivo, coerente col knolling.",
+    ? "Percentage bars promise a precision that does not exist. Here the border grows with the level, from 1 to 4px, and the glow marks mastery: a visual inventory, consistent with knolling."
+    : "Le barre percentuali promettono una precisione che non esiste. Qui il bordo cresce col livello, da 1 a 4px, e il glow segna la padronanza: un inventario visivo, coerente col knolling.",
   sqLevels: isEN
     ? ["Basic", "Intermediate", "Advanced", "Expert"]
     : ["Base", "Intermedio", "Avanzato", "Esperto"],
-  motion: isEN ? "Motion — rules, not moods" : "Motion — regole, non umori",
+  motion: "Motion",
+  motionTag: isEN ? "Rules, not moods." : "Regole, non umori.",
   motionRules: isEN
     ? [
-        "UI durations: 150ms micro-interactions, 300ms state changes — never beyond 300ms outside hero/preloader",
-        "Only transform and opacity are animated (GPU) — never width, height, margin",
-        "Slow deliberate enters, fast exits — the system responds",
-        "Hover effects gated behind (hover: hover) — no sticky hovers on touch",
-        "prefers-reduced-motion always respected: motion removed, meaning kept",
+        "UI durations: 150ms for micro-interactions, 300ms for state changes. Beyond 300ms, only hero and preloader.",
+        "Only transform and opacity are animated, both GPU properties. Never width, height or margin.",
+        "Slow deliberate enters, fast exits: the system responds.",
+        "Hover effects gated behind (hover: hover), no sticky hovers on touch.",
+        "prefers-reduced-motion always respected: I remove the motion, not the meaning.",
       ]
     : [
-        "Durate UI: 150ms micro-interazioni, 300ms cambi di stato — mai oltre 300ms fuori da hero/preloader",
-        "Si animano solo transform e opacity (GPU) — mai width, height, margin",
-        "Entrate lente e deliberate, uscite veloci — il sistema risponde",
-        "Hover solo dietro (hover: hover) — niente hover appiccicosi su touch",
-        "prefers-reduced-motion sempre rispettato: si toglie il movimento, non il significato",
+        "Durate UI: 150ms per le micro-interazioni, 300ms per i cambi di stato. Oltre i 300ms solo hero e preloader.",
+        "Si animano solo transform e opacity, proprietà GPU. Mai width, height o margin.",
+        "Entrate lente e deliberate, uscite veloci: il sistema risponde.",
+        "Hover solo dietro (hover: hover), niente hover appiccicosi su touch.",
+        "prefers-reduced-motion sempre rispettato: tolgo il movimento, non il significato.",
       ],
-  surfaces: isEN ? "Surfaces & signs" : "Superfici & segni",
+  surfaces: isEN ? "Surfaces and signs" : "Superfici e segni",
+  surfacesTag: isEN ? "Content gives the shape." : "La forma la dà il contenuto.",
   surfacesRules: isEN
     ? [
-        "Cards and sections: 1px border, near-transparent background, 1rem radius (--radius-16) — content gives the shape, not decoration",
-        "One SVG icon (touch-icon) applied via CSS mask + currentColor: a single file, tinted by context across all four modes",
-        "Chevrons drawn in CSS (rotated borders) — never Unicode glyphs, whose stroke depends on the OS font",
-        "8 knolling objects in WebP (~15KB each): every mode has its physical counterparts on the table",
+        "Cards and sections have a 1px border, a near-transparent background and a 1rem radius (--radius-16). Content gives the shape, not decoration.",
+        "One SVG icon (touch-icon) applied via CSS mask and currentColor: a single file, tinted by context across all four modes.",
+        "Chevrons are drawn in CSS with rotated borders, never Unicode glyphs: their stroke would depend on the OS font.",
+        "8 knolling objects in WebP, about 15KB each: every mode has its physical counterparts on the table.",
       ]
     : [
-        "Card e sezioni: bordo 1px, background quasi trasparente, raggio 1rem (--radius-16) — la forma la dà il contenuto, non la decorazione",
-        "Una sola icona SVG (touch-icon) applicata via CSS mask + currentColor: un file unico, tinto dal contesto in tutti e quattro i mode",
-        "Chevron disegnati in CSS (bordi ruotati) — mai glifi Unicode, il cui tratto dipende dal font di sistema",
-        "8 oggetti knolling in WebP (~15KB l'uno): ogni mode ha i suoi corrispettivi fisici sul tavolo",
+        "Card e sezioni hanno bordo 1px, background quasi trasparente e raggio 1rem (--radius-16). La forma la dà il contenuto, non la decorazione.",
+        "Una sola icona SVG (touch-icon) applicata via CSS mask e currentColor: un file unico, tinto dal contesto in tutti e quattro i mode.",
+        "I chevron sono disegnati in CSS con bordi ruotati, mai glifi Unicode: il loro tratto dipenderebbe dal font di sistema.",
+        "8 oggetti knolling in WebP, circa 15KB l'uno: ogni mode ha i suoi corrispettivi fisici sul tavolo.",
       ],
-  modes: isEN ? "Mode system — emphasis, never structure" : "Mode system — enfasi, mai struttura",
+  modes: "Mode system",
+  modesTag: isEN ? "Emphasis, never structure." : "Enfasi, mai struttura.",
   modesNote: isEN
-    ? "Switching mode never changes template or content: active cards come forward, the others drop to low opacity — whispers, not silences. Anyone assessing a T-shaped profile must see the breadth even while examining one depth."
-    : "Cambiare mode non cambia mai template né contenuti: le card attive avanzano, le altre scendono a bassa opacità — sussurri, non silenzi. Chi valuta un profilo T-shaped deve vedere l'ampiezza anche mentre esamina una profondità.",
+    ? "Switching mode never changes template or content: active cards come forward, the others drop to low opacity. Whispers, not silences. Anyone assessing a T-shaped profile must see the breadth even while examining one depth."
+    : "Cambiare mode non cambia mai template né contenuti: le card attive avanzano, le altre scendono a bassa opacità. Sussurri, non silenzi. Chi valuta un profilo T-shaped deve vedere l'ampiezza anche mentre esamina una profondità.",
 };
 
 const modes = [
@@ -87,94 +98,284 @@ const baseTokens = [
   <h2 class="work-section__title" id="work-ds-title">{t.title}</h2>
   <p class="work-section__text ds__intro">{t.intro}</p>
 
-  <!-- Colore -->
-  <h3 class="ds__sub">{t.colors}</h3>
-  <p class="ds__note">{t.colorsNote}</p>
-  <div class="ds__swatches">
-    {baseTokens.map((tok) => (
-      <div class="ds__swatch">
-        <span class="ds__chip" style={`background:${tok.value}`}></span>
-        <span class="ds__tok">{tok.name}</span>
-        <span class="ds__val">{tok.value} · {tok.note}</span>
+  <div class="ds__list">
+    <!-- 01 · Colore -->
+    <details class="ds__item" name="ds-section" open>
+      <summary class="ds__summary">
+        <span class="ds__num" aria-hidden="true">01</span>
+        <span class="ds__head">
+          <h3 class="ds__name">{t.colors}</h3>
+          <span class="ds__tagline">{t.colorsTag}</span>
+        </span>
+        <span class="work-chevron work-chevron--down ds__chevron" aria-hidden="true"></span>
+      </summary>
+      <div class="ds__body">
+        <p class="ds__note">{t.colorsNote}</p>
+        <div class="ds__swatches">
+          {baseTokens.map((tok) => (
+            <div class="ds__swatch">
+              <span class="ds__chip" style={`background:${tok.value}`}></span>
+              <span class="ds__tok">{tok.name}</span>
+              <span class="ds__val">{tok.value} · {tok.note}</span>
+            </div>
+          ))}
+        </div>
+        <div class="ds__accents">
+          {modes.map((m) => (
+            <div class="ds__accent">
+              <span class="ds__chip ds__chip--lg" style={`background:${m.accent}`}></span>
+              <span class="ds__chip" style={`background:${m.muted}`}></span>
+              <span class="ds__tok">{m.key}</span>
+              <span class="ds__val">{m.label} · muted {m.ratio}</span>
+            </div>
+          ))}
+        </div>
       </div>
-    ))}
-  </div>
-  <div class="ds__accents">
-    {modes.map((m) => (
-      <div class="ds__accent">
-        <span class="ds__chip ds__chip--lg" style={`background:${m.accent}`}></span>
-        <span class="ds__chip" style={`background:${m.muted}`}></span>
-        <span class="ds__tok">{m.key}</span>
-        <span class="ds__val">{m.label} · muted {m.ratio}</span>
+    </details>
+
+    <!-- 02 · Tipografia -->
+    <details class="ds__item" name="ds-section">
+      <summary class="ds__summary">
+        <span class="ds__num" aria-hidden="true">02</span>
+        <span class="ds__head">
+          <h3 class="ds__name">{t.type}</h3>
+          <span class="ds__tagline">{t.typeTag}</span>
+        </span>
+        <span class="work-chevron work-chevron--down ds__chevron" aria-hidden="true"></span>
+      </summary>
+      <div class="ds__body">
+        <p class="ds__note">{t.typeNote}</p>
+        <div class="ds__typo">
+          <p class="ds__typo-display" aria-hidden="true">GO</p>
+          <div class="ds__typo-meta">
+            <p class="ds__typo-row"><span class="ds__tok">Lexend</span> 400 · 500 · 600 · 700 · <b>800</b></p>
+            <p class="ds__typo-row ds__typo-row--mono"><span class="ds__tok">JetBrains Mono</span> -87% · 04 / · 6 {isEN ? "roles" : "ruoli"} · impactScore</p>
+            <p class="ds__typo-row ds__typo-scale">h2 clamp(2rem, 5vw, 4.5rem) · label 0.65rem / 0.25em · body ≤ 1.1rem / 1.65</p>
+          </div>
+        </div>
       </div>
-    ))}
-  </div>
+    </details>
 
-  <!-- Tipografia -->
-  <h3 class="ds__sub">{t.type}</h3>
-  <p class="ds__note">{t.typeNote}</p>
-  <div class="ds__typo">
-    <p class="ds__typo-display" aria-hidden="true">GO</p>
-    <div class="ds__typo-meta">
-      <p class="ds__typo-row"><span class="ds__tok">Lexend</span> 400 · 500 · 600 · 700 · <b>800</b></p>
-      <p class="ds__typo-row ds__typo-row--mono"><span class="ds__tok">JetBrains Mono</span> -87% · 04 / · 6 {isEN ? "roles" : "ruoli"} · impactScore</p>
-      <p class="ds__typo-row ds__typo-scale">h2 clamp(2rem, 5vw, 4.5rem) · label 0.65rem / 0.25em · body ≤ 1.1rem / 1.65</p>
-    </div>
-  </div>
-
-  <!-- Square & glow -->
-  <h3 class="ds__sub">{t.squares}</h3>
-  <p class="ds__note">{t.squaresNote}</p>
-  <div class="ds__squares">
-    {t.sqLevels.map((label, i) => (
-      <div class="ds__square-wrap">
-        <span class:list={["ds__square", { "ds__square--glow": i >= 2 }]} style={`border-width:${i + 1}px`}></span>
-        <span class="ds__val">{label} · {i + 1}px</span>
+    <!-- 03 · Livelli skill -->
+    <details class="ds__item" name="ds-section">
+      <summary class="ds__summary">
+        <span class="ds__num" aria-hidden="true">03</span>
+        <span class="ds__head">
+          <h3 class="ds__name">{t.squares}</h3>
+          <span class="ds__tagline">{t.squaresTag}</span>
+        </span>
+        <span class="work-chevron work-chevron--down ds__chevron" aria-hidden="true"></span>
+      </summary>
+      <div class="ds__body">
+        <p class="ds__note">{t.squaresNote}</p>
+        <div class="ds__squares">
+          {t.sqLevels.map((label, i) => (
+            <div class="ds__square-wrap">
+              <span class:list={["ds__square", { "ds__square--glow": i >= 2 }]} style={`border-width:${i + 1}px`}></span>
+              <span class="ds__val">{label} · {i + 1}px</span>
+            </div>
+          ))}
+        </div>
       </div>
-    ))}
-  </div>
+    </details>
 
-  <!-- Motion -->
-  <h3 class="ds__sub">{t.motion}</h3>
-  <ul class="ds__rules">
-    {t.motionRules.map((r) => <li>{r}</li>)}
-  </ul>
-  <p class="ds__typo-row ds__typo-row--mono ds__tokens-line">--duration-micro 150ms · --duration-state 300ms · --ease-standard cubic-bezier(0.4, 0, 0.2, 1)</p>
+    <!-- 04 · Motion -->
+    <details class="ds__item" name="ds-section">
+      <summary class="ds__summary">
+        <span class="ds__num" aria-hidden="true">04</span>
+        <span class="ds__head">
+          <h3 class="ds__name">{t.motion}</h3>
+          <span class="ds__tagline">{t.motionTag}</span>
+        </span>
+        <span class="work-chevron work-chevron--down ds__chevron" aria-hidden="true"></span>
+      </summary>
+      <div class="ds__body">
+        <ul class="ds__rules">
+          {t.motionRules.map((r) => <li>{r}</li>)}
+        </ul>
+        <p class="ds__typo-row ds__typo-row--mono ds__tokens-line">--duration-micro 150ms · --duration-state 300ms · --ease-standard cubic-bezier(0.4, 0, 0.2, 1)</p>
+      </div>
+    </details>
 
-  <!-- Superfici & segni -->
-  <h3 class="ds__sub">{t.surfaces}</h3>
-  <ul class="ds__rules">
-    {t.surfacesRules.map((r) => <li>{r}</li>)}
-  </ul>
+    <!-- 05 · Superfici e segni -->
+    <details class="ds__item" name="ds-section">
+      <summary class="ds__summary">
+        <span class="ds__num" aria-hidden="true">05</span>
+        <span class="ds__head">
+          <h3 class="ds__name">{t.surfaces}</h3>
+          <span class="ds__tagline">{t.surfacesTag}</span>
+        </span>
+        <span class="work-chevron work-chevron--down ds__chevron" aria-hidden="true"></span>
+      </summary>
+      <div class="ds__body">
+        <ul class="ds__rules">
+          {t.surfacesRules.map((r) => <li>{r}</li>)}
+        </ul>
+      </div>
+    </details>
 
-  <!-- Mode system -->
-  <h3 class="ds__sub">{t.modes}</h3>
-  <p class="ds__note">{t.modesNote}</p>
-  <div class="ds__modes-demo" aria-hidden="true">
-    {modes.map((m, i) => (
-      <span class:list={["ds__mode-pill", { "ds__mode-pill--passive": i !== 0 }]} style={`--pill-accent:${m.accent}`}>{m.key}</span>
-    ))}
+    <!-- 06 · Mode system -->
+    <details class="ds__item" name="ds-section">
+      <summary class="ds__summary">
+        <span class="ds__num" aria-hidden="true">06</span>
+        <span class="ds__head">
+          <h3 class="ds__name">{t.modes}</h3>
+          <span class="ds__tagline">{t.modesTag}</span>
+        </span>
+        <span class="work-chevron work-chevron--down ds__chevron" aria-hidden="true"></span>
+      </summary>
+      <div class="ds__body">
+        <p class="ds__note">{t.modesNote}</p>
+        <div class="ds__modes-demo" aria-hidden="true">
+          {modes.map((m, i) => (
+            <span class:list={["ds__mode-pill", { "ds__mode-pill--passive": i !== 0 }]} style={`--pill-accent:${m.accent}`}>{m.key}</span>
+          ))}
+        </div>
+      </div>
+    </details>
   </div>
 </section>
 
 <style>
-  .ds {
+  .ds__intro {
+    margin-bottom: 1.5rem;
+  }
+
+  .ds__list {
     display: flex;
     flex-direction: column;
-    gap: 0;
+    gap: 0.75rem;
   }
 
-  .ds__intro {
-    margin-bottom: 1rem;
+  /* ── Accordion item ── */
+  .ds__item {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-16);
+    background: rgba(255, 255, 255, 0.02);
+    overflow: hidden;
+    transition: border-color var(--duration-state) var(--ease-standard);
   }
 
-  .ds__sub {
+  .ds__item[open] {
+    border-color: color-mix(in srgb, var(--color-accent) 45%, transparent);
+  }
+
+  .ds__summary {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.05rem 1.25rem;
+    cursor: pointer;
+    list-style: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .ds__summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .ds__num {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: var(--color-accent);
+    flex-shrink: 0;
+  }
+
+  .ds__head {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    min-width: 0;
+    flex: 1;
+  }
+
+  .ds__name {
     font-family: var(--font-display);
-    font-size: 1.05rem;
+    font-size: 1rem;
     font-weight: 700;
     letter-spacing: -0.01em;
+    line-height: 1.2;
     color: var(--color-text-primary);
-    margin: 2.25rem 0 0.4rem;
+    margin: 0;
+    transition: color var(--duration-micro) ease;
+  }
+
+  .ds__tagline {
+    font-family: var(--font-mono);
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  .ds__chevron {
+    margin-left: auto;
+    transition: rotate var(--duration-state) var(--ease-standard);
+  }
+
+  .ds__item[open] .ds__chevron {
+    rotate: -135deg;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .ds__item:hover {
+      border-color: rgba(255, 255, 255, 0.24);
+    }
+
+    .ds__item[open]:hover {
+      border-color: color-mix(in srgb, var(--color-accent) 60%, transparent);
+    }
+
+    .ds__summary:hover .ds__name {
+      color: var(--color-accent);
+    }
+  }
+
+  /* ── Body — l'altezza non si anima (regola GPU-only): entra il contenuto ── */
+  .ds__body {
+    padding: 1.1rem 1.25rem 1.4rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .ds__item[open] .ds__body {
+    animation: ds-body-in var(--duration-state) var(--ease-standard) both;
+  }
+
+  @keyframes ds-body-in {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ds__item[open] .ds__body {
+      animation: none;
+    }
+
+    .ds__chevron {
+      transition: none;
+    }
+  }
+
+  @media (max-width: 40rem) {
+    .ds__summary {
+      padding: 0.9rem 1rem;
+      gap: 0.75rem;
+    }
+
+    .ds__body {
+      padding: 1rem 1rem 1.2rem;
+    }
   }
 
   .ds__note {
@@ -279,7 +480,7 @@ const baseTokens = [
   }
 
   .ds__tokens-line {
-    margin: 0.75rem 0 0;
+    margin: 0.9rem 0 0;
     color: var(--color-text-muted);
   }
 
