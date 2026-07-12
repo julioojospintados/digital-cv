@@ -484,7 +484,10 @@
   max-width: none;
   margin: 0;
   gap: clamp(3.5rem, 9vw, 8rem);
-  padding: 0 16vw 0 14vw;
+  /* padding-bottom: riduce il box di centratura verticale → le card salgono
+     di ~6vh. Meno vuoto tra hero e prima card in ingresso, più distanza tra
+     il fondo delle card e la strada/bussola (che vive sotto la linea). */
+  padding: 0 16vw 12vh 14vw;
   will-change: transform;
 }
 

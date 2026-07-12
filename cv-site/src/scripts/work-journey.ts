@@ -43,13 +43,12 @@ function initJourney(root: HTMLElement) {
     const h = root.clientHeight;
     // Sotto i 40rem le card sono molto più strette (--panel width scende a
     // min(82vw, 21rem)): lo stesso testo va a capo su molte più righe e le
-    // card "Il problema"/"Risultato misurabile" diventano abbastanza alte
-    // da estendersi, centrate verticalmente, fin sotto al 72% dell'altezza
-    // — proprio dove staziona la bussola. Sulla riga mobile la strada scende
-    // al 90%: molto più margine sopra per le card, la bussola resta libera
-    // sotto anche quando il testo è lungo.
+    // card diventano abbastanza alte da estendersi, centrate verticalmente,
+    // fin dove staziona la bussola. La strada quindi sta bassa (90% mobile,
+    // 76% desktop) e le card sono spostate verso l'alto dal padding-bottom
+    // del track (work-page.css): due margini indipendenti di sicurezza.
     const isMobileViewport = window.matchMedia("(max-width: 40rem)").matches;
-    const roadY = h * (isMobileViewport ? 0.9 : 0.72);
+    const roadY = h * (isMobileViewport ? 0.9 : 0.76);
     const amp = Math.min(h * 0.045, 42);
 
     svg.setAttribute("width", String(w));
@@ -92,9 +91,12 @@ function initJourney(root: HTMLElement) {
       dots.push(c);
     }
 
-    // La bussola "viaggia" appoggiata sulla strada, a sinistra del viewport
+    // La bussola viaggia APPESA SOTTO la strada (solo il bordo superiore
+    // tocca la linea): sopra la linea restano le card, sotto solo lei.
+    // Prima stava appoggiata sopra (top = roadY - h*0.92) e con le card
+    // alte finiva sovrapposta al testo, rendendolo illeggibile.
     if (traveler) {
-      traveler.style.top = `${roadY - traveler.offsetHeight * 0.92}px`;
+      traveler.style.top = `${roadY - traveler.offsetHeight * 0.15}px`;
     }
   }
 
