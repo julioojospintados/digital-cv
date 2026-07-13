@@ -1238,7 +1238,16 @@ if (skillsViewButtons.length) {
       // CSS transitions su .cv-card animano automaticamente verso i valori
       // corretti del mode attivo: var(--card-opacity-passive) e var(--card-scale-passive).
       gsap.set(card, { clearProps: "opacity,scale,transform,boxShadow,borderColor" });
-      card.dataset.state = "passive";
+      // Ricalcola lo stato vero invece di forzare "passive": una card può
+      // entrare in peek mentre è passiva e poi, nel frattempo (mode switch,
+      // o un data-state già disallineato a monte), essere di nuovo rilevante
+      // per il mode corrente — forzare "passive" la lasciava dimmed/rotta
+      // anche quando in realtà apparteneva al mode attivo (bug segnalato:
+      // la card sparisce dopo il primo peek e il click successivo la
+      // ripesca in loop). Stessa logica di applyCardStates (mode-helpers.ts).
+      const tags = card.dataset.tags?.split(" ") ?? [];
+      const currentMode = document.documentElement.dataset.mode;
+      card.dataset.state = currentMode && tags.includes(currentMode) ? "active" : "passive";
     }
   };
 
@@ -1450,8 +1459,16 @@ if (skillsViewButtons.length) {
     card.addEventListener("click", (e) => {
       if (card.dataset.state === "peeking") return;
 
-      const isPassive = card.dataset.state === "passive";
       const tags = (card.dataset.tags ?? "").split(" ");
+      // Ricalcolato dai tag reali vs il mode corrente, MAI fidato del solo
+      // data-state: è lo stesso identico controllo di applyCardStates
+      // (mode-helpers.ts), che è la fonte di verità per active/passive.
+      // Leggere data-state qui duplicava quella logica con un'copia che
+      // poteva disallinearsi (es. dopo un resetPeek) — una card già attiva
+      // per il mode corrente finiva comunque trattata come "passiva" e
+      // faceva scattare il peek/freccia verso la navbar anche se non doveva.
+      const currentMode = document.documentElement.dataset.mode;
+      const isPassive = !currentMode || !tags.includes(currentMode);
       const modes = CV_MODE_KEYS.filter((m) => tags.includes(m));
       if (!modes.length) return;
 
