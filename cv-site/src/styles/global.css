@@ -70,6 +70,27 @@ button { background: none; border: 0; padding: 0; cursor: pointer; }
   --radius-4: 0.25rem;
   --duration-page: 500ms;
   --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* ── Typography scale (decisione 2026-07-14) ──────────────────────────
+     Scala fissa in rem ancorata a un root 16px: ogni valore è un px "pulito"
+     (12/14/16/18/20/24/28/32/36/40/48), mai un rem calcolato a occhio
+     (0.68rem, 0.82rem, ecc. — il "rumore" che questi token eliminano).
+     Regola ferrea completa in .claude/skills/design-system/SKILL.md.
+     --fs-10 è un'eccezione riservata a badge/timestamp brevissimi in
+     ALL CAPS + bold + alto contrasto — mai per testo che l'utente legge
+     davvero. --fs-12 è il pavimento assoluto per tutto il resto. */
+  --fs-10: 0.625rem;
+  --fs-12: 0.75rem;
+  --fs-14: 0.875rem;
+  --fs-16: 1rem;
+  --fs-18: 1.125rem;
+  --fs-20: 1.25rem;
+  --fs-24: 1.5rem;
+  --fs-28: 1.75rem;
+  --fs-32: 2rem;
+  --fs-36: 2.25rem;
+  --fs-40: 2.5rem;
+  --fs-48: 3rem;
 }
 
 /* Mode overrides — mantengono sfondo ottanio, cambiano solo accent */
@@ -187,7 +208,7 @@ body {
   padding: 0.5rem 1rem;
   background: var(--color-text-primary);
   color: var(--color-bg);
-  font-size: 0.85rem;
+  font-size: var(--fs-14);
   font-weight: 600;
   border-radius: var(--radius-4);
   text-decoration: none;
@@ -274,7 +295,8 @@ body {
   transform: translateY(-50%) translateX(4px);
   white-space: nowrap;
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  /* 0.68rem (10.88px) sotto il pavimento dei 12px — bump al minimo */
+  font-size: var(--fs-12);
   letter-spacing: 0.05em;
   text-transform: uppercase;
   color: var(--color-text-primary);
@@ -451,7 +473,7 @@ body::after {
 }
 
 .text-label-caps {
-  font-size: 0.75rem;
+  font-size: var(--fs-12);
   font-weight: 600;
   letter-spacing: 0.28em;
   text-transform: uppercase;
@@ -682,9 +704,11 @@ floating-menu {
 }
 
 /* ── Icona "touch" condivisa — /touch-icon.svg via CSS mask ──────────────
-   Usata da .profile-cta (home, index-page.css) e .hero-portfolio-cta
-   (CV page, cv-page.css): stessa classe, stessa animazione idle ovunque —
-   il "questo porta a un case study" ha sempre la stessa firma visiva.
+   Usata da .profile-cta e .profile-portfolio-cta (home, index-page.css):
+   stessa classe, stessa animazione idle ovunque — il "questo porta a un
+   case study" ha sempre la stessa firma visiva. Il CTA portfolio della CV
+   page (cv-page.css) usa invece .work-chevron (work-page.css), la stessa
+   icona delle card di /work — coerente con quel contesto, non con questo.
    currentColor eredita il colore del link che la contiene: un solo file
    SVG, tinta diversa per contesto/mode, zero duplicazione.
    Nudge idle orizzontale in CSS puro (non GSAP): un tween infinito

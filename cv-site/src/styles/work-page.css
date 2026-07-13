@@ -22,7 +22,7 @@
 
 .work-back {
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: var(--fs-12);
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -38,7 +38,7 @@
 
 .work-lang {
   font-family: var(--font-display);
-  font-size: 0.75rem;
+  font-size: var(--fs-12);
   font-weight: 700;
   letter-spacing: 0.1em;
   color: var(--color-text-muted);
@@ -87,7 +87,7 @@
 
 .work-hero__eyebrow {
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: var(--fs-12);
   font-weight: 700;
   letter-spacing: 0.22em;
   text-transform: uppercase;
@@ -109,7 +109,7 @@
 }
 
 .work-hero__role {
-  font-size: 1rem;
+  font-size: var(--fs-16);
   color: rgba(192, 220, 215, 0.85);
   margin: 0 0 1.25rem;
   max-width: 34rem;
@@ -126,7 +126,7 @@
 }
 
 .work-tag {
-  font-size: 0.68rem;
+  font-size: var(--fs-12);
   font-weight: 500;
   letter-spacing: 0.05em;
   color: rgba(192, 220, 215, 0.85);
@@ -138,7 +138,7 @@
 /* ── Sezioni testuali (problema / processo) ── */
 .work-section__title {
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: var(--fs-12);
   font-weight: 700;
   letter-spacing: 0.2em;
   text-transform: uppercase;
@@ -147,7 +147,7 @@
 }
 
 .work-section__text {
-  font-size: 1.05rem;
+  font-size: var(--fs-16);
   line-height: 1.7;
   color: rgba(192, 220, 215, 0.92);
   max-width: 40rem;
@@ -175,7 +175,7 @@
 
 .work-decision__title {
   font-family: var(--font-display);
-  font-size: 1.05rem;
+  font-size: var(--fs-16);
   font-weight: 700;
   letter-spacing: -0.01em;
   color: var(--color-text-primary);
@@ -183,7 +183,7 @@
 }
 
 .work-decision__body {
-  font-size: 0.95rem;
+  font-size: var(--fs-16);
   line-height: 1.7;
   color: rgba(192, 220, 215, 0.9);
   max-width: 40rem;
@@ -203,7 +203,7 @@
 .work-learnings__item {
   position: relative;
   padding-left: 1.4rem;
-  font-size: 0.98rem;
+  font-size: var(--fs-16);
   line-height: 1.7;
   font-style: italic;
   color: rgba(192, 220, 215, 0.9);
@@ -228,7 +228,7 @@
 }
 
 .work-cta__text {
-  font-size: 1.1rem;
+  font-size: var(--fs-18);
   color: var(--color-text-primary);
   margin: 0 0 1.25rem;
 }
@@ -242,7 +242,7 @@
 
 .work-cta__link {
   font-family: var(--font-mono);
-  font-size: 0.8rem;
+  font-size: var(--fs-12);
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -343,7 +343,7 @@
 
 .work-index-card__eyebrow {
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: var(--fs-12);
   font-weight: 700;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -355,7 +355,7 @@
 
 .work-index-card__name {
   font-family: var(--font-display);
-  font-size: 1.35rem;
+  font-size: var(--fs-20);
   font-weight: 700;
   letter-spacing: -0.01em;
   line-height: 1.25;
@@ -366,7 +366,7 @@
 }
 
 .work-index-card__role {
-  font-size: 0.85rem;
+  font-size: var(--fs-14);
   line-height: 1.5;
   color: rgba(192, 220, 215, 0.85);
   margin: 0;
@@ -381,7 +381,7 @@
   margin-top: auto;
   padding-top: 0.75rem;
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: var(--fs-12);
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -420,7 +420,7 @@
   gap: 0.5rem;
   margin-top: 1.25rem;
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: var(--fs-12);
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -587,7 +587,7 @@
   align-items: flex-end;
   gap: 0.45rem;
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: var(--fs-12);
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -615,7 +615,7 @@
 }
 
 .journey__hud-km {
-  font-size: 0.62rem;
+  font-size: var(--fs-12);
   opacity: 0.75;
 }
 
@@ -646,7 +646,7 @@
 /* ── Pannelli ── */
 .journey__eyebrow {
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: var(--fs-12);
   font-weight: 700;
   letter-spacing: 0.22em;
   text-transform: uppercase;
@@ -655,7 +655,7 @@
 }
 
 .journey__text {
-  font-size: 0.9rem;
+  font-size: var(--fs-14);
   line-height: 1.65;
   color: var(--color-text-muted);
   margin: 0;
@@ -676,7 +676,7 @@
   gap: 0.55rem;
   margin: 1.5rem 0 0;
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: var(--fs-12);
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -720,7 +720,7 @@
 /* Numero dello step: grande, outlined — chilometrica della strada */
 .journey__step-num {
   font-family: var(--font-mono);
-  font-size: 2.4rem;
+  font-size: var(--fs-40);
   font-weight: 700;
   line-height: 1;
   color: transparent;
@@ -730,7 +730,7 @@
 
 .journey__stop-title {
   font-family: var(--font-display);
-  font-size: 1.25rem;
+  font-size: var(--fs-20);
   font-weight: 700;
   letter-spacing: -0.01em;
   line-height: 1.25;
@@ -750,7 +750,7 @@
 
 .journey__outcomes li {
   font-family: var(--font-mono);
-  font-size: 0.74rem;
+  font-size: var(--fs-12);
   font-weight: 600;
   line-height: 1.55;
   color: var(--color-accent);

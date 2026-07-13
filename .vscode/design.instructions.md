@@ -118,6 +118,11 @@ Each `AiCard` item has: `tool`, `title`, `desc`, `impact`, `tags`.
 - All headings/body: `Lexend` (preloaded — weight 800 critical for preloader)
 - Technical data / code snippets: `JetBrains Mono`
 - Labels / badges: font mono, `text-transform: uppercase`, `letter-spacing`
+- **Font-size scale (2026-07-14):** never a literal rem/px `font-size` outside
+  a `clamp()`. Always `var(--fs-N)` from `global.css` — 10/12/14/16/18/20/24/
+  28/32/36/40/48px. `--fs-12` is the absolute floor for any text users read;
+  `--fs-10` is an exception only for short ALL CAPS + bold badges (2-4 chars).
+  Full rule set in `design-system/SKILL.md` → "Typography Scale".
 
 ## Accessibility
 

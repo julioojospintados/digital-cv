@@ -11,6 +11,23 @@ if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
   gsap.globalTimeline.timeScale(50);
 }
 
+// ── Preloader: rituale solo alla prima visita di questa sessione ───────────
+// Il GO che atterra nel nome, le card e il knolling che appaiono in stagger
+// sono un'introduzione, non un caricamento reale — ha senso raccontarla una
+// volta, non ogni volta che si torna alla home dal resto del sito (click sul
+// logo GO = master reset, cv-site/src/islands/GoLogo.lit.ts, nuovo page
+// load). sessionStorage sopravvive alla navigazione ma si azzera a nuova
+// tab/sessione: distingue "primo arrivo" da "sto tornando indietro".
+const INTRO_SEEN_KEY = "go-intro-seen";
+let introAlreadySeen = false;
+try {
+  introAlreadySeen = sessionStorage.getItem(INTRO_SEEN_KEY) === "1";
+  sessionStorage.setItem(INTRO_SEEN_KEY, "1");
+} catch {
+  // Storage bloccato (privacy mode/quota) → tratta sempre come prima visita,
+  // mai il contrario: meglio un'intro di troppo che sparire il branding.
+}
+
 // ── DOM refs ─────────────────────────────────────────────
 const preloader = document.getElementById("preloader")!;
 const header = document.getElementById("entry-header")!;
@@ -182,8 +199,21 @@ const preGEl = document.getElementById("pre-G")!;
 const preOEl = document.getElementById("pre-O")!;
 
 // La barra CSS impiega 0.2s (delay) + 0.7s (fill) = 0.9s. Partiamo a 0.9s.
-gsap.delayedCall(0.9, () => {
+// Su un ritorno alla home (intro già vista in questa sessione) non aspettiamo:
+// il delayedCall parte al frame successivo, la coreografia si risolve subito
+// (vedi tl.progress(1) in fondo) — la barra CSS del preloader (.pre-bar::after,
+// pura CSS, indipendente da GSAP) fa comunque in tempo al massimo a un frame
+// prima che il preloader venga nascosto dentro la timeline stessa.
+gsap.delayedCall(introAlreadySeen ? 0 : 0.9, () => {
   const tl = gsap.timeline();
+  // Ritorno alla home in questa sessione: NON saltiamo la timeline con un
+  // progress(1) secco (seek sincrono che tocca in un colpo solo ogni
+  // tl.call/getComputedStyle/DOM sort — rischioso e già causa di un bug
+  // reale su return visit: il preloader restava bloccato a schermo). Stessa
+  // tecnica già in produzione per prefers-reduced-motion qui sopra:
+  // comprimere il tempo, non saltarlo — ogni step passa comunque dal
+  // normale ciclo di render di GSAP, solo in ~10 frame invece di ~150.
+  if (introAlreadySeen) tl.timeScale(60);
 
   // 1. Glow flash sulle lettere del preloader — identità rivelata
   tl.to([preGEl, preOEl], {

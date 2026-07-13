@@ -1,3 +1,14 @@
+/*
+--touch       → mobile + tablet portrait: knolling-mob, layout a 3 righe
+--desktop     → true desktop: knolling-stage visibile, layout orizzontale
+--mobile-only → solo smartphone: griglia 2×2 compressa, tipografia ridotta
+--tablet-up   → tablet landscape + desktop */
+
+@custom-media --touch (max-width: 56.1875rem);
+@custom-media --desktop (min-width: 56.25rem);
+@custom-media --mobile-only (max-width: 39.9375rem);
+@custom-media --tablet-up (min-width: 40rem);
+
 /* ── Navigation ─────────────────────────────────────────────── */
 
 /* ── Knolling background objects in CV sections ──────────────── */
@@ -113,7 +124,7 @@ skill-force-graph {
 }
 
 .skills-sub-title {
-  font-size: 0.75rem;
+  font-size: var(--fs-12);
   font-weight: 600;
   letter-spacing: 0.15em;
   text-transform: uppercase;
@@ -137,7 +148,7 @@ skill-force-graph {
   align-items: center;
   justify-content: space-between;
   gap: 0.5rem;
-  padding: 0 1.5rem;
+  padding: 0 3rem;
   height: 3.25rem;
   background: rgba(8, 73, 67, 0.85);
   backdrop-filter: blur(12px);
@@ -146,7 +157,12 @@ skill-force-graph {
   /* overflow: visible allows the mobile mode dropdown list to escape the nav bounds */
   overflow: visible;
   max-width: 100dvw;
+}
 
+@media (--mobile-only) {
+  .cv-nav {
+    padding: 0 1rem;
+  }
 }
 
 .cv-nav__logo {
@@ -169,7 +185,7 @@ go-logo:not(:defined) {
 }
 
 .logo-initials {
-  font-size: 0.85rem;
+  font-size: var(--fs-14);
   font-weight: 700;
   letter-spacing: 0.08em;
   color: var(--color-text-primary);
@@ -221,7 +237,7 @@ go-logo:not(:defined) {
   /* GSAP sovrascrive ad ogni cambio mode */
   height: 1.9rem;
   padding: 0 0.5rem;
-  font-size: 0.75rem;
+  font-size: var(--fs-12);
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -372,7 +388,7 @@ go-logo:not(:defined) {
   border-radius: var(--radius-4);
   color: var(--color-accent);
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: var(--fs-12);
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -396,7 +412,7 @@ go-logo:not(:defined) {
 
 .mode-dropdown__chevron {
   flex-shrink: 0;
-  font-size: 0.9rem;
+  font-size: var(--fs-14);
   transition: transform 0.2s ease;
   line-height: 1;
 }
@@ -430,7 +446,7 @@ go-logo:not(:defined) {
 .mode-dropdown__option {
   padding: 0.65rem 0.75rem;
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: var(--fs-12);
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -472,7 +488,7 @@ go-logo:not(:defined) {
 .lang-switch__opt {
   padding: 0.28rem 0.55rem;
   font-family: var(--font-mono);
-  font-size: 0.65rem;
+  font-size: var(--fs-12);
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -539,7 +555,7 @@ a.lang-switch__opt:hover {
   border-radius: var(--radius-4);
   color: rgba(192, 220, 215, 0.85);
   font-family: var(--font-mono);
-  font-size: 0.65rem;
+  font-size: var(--fs-12);
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -563,7 +579,7 @@ a.lang-switch__opt:hover {
 }
 
 .lang-dropdown__chevron {
-  font-size: 0.9rem;
+  font-size: var(--fs-14);
   line-height: 1;
   transition: transform 0.2s ease;
 }
@@ -592,7 +608,7 @@ a.lang-switch__opt:hover {
 .lang-dropdown__option {
   padding: 0.5rem 0.75rem;
   font-family: var(--font-mono);
-  font-size: 0.65rem;
+  font-size: var(--fs-12);
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -639,7 +655,7 @@ a.lang-switch__opt:hover {
   flex-direction: column;
   align-items: baseline;
   gap: 1rem;
-  font-size: 0.875rem;
+  font-size: var(--fs-14);
   font-weight: 600;
   letter-spacing: 0.2em;
   text-transform: uppercase;
@@ -652,7 +668,7 @@ a.lang-switch__opt:hover {
 }
 
 .section-subtitle {
-  font-size: 0.75rem;
+  font-size: var(--fs-12);
   font-weight: 400;
   letter-spacing: 0.05em;
   text-transform: none;
@@ -672,9 +688,7 @@ a.lang-switch__opt:hover {
 .hero-badges,
 .hero-title,
 .hero-summary,
-.hero-tshape,
-.profile-portfolio-cta,
-.hero-portfolio-cta,
+.hero-portfolio-card,
 .hero-footer {
   opacity: 0;
   /* GSAP animates to 1 */
@@ -690,7 +704,7 @@ a.lang-switch__opt:hover {
 
 .avail-badge {
   display: inline-block;
-  font-size: 0.75rem;
+  font-size: var(--fs-12);
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -718,7 +732,7 @@ a.lang-switch__opt:hover {
 }
 
 .loc-badge {
-  font-size: 0.75rem;
+  font-size: var(--fs-12);
   font-weight: 500;
   letter-spacing: 0.08em;
   color: rgba(192, 220, 215, 0.85);
@@ -775,7 +789,7 @@ a.lang-switch__opt:hover {
 }
 
 .hero-title {
-  font-size: 0.9rem;
+  font-size: var(--fs-14);
   font-weight: 500;
   color: var(--color-accent);
   letter-spacing: 0.02em;
@@ -783,7 +797,7 @@ a.lang-switch__opt:hover {
 }
 
 .hero-summary {
-  font-size: 0.95rem;
+  font-size: var(--fs-16);
   line-height: 1.75;
   color: rgba(192, 220, 215, 0.85);
   max-width: 72ch;
@@ -814,7 +828,7 @@ a.lang-switch__opt:hover {
 
 .hero-tshape__label {
   font-family: var(--font-mono);
-  font-size: 0.65rem;
+  font-size: var(--fs-12);
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -822,55 +836,36 @@ a.lang-switch__opt:hover {
 }
 
 .hero-tshape__value {
-  font-size: 0.85rem;
+  font-size: var(--fs-14);
   font-weight: 600;
   color: var(--color-text-primary);
 }
 
 .hero-tshape__glyph {
   font-family: var(--font-mono);
-  font-size: 1.5rem;
+  font-size: var(--fs-24);
   font-weight: 700;
   line-height: 1;
   color: var(--color-accent);
 }
 
-/* CTA sotto il summary — stessa icona/animazione di .profile-cta__arrow
-   (home, definita in global.css): "questo porta a un case study" ha
-   sempre la stessa firma visiva sul sito, non solo sulla home. */
-.hero-portfolio-cta {
-  display: block;
-  max-width: 72ch;
+/* CTA portfolio sotto il summary — card teaser (.work-index-card riusata da
+   work-page.css, importato in cima al file), non un link testuale: il
+   portfolio è la prova del lavoro, non un dettaglio da annegare nel
+   paragrafo. Qui solo gli adattamenti per il contesto hero: fuori dalla
+   griglia di /work la card ha bisogno di un max-width esplicito, e la
+   spinta in più su bordo/glow all'hover perché qui è l'unico CTA della
+   sezione. */
+.hero-portfolio-card {
+  max-width: 26rem;
   margin: 0 0 2rem;
-  font-size: 0.95rem;
-  line-height: 1.7;
-  color: var(--color-accent);
-  text-decoration: underline;
-  text-decoration-color: color-mix(in srgb, var(--color-accent) 40%, transparent);
-  text-underline-offset: 0.2em;
-  transition: text-decoration-color 0.2s ease;
-}
-
-.hero-portfolio-cta:hover,
-.hero-portfolio-cta:focus-visible {
-  text-decoration-color: var(--color-accent);
-}
-
-.hero-portfolio-cta .profile-cta__arrow {
-  margin-left: 0.4rem;
-  vertical-align: -0.08em;
+  text-decoration: none;
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .hero-portfolio-cta:hover .profile-cta__arrow {
-    translate: 4px 0;
-    animation-play-state: paused;
+  .hero-portfolio-card:hover {
+    box-shadow: 0 0 20px color-mix(in srgb, var(--color-accent) 20%, transparent);
   }
-}
-
-.hero-portfolio-cta:focus-visible .profile-cta__arrow {
-  translate: 4px 0;
-  animation-play-state: paused;
 }
 
 .hero-footer {
@@ -887,7 +882,7 @@ a.lang-switch__opt:hover {
 }
 
 .social-link {
-  font-size: 0.7rem;
+  font-size: var(--fs-12);
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -915,7 +910,7 @@ a.lang-switch__opt:hover {
 .profile-portfolio-cta {
   position: relative;
   color: var(--color-accent);
-  font-size: 1rem;
+  font-size: var(--fs-16);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -988,7 +983,7 @@ a.lang-switch__opt:hover {
 }
 
 .lang-chip {
-  font-size: 0.75rem;
+  font-size: var(--fs-12);
   color: rgba(192, 220, 215, 0.85);
   display: flex;
   align-items: center;
@@ -1067,7 +1062,7 @@ a.lang-switch__opt:hover {
   justify-content: center;
   text-align: center;
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: var(--fs-12);
   font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -1245,7 +1240,7 @@ a.lang-switch__opt:hover {
   background: var(--color-accent);
   border-radius: var(--radius-4);
   color: rgba(8, 73, 67, 1);
-  font-size: 0.75rem;
+  font-size: var(--fs-12);
   font-weight: 900;
   letter-spacing: 0.2em;
   text-transform: uppercase;
@@ -1323,7 +1318,7 @@ a.lang-switch__opt:hover {
 
 .exp-cluster__name {
   flex: 1;
-  font-size: 0.75rem;
+  font-size: var(--fs-12);
   font-weight: 700;
   letter-spacing: 0.15em;
   text-transform: uppercase;
@@ -1344,7 +1339,7 @@ a.lang-switch__opt:hover {
    card dentro il cluster. */
 .exp-cluster__index {
   font-family: var(--font-mono);
-  font-size: 1.05rem;
+  font-size: var(--fs-16);
   font-weight: 800;
   line-height: 1;
   flex-shrink: 0;
@@ -1375,7 +1370,7 @@ a.lang-switch__opt:hover {
 /* Conteggio parlante — etichetta d'inventario, non un badge */
 .exp-cluster__count {
   font-family: var(--font-mono);
-  font-size: 0.68rem;
+  font-size: var(--fs-12);
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -1463,7 +1458,7 @@ a.lang-switch__opt:hover {
   cursor: none;
   color: var(--color-text-muted);
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: var(--fs-12);
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -1649,7 +1644,7 @@ a.lang-switch__opt:hover {
 
 .growth-card__label {
   font-family: var(--font-mono);
-  font-size: 0.52rem;
+  font-size: var(--fs-12);
   font-weight: 700;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -1659,7 +1654,7 @@ a.lang-switch__opt:hover {
 }
 
 .growth-card__name {
-  font-size: 0.8rem;
+  font-size: var(--fs-12);
   font-weight: 700;
   letter-spacing: 0.04em;
   color: var(--color-accent);
@@ -1667,7 +1662,7 @@ a.lang-switch__opt:hover {
 }
 
 .growth-card__reframe {
-  font-size: 0.82rem;
+  font-size: var(--fs-14);
   line-height: 1.72;
   color: var(--color-text-primary);
   margin: 0;
@@ -1686,7 +1681,7 @@ a.lang-switch__opt:hover {
 
 .interests-label {
   font-family: var(--font-mono);
-  font-size: 0.75rem;
+  font-size: var(--fs-12);
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -1706,7 +1701,7 @@ a.lang-switch__opt:hover {
 }
 
 .interest-chip {
-  font-size: 0.72rem;
+  font-size: var(--fs-12);
   color: var(--color-text-muted);
   padding: 0.175rem 0.55rem;
   border: 1px solid rgba(255 255 255 / 0.12);
@@ -1746,7 +1741,7 @@ a.lang-switch__opt:hover {
 
 .social-impact-card__label {
   font-family: var(--font-mono);
-  font-size: 0.52rem;
+  font-size: var(--fs-12);
   font-weight: 700;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -1756,7 +1751,7 @@ a.lang-switch__opt:hover {
 }
 
 .social-impact-card__name {
-  font-size: 0.8rem;
+  font-size: var(--fs-12);
   font-weight: 700;
   letter-spacing: 0.04em;
   color: var(--color-accent);
@@ -1771,7 +1766,7 @@ a.lang-switch__opt:hover {
 }
 
 .social-impact-card__tag {
-  font-size: 0.75rem;
+  font-size: var(--fs-12);
   color: var(--color-text-primary);
   padding: 0.1rem 0.4rem;
   border: 1px solid rgba(255 255 255 / 0.1);
@@ -1804,7 +1799,7 @@ a.lang-switch__opt:hover {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-  font-size: 0.58rem;
+  font-size: var(--fs-12);
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -1878,7 +1873,7 @@ a.lang-switch__opt:hover {
 .tl-date {
   grid-column: 1;
   text-align: right;
-  font-size: 0.75rem;
+  font-size: var(--fs-12);
   font-variant-numeric: tabular-nums;
   color: rgba(192, 220, 215, 0.6);
   padding-top: 0.12rem;
@@ -1922,7 +1917,7 @@ a.lang-switch__opt:hover {
 }
 
 .tl-title {
-  font-size: 0.82rem;
+  font-size: var(--fs-14);
   font-weight: 500;
   color: var(--color-text-primary);
   margin: 0;
@@ -1935,7 +1930,7 @@ a.lang-switch__opt:hover {
 
 /* WIP badge — colore ambra, coerente con avail-badge --amber */
 .tl-wip {
-  font-size: 0.56rem;
+  font-size: var(--fs-12);
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -1948,7 +1943,7 @@ a.lang-switch__opt:hover {
 }
 
 .tl-inst {
-  font-size: 0.75rem;
+  font-size: var(--fs-12);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -1961,7 +1956,7 @@ a.lang-switch__opt:hover {
 }
 
 .tl-cred {
-  font-size: 0.57rem;
+  font-size: var(--fs-12);
   color: rgba(192, 220, 215, 0.4);
   margin: 0.1rem 0 0;
   font-variant-numeric: tabular-nums;
@@ -2012,7 +2007,7 @@ a.lang-switch__opt:hover {
 }
 
 .cv-footer__credit {
-  font-size: 0.75rem;
+  font-size: var(--fs-12);
   color: rgba(192, 220, 215, 0.85);
   margin: 0;
 }
@@ -2028,7 +2023,7 @@ a.lang-switch__opt:hover {
 }
 
 .cv-footer__back {
-  font-size: 0.75rem;
+  font-size: var(--fs-12);
   font-weight: 500;
   letter-spacing: 0.05em;
   color: rgba(192, 220, 215, 0.85);

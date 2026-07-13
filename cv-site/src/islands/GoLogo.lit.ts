@@ -44,7 +44,7 @@ class GoLogo extends LitElement {
     .go-g,
     .go-o {
       display: inline-block;
-      font-size: 1.5rem;
+      font-size: var(--fs-24);
       font-weight: 800;
       letter-spacing: -0.03em;
       color: var(--color-text-primary, rgba(245, 240, 230, 1));

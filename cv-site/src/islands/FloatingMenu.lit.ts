@@ -74,7 +74,7 @@ class FloatingMenu extends LitElement {
       align-items: center;
       justify-content: center;
       color: var(--color-accent, rgba(0, 255, 200, 1)); /* accent su ottanio — legibile in tutti i mode */
-      font-size: 1.25rem;
+      font-size: var(--fs-20);
       font-weight: 900;
       line-height: 1.5;
       transition:
@@ -135,7 +135,7 @@ class FloatingMenu extends LitElement {
         );
       color: var(--color-text-primary, rgba(245, 240, 230, 1));
       font-family: "Lexend", ui-sans-serif, sans-serif;
-      font-size: 0.875rem;
+      font-size: var(--fs-14);
       font-weight: 600;
       letter-spacing: 0.08em;
       text-transform: uppercase;
@@ -162,7 +162,7 @@ class FloatingMenu extends LitElement {
     }
 
     .fab-item__icon {
-      font-size: 1rem;
+      font-size: var(--fs-16);
       line-height: 1.5;
     }
 
@@ -247,7 +247,7 @@ class FloatingMenu extends LitElement {
     }
     .fp-title {
       font-family: "Lexend", sans-serif;
-      font-size: 0.875rem;
+      font-size: var(--fs-14);
       font-weight: 700;
       letter-spacing: 0.15em;
       text-transform: uppercase;
@@ -258,7 +258,7 @@ class FloatingMenu extends LitElement {
       border: none;
       cursor: pointer;
       color: rgba(192, 220, 215, 0.6);
-      font-size: 0.875rem;
+      font-size: var(--fs-14);
       line-height: 1.5;
       padding: 0;
       display: flex;
@@ -275,7 +275,7 @@ class FloatingMenu extends LitElement {
       border-radius: 0.35rem;
       color: rgba(245, 240, 230, 1);
       font-family: "Lexend", sans-serif;
-      font-size: 0.875rem;
+      font-size: var(--fs-14);
       padding: 0.45rem 0.6rem;
       margin-bottom: 0.5rem;
       box-sizing: border-box;
@@ -313,7 +313,7 @@ class FloatingMenu extends LitElement {
       border-radius: 0.35rem;
       color: var(--color-accent, rgba(0, 255, 200, 1));
       font-family: "Lexend", sans-serif;
-      font-size: 0.875rem;
+      font-size: var(--fs-14);
       font-weight: 700;
       letter-spacing: 0.1em;
       text-transform: uppercase;
@@ -331,13 +331,13 @@ class FloatingMenu extends LitElement {
     .fp-sent {
       text-align: center;
       font-family: "Lexend", sans-serif;
-      font-size: 0.875rem;
+      font-size: var(--fs-14);
       color: var(--color-accent, rgba(0, 255, 200, 1));
       padding: 0.5rem 0;
     }
     .fp-hint {
       font-family: "Lexend", sans-serif;
-      font-size: 0.875rem;
+      font-size: var(--fs-14);
       color: rgba(192, 220, 215, 0.4);
       text-align: center;
       margin-top: 0.45rem;
@@ -353,7 +353,7 @@ class FloatingMenu extends LitElement {
       background: rgba(0, 255, 200, 1);
       color: rgba(8, 73, 67, 1);
       font-family: "Lexend", sans-serif;
-      font-size: 0.875rem;
+      font-size: var(--fs-14);
       font-weight: 700;
       display: flex;
       align-items: center;
