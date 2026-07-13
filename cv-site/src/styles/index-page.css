@@ -44,6 +44,16 @@
 }
 
 /* ── Preloader —— */
+
+/* Ritorno in-sessione (intro GO già vista): il preloader non deve arrivare
+   nemmeno al primo paint — lo script inline in index.astro setta
+   data-intro-seen su <html> durante il parse, prima che #preloader venga
+   renderizzato. Senza questa regola il GO gigante resta a schermo per tutto
+   il tempo di caricamento del JS, anche con la timeline GSAP compressa. */
+html[data-intro-seen] #preloader {
+  display: none;
+}
+
 #preloader {
   position: fixed;
   inset: 0;

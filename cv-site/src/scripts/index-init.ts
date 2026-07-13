@@ -1,6 +1,7 @@
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { setMode } from "../islands/stores/modeStore.ts";
+import { isIntroSeen, markIntroSeen } from "./intro-seen.ts";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -16,17 +17,12 @@ if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
 // sono un'introduzione, non un caricamento reale — ha senso raccontarla una
 // volta, non ogni volta che si torna alla home dal resto del sito (click sul
 // logo GO = master reset, cv-site/src/islands/GoLogo.lit.ts, nuovo page
-// load). sessionStorage sopravvive alla navigazione ma si azzera a nuova
-// tab/sessione: distingue "primo arrivo" da "sto tornando indietro".
-const INTRO_SEEN_KEY = "go-intro-seen";
-let introAlreadySeen = false;
-try {
-  introAlreadySeen = sessionStorage.getItem(INTRO_SEEN_KEY) === "1";
-  sessionStorage.setItem(INTRO_SEEN_KEY, "1");
-} catch {
-  // Storage bloccato (privacy mode/quota) → tratta sempre come prima visita,
-  // mai il contrario: meglio un'intro di troppo che sparire il branding.
-}
+// load). Il preloader stesso, su un ritorno, non arriva nemmeno al primo
+// paint: lo script inline in index.astro setta data-intro-seen su <html>
+// durante il parse e il CSS lo tiene a display:none — qui gestiamo solo
+// la coreografia GSAP.
+const introAlreadySeen = isIntroSeen();
+markIntroSeen();
 
 // tl.timeScale(60) qui sotto comprime solo i tween GSAP: l'atterraggio degli
 // oggetti knolling (.do-enter → @keyframes knollLand, index-page.css) è
@@ -210,10 +206,10 @@ const preOEl = document.getElementById("pre-O")!;
 
 // La barra CSS impiega 0.2s (delay) + 0.7s (fill) = 0.9s. Partiamo a 0.9s.
 // Su un ritorno alla home (intro già vista in questa sessione) non aspettiamo:
-// il delayedCall parte al frame successivo, la coreografia si risolve subito
-// (vedi tl.progress(1) in fondo) — la barra CSS del preloader (.pre-bar::after,
-// pura CSS, indipendente da GSAP) fa comunque in tempo al massimo a un frame
-// prima che il preloader venga nascosto dentro la timeline stessa.
+// il delayedCall parte al frame successivo e il preloader è già display:none
+// dal primo paint (script inline + html[data-intro-seen] in index-page.css) —
+// gli step 1-2 della timeline animano un elemento nascosto, innocuo, e il
+// resto della coreografia (nome, card, knolling) si risolve in ~10 frame.
 gsap.delayedCall(introAlreadySeen ? 0 : 0.9, () => {
   const tl = gsap.timeline();
   // Ritorno alla home in questa sessione: NON saltiamo la timeline con un

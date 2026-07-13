@@ -1,6 +1,7 @@
 import { LitElement, html, css } from "lit";
 import { gsap } from "gsap";
 import { modeStore, type Mode } from "./stores/modeStore.ts";
+import { markIntroSeen } from "../scripts/intro-seen.ts";
 
 /**
  * <go-logo>
@@ -144,6 +145,13 @@ class GoLogo extends LitElement {
   }
 
   private _launchHome() {
+    // Un ritorno via logo non è mai un primo atterraggio: marca l'intro come
+    // vista PRIMA di navigare, così la home salta il rituale G-O anche se in
+    // questa sessione non è ancora stata visitata (es. arrivo diretto su
+    // /tech da un link esterno). Il warp qui sotto È la transizione: farla
+    // seguire dal preloader sarebbe raccontare due arrivi di fila.
+    markIntroSeen();
+
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       window.location.href = "/";
       return;

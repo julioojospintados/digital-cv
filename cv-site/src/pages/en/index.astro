@@ -80,6 +80,20 @@ const scatterAngle = (i: number) => SCATTER_ANGLES[i % SCATTER_ANGLES.length];
   <!-- Preload LCP image desktop — megaphone is the largest (top-left column) -->
   <link slot="head" rel="preload" as="image" href="/knolling/megaphone.webp" fetchpriority="high" media="(min-width: 900px)" />
 
+  <!-- Anti-flash: on an in-session return (GO intro already seen, flag set by
+       index-init.ts or by clicking the GO logo) the preloader must never hit
+       the screen. is:inline = synchronous execution during parse, BEFORE
+       #preloader below is rendered — a module script would run with the
+       bundle already loaded, giant GO already visible. The key duplicates
+       INTRO_SEEN_KEY from scripts/intro-seen.ts (inline scripts cannot
+       import modules): if it changes there, change it here too. -->
+  <script is:inline>
+    try {
+      if (sessionStorage.getItem("go-intro-seen") === "1")
+        document.documentElement.setAttribute("data-intro-seen", "");
+    } catch (_) {}
+  </script>
+
   <div id="preloader" aria-hidden="true">
     <div class="pre-logo">
       <span id="pre-G" class="pre-go-letter">G</span>
@@ -221,8 +235,9 @@ const scatterAngle = (i: number) => SCATTER_ANGLES[i % SCATTER_ANGLES.length];
           <p class="profile-desc">I am IBM certified in UX/UI Design. UX research, wireframing, Figma, design systems and GSAP animations. I design digital experiences that blend beauty, usability and measurable brand impact.</p>
           <!-- Same hero-portfolio-card as en/cv.astro (same classes, same
                copy) — "Portfolio" lives as the card eyebrow, not a separate
-               link above it. work-index-card--pulse only adds the periodic
-               glow via JS (index-init.ts), no impact on the static style. -->
+               link above it. work-index-card--pulse (work-page.css) adds the
+               accent border and CSS pulse with the exact same recipe as the
+               "GO to…" buttons (.profile-cta). -->
           <a href="/en/work" class="work-index-card hero-portfolio-card work-index-card--pulse">
             <p class="work-index-card__eyebrow">Portfolio</p>
             <p class="work-index-card__role">Case studies, not a list. <br/> In the portfolio I tell the full process behind every project: problem, decisions, measurable outcomes.</p>
