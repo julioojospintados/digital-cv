@@ -348,37 +348,52 @@
   background: rgba(255, 255, 255, 0.04);
 }
 
-/* Pulse persistente — stessa cadenza (1.5s, ease-in-out, loop continuo
-   0%→50%→100%, niente hold) del pulse CSS sui bottoni "GO to…"
-   (.profile-cta, index-page.css @keyframes profile-cta-pulse). Solo sulla
+/* Pulse persistente — RICETTA IDENTICA a .profile-cta ("GO to…",
+   index-page.css): bordo 1px accent pieno e costante, il respiro sta solo
+   nel glow box-shadow (0 0 16px 35% + inset 24px 10% → 0 0 26px 62% +
+   inset 30px 18%), 1.5s ease-in-out infinite. Nessun valore proprio: se
+   cambia la CTA, va cambiata anche qui con le stesse cifre. Solo sulla
    card vetrina (modifier --pulse), non sulla griglia di /work. */
 .work-index-card--pulse {
+  border-color: var(--color-accent);
+  box-shadow:
+    0 0 16px color-mix(in srgb, var(--color-accent) 35%, transparent),
+    inset 0 0 24px color-mix(in srgb, var(--color-accent) 10%, transparent);
   animation: work-index-card-pulse 1.5s ease-in-out infinite;
 }
 
 @keyframes work-index-card-pulse {
   0%,
   100% {
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+    box-shadow:
+      0 0 16px color-mix(in srgb, var(--color-accent) 35%, transparent),
+      inset 0 0 24px color-mix(in srgb, var(--color-accent) 10%, transparent);
   }
 
   50% {
     box-shadow:
-      inset 0 0 0 1.5px color-mix(in srgb, var(--color-accent) 55%, transparent),
-      0 0 14px 2px color-mix(in srgb, var(--color-accent) 18%, transparent);
+      0 0 26px color-mix(in srgb, var(--color-accent) 62%, transparent),
+      inset 0 0 30px color-mix(in srgb, var(--color-accent) 18%, transparent);
   }
 }
 
-/* Si interrompe su hover/focus, stessa logica di .profile-cta: l'utente sta
-   già interagendo, il glow radial-gradient di ::before basta come feedback. */
+/* Su hover/focus il pulse si ferma su un glow intermedio — stesse cifre
+   dell'hover di .profile-cta (22px 50% / inset 28px 14%): l'utente sta già
+   interagendo, non serve più richiamare l'attenzione. */
 @media (hover: hover) and (pointer: fine) {
   .work-index-card--pulse:hover {
     animation: none;
+    box-shadow:
+      0 0 22px color-mix(in srgb, var(--color-accent) 50%, transparent),
+      inset 0 0 28px color-mix(in srgb, var(--color-accent) 14%, transparent);
   }
 }
 
 .work-index-card--pulse:focus-visible {
   animation: none;
+  box-shadow:
+    0 0 22px color-mix(in srgb, var(--color-accent) 50%, transparent),
+    inset 0 0 28px color-mix(in srgb, var(--color-accent) 14%, transparent);
 }
 
 @media (hover: hover) and (pointer: fine) {

@@ -74,6 +74,20 @@ const scatterAngle = (i: number) => SCATTER_ANGLES[i % SCATTER_ANGLES.length];
   <!-- Preload LCP image desktop — megaphone è il più grande (colonna sinistra riga 1) -->
   <link slot="head" rel="preload" as="image" href="/knolling/megaphone.webp" fetchpriority="high" media="(min-width: 900px)" />
 
+  <!-- Anti-flash: su un ritorno in-sessione (intro GO già vista, flag settato
+       da index-init.ts o dal click sul logo GO) il preloader non deve mai
+       arrivare a schermo. is:inline = esecuzione sincrona durante il parse,
+       PRIMA che #preloader qui sotto venga renderizzato — uno script modulo
+       partirebbe a bundle già caricato, col GO gigante già visibile. La
+       chiave duplica INTRO_SEEN_KEY di scripts/intro-seen.ts (gli inline non
+       importano moduli): se cambia là, va cambiata anche qui. -->
+  <script is:inline>
+    try {
+      if (sessionStorage.getItem("go-intro-seen") === "1")
+        document.documentElement.setAttribute("data-intro-seen", "");
+    } catch (_) {}
+  </script>
+
   <div id="preloader" aria-hidden="true">
     <div class="pre-logo">
       <span id="pre-G" class="pre-go-letter">G</span>
@@ -217,8 +231,8 @@ const scatterAngle = (i: number) => SCATTER_ANGLES[i % SCATTER_ANGLES.length];
           <!-- Stessa identica card hero-portfolio-card di [mode].astro (stesse
                classi, stesso testo) — "Portfolio" vive come eyebrow dentro la
                card, non come link separato sopra. work-index-card--pulse
-               aggiunge solo il glow periodico via JS (index-init.ts), nessun
-               impatto sullo stile statico. -->
+               (work-page.css) aggiunge bordo accent e pulse CSS con la stessa
+               ricetta dei bottoni "GO to…" (.profile-cta). -->
           <a href="/work" class="work-index-card hero-portfolio-card work-index-card--pulse">
             <p class="work-index-card__eyebrow">Portfolio</p>
             <p class="work-index-card__role">Case study, non un elenco.<br/> Nel portfolio racconto il processo completo di ogni progetto: problema, decisioni, risultati misurabili.</p>

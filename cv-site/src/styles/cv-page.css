@@ -853,19 +853,14 @@ a.lang-switch__opt:hover {
    work-page.css, importato in cima al file), non un link testuale: il
    portfolio è la prova del lavoro, non un dettaglio da annegare nel
    paragrafo. Qui solo gli adattamenti per il contesto hero: fuori dalla
-   griglia di /work la card ha bisogno di un max-width esplicito, e la
-   spinta in più su bordo/glow all'hover perché qui è l'unico CTA della
-   sezione. */
+   griglia di /work la card ha bisogno di un max-width esplicito. Bordo,
+   glow e hover arrivano tutti da .work-index-card--pulse (work-page.css),
+   che replica la ricetta di .profile-cta — nessun override locale, o il
+   bordo divergerebbe di nuovo dai bottoni "GO to…". */
 .hero-portfolio-card {
   max-width: 26rem;
   margin: 0 0 2rem;
   text-decoration: none;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .hero-portfolio-card:hover {
-    box-shadow: 0 0 20px color-mix(in srgb, var(--color-accent) 20%, transparent);
-  }
 }
 
 .hero-footer {
