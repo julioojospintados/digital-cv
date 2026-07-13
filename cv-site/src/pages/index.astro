@@ -1,6 +1,9 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import '../styles/index-page.css';
+// .work-index-card / .work-chevron — stessa identità visiva della card
+// hero-portfolio-card in [mode].astro (vedi sezione Web & UX Designer sotto).
+import '../styles/work-page.css';
 
 // Foto in cv-site/public/photos/{trip,belongings} — caricate dall'utente,
 // elencate qui a mano perché sono in public/ (import.meta.glob non le vede,
@@ -211,8 +214,18 @@ const scatterAngle = (i: number) => SCATTER_ANGLES[i % SCATTER_ANGLES.length];
           <p class="profile-eyebrow">Web &amp; UX Designer</p>
           <h2 class="profile-title">Brand,<br>estetica e interfacce.</h2>
           <p class="profile-desc">Sono certificato IBM in UX/UI Design. UX research, wireframing, Figma, design system e animazioni GSAP. Progetto esperienze digitali che uniscono bellezza, usabilità e impatto misurabile sul brand.</p>
-          <a href="/work" class="profile-portfolio-cta">
-            Portfolio
+          <!-- Stessa identica card hero-portfolio-card di [mode].astro (stesse
+               classi, stesso testo) — "Portfolio" vive come eyebrow dentro la
+               card, non come link separato sopra. work-index-card--pulse
+               aggiunge solo il glow periodico via JS (index-init.ts), nessun
+               impatto sullo stile statico. -->
+          <a href="/work" class="work-index-card hero-portfolio-card work-index-card--pulse">
+            <p class="work-index-card__eyebrow">Portfolio</p>
+            <p class="work-index-card__role">Case study, non un elenco.<br/> Nel portfolio racconto il processo completo di ogni progetto: problema, decisioni, risultati misurabili.</p>
+            <span class="work-index-card__cta">
+              Esplora il portfolio
+              <span class="work-chevron" aria-hidden="true"></span>
+            </span>
           </a>
           <div class="skills-marquee" aria-hidden="true">
             <div class="skills-marquee__track">

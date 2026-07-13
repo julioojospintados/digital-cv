@@ -1433,14 +1433,19 @@ a.lang-switch__opt:hover {
   display: none;
 }
 
-/* Cards inside the drawer start invisible for GSAP to animate */
-.exp-drawer .exp-card {
+/* Cards inside the drawer start invisible for GSAP to animate.
+   :not(.is-revealed) evita che questo placeholder "pre-reveal" rivinca la
+   cascata (stessa specificità di .cv-card[data-state]) quando un resetPeek
+   successivo (click su una card di un mode diverso) rimuove con clearProps
+   lo stile inline di GSAP che teneva la card visibile — senza la guardia la
+   card spariva del tutto invece di tornare al whisper "passive" corretto. */
+.exp-drawer .exp-card:not(.is-revealed) {
   opacity: 0;
   transform: translateY(16px);
 }
 
 /* Featured cards start invisible — GSAP scroll-reveal handles entrance */
-.exp-grid--featured .exp-card {
+.exp-grid--featured .exp-card:not(.is-revealed) {
   opacity: 0;
   transform: translateY(24px);
 }

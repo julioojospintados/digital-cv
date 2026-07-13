@@ -30,6 +30,8 @@ const { name, description, tags, modeTags, slug, workHref = "/work" } = Astro.pr
 
 <style>
   .project-card {
+    position: relative;
+    overflow: hidden;
     padding: 1rem 1.25rem;
     border: 1px solid var(--color-border);
     border-radius: var(--radius-16);
@@ -40,6 +42,34 @@ const { name, description, tags, modeTags, slug, workHref = "/work" } = Astro.pr
     transition:
       opacity var(--duration-state) var(--ease-standard),
       border-color var(--duration-state) var(--ease-standard);
+  }
+
+  /* Glow al hover — stesso linguaggio delle mode-card della home
+     (index-page.css .mode-card::before): radial-gradient che sfuma in
+     opacity, colore legato a --color-accent (già coerente col mode attivo
+     della pagina, niente nuova mappa colori da mantenere). */
+  .project-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    background: radial-gradient(
+      ellipse at 50% 120%,
+      color-mix(in srgb, var(--color-accent) 16%, transparent) 0%,
+      transparent 70%
+    );
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .project-card:hover::before {
+      opacity: 1;
+    }
+
+    .project-card:hover {
+      border-color: color-mix(in srgb, var(--color-accent) 45%, var(--color-border));
+    }
   }
 
   .project-card__name {

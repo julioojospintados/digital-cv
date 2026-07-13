@@ -195,7 +195,7 @@ img[src*="flashlight"] {
 
 .knoll-item.do-enter,
 .knoll-m.do-enter {
-  animation: knollLand 0.45s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: knollLand var(--knoll-land-duration, 0.45s) cubic-bezier(0.22, 1, 0.36, 1) forwards;
   animation-delay: var(--knoll-delay, 0ms);
 }
 

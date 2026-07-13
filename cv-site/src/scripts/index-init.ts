@@ -28,6 +28,16 @@ try {
   // mai il contrario: meglio un'intro di troppo che sparire il branding.
 }
 
+// tl.timeScale(60) qui sotto comprime solo i tween GSAP: l'atterraggio degli
+// oggetti knolling (.do-enter → @keyframes knollLand, index-page.css) è
+// un'animazione CSS pura, invisibile al clock di GSAP — su un ritorno alla
+// home restava alla sua durata piena (0.45s + stagger) anche a intro "vista".
+// Stessa tecnica del resto del file: comprimere il tempo, non saltarlo.
+if (introAlreadySeen) {
+  document.documentElement.style.setProperty("--knoll-land-duration", "20ms");
+}
+const knollDelayStep = introAlreadySeen ? 2 : 45;
+
 // ── DOM refs ─────────────────────────────────────────────
 const preloader = document.getElementById("preloader")!;
 const header = document.getElementById("entry-header")!;
@@ -333,7 +343,7 @@ gsap.delayedCall(introAlreadySeen ? 0 : 0.9, () => {
       return scoreA - scoreB;
     });
     sortedKnolls.forEach((knoll, i) => {
-      knoll.style.setProperty("--knoll-delay", `${i * 45}ms`);
+      knoll.style.setProperty("--knoll-delay", `${i * knollDelayStep}ms`);
       knoll.classList.add("do-enter");
     });
   }, undefined, "-=0.55");

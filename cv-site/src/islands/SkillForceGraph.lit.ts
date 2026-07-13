@@ -270,7 +270,7 @@ class SkillForceGraph extends LitElement {
     }
 
     .force-node-label {
-      font-family: "Lexend", sans-serif;
+      font-family: var(--font-mono);
       font-size: var(--fs-14);
       font-weight: 600;
       letter-spacing: 0.02em;
