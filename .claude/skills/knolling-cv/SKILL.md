@@ -13,17 +13,19 @@ Questo progetto ha 5 skill specializzate. Carica quella più pertinente alla ric
 | **design-system** `.claude/skills/design-system/SKILL.md` | UI, animazioni, card, knolling, GSAP, Awwwards |
 | **agile-methodology** `.claude/skills/agile-methodology/SKILL.md` | Esperienze, Agile, UX/UI, certificazioni, sprint |
 | **mcp-architecture** `.claude/skills/mcp-architecture/SKILL.md` | Backend, MCP tools, Hono, test, cv.ts, env |
-| **partnership-strategy** `.claude/skills/partnership-strategy/SKILL.md` | Offerta Fractional, bio servizi, tono PMI, posizionamento |
+| **partnership-strategy** `.claude/skills/partnership-strategy/SKILL.md` | Offerta Fractional, bio servizi, tono per le aziende, posizionamento |
 
 ---
 
 ## Chi è Giulio (in breve)
 
-**Giulio Occhipinti** — Consulente per l'Innovazione Digitale & Partner Tecnico per PMI.
-Generalista esperto che supporta le PMI a 360° orchestrando **Tecnologia + Design + Metodo**
+**Giulio Occhipinti** — Consulente per l'Innovazione Digitale & Partner Tecnico per piccole e grandi realtà.
+Generalista esperto che supporta le aziende a 360° orchestrando **Tecnologia + Design + Metodo**
 in un unico ingaggio — mai un solo pilastro isolato. Non un manager da organigramma: entra
 nell'azienda, capisce il problema reale, costruisce la soluzione e la fa girare, con le proprie
-mani e con l'AI come moltiplicatore. Target: PMI che vogliono scalare senza assumere 10 persone.
+mani e con l'AI come moltiplicatore. Target: realtà che vogliono scalare senza assumere 10 persone.
+Il termine "PMI" è bandito dai testi (decisione 2026-07-12, vedi `identity/writing-style.md`):
+usare "realtà" con un qualificatore o "aziende"; in inglese "businesses".
 
 Descrizione lunga, storytelling e narrativa GO → `identity/SKILL.md`.
 Posizionamento commerciale e offerta Fractional → `partnership-strategy/SKILL.md`.
@@ -62,7 +64,7 @@ ma la regola base è questa — non ripeterla, solo estenderla se serve un termi
 | tech (Software Developer) | Cyan `rgba(0,255,200,1)` | Architetture, codice, AI |
 | creative (Web & UX Designer) | Arancione `rgba(255,107,53,1)` | Storytelling, estetica, fotografia |
 | human (AI & Digital Specialist) | Oro `rgba(240,200,127,1)` | Impatto, relazione, autonomia strategica |
-| management (Project Manager) | Viola `rgba(180,100,255,1)` | Metodo, Agile, PMI, consulenza strategica |
+| management (Project Manager) | Viola `rgba(180,100,255,1)` | Metodo, Agile, aziende, consulenza strategica |
 
 Il mode cambia **solo l'enfasi visiva** — mai il template, mai la struttura.
 Lo sfondo è **sempre ottanio** rgba(8,73,67,1). Mai hardcodare colori.
@@ -82,7 +84,7 @@ Lo sfondo è **sempre ottanio** rgba(8,73,67,1). Mai hardcodare colori.
 | File | Custom element | Scopo |
 |---|---|---|
 | `GoLogo.lit.ts` | `<go-logo>` | Logo animato, click = reset a `/`, colore mode-reactive |
-| `FloatingMenu.lit.ts` | `<floating-menu>` | FAB: contatti, feedback, AI-section |
+| `FloatingMenu.lit.ts` | `<floating-menu>` | FAB: contatti, feedback |
 | `SkillForceGraph.lit.ts` | `<skill-force-graph>` | Grafo D3 force-directed delle skill |
 
 ### Data Source of Truth

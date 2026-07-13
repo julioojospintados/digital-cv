@@ -43,7 +43,7 @@ Lo sfondo è **sempre ottanio** `rgba(8,73,67,1)` in tutti e 3 i mode. Solo `--c
 | `tech`       | `rgba(0,255,200,1)`     | `rgba(0,255,200,0.70)` — ~4.8:1 ✅        | CTO, recruiter tecnico      |
 | `creative`   | `rgba(255,107,53,1)`    | `rgba(255,195,155,0.82)` — ~4.9:1 ✅      | Art director, agenzia       |
 | `human`      | `rgba(240,200,127,1)`   | `rgba(240,210,148,0.75)` — ~4.6:1 ✅      | HR, fondatore, no-profit    |
-| `management` | `rgba(180,100,255,1)`   | `rgba(200,170,255,0.78)` — ~4.6:1 ✅      | Recruiter, PMI, innovazione |
+| `management` | `rgba(180,100,255,1)`   | `rgba(200,170,255,0.78)` — ~4.6:1 ✅      | Recruiter, aziende, innovazione |
 
 ### Token NON esistenti — non usarli mai
 
@@ -53,7 +53,7 @@ Lo sfondo è **sempre ottanio** `rgba(8,73,67,1)` in tutti e 3 i mode. Solo `--c
 
 ### Mode `management` — Spec
 
-Accent viola `rgba(180,100,255,1)`. Target: recruiter, PMI, contenuti su metodo e consulenza.
+Accent viola `rgba(180,100,255,1)`. Target: recruiter, aziende, contenuti su metodo e consulenza.
 Le card con `data-tags="management"` sono attive in questo mode.
 L'oggetto knolling associato al management è `chess.png` (strategia) e `compass.png` (orientamento).
 

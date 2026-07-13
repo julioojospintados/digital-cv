@@ -66,3 +66,4 @@ Se il contesto richiede ironia, umorismo o una nota di colore, applica queste re
 - Il trattino lungo `—` usato come interruzione nei testi discorsivi rientra nella regola "niente trattini": va sostituito con virgola, due punti o punto fermo.
 - Restano ammessi i separatori strutturali NON discorsivi: il prefisso `"Ricerca — "` negli step di processo di `cv.ts` (parsato dal codice di `/work/[slug]`), i dati mono tipo `-87% boilerplate` (impactScore), gli intervalli di date `2023–2024`.
 - Prima persona sempre (vedi memoria `prima-persona-sempre`): mai terza persona nei testi del sito.
+- Il termine "PMI" non si usa più nei testi del sito (decisione 2026-07-12): sostituire con "realtà" (con un qualificatore naturale, es. "piccole e grandi realtà", "realtà che vogliono scalare") o "aziende". In inglese "SMB/SME" diventa "businesses" o "businesses of all sizes".

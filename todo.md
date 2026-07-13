@@ -119,6 +119,37 @@ I ruoli "puro frontend implementatore" e "full-stack generico" sono in erosione 
 
 31. ✅ Ripristinate le 4 mode-card su mobile (≤639px) come griglia 2×2 "knolling style" al posto della colonna di righe orizzontali. Interventi in index-page.css: (a) rimosso l'override mobile-only che forzava flex-column — ora cascata la stessa griglia 2×2 del breakpoint touch, gap costante 0.4rem in entrambe le direzioni (regola knolling: lo spazio tra gli oggetti è parte del design); (b) aggiunto cartellino quadrato accent (`.mode-card__label::before`, solo touch) come etichetta d'inventario knolling — sostituisce il color-coding del GO button nascosto su touch, senza essere l'unico differenziatore (WCAG 1.4.1); (c) desc della card ora nel colore muted per-mode (`--card-desc-color`, valori WCAG-verificati della tabella design system). Bonus: `expandMobileGrid` (l'espansione GSAP della cella selezionata al 60%) era silenziosamente rotto dall'override flex — animava gridTemplate* su un flex container — e ora torna a funzionare. Verificato con screenshot Playwright a 393px (Pixel 5) e 320px: nessun overflow, label max 2 righe, fold intatto.
 
+## Analisi codice 2026-07-12 (richiesta: proporre migliorie/fix e correggere)
+
+Perimetro rivisto: pagine Astro (index/[mode]/en/work), scripts (memory-drawer, work-journey), componenti card, Layout, dati cv.ts/cv.en.ts. Backend src/ non toccato (84 test verdi, nessun sintomo).
+
+35. ✅ **Bug navigazione EN → IT.** Le pagine work inglesi rimandavano alle pagine italiane: `en/work/index.astro` aveva "Back to CV" → `/tech`, `en/work/[slug].astro` aveva nav e CTA footer → `/${mode}` (route IT). Un recruiter anglofono che esplorava un case study finiva sul CV in italiano senza preavviso.
+    — **Fatto (2026-07-12):** tutti e tre i link ora puntano a `/en/cv`.
+
+36. ✅ **Bug dati: `SOFT_MODE_TAGS` disallineato (9 tag per 11 soft skill).** In `[mode].astro` e `en/cv.astro` la mappa per indice era stata scritta prima dell'aggiunta di "Ascolto attivo" e "Assertività": le due rubavano i tag destinati a "Sensibilità estetica" (creative) e "Pensiero T-shaped" (tutti i mode), che finivano nel fallback attivo-ovunque. Enfasi visiva sbagliata su 4 skill in tutti i mode.
+    — **Fatto (2026-07-12):** mappa estesa a 11 voci con commento per riga (nome skill accanto al tag), mirror EN.
+
+37. ✅ **Guard di build sulle mappe per indice.** `EXP_MODE_TAGS` e `SOFT_MODE_TAGS` mappano per posizione sugli array di cv.ts: aggiungere o riordinare una voce nei dati disallinea silenziosamente l'enfasi (è esattamente ciò che è successo al punto 36).
+    — **Fatto (2026-07-12):** check nel frontmatter di `[mode].astro` e `en/cv.astro`: se le lunghezze non coincidono la build fallisce con un messaggio che dice quale mappa aggiornare.
+
+38. ✅ **A11y: foto dei memory drawer invisibili alla tastiera.** Le `.memory-photo` aprivano la lightbox solo via click su `<img>`: nessun focus, nessun ruolo, nessuna attivazione da tastiera (WCAG 2.1.1).
+    — **Fatto (2026-07-12):** in `memory-drawer.ts` le foto ricevono `tabindex=0`, `role="button"`, `aria-label` localizzata ("Espandi la foto"/"Expand photo"); Enter e Spazio delegano al click (vale anche per la chiusura della lightbox). Bonus: anche l'aria-label del bottone chiudi della lightbox ora è localizzata.
+
+39. ✅ **Email footer hardcoded.** `[mode].astro` ed `en/cv.astro` avevano il `mailto:` letterale nel template mentre cv.ts espone già il contatto in `social`: due punti di verità per lo stesso dato.
+    — **Fatto (2026-07-12):** footer derivato da `social` (piattaforma Email), come già facevano le pagine work.
+
+### Segnalazioni aperte (decisioni da prendere, non fix)
+
+40. **EN: i 4 CTA "GO to..." della home inglese puntano tutti a `/en/cv`** perché non esistono route EN per-mode (`/en/tech`, ecc.): la pagina EN è single-persona con filtro client-side. Decidere se creare `en/[mode].astro` (parità piena con l'IT) o dichiarare esplicitamente la scelta single-page.
+41. **I marquee della home elencano strumenti non presenti in cv.ts** (PostgreSQL, MongoDB, Docker, Adobe XD, Sketch, Photoshop, Illustrator, After Effects, Webflow, Podcast...). Sono decorativi e `aria-hidden`, ma in un colloquio ogni voce è argomentabile ("Perché c'è Docker se non è nelle skill?"). Da riallineare al contenuto reale di cv.ts o da sfoltire.
+42. **`astro check` su Windows segnala il conflitto di casing `gsap/Flip.d.ts` vs `flip.d.ts`** (difetto del pacchetto GSAP, non nostro) più i preesistenti errori `screen.orientation.lock`. Non bloccano build né runtime: da ripulire solo se si vuole un check pulito (es. `skipLibCheck` mirato o pin di versione GSAP).
+
+## Richieste 2026-07-13
+
+43. ✅ **Rimosso il termine "PMI" da tutto il progetto**, non solo dai testi del sito: anche dalle skill `.claude/` e dai mirror `.github/` (copilot-instructions.md, skills), da `AGENTS.md` e `CLAUDE.md`. Sostituito con "realtà" (con qualificatore, es. "piccole e grandi realtà") o "aziende"; EN "SMB/SME" → "businesses". Regola scritta in `identity/writing-style.md` perché resti applicata ai testi futuri.
+
+44. ✅ **Rimossa la voce "AI Workflow" dal FloatingMenu (FAB).** Il FAB ora ha solo Contattami e Feedback. Rimossi insieme: lo scroll-to-`#ai-section` (`_handleAI`, ~80 righe con gestione Lenis/fallback/focus), le stringhe i18n `aiLabel`/`aiAriaLabel`, e la logica `isHome`/`href` che serviva solo a quella voce (su home il FAB non mostrava comunque il link AI). La sezione AI Workflow resta raggiungibile da dot-nav e scroll naturale su `/tech /creative /human /management`. Documentazione aggiornata (AGENTS.md, knolling-cv/SKILL.md IT+EN) per non citare più il link AI-section nel FAB.
+
 ### Nota di verifica
 
 - Il "vuoto hero desktop" visto nei primi screenshot era un artefatto del dev server Vite (504 Outdated Optimize Dep durante re-optimize), NON un bug del sito: verificato con probe (opacity 1, posizioni corrette) e re-screenshot.

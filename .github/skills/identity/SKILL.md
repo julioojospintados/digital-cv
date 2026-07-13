@@ -1,6 +1,6 @@
 ---
 name: identity
-description: "Chi è Giulio Occhipinti — Consulente per l'Innovazione Digitale & Partner Tecnico per PMI. Profilo multidisciplinare: Tech (Angular, Lit, MCP, Node.js), Design (UX/UI cert. IBM), Metodo (Agile snello). Carica quando: scrivi bio, testi di presentazione, copy delle card, descrizioni esperienze, tone of voice, storytelling, identità professionale, frasi guida, job hunting, target recruiter/CTO/art director/management, narrativa GO, 4 mode (tech/creative/human/management), preloader."
+description: "Chi è Giulio Occhipinti — Consulente per l'Innovazione Digitale & Partner Tecnico per piccole e grandi realtà. Profilo multidisciplinare: Tech (Angular, Lit, MCP, Node.js), Design (UX/UI cert. IBM), Metodo (Agile snello). Carica quando: scrivi bio, testi di presentazione, copy delle card, descrizioni esperienze, tone of voice, storytelling, identità professionale, frasi guida, job hunting, target recruiter/CTO/art director/management, narrativa GO, 4 mode (tech/creative/human/management), preloader."
 ---
 
 ## 🎯 Regole di Copywriting Strategico (AIDA/PAS)
@@ -28,11 +28,11 @@ Giulio non è un "esecutore", è un **abilitatore di autonomia**, un **facilitat
 
 ## Chi è
 
-**Consulente Tecnico & AI Specialist per PMI** — non un manager da organigramma.
+**Consulente Tecnico & AI Specialist per le aziende** — non un manager da organigramma.
 Entra nell'azienda, capisce il problema reale, costruisce la soluzione e la fa girare —
 con le proprie mani e con l'AI come moltiplicatore.
 
-Target: PMI che vogliono scalare senza assumere 10 persone.
+Target: realtà che vogliono scalare senza assumere 10 persone.
 AI, automazione e metodi Agile snelli per fare in 2 quello che altri fanno in 8.
 
 ---
@@ -123,7 +123,7 @@ L'utente esplora o torna senza mai ricominciare da zero. Il `<go-logo>` è il po
 
 **Identità professionale:**
 
-- USA: "Consulente Tecnico & AI Specialist per PMI", "hands-on", "operativo", "velocità di esecuzione"
+- USA: "Consulente Tecnico & AI Specialist per le aziende", "hands-on", "operativo", "velocità di esecuzione"
 - EVITA: "Team Lead", "Manager", "Owner", "Stakeholder", gergo da multinazionale
 
 **Agile:**

@@ -149,7 +149,7 @@ cv-site/                  ← Astro site (the actual CV)
         SoftItem.astro    ← Soft / transversal skill item
     islands/              ← Lit interactive web components
       GoLogo.lit.ts       ← <go-logo>: animated logo, click = reset to /, mode-reactive color
-      FloatingMenu.lit.ts ← <floating-menu>: FAB with contact/feedback/AI-section links
+      FloatingMenu.lit.ts ← <floating-menu>: FAB with contact/feedback links
       SkillForceGraph.lit.ts ← <skill-force-graph>: D3 force-directed skill network
       stores/modeStore.ts ← NanoStore for global mode state (tech/creative/human/management)
     styles/global.css     ← CSS custom properties for 4 modes

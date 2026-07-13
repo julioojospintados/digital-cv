@@ -213,9 +213,9 @@ export const cvData = {
   // ── Personal info ──────────────────────────────────────────────────────────
   personal: {
     name: "Giulio Occhipinti",
-    title: "Consulente per l'Innovazione Digitale & Partner Tecnico per PMI",
+    title: "Consulente per l'Innovazione Digitale & Partner Tecnico per piccole e grandi realtà",
     summary:
-      "Supporto le PMI su tre pilastri integrati: Design (UX/UI, certificazioni IBM e SkillUp), Tecnologia (Angular, Lit, MCP, Node.js) e Metodo (Agile snello, sprint brevi, autonomia del team). Ho progettato e costruito interfacce web per oltre 6 anni in contesti enterprise (Intesa San Paolo, Aruba, Rai Pubblicità). Scelgo lo strumento in base al problema e ho lavorato in 5 paesi. Non consegno slide: entro in azienda, capisco il problema reale, costruisco la soluzione e la faccio girare.",
+      "Supporto piccole e grandi realtà su tre pilastri integrati: Design (UX/UI, certificazioni IBM e SkillUp), Tecnologia (Angular, Lit, MCP, Node.js) e Metodo (Agile snello, sprint brevi, autonomia del team). Ho progettato e costruito interfacce web per oltre 6 anni in contesti enterprise (Intesa San Paolo, Aruba, Rai Pubblicità). Scelgo lo strumento in base al problema e ho lavorato in 5 paesi. Non consegno slide: entro in azienda, capisco il problema reale, costruisco la soluzione e la faccio girare.",
     location: "Torino, Italia",
     age: 36,
     avatar: "",
@@ -262,14 +262,14 @@ export const cvData = {
   experience: [
     {
       company:
-        "Progetto Interno — Gestionale PMI (caso studio di Partnering Operativo)",
+        "Progetto Interno — Gestionale aziendale (caso studio di Partnering Operativo)",
       role: "Consulente per l'Innovazione Digitale & Lead Developer",
       startDate: "2025-09",
       endDate: "present",
       location: "Torino, Italia",
       remote: true,
       description:
-        "Ho progettato e sviluppato un gestionale interno per PMI, dall'analisi dei processi al deploy: architettura MCP con tool, resource e prompt come API per agenti AI, integrata con VS Code Copilot e Cursor, UX semplificata per operatori non tecnici e pipeline Cursor → GitLab CI/CD → deploy automatizzata. Lavoro in sprint da 1 a 2 settimane e misuro l'impactScore a ogni rilascio.",
+        "Ho progettato e sviluppato un gestionale aziendale interno, dall'analisi dei processi al deploy: architettura MCP con tool, resource e prompt come API per agenti AI, integrata con VS Code Copilot e Cursor, UX semplificata per operatori non tecnici e pipeline Cursor → GitLab CI/CD → deploy automatizzata. Lavoro in sprint da 1 a 2 settimane e misuro l'impactScore a ogni rilascio.",
       highlights: [
         "Ho semplificato la UX per operatori non tecnici: –40% tempo di formazione sui nuovi flussi.",
         "Ho automatizzato la pipeline Cursor → GitLab CI/CD → deploy: zero interventi manuali.",
@@ -745,7 +745,7 @@ export const cvData = {
       issuer: "IBM",
       date: "2026-02",
       credentialId: "L7GZFSYJYMAC",
-      // Impatto pratico: framework Scrum snello applicato a sprint PMI — garantisce ROI misurabile a ogni rilascio e riduce il time-to-market del 30–40% rispetto a progetti waterfall
+      // Impatto pratico: framework Scrum snello applicato a sprint aziendali — garantisce ROI misurabile a ogni rilascio e riduce il time-to-market del 30–40% rispetto a progetti waterfall
     },
     {
       name: "UX/UI Design Fundamentals: Usability and Visual Principles",

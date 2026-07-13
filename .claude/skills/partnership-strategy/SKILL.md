@@ -1,6 +1,6 @@
 ---
 name: partnership-strategy
-description: "Strategia di posizionamento come Partner Tecnico / Facilitatore per PMI. Carica quando: scrivi bio per offerta Fractional, sezione servizi, testi management, descrivi il modello di collaborazione, posizionamento vs dipendente/consulente classico, proposta di valore per PMI."
+description: "Strategia di posizionamento come Partner Tecnico / Facilitatore per piccole e grandi realtà. Carica quando: scrivi bio per offerta Fractional, sezione servizi, testi management, descrivi il modello di collaborazione, posizionamento vs dipendente/consulente classico, proposta di valore per le aziende."
 ---
 
 # Giulio Occhipinti — Partnership Digitale Integrata
@@ -8,14 +8,18 @@ description: "Strategia di posizionamento come Partner Tecnico / Facilitatore pe
 ## Il Ruolo
 
 Giulio non vende singoli servizi: si propone come **referente unico per l'intero comparto
-digitale** della PMI. Approccio Analitico e Strategico — prima capisce il modello di business,
+digitale** dell'azienda. Approccio Analitico e Strategico — prima capisce il modello di business,
 poi applica la tecnologia corretta (AI, Codice, Design o Comunicazione). Non è un developer
 che prende ticket, né un consulente che consegna slide: è un partner che definisce i ticket
 insieme al cliente e porta il progetto in produzione.
 
-Il target non sono le multinazionali. Sono le **PMI che vogliono scalare senza assumere 10
+Il target non sono le multinazionali. Sono le **realtà che vogliono scalare senza assumere 10
 persone** — usando automazione, metodo Agile snello e design funzionale per fare in 2 quello
 che altri fanno in 8.
+
+> **Nota lessicale (2026-07-13):** il termine "PMI" è bandito da tutti i testi
+> (vedi `identity/writing-style.md`). Nei testi usare "realtà" con un
+> qualificatore naturale o "aziende"; in inglese "businesses".
 
 ---
 
@@ -70,7 +74,7 @@ interno e la flessibilità di un consulente esterno.
 
 ## Framework di Comunicazione & Psicologia
 
-- **AIDA per PMI:** Attenzione sul caos digitale → Interesse con l'AI (MCP) → Desiderio di
+- **AIDA per le aziende:** Attenzione sul caos digitale → Interesse con l'AI (MCP) → Desiderio di
   ordine → Azione (Audit).
 - **PAS (Problem, Agitation, Solution):** identifica il "dolore" (es. gestionale lento),
   enfatizza le perdite economiche, offri l'Ecosistema come cura.
@@ -99,7 +103,7 @@ Regola base (evita/usa) in `knolling-cv/SKILL.md`. Qui le aggiunte specifiche pe
 
 ---
 
-## Messaggi Chiave per le PMI
+## Messaggi Chiave per le Aziende
 
 - "Non devi assumere un team AI. Ti serve qualcuno che lo faccia funzionare — subito."
 - "MCP non è per grandi budget. È per chi vuole l'AI integrata nei processi, non in una demo."

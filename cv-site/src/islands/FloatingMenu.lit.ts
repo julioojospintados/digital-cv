@@ -4,10 +4,12 @@ import { modeStore } from "./stores/modeStore.js";
 /**
  * <floating-menu>
  *
- * FAB (Floating Action Button) con 3 voci espandibili:
+ * FAB (Floating Action Button) con 2 voci espandibili:
  *  - Contattami → mailto
  *  - Feedback    → mailto pre-compilata
- *  - AI Workflow → ancora alla sezione AI della pagina corrente
+ *
+ * (La voce "AI Workflow" è stata rimossa su richiesta il 2026-07-13:
+ * la sezione resta raggiungibile da dot-nav e scroll naturale.)
  *
  * Mode-reactive: colore del trigger segue --color-accent.
  * Chiude con click fuori o con Escape.
@@ -180,9 +182,6 @@ class FloatingMenu extends LitElement {
     }
     :host([open]) .fab-item:nth-child(2) {
       transition-delay: 0.08s;
-    }
-    :host([open]) .fab-item:nth-child(3) {
-      transition-delay: 0.12s;
     }
 
     /* ── Pulse ring (attrae l'attenzione quando chiuso) ── */
@@ -550,87 +549,6 @@ class FloatingMenu extends LitElement {
     this.requestUpdate();
   }
 
-  private async _handleAI(e: Event) {
-    // Robust navigation to #ai-section: prevent default, close menu,
-    // wait a frame for layout, then smooth-scroll (Lenis aware) and focus.
-    if (typeof window === "undefined") return;
-    e.preventDefault();
-
-    this._closeOnNav();
-
-    // Allow potential layout changes to settle (one RAF)
-    await new Promise((res) => requestAnimationFrame(res));
-
-    const target = document.getElementById("ai-section");
-    if (!target) {
-      // Fallback: navigate via href if section missing
-      const href = (e.currentTarget as HTMLAnchorElement)?.getAttribute("href");
-      if (href) window.location.href = href;
-      return;
-    }
-
-    const NAV_HEIGHT = (() => {
-      const nav = document.querySelector("#cv-nav");
-      return nav ? (nav as HTMLElement).getBoundingClientRect().height : 52;
-    })();
-    const lenis = window.__lenis;
-
-    // Calcola absoluteTop usando offsetTop (non affetto da GSAP transform: translateY)
-    // getBoundingClientRect() includerebbe il translateY(32px) degli elementi pre-reveal
-    // causando una destinazione sbagliata al primo click.
-    const getOffsetTop = (el: HTMLElement): number => {
-      let top = 0;
-      let current: HTMLElement | null = el;
-      while (current) {
-        top += current.offsetTop;
-        current = current.offsetParent as HTMLElement | null;
-      }
-      return top;
-    };
-    const absoluteTop = getOffsetTop(target) - NAV_HEIGHT;
-
-    const waitForArrival = (targetY: number) =>
-      new Promise<void>((resolve) => {
-        let rafId: number | null = null;
-        const timeoutId = window.setTimeout(() => {
-          if (rafId) cancelAnimationFrame(rafId);
-          resolve();
-        }, 1600);
-
-        const check = () => {
-          const currentY = window.scrollY || window.pageYOffset || 0;
-          if (Math.abs(currentY - targetY) <= 6 || (window.innerHeight + currentY) >= document.body.scrollHeight) {
-            clearTimeout(timeoutId);
-            if (rafId) cancelAnimationFrame(rafId);
-            resolve();
-            return;
-          }
-          rafId = requestAnimationFrame(check);
-        };
-        rafId = requestAnimationFrame(check);
-      });
-
-    try {
-      if (lenis && typeof lenis.scrollTo === "function") {
-        lenis.scrollTo(absoluteTop, { duration: 1.0 });
-        await waitForArrival(absoluteTop);
-      } else {
-        window.scrollTo({ top: absoluteTop, behavior: "smooth" });
-        await waitForArrival(absoluteTop);
-      }
-    } catch {
-      window.scrollTo({ top: absoluteTop, behavior: "smooth" });
-      await waitForArrival(absoluteTop);
-    }
-
-    try {
-      target.setAttribute("tabindex", "-1");
-      (target as HTMLElement).focus({ preventScroll: true });
-    } catch {
-      /* noop */
-    }
-  }
-
   render() {
     // Guard window/sessionStorage access for SSR compatibility (window is undefined in Node.js)
     const isClient = typeof window !== "undefined";
@@ -644,8 +562,6 @@ class FloatingMenu extends LitElement {
       contactAriaLabel: isEN ? "Send email to Giulio" : "Invia email a Giulio",
       feedbackLabel: isEN ? "Feedback" : "Feedback",
       feedbackAriaLabel: isEN ? "Leave feedback" : "Lascia un feedback",
-      aiLabel: isEN ? "AI Workflow" : "AI Workflow",
-      aiAriaLabel: isEN ? "AI Workflow — how AI amplifies the work" : "AI Workflow — come l'AI amplifica il lavoro",
       fpAriaLabel: isEN ? "Feedback form" : "Modulo feedback",
       fpClose: isEN ? "Close" : "Chiudi",
       fpSent: isEN ? "✓ Thanks! Opening email…" : "✓ Grazie! Apertura email…",
@@ -658,18 +574,6 @@ class FloatingMenu extends LitElement {
       menuClose: isEN ? "Close contacts" : "Chiudi contatti",
       badgeTitle: (n: number) => isEN ? `${n} feedback sent this session` : `${n} feedback inviati in questa sessione`,
     };
-
-    const isHome =
-      isClient &&
-      (window.location.pathname === "/" ||
-        window.location.pathname === "/index" ||
-        window.location.pathname === "/index.html");
-
-    const href =
-      isClient &&
-        window.location.pathname.match(/^\/(tech|creative|human|management|cv|en)/)
-        ? "#ai-section"
-        : "/tech#ai-section";
 
     let feedbackCount = 0;
     if (isClient) {
@@ -754,17 +658,6 @@ class FloatingMenu extends LitElement {
                 <span class="fab-item__icon">✦</span>
                 <span>${t.feedbackLabel}</span>
               </button>
-              ${!isHome
-            ? html`<a
-                    class="fab-item"
-                    href="${href}"
-                    aria-label="${t.aiAriaLabel}"
-                    @click=${this._handleAI}
-                  >
-                    <span class="fab-item__icon">✦</span>
-                    <span>${t.aiLabel}</span>
-                  </a>`
-            : ""}
             </div>
           `}
 
