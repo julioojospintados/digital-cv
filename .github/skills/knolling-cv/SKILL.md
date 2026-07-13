@@ -13,7 +13,7 @@ Questo progetto ha 4 skill specializzate. Carica quella piu pertinente alla rich
 | **design-system** `.github/skills/design-system/SKILL.md` | UI, animazioni, card, knolling, GSAP, Awwwards |
 | **agile-methodology** `.github/skills/agile-methodology/SKILL.md` | Esperienze, Agile, UX/UI, certificazioni, sprint |
 | **mcp-architecture** `.github/skills/mcp-architecture/SKILL.md` | Backend, MCP tools, Hono, test, cv.ts, env |
-| **partnership-strategy** `.github/skills/partnership-strategy/SKILL.md` | Offerta Fractional, bio servizi, tono PMI, posizionamento |
+| **partnership-strategy** `.github/skills/partnership-strategy/SKILL.md` | Offerta Fractional, bio servizi, tono per le aziende, posizionamento |
 
 ---
 
@@ -35,7 +35,7 @@ Questo progetto ha 4 skill specializzate. Carica quella piu pertinente alla rich
 | tech (Software Developer) | Cyan `rgba(0,255,200,1)` | Architetture, codice, AI |
 | creative (Web & UX Designer) | Arancione `rgba(255,107,53,1)` | Storytelling, estetica, fotografia |
 | human (AI & Digital Specialist) | Oro `rgba(240,200,127,1)` | Impatto, relazione, autonomia strategica |
-| management (Project Manager) | Viola `rgba(180,100,255,1)` | Metodo, Agile, PMI, consulenza strategica |
+| management (Project Manager) | Viola `rgba(180,100,255,1)` | Metodo, Agile, aziende, consulenza strategica |
 
 Il mode cambia **solo l'enfasi visiva** — mai il template, mai la struttura.
 Lo sfondo è **sempre ottanio** rgba(8,73,67,1). Mai hardcodare colori.
@@ -55,7 +55,7 @@ Lo sfondo è **sempre ottanio** rgba(8,73,67,1). Mai hardcodare colori.
 | File | Custom element | Scopo |
 |---|---|---|
 | `GoLogo.lit.ts` | `<go-logo>` | Logo animato, click = reset a `/`, colore mode-reactive |
-| `FloatingMenu.lit.ts` | `<floating-menu>` | FAB: contatti, feedback, AI-section |
+| `FloatingMenu.lit.ts` | `<floating-menu>` | FAB: contatti, feedback |
 | `SkillForceGraph.lit.ts` | `<skill-force-graph>` | Grafo D3 force-directed delle skill |
 
 ### Data Source of Truth

@@ -26,9 +26,9 @@ export const cvDataEn = {
   // ── Personal info ──────────────────────────────────────────────────────────
   personal: {
     name: "Giulio Occhipinti",
-    title: "Digital Innovation Consultant & Technical Partner for SMBs",
+    title: "Digital Innovation Consultant & Technical Partner for businesses of all sizes",
     summary:
-      "I support SMBs across three integrated pillars: Design (UX/UI, IBM and SkillUp certifications), Technology (Angular, Lit, MCP, Node.js) and Method (lean Agile, short sprints, team autonomy). I have designed and built web interfaces for over 6 years in enterprise contexts (Intesa San Paolo, Aruba, Rai Pubblicità). I choose the tool based on the problem and I have worked in 5 countries. I don't deliver slide decks: I get inside the business, understand the real problem, build the solution and run it.",
+      "I support businesses of all sizes across three integrated pillars: Design (UX/UI, IBM and SkillUp certifications), Technology (Angular, Lit, MCP, Node.js) and Method (lean Agile, short sprints, team autonomy). I have designed and built web interfaces for over 6 years in enterprise contexts (Intesa San Paolo, Aruba, Rai Pubblicità). I choose the tool based on the problem and I have worked in 5 countries. I don't deliver slide decks: I get inside the business, understand the real problem, build the solution and run it.",
     location: "Turin, Italy",
     age: 36,
     avatar: "",
@@ -71,14 +71,14 @@ export const cvDataEn = {
   experience: [
     {
       company:
-        "Internal Project — SME Management Software (Operational Partnering case study)",
+        "Internal Project — Business Management Software (Operational Partnering case study)",
       role: "Digital Innovation Consultant & Lead Developer",
       startDate: "2025-09",
       endDate: "present",
       location: "Turin, Italy",
       remote: true,
       description:
-        "I designed and developed internal management software for SMEs, from process analysis to deploy: MCP architecture with tools, resources and prompts as APIs for AI agents, integrated with VS Code Copilot and Cursor, simplified UX for non-technical operators and an automated Cursor → GitLab CI/CD → deploy pipeline. I work in 1 to 2 week sprints and measure impactScore at every release.",
+        "I designed and developed internal business management software, from process analysis to deploy: MCP architecture with tools, resources and prompts as APIs for AI agents, integrated with VS Code Copilot and Cursor, simplified UX for non-technical operators and an automated Cursor → GitLab CI/CD → deploy pipeline. I work in 1 to 2 week sprints and measure impactScore at every release.",
       highlights: [
         "I simplified the UX for non-technical operators: –40% training time on new workflows.",
         "I automated the Cursor → GitLab CI/CD → deploy pipeline: zero manual intervention.",

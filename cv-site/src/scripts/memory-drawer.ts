@@ -10,6 +10,7 @@ gsap.registerPlugin(Flip);
 // Drift è puro CSS (index-page.css), nessuna interazione da gestire qui.
 
 const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const isEN = document.documentElement.lang === "en";
 
 document.querySelectorAll<HTMLButtonElement>("[data-drawer-open]").forEach((btn) => {
   const key = btn.dataset.drawerOpen;
@@ -42,9 +43,20 @@ document.querySelectorAll<HTMLButtonElement>("[data-drawer-open]").forEach((btn)
     closeBtn.addEventListener("click", () => dialog.close());
   });
 
-  // Click su una foto → lightbox (delega: le foto sono già nel DOM al load)
+  // Click su una foto → lightbox. Le foto sono <img>, non bottoni: senza
+  // role/tabindex resterebbero invisibili alla tastiera pur essendo l'unico
+  // modo di aprire la lightbox — qui diventano controlli a tutti gli effetti
+  // (Enter e Spazio delegano al click, incluso quello di chiusura once).
   dialog.querySelectorAll<HTMLImageElement>(".memory-photo").forEach((img) => {
+    img.tabIndex = 0;
+    img.setAttribute("role", "button");
+    img.setAttribute("aria-label", isEN ? "Expand photo" : "Espandi la foto");
     img.addEventListener("click", () => openLightbox(dialog, img));
+    img.addEventListener("keydown", (e) => {
+      if (e.key !== "Enter" && e.key !== " ") return;
+      e.preventDefault();
+      img.click();
+    });
   });
 });
 
@@ -90,7 +102,7 @@ function ensureLightbox(dialog: HTMLDialogElement): HTMLDivElement {
   const closeBtn = document.createElement("button");
   closeBtn.type = "button";
   closeBtn.className = "photo-lightbox__close";
-  closeBtn.setAttribute("aria-label", "Chiudi");
+  closeBtn.setAttribute("aria-label", isEN ? "Close" : "Chiudi");
   closeBtn.textContent = "✕";
   closeBtn.addEventListener("click", () => closeLightbox(dialog));
   box.appendChild(closeBtn);

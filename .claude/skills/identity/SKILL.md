@@ -1,6 +1,6 @@
 ---
 name: identity
-description: "Chi è Giulio Occhipinti — Consulente per l'Innovazione Digitale & Partner Tecnico per PMI. Profilo multidisciplinare: Tech (Angular, Lit, MCP, Node.js), Design (UX/UI cert. IBM), Metodo (Agile snello). Carica quando: scrivi bio, testi di presentazione, copy delle card, descrizioni esperienze, tone of voice, storytelling, identità professionale, frasi guida, job hunting, target recruiter/CTO/art director/management, narrativa GO, 4 mode (tech/creative/human/management), preloader."
+description: "Chi è Giulio Occhipinti — Consulente per l'Innovazione Digitale & Partner Tecnico per piccole e grandi realtà. Profilo multidisciplinare: Tech (Angular, Lit, MCP, Node.js), Design (UX/UI cert. IBM), Metodo (Agile snello). Carica quando: scrivi bio, testi di presentazione, copy delle card, descrizioni esperienze, tone of voice, storytelling, identità professionale, frasi guida, job hunting, target recruiter/CTO/art director/management, narrativa GO, 4 mode (tech/creative/human/management), preloader."
 ---
 
 ## ⛔ BLOCKING — Writing Style di Giulio
@@ -128,7 +128,7 @@ L'utente esplora o torna senza mai ricominciare da zero. Il `<go-logo>` è il po
 
 **Identità professionale:**
 
-- USA: "Consulente Tecnico & AI Specialist per PMI", "hands-on", "operativo", "velocità di esecuzione"
+- USA: "Consulente Tecnico & AI Specialist per le aziende", "hands-on", "operativo", "velocità di esecuzione"
 - EVITA: "Team Lead", "Manager", "Owner", "Stakeholder", gergo da multinazionale
   (vocabolario base condiviso in `knolling-cv/SKILL.md` — qui solo le varianti specifiche per il copy)
 

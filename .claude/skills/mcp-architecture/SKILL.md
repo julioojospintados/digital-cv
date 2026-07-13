@@ -1,6 +1,6 @@
 ---
 name: mcp-architecture
-description: "Regole tecniche per il server MCP, Hono, e l'integrazione AI. Carica quando: lavori su src/, aggiungi tool MCP, route HTTP, variabili env, test, data layer, cv.ts, cv.en.ts, risorse MCP, prompt template, logger, Zod, MCP come vantaggio PMI, AI Workflow testi tecnici, build, deploy."
+description: "Regole tecniche per il server MCP, Hono, e l'integrazione AI. Carica quando: lavori su src/, aggiungi tool MCP, route HTTP, variabili env, test, data layer, cv.ts, cv.en.ts, risorse MCP, prompt template, logger, Zod, MCP come vantaggio aziendale, AI Workflow testi tecnici, build, deploy."
 ---
 
 # MCP Architecture — Regole Tecniche
@@ -68,7 +68,7 @@ Regola da ricordare qui: **ogni modifica a `cv.ts` va rispecchiata in `cv.en.ts`
 
 ---
 
-## MCP come Vantaggio Competitivo per PMI
+## MCP come Vantaggio Competitivo per le Aziende
 
 Quando scrivi testi in modalità TECH per AI Workflow / impactScore / card tecniche
 (vocabolario base in `knolling-cv/SKILL.md`, qui le varianti tecniche):

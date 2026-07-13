@@ -1,9 +1,9 @@
 ---
 name: agile-methodology
-description: "Come lavora Giulio: Agile snello, Lean, Project Management per PMI. Carica quando: aggiorni la sezione esperienze, scrivi testi Agile/UX/UI, descrivi metodologia, tag agile nelle card, certificazioni IBM, sprint, backlog, impactScore, GO Agile, GO Automated, glow skill agile."
+description: "Come lavora Giulio: Agile snello, Lean, Project Management per le aziende. Carica quando: aggiorni la sezione esperienze, scrivi testi Agile/UX/UI, descrivi metodologia, tag agile nelle card, certificazioni IBM, sprint, backlog, impactScore, GO Agile, GO Automated, glow skill agile."
 ---
 
-# Agile Methodology — Snello per PMI
+# Agile Methodology — Snello per le Aziende
 
 ## Il Metodo
 

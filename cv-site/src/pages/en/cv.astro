@@ -13,6 +13,9 @@ import SoftItem from "../../components/cards/SoftItem.astro";
 // it doesn't re-render hero text). Mirrors the "tech" entry of heroTitles/
 // heroSummaries in [mode].astro — same "Design first, Tech as a tool"
 // framing (see memory "posizionamento-ux-ui-first").
+// Footer: contacts derived from cv.en.ts, no hardcoded mailto in the template
+const emailSocial = cvDataEn.social.find((s) => s.platform === "Email");
+
 const heroTitle =
   "Development in service of design: Angular, Lit, AI Workflow.";
 const heroSummary =
@@ -167,7 +170,7 @@ function isActiveSkill(modeTags: string): boolean {
 
 // ── Experience mode tags ───────────────────────────────────────────────────
 const EXP_MODE_TAGS = [
-  "tech management", // 0 — PMI Gestionale Internal Project
+  "tech management", // 0 — Business Management Internal Project
   "tech", // 1 — Digital CV AI-Augmented
   "tech management", // 2 — ALTEN Italia (Angular/WebComponents enterprise)
   "creative human", // 3 — Music Agency
@@ -271,17 +274,34 @@ const expClustersEn = EXP_CLUSTER_DEFS_EN.map((cluster) => {
 });
 
 // ── Soft skills mode tags ─────────────────────────────────────────────────
+// One entry per cvDataEn.softSkills item, same order. Mirrors [mode].astro:
+// the list used to have 9 tags for 11 skills, so "Active listening" and
+// "Assertiveness" (added later) stole the tags meant for "Aesthetic
+// sensibility" and "T-shaped thinking".
 const SOFT_MODE_TAGS = [
-  "human creative",
-  "creative human",
-  "human",
-  "human management",
-  "tech human management",
-  "tech human management",
-  "human management",
-  "creative",
-  "tech creative human management",
+  "human creative", // Effective communication
+  "creative human", // Applied creativity
+  "human", // Cultural adaptability
+  "human management", // Relational intelligence
+  "tech human management", // Lateral problem solving
+  "tech human management", // Autonomy and ownership
+  "human management", // Resilience and adaptive thinking
+  "human management", // Active listening
+  "human management", // Assertiveness
+  "creative", // Aesthetic sensibility
+  "tech creative human management", // T-shaped thinking
 ];
+
+// Index-based maps must stay aligned with the data: failing the build beats
+// shipping a silently wrong visual emphasis.
+if (EXP_MODE_TAGS.length !== cvDataEn.experience.length)
+  throw new Error(
+    `EXP_MODE_TAGS (${EXP_MODE_TAGS.length}) out of sync with cvDataEn.experience (${cvDataEn.experience.length}): update the map in en/cv.astro.`,
+  );
+if (SOFT_MODE_TAGS.length !== cvDataEn.softSkills.length)
+  throw new Error(
+    `SOFT_MODE_TAGS (${SOFT_MODE_TAGS.length}) out of sync with cvDataEn.softSkills (${cvDataEn.softSkills.length}): update the map in en/cv.astro.`,
+  );
 
 const softSkillsData = cvDataEn.softSkills.map((skill, i) => ({
   name: skill.name,
@@ -877,10 +897,12 @@ const projectsData = cvDataEn.projects.slice(0, 6).map((p) => {
           >LinkedIn</a>
         </>
       )}
-      {" · "}
-      <a href="mailto:giulio.occhipinti.g@gmail.com"
-        >giulio.occhipinti.g@gmail.com</a
-      >
+      {emailSocial && (
+        <>
+          {" · "}
+          <a href={emailSocial.url}>{emailSocial.label ?? emailSocial.url.replace("mailto:", "")}</a>
+        </>
+      )}
     </p>
   </footer>
 </Layout>

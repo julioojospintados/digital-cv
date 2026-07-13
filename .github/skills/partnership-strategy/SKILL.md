@@ -1,13 +1,13 @@
 ---
 name: partnership-strategy
-description: "Strategia di posizionamento come Partner Tecnico / Facilitatore per PMI. Carica quando: scrivi bio per offerta Fractional, sezione servizi, testi management, descrivi il modello di collaborazione, posizionamento vs dipendente/consulente classico, proposta di valore per PMI."
+description: "Strategia di posizionamento come Partner Tecnico / Facilitatore per piccole e grandi realtà. Carica quando: scrivi bio per offerta Fractional, sezione servizi, testi management, descrivi il modello di collaborazione, posizionamento vs dipendente/consulente classico, proposta di valore per le aziende."
 ---
 
 # Giulio Occhipinti — Partnership Digitale Integrata
 
 ## Il Ruolo: Partner per l'Innovazione & Problem Solver
 
-Giulio non vende singoli servizi, ma si propone come il **referente unico per l'intero comparto digitale** della PMI.
+Giulio non vende singoli servizi, ma si propone come il **referente unico per l'intero comparto digitale** dell'azienda.
 Il suo approccio è **Analitico e Strategico**: prima capisce il modello di business, poi applica la tecnologia corretta (AI, Codice, Design o Comunicazione).
 
 ---
@@ -46,7 +46,7 @@ Facilitazione tramite Scrum snello per garantire che ogni progetto arrivi alla f
 
 ## Framework di Comunicazione & Psicologia
 
-- **AIDA per PMI:** Attira l'attenzione sul caos digitale, crea interesse con l'AI (MCP), genera desiderio di ordine e spingi all'azione (Audit).
+- **AIDA per le aziende:** Attira l'attenzione sul caos digitale, crea interesse con l'AI (MCP), genera desiderio di ordine e spingi all'azione (Audit).
 - **PAS (Problem, Agitation, Solution):** Identifica il "dolore" (es. gestionale lento), enfatizza le perdite economiche, offri l'Ecosistema come cura.
 - **Hick's Law:** Applica la semplicità estrema nelle CTA. Una sola scelta chiara per evitare il blocco decisionale del cliente.
 
@@ -108,7 +108,7 @@ Sprint corti, backlog orientato al business, autonomia crescente del team — no
 
 ---
 
-## Messaggi Chiave per le PMI
+## Messaggi Chiave per le Aziende
 
 - "Non devi assumere un team AI. Ti serve qualcuno che lo faccia funzionare — subito."
 - "MCP non è per grandi budget. È per chi vuole l'AI integrata nei processi, non in una demo."

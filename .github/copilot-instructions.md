@@ -24,9 +24,9 @@ Poi carica la skill specializzata pertinente alla richiesta:
 
 ## Identità professionale
 
-**Giulio Occhipinti** — **Consulente per l'Innovazione Digitale & Partner Tecnico per PMI**.
+**Giulio Occhipinti** — **Consulente per l'Innovazione Digitale & Partner Tecnico per piccole e grandi realtà**.
 
-È un **generalista esperto** che supporta le PMI a 360°, orchestrando tre pilastri integrati:
+È un **generalista esperto** che supporta le aziende a 360°, orchestrando tre pilastri integrati:
 
 | Pilastro       | Cosa include                                                                          |
 | -------------- | ------------------------------------------------------------------------------------- |
@@ -48,7 +48,7 @@ Il flusso tipo di un suo intervento:
 4. **Autonomia del team** — il team continua senza dipendere dal consulente
 
 Non un manager da organigramma, non un consulente che consegna slide: qualcuno che **entra nell'azienda, capisce il problema reale, costruisce la soluzione e la fa girare** — con le proprie mani e con l'AI come moltiplicatore.
-Il target non sono le multinazionali con team di 50 persone. Sono le **PMI che vogliono scalare senza assumere 10 persone** — usando Tecnologia, Design e Metodo Agile per fare in 2 quello che altri fanno in 8.
+Il target non sono le multinazionali con team di 50 persone. Sono le **realtà che vogliono scalare senza assumere 10 persone** — usando Tecnologia, Design e Metodo Agile per fare in 2 quello che altri fanno in 8.
 
 **Vocabolario — Regola Ferrea:** Evita sempre gergo corporate come "alignment", "stakeholder management", "vertical growth", "ownership", "KPI-driven". Usa: **risoluzione**, **automazione**, **velocità di rilascio**, **impatto sul business**, **autonomia strategica**, **Tecnologia**, **Design**, **Metodo**.
 
@@ -76,7 +76,7 @@ Questo progetto è la dimostrazione live dei tre pilastri (Tecnologia + Design +
 
 ---
 
-## Metodologia — Hands-on & Agile snello per PMI
+## Metodologia — Hands-on & Agile snello per le aziende
 
 - **Operativo prima di tutto**: non delega, esegue. Progetta l'architettura e scrive il codice — spesso nella stessa giornata.
 - **Agile senza burocrazia**: sprint corti (1–2 settimane), nessun documento che non serve a rilasciare domani. Backlog = lista di problemi aziendali concreti, non requisiti astratti.
@@ -175,7 +175,7 @@ Il sito si chiama **Knolling / Flat Lay CV**: ogni elemento (esperienza, skill, 
 | SOFTWARE DEVELOPER   | `/tech`       | Cyan `rgba(0,255,200,1)` | Architetture, codice, sistemi                        |
 | WEB & UX DESIGNER    | `/creative`   | Arancione `rgba(255,107,53,1)` | Racconto, immagine, suono                      |
 | AI & DIGITAL SPECIALIST | `/human`   | Oro `rgba(240,200,127,1)` | Impatto, relazione, presenza                        |
-| PROJECT MANAGER      | `/management` | Viola `rgba(180,100,255,1)` | Metodo, Agile, PMI, consulenza strategica         |
+| PROJECT MANAGER      | `/management` | Viola `rgba(180,100,255,1)` | Metodo, Agile, aziende, consulenza strategica         |
 
 Tutti e 4 i mode usano sfondo ottanio `rgba(8,73,67,1)` — solo `--color-accent` cambia.
 

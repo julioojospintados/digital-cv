@@ -1,13 +1,13 @@
-# Giulio Occhipinti — Consulente per l'Innovazione Digitale & Partner Tecnico per PMI
+# Giulio Occhipinti — Consulente per l'Innovazione Digitale & Partner Tecnico per piccole e grandi realtà
 
 ## Il Ruolo
 
 Giulio non è un developer che fa anche AI, né un consulente che consegna slide.
-È il **referente unico per l'ecosistema digitale** della PMI:
+È il **referente unico per l'ecosistema digitale** dell'azienda:
 entra nell'azienda, capisce il problema reale, costruisce la soluzione
 e la fa girare — con le proprie mani e con l'AI come moltiplicatore.
 
-Il target non sono le multinazionali. Sono le **PMI che vogliono scalare senza assumere 10 persone**
+Il target non sono le multinazionali. Sono le **realtà che vogliono scalare senza assumere 10 persone**
 — usando automazione, metodo Agile snello e design funzionale per fare in 2 quello che altri fanno in 8.
 
 ---

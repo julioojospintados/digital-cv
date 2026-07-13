@@ -156,7 +156,7 @@ const skillSquares = [
 });
 
 const EXP_MODE_TAGS = [
-  "tech management", // 0 — Progetto Interno — Gestionale PMI
+  "tech management", // 0 — Progetto Interno — Gestionale aziendale
   "tech", // 1 — Digital CV AI-Augmented
   "tech management", // 2 — ALTEN Italia (Angular/WebComponents enterprise)
   "creative human", // 3 — Music Agency
@@ -259,17 +259,34 @@ const skillViewLabels = {
   cards: "Card",
 } as const;
 
+// Una voce per ogni elemento di cvData.softSkills, nello stesso ordine.
+// Prima erano 9 tag per 11 skill: "Ascolto attivo" e "Assertività" (aggiunte
+// dopo) rubavano i tag di "Sensibilità estetica" e "Pensiero T-shaped", e le
+// ultime due finivano nel fallback attivo-ovunque.
 const SOFT_MODE_TAGS = [
-  "human creative",
-  "creative human",
-  "human",
-  "human management",
-  "tech human management",
-  "tech human management",
-  "human management",
-  "creative",
-  "tech creative human management",
+  "human creative", // Comunicazione efficace
+  "creative human", // Creatività applicata
+  "human", // Adattabilità culturale
+  "human management", // Intelligenza relazionale
+  "tech human management", // Problem solving laterale
+  "tech human management", // Autonomia e ownership
+  "human management", // Resilienza e pensiero adattivo
+  "human management", // Ascolto attivo
+  "human management", // Assertività
+  "creative", // Sensibilità estetica
+  "tech creative human management", // Pensiero T-shaped
 ];
+
+// Le mappe per indice devono restare allineate ai dati: meglio far fallire
+// la build che spedire un'enfasi visiva silenziosamente sbagliata.
+if (EXP_MODE_TAGS.length !== cvData.experience.length)
+  throw new Error(
+    `EXP_MODE_TAGS (${EXP_MODE_TAGS.length}) non allineato a cvData.experience (${cvData.experience.length}): aggiorna la mappa in [mode].astro.`,
+  );
+if (SOFT_MODE_TAGS.length !== cvData.softSkills.length)
+  throw new Error(
+    `SOFT_MODE_TAGS (${SOFT_MODE_TAGS.length}) non allineato a cvData.softSkills (${cvData.softSkills.length}): aggiorna la mappa in [mode].astro.`,
+  );
 
 const softSkillsData = cvData.softSkills.map((skill, i) => ({
   name: skill.name,
@@ -366,28 +383,28 @@ const MODE_LABELS: Record<string, string> = {
 const modeLabel = MODE_LABELS[mode] ?? mode;
 
 const modeDescriptions: Record<string, string> = {
-  tech: "Sviluppo web con Angular, Lit e TypeScript al servizio del design: interfacce curate, AI workflow e automazione per PMI che vogliono risultati misurabili.",
+  tech: "Sviluppo web con Angular, Lit e TypeScript al servizio del design: interfacce curate, AI workflow e automazione per realtà che vogliono risultati misurabili.",
   creative:
-    "UX/UI & Web Designer certificato IBM, Creative Technologist. Progetto esperienze digitali che uniscono estetica, usabilità e impatto sul brand per PMI.",
+    "UX/UI & Web Designer certificato IBM, Creative Technologist. Progetto esperienze digitali che uniscono estetica, usabilità e impatto sul brand per realtà di ogni dimensione.",
   human:
     "Consulente per l'Innovazione Digitale con background multidisciplinare: design, sviluppo web, teatro e comunicazione. Lavoro per un impatto reale sulle persone e sui processi.",
   management:
-    "Partner Tecnico Agile per PMI. Sprint brevi, backlog orientato al business, autonomia del team. Design + Tecnologia + Metodo in ogni ingaggio.",
+    "Partner Tecnico Agile per piccole e grandi realtà. Sprint brevi, backlog orientato al business, autonomia del team. Design + Tecnologia + Metodo in ogni ingaggio.",
 };
 const modeDescription =
   modeDescriptions[mode] ??
-  "CV interattivo di Giulio Occhipinti: Consulente per l'Innovazione Digitale & Partner Tecnico per PMI.";
+  "CV interattivo di Giulio Occhipinti: Consulente per l'Innovazione Digitale & Partner Tecnico per piccole e grandi realtà.";
 
 // Hero mode-aware: chi arriva su /tech o /creative cercando un profilo
-// specifico non deve leggere il posizionamento PMI generico (quello resta
-// su home e /management) — vedi memoria "posizionamento-ux-ui-first":
+// specifico non deve leggere il posizionamento generico da partner tecnico
+// (quello resta su home e /management) — vedi memoria "posizionamento-ux-ui-first":
 // Design/UX-UI sempre prima, Tecnologia come strumento, mai "Senior
 // Frontend Developer" come identità.
 const heroTitles: Record<string, string> = {
   tech: "Sviluppo al servizio del design: Angular, Lit, AI Workflow.",
   creative: "UX/UI & Web Designer certificato IBM, Creative Technologist.",
   human: "Consulente per l'Innovazione Digitale: comunicazione e impatto.",
-  management: "Partner Tecnico Agile per PMI: Design, Tecnologia, Metodo.",
+  management: "Partner Tecnico Agile: Design, Tecnologia, Metodo.",
 };
 const heroTitle = heroTitles[mode] ?? cvData.personal.title;
 
@@ -398,6 +415,9 @@ const heroSummaries: Record<string, string> = {
   management: "Applico Scrum e Kanban in contesti diversi: team enterprise distribuiti come Intesa San Paolo e Aruba, e collaborazioni più snelle come il tour management per un'agenzia musicale, dove ho seguito booking e strategia digitale in autonomia. Lavoro in sprint brevi, con un backlog costruito sugli obiettivi di business.",
 };
 const heroSummary = heroSummaries[mode] ?? cvData.personal.summary;
+
+// Footer: contatti derivati da cv.ts, nessun mailto hardcoded nel template
+const emailSocial = cvData.social.find((s) => s.platform === "Email");
 ---
 
 <Layout
@@ -910,10 +930,12 @@ const heroSummary = heroSummaries[mode] ?? cvData.personal.summary;
         >LinkedIn</a>
       </>
     )}
-    {" · "}
-    <a href="mailto:giulio.occhipinti.g@gmail.com"
-      >giulio.occhipinti.g@gmail.com</a
-    >
+    {emailSocial && (
+      <>
+        {" · "}
+        <a href={emailSocial.url}>{emailSocial.label ?? emailSocial.url.replace("mailto:", "")}</a>
+      </>
+    )}
   </p>
 </footer>
 </Layout>

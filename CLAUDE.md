@@ -18,7 +18,7 @@ Poi carica la skill specializzata pertinente alla richiesta (i puntatori complet
 | `.claude/skills/design-system/SKILL.md` | UI, animazioni, card, knolling, GSAP, Tailwind 4, Awwwards |
 | `.claude/skills/agile-methodology/SKILL.md` | esperienze, Agile, UX/UI, certificazioni, sprint |
 | `.claude/skills/mcp-architecture/SKILL.md` | backend, MCP tools, Hono, test, cv.ts |
-| `.claude/skills/partnership-strategy/SKILL.md` | offerta Fractional, bio servizi, tono PMI, posizionamento |
+| `.claude/skills/partnership-strategy/SKILL.md` | offerta Fractional, bio servizi, tono per le aziende, posizionamento |
 
 Skill di utilità (non di dominio, non caricare di default):
 
