@@ -340,7 +340,8 @@ go-logo:not(:defined) {
    applicasse le larghezze fisse. ── */
 .mode-buttons,
 .mode-dropdown,
-.cv-nav .lang-switch {
+.cv-nav .lang-switch,
+.cv-nav .lang-dropdown {
   opacity: 0;
 }
 
@@ -500,6 +501,114 @@ go-logo:not(:defined) {
 a.lang-switch__opt:hover {
   color: var(--color-text-primary);
   background: rgba(255, 255, 255, 0.07);
+}
+
+/* Su mobile lo switch a 2 chip lascia il posto al .lang-dropdown compatto:
+   più largo del necessario per un elemento che affianca il mode-dropdown
+   nella stessa striscia stretta. */
+@media (max-width: 43.5rem) {
+  .lang-switch {
+    display: none;
+  }
+}
+
+/* ── Language dropdown — mobile only, <details> nativo, zero JS ───────────
+   Stesso linguaggio visivo di .mode-dropdown__trigger (trigger compatto +
+   lista assoluta) ma senza bisogno di alcun handler: aprire/chiudere è
+   comportamento nativo dell'elemento, selezionare una lingua è semplicemente
+   navigare al link — nessuno stato client da sincronizzare. */
+.lang-dropdown {
+  display: none;
+}
+
+@media (max-width: 43.5rem) {
+  .lang-dropdown {
+    display: block;
+    position: relative;
+    flex-shrink: 0;
+  }
+}
+
+.lang-dropdown__trigger {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  height: 1.9rem;
+  padding: 0 0.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-4);
+  color: rgba(192, 220, 215, 0.85);
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  list-style: none;
+  transition:
+    border-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.lang-dropdown__trigger::-webkit-details-marker {
+  display: none;
+}
+
+.lang-dropdown[open] .lang-dropdown__trigger {
+  border-radius: 2px 2px 0 0;
+  border-color: color-mix(in srgb, var(--color-accent) 40%, var(--color-border));
+  color: var(--color-text-primary);
+}
+
+.lang-dropdown__chevron {
+  font-size: 0.9rem;
+  line-height: 1;
+  transition: transform 0.2s ease;
+}
+
+.lang-dropdown[open] .lang-dropdown__chevron {
+  transform: rotate(90deg);
+}
+
+.lang-dropdown__list {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  min-width: 100%;
+  margin: 0;
+  padding: 0.2rem 0;
+  list-style: none;
+  background: rgba(8, 73, 67, 0.98);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid color-mix(in srgb, var(--color-accent) 40%, var(--color-border));
+  border-top: none;
+  border-radius: 0 0 2px 2px;
+  z-index: 200;
+}
+
+.lang-dropdown__option {
+  padding: 0.5rem 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(192, 220, 215, 0.85);
+  white-space: nowrap;
+}
+
+.lang-dropdown__option a {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+.lang-dropdown__option.is-selected {
+  color: var(--color-accent);
+  background: color-mix(in srgb, var(--color-accent) 8%, transparent);
 }
 
 /* ── Main layout ─────────────────────────────────────────────── */

@@ -56,6 +56,7 @@ const navControls = [
   document.querySelector<HTMLElement>(".cv-nav .mode-buttons"),
   document.querySelector<HTMLElement>("#mode-dropdown"),
   document.querySelector<HTMLElement>(".cv-nav .lang-switch"),
+  document.querySelector<HTMLElement>(".cv-nav .lang-dropdown"),
 ].filter((el): el is HTMLElement => el !== null);
 if (navControls.length) {
   heroTl.fromTo(
@@ -237,6 +238,20 @@ document.addEventListener("fullscreenchange", () => {
   }
 });
 
+// ── Lazy-load SkillForceGraph — D3 (~130 KB gzip) fuori dal percorso critico ──
+// Su mobile il grafo resta opt-in: D3 si carica solo al primo click su
+// "Grafico". Su desktop è la vista di default (vedi sotto) quindi si carica
+// subito — niente click necessario per vederlo.
+let _graphLoadStarted = false;
+function ensureGraphLoaded(): void {
+  if (_graphLoadStarted) return;
+  _graphLoadStarted = true;
+  import("../islands/SkillForceGraph.lit.ts").then(() => {
+    // Custom element ora registrato — ricalcola trigger ScrollTrigger
+    requestAnimationFrame(() => ScrollTrigger.refresh());
+  });
+}
+
 skillsViewButtons.forEach((button) => {
   button.addEventListener("click", () => {
     const view = button.dataset.skillsViewButton as
@@ -244,13 +259,22 @@ skillsViewButtons.forEach((button) => {
       | "cards"
       | undefined;
     if (!view) return;
+    // Avvia l'import PRIMA dello switch: se l'utente clicca "Grafico" da
+    // mobile (dove non è ancora caricato) il pannello passa a display:block
+    // nello stesso istante in cui parte il fetch di D3, non dopo.
+    if (view === "graph") ensureGraphLoaded();
     applySkillsView(view);
   });
 });
 
-// Default view: CARD su tutti i viewport (scannabile — Legge di Jakob).
-// Il grafico è l'opt-in "wow": D3 viene caricato solo al primo switch.
-applySkillsView("cards");
+// Default view dipende dal viewport (stesso breakpoint —min-width:56.25rem—
+// che SkillForceGraph usa internamente per isMobile, custom media --desktop
+// in index-page.css): desktop ha spazio e mouse per il grafico e lo mostra
+// da subito; mobile resta su CARD, scannabile in 5s (Legge di Jakob), il
+// grafico resta un opt-in dietro al tasto "Grafico".
+const isDesktopViewport = window.matchMedia("(min-width: 56.25rem)").matches;
+applySkillsView(isDesktopViewport ? "graph" : "cards");
+if (isDesktopViewport) ensureGraphLoaded();
 
 // ── Update nav buttons: morph larghezza + crossfade testo ───────────
 // Larghezze FISSE anche su desktop: evitano jitter e tengono le 4 voci allineate.
@@ -600,6 +624,21 @@ document
       if (dropdownList.classList.contains("is-open")) {
         dropdownList.classList.remove("is-open");
         dropdownBtn.setAttribute("aria-expanded", "false");
+      }
+    });
+  }
+}
+
+// ── Language dropdown (mobile, <details> nativo) ────────────────────────
+// Apertura/chiusura è gratis (comportamento nativo dell'elemento) — l'unica
+// cosa che serve è chiudere quando l'utente clicca fuori, per coerenza con
+// il mode-dropdown accanto (che ha lo stesso comportamento).
+{
+  const langDropdown = document.querySelector<HTMLDetailsElement>(".lang-dropdown");
+  if (langDropdown) {
+    document.addEventListener("click", (e) => {
+      if (langDropdown.open && !langDropdown.contains(e.target as Node)) {
+        langDropdown.open = false;
       }
     });
   }
@@ -1481,20 +1520,5 @@ if (skillsViewButtons.length) {
   document.addEventListener("click", () => { if (_peekCard) resetPeek(); });
 }
 
-// ── Lazy-load SkillForceGraph — D3 (~130 KB gzip) fuori dal percorso critico ──
-// Con la vista CARD come default, il grafo è opt-in: D3 viene importato solo
-// al primo click su "Grafico" — chi non lo apre non lo scarica mai.
-let _graphLoadStarted = false;
-function ensureGraphLoaded(): void {
-  if (_graphLoadStarted) return;
-  _graphLoadStarted = true;
-  import("../islands/SkillForceGraph.lit.ts").then(() => {
-    // Custom element ora registrato — ricalcola trigger ScrollTrigger
-    requestAnimationFrame(() => ScrollTrigger.refresh());
-  });
-}
-skillsViewButtons.forEach((button) => {
-  if (button.dataset.skillsViewButton === "graph") {
-    button.addEventListener("click", ensureGraphLoaded);
-  }
-});
+// (Lazy-load di SkillForceGraph + listener dei bottoni vista skill: vedi
+// ensureGraphLoaded/applySkillsView più in alto in questo file.)
