@@ -367,14 +367,77 @@ Hardware-accelerato. Applicabile alle sezioni di `cv.astro` con `IntersectionObs
 
 ---
 
-## Typography Scale
+## Typography Scale — regola ferrea (decisione 2026-07-14)
 
-/_ h2 sezione: clamp(2rem, 5vw, 4.5rem) — font-weight 700 _/
-/_ Label uppercase (entry-label): 0.65rem, letter-spacing: 0.25em _/
-/_ Body: max 1.1rem, line-height: 1.65 _/
-/_ Tagline/italic: 0.9rem _/
+**Mai un font-size "a caso".** Ogni `font-size` fisso (non fluido) nel progetto
+deve essere uno dei token `--fs-*` definiti in `global.css`, mai un rem
+calcolato a occhio (`0.68rem`, `0.82rem`, `0.58rem`...). Il "rumore" di rem
+non tondi è esattamente il difetto che questa scala elimina: prima della
+normalizzazione del 2026-07-14 il progetto aveva oltre 30 valori diversi di
+font-size, molti sotto la soglia minima di leggibilità.
 
-````
+### La scala — sempre via `var(--fs-N)`, mai il rem letterale
+
+| Token         | rem      | px  | Uso tipico                                          |
+| ------------- | -------- | --- | ---------------------------------------------------- |
+| `--fs-10`     | 0.625rem | 10  | **Eccezione**, vedi sotto — mai testo che si legge   |
+| `--fs-12`     | 0.75rem  | 12  | **Pavimento assoluto** — eyebrow, chip, meta, badge  |
+| `--fs-14`     | 0.875rem | 14  | Label secondarie, sub-title, testo desktop compatto  |
+| `--fs-16`     | 1rem     | 16  | Body — minimo per il testo principale su mobile      |
+| `--fs-18`     | 1.125rem | 18  | Body enfatizzato, sub-heading piccolo                |
+| `--fs-20`     | 1.25rem  | 20  | Titoli di card (es. project title)                   |
+| `--fs-24`     | 1.5rem   | 24  | Titoli di sezione piccoli                            |
+| `--fs-28`     | 1.75rem  | 28  | —                                                     |
+| `--fs-32`     | 2rem     | 32  | —                                                     |
+| `--fs-36`     | 2.25rem  | 36  | —                                                     |
+| `--fs-40`     | 2.5rem   | 40  | Numeri/display di medio impatto (es. step numerati)  |
+| `--fs-48`     | 3rem     | 48  | Display, specimen tipografico                        |
+
+Quando un valore esistente non è già su uno di questi step, va sempre
+arrotondato al più vicino (nearest-neighbor in px) — mai lasciato "in mezzo".
+Esempio: `0.82rem` (13.12px) è più vicino a 14px che a 12px → `var(--fs-14)`.
+
+**Eccezione — titoli/hero fluidi:** i `font-size: clamp(...)` per h1/h2 hero e
+display (es. `clamp(2rem, 5vw, 4.5rem)`) restano fuori da questa scala: sono
+deliberatamente continui/responsivi, il loro valore giusto dipende dal
+viewport reale, non da un token fisso. Il pavimento dei 12px vale comunque
+anche lì — nessun bound minimo di un clamp può scendere sotto `var(--fs-12)`
+(vedi `SkillSquare.astro`, i due clamp con `cqi` hanno pavimento a
+`--fs-12`/`--fs-10` per lo stesso motivo).
+
+### Regole di accessibilità (non negoziabili)
+
+- **12px è il minimo assoluto** per qualunque testo che l'utente deve
+  effettivamente leggere: label di form, didascalie, micro-help, note. Mai
+  scendere sotto `var(--fs-12)` per prosa, nomi, descrizioni, dati.
+- **10px (`var(--fs-10)`) è un'eccezione**, non uno step normale: si usa SOLO
+  per badge/timestamp brevissimi (2-4 caratteri) in ALL CAPS + bold + alto
+  contrasto — es. l'abbreviazione di 3 lettere del livello skill
+  (`EXP`/`AVA`/`BAS`). Se il testo è una frase o una parola intera, non
+  qualifica per l'eccezione: va a `--fs-12`.
+- **Body mobile:** minimo 16px (`var(--fs-16)`) — standard iOS/Material.
+- **Body desktop:** 14-16px accettabili (`var(--fs-14)`/`var(--fs-16)`).
+- **Testo secondario (entrambi i device):** minimo 12px (`var(--fs-12)`).
+- **Contrasto:** sotto i 18px bold / 14px normal serve un rapporto WCAG
+  ≥4.5:1 (già verificato per `--color-text-muted` su tutti i mode — vedi
+  tabella colori sopra). Non abbassare l'opacità di un colore già a 12px.
+- **Line-height:** più piccolo è il font, più deve respirare — 140-150% del
+  font-size per qualunque blocco a `--fs-12` o `--fs-14`. Mai line-height
+  <1.3 sotto i 14px.
+- **Font-weight:** mai `font-weight: 300`/`400` sotto i 14px su questo sito —
+  i micro-label usano già 500-700 (JetBrains Mono compensa bene grazie
+  all'x-height alta; Lexend idem).
+
+### DO NOT (typography)
+
+- Scrivere un `font-size` in rem/px letterale fuori da un `clamp()` — usa
+  sempre `var(--fs-N)`.
+- Introdurre un nuovo step nella scala senza motivo — se serve una taglia
+  intermedia, verifica prima se lo step vicino (12/14/16...) funziona.
+- Scendere sotto `var(--fs-12)` per qualunque prosa/label/nome — l'unica
+  eccezione è `var(--fs-10)` per badge cortissimi ALL CAPS + bold.
+- Alzare l'opacità/abbassare il contrasto per "far stare" un testo piccolo —
+  se il contrasto non regge a quella dimensione, la dimensione è sbagliata.
 
 **Font coppia tecnica — self-hosted via Fontsource (nessuna richiesta esterna, GDPR compliant):**
 
@@ -444,4 +507,6 @@ Hardware-accelerato. Applicabile alle sezioni di `cv.astro` con `IntersectionObs
 - Aggiungere token CSS (`--color-*`) senza usarli immediatamente nei componenti
 - Aumentare la trasparenza di `--color-text-muted` senza ricalcolare il ratio WCAG
 - Sovrascrivere `:focus-visible` con `outline: none` senza alternativa visibile
+- `font-size` in rem/px letterale fuori da un `clamp()` — usa sempre `var(--fs-N)` (vedi "Typography Scale")
+- Scendere sotto `var(--fs-12)` per prosa/label/nomi — l'eccezione `var(--fs-10)` è solo per badge cortissimi ALL CAPS + bold
 

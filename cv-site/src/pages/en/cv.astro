@@ -2,6 +2,9 @@
 import Layout from "../../layouts/Layout.astro";
 import { cvDataEn } from "@cv-data-en";
 import "../../styles/cv-page.css";
+// .work-index-card / .work-chevron — reused by the hero portfolio CTA, same
+// visual identity as the /work cards (see hero-portfolio-card below).
+import "../../styles/work-page.css";
 import ExpCard from "../../components/cards/ExpCard.astro";
 import AiCard from "../../components/cards/AiCard.astro";
 import ProjectCard from "../../components/cards/ProjectCard.astro";
@@ -533,19 +536,19 @@ const projectsData = cvDataEn.projects.slice(0, 6).map((p) => {
       </h1>
       <p class="hero-title">{heroTitle}</p>
       <p class="hero-summary">{heroSummary}</p>
-      <div class="hero-tshape" aria-label="T-shaped profile: depth and breadth">
-        <span class="hero-tshape__item">
-          <span class="hero-tshape__label">Depth</span>
-          <span class="hero-tshape__value">Frontend · 6+ years</span>
+
+      <!-- Card teaser, not a plain text link: the portfolio is proof of the
+           work, it deserves the same visual weight as the cards on /work
+           (.work-index-card, work-page.css) instead of blending into the
+           paragraph as just another underlined link. -->
+      <a href="/en/work" class="work-index-card hero-portfolio-card">
+        <p class="work-index-card__eyebrow">Portfolio</p>
+        <p class="work-index-card__name">Case studies, not a list.</p>
+        <p class="work-index-card__role">In the portfolio I tell the full process behind every project: problem, decisions, measurable outcomes.</p>
+        <span class="work-index-card__cta">
+          Explore the portfolio
+          <span class="work-chevron" aria-hidden="true"></span>
         </span>
-        <span class="hero-tshape__glyph" aria-hidden="true">⊤</span>
-        <span class="hero-tshape__item">
-          <span class="hero-tshape__label">Breadth</span>
-          <span class="hero-tshape__value">Design · Method · AI · Stage</span>
-        </span>
-      </div>
-      <a href="/en/work" class="hero-portfolio-cta">
-        In the portfolio I tell the full process behind every project: problem, decisions, measurable outcomes.
       </a>
 
       <div class="hero-footer">

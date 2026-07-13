@@ -43,7 +43,7 @@ const { name, description, tags, modeTags, slug, workHref = "/work" } = Astro.pr
   }
 
   .project-card__name {
-    font-size: 0.82rem;
+    font-size: var(--fs-14);
     font-weight: 600;
     color: var(--color-text-primary);
     margin: 0;
@@ -51,7 +51,7 @@ const { name, description, tags, modeTags, slug, workHref = "/work" } = Astro.pr
   }
 
   .project-card__desc {
-    font-size: 0.72rem;
+    font-size: var(--fs-14);
     line-height: 1.6;
     color: rgba(192, 220, 215, 0.85);
     margin: 0;
@@ -70,7 +70,7 @@ const { name, description, tags, modeTags, slug, workHref = "/work" } = Astro.pr
   }
 
   .tag-chip {
-    font-size: 0.55rem;
+    font-size: var(--fs-12);
     font-weight: 500;
     letter-spacing: 0.05em;
     color: rgba(192, 220, 215, 0.85);
@@ -85,7 +85,7 @@ const { name, description, tags, modeTags, slug, workHref = "/work" } = Astro.pr
     gap: 0.4rem;
     margin-top: 0.35rem;
     font-family: var(--font-mono);
-    font-size: 0.65rem;
+    font-size: var(--fs-14);
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;

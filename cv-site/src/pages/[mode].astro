@@ -2,6 +2,9 @@
 import Layout from "../layouts/Layout.astro";
 import { cvData } from "@cv-data";
 import "../styles/cv-page.css";
+// .work-index-card / .work-chevron — riusati dal CTA portfolio nell'hero,
+// stessa identità visiva delle card di /work (vedi hero-portfolio-card sotto).
+import "../styles/work-page.css";
 import ExpCard from "../components/cards/ExpCard.astro";
 import AiCard from "../components/cards/AiCard.astro";
 import ProjectCard from "../components/cards/ProjectCard.astro";
@@ -568,22 +571,19 @@ const emailSocial = cvData.social.find((s) => s.platform === "Email");
       </h1>
       <p class="hero-title">{heroTitle}</p>
       <p class="hero-summary">{heroSummary}</p>
-      <div class="hero-tshape" aria-label="Profilo T-shaped: profondità e ampiezza">
-        <span class="hero-tshape__item">
-          <span class="hero-tshape__label">Profondità</span>
-          <span class="hero-tshape__value">Frontend · 6+ anni</span>
+
+      <!-- Card teaser, non un link testuale: il portfolio è la prova del
+           lavoro, merita lo stesso peso visivo delle card su /work (stile
+           .work-index-card, work-page.css) invece di sparire dentro il
+           paragrafo come un link sottolineato qualunque. -->
+      <a href="/work" class="work-index-card hero-portfolio-card">
+        <p class="work-index-card__eyebrow">Portfolio</p>
+        <p class="work-index-card__name">Case study, non un elenco.</p>
+        <p class="work-index-card__role">Nel portfolio racconto il processo completo di ogni progetto: problema, decisioni, risultati misurabili.</p>
+        <span class="work-index-card__cta">
+          Esplora il portfolio
+          <span class="work-chevron" aria-hidden="true"></span>
         </span>
-        <span class="hero-tshape__glyph" aria-hidden="true">⊤</span>
-        <span class="hero-tshape__item">
-          <span class="hero-tshape__label">Ampiezza</span>
-          <span class="hero-tshape__value">Design · Metodo · AI · Palco</span>
-        </span>
-      </div>
-               <a href="/work" class="profile-portfolio-cta">
-            Portfolio:
-          </a>
-      <a href="/work" class="hero-portfolio-cta">
-        Nel portfolio racconto il processo completo di ogni progetto: problema, decisioni, risultati misurabili.
       </a>
 
 

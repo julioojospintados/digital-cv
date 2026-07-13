@@ -76,14 +76,19 @@ const classes = [
     letter-spacing: 0.02em;
     line-height: 1.2;
     color: var(--color-text-primary);
-    /* Font scala con la larghezza reale della card */
-    font-size: clamp(0.32rem, 9cqi, 0.82rem);
+    /* Font scala con la larghezza reale della card. Pavimento a 12px
+       (var(--fs-12)): sotto quella soglia il nome skill (testo vero, non
+       decorativo) diventava illeggibile nelle celle weight=1 più strette —
+       violazione del minimo assoluto (design-system/SKILL.md). */
+    font-size: clamp(var(--fs-12), 9cqi, var(--fs-14));
   }
 
   .skill-sq__level {
     font-weight: 500;
     letter-spacing: 0.08em;
     color: rgba(192, 220, 215, 0.85);
-    font-size: clamp(0.26rem, 6.5cqi, 0.6rem);
+    /* Abbreviazione di 3 lettere (EXP/AVA/BAS…), maiuscola: qualifica per
+       l'eccezione dei 10px (badge cortissimo, non prosa). */
+    font-size: clamp(var(--fs-10), 6.5cqi, var(--fs-12));
   }
 </style>

@@ -271,7 +271,7 @@ class SkillForceGraph extends LitElement {
 
     .force-node-label {
       font-family: "Lexend", sans-serif;
-      font-size: 0.875rem;
+      font-size: var(--fs-14);
       font-weight: 600;
       letter-spacing: 0.02em;
       fill: rgba(245, 240, 230, 0.92);
@@ -299,7 +299,7 @@ class SkillForceGraph extends LitElement {
       align-items: center;
       gap: 0.35rem;
       font-family: "Lexend", sans-serif;
-      font-size: 0.875rem;
+      font-size: var(--fs-14);
       font-weight: 600;
       letter-spacing: 0.12em;
       text-transform: uppercase;
@@ -319,7 +319,7 @@ class SkillForceGraph extends LitElement {
       border-top: 1px solid
         var(--skills-panel-border, rgba(255, 255, 255, 0.05));
       font-family: "JetBrains Mono", monospace;
-      font-size: 0.875rem;
+      font-size: var(--fs-14);
       color: rgba(192, 220, 215, 0.58);
       text-align: center;
     }
@@ -329,13 +329,13 @@ class SkillForceGraph extends LitElement {
        Lo zoom iniziale 1.9× porta le label a ~9px effettivi. */
     @media (max-width: 56.1875rem) {
       .force-node-label {
-        font-size: 0.875rem;
+        font-size: var(--fs-14);
         font-weight: 400;
         stroke-width: 2.5px;
       }
       .graph-meta {
         padding: 0.1rem 0.65rem 0.15rem;
-        font-size: 0.875rem;
+        font-size: var(--fs-14);
       }
     }
 
@@ -363,7 +363,7 @@ class SkillForceGraph extends LitElement {
       border: 1px solid rgba(255,255,255,0.18);
       background: rgba(8,73,67,0.92);
       color: rgba(192,220,215,0.8);
-      font-size: 1rem;
+      font-size: var(--fs-16);
       line-height: 1.5;
       display: flex;
       align-items: center;
@@ -397,7 +397,7 @@ class SkillForceGraph extends LitElement {
       left: 50%;
       transform: translateX(-50%);
       font-family: "Lexend", sans-serif;
-      font-size: 0.875rem;
+      font-size: var(--fs-14);
       letter-spacing: 0.09em;
       color: rgba(192,220,215,0.38);
       pointer-events: none;
@@ -438,7 +438,7 @@ class SkillForceGraph extends LitElement {
     }
     .graph-dialog-title {
       font-family: "Lexend", sans-serif;
-      font-size: 0.875rem;
+      font-size: var(--fs-14);
       font-weight: 700;
       letter-spacing: 0.14em;
       text-transform: uppercase;
@@ -448,7 +448,7 @@ class SkillForceGraph extends LitElement {
       background: none;
       border: none;
       color: rgba(192,220,215,0.7);
-      font-size: 1.1rem;
+      font-size: var(--fs-18);
       line-height: 1.5;
       cursor: pointer;
       padding: 0.2rem;
@@ -487,7 +487,7 @@ class SkillForceGraph extends LitElement {
     .graph-dialog-meta {
       padding: 0.3rem 1rem;
       font-family: "JetBrains Mono", monospace;
-      font-size: 0.875rem;
+      font-size: var(--fs-14);
       color: rgba(192,220,215,0.5);
       text-align: center;
       border-top: 1px solid rgba(255,255,255,0.05);
@@ -605,14 +605,14 @@ class SkillForceGraph extends LitElement {
         }
         .skill-graph-tooltip-portal .graph-tooltip__title {
           margin: 0;
-          font-size: 0.875rem;
+          font-size: var(--fs-14);
           font-weight: 700;
           letter-spacing: 0.03em;
           color: rgba(245,240,230,0.96);
         }
         .skill-graph-tooltip-portal .graph-tooltip__meta {
           margin: 0.2rem 0 0;
-          font-size: 0.875rem;
+          font-size: var(--fs-14);
           letter-spacing: 0.08em;
           text-transform: uppercase;
           color: rgba(192,220,215,0.82);
@@ -633,19 +633,19 @@ class SkillForceGraph extends LitElement {
           align-items: center;
           justify-content: space-between;
           gap: 0.5rem;
-          font-size: 0.875rem;
+          font-size: var(--fs-14);
           color: rgba(245,240,230,0.9);
         }
         .skill-graph-tooltip-portal .graph-tooltip__type {
           font-family: 'JetBrains Mono', monospace;
-          font-size: 0.875rem;
+          font-size: var(--fs-14);
           letter-spacing: 0.05em;
           text-transform: uppercase;
           color: rgba(192,220,215,0.88);
         }
         .skill-graph-tooltip-portal .graph-tooltip__desc {
           margin: 0.15rem 0 0;
-          font-size: 0.875rem;
+          font-size: var(--fs-14);
           color: rgba(192,220,215,0.68);
           line-height: 1.5;
         }
