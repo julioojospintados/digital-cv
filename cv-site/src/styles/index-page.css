@@ -1604,6 +1604,7 @@ img[src*="flashlight"] {
 .profile-cta {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
   margin-top: 0.85rem;
   padding: 0.65rem 1.25rem;
@@ -1618,6 +1619,13 @@ img[src*="flashlight"] {
   text-transform: uppercase;
   text-decoration: none;
   align-self: flex-start;
+  /* Larghezza uniforme sui 4 CTA (uno per mode): senza questo, un bottone
+     hug-content varia con la lunghezza della label ("GO to Project Manager"
+     vs "GO to AI & Digital Specialist") — su schermi stretti il divario si
+     vede a colpo d'occhio. min() sceglie il più piccolo tra il valore fisso
+     (abbastanza largo per la label più lunga) e il 100% del contenitore: mai
+     overflow, mai un bottone visibilmente più corto di un altro. */
+  min-width: min(22rem, 100%);
   /* Glow bordo luminescente — stessa formula di .cv-card[data-state="active"]
      in global.css, ma ancorata a --ps-accent (colore della sezione) invece
      di --color-accent (colore del mode globale). */
