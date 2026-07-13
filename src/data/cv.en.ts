@@ -130,7 +130,7 @@ export const cvDataEn = {
     },
     {
       company: "ALTEN Italia",
-      role: "Senior Frontend Developer",
+      role: "Frontend Developer",
       startDate: "2019-07",
       endDate: "present",
       location: "Turin, Italy",

@@ -51,7 +51,7 @@ Il sito non deve "elencare", deve **"dimostrare"**.
 ## I Tre Profili Target — Job Hunting
 
 Il sito **non è un portfolio sperimentale**: è uno strumento attivo di ricerca lavoro.
-Giulio Occhipinti è un Senior Frontend Developer con ~12 anni di esperienza.
+Giulio Occhipinti è un Frontend Developer con ~12 anni di esperienza.
 
 **Il sito deve convincere questi tre profili in ≤ 3 secondi:**
 
