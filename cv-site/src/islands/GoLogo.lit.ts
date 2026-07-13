@@ -1,4 +1,5 @@
 import { LitElement, html, css } from "lit";
+import { gsap } from "gsap";
 import { modeStore, type Mode } from "./stores/modeStore.ts";
 
 /**
@@ -129,9 +130,151 @@ class GoLogo extends LitElement {
     this._unsub?.();
   }
 
+  private _launching = false;
+
   private _handleClick() {
-    // Master Reset: torna alla landing con stato neutro
-    window.location.href = "/";
+    // Master Reset: torna alla landing con stato neutro. Stessa animazione
+    // "warp launch" dei bottoni "GO to..." della home (index-init.ts
+    // launchJourney) — un reload nudo lasciava vedere GO comparire subito e
+    // nome/card "assestarsi" con un beat di ritardo dietro: un transition
+    // intenzionale maschera quel riassemblaggio invece di esporlo.
+    if (this._launching) return;
+    this._launching = true;
+    this._launchHome();
+  }
+
+  private _launchHome() {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      window.location.href = "/";
+      return;
+    }
+
+    document.body.style.pointerEvents = "none";
+
+    // Overlay e speed-line vivono fuori da <body> (figli diretti di <html>):
+    // così restano nitidi anche se sfumiamo/scaliamo #main-content, e
+    // funzionano identici su qualunque pagina (mode, work, case study) senza
+    // dipendere da markup home-specifico come #launch-overlay.
+    const overlay = document.createElement("div");
+    Object.assign(overlay.style, {
+      position: "fixed",
+      inset: "0",
+      background: "rgba(0,0,0,0.92)",
+      opacity: "0",
+      zIndex: "99998",
+      pointerEvents: "none",
+    });
+    document.documentElement.appendChild(overlay);
+
+    const cx = window.innerWidth / 2;
+    const cy = window.innerHeight / 2;
+    const lineCount = 28;
+    const lineEls: HTMLElement[] = [];
+
+    for (let i = 0; i < lineCount; i++) {
+      const angle = (i / lineCount) * 360;
+      const rad = (angle * Math.PI) / 180;
+      const dist = Math.random() * 60 + 10;
+      const len = Math.random() * 200 + 80;
+      const thick = Math.random() * 1.5 + 0.5;
+      const line = document.createElement("div");
+      Object.assign(line.style, {
+        position: "fixed",
+        left: `${cx + Math.cos(rad) * dist}px`,
+        top: `${cy + Math.sin(rad) * dist}px`,
+        width: `${len}px`,
+        height: `${thick}px`,
+        background: "rgba(255,255,255,0.9)",
+        transform: `rotate(${angle}deg)`,
+        transformOrigin: "left center",
+        opacity: "0",
+        zIndex: "99997",
+        pointerEvents: "none",
+      });
+      document.documentElement.appendChild(line);
+      lineEls.push(line);
+    }
+
+    // #main-content (presente su ogni pagina, obbligatorio per lo skip-link)
+    // invece di document.body: scalare/sfumare l'intero body sposterebbe il
+    // containing block degli elementi position:fixed (cursor custom, FAB,
+    // nav) causando salti visivi — #main-content è sempre un sibling di nav/FAB.
+    const main = document.getElementById("main-content");
+
+    const journey = gsap.timeline({
+      onComplete: () => {
+        lineEls.forEach((l) => l.remove());
+        overlay.remove();
+      },
+    });
+
+    const isTouchDevice = !window.matchMedia("(hover: hover) and (pointer: fine)")
+      .matches;
+
+    const phase1Duration = isTouchDevice ? 0.55 : 0.6;
+    const phase1Stagger = isTouchDevice ? 0.02 : 0.018;
+    const phase2Duration = isTouchDevice ? 0.25 : 0.5;
+    const phase3Duration = isTouchDevice ? 0.35 : 0.35;
+    const phase3Stagger = isTouchDevice ? 0.012 : 0.009;
+    const blurStart = isTouchDevice ? 0.4 : 0.5;
+    const vignetteStart = isTouchDevice ? 0.75 : 0.9;
+    const navigateAt = isTouchDevice ? vignetteStart + 0.28 : vignetteStart + 0.4;
+
+    // Fase 1: comparsa — le speed-line "sparano" verso l'esterno
+    journey.fromTo(
+      lineEls,
+      { scaleX: 0, opacity: 0 },
+      {
+        scaleX: 1,
+        opacity: 0.85,
+        duration: phase1Duration,
+        stagger: { each: phase1Stagger, from: "random" },
+        ease: "power2.out",
+      },
+    );
+    // Fase 2: hold visibile prima di sparire
+    journey.to(
+      lineEls,
+      { opacity: 0.85, duration: phase2Duration, ease: "none" },
+      "-=0",
+    );
+    // Fase 3: allontanamento warp e dissolvenza
+    journey.to(
+      lineEls,
+      {
+        scaleX: 6,
+        opacity: 0,
+        duration: phase3Duration,
+        stagger: { each: phase3Stagger, from: "random" },
+        ease: "power4.in",
+      },
+      "-=0",
+    );
+
+    // Il mondo si allontana mentre acceleri
+    if (main) {
+      journey.to(
+        main,
+        {
+          opacity: 0,
+          scale: 0.85,
+          filter: "blur(10px)",
+          duration: phase3Duration,
+          ease: "power3.in",
+        },
+        blurStart,
+      );
+    }
+
+    // Vignette scura chiude la scena
+    journey.to(
+      overlay,
+      { opacity: 1, duration: 0.5, ease: "power2.inOut" },
+      vignetteStart,
+    );
+
+    // Naviga quando la vignette è abbastanza scura — non aspettare il completamento
+    journey.call(() => { window.location.href = "/"; }, undefined, navigateAt);
   }
 
   render() {

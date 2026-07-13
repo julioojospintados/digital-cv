@@ -965,7 +965,10 @@ document
         .slice(0, REVEAL_BATCH);
       if (!batch.length) return;
 
-      batch.forEach((card) => card.removeAttribute("hidden"));
+      batch.forEach((card) => {
+        card.removeAttribute("hidden");
+        card.classList.add("is-revealed");
+      });
       if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
         gsap.set(batch, { opacity: 1, y: 0 });
       } else {
@@ -998,6 +1001,7 @@ function initFeaturedCardReveal() {
   document.querySelectorAll<HTMLElement>(".exp-grid--featured .exp-card").forEach((card) => {
     gsap.killTweensOf(card);
     gsap.set(card, { clearProps: "opacity,y" });
+    card.classList.remove("is-revealed");
   });
 
   const featuredCards = Array.from(document.querySelectorAll<HTMLElement>(
@@ -1023,6 +1027,7 @@ function initFeaturedCardReveal() {
   // Card già nel viewport → animazione diretta (ScrollTrigger.batch non fa scattare
   // onEnter per elementi già visibili al momento della creazione del batch).
   if (inView.length) {
+    inView.forEach((card) => card.classList.add("is-revealed"));
     gsap.to(inView, {
       opacity: 1,
       y: 0,
@@ -1037,6 +1042,7 @@ function initFeaturedCardReveal() {
     ScrollTrigger.batch(belowFold, {
       start: "top 92%",
       onEnter(batch) {
+        batch.forEach((card) => card.classList.add("is-revealed"));
         gsap.to(batch, {
           opacity: 1,
           y: 0,

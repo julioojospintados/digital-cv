@@ -2,13 +2,7 @@
 import Layout from "../../layouts/Layout.astro";
 import { cvData } from "@cv-data";
 import "../../styles/work-page.css";
-
-const KNOLL_ICON: Record<string, string> = {
-  tech: "laptop.webp",
-  creative: "camera.webp",
-  human: "plant.webp",
-  management: "chess.webp",
-};
+import WorkIndexCard from "../../components/cards/WorkIndexCard.astro";
 
 const caseStudies = cvData.projects.filter((p) => !!p.slug);
 ---
@@ -38,23 +32,14 @@ const caseStudies = cvData.projects.filter((p) => !!p.slug);
     <div class="work-index-grid">
       {
         caseStudies.map((p) => (
-          <a class="work-index-card" href={`/work/${p.slug}`}>
-            <img
-              class="work-index-card__icon"
-              src={`/knolling/${KNOLL_ICON[p.primaryMode ?? "tech"]}`}
-              alt=""
-              aria-hidden="true"
-              loading="lazy"
-              decoding="async"
-            />
-            <p class="work-index-card__eyebrow">Case Study</p>
-            <h2 class="work-index-card__name">{p.name}</h2>
-            {p.role && <p class="work-index-card__role">{p.role}</p>}
-            <span class="work-index-card__cta">
-              Leggi il case study
-              <span class="work-chevron" aria-hidden="true" />
-            </span>
-          </a>
+          <WorkIndexCard
+            name={p.name}
+            slug={p.slug!}
+            role={p.role}
+            primaryMode={p.primaryMode}
+            workHref="/work"
+            ctaLabel="Leggi il case study"
+          />
         ))
       }
     </div>
