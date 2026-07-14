@@ -671,9 +671,11 @@ class FloatingMenu extends LitElement {
       >
         <span class="fab-icon fab-icon--open" aria-hidden="true">✕</span>
         <span class="fab-icon fab-icon--close" aria-hidden="true">
-          <!-- Icona contatti: il FAB è l'hub per mail/telefono/canali futuri -->
+          <!-- Nuvoletta di messaggio con 3 puntini: comunica "contattami",
+               non "profilo". I puntini sono subpath ritagliati via evenodd,
+               nessun colore hardcoded. -->
           <svg viewBox="0 0 24 24" width="21" height="21" fill="currentColor">
-            <path d="M12 12c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm0 2.5c-3.34 0-10 1.67-10 5V21h20v-1.5c0-3.33-6.66-5-10-5z"/>
+            <path fill-rule="evenodd" d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM8 9.6a1.4 1.4 0 1 1 0 2.8 1.4 1.4 0 0 1 0-2.8zm4 0a1.4 1.4 0 1 1 0 2.8 1.4 1.4 0 0 1 0-2.8zm4 0a1.4 1.4 0 1 1 0 2.8 1.4 1.4 0 0 1 0-2.8z"/>
           </svg>
         </span>
         ${feedbackCount > 0

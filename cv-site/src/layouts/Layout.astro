@@ -7,7 +7,7 @@ interface Props {
   description?: string;
   mode?: "tech" | "creative" | "human" | "management";
   lang?: "it" | "en";
-  /** FAB contatti — solo sulle pagine CV ([mode], en/cv) */
+  /** FAB contatti — pagine CV ([mode], en/cv), home (index, en/index) e /work */
   showFab?: boolean;
 }
 
@@ -129,7 +129,9 @@ const jsonLd = {
 
     <slot />
 
-    <!-- FAB contatti — solo pagine CV (showFab); il JS è importato da cv-init.ts -->
+    <!-- FAB contatti (showFab) — la definizione dell'island è importata
+         dalla pagina ospite (cv-init.ts sulle pagine CV, script inline su
+         home e /work) -->
     {showFab && <floating-menu></floating-menu>}
 
     <SpeedInsights />

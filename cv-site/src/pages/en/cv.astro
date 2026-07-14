@@ -10,14 +10,13 @@ import AiCard from "../../components/cards/AiCard.astro";
 import ProjectCard from "../../components/cards/ProjectCard.astro";
 import SkillSquare from "../../components/cards/SkillSquare.astro";
 import SoftItem from "../../components/cards/SoftItem.astro";
+import ContactFooter from "../../components/ContactFooter.astro";
 
 // Hero copy — EN page is always static, default persona is 'tech' (see
 // mode-buttons comment below: mode switch only filters cards client-side,
 // it doesn't re-render hero text). Mirrors the "tech" entry of heroTitles/
 // heroSummaries in [mode].astro — same "Design first, Tech as a tool"
 // framing (see memory "posizionamento-ux-ui-first").
-// Footer: contacts derived from cv.en.ts, no hardcoded mailto in the template
-const emailSocial = cvDataEn.social.find((s) => s.platform === "Email");
 
 const heroTitle =
   "Development in service of design: Angular, Lit, AI Workflow.";
@@ -911,31 +910,8 @@ const projectsData = cvDataEn.projects.slice(0, 6).map((p) => {
         </div>
       )
     }
-    <p class="cv-footer__credit">
-      {cvDataEn.personal.name}
-      {cvDataEn.personal.phone && (
-        <>
-          {" · "}
-          <a href={`tel:${cvDataEn.personal.phone.replace(/\s+/g, "")}`}>{cvDataEn.personal.phone}</a>
-        </>
-      )}
-      {cvDataEn.social.find((s) => s.platform === "LinkedIn") && (
-        <>
-          {" · "}
-          <a
-            href={cvDataEn.social.find((s) => s.platform === "LinkedIn")!.url}
-            target="_blank"
-            rel="noopener noreferrer"
-          >LinkedIn</a>
-        </>
-      )}
-      {emailSocial && (
-        <>
-          {" · "}
-          <a href={emailSocial.url}>{emailSocial.label ?? emailSocial.url.replace("mailto:", "")}</a>
-        </>
-      )}
-    </p>
+    <ContactFooter lang="en" />
+    <p class="cv-footer__credit">{cvDataEn.personal.name} · Digital CV</p>
   </footer>
 </Layout>
 

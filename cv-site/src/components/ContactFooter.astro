@@ -1,0 +1,213 @@
+---
+// ContactFooter.astro — blocco contatti CTA condiviso (home + pagine CV).
+// Email, LinkedIn e telefono sono azioni cliccabili, non testo da copiare:
+// ogni card ha label mono, valore reale e verbo d'azione con freccia.
+// LinkedIn apre in una nuova scheda (è l'unico link che naviga verso un
+// altro sito); mailto e tel restano nella stessa scheda perché aprono il
+// client di posta o il dialer, non una pagina.
+import { cvData } from "@cv-data";
+import { cvDataEn } from "@cv-data-en";
+
+interface Props {
+  lang?: "it" | "en";
+}
+const { lang = "it" } = Astro.props;
+const data = lang === "en" ? cvDataEn : cvData;
+
+const email = data.social.find((s) => s.platform === "Email");
+const linkedin = data.social.find((s) => s.platform === "LinkedIn");
+const phone = data.personal.phone;
+
+const t =
+  lang === "en"
+    ? {
+        eyebrow: "Contacts",
+        title: "Let's talk",
+        sub: "An email, a call or a LinkedIn message. I answer, not a form.",
+        email: { label: "Email", action: "Write to me", aria: "Write an email to Giulio" },
+        linkedin: { label: "LinkedIn", action: "Let's connect", aria: "Open Giulio's LinkedIn profile in a new tab" },
+        phone: { label: "Phone", action: "Call me", aria: "Call Giulio" },
+      }
+    : {
+        eyebrow: "Contatti",
+        title: "Parliamone",
+        sub: "Una mail, una chiamata o un messaggio su LinkedIn. Rispondo io, non un form.",
+        email: { label: "Email", action: "Scrivimi", aria: "Scrivi una email a Giulio" },
+        linkedin: { label: "LinkedIn", action: "Connettiamoci", aria: "Apri il profilo LinkedIn di Giulio in una nuova scheda" },
+        phone: { label: "Telefono", action: "Chiamami", aria: "Chiama Giulio" },
+      };
+---
+
+<section class="contact-cta" aria-labelledby="contact-cta-title">
+  <p class="contact-cta__eyebrow">{t.eyebrow}</p>
+  <h2 class="contact-cta__title" id="contact-cta-title">
+    {t.title}<span class="contact-cta__dot">.</span>
+  </h2>
+  <p class="contact-cta__sub">{t.sub}</p>
+
+  <div class="contact-cta__grid">
+    {email && (
+      <a class="contact-card" href={email.url} aria-label={t.email.aria}>
+        <span class="contact-card__label">{t.email.label}</span>
+        <span class="contact-card__value">{email.label ?? email.url.replace("mailto:", "")}</span>
+        <span class="contact-card__action">
+          {t.email.action}
+          <span class="contact-card__arrow" aria-hidden="true">→</span>
+        </span>
+      </a>
+    )}
+    {linkedin && (
+      <a
+        class="contact-card"
+        href={linkedin.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={t.linkedin.aria}
+      >
+        <span class="contact-card__label">{t.linkedin.label}</span>
+        <span class="contact-card__value">{linkedin.label ?? linkedin.url}</span>
+        <span class="contact-card__action">
+          {t.linkedin.action}
+          <span class="contact-card__arrow" aria-hidden="true">→</span>
+        </span>
+      </a>
+    )}
+    {phone && (
+      <a class="contact-card" href={`tel:${phone.replace(/\s+/g, "")}`} aria-label={t.phone.aria}>
+        <span class="contact-card__label">{t.phone.label}</span>
+        <span class="contact-card__value">{phone}</span>
+        <span class="contact-card__action">
+          {t.phone.action}
+          <span class="contact-card__arrow" aria-hidden="true">→</span>
+        </span>
+      </a>
+    )}
+  </div>
+</section>
+
+<style>
+  /* Il contenitore orizzontale (max-width + padding laterale) lo dà la
+     pagina ospite (.cv-footer / .entry-footer) — qui solo spazio verticale. */
+  .contact-cta {
+    padding: 2rem 0 0.5rem;
+  }
+
+  .contact-cta__eyebrow {
+    font-family: var(--font-mono);
+    font-size: var(--fs-12);
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+    margin: 0 0 0.5rem;
+  }
+
+  .contact-cta__title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 3rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    color: var(--color-text-primary);
+    margin: 0 0 0.6rem;
+  }
+
+  .contact-cta__dot {
+    color: var(--color-accent);
+  }
+
+  .contact-cta__sub {
+    font-size: var(--fs-16);
+    line-height: 1.5;
+    color: var(--color-text-muted);
+    max-width: 40rem;
+    margin: 0 0 1.75rem;
+  }
+
+  /* Mobile-first: una colonna, poi 3 colonne da tablet in su. */
+  .contact-cta__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  @media (min-width: 48rem) {
+    .contact-cta__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .contact-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1.15rem 1.25rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-16, 1rem);
+    text-decoration: none;
+    transition:
+      transform 0.2s cubic-bezier(0.23, 1, 0.32, 1),
+      border-color 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+
+  .contact-card:active {
+    transform: scale(0.97);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .contact-card:hover {
+      transform: translateY(-3px);
+      border-color: color-mix(in srgb, var(--color-accent) 70%, transparent);
+      box-shadow: 0 0 22px color-mix(in srgb, var(--color-accent) 22%, transparent);
+    }
+    .contact-card:hover .contact-card__action {
+      color: var(--color-accent);
+    }
+    .contact-card:hover .contact-card__arrow {
+      transform: translateX(0.3rem);
+    }
+  }
+
+  .contact-card__label {
+    font-family: var(--font-mono);
+    font-size: var(--fs-12);
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+  }
+
+  .contact-card__value {
+    font-size: var(--fs-16);
+    font-weight: 600;
+    line-height: 1.35;
+    color: var(--color-text-primary);
+    overflow-wrap: anywhere;
+  }
+
+  .contact-card__action {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 0.15rem;
+    font-family: var(--font-mono);
+    font-size: var(--fs-14);
+    font-weight: 600;
+    color: var(--color-text-muted);
+    transition: color 0.2s ease;
+  }
+
+  .contact-card__arrow {
+    display: inline-block;
+    transition: transform 0.2s cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .contact-card,
+    .contact-card__arrow {
+      transition-duration: 0.01ms !important;
+    }
+  }
+</style>
