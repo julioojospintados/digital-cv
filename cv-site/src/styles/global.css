@@ -337,6 +337,41 @@ body {
   }
 }
 
+/* ── Page transition — click sul portfolio ───────────────────────────────
+   Cross-document View Transitions: la navigazione resta una navigazione
+   vera, pagina intera, script re-inizializzati da zero come sempre — qui
+   il nome condiviso dice al browser di trattare le due card come lo STESSO
+   elemento che cambia forma (shared-element morph), non un crossfade
+   generico. .hero-portfolio-card vive su index.astro/[mode].astro/
+   en/cv.astro, .work-index-hero sulla pagina di destinazione /work —
+   non sono mai renderizzate insieme, nessun conflitto di nome.
+
+   L'opt-in è @view-transition{navigation:auto}, non più il meta tag
+   <meta name="view-transition" content="same-origin"> (Layout.astro):
+   Chrome l'ha deprecato intorno alla versione 126 a favore di questa
+   at-rule, che va in un CSS caricato da entrambe le pagine — global.css
+   è già su ogni pagina del sito, quindi basta qui, una volta sola. */
+@view-transition {
+  navigation: auto;
+}
+
+.hero-portfolio-card,
+.work-index-hero {
+  view-transition-name: portfolio-hero;
+}
+
+::view-transition-group(portfolio-hero) {
+  animation-duration: var(--duration-page);
+  animation-timing-function: var(--ease-standard);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-portfolio-card,
+  .work-index-hero {
+    view-transition-name: none;
+  }
+}
+
 /* Cursore personalizzato attivo: il focus-visible rimane ugualmente visibile */
 * {
   cursor: none !important;
