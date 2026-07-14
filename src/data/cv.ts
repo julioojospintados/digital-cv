@@ -53,6 +53,10 @@ export interface ValueFlow {
 
 export interface Skill {
   name: string;
+  /** Etichetta compatta per lo skill-square su mobile (colonna singola) —
+   * solo per i nomi troppo lunghi per una cella stretta. Il nome esteso
+   * resta sempre in title/aria-label e su desktop. */
+  shortName?: string;
   level: SkillLevel;
   /** Icon slug from https://simpleicons.org — optional */
   icon?: string;
@@ -70,6 +74,8 @@ export interface Skill {
 
 export interface SoftSkill {
   name: string;
+  /** Vedi Skill.shortName */
+  shortName?: string;
   /** One-line description or example context */
   description?: string;
   domain?: SkillDomain;
@@ -81,6 +87,8 @@ export interface SoftSkill {
 
 export interface TransversalSkill {
   name: string;
+  /** Vedi Skill.shortName */
+  shortName?: string;
   description?: string;
   domain?: SkillDomain;
   weight?: SkillWeight;
@@ -1195,6 +1203,7 @@ export const cvData = {
     },
     {
       name: "Accessibility / WCAG",
+      shortName: "A11y / WCAG",
       level: "Intermedio",
       domain: "tech",
       weight: 3,
@@ -1439,6 +1448,7 @@ export const cvData = {
     },
     {
       name: "Resilienza e pensiero adattivo",
+      shortName: "Resilienza adattiva",
       description:
         "Ho allenato la lucidità sotto pressione nella regia tecnica teatrale, nella conduzione live di eventi e sui sistemi enterprise in produzione. Tratto l'imprevisto come un dato da cui imparare.",
       domain: "human",
@@ -1599,6 +1609,7 @@ export const cvData = {
     },
     {
       name: "Social media management",
+      shortName: "Social media",
       description:
         "Mi sono formato con Immaginazione e Lavoro (2018) e ho costruito il piano editoriale dei canali per eventi culturali e per l'agenzia musicale.",
       domain: "management",

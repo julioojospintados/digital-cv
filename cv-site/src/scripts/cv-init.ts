@@ -1,7 +1,7 @@
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { modeStore, setMode } from "../islands/stores/modeStore.ts";
-import { applyAccordions, applyCardStates, CLUSTER_OPEN_FOR } from "./mode-helpers.ts";
+import { applyAccordions, applyCardStates, reorderSkillSquares, CLUSTER_OPEN_FOR } from "./mode-helpers.ts";
 import "../islands/GoLogo.lit.ts";
 // FAB contatti — solo le pagine CV lo renderizzano (Layout, prop showFab)
 import "../islands/FloatingMenu.lit.ts";
@@ -137,9 +137,50 @@ ScrollTrigger.create({
 // CSS transitions già definite su ogni card (opacity, border-color, transform).
 // Rimosso GSAP Flip: catturare computed styles di ogni card è CPU-intensivo
 // quando il layout non cambia — solo gli stati visivi. CSS gestisce da solo.
+// ── Riordino skill-grid al cambio mode ──────────────────────────────────────
+// reorderSkillSquares (mode-helpers.ts) è una funzione DOM pura, senza GSAP:
+// qui la richiamiamo dentro un mini-FLIP manuale (First-Last-Invert-Play) così
+// lo spostamento delle card è animato invece di un salto secco. clearProps
+// rilascia il transform inline al termine, altrimenti resterebbe sopra a
+// scale/translateY di .cv-card[data-state] (stessa proprietà, l'inline vince).
+function reorderSkillsAnimated(mode: string) {
+  const grid = document.querySelector<HTMLElement>(".skills-grid");
+  if (!grid) return;
+
+  const items = Array.from(grid.querySelectorAll<HTMLElement>(".skill-sq"));
+  const firstRects = new Map(items.map((el) => [el, el.getBoundingClientRect()] as const));
+
+  reorderSkillSquares(mode);
+
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  items.forEach((el) => {
+    const first = firstRects.get(el);
+    if (!first) return;
+    const last = el.getBoundingClientRect();
+    const dx = first.left - last.left;
+    const dy = first.top - last.top;
+    if (!dx && !dy) return;
+    gsap.fromTo(
+      el,
+      { x: dx, y: dy },
+      {
+        x: 0,
+        y: 0,
+        duration: 0.5,
+        ease: "power3.out",
+        onComplete: () => {
+          gsap.set(el, { clearProps: "transform" });
+        },
+      },
+    );
+  });
+}
+
 function applyMode(mode: string) {
   applyCardStates(mode);
   updateNavButtons(mode);
+  reorderSkillsAnimated(mode);
   // ScrollTrigger.refresh() rimosso da qui — il subscribe lo chiama già una sola volta.
 }
 
@@ -273,6 +314,28 @@ skillsViewButtons.forEach((button) => {
 const isDesktopViewport = window.matchMedia("(min-width: 56.25rem)").matches;
 applySkillsView(isDesktopViewport ? "graph" : "cards");
 if (isDesktopViewport) ensureGraphLoaded();
+
+// ── Skills-grid: "Mostra tutte" — espande la griglia oltre l'altezza
+// collassata (skills-collapsible + dissolvenza in cv-page.css). Le card
+// restano tutte nel DOM anche da collassate — solo altezza/opacity della
+// dissolvenza cambiano, mai display:none (sussurri, non silenzi). ──────────
+const skillsExpandBtn = document.querySelector<HTMLButtonElement>(
+  "[data-skills-expand-toggle]",
+);
+const skillsCollapsible = document.querySelector<HTMLElement>(".skills-collapsible");
+if (skillsExpandBtn && skillsCollapsible) {
+  skillsExpandBtn.addEventListener("click", () => {
+    const expanded = skillsCollapsible.dataset.skillsExpanded === "true";
+    skillsCollapsible.dataset.skillsExpanded = String(!expanded);
+    skillsExpandBtn.setAttribute("aria-expanded", String(!expanded));
+    skillsExpandBtn.textContent = expanded
+      ? skillsExpandBtn.dataset.labelCollapsed ?? skillsExpandBtn.textContent ?? ""
+      : skillsExpandBtn.dataset.labelExpanded ?? skillsExpandBtn.textContent ?? "";
+    // La griglia cresce/si contrae (max-height) — ScrollTrigger deve
+    // ricalcolare le posizioni delle sezioni sottostanti.
+    requestAnimationFrame(() => ScrollTrigger.refresh());
+  });
+}
 
 // ── Update nav buttons: morph larghezza + crossfade testo ───────────
 // Larghezze FISSE anche su desktop: evitano jitter e tengono le 4 voci allineate.
@@ -1137,24 +1200,6 @@ if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       );
     });
 
-  // ── Profondità tra sezioni — i titoli scorrono un filo più lenti del
-  // contenuto (delta ±24px, scrub): layering percettivo in stile knolling.
-  document.querySelectorAll<HTMLElement>(".section-title").forEach((title) => {
-    gsap.fromTo(
-      title,
-      { y: 24 },
-      {
-        y: -24,
-        ease: "none",
-        scrollTrigger: {
-          trigger: title,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: true,
-        },
-      },
-    );
-  });
 }
 
 // ── Skills toggle hint: pulse glow (A) + scan sweep (C) ───────────────────

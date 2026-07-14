@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { applyAccordions, applyCardStates, CLUSTER_OPEN_FOR } from "./mode-helpers";
+import { applyAccordions, applyCardStates, reorderSkillSquares, CLUSTER_OPEN_FOR } from "./mode-helpers";
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -24,6 +24,37 @@ function makeCard(tags: string): HTMLElement {
   card.className = "cv-card";
   card.dataset.tags = tags;
   return card;
+}
+
+/** Crea una .skill-sq con i data-attribute usati da reorderSkillSquares. */
+function makeSkillSquare(opts: {
+  name: string;
+  tags: string;
+  weight?: number;
+  border?: number;
+}): HTMLElement {
+  const el = document.createElement("div");
+  el.className = "skill-sq";
+  el.dataset.tags = opts.tags;
+  el.dataset.name = opts.name;
+  el.dataset.weight = String(opts.weight ?? 1);
+  el.dataset.border = String(opts.border ?? 1);
+  return el;
+}
+
+/** Crea .skills-grid con dentro le skill-sq passate, nell'ordine dato. */
+function makeSkillsGrid(items: HTMLElement[]): HTMLElement {
+  const grid = document.createElement("div");
+  grid.className = "skills-grid";
+  items.forEach((el) => grid.appendChild(el));
+  return grid;
+}
+
+/** Nomi delle .skill-sq dentro .skills-grid, nell'ordine DOM attuale. */
+function gridOrder(grid: HTMLElement): string[] {
+  return Array.from(grid.querySelectorAll<HTMLElement>(".skill-sq")).map(
+    (el) => el.dataset.name ?? "",
+  );
 }
 
 // ── CLUSTER_OPEN_FOR ─────────────────────────────────────────────────────────
@@ -214,5 +245,63 @@ describe("applyCardStates", () => {
     expect(() => applyCardStates("tech")).not.toThrow();
     // L'elemento senza .cv-card non viene toccato
     expect(div.dataset.state).toBeUndefined();
+  });
+});
+
+// ── reorderSkillSquares ────────────────────────────────────────────────────
+
+describe("reorderSkillSquares", () => {
+  beforeEach(() => {
+    document.body.innerHTML = "";
+  });
+
+  it("porta in cima le skill del mode attivo", () => {
+    const a = makeSkillSquare({ name: "Figma", tags: "creative" });
+    const b = makeSkillSquare({ name: "Angular", tags: "tech" });
+    const grid = makeSkillsGrid([a, b]);
+    document.body.appendChild(grid);
+
+    reorderSkillSquares("tech");
+
+    expect(gridOrder(grid)).toEqual(["Angular", "Figma"]);
+  });
+
+  it("a parità di mode, ordina per area (weight × border) decrescente", () => {
+    const small = makeSkillSquare({ name: "SEO", tags: "tech", weight: 1, border: 1 });
+    const big = makeSkillSquare({ name: "Angular", tags: "tech", weight: 5, border: 4 });
+    const grid = makeSkillsGrid([small, big]);
+    document.body.appendChild(grid);
+
+    reorderSkillSquares("tech");
+
+    expect(gridOrder(grid)).toEqual(["Angular", "SEO"]);
+  });
+
+  it("a parità di mode e area, ordina alfabeticamente", () => {
+    const z = makeSkillSquare({ name: "Zod", tags: "tech", weight: 2, border: 2 });
+    const a = makeSkillSquare({ name: "Astro", tags: "tech", weight: 2, border: 2 });
+    const grid = makeSkillsGrid([z, a]);
+    document.body.appendChild(grid);
+
+    reorderSkillSquares("tech");
+
+    expect(gridOrder(grid)).toEqual(["Astro", "Zod"]);
+  });
+
+  it("aggiorna l'ordine quando il mode cambia", () => {
+    const tech = makeSkillSquare({ name: "Angular", tags: "tech" });
+    const creative = makeSkillSquare({ name: "Figma", tags: "creative" });
+    const grid = makeSkillsGrid([tech, creative]);
+    document.body.appendChild(grid);
+
+    reorderSkillSquares("tech");
+    expect(gridOrder(grid)).toEqual(["Angular", "Figma"]);
+
+    reorderSkillSquares("creative");
+    expect(gridOrder(grid)).toEqual(["Figma", "Angular"]);
+  });
+
+  it("non lancia errori se .skills-grid non è nel DOM", () => {
+    expect(() => reorderSkillSquares("tech")).not.toThrow();
   });
 });
