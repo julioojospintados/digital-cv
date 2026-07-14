@@ -1414,6 +1414,65 @@ export const cvDataEn = {
       ],
     },
     {
+      name: "Product Discovery — UX Research & Product Strategy",
+      description:
+        "With a technical partner I flipped the ideation process of a digital product: research into people's real needs first, the idea after. A behavioural map on Miro, interviews, competitor analysis: out of 17 concepts one remains, now in development, to be validated with a high-fidelity prototype before writing any code.",
+      date: "2026-05",
+      tags: [
+        "UX Research",
+        "Product Strategy",
+        "User interviews",
+        "Value Proposition Canvas",
+        "Miro",
+        "Figma",
+        "Prototyping",
+      ],
+      slug: "product-discovery",
+      primaryMode: "creative",
+      role: "UX Researcher & Product Strategist, ongoing project with a technical partner (2026).",
+      problem:
+        "Most apps fail because they solve problems people don't feel, or try to manufacture needs that don't exist. With a technical partner I flipped the classic ideation process: no starting idea to defend, first the study of the behaviours, anxieties and everyday desires that digital products fail to intercept. The goal: validate real interest in a product before writing a single line of code.",
+      process: [
+        "Research — I mapped people's behaviours and deep needs on Miro, organised into macro-areas: identity and status, fear of ageing, need for control, relationships. I classified each need by severity, prevalence and cultural area, grounded in behavioural psychology instead of the usual demographic segmentation.",
+        "Validation — A theoretical map is an echo chamber: you end up agreeing with yourself. I verified the needs with 7 quick interviews with people in the target, informal fifteen-minute conversations, and with an analysis of the competitors already trying to answer those needs, studying what works and what doesn't in their flows.",
+        "Ideation — From the map, together with my partner, I generated 17 product ideas, each anchored to a precise need. I broke down the most promising ones with the Value Proposition Canvas and stress-tested them with AI in an adversarial role: a sceptical venture capitalist attacking the economics, an analyst hunting for technical and legal blockers.",
+        "Prioritisation — With a Value/Effort matrix I crossed user value with design effort: of the 17 ideas 4 survived, and all resources went into a single one, now in development.",
+        "PPoC — The final test is a Probabilistic Proof of Concept: a high-fidelity Figma prototype that looks like a real working app, shown to users to measure behaviours, not opinions. The success thresholds are set before launch: over 8% conversion to onboarding, over 2% clicks on the pre-order.",
+      ],
+      decisions: [
+        {
+          title: "Needs first, idea later",
+          body: "The classic process starts from an idea and looks for confirmation. We started from the needs and let the ideas emerge from the map. It costs more time upfront, but it removes the worst risk: falling in love with a product only its inventors like.",
+        },
+        {
+          title: "Real interviews against the echo chamber",
+          body: "Desk research was more comfortable, but it confirms what you already think. Talking to people in the target flipped the picture: many ideas that looked strong on the whiteboard didn't survive a fifteen-minute conversation. The cut from 17 to 4 ideas came almost entirely from there.",
+        },
+        {
+          title: "AI as devil's advocate, not as an oracle",
+          body: "I didn't ask AI to generate ideas: the ideas were ours. I instructed it to attack them, in the role of a sceptical venture capitalist and of a technical and legal analyst. A compliant AI confirms anything; an adversarial one finds in a few hours the holes we would have discovered after launch.",
+        },
+        {
+          title: "A fake example to protect the real idea",
+          body: "The idea in development stays confidential, so I tell the method through a deliberately silly example: WhatTheHeckDoIEat, an app that decides what you eat for dinner by spinning a wheel. The need is decision anxiety. The Value Proposition Canvas holds up all the same: the user has to pick dinner without losing half an hour, their pains are couple arguments and mental fatigue, the solution lifts the weight of choosing, the wheel decides and there's no arguing. If the framework works on a dumb idea, it works.",
+        },
+        {
+          title: "Measure clicks, not compliments",
+          body: "A landing page collecting emails measures declared intent, and people declare one thing and then do another. The PPoC measures behaviours that cost something: completing the preference setup, clicking on a €0.99/month subscription that charges nothing but records the willingness to pay. If nobody clicks, the backend doesn't get written.",
+        },
+      ],
+      outcomes: [
+        "From 17 product ideas to a single one, filtered through interviews, competitor analysis and a Value/Effort matrix, now in development.",
+        "7 interviews with people in the target before designing a single screen.",
+        "Validation thresholds set before the PPoC launch: over 8% conversion to onboarding, over 2% clicks on the pre-order.",
+      ],
+      learnings: [
+        "UX comes before code: technically perfect software that doesn't solve a real need is just a well-written cost.",
+        "AI truly accelerates only when you give it an uncomfortable role: as devil's advocate it found in hours the weak points we would have discovered with the product finished.",
+        "Talking to real people early costs little and cuts a lot: most of the ideas we liked had no market, and knowing it right away saved months of work.",
+      ],
+    },
+    {
       name: "Music Agency — Tour Management & Digital Strategy",
       description:
         "I organised booking and tours for the roster artists of an Italian music agency and designed the digital communication: from promoter negotiations to organic growth of social channels aimed at an industry audience.",

@@ -1857,6 +1857,65 @@ export const cvData = {
       ],
     },
     {
+      name: "Product Discovery — UX Research & Product Strategy",
+      description:
+        "Con un socio tecnico ho rovesciato il processo di ideazione di un prodotto digitale: prima la ricerca sui bisogni reali delle persone, poi l'idea. Mappa comportamentale su Miro, interviste, analisi dei competitor: da 17 concept ne è rimasto uno, ora in sviluppo, che valideremo con un prototipo ad alta fedeltà prima di scrivere codice.",
+      date: "2026-05",
+      tags: [
+        "UX Research",
+        "Product Strategy",
+        "Interviste utente",
+        "Value Proposition Canvas",
+        "Miro",
+        "Figma",
+        "Prototipazione",
+      ],
+      slug: "product-discovery",
+      primaryMode: "creative",
+      role: "UX Researcher & Product Strategist, progetto in corso con un socio tecnico (2026).",
+      problem:
+        "La maggior parte delle app fallisce perché risolve problemi che le persone non sentono, o prova a fabbricare bisogni che non esistono. Con un socio tecnico ho rovesciato il processo classico di ideazione: nessuna idea di partenza da difendere, prima lo studio dei comportamenti, delle ansie e dei desideri quotidiani che i prodotti digitali non intercettano. L'obiettivo: validare l'interesse reale per un prodotto prima di scrivere una riga di codice.",
+      process: [
+        "Ricerca — Ho mappato su Miro i comportamenti e i bisogni profondi delle persone, organizzati in macro-aree: identità e status, paura di invecchiare, bisogno di controllo, relazioni. Ho classificato ogni bisogno per gravità, diffusione e area culturale, con basi di psicologia comportamentale al posto della classica segmentazione demografica.",
+        "Validazione — Una mappa teorica è una camera dell'eco: ci si dà ragione da soli. Ho verificato i bisogni con 7 interviste rapide a persone nel target, chiacchierate informali di un quarto d'ora, e con l'analisi dei competitor che già provano a rispondere a quei bisogni, studiando cosa funziona e cosa no nei loro flussi.",
+        "Ideazione — Dalla mappa ho generato con il socio 17 idee di prodotto, ognuna agganciata a un bisogno preciso. Ho destrutturato le più promettenti con il Value Proposition Canvas e le ho stressate con l'AI in ruolo avversariale: un venture capitalist scettico che attacca la sostenibilità economica, un analista che cerca i blocchi tecnici e legali.",
+        "Prioritizzazione — Con una matrice Valore/Sforzo ho incrociato il valore per l'utente con lo sforzo di progettazione: delle 17 idee ne sono rimaste 4, e tutte le risorse sono andate su una sola, ora in sviluppo.",
+        "PPoC — Il test finale è un Probabilistic Proof of Concept: un prototipo Figma ad alta fedeltà che sembra un'app vera e funzionante, mostrato agli utenti per misurare comportamenti, non opinioni. Le soglie di successo sono decise prima del lancio: oltre l'8% di conversione all'onboarding, oltre il 2% di clic sul pre-ordine.",
+      ],
+      decisions: [
+        {
+          title: "Prima i bisogni, poi l'idea",
+          body: "Il processo classico parte da un'idea e cerca conferme. Noi siamo partiti dai bisogni e abbiamo lasciato che le idee emergessero dalla mappa. Costa più tempo all'inizio, ma elimina il rischio peggiore: innamorarsi di un prodotto che piace solo a chi lo ha inventato.",
+        },
+        {
+          title: "Interviste vere contro la camera dell'eco",
+          body: "La desk research era più comoda, ma conferma quello che pensi già. Parlare con persone nel target ha ribaltato il quadro: molte idee che sulla lavagna sembravano forti non reggevano una chiacchierata di un quarto d'ora. Il taglio da 17 a 4 idee arriva quasi tutto da lì.",
+        },
+        {
+          title: "L'AI come avvocato del diavolo, non come oracolo",
+          body: "Non ho chiesto all'AI di generare idee: le idee erano nostre. L'ho istruita per attaccarle, nei panni di un venture capitalist scettico e di un analista tecnico e legale. Un'AI compiacente conferma qualsiasi cosa; una avversariale trova in poche ore i buchi che avremmo scoperto dopo il lancio.",
+        },
+        {
+          title: "Un esempio finto per proteggere l'idea vera",
+          body: "L'idea in sviluppo resta riservata, quindi racconto il metodo su un esempio volutamente sciocco: CheCaspitaMangio, un'app che decide cosa mangi a cena facendo girare una ruota. Il bisogno è l'ansia da decisione. Il Value Proposition Canvas regge lo stesso: l'utente deve scegliere la cena senza perdere mezz'ora, i suoi dolori sono le discussioni di coppia e la stanchezza mentale, la soluzione gli toglie il peso della scelta, la ruota decide e non si discute. Se il framework funziona su un'idea stupida, funziona.",
+        },
+        {
+          title: "Misurare i clic, non i complimenti",
+          body: "Una landing page che raccoglie email misura l'intento dichiarato, e le persone dichiarano una cosa e poi ne fanno un'altra. Il PPoC misura comportamenti che costano: completare la configurazione delle preferenze, cliccare su un abbonamento a 0,99€ al mese che non preleva nulla ma registra la volontà di pagare. Se nessuno clicca, il backend non si scrive.",
+        },
+      ],
+      outcomes: [
+        "Da 17 idee di prodotto a una sola, filtrata con interviste, analisi competitor e matrice Valore/Sforzo, ora in sviluppo.",
+        "7 interviste con persone nel target prima di disegnare qualsiasi schermata.",
+        "Soglie di validazione definite prima del lancio del PPoC: oltre l'8% di conversione all'onboarding, oltre il 2% di clic sul pre-ordine.",
+      ],
+      learnings: [
+        "La UX viene prima del codice: un software tecnicamente perfetto che non risolve un bisogno reale è solo un costo scritto bene.",
+        "L'AI accelera davvero solo se le assegni un ruolo scomodo: da avvocato del diavolo ha trovato in ore i punti deboli che avremmo scoperto a prodotto finito.",
+        "Parlare presto con persone vere costa poco e taglia tanto: la maggior parte delle idee che piacevano a noi non aveva mercato, e saperlo subito ha risparmiato mesi di lavoro.",
+      ],
+    },
+    {
       name: "Music Agency — Tour Management & Digital Strategy",
       description:
         "Ho organizzato booking e tour per gli artisti del roster di un'agenzia musicale italiana e ho progettato la comunicazione digitale: dalla trattativa con i promoter alla crescita organica dei canali social verso un pubblico di settore.",
