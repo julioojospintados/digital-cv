@@ -159,7 +159,7 @@ const scatterAngle = (i: number) => SCATTER_ANGLES[i % SCATTER_ANGLES.length];
 
         <button class="mode-card" data-mode="human" id="card-human" type="button">
           <span class="mode-card__label">AI &amp; Digital Specialist</span>
-          <span class="mode-card__desc">Storytelling e strategia.</span>
+          <span class="mode-card__desc">Storie, comunicazione e strategia.</span>
         </button>
       </section>
 
@@ -186,7 +186,7 @@ const scatterAngle = (i: number) => SCATTER_ANGLES[i % SCATTER_ANGLES.length];
         <div class="profile-content">
           <p class="profile-eyebrow">Chi sono</p>
           <h2 class="profile-title">Coltivatore di empatia e battute in tasca.</h2>
-          <p class="profile-desc">Tantissimi lavori diversi alle spalle, alcune piante in casa e un passaporto ben timbrato. Ho vissuto in tre Stati diversi prima di tornare in Italia, ma sono riuscito a fare il bagno nei tre oceani balneabili, gli altri due sono troppo freddi. Improvvisatore di battute e in viaggio, ho messo radici nel digitale, mantenendo una forte sensibilità, caratteristica che mi fanno notare spesso, verso le persone e se stessi, strizzando l'occhiolino alla poesia e alla fotografia. Attualmente cerco di unire i puntini nel mondo dello sviluppo software, applicando la stessa logica che serve negli scacchi. Gioco a Torino, ma cerco il prossimo avversario professionale per iniziare una nuova partita.</p>
+          <p class="profile-desc">Tantissimi lavori diversi alle spalle, alcune piante in casa e un passaporto ben timbrato. Ho vissuto in tre Stati diversi prima di tornare in Italia, ma sono riuscito a fare il bagno nei tre oceani balneabili, gli altri due sono troppo freddi. Improvvisatore di battute e in viaggio, ho messo radici nel digitale, mantenendo una forte sensibilità, caratteristica che mi fanno notare spesso, verso le persone e se stessi, strizzando l'occhiolino alla poesia e alla fotografia. Attualmente cerco di unire i puntini nel mondo dello sviluppo software, applicando la stessa logica che serve negli scacchi. Gioco cercando la mossa geniale.</p>
           <div class="about-actions" role="group" aria-label="Scopri di più su di me">
             <button class="about-action" type="button" data-drawer-open="funfact">
               <span class="about-action__icon" aria-hidden="true">✦</span>
@@ -228,7 +228,7 @@ const scatterAngle = (i: number) => SCATTER_ANGLES[i % SCATTER_ANGLES.length];
         <div class="profile-content">
           <p class="profile-eyebrow">Web &amp; UX Designer</p>
           <h2 class="profile-title">Brand,<br>estetica e interfacce.</h2>
-          <p class="profile-desc">Sono certificato IBM in UX/UI Design. UX research, wireframing, Figma, design system e animazioni GSAP. Progetto esperienze digitali che uniscono bellezza, usabilità e impatto misurabile sul brand.</p>
+          <p class="profile-desc">Sono certificato IBM e SkillUp in UX/UI Design, con un percorso specifico su Generative AI applicata al design. UX research, wireframing, Figma, design system e animazioni GSAP. Progetto esperienze digitali che uniscono bellezza, usabilità e impatto misurabile sul brand.</p>
           <!-- Stessa identica card hero-portfolio-card di [mode].astro (stesse
                classi, stesso testo) — "Portfolio" vive come eyebrow dentro la
                card, non come link separato sopra. work-index-card--pulse
@@ -321,7 +321,9 @@ const scatterAngle = (i: number) => SCATTER_ANGLES[i % SCATTER_ANGLES.length];
     <p class="memory-dialog__eyebrow" id="dialog-belongings-title">Cose mie</p>
     <div class="memory-scatter">
       {belongingsPhotos.map((name, i) => (
-        <img class="memory-photo" src={`/photos/belongings/${name}.webp`} alt="" loading="lazy" decoding="async" style={`--mr:${scatterAngle(i)}deg`} />
+        <button type="button" class="memory-photo-btn" aria-label="Espandi la foto">
+          <img class="memory-photo" src={`/photos/belongings/${name}.webp`} alt="" loading="lazy" decoding="async" style={`--mr:${scatterAngle(i)}deg`} />
+        </button>
       ))}
     </div>
   </dialog>
@@ -331,7 +333,9 @@ const scatterAngle = (i: number) => SCATTER_ANGLES[i % SCATTER_ANGLES.length];
     <p class="memory-dialog__eyebrow" id="dialog-trip-title">Viaggio</p>
     <div class="memory-scatter">
       {tripPhotos.map((name, i) => (
-        <img class="memory-photo" src={`/photos/trip/${name}.webp`} alt="" loading="lazy" decoding="async" style={`--mr:${scatterAngle(i)}deg`} />
+        <button type="button" class="memory-photo-btn" aria-label="Espandi la foto">
+          <img class="memory-photo" src={`/photos/trip/${name}.webp`} alt="" loading="lazy" decoding="async" style={`--mr:${scatterAngle(i)}deg`} />
+        </button>
       ))}
     </div>
   </dialog>

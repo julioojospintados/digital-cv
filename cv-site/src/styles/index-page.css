@@ -144,7 +144,7 @@ html[data-intro-seen] #preloader {
   }
 
   .entry-header {
-    gap: 0.25rem;
+    gap: 0.5rem;
   }
 }
 
@@ -503,7 +503,7 @@ img[src*="flashlight"] {
   text-align: center;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.25rem;
   opacity: 0;
   /* GSAP gestisce */
 }
@@ -906,7 +906,8 @@ img[src*="flashlight"] {
 @media (--mobile-only) {
   .mode-card__desc {
     flex: 1;
-    display: -webkit-box;
+    display: flex;
+    align-items: end;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
     overflow: hidden;
@@ -1331,6 +1332,24 @@ img[src*="flashlight"] {
   justify-content: center;
   gap: 1.25rem 1.5rem;
   padding-bottom: 0.5rem;
+}
+
+/* Wrapper nativo <button> intorno a .memory-photo — sostituisce
+   role="button"/tabindex sull'<img> (ARIA su elemento non compatibile,
+   già segnalato da Lighthouse). Reset del chrome di default: nessuna
+   dimensione/box propria, così .memory-photo (l'<img>, ancora il target
+   di GSAP Flip in memory-drawer.ts) resta identico in tutto — rotazione,
+   aspect-ratio, object-fit, hover, stato lightbox. */
+.memory-photo-btn {
+  display: block;
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: none;
+  font: inherit;
+  color: inherit;
+  text-align: inherit;
+  cursor: zoom-in;
 }
 
 .memory-photo {
