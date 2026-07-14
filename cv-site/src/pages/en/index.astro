@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import ContactFooter from '../../components/ContactFooter.astro';
 import '../../styles/index-page.css';
 // .work-index-card / .work-chevron — same visual identity as the
 // hero-portfolio-card in en/cv.astro (see Web & UX Designer section below).
@@ -73,6 +74,7 @@ const scatterAngle = (i: number) => SCATTER_ANGLES[i % SCATTER_ANGLES.length];
   title="Giulio Occhipinti — Digital CV"
   description="Interactive CV of Giulio Occhipinti: IBM-certified UX/UI & Web Designer, Creative Technologist (Angular, Lit, GSAP), AI & Digital Specialist and Agile Project Manager."
   lang="en"
+  showFab
 >
 
   <!-- Preload LCP image — laptop is the widest element in the mobile knolling grid (7/15 col) -->
@@ -294,6 +296,13 @@ const scatterAngle = (i: number) => SCATTER_ANGLES[i % SCATTER_ANGLES.length];
 
   </div>
 
+  <!-- Contact footer — email, LinkedIn and phone as CTAs (ContactFooter),
+       same block as the CV pages. Mirrors index.astro (IT). -->
+  <footer class="entry-footer">
+    <ContactFooter lang="en" />
+    <p class="entry-footer__credit">Giulio Occhipinti · Digital CV</p>
+  </footer>
+
   <!-- Memory drawers — "Fun fact / Belongings / Travel" buttons under About me.
        Native <dialog>: focus trap, ESC and backdrop-click handled by the
        browser. Scatter in knolling style animated on open by
@@ -355,4 +364,6 @@ const scatterAngle = (i: number) => SCATTER_ANGLES[i % SCATTER_ANGLES.length];
 <script>
   import '../../scripts/index-init.ts';
   import '../../scripts/memory-drawer.ts';
+  // Contact FAB — the home now has showFab: the island definition is needed
+  import '../../islands/FloatingMenu.lit.ts';
 </script>

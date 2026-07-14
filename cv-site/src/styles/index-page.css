@@ -1972,3 +1972,26 @@ img[src*="flashlight"] {
 .skills-marquee:hover .skills-marquee__track {
   animation-play-state: paused;
 }
+
+/* ── Footer contatti (home) ─────────────────────────────────────
+   Contiene ContactFooter.astro: il componente porta solo spazio
+   verticale, qui max-width e padding allineati alle profile-section. */
+.entry-footer {
+  position: relative;
+  z-index: 1;
+  background: var(--color-bg);
+  border-top: 1px solid var(--color-border);
+  padding: 1rem 1.5rem 3rem;
+}
+
+.entry-footer .contact-cta {
+  max-width: 64rem;
+  margin: 0 auto;
+}
+
+.entry-footer__credit {
+  font-size: var(--fs-12);
+  color: var(--color-text-muted);
+  text-align: center;
+  margin: 2.5rem 0 0;
+}

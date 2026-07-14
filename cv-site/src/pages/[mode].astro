@@ -10,6 +10,7 @@ import AiCard from "../components/cards/AiCard.astro";
 import ProjectCard from "../components/cards/ProjectCard.astro";
 import SkillSquare from "../components/cards/SkillSquare.astro";
 import SoftItem from "../components/cards/SoftItem.astro";
+import ContactFooter from "../components/ContactFooter.astro";
 
 export function getStaticPaths() {
   return [
@@ -420,9 +421,6 @@ const heroSummaries: Record<string, string> = {
   management: "Applico Scrum e Kanban in contesti diversi: team enterprise distribuiti come Intesa San Paolo e Aruba, e collaborazioni più snelle come il tour management per un'agenzia musicale, dove ho seguito booking e strategia digitale in autonomia. Lavoro in sprint brevi, con un backlog costruito sugli obiettivi di business.",
 };
 const heroSummary = heroSummaries[mode] ?? cvData.personal.summary;
-
-// Footer: contatti derivati da cv.ts, nessun mailto hardcoded nel template
-const emailSocial = cvData.social.find((s) => s.platform === "Email");
 ---
 
 <Layout
@@ -941,31 +939,8 @@ const emailSocial = cvData.social.find((s) => s.platform === "Email");
       </div>
     )
   }
-  <p class="cv-footer__credit">
-    {cvData.personal.name}
-    {cvData.personal.phone && (
-      <>
-        {" · "}
-        <a href={`tel:${cvData.personal.phone.replace(/\s+/g, "")}`}>{cvData.personal.phone}</a>
-      </>
-    )}
-    {cvData.social.find((s) => s.platform === "LinkedIn") && (
-      <>
-        {" · "}
-        <a
-          href={cvData.social.find((s) => s.platform === "LinkedIn")!.url}
-          target="_blank"
-          rel="noopener noreferrer"
-        >LinkedIn</a>
-      </>
-    )}
-    {emailSocial && (
-      <>
-        {" · "}
-        <a href={emailSocial.url}>{emailSocial.label ?? emailSocial.url.replace("mailto:", "")}</a>
-      </>
-    )}
-  </p>
+  <ContactFooter lang="it" />
+  <p class="cv-footer__credit">{cvData.personal.name} · Digital CV</p>
 </footer>
 </Layout>
 
