@@ -5,10 +5,12 @@
  * skill): questa pagina li mostra, non li ridefinisce. I colori letterali
  * qui sotto sono dati documentali (la palette è il contenuto), non stile UI.
  *
- * Struttura ad accordion: <details name="ds-section"> nativo — esclusivo
- * (un pannello aperto alla volta), accessibile e funzionante senza JS.
- * L'apertura non anima l'altezza (regola GPU-only del progetto): anima il
- * contenuto in opacity/transform e la rotazione del chevron.
+ * Layout bento a 6 tile, tutto visibile (niente accordion: la leggibilità
+ * viene prima). Ogni tile ha una demo viva della regola che documenta:
+ *  - le 4 "luci" cambiano davvero l'accent dell'intera sezione (--ds-accent);
+ *  - il motion tile dimostra enter lento / exit veloce al hover;
+ *  - il mode tile riproduce i sussurri (opacity, mai display:none).
+ * Animazioni solo transform/opacity, hover gated, reduced-motion rispettato.
  */
 interface Props {
   lang?: "it" | "en";
@@ -19,63 +21,69 @@ const isEN = lang === "en";
 const t = {
   title: "Design System",
   intro: isEN
-    ? "I set the rules before the components: a fixed teal stage, one accent per mode, two typefaces, motion only where it carries meaning. Every sample below is rendered from the site's real tokens."
-    : "Ho fissato le regole prima dei componenti: palco ottanio fisso, un accent per mode, due famiglie tipografiche, animazione solo dove porta significato. Ogni esempio qui sotto è renderizzato dai token reali del sito.",
+    ? "I set the rules before the components: a fixed teal stage, one accent per mode, two typefaces, motion only where it carries meaning. Every sample below runs on the site's real tokens, and every demo is live: touch it."
+    : "Ho fissato le regole prima dei componenti: palco ottanio fisso, un accent per mode, due famiglie tipografiche, animazione solo dove porta significato. Ogni esempio qui sotto gira sui token reali del sito, e ogni demo è viva: toccala.",
   colors: isEN ? "Color" : "Colore",
   colorsTag: isEN ? "One stage, four lights." : "Un palco, quattro luci.",
   colorsNote: isEN
-    ? "The teal background never changes. Switching mode only changes the accent, like a stage light. Every accent has a muted variant recalibrated for WCAG AA contrast (≥4.5:1) on teal."
-    : "Lo sfondo ottanio non cambia mai. Cambiare mode cambia solo l'accent, come una luce di scena. Ogni accent ha una variante muted ricalibrata per contrasto WCAG AA (≥4.5:1) su ottanio.",
+    ? "The teal background never changes. Switching mode only changes the accent, like a stage light: press one and this whole section follows. Every accent has a muted variant recalibrated for WCAG AA contrast (≥4.5:1) on teal."
+    : "Lo sfondo ottanio non cambia mai. Cambiare mode cambia solo l'accent, come una luce di scena: premine una e tutta questa sezione la segue. Ogni accent ha una variante muted ricalibrata per contrasto WCAG AA (≥4.5:1) su ottanio.",
+  lightsHint: isEN ? "Press a light" : "Premi una luce",
   type: isEN ? "Typography" : "Tipografia",
   typeTag: isEN ? "Spoken and measured." : "Parlato e misurato.",
   typeNote: isEN
-    ? "Lexend covers everything spoken, titles and body. JetBrains Mono covers everything measured: labels, counts, data, impactScore. Fonts are self-hosted via Fontsource, with zero external requests. Lexend 800 loads with font-display: block and keeps the preloader flash-free."
-    : "Lexend copre tutto ciò che è parlato, titoli e testo. JetBrains Mono copre tutto ciò che è misurato: label, conteggi, dati, impactScore. I font sono self-hosted via Fontsource, zero richieste esterne. Il peso 800 di Lexend carica con font-display: block e tiene il preloader senza flash.",
+    ? "Lexend covers everything spoken, titles and body. JetBrains Mono covers everything measured: labels, counts, data, impactScore. Self-hosted via Fontsource, zero external requests; Lexend 800 loads with font-display: block and keeps the preloader flash-free."
+    : "Lexend copre tutto ciò che è parlato, titoli e testo. JetBrains Mono copre tutto ciò che è misurato: label, conteggi, dati, impactScore. Self-hosted via Fontsource, zero richieste esterne; il peso 800 di Lexend carica con font-display: block e tiene il preloader senza flash.",
+  typeScale: isEN
+    ? "hero clamp(2rem, 5vw, 4.5rem) · fixed scale --fs-12 → --fs-48 · 12px floor for readable text"
+    : "hero clamp(2rem, 5vw, 4.5rem) · scala fissa --fs-12 → --fs-48 · pavimento 12px per il testo che si legge",
   squares: isEN ? "Skill levels" : "Livelli skill",
   squaresTag: isEN ? "Square and glow, never bars." : "Square e glow, mai barre.",
   squaresNote: isEN
-    ? "Percentage bars promise a precision that does not exist. Here the border grows with the level, from 1 to 4px, and the glow marks mastery: a visual inventory, consistent with knolling."
-    : "Le barre percentuali promettono una precisione che non esiste. Qui il bordo cresce col livello, da 1 a 4px, e il glow segna la padronanza: un inventario visivo, coerente col knolling.",
+    ? "Percentage bars promise a precision that does not exist. The border grows with the level, 1 to 4px, and the glow marks mastery: a visual inventory, consistent with knolling."
+    : "Le barre percentuali promettono una precisione che non esiste. Il bordo cresce col livello, da 1 a 4px, e il glow segna la padronanza: un inventario visivo, coerente col knolling.",
   sqLevels: isEN
     ? ["Basic", "Intermediate", "Advanced", "Expert"]
     : ["Base", "Intermedio", "Avanzato", "Esperto"],
   motion: "Motion",
   motionTag: isEN ? "Rules, not moods." : "Regole, non umori.",
+  motionDemoHint: isEN
+    ? "Hover the track: slow enter (300ms), fast exit (150ms)."
+    : "Passa sul binario: entrata lenta (300ms), uscita veloce (150ms).",
   motionRules: isEN
     ? [
         "UI durations: 150ms for micro-interactions, 300ms for state changes. Beyond 300ms, only hero and preloader.",
         "Only transform and opacity are animated, both GPU properties. Never width, height or margin.",
-        "Slow deliberate enters, fast exits: the system responds.",
         "Hover effects gated behind (hover: hover), no sticky hovers on touch.",
         "prefers-reduced-motion always respected: I remove the motion, not the meaning.",
       ]
     : [
         "Durate UI: 150ms per le micro-interazioni, 300ms per i cambi di stato. Oltre i 300ms solo hero e preloader.",
         "Si animano solo transform e opacity, proprietà GPU. Mai width, height o margin.",
-        "Entrate lente e deliberate, uscite veloci: il sistema risponde.",
         "Hover solo dietro (hover: hover), niente hover appiccicosi su touch.",
         "prefers-reduced-motion sempre rispettato: tolgo il movimento, non il significato.",
       ],
   surfaces: isEN ? "Surfaces and signs" : "Superfici e segni",
-  surfacesTag: isEN ? "Content gives the shape." : "La forma la dà il contenuto.",
+  surfacesTag: isEN ? "This card is the sample." : "Questa card è il campione.",
   surfacesRules: isEN
     ? [
-        "Cards and sections have a 1px border, a near-transparent background and a 1rem radius (--radius-16). Content gives the shape, not decoration.",
         "One SVG icon (touch-icon) applied via CSS mask and currentColor: a single file, tinted by context across all four modes.",
         "Chevrons are drawn in CSS with rotated borders, never Unicode glyphs: their stroke would depend on the OS font.",
         "8 knolling objects in WebP, about 15KB each: every mode has its physical counterparts on the table.",
       ]
     : [
-        "Card e sezioni hanno bordo 1px, background quasi trasparente e raggio 1rem (--radius-16). La forma la dà il contenuto, non la decorazione.",
         "Una sola icona SVG (touch-icon) applicata via CSS mask e currentColor: un file unico, tinto dal contesto in tutti e quattro i mode.",
         "I chevron sono disegnati in CSS con bordi ruotati, mai glifi Unicode: il loro tratto dipenderebbe dal font di sistema.",
         "8 oggetti knolling in WebP, circa 15KB l'uno: ogni mode ha i suoi corrispettivi fisici sul tavolo.",
       ],
+  callouts: isEN
+    ? { border: "1px --color-border", radius: "1rem --radius-16", surface: "surface rgba(255,255,255,0.02)" }
+    : { border: "bordo 1px --color-border", radius: "raggio 1rem --radius-16", surface: "superficie rgba(255,255,255,0.02)" },
   modes: "Mode system",
   modesTag: isEN ? "Emphasis, never structure." : "Enfasi, mai struttura.",
   modesNote: isEN
-    ? "Switching mode never changes template or content: active cards come forward, the others drop to low opacity. Whispers, not silences. Anyone assessing a T-shaped profile must see the breadth even while examining one depth."
-    : "Cambiare mode non cambia mai template né contenuti: le card attive avanzano, le altre scendono a bassa opacità. Sussurri, non silenzi. Chi valuta un profilo T-shaped deve vedere l'ampiezza anche mentre esamina una profondità.",
+    ? "Switching mode never changes template or content: active cards come forward, the others drop to low opacity. Whispers, not silences. Pick a mode and watch the cards below."
+    : "Cambiare mode non cambia mai template né contenuti: le card attive avanzano, le altre scendono a bassa opacità. Sussurri, non silenzi. Scegli un mode e guarda le card qui sotto.",
 };
 
 const modes = [
@@ -92,319 +100,392 @@ const baseTokens = [
   { name: "--color-text-primary", value: "rgba(245, 240, 230, 1)", note: isEN ? "titles, body" : "titoli, testo" },
   { name: "--color-text-muted", value: "rgba(192, 220, 215, 0.85)", note: "~5.7:1 AA" },
 ];
+
+// Card demo per il tile Mode system: contenuti reali del sito, un mode ciascuna
+const demoCards = [
+  { mode: "tech", label: "MCP Server" },
+  { mode: "creative", label: "Knolling" },
+  { mode: "management", label: "Sprint 1–2w" },
+  { mode: "human", label: isEN ? "Theatre" : "Teatro" },
+];
 ---
 
 <section class="work-section ds" id="design-system" aria-labelledby="work-ds-title">
   <h2 class="work-section__title" id="work-ds-title">{t.title}</h2>
   <p class="work-section__text ds__intro">{t.intro}</p>
 
-  <div class="ds__list">
-    <!-- 01 · Colore -->
-    <details class="ds__item" name="ds-section" open>
-      <summary class="ds__summary">
-        <span class="ds__num" aria-hidden="true">01</span>
-        <span class="ds__head">
-          <h3 class="ds__name">{t.colors}</h3>
-          <span class="ds__tagline">{t.colorsTag}</span>
-        </span>
-        <span class="work-chevron work-chevron--down ds__chevron" aria-hidden="true"></span>
-      </summary>
-      <div class="ds__body">
-        <p class="ds__note">{t.colorsNote}</p>
-        <div class="ds__swatches">
-          {baseTokens.map((tok) => (
-            <div class="ds__swatch">
-              <span class="ds__chip" style={`background:${tok.value}`}></span>
-              <span class="ds__tok">{tok.name}</span>
-              <span class="ds__val">{tok.value} · {tok.note}</span>
-            </div>
-          ))}
-        </div>
-        <div class="ds__accents">
-          {modes.map((m) => (
-            <div class="ds__accent">
-              <span class="ds__chip ds__chip--lg" style={`background:${m.accent}`}></span>
-              <span class="ds__chip" style={`background:${m.muted}`}></span>
-              <span class="ds__tok">{m.key}</span>
-              <span class="ds__val">{m.label} · muted {m.ratio}</span>
-            </div>
-          ))}
-        </div>
+  <div class="ds__bento">
+    <!-- 01 · Colore — le luci cambiano davvero l'accent della sezione -->
+    <article class="ds__tile ds__tile--w7">
+      <span class="ds__wm" aria-hidden="true">01</span>
+      <header class="ds__tile-head">
+        <h3 class="ds__name">{t.colors}</h3>
+        <p class="ds__tagline">{t.colorsTag}</p>
+      </header>
+      <p class="ds__note">{t.colorsNote}</p>
+      <div class="ds__lights" role="group" aria-label={t.lightsHint}>
+        {modes.map((m, i) => (
+          <button
+            type="button"
+            class="ds__light"
+            style={`--light:${m.accent}`}
+            data-ds-light={m.accent}
+            aria-pressed={i === 0 ? "true" : "false"}
+            aria-label={`Accent ${m.key}`}
+          >
+            <span class="ds__light-dot" aria-hidden="true"></span>
+            <span class="ds__light-key">{m.key}</span>
+          </button>
+        ))}
+        <span class="ds__hint" aria-hidden="true">{t.lightsHint} ↑</span>
       </div>
-    </details>
+      <div class="ds__tokens">
+        {baseTokens.map((tok) => (
+          <div class="ds__swatch">
+            <span class="ds__chip" style={`background:${tok.value}`}></span>
+            <span class="ds__tok">{tok.name}</span>
+            <span class="ds__val">{tok.value} · {tok.note}</span>
+          </div>
+        ))}
+      </div>
+    </article>
 
     <!-- 02 · Tipografia -->
-    <details class="ds__item" name="ds-section">
-      <summary class="ds__summary">
-        <span class="ds__num" aria-hidden="true">02</span>
-        <span class="ds__head">
-          <h3 class="ds__name">{t.type}</h3>
-          <span class="ds__tagline">{t.typeTag}</span>
+    <article class="ds__tile ds__tile--w5">
+      <span class="ds__wm" aria-hidden="true">02</span>
+      <header class="ds__tile-head">
+        <h3 class="ds__name">{t.type}</h3>
+        <p class="ds__tagline">{t.typeTag}</p>
+      </header>
+      <div class="ds__specimen" aria-hidden="true">
+        <span class="ds__specimen-go">
+          <span class="ds__specimen-heavy">GO</span>
+          <span class="ds__specimen-light">GO</span>
         </span>
-        <span class="work-chevron work-chevron--down ds__chevron" aria-hidden="true"></span>
-      </summary>
-      <div class="ds__body">
-        <p class="ds__note">{t.typeNote}</p>
-        <div class="ds__typo">
-          <p class="ds__typo-display" aria-hidden="true">GO</p>
-          <div class="ds__typo-meta">
-            <p class="ds__typo-row"><span class="ds__tok">Lexend</span> 400 · 500 · 600 · 700 · <b>800</b></p>
-            <p class="ds__typo-row ds__typo-row--mono"><span class="ds__tok">JetBrains Mono</span> -87% · 04 / · 6 {isEN ? "roles" : "ruoli"} · impactScore</p>
-            <p class="ds__typo-row ds__typo-scale">h2 clamp(2rem, 5vw, 4.5rem) · label 0.65rem / 0.25em · body ≤ 1.1rem / 1.65</p>
-          </div>
-        </div>
+        <span class="ds__specimen-weights">Lexend 400 · 500 · 600 · 700 · <b>800</b></span>
+        <span class="ds__specimen-mono">JetBrains Mono · -87% · 04 / · impactScore</span>
       </div>
-    </details>
+      <p class="ds__note ds__note--tight">{t.typeNote}</p>
+      <p class="ds__val ds__scale-line">{t.typeScale}</p>
+    </article>
 
     <!-- 03 · Livelli skill -->
-    <details class="ds__item" name="ds-section">
-      <summary class="ds__summary">
-        <span class="ds__num" aria-hidden="true">03</span>
-        <span class="ds__head">
-          <h3 class="ds__name">{t.squares}</h3>
-          <span class="ds__tagline">{t.squaresTag}</span>
-        </span>
-        <span class="work-chevron work-chevron--down ds__chevron" aria-hidden="true"></span>
-      </summary>
-      <div class="ds__body">
-        <p class="ds__note">{t.squaresNote}</p>
-        <div class="ds__squares">
-          {t.sqLevels.map((label, i) => (
-            <div class="ds__square-wrap">
-              <span class:list={["ds__square", { "ds__square--glow": i >= 2 }]} style={`border-width:${i + 1}px`}></span>
-              <span class="ds__val">{label} · {i + 1}px</span>
-            </div>
-          ))}
-        </div>
+    <article class="ds__tile ds__tile--w5">
+      <span class="ds__wm" aria-hidden="true">03</span>
+      <header class="ds__tile-head">
+        <h3 class="ds__name">{t.squares}</h3>
+        <p class="ds__tagline">{t.squaresTag}</p>
+      </header>
+      <div class="ds__squares">
+        {t.sqLevels.map((label, i) => (
+          <div class="ds__square-wrap">
+            <span class:list={["ds__square", { "ds__square--glow": i >= 2 }]} style={`border-width:${i + 1}px`}></span>
+            <span class="ds__val">{label}</span>
+            <span class="ds__val ds__val--dim">{i + 1}px</span>
+          </div>
+        ))}
       </div>
-    </details>
+      <p class="ds__note ds__note--tight">{t.squaresNote}</p>
+    </article>
 
-    <!-- 04 · Motion -->
-    <details class="ds__item" name="ds-section">
-      <summary class="ds__summary">
-        <span class="ds__num" aria-hidden="true">04</span>
-        <span class="ds__head">
-          <h3 class="ds__name">{t.motion}</h3>
-          <span class="ds__tagline">{t.motionTag}</span>
-        </span>
-        <span class="work-chevron work-chevron--down ds__chevron" aria-hidden="true"></span>
-      </summary>
-      <div class="ds__body">
-        <ul class="ds__rules">
-          {t.motionRules.map((r) => <li>{r}</li>)}
-        </ul>
-        <p class="ds__typo-row ds__typo-row--mono ds__tokens-line">--duration-micro 150ms · --duration-state 300ms · --ease-standard cubic-bezier(0.4, 0, 0.2, 1)</p>
+    <!-- 04 · Motion — demo viva enter/exit -->
+    <article class="ds__tile ds__tile--w7">
+      <span class="ds__wm" aria-hidden="true">04</span>
+      <header class="ds__tile-head">
+        <h3 class="ds__name">{t.motion}</h3>
+        <p class="ds__tagline">{t.motionTag}</p>
+      </header>
+      <div class="ds__track" aria-hidden="true">
+        <span class="ds__runner"></span>
+        <span class="ds__track-label ds__track-label--in">enter 300ms</span>
+        <span class="ds__track-label ds__track-label--out">exit 150ms</span>
       </div>
-    </details>
+      <p class="ds__hint">{t.motionDemoHint}</p>
+      <ul class="ds__rules">
+        {t.motionRules.map((r) => <li>{r}</li>)}
+      </ul>
+      <p class="ds__val ds__scale-line">--duration-micro 150ms · --duration-state 300ms · --ease-standard cubic-bezier(0.4, 0, 0.2, 1)</p>
+    </article>
 
-    <!-- 05 · Superfici e segni -->
-    <details class="ds__item" name="ds-section">
-      <summary class="ds__summary">
-        <span class="ds__num" aria-hidden="true">05</span>
-        <span class="ds__head">
-          <h3 class="ds__name">{t.surfaces}</h3>
-          <span class="ds__tagline">{t.surfacesTag}</span>
-        </span>
-        <span class="work-chevron work-chevron--down ds__chevron" aria-hidden="true"></span>
-      </summary>
-      <div class="ds__body">
-        <ul class="ds__rules">
-          {t.surfacesRules.map((r) => <li>{r}</li>)}
-        </ul>
-      </div>
-    </details>
+    <!-- 05 · Superfici — la card si annota da sola -->
+    <article class="ds__tile ds__tile--w5 ds__tile--annotated">
+      <span class="ds__wm" aria-hidden="true">05</span>
+      <span class="ds__callout ds__callout--tl" aria-hidden="true">{t.callouts.radius}</span>
+      <span class="ds__callout ds__callout--r" aria-hidden="true">{t.callouts.border}</span>
+      <span class="ds__callout ds__callout--b" aria-hidden="true">{t.callouts.surface}</span>
+      <header class="ds__tile-head">
+        <h3 class="ds__name">{t.surfaces}</h3>
+        <p class="ds__tagline">{t.surfacesTag}</p>
+      </header>
+      <ul class="ds__rules">
+        {t.surfacesRules.map((r) => <li>{r}</li>)}
+      </ul>
+    </article>
 
-    <!-- 06 · Mode system -->
-    <details class="ds__item" name="ds-section">
-      <summary class="ds__summary">
-        <span class="ds__num" aria-hidden="true">06</span>
-        <span class="ds__head">
-          <h3 class="ds__name">{t.modes}</h3>
-          <span class="ds__tagline">{t.modesTag}</span>
-        </span>
-        <span class="work-chevron work-chevron--down ds__chevron" aria-hidden="true"></span>
-      </summary>
-      <div class="ds__body">
-        <p class="ds__note">{t.modesNote}</p>
-        <div class="ds__modes-demo" aria-hidden="true">
-          {modes.map((m, i) => (
-            <span class:list={["ds__mode-pill", { "ds__mode-pill--passive": i !== 0 }]} style={`--pill-accent:${m.accent}`}>{m.key}</span>
-          ))}
-        </div>
+    <!-- 06 · Mode system — sussurri cliccabili -->
+    <article class="ds__tile ds__tile--w7">
+      <span class="ds__wm" aria-hidden="true">06</span>
+      <header class="ds__tile-head">
+        <h3 class="ds__name">{t.modes}</h3>
+        <p class="ds__tagline">{t.modesTag}</p>
+      </header>
+      <p class="ds__note">{t.modesNote}</p>
+      <div class="ds__mode-pills" role="group" aria-label="Mode demo">
+        {modes.map((m, i) => (
+          <button
+            type="button"
+            class="ds__mode-pill"
+            style={`--pill-accent:${m.accent}`}
+            data-ds-mode={m.key}
+            aria-pressed={i === 0 ? "true" : "false"}
+          >{m.key}</button>
+        ))}
       </div>
-    </details>
+      <div class="ds__demo-cards" data-ds-demo="tech">
+        {demoCards.map((c) => (
+          <div class="ds__demo-card" data-demo-mode={c.mode}>
+            <span class="ds__demo-dot" aria-hidden="true"></span>
+            <span class="ds__tok">{c.label}</span>
+            <span class="ds__val">{c.mode}</span>
+          </div>
+        ))}
+      </div>
+    </article>
   </div>
 </section>
 
+<script>
+  // Demo vive del design system: nessuna dipendenza, solo class/attribute
+  // toggling. Le transizioni le fa il CSS (transform/opacity).
+  const ds = document.getElementById("design-system");
+  if (ds) {
+    // 01 · Luci: l'accent scelto guida tutta la sezione via --ds-accent
+    const lights = ds.querySelectorAll<HTMLButtonElement>("[data-ds-light]");
+    lights.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        (ds as HTMLElement).style.setProperty("--ds-accent", btn.dataset.dsLight ?? "");
+        lights.forEach((b) => b.setAttribute("aria-pressed", String(b === btn)));
+      });
+    });
+
+    // 06 · Sussurri: il mode attivo porta avanti le card corrispondenti
+    const pills = ds.querySelectorAll<HTMLButtonElement>("[data-ds-mode]");
+    const demo = ds.querySelector<HTMLElement>("[data-ds-demo]");
+    pills.forEach((pill) => {
+      pill.addEventListener("click", () => {
+        if (demo) demo.dataset.dsDemo = pill.dataset.dsMode;
+        pills.forEach((p) => p.setAttribute("aria-pressed", String(p === pill)));
+      });
+    });
+  }
+</script>
+
 <style>
+  /* L'accent della sezione: parte dal mode della pagina, poi lo comandano
+     le luci del tile 01. Tutto ciò che è accent qui sotto usa --ds-accent. */
+  .ds {
+    --ds-accent: var(--color-accent);
+  }
+
   .ds__intro {
-    margin-bottom: 1.5rem;
+    margin-bottom: 2rem;
+    max-width: 44rem;
   }
 
-  .ds__list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.75rem;
+  /* ── Bento ── */
+  .ds__bento {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
   }
 
-  /* ── Accordion item ── */
-  .ds__item {
+  @media (min-width: 56.25rem) {
+    .ds__bento {
+      grid-template-columns: repeat(12, 1fr);
+      /* Breakout dalla colonna 48rem di .work-main (stesso pattern del
+         journey: html ha overflow-x clip). Il bento respira fino a 72rem. */
+      --bento-w: min(72rem, 100vw - 3rem);
+      width: var(--bento-w);
+      margin-left: calc(50% - var(--bento-w) / 2);
+    }
+
+    .ds__tile--w7 {
+      grid-column: span 7;
+    }
+
+    .ds__tile--w5 {
+      grid-column: span 5;
+    }
+  }
+
+  .ds__tile {
+    position: relative;
+    overflow: hidden;
     border: 1px solid var(--color-border);
     border-radius: var(--radius-16);
     background: rgba(255, 255, 255, 0.02);
-    overflow: hidden;
-    transition: border-color var(--duration-state) var(--ease-standard);
+    padding: 1.5rem 1.5rem 1.6rem;
+    transition:
+      transform var(--duration-state) var(--ease-standard),
+      border-color var(--duration-state) var(--ease-standard);
   }
 
-  .ds__item[open] {
-    border-color: color-mix(in srgb, var(--color-accent) 45%, transparent);
+  @media (hover: hover) and (pointer: fine) {
+    .ds__tile:hover {
+      transform: translateY(-3px);
+      border-color: color-mix(in srgb, var(--ds-accent) 45%, transparent);
+    }
   }
 
-  .ds__summary {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    padding: 1.05rem 1.25rem;
-    cursor: pointer;
-    list-style: none;
+  /* Numero watermark: outlined, come le sigle giganti della home */
+  .ds__wm {
+    position: absolute;
+    top: 0.4rem;
+    right: 0.9rem;
+    font-family: var(--font-display);
+    font-size: clamp(4rem, 8vw, 6rem);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.05em;
+    color: transparent;
+    -webkit-text-stroke: 1px color-mix(in srgb, var(--ds-accent) 28%, transparent);
+    pointer-events: none;
     user-select: none;
-    -webkit-tap-highlight-color: transparent;
+    transition: -webkit-text-stroke-color var(--duration-state) var(--ease-standard);
   }
 
-  .ds__summary::-webkit-details-marker {
-    display: none;
-  }
-
-  .ds__num {
-    font-family: var(--font-mono);
-    font-size: var(--fs-14);
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    color: var(--color-accent);
-    flex-shrink: 0;
-  }
-
-  .ds__head {
-    display: flex;
-    flex-direction: column;
-    gap: 0.2rem;
-    min-width: 0;
-    flex: 1;
+  .ds__tile-head {
+    margin-bottom: 0.9rem;
+    padding-right: 4.5rem;
   }
 
   .ds__name {
     font-family: var(--font-display);
-    font-size: var(--fs-16);
+    font-size: var(--fs-24);
     font-weight: 700;
     letter-spacing: -0.01em;
-    line-height: 1.2;
+    line-height: 1.15;
     color: var(--color-text-primary);
-    margin: 0;
-    transition: color var(--duration-micro) ease;
+    margin: 0 0 0.25rem;
   }
 
   .ds__tagline {
     font-family: var(--font-mono);
-    font-size: var(--fs-14);
-    font-weight: 600;
-    letter-spacing: 0.12em;
+    font-size: var(--fs-12);
+    font-weight: 700;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--color-text-muted);
-  }
-
-  .ds__chevron {
-    margin-left: auto;
-    transition: rotate var(--duration-state) var(--ease-standard);
-  }
-
-  .ds__item[open] .ds__chevron {
-    rotate: -135deg;
-  }
-
-  @media (hover: hover) and (pointer: fine) {
-    .ds__item:hover {
-      border-color: rgba(255, 255, 255, 0.24);
-    }
-
-    .ds__item[open]:hover {
-      border-color: color-mix(in srgb, var(--color-accent) 60%, transparent);
-    }
-
-    .ds__summary:hover .ds__name {
-      color: var(--color-accent);
-    }
-  }
-
-  /* ── Body — l'altezza non si anima (regola GPU-only): entra il contenuto ── */
-  .ds__body {
-    padding: 1.1rem 1.25rem 1.4rem;
-    border-top: 1px solid var(--color-border);
-  }
-
-  .ds__item[open] .ds__body {
-    animation: ds-body-in var(--duration-state) var(--ease-standard) both;
-  }
-
-  @keyframes ds-body-in {
-    from {
-      opacity: 0;
-      transform: translateY(6px);
-    }
-
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .ds__item[open] .ds__body {
-      animation: none;
-    }
-
-    .ds__chevron {
-      transition: none;
-    }
-  }
-
-  @media (max-width: 40rem) {
-    .ds__summary {
-      padding: 0.9rem 1rem;
-      gap: 0.75rem;
-    }
-
-    .ds__body {
-      padding: 1rem 1rem 1.2rem;
-    }
+    color: var(--ds-accent);
+    margin: 0;
+    transition: color var(--duration-state) var(--ease-standard);
   }
 
   .ds__note {
     font-size: var(--fs-16);
     line-height: 1.7;
     color: rgba(192, 220, 215, 0.9);
-    max-width: 40rem;
-    margin: 0 0 1.1rem;
+    max-width: 38rem;
+    margin: 0 0 1.2rem;
   }
 
-  /* Swatches */
-  .ds__swatches,
-  .ds__accents {
+  .ds__note--tight {
+    margin-bottom: 0.6rem;
+  }
+
+  .ds__hint {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--fs-12);
+    letter-spacing: 0.08em;
+    color: var(--color-text-muted);
+    margin: 0 0 1rem;
+  }
+
+  /* ── 01 · Luci ── */
+  .ds__lights {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.25rem;
+  }
+
+  .ds__light {
     display: flex;
     flex-direction: column;
-    gap: 0.55rem;
+    align-items: center;
+    gap: 0.4rem;
+    background: none;
+    border: none;
+    padding: 0.35rem;
+    cursor: pointer;
+    transition: transform var(--duration-micro) var(--ease-standard);
   }
 
-  .ds__accents {
-    margin-top: 1rem;
-    padding-top: 1rem;
+  .ds__light:active {
+    transform: scale(0.94);
+  }
+
+  .ds__light-dot {
+    width: 2.4rem;
+    height: 2.4rem;
+    border-radius: 50%;
+    background: var(--light);
+    border: 2px solid transparent;
+    box-shadow: 0 0 0 0 transparent;
+    transition:
+      transform var(--duration-state) var(--ease-standard),
+      box-shadow var(--duration-state) var(--ease-standard);
+  }
+
+  .ds__light[aria-pressed="true"] .ds__light-dot {
+    transform: scale(1.12);
+    box-shadow: 0 0 22px 2px color-mix(in srgb, var(--light) 55%, transparent);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .ds__light:hover .ds__light-dot {
+      transform: scale(1.12);
+      box-shadow: 0 0 18px 1px color-mix(in srgb, var(--light) 40%, transparent);
+    }
+  }
+
+  .ds__light-key {
+    font-family: var(--font-mono);
+    font-size: var(--fs-12);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+  }
+
+  .ds__light[aria-pressed="true"] .ds__light-key {
+    color: var(--color-text-primary);
+  }
+
+  .ds__lights .ds__hint {
+    margin: 0 0 0 0.5rem;
+  }
+
+  .ds__tokens {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
     border-top: 1px solid var(--color-border);
+    padding-top: 1rem;
   }
 
-  .ds__swatch,
-  .ds__accent {
+  @media (min-width: 40rem) {
+    .ds__tokens {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  .ds__swatch {
     display: flex;
     align-items: center;
     gap: 0.6rem;
+    min-width: 0;
     flex-wrap: wrap;
   }
 
@@ -414,10 +495,6 @@ const baseTokens = [
     border-radius: 0.45rem;
     border: 1px solid var(--color-border);
     flex-shrink: 0;
-  }
-
-  .ds__chip--lg {
-    width: 2.1rem;
   }
 
   .ds__tok {
@@ -434,92 +511,177 @@ const baseTokens = [
     color: var(--color-text-muted);
   }
 
-  /* Tipografia */
-  .ds__typo {
-    display: flex;
-    align-items: center;
-    gap: 1.25rem;
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-16);
-    padding: 1rem 1.25rem;
-    background: rgba(255, 255, 255, 0.02);
+  .ds__val--dim {
+    opacity: 0.7;
   }
 
-  .ds__typo-display {
-    font-family: var(--font-display);
-    font-size: var(--fs-48);
-    font-weight: 800;
-    letter-spacing: -0.05em;
-    line-height: 1;
-    color: var(--color-accent);
-    margin: 0;
-  }
-
-  .ds__typo-meta {
+  /* ── 02 · Specimen ── */
+  .ds__specimen {
     display: flex;
     flex-direction: column;
-    gap: 0.35rem;
-    min-width: 0;
+    gap: 0.4rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-16);
+    padding: 1.1rem 1.25rem 1rem;
+    background: rgba(255, 255, 255, 0.02);
+    margin-bottom: 1.1rem;
   }
 
-  .ds__typo-row {
-    margin: 0;
+  /* Crossfade 800 → 400 al hover: due layer, si anima solo opacity */
+  .ds__specimen-go {
+    position: relative;
+    display: inline-block;
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 6vw, 4.5rem);
+    letter-spacing: -0.05em;
+    line-height: 1;
+    color: var(--ds-accent);
+    transition: color var(--duration-state) var(--ease-standard);
+  }
+
+  .ds__specimen-heavy {
+    font-weight: 800;
+    transition: opacity var(--duration-state) var(--ease-standard);
+  }
+
+  .ds__specimen-light {
+    position: absolute;
+    inset: 0;
+    font-weight: 400;
+    opacity: 0;
+    transition: opacity var(--duration-state) var(--ease-standard);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .ds__specimen:hover .ds__specimen-heavy {
+      opacity: 0;
+    }
+
+    .ds__specimen:hover .ds__specimen-light {
+      opacity: 1;
+    }
+  }
+
+  .ds__specimen-weights {
+    font-family: var(--font-sans);
     font-size: var(--fs-14);
     color: rgba(192, 220, 215, 0.9);
   }
 
-  .ds__typo-row--mono {
+  .ds__specimen-mono {
     font-family: var(--font-mono);
     font-size: var(--fs-12);
-  }
-
-  .ds__typo-scale {
-    font-family: var(--font-mono);
-    font-size: var(--fs-14);
     color: var(--color-text-muted);
   }
 
-  .ds__tokens-line {
-    margin: 0.9rem 0 0;
-    color: var(--color-text-muted);
+  .ds__scale-line {
+    display: block;
+    margin: 0.8rem 0 0;
+    line-height: 1.6;
   }
 
-  /* Square & glow */
+  /* ── 03 · Square & glow ── */
   .ds__squares {
     display: flex;
-    gap: 1.25rem;
+    gap: 0.75rem;
     flex-wrap: wrap;
+    margin-bottom: 1.1rem;
   }
 
   .ds__square-wrap {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 0.45rem;
+    gap: 0.35rem;
+    /* 4 colonne che si spartiscono la riga: niente wrap 3+1 nel tile stretto */
+    flex: 1 1 0;
+    min-width: 4rem;
   }
 
   .ds__square {
-    width: 3rem;
-    height: 3rem;
+    width: 3.2rem;
+    height: 3.2rem;
     border-style: solid;
-    border-color: var(--color-accent);
+    border-color: var(--ds-accent);
     border-radius: 0.6rem;
     background: rgba(255, 255, 255, 0.02);
+    transition:
+      transform var(--duration-state) var(--ease-standard),
+      border-color var(--duration-state) var(--ease-standard),
+      box-shadow var(--duration-state) var(--ease-standard);
   }
 
   .ds__square--glow {
-    box-shadow: 0 0 12px 3px color-mix(in srgb, var(--color-accent) 40%, transparent);
+    box-shadow: 0 0 12px 3px color-mix(in srgb, var(--ds-accent) 40%, transparent);
   }
 
-  /* Regole */
+  @media (hover: hover) and (pointer: fine) {
+    .ds__square-wrap:hover .ds__square {
+      transform: translateY(-4px);
+    }
+  }
+
+  /* ── 04 · Motion demo: enter lento, exit veloce ── */
+  .ds__track {
+    position: relative;
+    height: 3rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-16);
+    background: rgba(255, 255, 255, 0.02);
+    margin-bottom: 0.5rem;
+    overflow: hidden;
+    container-type: inline-size;
+  }
+
+  .ds__runner {
+    position: absolute;
+    top: 50%;
+    left: 0.6rem;
+    width: 1.6rem;
+    height: 1.6rem;
+    border-radius: 0.45rem;
+    background: var(--ds-accent);
+    /* exit: veloce (150ms) — è la transizione di default */
+    transform: translateY(-50%);
+    transition:
+      transform var(--duration-micro) var(--ease-standard),
+      background var(--duration-state) var(--ease-standard);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    /* enter: lento e deliberato (300ms) */
+    .ds__track:hover .ds__runner {
+      transform: translateY(-50%) translateX(calc(100cqw - 2.8rem));
+      transition-duration: var(--duration-state);
+    }
+  }
+
+  .ds__track-label {
+    position: absolute;
+    top: 50%;
+    translate: 0 -50%;
+    font-family: var(--font-mono);
+    font-size: var(--fs-12);
+    color: var(--color-text-muted);
+    pointer-events: none;
+  }
+
+  .ds__track-label--in {
+    right: 0.9rem;
+  }
+
+  .ds__track-label--out {
+    left: 2.8rem;
+  }
+
   .ds__rules {
     list-style: none;
-    margin: 0;
+    margin: 1rem 0 0;
     padding: 0;
     display: flex;
     flex-direction: column;
     gap: 0.55rem;
-    max-width: 40rem;
+    max-width: 38rem;
   }
 
   .ds__rules li {
@@ -538,14 +700,56 @@ const baseTokens = [
     width: 6px;
     height: 6px;
     border-radius: 1px;
-    background: var(--color-accent);
+    background: var(--ds-accent);
+    transition: background var(--duration-state) var(--ease-standard);
   }
 
-  /* Mode demo */
-  .ds__modes-demo {
+  /* ── 05 · Superfici: callout auto-referenziali ── */
+  .ds__tile--annotated {
+    padding-bottom: 2.6rem;
+  }
+
+  .ds__callout {
+    position: absolute;
+    font-family: var(--font-mono);
+    font-size: var(--fs-12);
+    color: var(--ds-accent);
+    letter-spacing: 0.04em;
+    pointer-events: none;
+    transition: color var(--duration-state) var(--ease-standard);
+  }
+
+  .ds__callout--tl {
+    top: 0.55rem;
+    left: 1rem;
+  }
+
+  .ds__callout--r {
+    top: 50%;
+    right: 0.75rem;
+    translate: 0 -50%;
+    writing-mode: vertical-rl;
+  }
+
+  .ds__callout--b {
+    bottom: 0.55rem;
+    left: 1rem;
+  }
+
+  .ds__tile--annotated .ds__tile-head {
+    margin-top: 1.1rem;
+  }
+
+  .ds__tile--annotated .ds__wm {
+    top: 1.6rem;
+  }
+
+  /* ── 06 · Mode demo: sussurri ── */
+  .ds__mode-pills {
     display: flex;
     gap: 0.5rem;
     flex-wrap: wrap;
+    margin-bottom: 1rem;
   }
 
   .ds__mode-pill {
@@ -555,20 +759,98 @@ const baseTokens = [
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: var(--pill-accent);
+    background: none;
     border: 1px solid var(--pill-accent);
     border-radius: 2rem;
-    padding: 0.3rem 0.8rem;
-    transition: opacity var(--duration-state) var(--ease-standard);
+    padding: 0.32rem 0.85rem;
+    cursor: pointer;
+    opacity: 0.4;
+    transition:
+      opacity var(--duration-state) var(--ease-standard),
+      transform var(--duration-micro) var(--ease-standard);
   }
 
-  .ds__mode-pill--passive {
-    opacity: 0.35;
+  .ds__mode-pill:active {
+    transform: scale(0.95);
   }
 
-  @media (max-width: 30rem) {
-    .ds__typo {
-      flex-direction: column;
-      align-items: flex-start;
+  .ds__mode-pill[aria-pressed="true"] {
+    opacity: 1;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .ds__mode-pill:hover {
+      opacity: 0.85;
+    }
+  }
+
+  .ds__demo-cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.6rem;
+  }
+
+  @media (min-width: 40rem) {
+    .ds__demo-cards {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .ds__demo-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    border: 1px solid var(--color-border);
+    border-radius: 0.75rem;
+    padding: 0.75rem 0.85rem;
+    background: rgba(255, 255, 255, 0.02);
+    /* Sussurro, non silenzio: si anima solo opacity/transform */
+    opacity: 0.28;
+    transform: translateY(2px);
+    transition:
+      opacity var(--duration-state) var(--ease-standard),
+      transform var(--duration-state) var(--ease-standard),
+      border-color var(--duration-state) var(--ease-standard);
+  }
+
+  .ds__demo-dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 2px;
+    background: var(--ds-accent);
+    transition: background var(--duration-state) var(--ease-standard);
+  }
+
+  /* Card attiva per il mode scelto */
+  [data-ds-demo="tech"] [data-demo-mode="tech"],
+  [data-ds-demo="creative"] [data-demo-mode="creative"],
+  [data-ds-demo="management"] [data-demo-mode="management"],
+  [data-ds-demo="human"] [data-demo-mode="human"] {
+    opacity: 1;
+    transform: translateY(0);
+    border-color: color-mix(in srgb, var(--ds-accent) 50%, transparent);
+  }
+
+  /* ── Reduced motion: resta tutto leggibile, sparisce il movimento ── */
+  @media (prefers-reduced-motion: reduce) {
+    .ds__tile,
+    .ds__runner,
+    .ds__square,
+    .ds__specimen-heavy,
+    .ds__specimen-light,
+    .ds__demo-card,
+    .ds__light-dot {
+      transition-duration: 0.01ms !important;
+    }
+  }
+
+  @media (max-width: 40rem) {
+    .ds__tile {
+      padding: 1.2rem 1.1rem 1.3rem;
+    }
+
+    .ds__wm {
+      font-size: 3.5rem;
     }
   }
 </style>
