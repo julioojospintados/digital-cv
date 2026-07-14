@@ -55,6 +55,11 @@ export function setMode(mode: Mode): void {
 // (es. /en/cv, /cv) — leggono il mode da localStorage invece di azzerarlo.
 const MODE_AWARE_PATHS = ['/en/cv', '/cv'];
 
+// Pagine che dichiarano il proprio mode lato server (data-mode SSR nel
+// markup): il mode è del contenuto (primaryMode del case study), non
+// dell'utente — initMode non deve né cancellarlo né sovrascriverlo.
+const SSR_MODE_PATHS = ['/work', '/en/work'];
+
 export function initMode(): void {
   if (typeof window === 'undefined') return;
   // La route è la source of truth: se siamo su /tech, usiamo 'tech'
@@ -73,6 +78,8 @@ export function initMode(): void {
     const stored = modeStore.get();
     const mode = VALID_MODES.includes(stored) ? stored : 'tech';
     document.documentElement.dataset.mode = mode;
+  } else if (SSR_MODE_PATHS.some(p => pathname.startsWith(p))) {
+    // Case study (/work/*) — il data-mode SSR del progetto resta com'è
   } else {
     // Home (/) o altre route non-mode — torna a neutro
     delete document.documentElement.dataset.mode;

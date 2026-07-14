@@ -21,8 +21,10 @@ const {
 
 const siteUrl = "https://giulio-occhipinti.com";
 const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
-// PNG reale 1200×600 — LinkedIn/WhatsApp non renderizzano SVG come preview
-const ogImage = `${siteUrl}/og-image.png`;
+// Screenshot reale della home 1200×630, JPEG ~90KB: WhatsApp scarta le
+// immagini og sopra ~300KB. Nome nuovo (og-cover) = cache busting per le
+// anteprime già condivise con il vecchio og-image.png.
+const ogImage = `${siteUrl}/og-cover.jpg`;
 
 // JSON-LD — Person schema (schema.org) — indicizzato direttamente da Google
 const jsonLd = {
@@ -83,7 +85,7 @@ const jsonLd = {
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:image" content={ogImage} />
     <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="600" />
+    <meta property="og:image:height" content="630" />
     <meta property="og:locale" content={lang === "en" ? "en_US" : "it_IT"} />
     <meta property="og:site_name" content="Giulio Occhipinti — Digital CV" />
 
@@ -114,7 +116,13 @@ const jsonLd = {
       crossorigin
     />
 
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <!-- Favicon GO rasterizzati con Lexend reale (favicon-render): l'SVG con
+         <text> non è affidabile fuori dal browser (i bot di anteprima non
+         caricano webfont né renderizzano SVG). favicon.ico reale a 3 taglie
+         per crawler e contesti legacy. -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/favicon-192.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <title>{title}</title>
     <slot name="head" />
   </head>
