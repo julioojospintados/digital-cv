@@ -40,8 +40,8 @@ const t = {
   squares: isEN ? "Skill levels" : "Livelli skill",
   squaresTag: isEN ? "Square and glow, never bars." : "Square e glow, mai barre.",
   squaresNote: isEN
-    ? "Percentage bars promise a precision that does not exist. The border grows with the level, 1 to 4px, and the glow marks mastery: a visual inventory, consistent with knolling."
-    : "Le barre percentuali promettono una precisione che non esiste. Il bordo cresce col livello, da 1 a 4px, e il glow segna la padronanza: un inventario visivo, coerente col knolling.",
+    ? "Percentage bars promise a precision that does not exist. The border grows with the level, 1 to 4px (uniform 1px on mobile, where thick borders crowd the narrow cells), and the glow marks mastery: it lights up on hover or when the skill matches the active mode. Whispers, even here."
+    : "Le barre percentuali promettono una precisione che non esiste. Il bordo cresce col livello, da 1 a 4px (su mobile si uniforma a 1px, i bordi spessi affollano le celle strette), e il glow segna la padronanza: si accende al hover o quando la skill è attinente al mode attivo. Sussurri anche qui.",
   sqLevels: isEN
     ? ["Basic", "Intermediate", "Advanced", "Expert"]
     : ["Base", "Intermedio", "Avanzato", "Esperto"],
@@ -611,14 +611,22 @@ const demoCards = [
       box-shadow var(--duration-state) var(--ease-standard);
   }
 
-  .ds__square--glow {
-    box-shadow: 0 0 12px 3px color-mix(in srgb, var(--ds-accent) 40%, transparent);
-  }
-
+  /* Stesso valore di SkillSquare.astro (skill-sq--glow:hover): il glow è
+     spento a riposo e si accende al hover, come nelle card vere del CV. */
   @media (hover: hover) and (pointer: fine) {
     .ds__square-wrap:hover .ds__square {
       transform: translateY(-4px);
     }
+
+    .ds__square-wrap:hover .ds__square--glow {
+      box-shadow: 0 0 12px color-mix(in srgb, var(--ds-accent) 40%, transparent);
+    }
+  }
+
+  /* L'Esperto resta acceso a riposo: rappresenta la skill attinente al
+     mode attivo (data-state active nelle card vere) */
+  .ds__square-wrap:last-child .ds__square--glow {
+    box-shadow: 0 0 12px color-mix(in srgb, var(--ds-accent) 40%, transparent);
   }
 
   /* ── 04 · Motion demo: enter lento, exit veloce ── */

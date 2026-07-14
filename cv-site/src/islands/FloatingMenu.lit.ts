@@ -445,11 +445,9 @@ class FloatingMenu extends LitElement {
     // Avoid flaky behavior caused by menu re-render before anchor default navigation.
     e.preventDefault();
     this._closeOnNav();
-    try {
-      window.location.href = "mailto:giulio.occhipinti.g@gmail.com";
-    } catch {
-      window.open("mailto:giulio.occhipinti.g@gmail.com", "_self");
-    }
+    // _blank: se il gestore di posta è webmail (Gmail nel browser), _self
+    // sostituirebbe il CV con la composizione — il lettore non torna più.
+    window.open("mailto:giulio.occhipinti.g@gmail.com", "_blank", "noopener");
   };
 
   private _openFeedback() {
@@ -643,6 +641,8 @@ class FloatingMenu extends LitElement {
               <a
                 class="fab-item"
                 href="mailto:giulio.occhipinti.g@gmail.com"
+                target="_blank"
+                rel="noopener"
                 aria-label="${t.contactAriaLabel}"
                 @click=${this._handleContact}
               >
