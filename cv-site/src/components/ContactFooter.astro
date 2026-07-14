@@ -46,8 +46,11 @@ const t =
   <p class="contact-cta__sub">{t.sub}</p>
 
   <div class="contact-cta__grid">
+    <!-- _blank anche sul mailto: se il gestore di posta è webmail (Gmail nel
+         browser), _self sostituirebbe il CV con la pagina di composizione.
+         Con il client nativo la scheda transitoria si chiude da sola. -->
     {email && (
-      <a class="contact-card" href={email.url} aria-label={t.email.aria}>
+      <a class="contact-card" href={email.url} target="_blank" rel="noopener noreferrer" aria-label={t.email.aria}>
         <span class="contact-card__label">{t.email.label}</span>
         <span class="contact-card__value">{email.label ?? email.url.replace("mailto:", "")}</span>
         <span class="contact-card__action">
