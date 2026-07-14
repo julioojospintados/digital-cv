@@ -730,7 +730,7 @@ export const cvDataEn = {
         { target: "Node.js", type: "workflow" },
         { target: "REST API", type: "workflow" },
         { target: "Agile Methodology", type: "cross-domain" },
-        { target: "Autonomy and ownership", type: "cross-domain" },
+        { target: "Strategic autonomy", type: "cross-domain" },
       ],
     },
     {
@@ -1084,7 +1084,7 @@ export const cvDataEn = {
       ],
     },
     {
-      name: "Autonomy and ownership",
+      name: "Strategic autonomy",
       description:
         "I run parallel projects on my own (freelance photography, videography, strategic consultancy): I set priorities, meet deadlines and deliver without direct supervision.",
       links: [
@@ -1100,7 +1100,7 @@ export const cvDataEn = {
       description:
         "I trained clarity under pressure through theatre technical direction, live event hosting and enterprise systems in production. I treat the unexpected as data to learn from.",
       links: [
-        { target: "Autonomy and ownership", type: "conceptual" },
+        { target: "Strategic autonomy", type: "conceptual" },
         { target: "Cultural adaptability", type: "conceptual" },
         { target: "Theatre and improvisation", type: "cross-domain" },
         { target: "Agile Methodology", type: "cross-domain" },
@@ -1122,7 +1122,7 @@ export const cvDataEn = {
         "I express technical and strategic positions clearly and respectfully, even in disagreement. I use dialogue to move the project forward, not to win the argument.",
       links: [
         { target: "Effective communication", type: "conceptual" },
-        { target: "Autonomy and ownership", type: "conceptual" },
+        { target: "Strategic autonomy", type: "conceptual" },
         { target: "Lateral problem solving", type: "cross-domain" },
       ],
     },
@@ -1145,7 +1145,7 @@ export const cvDataEn = {
         "I bridge engineering (frontend), design (UX/UI) and marketing (SEO/SEM): fewer communication silos, faster time-to-market.",
       links: [
         { target: "Lateral problem solving", type: "conceptual" },
-        { target: "Autonomy and ownership", type: "conceptual" },
+        { target: "Strategic autonomy", type: "conceptual" },
         { target: "AI-Augmented Productivity", type: "cross-domain" },
         { target: "Agile Methodology", type: "cross-domain" },
       ],
@@ -1264,7 +1264,7 @@ export const cvDataEn = {
         "I applied Scrum and Kanban in distributed enterprise teams (ALTEN, Intesa San Paolo, Aruba) and in personal creative projects: sprint planning, retrospectives and backlog.",
       links: [
         { target: "T-shaped thinking", type: "cross-domain" },
-        { target: "Autonomy and ownership", type: "cross-domain" },
+        { target: "Strategic autonomy", type: "cross-domain" },
         { target: "Theatre and improvisation", type: "conceptual" },
         { target: "Event management", type: "cross-domain" },
         { target: "Git", type: "workflow" },
@@ -1382,8 +1382,8 @@ export const cvDataEn = {
       ],
       decisions: [
         {
-          title: "Cards by default, the graph as a reward",
-          body: "The most spectacular skills view is a D3 force graph, but graphs are admired, not scanned. The default became the card view, readable in 5 seconds (Jakob's law); the graph remains an opt-in exploration, and D3 (~130KB) only loads for those who actually open it. The \"wow\" must never cost readability for someone with 30 seconds.",
+          title: "The graph where there's room, cards where there's hurry",
+          body: "The most spectacular skills view is a D3 force graph, but graphs are admired, not scanned. On mobile the default is the card view, readable in 5 seconds, and D3 (~130KB) only loads for those who actually open the graph. On desktop, with the space and a mouse to explore it, the graph welcomes you first: the default follows the context of use, not the effect.",
         },
         {
           title: "Whispers, not silences",
@@ -1410,7 +1410,7 @@ export const cvDataEn = {
       learnings: [
         "AI truly accelerates only inside constraints set beforehand: with tokens, animation rules and explicit DO NOTs, vibe coding delivers; without them, it delivers chaos to redo.",
         "Every detail must survive the question \"why?\": if a visual choice has no interview-ready answer, it's decoration.",
-        "Test your certainties early: the most \"wow\" ideas, the graph as default view and the stepped scroll, were the first I scaled back in front of real use.",
+        "Test your certainties early: the most \"wow\" ideas, the graph as the only view and the stepped scroll, were the first I scaled back in front of real use.",
       ],
     },
     {
@@ -1644,7 +1644,7 @@ export const cvDataEn = {
       ],
     },
     {
-      name: "Team Delivery & Agile Leadership",
+      name: "Team Delivery & Agile Facilitation",
       description:
         "How I take a team from 'operational chaos' to 'conscious autonomy': improvisation as methodology, Agile as structure, communication as the binding agent.",
       steps: [
@@ -1652,7 +1652,7 @@ export const cvDataEn = {
         "Agile Methodology",
         "Effective communication",
         "T-shaped thinking",
-        "Autonomy and ownership",
+        "Strategic autonomy",
         "Git",
       ],
     },

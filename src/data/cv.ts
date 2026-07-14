@@ -982,7 +982,7 @@ export const cvData = {
         { target: "Node.js", type: "workflow" },
         { target: "REST API", type: "workflow" },
         { target: "Agile Methodology", type: "cross-domain" },
-        { target: "Autonomia e ownership", type: "cross-domain" },
+        { target: "Autonomia strategica", type: "cross-domain" },
       ],
     },
     {
@@ -1446,7 +1446,7 @@ export const cvData = {
       ],
     },
     {
-      name: "Autonomia e ownership",
+      name: "Autonomia strategica",
       description:
         "Porto avanti da solo progetti paralleli (fotografia freelance, videomaking, consulenza strategica): definisco le priorità, rispetto le scadenze e consegno senza supervisione diretta.",
       domain: "management",
@@ -1470,7 +1470,7 @@ export const cvData = {
       mastery: 82,
       role: "support",
       links: [
-        { target: "Autonomia e ownership", type: "conceptual" },
+        { target: "Autonomia strategica", type: "conceptual" },
         { target: "Adattabilità culturale", type: "conceptual" },
         { target: "Teatro e improvvisazione", type: "cross-domain" },
         { target: "Agile Methodology", type: "cross-domain" },
@@ -1500,7 +1500,7 @@ export const cvData = {
       role: "support",
       links: [
         { target: "Comunicazione efficace", type: "conceptual" },
-        { target: "Autonomia e ownership", type: "conceptual" },
+        { target: "Autonomia strategica", type: "conceptual" },
         { target: "Problem solving laterale", type: "cross-domain" },
       ],
     },
@@ -1531,7 +1531,7 @@ export const cvData = {
       role: "bridge",
       links: [
         { target: "Problem solving laterale", type: "conceptual" },
-        { target: "Autonomia e ownership", type: "conceptual" },
+        { target: "Autonomia strategica", type: "conceptual" },
         { target: "AI-Augmented Productivity", type: "cross-domain" },
         { target: "Agile Methodology", type: "cross-domain" },
       ],
@@ -1695,7 +1695,7 @@ export const cvData = {
       role: "bridge",
       links: [
         { target: "Pensiero T-shaped", type: "cross-domain" },
-        { target: "Autonomia e ownership", type: "cross-domain" },
+        { target: "Autonomia strategica", type: "cross-domain" },
         { target: "Teatro e improvvisazione", type: "conceptual" },
         { target: "Event management", type: "cross-domain" },
         { target: "Git", type: "workflow" },
@@ -1825,8 +1825,8 @@ export const cvData = {
       ],
       decisions: [
         {
-          title: "Card di default, grafo come premio",
-          body: "La vista skills più spettacolare è un force graph D3, ma i grafi si guardano, non si scansionano. Il default è diventato la vista card, leggibile in 5 secondi (Legge di Jakob); il grafo resta come esplorazione opt-in, e D3 (~130KB) si carica solo per chi lo apre davvero. Il \"wow\" non deve mai costare la leggibilità a chi ha 30 secondi.",
+          title: "Il grafo dove c'è spazio, le card dove c'è fretta",
+          body: "La vista skills più spettacolare è un force graph D3, ma i grafi si guardano, non si scansionano. Su mobile il default è la vista card, leggibile in 5 secondi, e D3 (~130KB) si carica solo per chi apre il grafo davvero. Su desktop, dove ci sono spazio e mouse per esplorarlo, il grafo accoglie per primo: il default segue il contesto d'uso, non l'effetto.",
         },
         {
           title: "Sussurri, non silenzi",
@@ -1853,7 +1853,7 @@ export const cvData = {
       learnings: [
         "L'AI accelera davvero solo dentro vincoli decisi prima: con token, regole di animazione e DO NOT espliciti il vibe coding produce; senza, produce caos da rifare.",
         "Ogni dettaglio deve sopravvivere alla domanda \"perché?\": se una scelta visiva non ha una risposta da colloquio, è decorazione.",
-        "Le certezze vanno testate presto: le idee più \"wow\", il grafo come vista di default e lo scroll a step, sono le prime che ho ridimensionato davanti all'uso reale.",
+        "Le certezze vanno testate presto: le idee più \"wow\", il grafo come vista unica e lo scroll a step, sono le prime che ho ridimensionato davanti all'uso reale.",
       ],
     },
     {
@@ -2131,7 +2131,7 @@ export const cvData = {
       ],
     },
     {
-      name: "Team Delivery & Leadership Agile",
+      name: "Team Delivery & Facilitazione Agile",
       description:
         "Come porto un team da 'caos operativo' ad 'autonomia consapevole': improvvisazione come metodo, Agile come struttura, comunicazione come collante.",
       steps: [
@@ -2139,7 +2139,7 @@ export const cvData = {
         "Agile Methodology",
         "Comunicazione efficace",
         "Pensiero T-shaped",
-        "Autonomia e ownership",
+        "Autonomia strategica",
         "Git",
       ],
     },
