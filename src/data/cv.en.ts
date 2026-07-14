@@ -546,6 +546,18 @@ export const cvDataEn = {
   // ── Certifications ────────────────────────────────────────────────────────
   certifications: [
     {
+      name: "Generative AI: The Future of UX UI Design",
+      issuer: "SkillUp",
+      date: "2026-06",
+      credentialId: "QL8LAMVW92AG",
+    },
+    {
+      name: "UI/UX Wireframing and Prototyping with Figma",
+      issuer: "SkillUp",
+      date: "2026-06",
+      credentialId: "1ZVQMN0YTP2Y",
+    },
+    {
       name: "Introduction to Agile Development and Scrum",
       issuer: "IBM",
       date: "2026-02",

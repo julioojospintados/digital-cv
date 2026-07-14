@@ -749,6 +749,20 @@ export const cvData = {
   // ── Certifications ────────────────────────────────────────────────────────
   certifications: [
     {
+      name: "Generative AI: The Future of UX UI Design",
+      issuer: "SkillUp",
+      date: "2026-06",
+      credentialId: "QL8LAMVW92AG",
+      // Impatto pratico: uso della Generative AI nel processo di design UX/UI, lo stesso principio applicato nell'AI Workflow di questo sito
+    },
+    {
+      name: "UI/UX Wireframing and Prototyping with Figma",
+      issuer: "SkillUp",
+      date: "2026-06",
+      credentialId: "1ZVQMN0YTP2Y",
+      // Impatto pratico: wireframe e prototipi Figma nello stesso flusso usato per Aruba e per il design system di questo sito
+    },
+    {
       name: "Introduction to Agile Development and Scrum",
       issuer: "IBM",
       date: "2026-02",

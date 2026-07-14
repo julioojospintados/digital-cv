@@ -43,20 +43,13 @@ document.querySelectorAll<HTMLButtonElement>("[data-drawer-open]").forEach((btn)
     closeBtn.addEventListener("click", () => dialog.close());
   });
 
-  // Click su una foto → lightbox. Le foto sono <img>, non bottoni: senza
-  // role/tabindex resterebbero invisibili alla tastiera pur essendo l'unico
-  // modo di aprire la lightbox — qui diventano controlli a tutti gli effetti
-  // (Enter e Spazio delegano al click, incluso quello di chiusura once).
-  dialog.querySelectorAll<HTMLImageElement>(".memory-photo").forEach((img) => {
-    img.tabIndex = 0;
-    img.setAttribute("role", "button");
-    img.setAttribute("aria-label", isEN ? "Expand photo" : "Espandi la foto");
-    img.addEventListener("click", () => openLightbox(dialog, img));
-    img.addEventListener("keydown", (e) => {
-      if (e.key !== "Enter" && e.key !== " ") return;
-      e.preventDefault();
-      img.click();
-    });
+  // Click su una foto → lightbox. L'aria-label ("Espandi la foto"/"Expand
+  // photo") è già nel markup statico sul <button> che la avvolge — qui solo
+  // il wiring del click, Enter/Spazio sono già nativi su <button>.
+  dialog.querySelectorAll<HTMLButtonElement>(".memory-photo-btn").forEach((btn) => {
+    const img = btn.querySelector<HTMLImageElement>(".memory-photo");
+    if (!img) return;
+    btn.addEventListener("click", () => openLightbox(dialog, img));
   });
 });
 

@@ -277,6 +277,16 @@ body {
     border-color 0.2s ease;
 }
 
+/* Target di tocco WCAG 2.5.8 (min 24×24px) — il pallino resta visivamente
+   piccolo (8px, coerente con il linguaggio "sussurrato" del dot-nav), ma
+   l'area cliccabile/toccabile si allarga via pseudo-elemento invece di
+   ingrandire il segno visivo stesso. */
+.section-dot::before {
+  content: "";
+  position: absolute;
+  inset: -0.5rem;
+}
+
 .section-dot:hover,
 .section-dot:focus-visible {
   transform: scale(1.3);

@@ -1205,7 +1205,7 @@ a.lang-switch__opt:hover {
 }
 
 .skills-grid {
-  --skills-collapsed-h: 15rem;
+  --skills-collapsed-h: 17rem;
   /* padding-top 3px: .cv-card[data-state="active"] (global.css) solleva la
      card con translateY(-2px) — senza questo margine, l'overflow:hidden qui
      sotto tagliava il bordo superiore di qualunque card attiva finita in
