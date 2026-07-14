@@ -26,6 +26,7 @@ const { mode } = Astro.params as {
 
 type SkillSquareSource = {
   name: string;
+  shortName?: string;
   domain?: "tech" | "human" | "creative" | "management" | "ai";
   level?: string;
   weight?: number;
@@ -121,6 +122,7 @@ function toSkillSquare(skill: SkillSquareSource) {
   const level = skill.level ?? deriveSkillLevel(skill.mastery);
   return {
     name: skill.name,
+    shortName: skill.shortName,
     level,
     borderPx: LEVEL_BORDERS[level] ?? 1,
     isGlow: level === "Avanzato" || level === "Esperto",
@@ -673,13 +675,26 @@ const emailSocial = cvData.social.find((s) => s.platform === "Email");
           <skill-force-graph></skill-force-graph>
         </div>
         <div class="skills-stage__panel skills-stage__panel--cards">
-          <div
-            class="skills-grid"
-            role="list"
-            aria-label="Competenze tecniche, creative e trasversali"
-          >
-            {skillSquares.map((skill) => <SkillSquare {...skill} />)}
+          <div class="skills-collapsible" data-skills-expanded="false">
+            <div
+              class="skills-grid"
+              role="list"
+              aria-label="Competenze tecniche, creative e trasversali"
+            >
+              {skillSquares.map((skill) => <SkillSquare {...skill} />)}
+            </div>
+            <div class="skills-fade" aria-hidden="true" />
           </div>
+          <button
+            class="skills-expand-btn"
+            type="button"
+            data-skills-expand-toggle
+            data-label-collapsed="Mostra tutte le competenze"
+            data-label-expanded="Mostra meno"
+            aria-expanded="false"
+          >
+            Mostra tutte le competenze
+          </button>
         </div>
       </div>
     </section>

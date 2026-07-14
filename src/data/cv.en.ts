@@ -905,6 +905,7 @@ export const cvDataEn = {
     },
     {
       name: "Accessibility / WCAG",
+      shortName: "A11y / WCAG",
       level: "Intermedio",
       mastery: 65,
       links: [
@@ -1083,6 +1084,7 @@ export const cvDataEn = {
     },
     {
       name: "Resilience and adaptive thinking",
+      shortName: "Adaptive resilience",
       description:
         "I trained clarity under pressure through theatre technical direction, live event hosting and enterprise systems in production. I treat the unexpected as data to learn from.",
       links: [
@@ -1198,6 +1200,7 @@ export const cvDataEn = {
     },
     {
       name: "Social media management",
+      shortName: "Social media",
       description:
         "I trained with Immaginazione e Lavoro (2018) and built the editorial plan for cultural event channels and the music agency.",
       links: [

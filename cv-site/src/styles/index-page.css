@@ -646,7 +646,18 @@ img[src*="flashlight"] {
   margin-top: 0.6rem;
 }
 
-
+@media (--touch) {
+  .entry-cred {
+    font-size: var(--fs-12);
+    margin-top: 0.35rem;
+  }
+}
+@media (--mobile-only) {
+  .entry-cred {
+    letter-spacing: 0.05rem;
+    margin-top: 0;
+  }
+}
 
 /* ── Mode cards ── */
 .mode-cards {

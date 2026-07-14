@@ -1179,11 +1179,131 @@ a.lang-switch__opt:hover {
   width: 100%;
 }
 
-/* Mobile: fewer columns, still dense and full-width */
+/* Mobile: fewer columns, still dense and full-width — 4 invece di 6:
+   celle più grandi e leggibili, stesso rapporto tra i weight (1/2/3 col). */
 @media (max-width: 39.9375rem) {
   .skills-grid {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-    grid-auto-rows: clamp(2.3rem, 7vw, 3.2rem);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    /* minmax(min, auto), non un valore fisso: il peso decide la larghezza
+       (1/2 colonne), ma un nome lungo ("Social media management" su una
+       cella da 1 colonna) può far crescere la riga oltre il minimo invece
+       di uscire dal bordo — le altre celle sulla stessa riga si allungano
+       insieme, restando allineate (niente overflow, niente troncamento). */
+    grid-auto-rows: minmax(clamp(3.2rem, 11vw, 4.5rem), auto);
+    gap: 0;
+  }
+}
+
+/* ── Skills-grid collassata — riduce l'altezza della sezione (1072 nodi
+   DOM totali, la skills-grid è la voce più pesante secondo Lighthouse
+   "Optimizza dimensioni DOM") senza display:none sulle card passive
+   (sussurri, non silenzi — knolling-cv/SKILL.md). Le card restano tutte
+   nel DOM, solo la porzione oltre --skills-collapsed-h viene tagliata
+   e sfumata con una dissolvenza invece di un bordo netto. ────────────── */
+.skills-collapsible {
+  position: relative;
+}
+
+.skills-grid {
+  --skills-collapsed-h: 15rem;
+  /* padding-top 3px: .cv-card[data-state="active"] (global.css) solleva la
+     card con translateY(-2px) — senza questo margine, l'overflow:hidden qui
+     sotto tagliava il bordo superiore di qualunque card attiva finita in
+     prima riga (visibile su tutti i viewport, più evidente sotto i 640px
+     dove il gap tra righe è 0 e non fa da cuscinetto). */
+  padding-top: 3px;
+  max-height: calc(var(--skills-collapsed-h) + 3px);
+  overflow: hidden;
+  transition: max-height 0.6s var(--ease-standard);
+}
+
+.skills-collapsible[data-skills-expanded="true"] .skills-grid {
+  /* Nessun valore reale di "altezza naturale" da animare in CSS puro —
+     overshoot ampio, stessa tecnica già usata da .exp-cluster__body. */
+  max-height: 9000px;
+}
+
+.skills-fade {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 4.5rem;
+  /* --skills-panel-bg (non --color-bg): il pannello è un overlay
+     translucido su ambient glow + knoll, non un colore pieno — sfumare
+     verso ottanio pieno lascerebbe una giuntura visibile. */
+  background: linear-gradient(to bottom, transparent, var(--skills-panel-bg) 85%);
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.skills-collapsible[data-skills-expanded="true"] .skills-fade {
+  opacity: 0;
+}
+
+.skills-expand-btn {
+  display: block;
+  margin: 0.85rem auto 0;
+  padding: 0.45rem 1.25rem;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--color-text-muted);
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition:
+    border-color var(--duration-state) var(--ease-standard),
+    color var(--duration-state) var(--ease-standard),
+    transform 160ms var(--ease-standard);
+}
+
+.skills-expand-btn:active {
+  transform: scale(0.97);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .skills-expand-btn:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+}
+
+.skills-expand-btn:focus-visible {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+/* Span per weight — sostituisce il grid-column/row inline che prima
+   SkillSquare.astro fissava in JS (impossibile da correggere per mobile
+   senza !important). Desktop: 12 colonne, stessi rapporti di prima. */
+.skill-sq--w5 {
+  grid-column: span 3;
+  grid-row: span 2;
+}
+
+.skill-sq--w4 {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+
+.skill-sq--w3,
+.skill-sq--w1 {
+  grid-column: span 1;
+  grid-row: span 1;
+}
+
+/* Mobile: con 4 sole colonne uno span-3/span-2 pensato per la griglia a
+   12 colonne diventa sproporzionato (75%/50% larghezza) e la card resta
+   quasi vuota (es. "Agile Methodology" nello screenshot). Limita le
+   skill pesanti a 2 colonne × 1 riga: restano più grandi delle altre
+   ma senza lo spazio vuoto. */
+@media (max-width: 39.9375rem) {
+  .skill-sq--w5,
+  .skill-sq--w4 {
+    grid-column: span 2;
+    grid-row: span 1;
   }
 }
 

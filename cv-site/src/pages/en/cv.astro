@@ -34,6 +34,7 @@ const LEVEL_EN: Record<string, string> = {
 
 type SkillSquareSource = {
   name: string;
+  shortName?: string;
   domain?: "tech" | "human" | "creative" | "management" | "ai";
   level?: string;
   weight?: number;
@@ -133,6 +134,7 @@ function toSkillSquare(skill: SkillSquareSource) {
   const level = skill.level ?? deriveSkillLevel(skill.mastery);
   return {
     name: skill.name,
+    shortName: skill.shortName,
     level: LEVEL_EN[level] ?? level,
     borderPx: LEVEL_BORDERS[level] ?? 1,
     isGlow: level === "Avanzato" || level === "Esperto",
@@ -639,9 +641,22 @@ const projectsData = cvDataEn.projects.slice(0, 6).map((p) => {
           <skill-force-graph></skill-force-graph>
         </div>
         <div class="skills-stage__panel skills-stage__panel--cards">
-          <div class="skills-grid">
-            {skillSquares.map((skill) => <SkillSquare {...skill} />)}
+          <div class="skills-collapsible" data-skills-expanded="false">
+            <div class="skills-grid">
+              {skillSquares.map((skill) => <SkillSquare {...skill} />)}
+            </div>
+            <div class="skills-fade" aria-hidden="true" />
           </div>
+          <button
+            class="skills-expand-btn"
+            type="button"
+            data-skills-expand-toggle
+            data-label-collapsed="Show all skills"
+            data-label-expanded="Show less"
+            aria-expanded="false"
+          >
+            Show all skills
+          </button>
         </div>
       </div>
     </section>
