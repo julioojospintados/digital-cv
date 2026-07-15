@@ -688,6 +688,7 @@ a.lang-switch__opt:hover {
 .hero-badges,
 .hero-title,
 .hero-summary,
+.hero-stats,
 .hero-portfolio-card,
 .hero-footer {
   opacity: 0;
@@ -2146,3 +2147,210 @@ a.lang-switch__opt:hover {
 }
 
 /* cv-card passive/active states → global.css */
+
+/* ── Hero, "In breve" — quattro frasi di metodo in apertura ─────────
+   Principi argomentabili al colloquio, non percentuali: chip con
+   marcatore quadrato accent (stesso segno delle liste del sito). */
+.hero-stats {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.75rem;
+  padding: 0;
+  margin: 1rem 0 1rem;
+  max-width: 80ch;
+}
+
+.hero-stat {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  padding: 0.35rem 0.9rem;
+  background: rgba(255, 255, 255, 0.02);
+  font-size: var(--fs-14);
+  color: rgba(192, 220, 215, 0.9);
+  line-height: 1.45;
+}
+
+.hero-stat::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 1px;
+  background: var(--color-accent);
+  flex-shrink: 0;
+}
+
+/* ── "Come lavoro" — soft skills, mindset e crescita, chiusi di default ──
+   Materiale da secondo colloquio: il default corto viene prima.
+   <details> nativo: accessibile, zero JS per aprire/chiudere. */
+.worklife > summary {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.9rem;
+  cursor: pointer;
+  list-style: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.worklife > summary::-webkit-details-marker {
+  display: none;
+}
+
+.worklife > summary .section-title {
+  margin: 0;
+}
+
+/* Chevron in CSS con bordi ruotati (regola DS: mai glifi Unicode) */
+.worklife__chevron {
+  margin-top: 0.35rem;
+  width: 0.55rem;
+  height: 0.55rem;
+  border-right: 2px solid var(--color-text-muted);
+  border-bottom: 2px solid var(--color-text-muted);
+  rotate: 45deg;
+  flex-shrink: 0;
+  transition:
+    rotate var(--duration-state) var(--ease-standard),
+    border-color var(--duration-micro) ease;
+}
+
+.worklife[open] .worklife__chevron {
+  rotate: -135deg;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .worklife > summary:hover .worklife__chevron {
+    border-color: var(--color-accent);
+  }
+}
+
+.worklife[open] > summary {
+  margin-bottom: 2.5rem;
+}
+
+.worklife__body {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+/* L'altezza non si anima (regola GPU-only): entra il contenuto */
+.worklife[open] .worklife__body {
+  animation: worklife-in var(--duration-state) var(--ease-standard) both;
+}
+
+@keyframes worklife-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Feedback — cosa dicono di me ─────────────────────────────── */
+.feedback-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 48rem) {
+  .feedback-grid {
+    grid-template-columns: repeat(auto-fit, minmax(18rem, 30rem));
+  }
+}
+
+.feedback-card {
+  margin: 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-16);
+  background: var(--color-surface);
+  padding: 1.25rem 1.4rem;
+}
+
+.feedback-quote {
+  margin: 0 0 1rem;
+  font-size: var(--fs-16);
+  line-height: 1.65;
+  color: var(--color-text-primary);
+}
+
+.feedback-keywords {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+  padding: 0;
+  margin: 0 0 1rem;
+}
+
+.feedback-kw {
+  font-size: var(--fs-12);
+  color: var(--color-text-muted);
+  padding: 0.175rem 0.55rem;
+  border: 1px solid rgba(255 255 255 / 0.12);
+  border-radius: 999px;
+}
+
+.feedback-who {
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  color: var(--color-text-muted);
+}
+
+.feedback-who b {
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+
+/* ── Timeline formazione collassata — stessa tecnica di .skills-collapsible ── */
+.tl-collapsible {
+  position: relative;
+}
+
+.tl-collapsible .timeline {
+  max-height: 26rem;
+  overflow: hidden;
+  transition: max-height 0.5s var(--ease-standard);
+}
+
+.tl-collapsible[data-tl-expanded="true"] .timeline {
+  /* Overshoot ampio, stessa tecnica di .skills-grid espansa */
+  max-height: 9000px;
+}
+
+.tl-fade {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 5rem;
+  background: linear-gradient(to bottom, transparent, var(--color-bg) 85%);
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+}
+
+.tl-collapsible[data-tl-expanded="true"] .tl-fade {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .worklife[open] .worklife__body {
+    animation: none;
+  }
+
+  .worklife__chevron {
+    transition: none;
+  }
+
+  .tl-collapsible .timeline {
+    transition: none;
+  }
+}

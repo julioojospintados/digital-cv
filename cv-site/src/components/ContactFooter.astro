@@ -23,7 +23,7 @@ const t =
     ? {
         eyebrow: "Contacts",
         title: "Let's talk",
-        sub: "An email, a call or a LinkedIn message. I answer, not a form.",
+        sub: "An email, a call or a LinkedIn message.",
         email: { label: "Email", action: "Write to me", aria: "Write an email to Giulio" },
         linkedin: { label: "LinkedIn", action: "Let's connect", aria: "Open Giulio's LinkedIn profile in a new tab" },
         phone: { label: "Phone", action: "Call me", aria: "Call Giulio" },
@@ -31,7 +31,7 @@ const t =
     : {
         eyebrow: "Contatti",
         title: "Parliamone",
-        sub: "Una mail, una chiamata o un messaggio su LinkedIn. Rispondo io, non un form.",
+        sub: "Una mail, una chiamata o un messaggio su LinkedIn.",
         email: { label: "Email", action: "Scrivimi", aria: "Scrivi una email a Giulio" },
         linkedin: { label: "LinkedIn", action: "Connettiamoci", aria: "Apri il profilo LinkedIn di Giulio in una nuova scheda" },
         phone: { label: "Telefono", action: "Chiamami", aria: "Chiama Giulio" },
@@ -39,10 +39,10 @@ const t =
 ---
 
 <section class="contact-cta" aria-labelledby="contact-cta-title">
-  <p class="contact-cta__eyebrow">{t.eyebrow}</p>
   <h2 class="contact-cta__title" id="contact-cta-title">
     {t.title}<span class="contact-cta__dot">.</span>
   </h2>
+  <p class="contact-cta__eyebrow">{t.eyebrow}</p>
   <p class="contact-cta__sub">{t.sub}</p>
 
   <div class="contact-cta__grid">
@@ -93,6 +93,9 @@ const t =
      pagina ospite (.cv-footer / .entry-footer) — qui solo spazio verticale. */
   .contact-cta {
     padding: 2rem 0 0.5rem;
+    display:flex;
+    flex-direction: column;
+    gap: 1rem;
   }
 
   .contact-cta__eyebrow {
@@ -102,7 +105,6 @@ const t =
     letter-spacing: 0.16em;
     text-transform: uppercase;
     color: var(--color-accent);
-    margin: 0 0 0.5rem;
   }
 
   .contact-cta__title {
@@ -112,7 +114,6 @@ const t =
     letter-spacing: -0.02em;
     line-height: 1.1;
     color: var(--color-text-primary);
-    margin: 0 0 0.6rem;
   }
 
   .contact-cta__dot {
@@ -124,7 +125,6 @@ const t =
     line-height: 1.5;
     color: var(--color-text-muted);
     max-width: 40rem;
-    margin: 0 0 1.75rem;
   }
 
   /* Mobile-first: una colonna, poi 3 colonne da tablet in su. */

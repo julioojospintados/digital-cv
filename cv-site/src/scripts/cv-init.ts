@@ -21,6 +21,7 @@ const restChars = [...allChars].filter(
 );
 const heroTitle = heroEl.querySelector<HTMLElement>(".hero-title");
 const heroSummary = heroEl.querySelector<HTMLElement>(".hero-summary");
+const heroStats = heroEl.querySelector<HTMLElement>(".hero-stats");
 const heroPortfolioCard = heroEl.querySelector<HTMLElement>(".hero-portfolio-card");
 const heroFooter = heroEl.querySelector<HTMLElement>(".hero-footer");
 
@@ -106,7 +107,7 @@ heroTl.to(
 
 // 5. Resto della sezione hero (titolo, summary, card portfolio, footer)
 heroTl.to(
-  [heroTitle, heroSummary, heroPortfolioCard, heroFooter].filter(
+  [heroTitle, heroSummary, heroPortfolioCard, heroFooter, heroStats].filter(
     (el): el is HTMLElement => el !== null,
   ),
   {
@@ -337,6 +338,32 @@ if (skillsExpandBtn && skillsCollapsible) {
   });
 }
 
+// ── Timeline formazione: "Mostra tutta la cronologia" — stessa meccanica
+// della skills-grid (tl-collapsible + dissolvenza in cv-page.css). ─────────
+const tlExpandBtn = document.querySelector<HTMLButtonElement>(
+  "[data-tl-expand-toggle]",
+);
+const tlCollapsible = document.querySelector<HTMLElement>(".tl-collapsible");
+if (tlExpandBtn && tlCollapsible) {
+  tlExpandBtn.addEventListener("click", () => {
+    const expanded = tlCollapsible.dataset.tlExpanded === "true";
+    tlCollapsible.dataset.tlExpanded = String(!expanded);
+    tlExpandBtn.setAttribute("aria-expanded", String(!expanded));
+    tlExpandBtn.textContent = expanded
+      ? tlExpandBtn.dataset.labelCollapsed ?? tlExpandBtn.textContent ?? ""
+      : tlExpandBtn.dataset.labelExpanded ?? tlExpandBtn.textContent ?? "";
+    requestAnimationFrame(() => ScrollTrigger.refresh());
+  });
+}
+
+// ── "Come lavoro" (<details>): all'apertura cambia l'altezza della pagina —
+// ScrollTrigger deve ricalcolare i trigger delle sezioni sottostanti. ──────
+document
+  .querySelector<HTMLDetailsElement>(".worklife")
+  ?.addEventListener("toggle", () => {
+    requestAnimationFrame(() => ScrollTrigger.refresh());
+  });
+
 // ── Update nav buttons: morph larghezza + crossfade testo ───────────
 // Larghezze FISSE anche su desktop: evitano jitter e tengono le 4 voci allineate.
 // CSS transition rimossa dal .mode-btn: GSAP controlla tutto.
@@ -462,6 +489,14 @@ document
           `.exp-cluster[data-cluster="${primaryClusterKey}"]`,
         );
         const allClusters = document.querySelectorAll<HTMLElement>(".exp-cluster");
+        // Lo scroll si ferma sul titolo della sezione Esperienze, non sul
+        // cluster: il cluster resta più in basso della viewport, il titolo
+        // (contesto "Esperienze") altrimenti finirebbe nascosto sotto la
+        // navbar e chi arriva dalla dropdown perderebbe l'orientamento.
+        const scrollTarget =
+          scanTarget
+            ?.closest<HTMLElement>(".exp-section")
+            ?.querySelector<HTMLElement>(".section-title") ?? scanTarget;
 
         // ── Crea stamp fullscreen ──────────────────────────────────────────
         const stamp = document.createElement("div");
@@ -622,7 +657,7 @@ document
               const navEl = document.querySelector<HTMLElement>("#cv-nav");
               const NAV_HEIGHT = navEl ? navEl.getBoundingClientRect().height : 52;
               const absoluteTop =
-                scanTarget.getBoundingClientRect().top + window.scrollY - NAV_HEIGHT;
+                (scrollTarget ?? scanTarget).getBoundingClientRect().top + window.scrollY - NAV_HEIGHT;
 
               // Spotlight: dim gli altri, glow sul target
               gsap.to(allClusters, { opacity: 0.2, duration: 0.25 });
@@ -636,6 +671,23 @@ document
               // Usa helper scrollToPositionThen per attendere l'arrivo e spegnere
               // lo spotlight in modo affidabile (gestisce Lenis o fallback).
               scrollToPositionThen(absoluteTop).then(() => {
+                // Correzione finale: l'apertura/chiusura dei cluster (CSS
+                // max-height, ~550ms) e le re-reveal dell'accordion possono
+                // continuare a leggero spostare il layout durante lo scroll
+                // stesso — ricalcola e correggi in un colpo solo, senza
+                // animazione, così il titolo non resta mai sotto la navbar.
+                const settledTop =
+                  (scrollTarget ?? scanTarget).getBoundingClientRect().top +
+                  window.scrollY -
+                  NAV_HEIGHT;
+                if (Math.abs(settledTop - window.scrollY) > 4) {
+                  const lenis = window.__lenis;
+                  if (lenis && typeof lenis.scrollTo === "function") {
+                    lenis.scrollTo(settledTop, { immediate: true });
+                  } else {
+                    window.scrollTo({ top: settledTop });
+                  }
+                }
                 gsap.to(allClusters, { opacity: 1, duration: 0.5, ease: "power2.out" });
                 gsap.to(scanTarget, { boxShadow: "none", duration: 0.5 });
               });

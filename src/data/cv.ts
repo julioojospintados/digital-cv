@@ -305,7 +305,7 @@ export const cvData = {
       location: "Torino, Italia",
       remote: true,
       description:
-        "Ho costruito questo CV interattivo end-to-end con GitHub Copilot e Claude come assistenti operativi: architettura, UI, animazioni GSAP, server MCP e API HTTP con Hono. Il sito usa Astro e Lit, il server MCP espone i dati come API per agenti AI. L'ho consegnato in 5 giorni, contro una stima tradizionale di oltre un mese.",
+        "Ho costruito questo CV interattivo end-to-end con GitHub Copilot e Claude come assistenti operativi: architettura, UI, animazioni GSAP, server MCP e API HTTP con Hono. Il sito usa Astro e Lit, il server MCP espone i dati come API per agenti AI.",
       highlights: [
         "Ho sviluppato un server MCP con tool, resource e prompt template che espone i dati del CV ad agenti AI (VS Code Copilot, Claude Desktop).",
         "Ho sviluppato il sito con Astro, Lit e animazioni GSAP: preloader narrativo, wave hold effect SVG, distortion filter via feTurbulence.",
@@ -1846,7 +1846,6 @@ export const cvData = {
         },
       ],
       outcomes: [
-        "Consegnato in 5 giorni, contro una stima tradizionale di oltre un mese.",
         "Copertura test >80% (Vitest) sul layer MCP/HTTP.",
         "Server MCP con tool, resource e prompt template: API dei dati CV per agenti AI, dimostrazione live.",
       ],

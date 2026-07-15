@@ -194,6 +194,16 @@ const scatterAngle = (i: number) => SCATTER_ANGLES[i % SCATTER_ANGLES.length];
           <h2 class="profile-title">Cultivating empathy, with jokes in my pocket.</h2>
           <p class="profile-eyebrow">About me</p>
           <p class="profile-desc">Countless different jobs behind me, a few plants at home, and a well-stamped passport. I lived in three different countries before moving back to Italy, but I did manage to swim in all three swimmable oceans — the other two are just too cold. An improviser of jokes and journeys, I've put down roots in the digital world while keeping a strong sensitivity — people tell me about it often — toward others and myself, with a wink toward poetry and photography. These days I'm trying to connect the dots in software development, applying the same logic chess requires. I play looking for the brilliant move.</p>
+          <!-- Inventory labels, not buttons (dashed border, no hover):
+               concrete conversation hooks, not generic categories. -->
+          <ul class="about-chips" aria-label="Beyond the code">
+            <li class="about-chip">Film in San Francisco</li>
+            <li class="about-chip">Improv theatre</li>
+            <li class="about-chip">Award-winning poetry</li>
+            <li class="about-chip">Photography</li>
+            <li class="about-chip">Chess</li>
+            <li class="about-chip">House plants</li>
+          </ul>
           <div class="about-actions" role="group" aria-label="Learn more about me">
             <button class="about-action" type="button" data-drawer-open="funfact">
               <span class="about-action__icon" aria-hidden="true">✦</span>

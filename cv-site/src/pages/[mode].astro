@@ -415,7 +415,7 @@ const heroTitles: Record<string, string> = {
 const heroTitle = heroTitles[mode] ?? cvData.personal.title;
 
 const heroSummaries: Record<string, string> = {
-  tech: "Costruisco interfacce con Angular, Lit e TypeScript, e integro strumenti AI per velocizzare senza perdere qualità. In ALTEN Italia ho sviluppato design system e architetture per Aruba e Intesa San Paolo. Questo sito, ad esempio, l'ho realizzato in cinque giorni con GitHub Copilot e Claude come assistenti operativi.",
+  tech: "Costruisco interfacce con Angular, Lit e TypeScript, e integro strumenti AI per velocizzare senza perdere qualità. In ALTEN Italia ho sviluppato design system e architetture per Aruba e Intesa San Paolo. Questo sito, ad esempio, l'ho realizzato con GitHub Copilot e Claude come assistenti operativi.",
   creative: "Progetto esperienze digitali che uniscono estetica, usabilità e attenzione al dettaglio, con certificazioni IBM e SkillUp in UX/UI Design e in Generative AI applicata al design. Per Aruba ho sviluppato una libreria di componenti riutilizzabile cross-prodotto; in questo sito ho progettato animazioni GSAP e un sistema knolling documentato passo per passo nel design system.",
   human: "Il mio percorso unisce design, sviluppo, teatro e comunicazione. La formazione in improvvisazione teatrale con B-Teatro mi ha insegnato ad ascoltare prima di rispondere, un'attitudine che porto anche nella progettazione dei workflow AI. Ho condotto festival e panel con ospiti internazionali e ho progettato la comunicazione digitale del roster di un'agenzia musicale.",
   management: "Applico Scrum e Kanban in contesti diversi: team enterprise distribuiti come Intesa San Paolo e Aruba, e collaborazioni più snelle come il tour management per un'agenzia musicale, dove ho seguito booking e strategia digitale in autonomia. Lavoro in sprint brevi, con un backlog costruito sugli obiettivi di business.",
@@ -530,11 +530,11 @@ const heroSummary = heroSummaries[mode] ?? cvData.personal.summary;
     <a href="#skills" class="section-dot" aria-label="Competenze"><span class="section-dot__tip">Competenze</span></a>
     <a href="#experience" class="section-dot" aria-label="Esperienze"><span class="section-dot__tip">Esperienze</span></a>
     <a href="#ai-section" class="section-dot" aria-label="AI Workflow"><span class="section-dot__tip">AI Workflow</span></a>
-    <a href="#soft-skills" class="section-dot" aria-label="Soft Skills"><span class="section-dot__tip">Soft Skills</span></a>
+    <a href="#worklife" class="section-dot" aria-label="Come lavoro"><span class="section-dot__tip">Come lavoro</span></a>
     {
-      cvData.growthAreas.length > 0 && (
-        <a href="#growth" class="section-dot" aria-label="Crescita">
-          <span class="section-dot__tip">Crescita</span>
+      cvData.feedbacks.length > 0 && (
+        <a href="#feedback" class="section-dot" aria-label="Dicono di me">
+          <span class="section-dot__tip">Dicono di me</span>
         </a>
       )
     }
@@ -571,6 +571,16 @@ const heroSummary = heroSummaries[mode] ?? cvData.personal.summary;
       </h1>
       <p class="hero-title">{heroTitle}</p>
       <p class="hero-summary">{heroSummary}</p>
+
+      <!-- Come lavoro, in quattro frasi: principi argomentabili al colloquio.
+           Le chip numeriche sono state rimosse su richiesta (2026-07-15):
+           percentuali non misurate indebolivano la credibilità. -->
+      <ul class="hero-stats" aria-label="In breve">
+        <li class="hero-stat">Trovo soluzioni che velocizzano il lavoro a monte.</li>
+        <li class="hero-stat">Ho lavorato da solo e in team di oltre 20 persone.</li>
+        <li class="hero-stat">Cerco modi per facilitare il lavoro degli altri.</li>
+        <li class="hero-stat">Parto dal perché: è lì la radice delle cose.</li>
+      </ul>
 
       <!-- Card teaser, non un link testuale: il portfolio è la prova del
            lavoro, merita lo stesso peso visivo delle card su /work (stile
@@ -627,8 +637,10 @@ const heroSummary = heroSummaries[mode] ?? cvData.personal.summary;
     </section>
 
     <!-- ── SKILLS BENTO + FORCE NETWORK ─────────────────────────── -->
-    <!-- Default: vista CARD (scannabile in 5s — Legge di Jakob). Il force graph
-         è l'opt-in "wow": D3 viene caricato solo al primo switch (cv-init.ts). -->
+    <!-- Default per viewport (cv-init.ts): CARD su mobile (scannabile in 5s,
+         D3 caricato solo al primo switch), GRAFICO su desktop dove ci sono
+         spazio e mouse per esplorarlo. -->
+
     <section
       class="skills-section reveal delay-100"
       id="skills"
@@ -803,8 +815,20 @@ const heroSummary = heroSummaries[mode] ?? cvData.personal.summary;
       {cvData.aiWorkflow.map((item) => <AiCard {...item} />)}
     </div>
 
-    <!-- ── SOFT SKILLS + METODOLOGIA ───────────────────────────────── -->
-    <section class="soft-section reveal" id="soft-skills" aria-label="Soft skills e metodologia">
+    <!-- ── COME LAVORO — soft skills, mindset e crescita, chiusi di default:
+         materiale da secondo colloquio, il primo scan resta corto.
+         <details> nativo: niente JS per aprire, niente display:none imposto
+         da noi — è il lettore che sceglie di aprire il cassetto. -->
+    <details class="worklife reveal" id="worklife">
+      <summary class="worklife__summary" aria-label="Apri: soft skills, mindset e aree in evoluzione">
+        <h2 class="section-title">
+          <span>Come lavoro</span>
+          <span class="section-subtitle">Soft skills, mindset e aree in evoluzione. Materiale da colloquio: apri pure.</span>
+        </h2>
+        <span class="worklife__chevron" aria-hidden="true"></span>
+      </summary>
+      <div class="worklife__body">
+    <section class="soft-section" id="soft-skills" aria-label="Soft skills e metodologia">
     <img
       class="bg-knoll bg-knoll--plant"
       src="/knolling/plant.webp"
@@ -847,7 +871,7 @@ const heroSummary = heroSummaries[mode] ?? cvData.personal.summary;
     {
       cvData.growthAreas.length > 0 && (
         <section
-          class="growth-section reveal"
+          class="growth-section"
           id="growth"
           aria-label="Aree di crescita consapevole"
         >
@@ -867,6 +891,38 @@ const heroSummary = heroSummaries[mode] ?? cvData.personal.summary;
                 <p class="growth-card__name">{area.name}</p>
                 <p class="growth-card__reframe">{area.reframe}</p>
               </article>
+            ))}
+          </div>
+        </section>
+      )
+    }
+      </div>
+    </details>
+
+    <!-- ── FEEDBACK — cosa dicono di me ─────────────────────────────── -->
+    {
+      cvData.feedbacks.length > 0 && (
+        <section class="feedback-section reveal" id="feedback" aria-label="Cosa dicono di me">
+          <h2 class="section-title">
+            <span>Dicono di me</span>
+            <span class="section-subtitle">Parole di chi ci ha lavorato insieme.</span>
+          </h2>
+          <div class="feedback-grid">
+            {cvData.feedbacks.map((f) => (
+              <figure class="feedback-card cv-card" data-tags="tech creative human management">
+                {f.quote && <blockquote class="feedback-quote">"{f.quote}"</blockquote>}
+                {!f.quote && f.keywords.length > 0 && (
+                  <ul class="feedback-keywords" aria-label={`Le parole che ${f.name} ha usato per descrivermi`}>
+                    {f.keywords.map((k) => (
+                      <li class="feedback-kw">{k}</li>
+                    ))}
+                  </ul>
+                )}
+                <figcaption class="feedback-who">
+                  <b>{f.name}</b>
+                  {f.role && <span> · {f.role}</span>}
+                </figcaption>
+              </figure>
             ))}
           </div>
         </section>
@@ -898,30 +954,45 @@ const heroSummary = heroSummaries[mode] ?? cvData.personal.summary;
           <span class="tl-legend-chip tl-legend-chip--edu">Formazione</span>
         </div>
       </div>
-      <ol class="timeline" role="list">
-        {
-          timelineItems.map((item) => (
-            <li class="tl-item" data-type={item.type}>
-              <time class="tl-date" datetime={item.date} title={item.date}>
-                {item.dateLabel}
-              </time>
-              <span class="tl-dot-col" aria-hidden="true">
-                <span class="tl-dot" />
-              </span>
-              <div class="tl-body">
-                <p class="tl-title">
-                  {item.title}
-                  {item.inProgress && <span class="tl-wip">in corso</span>}
-                </p>
-                <p class="tl-inst">{item.institution}</p>
-                {item.credentialId && (
-                  <p class="tl-cred">ID: {item.credentialId}</p>
-                )}
-              </div>
-            </li>
-          ))
-        }
-      </ol>
+      <!-- Cronologia collassata: le voci recenti bastano al primo scan,
+           il resto (fino al 2010) si apre con "Mostra tutta la cronologia". -->
+      <div class="tl-collapsible" data-tl-expanded="false">
+        <ol class="timeline" role="list">
+          {
+            timelineItems.map((item) => (
+              <li class="tl-item" data-type={item.type}>
+                <time class="tl-date" datetime={item.date} title={item.date}>
+                  {item.dateLabel}
+                </time>
+                <span class="tl-dot-col" aria-hidden="true">
+                  <span class="tl-dot" />
+                </span>
+                <div class="tl-body">
+                  <p class="tl-title">
+                    {item.title}
+                    {item.inProgress && <span class="tl-wip">in corso</span>}
+                  </p>
+                  <p class="tl-inst">{item.institution}</p>
+                  {item.credentialId && (
+                    <p class="tl-cred">ID: {item.credentialId}</p>
+                  )}
+                </div>
+              </li>
+            ))
+          }
+        </ol>
+        <div class="tl-fade" aria-hidden="true"></div>
+      </div>
+      <button
+        class="skills-expand-btn"
+        type="button"
+        data-tl-expand-toggle
+        data-label-collapsed="Mostra tutta la cronologia"
+        data-label-expanded="Mostra meno"
+        aria-expanded="false"
+      >
+        Mostra tutta la cronologia
+      </button>
     </section>
   </main>
 
