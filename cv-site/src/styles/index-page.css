@@ -1166,6 +1166,27 @@ img[src*="flashlight"] {
    Badge da raccogliere, non link di navigazione: aprono un <dialog> con lo
    scatter fotografico, non cambiano pagina. Linguaggio visivo distinto da
    .profile-cta (che naviga) per non confondere le due azioni. */
+/* ── Chip "fuori dal codice" — etichette d'inventario sotto Chi sono.
+   Bordo dashed e niente hover: si distinguono dai bottoni .about-action
+   (bordo pieno, uppercase, cursore) perché non sono cliccabili. ── */
+.about-chips {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding: 0;
+  margin: -0.25rem 0 0.85rem;
+}
+
+.about-chip {
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  color: var(--color-text-muted);
+  border: 1px dashed rgba(255 255 255 / 0.22);
+  border-radius: 999px;
+  padding: 0.22rem 0.7rem;
+}
+
 .about-actions {
   display: flex;
   flex-wrap: wrap;

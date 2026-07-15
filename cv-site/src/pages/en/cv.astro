@@ -21,7 +21,7 @@ import ContactFooter from "../../components/ContactFooter.astro";
 const heroTitle =
   "Development in service of design: Angular, Lit, AI Workflow.";
 const heroSummary =
-  "I build interfaces with Angular, Lit and TypeScript, and I integrate AI tooling to move faster without losing quality. At ALTEN Italia I developed design systems and architecture for Aruba and Intesa San Paolo. This site, for example, I built in five days with GitHub Copilot and Claude as operational assistants.";
+  "I build interfaces with Angular, Lit and TypeScript, and I integrate AI tooling to move faster without losing quality. At ALTEN Italia I developed design systems and architecture for Aruba and Intesa San Paolo. This site, for example, I built with GitHub Copilot and Claude as operational assistants.";
 
 // ── Skill level labels (English) ───────────────────────────────────────────
 const LEVEL_EN: Record<string, string> = {
@@ -496,11 +496,11 @@ const projectsData = cvDataEn.projects.slice(0, 6).map((p) => {
     <a href="#skills" class="section-dot" aria-label="Skills"><span class="section-dot__tip">Skills</span></a>
     <a href="#experience" class="section-dot" aria-label="Experience"><span class="section-dot__tip">Experience</span></a>
     <a href="#ai-section" class="section-dot" aria-label="AI Workflow"><span class="section-dot__tip">AI Workflow</span></a>
-    <a href="#soft-skills" class="section-dot" aria-label="Soft Skills"><span class="section-dot__tip">Soft Skills</span></a>
+    <a href="#worklife" class="section-dot" aria-label="How I work"><span class="section-dot__tip">How I work</span></a>
     {
-      cvDataEn.growthAreas.length > 0 && (
-        <a href="#growth" class="section-dot" aria-label="Growth">
-          <span class="section-dot__tip">Growth</span>
+      cvDataEn.feedbacks.length > 0 && (
+        <a href="#feedback" class="section-dot" aria-label="What people say">
+          <span class="section-dot__tip">What people say</span>
         </a>
       )
     }
@@ -537,6 +537,16 @@ const projectsData = cvDataEn.projects.slice(0, 6).map((p) => {
       </h1>
       <p class="hero-title">{heroTitle}</p>
       <p class="hero-summary">{heroSummary}</p>
+
+      <!-- How I work, in four sentences: principles that hold up in an
+           interview. Numeric chips removed on request (2026-07-15):
+           unmeasured percentages weakened credibility. Mirrors [mode].astro. -->
+      <ul class="hero-stats" aria-label="In short">
+        <li class="hero-stat">I find solutions that speed up the work downstream.</li>
+        <li class="hero-stat">I've worked solo and in teams of 20+ people.</li>
+        <li class="hero-stat">I look for ways to make other people's work easier.</li>
+        <li class="hero-stat">I start from the why: that's where the root of things is.</li>
+      </ul>
 
       <!-- Card teaser, not a plain text link: the portfolio is proof of the
            work, it deserves the same visual weight as the cards on /work
@@ -594,8 +604,9 @@ const projectsData = cvDataEn.projects.slice(0, 6).map((p) => {
     </section>
 
     <!-- ── SKILLS BENTO + FORCE NETWORK ──────────────────────── -->
-    <!-- Default: CARD view (scannable in 5s — Jakob's law). The force graph
-         is the opt-in "wow": D3 loads only on first switch (cv-init.ts). -->
+    <!-- Default per viewport (cv-init.ts): CARDS on mobile (scannable in 5s,
+         D3 loaded only on first switch), GRAPH on desktop where there's
+         room and a mouse to explore it. -->
     <section
       class="skills-section reveal delay-100"
       id="skills"
@@ -764,9 +775,21 @@ const projectsData = cvDataEn.projects.slice(0, 6).map((p) => {
       </div>
     </section>
 
-    <!-- ── SOFT SKILLS + METHODOLOGY ───────────────────────────────── -->
+    <!-- ── HOW I WORK — soft skills, mindset and growth, closed by default:
+         second-interview material, the first scan stays short.
+         Native <details>: no JS to open, the reader chooses. Mirrors
+         [mode].astro. -->
+    <details class="worklife reveal" id="worklife">
+      <summary class="worklife__summary" aria-label="Open: soft skills, mindset and growing areas">
+        <h2 class="section-title">
+          <span>How I work</span>
+          <span class="section-subtitle">Soft skills, mindset and growing areas. Interview material: feel free to open.</span>
+        </h2>
+        <span class="worklife__chevron" aria-hidden="true"></span>
+      </summary>
+      <div class="worklife__body">
     <section
-      class="soft-section reveal"
+      class="soft-section"
       id="soft-skills"
       aria-label="Soft skills and methodology"
     >
@@ -814,7 +837,7 @@ const projectsData = cvDataEn.projects.slice(0, 6).map((p) => {
     {
       cvDataEn.growthAreas.length > 0 && (
         <section
-          class="growth-section reveal"
+          class="growth-section"
           id="growth"
           aria-label="Areas of conscious growth"
         >
@@ -834,6 +857,38 @@ const projectsData = cvDataEn.projects.slice(0, 6).map((p) => {
                 <p class="growth-card__name">{area.name}</p>
                 <p class="growth-card__reframe">{area.reframe}</p>
               </article>
+            ))}
+          </div>
+        </section>
+      )
+    }
+      </div>
+    </details>
+
+    <!-- ── FEEDBACK — what people say ───────────────────────────────── -->
+    {
+      cvDataEn.feedbacks.length > 0 && (
+        <section class="feedback-section reveal" id="feedback" aria-label="What people say">
+          <h2 class="section-title">
+            <span>What people say</span>
+            <span class="section-subtitle">Words from people who worked with me.</span>
+          </h2>
+          <div class="feedback-grid">
+            {cvDataEn.feedbacks.map((f) => (
+              <figure class="feedback-card cv-card" data-tags="tech creative human management">
+                {f.quote && <blockquote class="feedback-quote">"{f.quote}"</blockquote>}
+                {!f.quote && f.keywords.length > 0 && (
+                  <ul class="feedback-keywords" aria-label={`The words ${f.name} used to describe me`}>
+                    {f.keywords.map((k) => (
+                      <li class="feedback-kw">{k}</li>
+                    ))}
+                  </ul>
+                )}
+                <figcaption class="feedback-who">
+                  <b>{f.name}</b>
+                  {f.role && <span> · {f.role}</span>}
+                </figcaption>
+              </figure>
             ))}
           </div>
         </section>
@@ -869,6 +924,9 @@ const projectsData = cvDataEn.projects.slice(0, 6).map((p) => {
           <span class="tl-legend-chip tl-legend-chip--edu">Education</span>
         </div>
       </div>
+      <!-- Collapsed timeline: recent entries are enough for the first scan,
+           the rest (back to 2010) opens with "Show full timeline". -->
+      <div class="tl-collapsible" data-tl-expanded="false">
       <ol class="timeline" role="list">
         {
           timelineItems.map((item) => (
@@ -893,6 +951,18 @@ const projectsData = cvDataEn.projects.slice(0, 6).map((p) => {
           ))
         }
       </ol>
+        <div class="tl-fade" aria-hidden="true"></div>
+      </div>
+      <button
+        class="skills-expand-btn"
+        type="button"
+        data-tl-expand-toggle
+        data-label-collapsed="Show full timeline"
+        data-label-expanded="Show less"
+        aria-expanded="false"
+      >
+        Show full timeline
+      </button>
     </section>
   </main>
 

@@ -4,12 +4,15 @@ import { modeStore } from "./stores/modeStore.js";
 /**
  * <floating-menu>
  *
- * FAB (Floating Action Button) con 2 voci espandibili:
- *  - Contattami → mailto
- *  - Feedback    → mailto pre-compilata
+ * FAB (Floating Action Button) con 4 voci espandibili:
+ *  - WhatsApp   → wa.me (nuova scheda)
+ *  - Chiamami   → tel:
+ *  - Contattami → mailto (nuova scheda: se il gestore è webmail,
+ *                 _self sostituirebbe il CV con la composizione)
+ *  - Portfolio  → /work (o /en/work)
  *
- * (La voce "AI Workflow" è stata rimossa su richiesta il 2026-07-13:
- * la sezione resta raggiungibile da dot-nav e scroll naturale.)
+ * (Le voci "AI Workflow" e "Feedback" sono state rimosse su richiesta,
+ * 2026-07-13 e 2026-07-15: azioni di contatto immediato al loro posto.)
  *
  * Mode-reactive: colore del trigger segue --color-accent.
  * Chiude con click fuori o con Escape.
@@ -183,6 +186,19 @@ class FloatingMenu extends LitElement {
     :host([open]) .fab-item:nth-child(2) {
       transition-delay: 0.08s;
     }
+    :host([open]) .fab-item:nth-child(3) {
+      transition-delay: 0.12s;
+    }
+    :host([open]) .fab-item:nth-child(4) {
+      transition-delay: 0.16s;
+    }
+
+    .fab-item__icon svg {
+      display: block;
+      width: 1rem;
+      height: 1rem;
+      fill: currentColor;
+    }
 
     /* ── Pulse ring (attrae l'attenzione quando chiuso) ── */
     @keyframes fab-ring-pulse {
@@ -220,155 +236,10 @@ class FloatingMenu extends LitElement {
       }
     }
 
-    /* ── Feedback panel — absolute come .fab-items ── */
-    .feedback-panel {
-      position: absolute;
-      right: 0;
-      bottom: 3.75rem;
-      width: 15rem;
-      background: rgba(8, 73, 67, 0.97);
-      border: 1px solid
-        color-mix(
-          in srgb,
-          var(--color-accent, rgba(0, 255, 200, 1)) 40%,
-          transparent
-        );
-      /* custom property attraversa lo Shadow DOM — token in global.css */
-      border-radius: var(--radius-16, 1rem);
-      padding: 1rem;
-      backdrop-filter: blur(16px);
-      pointer-events: all;
-    }
-    .fp-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 0.65rem;
-    }
-    .fp-title {
-      font-family: "Lexend", sans-serif;
-      font-size: var(--fs-14);
-      font-weight: 700;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--color-accent, rgba(0, 255, 200, 1));
-    }
-    .fp-close {
-      background: none;
-      border: none;
-      cursor: pointer;
-      color: rgba(192, 220, 215, 0.6);
-      font-size: var(--fs-14);
-      line-height: 1.5;
-      padding: 0;
-      display: flex;
-      align-items: center;
-    }
-    .fp-close:hover {
-      color: rgba(245, 240, 230, 1);
-    }
-    .fp-input,
-    .fp-textarea {
-      width: 100%;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 0.35rem;
-      color: rgba(245, 240, 230, 1);
-      font-family: "Lexend", sans-serif;
-      font-size: var(--fs-14);
-      padding: 0.45rem 0.6rem;
-      margin-bottom: 0.5rem;
-      box-sizing: border-box;
-      transition: border-color 0.2s ease;
-      resize: none;
-    }
-    .fp-input {
-      cursor: text;
-    }
-    .fp-textarea {
-      height: 4rem;
-      cursor: text;
-    }
-    .fp-input::placeholder,
-    .fp-textarea::placeholder {
-      color: rgba(192, 220, 215, 0.4);
-    }
-    .fp-input:focus,
-    .fp-textarea:focus {
-      outline: none;
-      border-color: color-mix(
-        in srgb,
-        var(--color-accent, rgba(0, 255, 200, 1)) 60%,
-        transparent
-      );
-    }
-    .fp-submit {
-      width: 100%;
-      background: color-mix(
-        in srgb,
-        var(--color-accent, rgba(0, 255, 200, 1)) 20%,
-        transparent
-      );
-      border: 1px solid var(--color-accent, rgba(0, 255, 200, 1));
-      border-radius: 0.35rem;
-      color: var(--color-accent, rgba(0, 255, 200, 1));
-      font-family: "Lexend", sans-serif;
-      font-size: var(--fs-14);
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      padding: 0.5rem;
-      cursor: pointer;
-      transition: background 0.2s ease;
-    }
-    .fp-submit:hover {
-      background: color-mix(
-        in srgb,
-        var(--color-accent, rgba(0, 255, 200, 1)) 35%,
-        transparent
-      );
-    }
-    .fp-sent {
-      text-align: center;
-      font-family: "Lexend", sans-serif;
-      font-size: var(--fs-14);
-      color: var(--color-accent, rgba(0, 255, 200, 1));
-      padding: 0.5rem 0;
-    }
-    .fp-hint {
-      font-family: "Lexend", sans-serif;
-      font-size: var(--fs-14);
-      color: rgba(192, 220, 215, 0.4);
-      text-align: center;
-      margin-top: 0.45rem;
-    }
-    /* ── Session badge ── */
-    .fab-badge {
-      position: absolute;
-      top: -3px;
-      right: -3px;
-      width: 1rem;
-      height: 1rem;
-      border-radius: 50%;
-      background: rgba(0, 255, 200, 1);
-      color: rgba(8, 73, 67, 1);
-      font-family: "Lexend", sans-serif;
-      font-size: var(--fs-14);
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 1.5px solid rgba(8, 73, 67, 1);
-    }
   `;
 
   private _open = false;
   private _unsub?: () => void;
-  private _showFeedback = false;
-  private _feedbackSent = false;
-  private _draftName = "";
-  private _draftNote = "";
-  private static DRAFT_KEY = "cv-feedback-draft";
 
   connectedCallback() {
     super.connectedCallback();
@@ -377,21 +248,6 @@ class FloatingMenu extends LitElement {
     });
     document.addEventListener("click", this._handleOutsideClick);
     document.addEventListener("keydown", this._handleKeydown);
-
-    // Load saved draft (if any) from sessionStorage so the input is preserved
-    if (typeof window !== "undefined") {
-      try {
-        const draft = JSON.parse(
-          sessionStorage.getItem(FloatingMenu.DRAFT_KEY) ?? "null",
-        );
-        if (draft && typeof draft === "object") {
-          this._draftName = draft.name ?? "";
-          this._draftNote = draft.note ?? "";
-        }
-      } catch {
-        /* noop */
-      }
-    }
   }
 
   disconnectedCallback() {
@@ -407,37 +263,25 @@ class FloatingMenu extends LitElement {
       this.setAttribute("open", "");
     } else {
       this.removeAttribute("open");
-      this._showFeedback = false;
-      this._feedbackSent = false;
     }
     this.requestUpdate();
   }
 
   private _handleOutsideClick = (e: Event) => {
     if (this._open && !e.composedPath().includes(this)) {
-      this._open = false;
-      this.removeAttribute("open");
-      this._showFeedback = false;
-      this._feedbackSent = false;
-      this.requestUpdate();
+      this._closeOnNav();
     }
   };
 
   private _handleKeydown = (e: KeyboardEvent) => {
     if (e.key === "Escape" && this._open) {
-      this._open = false;
-      this.removeAttribute("open");
-      this._showFeedback = false;
-      this._feedbackSent = false;
-      this.requestUpdate();
+      this._closeOnNav();
     }
   };
 
   private _closeOnNav() {
     this._open = false;
     this.removeAttribute("open");
-    this._showFeedback = false;
-    this._feedbackSent = false;
     this.requestUpdate();
   }
 
@@ -450,105 +294,8 @@ class FloatingMenu extends LitElement {
     window.open("mailto:giulio.occhipinti.g@gmail.com", "_blank", "noopener");
   };
 
-  private _openFeedback() {
-    // Ensure draft is loaded before showing the panel
-    this._loadDraft();
-    this._showFeedback = true;
-    this._feedbackSent = false;
-    this.requestUpdate();
-  }
-
-  private _closeFeedback() {
-    this._showFeedback = false;
-    this._feedbackSent = false;
-    this.requestUpdate();
-  }
-
-  private _saveDraft() {
-    if (typeof window === "undefined") return;
-    try {
-      sessionStorage.setItem(
-        FloatingMenu.DRAFT_KEY,
-        JSON.stringify({ name: this._draftName, note: this._draftNote }),
-      );
-    } catch {
-      // ignore storage errors
-    }
-  }
-
-  private _loadDraft() {
-    if (typeof window === "undefined") return;
-    try {
-      const draft = JSON.parse(
-        sessionStorage.getItem(FloatingMenu.DRAFT_KEY) ?? "null",
-      );
-      if (draft && typeof draft === "object") {
-        this._draftName = draft.name ?? "";
-        this._draftNote = draft.note ?? "";
-      }
-    } catch {
-      /* noop */
-    }
-  }
-
-  private _onNameInput = (e: Event) => {
-    const t = e.target as HTMLInputElement;
-    this._draftName = t?.value ?? "";
-    this._saveDraft();
-  };
-
-  private _onNoteInput = (e: Event) => {
-    const t = e.target as HTMLTextAreaElement;
-    this._draftNote = t?.value ?? "";
-    this._saveDraft();
-  };
-
-  private _submitFeedback() {
-    const nameInput =
-      this.renderRoot.querySelector<HTMLInputElement>("#fp-name");
-    const noteInput =
-      this.renderRoot.querySelector<HTMLTextAreaElement>("#fp-note");
-    const name = nameInput?.value.trim() ?? "";
-    const note = noteInput?.value.trim() ?? "";
-    if (!note) return;
-
-    // Persist to sessionStorage so the badge updates
-    try {
-      const feedbacks: unknown[] = JSON.parse(
-        sessionStorage.getItem("cv-feedbacks") ?? "[]",
-      );
-      feedbacks.push({ timestamp: new Date().toISOString(), name, note });
-      sessionStorage.setItem("cv-feedbacks", JSON.stringify(feedbacks));
-    } catch {
-      // sessionStorage blocked — proceed anyway
-    }
-
-    // Open mailto with pre-filled content — zero infrastructure required
-    const subject = encodeURIComponent(
-      "Feedback — CV Digitale Giulio Occhipinti",
-    );
-    const nameStr = name ? `Da: ${name}` : "Feedback anonimo";
-    const body = encodeURIComponent(`${nameStr}\n\n${note}`);
-    window.open(
-      `mailto:giulio.occhipinti.g@gmail.com?subject=${subject}&body=${body}`,
-      "_blank",
-    );
-
-    // Clear saved draft after sending
-    if (typeof window !== "undefined") {
-      try {
-        sessionStorage.removeItem(FloatingMenu.DRAFT_KEY);
-      } catch { }
-    }
-    this._draftName = "";
-    this._draftNote = "";
-
-    this._feedbackSent = true;
-    this.requestUpdate();
-  }
-
   render() {
-    // Guard window/sessionStorage access for SSR compatibility (window is undefined in Node.js)
+    // Guard window access for SSR compatibility (window is undefined in Node.js)
     const isClient = typeof window !== "undefined";
 
     // i18n: legge il lang dal <html lang="..."> — fallback IT
@@ -556,110 +303,72 @@ class FloatingMenu extends LitElement {
     const isEN = lang === "en";
 
     const t = {
-      contactLabel: isEN ? "Contact me" : "Contattami",
+      whatsappLabel: "WhatsApp",
+      whatsappAria: isEN
+        ? "Message Giulio on WhatsApp (opens in a new tab)"
+        : "Scrivi a Giulio su WhatsApp (apre in nuova scheda)",
+      callLabel: isEN ? "Call me" : "Chiamami",
+      callAria: isEN ? "Call Giulio" : "Chiama Giulio",
+      contactLabel: isEN ? "E-mail" : "E-mail",
       contactAriaLabel: isEN ? "Send email to Giulio" : "Invia email a Giulio",
-      feedbackLabel: isEN ? "Feedback" : "Feedback",
-      feedbackAriaLabel: isEN ? "Leave feedback" : "Lascia un feedback",
-      fpAriaLabel: isEN ? "Feedback form" : "Modulo feedback",
-      fpClose: isEN ? "Close" : "Chiudi",
-      fpSent: isEN ? "✓ Thanks! Opening email…" : "✓ Grazie! Apertura email…",
-      fpHintSent: isEN ? "Send the message in your email client." : "Invia il messaggio nel client di posta che si è aperto.",
-      fpNamePlaceholder: isEN ? "Name (optional)" : "Nome (opzionale)",
-      fpNotePlaceholder: isEN ? "Leave a comment…" : "Lascia un commento…",
-      fpSubmit: isEN ? "Send" : "Invia",
-      fpHint: isEN ? "Opens your email client — no database, no account required." : "Apre il tuo client email — nessun DB, nessun account richiesto.",
+      portfolioLabel: "Portfolio",
+      portfolioAria: isEN ? "Explore the portfolio" : "Esplora il portfolio",
       menuOpen: isEN ? "Open contacts" : "Apri contatti",
       menuClose: isEN ? "Close contacts" : "Chiudi contatti",
-      badgeTitle: (n: number) => isEN ? `${n} feedback sent this session` : `${n} feedback inviati in questa sessione`,
     };
 
-    let feedbackCount = 0;
-    if (isClient) {
-      try {
-        const stored = JSON.parse(
-          sessionStorage.getItem("cv-feedbacks") ?? "[]",
-        );
-        feedbackCount = Array.isArray(stored) ? stored.length : 0;
-      } catch {
-        /* noop */
-      }
-    }
+    // Icone inline currentColor: nessun glifo Unicode (il tratto dipenderebbe
+    // dal font di sistema — stessa regola dei chevron nel design system).
+    const icons = {
+      whatsapp: html`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5.1-1.3A10 10 0 1 0 12 2zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.6-6.1c-.3-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1-.2.3-.6.8-.8 1-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.4-3c-.3-.4 0-.5.1-.7l.4-.5c.1-.2.2-.3.3-.5v-.5c0-.1-.6-1.4-.8-1.9-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5 0-.7.3-.2.3-.9.9-.9 2.1s.9 2.4 1 2.6c.1.2 1.8 2.8 4.4 3.9.6.3 1.1.4 1.5.6.6.2 1.2.2 1.6.1.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2 0-.1-.2-.2-.4-.3z"/></svg>`,
+      phone: html`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.9 15.9 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.6.1.3 0 .7-.2 1l-2.3 2.2z"/></svg>`,
+      mail: html`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg>`,
+      folder: html`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-8l-2-2z"/></svg>`,
+    };
 
     return html`
-      ${this._showFeedback
-        ? html`
-            <div
-              class="feedback-panel"
-              role="dialog"
-              aria-label="${t.fpAriaLabel}"
-            >
-              <div class="fp-header">
-                <span class="fp-title">✦ Feedback</span>
-                <button
-                  class="fp-close"
-                  @click=${this._closeFeedback}
-                  aria-label="${t.fpClose}"
-                >
-                  ✕
-                </button>
-              </div>
-              ${this._feedbackSent
-            ? html`
-                    <p class="fp-sent">${t.fpSent}</p>
-                    <p class="fp-hint">${t.fpHintSent}</p>
-                  `
-            : html`
-                    <input
-                      class="fp-input"
-                      type="text"
-                      id="fp-name"
-                      placeholder="${t.fpNamePlaceholder}"
-                      autocomplete="off"
-                      .value=${this._draftName}
-                      @input=${this._onNameInput}
-                    />
-                    <textarea
-                      class="fp-textarea"
-                      id="fp-note"
-                      placeholder="${t.fpNotePlaceholder}"
-                      .value=${this._draftNote}
-                      @input=${this._onNoteInput}
-                    ></textarea>
-                    <button
-                      class="fp-submit"
-                      @click=${this._submitFeedback}
-                      type="button"
-                    >
-                      ${t.fpSubmit}
-                    </button>
-                    <p class="fp-hint">${t.fpHint}</p>
-                  `}
-            </div>
-          `
-        : html`
-            <div class="fab-items" ?inert="${!this._open}" aria-hidden="${!this._open}">
-              <a
-                class="fab-item"
-                href="mailto:giulio.occhipinti.g@gmail.com"
-                target="_blank"
-                rel="noopener"
-                aria-label="${t.contactAriaLabel}"
-                @click=${this._handleContact}
-              >
-                <span class="fab-item__icon">✉</span>
-                <span>${t.contactLabel}</span>
-              </a>
-              <button
-                class="fab-item"
-                @click=${this._openFeedback}
-                aria-label="${t.feedbackAriaLabel}"
-                type="button"
-              >
-                <span class="fab-item__icon">✦</span>
-                <span>${t.feedbackLabel}</span>
-              </button>
-            </div>
-          `}
+      <div class="fab-items" ?inert="${!this._open}" aria-hidden="${!this._open}">
+        <a
+          class="fab-item"
+          href="https://wa.me/39[REDACTED]"
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="${t.whatsappAria}"
+          @click=${() => this._closeOnNav()}
+        >
+          <span class="fab-item__icon">${icons.whatsapp}</span>
+          <span>${t.whatsappLabel}</span>
+        </a>
+        <a
+          class="fab-item"
+          href="tel:+39[REDACTED]"
+          aria-label="${t.callAria}"
+          @click=${() => this._closeOnNav()}
+        >
+          <span class="fab-item__icon">${icons.phone}</span>
+          <span>${t.callLabel}</span>
+        </a>
+        <a
+          class="fab-item"
+          href="mailto:giulio.occhipinti.g@gmail.com"
+          target="_blank"
+          rel="noopener"
+          aria-label="${t.contactAriaLabel}"
+          @click=${this._handleContact}
+        >
+          <span class="fab-item__icon">${icons.mail}</span>
+          <span>${t.contactLabel}</span>
+        </a>
+        <a
+          class="fab-item"
+          href="${isEN ? "/en/work" : "/work"}"
+          aria-label="${t.portfolioAria}"
+          @click=${() => this._closeOnNav()}
+        >
+          <span class="fab-item__icon">${icons.folder}</span>
+          <span>${t.portfolioLabel}</span>
+        </a>
+      </div>
 
       <button
         class="fab-trigger"
@@ -678,16 +387,6 @@ class FloatingMenu extends LitElement {
             <path fill-rule="evenodd" d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM8 9.6a1.4 1.4 0 1 1 0 2.8 1.4 1.4 0 0 1 0-2.8zm4 0a1.4 1.4 0 1 1 0 2.8 1.4 1.4 0 0 1 0-2.8zm4 0a1.4 1.4 0 1 1 0 2.8 1.4 1.4 0 0 1 0-2.8z"/>
           </svg>
         </span>
-        ${feedbackCount > 0
-        ? html`
-              <span
-                class="fab-badge"
-                title="${t.badgeTitle(feedbackCount)}"
-              >
-                ${feedbackCount}
-              </span>
-            `
-        : ""}
       </button>
     `;
   }
