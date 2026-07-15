@@ -1353,7 +1353,7 @@ a.lang-switch__opt:hover {
 /* AI section enhanced visibility */
 .ai-title {
   position: relative;
-  align-items: center;
+  /* align-items: center; */
   flex-wrap: wrap;
 }
 
@@ -1366,7 +1366,7 @@ a.lang-switch__opt:hover {
       var(--color-accent) 0%,
       color-mix(in srgb, var(--color-accent) 70%, var(--color-text-primary)) 100%);
   -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  /* -webkit-text-fill-color: transparent; */
   background-clip: text;
   font-weight: 800;
   text-shadow: 0 0 20px color-mix(in srgb, var(--color-accent) 30%, transparent);
@@ -1387,6 +1387,7 @@ a.lang-switch__opt:hover {
   height: 5px;
   border-radius: 50%;
   background: var(--color-accent);
+  -webkit-text-fill-color: var(--color-accent) !important;
   opacity: 0.55;
   box-shadow: 0 0 4px var(--color-accent);
 }
@@ -1726,25 +1727,7 @@ a.lang-switch__opt:hover {
 /* AiCard styles → cards/AiCard.astro */
 
 /* ── Soft skills + Methodology ────────────────────────────────── */
-/* method-block: stessa spaziatura superiore degli altri titoli di sezione
-   (gli altri section-title ereditano il padding-top dal parent <section>).
-   Qui il two-col-grid non è usato quindi il gap manca — gap simulato con margin-top. */
-.method-block {
-  margin-top: 2rem;
-}
-
-.two-col-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 2rem;
-}
-
-@media (min-width: 48rem) {
-  .two-col-grid {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
+/* Wrapper cards → .worklife-card, .worklife__grid (sopra). */
 .soft-list,
 .method-list {
   list-style: none;
@@ -2225,76 +2208,69 @@ a.lang-switch__opt:hover {
   flex-shrink: 0;
 }
 
-/* ── "Come lavoro" — soft skills, mindset e crescita, chiusi di default ──
-   Materiale da secondo colloquio: il default corto viene prima.
-   <details> nativo: accessibile, zero JS per aprire/chiudere. */
-.worklife > summary {
+/* ── "Indole" — soft skills, mindset e aree in evoluzione, sempre visibili ──
+   Header in stile catalogo (stessa grammatica di .exp-cluster__header:
+   box bordato, nome in maiuscolo, meta in mono) ma statico: nessun
+   chevron, nessun toggle, non è un accordion. */
+.worklife__header {
   display: flex;
-  align-items: flex-start;
-  gap: 0.9rem;
-  cursor: pointer;
-  list-style: none;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.75rem;
+  padding: 0.85rem 1.25rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-16);
+  margin: 0 0 1.5rem;
 }
 
-.worklife > summary::-webkit-details-marker {
-  display: none;
+.worklife__name {
+  font-size: var(--fs-12);
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--color-text-primary);
 }
 
-.worklife > summary .section-title {
-  margin: 0;
+.worklife__meta {
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--color-text-muted);
 }
 
-/* Chevron in CSS con bordi ruotati (regola DS: mai glifi Unicode) */
-.worklife__chevron {
-  margin-top: 0.35rem;
-  width: 0.55rem;
-  height: 0.55rem;
-  border-right: 2px solid var(--color-text-muted);
-  border-bottom: 2px solid var(--color-text-muted);
-  rotate: 45deg;
-  flex-shrink: 0;
-  transition:
-    rotate var(--duration-state) var(--ease-standard),
-    border-color var(--duration-micro) ease;
+/* Soft Skills e Mindset come due card affiancate — stessa grammatica
+   visiva di .growth-card qui sotto: bordo, raggio, eyebrow mono. */
+.worklife__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
 }
 
-.worklife[open] .worklife__chevron {
-  rotate: -135deg;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .worklife > summary:hover .worklife__chevron {
-    border-color: var(--color-accent);
+@media (min-width: 48rem) {
+  .worklife__grid {
+    grid-template-columns: 1fr 1fr;
   }
 }
 
-.worklife[open] > summary {
-  margin-bottom: 2.5rem;
+.worklife-card {
+  padding: 1.25rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-16);
+  background: rgba(255, 255, 255, 0.02);
 }
 
-.worklife__body {
-  display: flex;
-  flex-direction: column;
-  gap: 3rem;
-}
-
-/* L'altezza non si anima (regola GPU-only): entra il contenuto */
-.worklife[open] .worklife__body {
-  animation: worklife-in var(--duration-state) var(--ease-standard) both;
-}
-
-@keyframes worklife-in {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.worklife-card__label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  opacity: 0.7;
+  margin: 0 0 0.9rem;
 }
 
 /* ── Feedback — cosa dicono di me ─────────────────────────────── */
@@ -2384,14 +2360,6 @@ a.lang-switch__opt:hover {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .worklife[open] .worklife__body {
-    animation: none;
-  }
-
-  .worklife__chevron {
-    transition: none;
-  }
-
   .tl-collapsible .timeline {
     transition: none;
   }

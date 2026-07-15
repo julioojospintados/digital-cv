@@ -1,7 +1,7 @@
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { modeStore, setMode } from "../islands/stores/modeStore.ts";
-import { applyAccordions, applyCardStates, reorderSkillSquares, CLUSTER_OPEN_FOR } from "./mode-helpers.ts";
+import { applyAccordions, applyCardStates, reorderSkillSquares, reorderProjectCards, CLUSTER_OPEN_FOR } from "./mode-helpers.ts";
 import "../islands/GoLogo.lit.ts";
 // FAB contatti — solo le pagine CV lo renderizzano (Layout, prop showFab)
 import "../islands/FloatingMenu.lit.ts";
@@ -178,10 +178,48 @@ function reorderSkillsAnimated(mode: string) {
   });
 }
 
+// ── Riordino projects-grid al cambio mode ───────────────────────────────────
+// Stessa tecnica FLIP di reorderSkillsAnimated: reorderProjectCards (pura,
+// mode-helpers.ts) sposta i nodi, qui si anima solo il delta di posizione.
+function reorderProjectsAnimated(mode: string) {
+  const grid = document.querySelector<HTMLElement>(".projects-grid");
+  if (!grid) return;
+
+  const items = Array.from(grid.querySelectorAll<HTMLElement>(".project-card"));
+  const firstRects = new Map(items.map((el) => [el, el.getBoundingClientRect()] as const));
+
+  reorderProjectCards(mode);
+
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  items.forEach((el) => {
+    const first = firstRects.get(el);
+    if (!first) return;
+    const last = el.getBoundingClientRect();
+    const dx = first.left - last.left;
+    const dy = first.top - last.top;
+    if (!dx && !dy) return;
+    gsap.fromTo(
+      el,
+      { x: dx, y: dy },
+      {
+        x: 0,
+        y: 0,
+        duration: 0.5,
+        ease: "power3.out",
+        onComplete: () => {
+          gsap.set(el, { clearProps: "transform" });
+        },
+      },
+    );
+  });
+}
+
 function applyMode(mode: string) {
   applyCardStates(mode);
   updateNavButtons(mode);
   reorderSkillsAnimated(mode);
+  reorderProjectsAnimated(mode);
   // ScrollTrigger.refresh() rimosso da qui — il subscribe lo chiama già una sola volta.
 }
 
@@ -356,13 +394,6 @@ if (tlExpandBtn && tlCollapsible) {
   });
 }
 
-// ── "Come lavoro" (<details>): all'apertura cambia l'altezza della pagina —
-// ScrollTrigger deve ricalcolare i trigger delle sezioni sottostanti. ──────
-document
-  .querySelector<HTMLDetailsElement>(".worklife")
-  ?.addEventListener("toggle", () => {
-    requestAnimationFrame(() => ScrollTrigger.refresh());
-  });
 
 // ── Update nav buttons: morph larghezza + crossfade testo ───────────
 // Larghezze FISSE anche su desktop: evitano jitter e tengono le 4 voci allineate.
@@ -1624,6 +1655,13 @@ if (skillsViewButtons.length) {
   document.querySelectorAll<HTMLElement>(".cv-card[data-tags]").forEach((card) => {
     card.addEventListener("click", (e) => {
       if (card.dataset.state === "peeking") return;
+
+      // Il toggle "Leggi tutto" (project-card__desc) e il link titolo devono
+      // solo espandere/navigare, mai innescare il peek: altrimenti il click
+      // per leggere la descrizione lanciava anche l'animazione verso la
+      // navbar, mascherando l'espansione (bug segnalato: "non espandibili").
+      const target = e.target as HTMLElement;
+      if (target.closest(".project-card__desc, .project-card__name a")) return;
 
       const tags = (card.dataset.tags ?? "").split(" ");
       // Ricalcolato dai tag reali vs il mode corrente, MAI fidato del solo

@@ -81,3 +81,27 @@ export function reorderSkillSquares(mode: string): void {
   items.forEach((el) => frag.appendChild(el));
   grid.appendChild(frag);
 }
+
+/**
+ * Riordina le .project-card dentro .projects-grid: progetti del mode attivo
+ * in cima, gli altri (passivi/dimmed) in fondo, ordine originale preservato
+ * dentro ciascun gruppo. Stessa tecnica di reorderSkillSquares: un CSS
+ * `order` sarebbe fragile (dipende dal timing di data-state), lo spostamento
+ * reale dei nodi è la fonte di verità già validata sui grafici skill.
+ */
+export function reorderProjectCards(mode: string): void {
+  const grid = document.querySelector<HTMLElement>(".projects-grid");
+  if (!grid) return;
+
+  const items = Array.from(grid.querySelectorAll<HTMLElement>(".project-card"));
+
+  items.sort((a, b) => {
+    const tagsA = a.dataset.tags?.split(" ") ?? [];
+    const tagsB = b.dataset.tags?.split(" ") ?? [];
+    return Number(tagsB.includes(mode)) - Number(tagsA.includes(mode));
+  });
+
+  const frag = document.createDocumentFragment();
+  items.forEach((el) => frag.appendChild(el));
+  grid.appendChild(frag);
+}

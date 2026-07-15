@@ -1629,20 +1629,6 @@ export const cvData = {
       ],
     },
     {
-      name: "Assertività",
-      description:
-        "Esprimo posizioni tecniche e strategiche con chiarezza e rispetto, anche in disaccordo. Uso la dialettica per far avanzare il progetto, non per vincere la discussione.",
-      domain: "human",
-      weight: 3,
-      mastery: 80,
-      role: "support",
-      links: [
-        { target: "Comunicazione efficace", type: "conceptual" },
-        { target: "Autonomia strategica", type: "conceptual" },
-        { target: "Problem solving laterale", type: "cross-domain" },
-      ],
-    },
-    {
       name: "Sensibilità estetica",
       description:
         "Fotografo da oltre 15 anni: quell'occhio si traduce in scelte UI più precise, con impatto diretto sulla percezione del brand e sulla qualità dell'esperienza utente.",
@@ -2117,7 +2103,7 @@ export const cvData = {
     {
       name: 'Film "Double"',
       description:
-        'Ho recitato come deuteragonista nel film "Double", prodotto a Torino da Filmine e presentato all\'Independent Film Festival di San Francisco nel 2022.',
+        'Ho recitato come deuteragonista nel film "Double", prodotto a Torino da Filmine e presentato all\'Independent Film Festival di San Francisco nel 2022 e successivamente al cinema al Cinema Massimo per la prima italiana.',
       date: "2022-01",
       tags: ["Cinema", "Recitazione"],
     },
@@ -2226,46 +2212,53 @@ export const cvData = {
   // ── AI Workflow ───────────────────────────────────────────────────────────
   aiWorkflow: [
     {
+      tool: "Claude",
+      title: "Sviluppo, revisione del codice e testi del sito",
+      desc: "Scrivo e revisiono codice su architetture Angular e Astro, analizzo bug e refactoring, e genero i testi del sito nel mio tono di voce.",
+      impact: "Coding · Debug · Testi",
+      tags: "tech creative human management",
+    },
+    {
       tool: "GitHub Copilot",
-      title: "Accelerazione sviluppo Angular enterprise",
+      title: "Autocompletamento in sviluppo Angular enterprise",
       desc: "Genero codice ripetitivo NGRX, test Jest e pattern architetturali, con validazione critica dell'output.",
-      impact: "-87% codice ripetitivo",
+      impact: "Coding quotidiano",
       tags: "tech",
     },
     {
-      tool: "ChatGPT / Claude",
-      title: "Prompt Engineering per prototipazione UX",
-      desc: "Ricavo user personas, flussi di navigazione e scenari di test da brief testuali. L'ho applicato nella fase UX Research IBM.",
-      impact: "-90% discovery time",
-      tags: "creative tech",
+      tool: "Claude Code Skills",
+      title: "Regole di scrittura, stile e vocabolario applicate ovunque",
+      desc: "Ho costruito skill dedicate a scrittura, regole sintattiche e tono di voce: ogni testo del sito le rispetta senza revisione manuale ripetuta.",
+      impact: "Scrittura · Regole · Stile",
+      tags: "tech management human",
     },
     {
-      tool: "Claude / GPT-4",
-      title: "Revisione del codice e architettura Angular",
-      desc: "Analizzo problemi di qualità del codice, refactoring e architetture a microfrontend con un LLM come revisore tecnico.",
-      impact: "-60% tempo di debug",
-      tags: "tech",
+      tool: "MCP",
+      title: "Server MCP per GitLab, Jira e Playwright",
+      desc: "Collego GitLab, Jira e Playwright come tool MCP: gestisco issue, merge request e test end-to-end direttamente dalla chat con l'AI.",
+      impact: "GitLab · Jira · Playwright",
+      tags: "tech management",
     },
     {
-      tool: "Midjourney",
-      title: "Esplorazione visiva per brief UX/UI",
-      desc: "Genero moodboard e concept visivi per allineare i referenti prima del wireframing, senza iterazioni costose.",
-      impact: "-70% cicli allineamento",
-      tags: "creative",
-    },
-    {
-      tool: "AI Tools",
-      title: "Copywriting e documentazione tecnica",
-      desc: "Produco SEO copy, varianti A/B per landing page e documentazione tecnica da codice annotato.",
-      impact: "+3x velocità contenuti",
-      tags: "creative",
-    },
-    {
-      tool: "Figma Make",
+      tool: "Figma AI",
       title: "Da brief a prototipo interattivo in minuti",
-      desc: "Genero schermate e flussi di navigazione direttamente in Figma da una descrizione in linguaggio naturale. L'ho applicato nella prototipazione rapida prima del wireframing strutturato.",
-      impact: "-75% tempo prototipazione",
+      desc: "Genero schermate e flussi di navigazione in Figma da una descrizione testuale, come base per il wireframing strutturato.",
+      impact: "Prototipazione UX/UI",
       tags: "creative tech",
+    },
+    {
+      tool: "Miro AI",
+      title: "Sintesi di workshop e brainstorming",
+      desc: "Trasformo sticky notes e mappe di workshop in cluster tematici e prossimi passi, senza riscrivere a mano ogni sessione.",
+      impact: "Facilitazione · Workshop",
+      tags: "management human",
+    },
+    {
+      tool: "NotebookLM",
+      title: "Ricerca e sintesi documentale",
+      desc: "Carico documentazione tecnica e ricerche UX in NotebookLM per interrogarle e trovare riferimenti incrociati velocemente.",
+      impact: "Ricerca · Documentazione",
+      tags: "tech creative",
     },
   ] as AiWorkflowItem[],
 

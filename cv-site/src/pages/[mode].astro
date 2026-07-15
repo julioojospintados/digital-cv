@@ -254,7 +254,6 @@ const SOFT_MODE_TAGS = [
   "tech human management", // Autonomia strategica
   "human management", // Resilienza e pensiero adattivo
   "human management", // Ascolto attivo
-  "human management", // Assertività
   "creative", // Sensibilità estetica
   "tech creative human management", // Pensiero T-shaped
 ];
@@ -364,8 +363,11 @@ const projectsData = cvData.projects.slice(0, 6).map((p) => {
   if (p.primaryMode) modes.add(p.primaryMode);
   const modeTags =
     modes.size > 0 ? Array.from(modes).join(" ") : "tech creative human";
-  return { name: p.name, description: p.description, tags, modeTags, slug: p.slug };
-});
+  return { name: p.name, description: p.description, modeTags, slug: p.slug };
+})
+  // Mode first al primo paint (prima che il JS lato client riordini col
+  // cambio mode): stessa logica di reorderProjectCards in mode-helpers.ts.
+  .sort((a, b) => Number(b.modeTags.includes(mode)) - Number(a.modeTags.includes(mode)));
 
 const MODE_LABELS: Record<string, string> = {
   tech: 'Software Developer',
@@ -524,7 +526,7 @@ const heroSummary = heroSummaries[mode] ?? cvData.personal.summary;
     <a href="#skills" class="section-dot" aria-label="Competenze"><span class="section-dot__tip">Competenze</span></a>
     <a href="#experience" class="section-dot" aria-label="Esperienze"><span class="section-dot__tip">Esperienze</span></a>
     <a href="#ai-section" class="section-dot" aria-label="AI Workflow"><span class="section-dot__tip">AI Workflow</span></a>
-    <a href="#worklife" class="section-dot" aria-label="Come lavoro"><span class="section-dot__tip">Come lavoro</span></a>
+    <a href="#worklife" class="section-dot" aria-label="Indole"><span class="section-dot__tip">Indole</span></a>
     {
       cvData.feedbacks.length > 0 && (
         <a href="#feedback" class="section-dot" aria-label="Dicono di me">
@@ -785,6 +787,12 @@ const heroSummary = heroSummaries[mode] ?? cvData.personal.summary;
     </section>
 
     <!-- ── AI WORKFLOW ─────────────────────────────────────────────── -->
+    <!-- Prima .ai-grid avvolgeva <section> (solo titolo) e le card come
+         fratelli: il titolo diventava una cella della grid invece che
+         un'intestazione a piena larghezza sopra le card, e ::before
+         (ambient glow) + il trigger GSAP del parallax (cv-init.ts)
+         coprivano solo il riquadro del titolo. Ora .ai-section avvolge
+         tutto, come ogni altra sezione (skills/exp/soft/projects/edu). -->
     <section
       class="ai-section reveal delay-300"
       id="ai-section"
@@ -797,77 +805,77 @@ const heroSummary = heroSummaries[mode] ?? cvData.personal.summary;
         alt=""
       />
       <h2 class="section-title ai-title">
-        <span>AI-Enhanced Workflow</span>
+        <span>AI-Enhanced Workflow <span class="ai-title__clip" aria-hidden="true">
+          <span class="ai-title__clip-pin"></span>
+          <span class="ai-title__clip-text">⚡ AI</span>
+        </span></span>
+
         <span class="section-subtitle"
           >Come l'AI moltiplica l'output senza sostituire il giudizio.</span
         >
-        <span class="ai-title__clip" aria-hidden="true">
-          <span class="ai-title__clip-pin"></span>
-          <span class="ai-title__clip-text">⚡ AI</span>
-        </span>
-      </h2>
-    </section>
-    <div class="ai-grid">
-      {cvData.aiWorkflow.map((item) => <AiCard {...item} />)}
-    </div>
 
-    <!-- ── COME LAVORO — soft skills, mindset e crescita, chiusi di default:
-         materiale da secondo colloquio, il primo scan resta corto.
-         <details> nativo: niente JS per aprire, niente display:none imposto
-         da noi — è il lettore che sceglie di aprire il cassetto. -->
-    <details class="worklife reveal" id="worklife">
-      <summary class="worklife__summary" aria-label="Apri: soft skills, mindset e aree in evoluzione">
-        <h2 class="section-title">
-          <span>Come lavoro</span>
-          <span class="section-subtitle">Soft skills, mindset e aree in evoluzione. Materiale da colloquio: apri pure.</span>
-        </h2>
-        <span class="worklife__chevron" aria-hidden="true"></span>
-      </summary>
-      <div class="worklife__body">
-    <section class="soft-section" id="soft-skills" aria-label="Soft skills e metodologia">
-    <img
-      class="bg-knoll bg-knoll--plant"
-      src="/knolling/plant.webp"
-      aria-hidden="true"
-      alt=""
-    />
-    <div class="soft-block">
-      <h2 class="section-title"><span>Soft Skills</span></h2>
-      <ul class="soft-list">
-        {
-          softSkillsData.map((skill) => (
-            <SoftItem
-              name={skill.name}
-              description={skill.description}
-              modeTags={skill.modeTags}
-              variant="soft"
-            />
-          ))
-        }
-      </ul>
-    </div>
-    <div class="method-block">
-      <h2 class="section-title"><span>Mindset</span></h2>
-      <ul class="method-list">
-        {
-          cvData.methodology.map((m) => (
-            <SoftItem
-              name={m.name}
-              description={m.description ?? ""}
-              modeTags="tech creative human management"
-              variant="method"
-            />
-          ))
-        }
-      </ul>
-    </div>
+      </h2>
+      <div class="ai-grid">
+        {cvData.aiWorkflow.map((item) => <AiCard {...item} />)}
+      </div>
+    </section>
+
+    <!-- ── INDOLE — soft skills, mindset e aree in evoluzione, sempre
+         visibili. Prima <details> chiuso di default (materiale da "secondo
+         colloquio"); header ora in stile catalogo come .exp-cluster__header
+         ma statico — non è un accordion, niente chevron/toggle. -->
+    <section class="worklife reveal" id="worklife" aria-label="Indole: soft skills, mindset e aree in evoluzione">
+      <div class="section-title">
+        <span >Indole</span>
+        <span class="section-subtitle">Soft skills, mindset e aree in evoluzione</span>
+      </div>
+      <div class="soft-section" id="soft-skills" aria-label="Soft skills e metodologia">
+        <img
+          class="bg-knoll bg-knoll--plant"
+          src="/knolling/plant.webp"
+          aria-hidden="true"
+          alt=""
+        />
+        <div class="worklife__grid">
+          <div class="worklife-card">
+            <p class="worklife-card__label">Soft Skills</p>
+            <ul class="soft-list">
+              {
+                softSkillsData.map((skill) => (
+                  <SoftItem
+                    name={skill.name}
+                    description={skill.description}
+                    modeTags={skill.modeTags}
+                    variant="soft"
+                  />
+                ))
+              }
+            </ul>
+          </div>
+          <div class="worklife-card">
+            <p class="worklife-card__label">Mindset</p>
+            <ul class="method-list">
+              {
+                cvData.methodology.map((m) => (
+                  <SoftItem
+                    name={m.name}
+                    description={m.description ?? ""}
+                    modeTags="tech creative human management"
+                    variant="method"
+                  />
+                ))
+              }
+            </ul>
+          </div>
+        </div>
+      </div>
     </section>
 
     <!-- ── GROWTH AREAS ─────────────────────────────────────────────── -->
     {
       cvData.growthAreas.length > 0 && (
         <section
-          class="growth-section"
+          class="growth-section reveal"
           id="growth"
           aria-label="Aree di crescita consapevole"
         >
@@ -892,8 +900,6 @@ const heroSummary = heroSummaries[mode] ?? cvData.personal.summary;
         </section>
       )
     }
-      </div>
-    </details>
 
     <!-- ── FEEDBACK — cosa dicono di me ─────────────────────────────── -->
     {

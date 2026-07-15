@@ -1240,16 +1240,6 @@ export const cvDataEn = {
       ],
     },
     {
-      name: "Assertiveness",
-      description:
-        "I express technical and strategic positions clearly and respectfully, even in disagreement. I use dialogue to move the project forward, not to win the argument.",
-      links: [
-        { target: "Effective communication", type: "conceptual" },
-        { target: "Strategic autonomy", type: "conceptual" },
-        { target: "Lateral problem solving", type: "cross-domain" },
-      ],
-    },
-    {
       name: "Aesthetic sensibility",
       description:
         "I have been photographing for over 15 years: that eye translates into sharper UI choices, with a direct impact on brand perception and the quality of the user experience.",
@@ -1659,7 +1649,7 @@ export const cvDataEn = {
     {
       name: 'Film "Double"',
       description:
-        'I played the deuteragonist in the film "Double", produced in Turin by Filmine and presented at the Independent Film Festival in San Francisco in 2022.',
+        'I played the deuteragonist in the film "Double", produced in Turin by Filmine and presented at the Independent Film Festival in San Francisco in 2022 and at the Cinema Massimo in Italy.',
       date: "2022-01",
       tags: ["Cinema", "Acting"],
     },
@@ -1725,46 +1715,53 @@ export const cvDataEn = {
   // ── AI Workflow ───────────────────────────────────────────────────────────
   aiWorkflow: [
     {
+      tool: "Claude",
+      title: "Development, code review and site copy",
+      desc: "I write and review code on Angular and Astro architectures, analyse bugs and refactors, and generate the site copy in my own voice.",
+      impact: "Coding · Debug · Copy",
+      tags: "tech creative human management",
+    },
+    {
       tool: "GitHub Copilot",
-      title: "Angular enterprise development acceleration",
+      title: "Autocomplete in Angular enterprise development",
       desc: "I generate NGRX boilerplate, Jest tests and repetitive architectural patterns, with critical validation of the output.",
-      impact: "-87% boilerplate",
+      impact: "Daily coding",
       tags: "tech",
     },
     {
-      tool: "ChatGPT / Claude",
-      title: "Prompt Engineering for UX prototyping",
-      desc: "I derive user personas, navigation flows and test scenarios from text briefs. I applied it during the IBM UX Research phase.",
-      impact: "-90% discovery time",
-      tags: "creative tech",
+      tool: "Claude Code Skills",
+      title: "Writing, style and vocabulary rules applied everywhere",
+      desc: "I built skills dedicated to writing, syntax rules and tone of voice: every text on the site follows them without repeated manual review.",
+      impact: "Writing · Rules · Style",
+      tags: "tech management human",
     },
     {
-      tool: "Claude / GPT-4",
-      title: "Code review and Angular architecture",
-      desc: "I analyse code quality issues, refactoring and microfrontend architectures with an LLM as technical reviewer.",
-      impact: "-60% debug time",
-      tags: "tech",
+      tool: "MCP",
+      title: "MCP servers for GitLab, Jira and Playwright",
+      desc: "I connect GitLab, Jira and Playwright as MCP tools: I manage issues, merge requests and end-to-end tests directly from the AI chat.",
+      impact: "GitLab · Jira · Playwright",
+      tags: "tech management",
     },
     {
-      tool: "Midjourney",
-      title: "Visual exploration for UX/UI briefs",
-      desc: "I generate moodboards and visual concepts to align counterparts before wireframing, without costly iterations.",
-      impact: "-70% alignment cycles",
-      tags: "creative",
-    },
-    {
-      tool: "AI Tools",
-      title: "Copywriting and technical documentation",
-      desc: "I produce SEO copy, A/B variants for landing pages and technical documentation from annotated code.",
-      impact: "+3x content velocity",
-      tags: "creative",
-    },
-    {
-      tool: "Figma Make",
+      tool: "Figma AI",
       title: "From brief to interactive prototype in minutes",
-      desc: "I generate screens and navigation flows directly in Figma from a natural language description. I applied it during rapid prototyping before structured wireframing.",
-      impact: "-75% prototyping time",
+      desc: "I generate screens and navigation flows in Figma from a text description, as a base for structured wireframing.",
+      impact: "UX/UI prototyping",
       tags: "creative tech",
+    },
+    {
+      tool: "Miro AI",
+      title: "Workshop and brainstorming synthesis",
+      desc: "I turn sticky notes and workshop maps into thematic clusters and next steps, without rewriting every session by hand.",
+      impact: "Facilitation · Workshops",
+      tags: "management human",
+    },
+    {
+      tool: "NotebookLM",
+      title: "Research and document synthesis",
+      desc: "I load technical documentation and UX research into NotebookLM to query it and find cross-references fast.",
+      impact: "Research · Documentation",
+      tags: "tech creative",
     },
   ] as AiWorkflowItem[],
 
