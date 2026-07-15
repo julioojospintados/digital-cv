@@ -1,5 +1,11 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import { applyAccordions, applyCardStates, reorderSkillSquares, CLUSTER_OPEN_FOR } from "./mode-helpers";
+import {
+  applyAccordions,
+  applyCardStates,
+  reorderSkillSquares,
+  reorderProjectCards,
+  CLUSTER_OPEN_FOR,
+} from "./mode-helpers";
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -53,6 +59,30 @@ function makeSkillsGrid(items: HTMLElement[]): HTMLElement {
 /** Nomi delle .skill-sq dentro .skills-grid, nell'ordine DOM attuale. */
 function gridOrder(grid: HTMLElement): string[] {
   return Array.from(grid.querySelectorAll<HTMLElement>(".skill-sq")).map(
+    (el) => el.dataset.name ?? "",
+  );
+}
+
+/** Crea una .project-card con data-tags e un nome leggibile via data-name. */
+function makeProjectCard(name: string, tags: string): HTMLElement {
+  const el = document.createElement("div");
+  el.className = "project-card cv-card";
+  el.dataset.tags = tags;
+  el.dataset.name = name;
+  return el;
+}
+
+/** Crea .projects-grid con dentro le project-card passate, nell'ordine dato. */
+function makeProjectsGrid(items: HTMLElement[]): HTMLElement {
+  const grid = document.createElement("div");
+  grid.className = "projects-grid";
+  items.forEach((el) => grid.appendChild(el));
+  return grid;
+}
+
+/** Nomi delle .project-card dentro .projects-grid, nell'ordine DOM attuale. */
+function projectsGridOrder(grid: HTMLElement): string[] {
+  return Array.from(grid.querySelectorAll<HTMLElement>(".project-card")).map(
     (el) => el.dataset.name ?? "",
   );
 }
@@ -322,5 +352,53 @@ describe("reorderSkillSquares", () => {
 
   it("non lancia errori se .skills-grid non è nel DOM", () => {
     expect(() => reorderSkillSquares("tech")).not.toThrow();
+  });
+});
+
+// ── reorderProjectCards ──────────────────────────────────────────────────────
+
+describe("reorderProjectCards", () => {
+  beforeEach(() => {
+    document.body.innerHTML = "";
+  });
+
+  it("porta in cima i progetti del mode attivo", () => {
+    const passive = makeProjectCard("Product Discovery", "creative");
+    const active = makeProjectCard("Digital CV", "tech");
+    const grid = makeProjectsGrid([passive, active]);
+    document.body.appendChild(grid);
+
+    reorderProjectCards("tech");
+
+    expect(projectsGridOrder(grid)).toEqual(["Digital CV", "Product Discovery"]);
+  });
+
+  it("preserva l'ordine originale dentro ciascun gruppo", () => {
+    const a = makeProjectCard("Digital CV", "tech");
+    const b = makeProjectCard("App Covid", "tech");
+    const c = makeProjectCard("Product Discovery", "creative");
+    const grid = makeProjectsGrid([c, a, b]);
+    document.body.appendChild(grid);
+
+    reorderProjectCards("tech");
+
+    expect(projectsGridOrder(grid)).toEqual(["Digital CV", "App Covid", "Product Discovery"]);
+  });
+
+  it("aggiorna l'ordine quando il mode cambia", () => {
+    const tech = makeProjectCard("Digital CV", "tech");
+    const creative = makeProjectCard("Product Discovery", "creative");
+    const grid = makeProjectsGrid([tech, creative]);
+    document.body.appendChild(grid);
+
+    reorderProjectCards("tech");
+    expect(projectsGridOrder(grid)).toEqual(["Digital CV", "Product Discovery"]);
+
+    reorderProjectCards("creative");
+    expect(projectsGridOrder(grid)).toEqual(["Product Discovery", "Digital CV"]);
+  });
+
+  it("non lancia errori se .projects-grid non è nel DOM", () => {
+    expect(() => reorderProjectCards("tech")).not.toThrow();
   });
 });

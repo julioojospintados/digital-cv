@@ -266,7 +266,6 @@ const SOFT_MODE_TAGS = [
   "tech human management", // Strategic autonomy
   "human management", // Resilience and adaptive thinking
   "human management", // Active listening
-  "human management", // Assertiveness
   "creative", // Aesthetic sensibility
   "tech creative human management", // T-shaped thinking
 ];
@@ -380,8 +379,10 @@ const projectsData = cvDataEn.projects.slice(0, 6).map((p) => {
   if (p.primaryMode) modes.add(p.primaryMode);
   const modeTags =
     modes.size > 0 ? Array.from(modes).join(" ") : "tech creative human";
-  return { name: p.name, description: p.description, tags, modeTags, slug: p.slug };
-});
+  return { name: p.name, description: p.description, modeTags, slug: p.slug };
+})
+  // EN page is always static at 'tech' — same mode-first logic as [mode].astro.
+  .sort((a, b) => Number(b.modeTags.includes("tech")) - Number(a.modeTags.includes("tech")));
 ---
 
 <Layout
@@ -488,7 +489,7 @@ const projectsData = cvDataEn.projects.slice(0, 6).map((p) => {
     <a href="#skills" class="section-dot" aria-label="Skills"><span class="section-dot__tip">Skills</span></a>
     <a href="#experience" class="section-dot" aria-label="Experience"><span class="section-dot__tip">Experience</span></a>
     <a href="#ai-section" class="section-dot" aria-label="AI Workflow"><span class="section-dot__tip">AI Workflow</span></a>
-    <a href="#worklife" class="section-dot" aria-label="How I work"><span class="section-dot__tip">How I work</span></a>
+    <a href="#worklife" class="section-dot" aria-label="Character"><span class="section-dot__tip">Character</span></a>
     {
       cvDataEn.feedbacks.length > 0 && (
         <a href="#feedback" class="section-dot" aria-label="What people say">
@@ -753,74 +754,69 @@ const projectsData = cvDataEn.projects.slice(0, 6).map((p) => {
         alt=""
       />
       <h2 class="section-title ai-title">
-        <span>AI-Enhanced Workflow</span>
+        <span>AI-Enhanced Workflow <span class="ai-title__clip" aria-hidden="true">
+          <span class="ai-title__clip-pin"></span>
+          <span class="ai-title__clip-text">⚡ AI</span>
+        </span></span>
+
         <span class="section-subtitle"
           >How AI multiplies output without replacing judgement.</span
         >
-        <span class="ai-title__clip" aria-hidden="true">
-          <span class="ai-title__clip-pin"></span>
-          <span class="ai-title__clip-text">⚡ AI</span>
-        </span>
+
       </h2>
       <div class="ai-grid">
         {cvDataEn.aiWorkflow.map((item) => <AiCard {...item} />)}
       </div>
     </section>
 
-    <!-- ── HOW I WORK — soft skills, mindset and growth, closed by default:
-         second-interview material, the first scan stays short.
-         Native <details>: no JS to open, the reader chooses. Mirrors
-         [mode].astro. -->
-    <details class="worklife reveal" id="worklife">
-      <summary class="worklife__summary" aria-label="Open: soft skills, mindset and growing areas">
-        <h2 class="section-title">
-          <span>How I work</span>
-          <span class="section-subtitle">Soft skills, mindset and growing areas. Interview material: feel free to open.</span>
-        </h2>
-        <span class="worklife__chevron" aria-hidden="true"></span>
-      </summary>
-      <div class="worklife__body">
-    <section
-      class="soft-section"
-      id="soft-skills"
-      aria-label="Soft skills and methodology"
-    >
-      <img
-        class="bg-knoll bg-knoll--plant"
-        src="/knolling/plant.webp"
-        aria-hidden="true"
-        alt=""
-      />
-      <div class="two-col-grid">
-        <div class="soft-block">
-          <h2 class="section-title"><span>Soft Skills</span></h2>
-          <ul class="soft-list">
-            {
-              softSkillsData.map((skill) => (
-                <SoftItem
-                  name={skill.name}
-                  description={skill.description}
-                  modeTags={skill.modeTags}
-                  variant="soft"
-                />
-              ))
-            }
-          </ul>
-        </div>
-        <div class="method-block">
-          <h2 class="section-title"><span>Mindset</span></h2>
-          <ul class="method-list">
-            {
-              cvDataEn.methodology.map((m) => (
-                <SoftItem
-                  name={m.name}
-                  description={m.description ?? ""}
-                  modeTags="tech creative human management"
-                  variant="method"
-                />
-              ))
-            }
-          </ul>
+    <!-- ── CHARACTER — soft skills, mindset and growing areas, always
+         visible. Previously a <details> closed by default ("second
+         interview material"); header now catalog-style like
+         .exp-cluster__header but static — not an accordion, no
+         chevron/toggle. Mirrors [mode].astro. -->
+    <section class="worklife reveal" id="worklife" aria-label="Character: soft skills, mindset and growing areas">
+      <div class="section-title">
+        <span >Character</span>
+        <span class="section-subtitle">Soft skills, mindset and growing areas</span>
+      </div>
+      <div class="soft-section" id="soft-skills" aria-label="Soft skills and methodology">
+        <img
+          class="bg-knoll bg-knoll--plant"
+          src="/knolling/plant.webp"
+          aria-hidden="true"
+          alt=""
+        />
+        <div class="worklife__grid">
+          <div class="worklife-card">
+            <p class="worklife-card__label">Soft Skills</p>
+            <ul class="soft-list">
+              {
+                softSkillsData.map((skill) => (
+                  <SoftItem
+                    name={skill.name}
+                    description={skill.description}
+                    modeTags={skill.modeTags}
+                    variant="soft"
+                  />
+                ))
+              }
+            </ul>
+          </div>
+          <div class="worklife-card">
+            <p class="worklife-card__label">Mindset</p>
+            <ul class="method-list">
+              {
+                cvDataEn.methodology.map((m) => (
+                  <SoftItem
+                    name={m.name}
+                    description={m.description ?? ""}
+                    modeTags="tech creative human management"
+                    variant="method"
+                  />
+                ))
+              }
+            </ul>
+          </div>
         </div>
       </div>
     </section>
@@ -829,7 +825,7 @@ const projectsData = cvDataEn.projects.slice(0, 6).map((p) => {
     {
       cvDataEn.growthAreas.length > 0 && (
         <section
-          class="growth-section"
+          class="growth-section reveal"
           id="growth"
           aria-label="Areas of conscious growth"
         >
@@ -854,8 +850,6 @@ const projectsData = cvDataEn.projects.slice(0, 6).map((p) => {
         </section>
       )
     }
-      </div>
-    </details>
 
     <!-- ── FEEDBACK — what people say ───────────────────────────────── -->
     {
