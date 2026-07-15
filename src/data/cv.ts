@@ -97,6 +97,19 @@ export interface TransversalSkill {
   links?: SkillLink[];
 }
 
+/**
+ * Variante di racconto per una lente/cluster: la stessa esperienza vista
+ * da un'altra angolazione (es. ALTEN come sviluppo, come Tech Lead, come
+ * design system). Il cluster con il mode corrispondente usa role,
+ * description e highlights della facet al posto di quelli base.
+ */
+export interface ExperienceFacet {
+  mode: "tech" | "creative" | "management" | "human";
+  role?: string;
+  description: string;
+  highlights?: string[];
+}
+
 export interface WorkExperience {
   company: string;
   role: string;
@@ -112,6 +125,8 @@ export interface WorkExperience {
   skills?: string[];
   /** Mode tags for visual priority: "tech" | "creative" | "human" | "agile" | "ai-orchestration" | ... */
   tags?: string[];
+  /** Varianti per cluster — vedi ExperienceFacet */
+  facets?: ExperienceFacet[];
 }
 
 export interface Education {
@@ -296,6 +311,30 @@ export const cvData = {
         "GitHub Copilot",
       ],
       tags: ["tech", "human", "ai-orchestration"],
+      facets: [
+        {
+          mode: "management",
+          role: "Referente Unico di progetto",
+          description:
+            "Ho gestito il progetto end-to-end come referente unico: sprint da 1 a 2 settimane, backlog costruito sugli obiettivi di business e impactScore misurato a ogni rilascio. Niente report formali: demo funzionanti e numeri.",
+          highlights: [
+            "Ho chiuso ogni sprint con una demo funzionante, non con un avanzamento su slide.",
+            "Ho costruito il backlog sugli obiettivi di business, non sulla lista delle feature richieste a voce.",
+            "Ho reso il team autonomo sui flussi nuovi: la conoscenza resta in azienda, non nel consulente.",
+          ],
+        },
+        {
+          mode: "human",
+          role: "AI Workflow Designer",
+          description:
+            "Ho progettato il layer AI del gestionale: architettura MCP con tool, resource e prompt esposti come API per agenti, integrata con VS Code Copilot e Cursor. L'AI qui non è una demo: è il workflow quotidiano con cui il progetto viene sviluppato.",
+          highlights: [
+            "Ho progettato tool, resource e prompt MCP che espongono i dati del gestionale agli agenti AI.",
+            "Ho istruito gli agenti con regole e vincoli espliciti: l'AI accelera solo dentro binari decisi prima.",
+            "Ho automatizzato la pipeline Cursor → GitLab CI/CD → deploy: zero interventi manuali.",
+          ],
+        },
+      ],
     },
     {
       company: "Digital CV — Progetto Open Source AI-Augmented",
@@ -326,6 +365,19 @@ export const cvData = {
         "Vitest",
       ],
       tags: ["tech", "ai-orchestration"],
+      facets: [
+        {
+          mode: "human",
+          role: "AI Workflow Designer",
+          description:
+            "Questo sito è la dimostrazione pubblica del mio workflow AI: server MCP con tool, resource e prompt template che espone i dati del CV agli agenti (VS Code Copilot, Claude Desktop), e sviluppo AI-augmented con GitHub Copilot e Claude dentro vincoli decisi prima.",
+          highlights: [
+            "Ho progettato il server MCP che trasforma il CV in una API per agenti AI.",
+            "Ho definito le regole del vibe coding prima dei componenti: token, regole di animazione, DO NOT espliciti.",
+            "Ho documentato il metodo nel case study del sito: ogni scelta è argomentabile in colloquio.",
+          ],
+        },
+      ],
     },
     {
       company: "ALTEN Italia",
@@ -355,6 +407,29 @@ export const cvData = {
         "Material Design",
         "Jest",
       ],
+      facets: [
+        {
+          mode: "creative",
+          role: "Design System Developer — Aruba",
+          description:
+            "Ho costruito il design system di Aruba dal lato di chi lo usa ogni giorno: una libreria di oltre 100 WebComponents in Lit, progettata insieme ai designer perché ogni componente rispetti tipografia, spacing e stati definiti in Figma.",
+          highlights: [
+            "Ho tradotto le specifiche visive dei designer in componenti riutilizzabili cross-prodotto, con naming e API condivisi.",
+            "Ho difeso coerenza tipografica, spacing e stati dei componenti nelle code review, su un team di oltre 30 persone.",
+          ],
+        },
+        {
+          mode: "management",
+          role: "Tech Lead & Scrum Master — Aruba Design System",
+          description:
+            "Ho guidato il team del design system Aruba per oltre 3 anni: più di 30 persone tra sviluppo e design, cerimonie Agile, priorità di backlog e standard di code review condivisi. Il mio lavoro era togliere attrito: meno dipendenze tra team, rilasci più prevedibili.",
+          highlights: [
+            "Ho coordinato più di 30 persone tra sviluppatori e designer su una libreria adottata cross-prodotto.",
+            "Ho impostato standard di code review e testing con impatto diretto sulla stabilità dei rilasci.",
+            "Ho fatto da ponte tra business, design e sviluppo nella definizione delle priorità di backlog.",
+          ],
+        },
+      ],
     },
     {
       company: "Music Agency (collaborazione)",
@@ -383,6 +458,29 @@ export const cvData = {
         "Project management",
       ],
       tags: ["creative", "management"],
+      facets: [
+        {
+          mode: "management",
+          role: "Tour Manager",
+          description:
+            "Ho gestito booking e tour del roster in autonomia: ricerca venue, trattativa con i promoter, contratti e coordinamento delle date, fino all'evento live all'Arci Bellezza di Milano seguito end-to-end.",
+          highlights: [
+            "Ho coordinato booking e concerti su tutto il roster, in autonomia.",
+            "Ho seguito l'evento all'Arci Bellezza di Milano dal booking alla comunicazione.",
+            "Ho trattato con venue e promoter fino alla firma dei contratti.",
+          ],
+        },
+        {
+          mode: "human",
+          role: "Digital Strategist",
+          description:
+            "Ho progettato la presenza digitale dell'agenzia per parlare alla filiera, non al pubblico generico: content strategy, playlist come strumento di networking e canali cresciuti con contatti che contano.",
+          highlights: [
+            "Ho raddoppiato i follower con audience mirata: musicisti, etichette, promoter.",
+            "Ho ideato una playlist di artisti emergenti come canale di contatto diretto con la filiera.",
+          ],
+        },
+      ],
     },
     {
       company: "Freelance",
@@ -690,6 +788,46 @@ export const cvData = {
         "Servizio clienti",
         "Precisione sotto pressione",
       ],
+    },
+    {
+      company: "Bambagia Design Lab (collaborazione)",
+      role: "UX/UI Designer",
+      startDate: "2026-04",
+      endDate: "2026-05",
+      location: "Italia",
+      remote: true,
+      description:
+        "Ho progettato le interfacce del sito di un cliente per Bambagia Design Lab: ricerca su cliente e competitor, wireframe e prototipo, HTML e CSS scritti a mano e varianti del sito con palette diverse, convertite in disegno Figma con plugin dedicati.",
+      highlights: [
+        "Ho studiato cliente e competitor prima di disegnare: ogni scelta di interfaccia è motivata, non estetica.",
+        "Ho prodotto varianti del sito con palette diverse, convertite in disegno Figma con plugin dedicati.",
+        "Ho scelto il flusso di consegna giusto perché il cliente possa modificare il sito in autonomia.",
+      ],
+      facets: [
+        {
+          mode: "human",
+          role: "AI Workflow Designer",
+          description:
+            "Ho costruito su VS Code un ambiente riutilizzabile con MCP Figma e MCP Wix, istruendo l'agente con le regole grafiche del progetto per esportare wireframe e prototipi corretti. Ho verificato i limiti di MCP Wix e trovato la strada giusta con il plugin Figma → Wix.",
+          highlights: [
+            "Ho costruito un ambiente riutilizzabile su VS Code con MCP Figma e MCP Wix, con l'agente istruito sulle regole grafiche del progetto.",
+            "Ho verificato che MCP Wix genera un frame statico via Astro: valido solo se il cliente non deve modificare il sito.",
+            "Ho trovato il plugin Figma → Wix per i moduli: il cliente modifica il sito da solo dopo la consegna.",
+          ],
+        },
+      ],
+      skills: [
+        "Figma",
+        "MCP",
+        "Wix",
+        "HTML5",
+        "CSS",
+        "AI Orchestration",
+        "Prompt Engineering",
+        "UX Research",
+        "Prototyping",
+      ],
+      tags: ["creative", "ai-orchestration"],
     },
   ] as WorkExperience[],
 
@@ -1778,17 +1916,32 @@ export const cvData = {
     {
       name: "Curiosità poliedrica",
       reframe:
-        "Esploro campi diversi per natura e questo richiede una gestione consapevole del focus. Non è dispersione: ogni competenza acquisita diventa un nuovo angolo da cui leggere i problemi tecnici e creativi, e genera soluzioni che chi conosce un solo dominio non vede.",
+        "Esploro ambiti diversi per un'irrequietezza intellettuale che non si ferma. Rifiuto di incasellarmi in un solo campo e ogni stimolo nuovo diventa un angolo in più da cui leggere un problema.",
     },
     {
       name: "Pensiero parallelo",
       reframe:
-        "Tengo attivi in parallelo più scenari e connessioni non lineari, una cosa che dall'esterno può sembrare mancanza di linearità. In fase di design di sistema o di debug complesso è ciò che mi porta a identificare il problema corretto da risolvere, non solo il sintomo più visibile.",
+        "Elaboro soluzioni muovendomi su più binari mentali insieme. Trovo connessioni tra elementi distanti che una lettura lineare del problema ignorerebbe.",
     },
     {
       name: "Comunicazione emotiva",
       reframe:
-        "Presto attenzione alle dinamiche relazionali e agli stati emotivi delle persone, una cosa che può sembrare lontana dal mondo tecnico. In pratica accelera la delivery nei team distribuiti e con referenti non tecnici: riduce l'attrito nei code review, fa emergere i requisiti reali, quelli non dichiarati, e costruisce fiducia più velocemente di qualsiasi presentazione.",
+        "Esprimo stati d'animo e dubbi in modo diretto, senza maschere difensive. Riduce l'attrito nei team e accelera la fiducia con chi ho di fronte.",
+    },
+    {
+      name: "Onestà intellettuale",
+      reframe:
+        "Riconosco i fatti per quello che sono, anche quando smentiscono le mie convinzioni o feriscono l'ego. In un progetto tecnico significa ammettere un errore prima che costi settimane a qualcun altro.",
+    },
+    {
+      name: "Mettersi nei panni degli altri",
+      reframe:
+        "Simulo la prospettiva di chi ho di fronte per decodificarne motivazioni e bisogni, oltre il mio giudizio personale. Nei team distribuiti anticipo obiezioni prima che diventino blocchi.",
+    },
+    {
+      name: "Assertività",
+      reframe:
+        "Definisco i miei confini e difendo le mie posizioni con fermezza, senza cedere per evitare il conflitto e senza aggredire l'altro. Le decisioni tecniche restano contendibili sul merito, non sul tono.",
     },
   ] as GrowthArea[],
 
@@ -1964,7 +2117,7 @@ export const cvData = {
     {
       name: 'Film "Double"',
       description:
-        'Ho recitato come deuteragonista nel film "Double", presentato all\'Independent Film Festival di San Francisco nel 2022.',
+        'Ho recitato come deuteragonista nel film "Double", prodotto a Torino da Filmine e presentato all\'Independent Film Festival di San Francisco nel 2022.',
       date: "2022-01",
       tags: ["Cinema", "Recitazione"],
     },
@@ -1988,6 +2141,13 @@ export const cvData = {
         "Ho cofondato e organizzato lo Square Festival nel Quadrilatero Romano di Torino, evento culturale multidisciplinare.",
       date: "2017-05",
       tags: ["Event management", "Cultura", "Torino"],
+    },
+    {
+      name: "Veni Vidi Vinyl",
+      description:
+        "Ho creato con un amico Veni Vidi Vinyl, una serata di listening session dedicata ai vinili portati dai partecipanti. L'ho pensata per dare peso all'ascolto materiale: ogni riproduzione consuma il vinile, quindi ogni ascolto è irripetibile. L'ho fatta solo per il piacere di farla.",
+      date: "2017-01",
+      tags: ["Event management", "Musica", "Vinili"],
     },
     {
       name: "Invenzione di una parola — Salone Internazionale del Libro (Torino)",

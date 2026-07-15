@@ -11,6 +11,11 @@ import ProjectCard from "../components/cards/ProjectCard.astro";
 import SkillSquare from "../components/cards/SkillSquare.astro";
 import SoftItem from "../components/cards/SoftItem.astro";
 import ContactFooter from "../components/ContactFooter.astro";
+import {
+  EXP_CLUSTER_DEFS,
+  PROJ_CARD_META,
+  type ClusterRef,
+} from "../lib/exp-clusters";
 
 export function getStaticPaths() {
   return [
@@ -161,98 +166,69 @@ const skillSquares = [
   return a.name.localeCompare(b.name);
 });
 
-const EXP_MODE_TAGS = [
-  "tech management", // 0 — Progetto Interno — Gestionale aziendale
-  "tech", // 1 — Digital CV AI-Augmented
-  "tech management", // 2 — ALTEN Italia (Angular/WebComponents enterprise)
-  "creative human", // 3 — Music Agency
-  "creative", // 4 — Freelance Videomaker
-  "tech", // 5 — ForgeLab (React/Covid dashboard)
-  "tech management", // 6 — Consoft (Angular gestionali)
-  "tech management", // 7 — Satispay
-  "human creative", // 8 — Festival ed eventi culturali
-  "creative human", // 9 — Freelance Fotografo
-  "creative human", // 10 — Corriere di Chieri
-  "creative human", // 11 — Artiversum
-  "creative", // 12 — FreeGinevro / Grafico Pubblicitario
-  "human", // 13 — Gruppo Mondadori
-  "human creative", // 14 — None Teatro
-  "human creative", // 15 — B-Teatro
-  "human", // 16 — Bestar Hotel
-  "human", // 17 — UCI Cinemas
-  "human", // 18 — Starbucks Coffee
-  "creative human", // 19 — Sogni Animazione
-  "human management", // 20 — Metamorfosi / Fun Factory
-  "human", // 21 — Caveja srl
+// ── Experience clusters — definizione condivisa IT/EN in lib/exp-clusters.ts.
+// Ogni ref diventa una card: la stessa esperienza può comparire in più
+// cluster con la facet giusta (ruolo/descrizione/highlight per quella lente).
+const AI_SKILL_HINTS = [
+  "MCP Protocol",
+  "Prompt Engineering",
+  "GitHub Copilot",
+  "Claude",
+  "Cursor",
+  "AI Orchestration",
+  "MCP",
 ];
 
-const featuredExpData = cvData.experience.map((exp, i) => ({
-  company: exp.company,
-  role: exp.role,
-  startYear: exp.startDate.substring(0, 4),
-  endYear: exp.endDate === "present" ? "oggi" : exp.endDate.substring(0, 4),
-  location: exp.location ?? "",
-  remote: exp.remote ?? false,
-  description: exp.description,
-  highlights: exp.highlights ?? [],
-  skills: exp.skills ?? [],
-  modeTags: EXP_MODE_TAGS[i] ?? "tech creative human",
-  aiAugmented: !!(
-    exp.tags?.includes("ai-orchestration") ||
-    exp.skills?.some((s) =>
-      [
-        "MCP Protocol",
-        "Prompt Engineering",
-        "GitHub Copilot",
-        "Claude",
-        "Cursor",
-        "AI Orchestration",
-        "MCP",
-      ].includes(s),
-    )
-  ),
-}));
-
-// ── Experience clusters ────────────────────────────────────────────────────
-const EXP_CLUSTER_DEFS = [
-  {
-    key: "tech",
-    label: "Sviluppo Software & AI",
-    tags: "tech management",
-    openForModes: ["tech", "management"],
-    // ALTEN (2) per primo: i recruiter cercano "dove lavora ora" in cima
-    // (reverse-chronological, Legge di Jakob). Poi i progetti personali (0, 1 —
-    // già etichettati come caso studio nel nome), poi i ruoli passati.
-    indices: [2, 0, 1, 5, 6, 7],
-  },
-  {
-    key: "creative",
-    label: "Design & Comunicazione",
-    tags: "creative",
-    openForModes: ["creative"],
-    indices: [3, 4, 9, 10, 11, 12],
-  },
-  {
-    key: "human",
-    label: "Facilitazione & Cultura",
-    tags: "human management",
-    openForModes: ["human", "management"],
-    indices: [8, 13, 20, 21],
-  },
-  {
-    key: "roots",
-    label: "Radici",
-    tags: "human creative",
-    openForModes: ["human", "creative"],
-    indices: [14, 15, 16, 17, 18, 19],
-  },
-];
+function refToCard(ref: ClusterRef, clusterTags: string) {
+  if ("proj" in ref) {
+    const p = cvData.projects[ref.proj];
+    const meta = PROJ_CARD_META[ref.proj];
+    if (!p) return null;
+    return {
+      company: p.name,
+      role: meta?.role.it ?? "",
+      startYear: meta?.startYear ?? "",
+      endYear: meta?.endYear ?? meta?.startYear ?? "",
+      location: meta?.location?.it ?? "",
+      remote: false,
+      description: p.description,
+      highlights: [] as string[],
+      skills: p.tags ?? [],
+      modeTags: clusterTags,
+      aiAugmented: false,
+    };
+  }
+  const exp = cvData.experience[ref.exp];
+  if (!exp) return null;
+  const facet = ref.facet
+    ? exp.facets?.find((f) => f.mode === ref.facet)
+    : undefined;
+  return {
+    company: exp.company,
+    role: facet?.role ?? exp.role,
+    startYear: exp.startDate.substring(0, 4),
+    endYear: exp.endDate === "present" ? "oggi" : exp.endDate.substring(0, 4),
+    location: exp.location ?? "",
+    remote: exp.remote ?? false,
+    description: facet?.description ?? exp.description,
+    highlights: facet?.highlights ?? exp.highlights ?? [],
+    skills: exp.skills ?? [],
+    modeTags: clusterTags,
+    aiAugmented: !!(
+      exp.tags?.includes("ai-orchestration") ||
+      exp.skills?.some((s) => AI_SKILL_HINTS.includes(s))
+    ),
+  };
+}
 
 const FEATURED_N = 3;
 const expClusters = EXP_CLUSTER_DEFS.map((cluster) => {
-  const items = cluster.indices.map((i) => featuredExpData[i]).filter(Boolean);
+  const items = cluster.refs
+    .map((r) => refToCard(r, cluster.tags))
+    .filter((c): c is NonNullable<typeof c> => c !== null);
   return {
-    ...cluster,
+    key: cluster.key,
+    label: cluster.labels.it,
     isDefaultOpen: cluster.openForModes.includes(mode),
     items,
     featured: items.slice(0, FEATURED_N),
@@ -285,10 +261,21 @@ const SOFT_MODE_TAGS = [
 
 // Le mappe per indice devono restare allineate ai dati: meglio far fallire
 // la build che spedire un'enfasi visiva silenziosamente sbagliata.
-if (EXP_MODE_TAGS.length !== cvData.experience.length)
-  throw new Error(
-    `EXP_MODE_TAGS (${EXP_MODE_TAGS.length}) non allineato a cvData.experience (${cvData.experience.length}): aggiorna la mappa in [mode].astro.`,
-  );
+for (const cluster of EXP_CLUSTER_DEFS)
+  for (const ref of cluster.refs) {
+    if ("exp" in ref && !cvData.experience[ref.exp])
+      throw new Error(
+        `Cluster "${cluster.key}": ref exp ${ref.exp} fuori da cvData.experience — aggiorna lib/exp-clusters.ts.`,
+      );
+    if ("proj" in ref && !cvData.projects[ref.proj])
+      throw new Error(
+        `Cluster "${cluster.key}": ref proj ${ref.proj} fuori da cvData.projects — aggiorna lib/exp-clusters.ts.`,
+      );
+    if ("exp" in ref && ref.facet && !cvData.experience[ref.exp].facets?.some((f) => f.mode === ref.facet))
+      throw new Error(
+        `Cluster "${cluster.key}": l'esperienza ${ref.exp} non ha la facet "${ref.facet}" — aggiungila in cv.ts.`,
+      );
+  }
 if (SOFT_MODE_TAGS.length !== cvData.softSkills.length)
   throw new Error(
     `SOFT_MODE_TAGS (${SOFT_MODE_TAGS.length}) non allineato a cvData.softSkills (${cvData.softSkills.length}): aggiorna la mappa in [mode].astro.`,
@@ -473,6 +460,12 @@ const heroSummary = heroSummaries[mode] ?? cvData.personal.summary;
         <span class="mode-btn__abbr" aria-hidden="true">AI</span>
         <span class="mode-btn__label">AI &amp; Digital</span>
       </button>
+      <!-- Voce di navigazione, non un mode: apre il cluster personale
+           "Fuori orario" e ci scrolla (handler in cv-init.ts). Il divider
+           CSS a sinistra segna che è un'altra categoria di azione. -->
+      <button class="mode-btn mode-btn--personal" data-nav-personal type="button">
+        <span class="mode-btn__label">Fuori orario</span>
+      </button>
     </div>
     <!-- Mobile dropdown — sostituisce i 4 pulsanti su ≤640px -->
     <div class="mode-dropdown" id="mode-dropdown">
@@ -501,6 +494,7 @@ const heroSummary = heroSummaries[mode] ?? cvData.personal.summary;
         <li class:list={["mode-dropdown__option", { "is-selected": mode === "creative" }]} role="option" data-dropdown-mode="creative" tabindex="-1">Web &amp; UX</li>
         <li class:list={["mode-dropdown__option", { "is-selected": mode === "management" }]} role="option" data-dropdown-mode="management" tabindex="-1">Project Manager</li>
         <li class:list={["mode-dropdown__option", { "is-selected": mode === "human" }]} role="option" data-dropdown-mode="human" tabindex="-1">AI &amp; Digital</li>
+        <li class="mode-dropdown__option mode-dropdown__option--personal" role="option" data-dropdown-personal tabindex="-1">Fuori orario</li>
       </ul>
     </div>
     <!-- Desktop: switch a 2 chip, sempre entrambe le lingue visibili.
@@ -802,14 +796,16 @@ const heroSummary = heroSummaries[mode] ?? cvData.personal.summary;
         aria-hidden="true"
         alt=""
       />
-      <span>AI-Enhanced Workflow</span>
-      <span class="section-subtitle"
-        >Come l'AI moltiplica l'output senza sostituire il giudizio.</span
-      >
-      <span class="ai-title__clip" aria-hidden="true">
-        <span class="ai-title__clip-pin"></span>
-        <span class="ai-title__clip-text">⚡ AI</span>
-      </span>
+      <h2 class="section-title ai-title">
+        <span>AI-Enhanced Workflow</span>
+        <span class="section-subtitle"
+          >Come l'AI moltiplica l'output senza sostituire il giudizio.</span
+        >
+        <span class="ai-title__clip" aria-hidden="true">
+          <span class="ai-title__clip-pin"></span>
+          <span class="ai-title__clip-text">⚡ AI</span>
+        </span>
+      </h2>
     </section>
     <div class="ai-grid">
       {cvData.aiWorkflow.map((item) => <AiCard {...item} />)}

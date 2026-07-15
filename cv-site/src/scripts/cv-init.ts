@@ -710,6 +710,53 @@ document
     });
   });
 
+// ── Voce "Fuori orario" — navigazione, non mode ─────────────────────────
+// Sync visivo tra lo stato realmente aperto del cluster "personal" e il
+// bottone/voce dropdown che lo aprono. Chiamata da tre punti: apertura da
+// "Fuori orario", click diretto sull'header del cluster, e chiusura
+// automatica quando si cambia mode (applyAccordions non include mai
+// "personal" in nessun mode — vedi mode-helpers.ts).
+function syncPersonalNavState() {
+  const cluster = document.querySelector<HTMLElement>(
+    '.exp-cluster[data-cluster="personal"]',
+  );
+  const isOpen = !!cluster?.hasAttribute("data-open");
+  document.querySelectorAll<HTMLElement>("[data-nav-personal]").forEach((btn) => {
+    btn.classList.toggle("is-active", isOpen);
+    btn.setAttribute("aria-pressed", String(isOpen));
+  });
+}
+
+// Apre il cluster personale e ci scrolla a filo navbar. Riusa il click
+// sull'header (non ne duplica la logica): quello stesso click è anche
+// l'unico punto che richiama initFeaturedCardReveal() dopo l'apertura —
+// senza, le featured card del cluster restano a opacity:0 (regola CSS
+// ".exp-grid--featured .exp-card:not(.is-revealed)"), perché a inizio
+// pagina initFeaturedCardReveal() le salta: il cluster "personal" non è
+// mai aperto di default, quindi non le trova.
+function openPersonalCluster() {
+  const cluster = document.querySelector<HTMLElement>(
+    '.exp-cluster[data-cluster="personal"]',
+  );
+  const header = cluster?.querySelector<HTMLElement>(".exp-cluster__header");
+  if (!cluster || !header) return;
+
+  if (!cluster.hasAttribute("data-open")) {
+    header.click();
+  } else {
+    // Già aperto — richiamo di scroll, nessun toggle (evita di richiuderlo).
+    const navEl = document.querySelector<HTMLElement>("#cv-nav");
+    const navH = navEl ? navEl.getBoundingClientRect().height : 52;
+    const targetY = header.getBoundingClientRect().top + window.scrollY - navH - 8;
+    scrollToPositionThen(targetY);
+  }
+  syncPersonalNavState();
+}
+
+document
+  .querySelectorAll<HTMLElement>("[data-nav-personal]")
+  .forEach((btn) => btn.addEventListener("click", openPersonalCluster));
+
 // ── Mode dropdown (mobile) ──────────────────────────────────────────────
 {
   const dropdownBtn = document.querySelector<HTMLButtonElement>("#mode-dropdown-btn");
@@ -729,6 +776,15 @@ document
         dropdownBtn.setAttribute("aria-expanded", "false");
         // Proxy: click sul pulsante nascosto — riusa tutta la logica mode + animazioni
         document.querySelector<HTMLButtonElement>(`button[data-nav-mode="${mode}"]`)?.click();
+      });
+    });
+
+    // Voce personale: apre il cluster "Fuori orario", nessun cambio mode
+    dropdownList.querySelectorAll<HTMLElement>("[data-dropdown-personal]").forEach((opt) => {
+      opt.addEventListener("click", () => {
+        dropdownList.classList.remove("is-open");
+        dropdownBtn.setAttribute("aria-expanded", "false");
+        openPersonalCluster();
       });
     });
 
@@ -799,6 +855,9 @@ modeStore.subscribe((mode) => {
   const m = mode ?? "tech";
   applyMode(m);
   applyAccordions(m);
+  // Nessun mode apre mai "personal" (mode-helpers.ts): un cambio mode lo
+  // chiude sempre. Sincronizza il bottone "Fuori orario" di conseguenza.
+  syncPersonalNavState();
 
   // Mobile-first: focus the first open cluster body so keyboard/touch users
   // land inside content immediately (only on small screens).
@@ -1041,6 +1100,10 @@ document
 
       // After layout change, refresh ScrollTrigger to recompute offsets
       setTimeout(() => ScrollTrigger.refresh(), 320);
+
+      // Click diretto sull'header del cluster personale (non passando dalla
+      // voce "Fuori orario"): sincronizza comunque lo stato del bottone.
+      if (cluster.dataset.cluster === "personal") syncPersonalNavState();
     });
   });
 
