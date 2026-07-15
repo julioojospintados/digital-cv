@@ -1826,8 +1826,7 @@ export const cvDataEn = {
     },
   ] as ValueFlow[],
 
-  // ── Feedbacks — parked data for a future UI section ────────────────────
-  // Not rendered. Descriptive keywords from people who have worked with Giulio.
+  // ── Feedbacks — testimonials from people who have worked with Giulio ───────
   feedbacks: [
     {
       name: "Lorenzo Rando",
@@ -1846,6 +1845,13 @@ export const cvDataEn = {
         "curiosity",
         "assertiveness",
       ],
+    },
+    {
+      name: "Eleonora D'Agostino",
+      role: "Owner, Bambagia Lab Design",
+      quote:
+        "Giulio is a highly capable and, above all, versatile professional. He supported me on a project where he fully understood my needs and delivered exactly what I was after, adapting his work along the way to requests as they came in, with great speed and precision. I recommend him without reservation.",
+      keywords: [],
     },
   ] as Feedback[],
 } as const satisfies Record<string, unknown>;

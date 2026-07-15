@@ -2324,8 +2324,7 @@ export const cvData = {
     },
   ] as ValueFlow[],
 
-  // ── Feedbacks — dati parcheggiati per futura sezione UI ────────────────────
-  // Non renderizzati. Keyword descrittive da persone che hanno lavorato con Giulio.
+  // ── Feedbacks — testimonianze di chi ha lavorato con Giulio ────────────────
   feedbacks: [
     {
       name: "Lorenzo Rando",
@@ -2344,6 +2343,13 @@ export const cvData = {
         "curiosità",
         "assertività",
       ],
+    },
+    {
+      name: "Eleonora D'Agostino",
+      role: "Owner, Bambagia Lab Design",
+      quote:
+        "Giulio è un professionista molto capace e soprattutto versatile. Mi ha supportato nello sviluppo di un progetto in cui è stato in grado di comprendere le mie esigenze a pieno e di realizzare quanto mi occorreva alla perfezione, anche e soprattutto modulando il suo lavoro sulle richieste che gli arrivavano in divenire, con grande rapidità e precisione. Lo raccomando assolutamente.",
+      keywords: [],
     },
   ] as Feedback[],
 } as const satisfies Record<string, unknown>;
