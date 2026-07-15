@@ -97,6 +97,30 @@ export const cvDataEn = {
         "GitHub Copilot",
       ],
       tags: ["tech", "human", "ai-orchestration"],
+      facets: [
+        {
+          mode: "management",
+          role: "Single Point of Contact",
+          description:
+            "I managed the project end-to-end as the single point of contact: 1-to-2-week sprints, a backlog built on business goals and impactScore measured at every release. No formal reports: working demos and numbers.",
+          highlights: [
+            "I closed every sprint with a working demo, not a progress slide.",
+            "I built the backlog on business goals, not on the list of features requested out loud.",
+            "I made the team autonomous on the new workflows: the knowledge stays in the company, not with the consultant.",
+          ],
+        },
+        {
+          mode: "human",
+          role: "AI Workflow Designer",
+          description:
+            "I designed the AI layer of the management software: an MCP architecture with tools, resources and prompts exposed as APIs for agents, integrated with VS Code Copilot and Cursor. AI here is not a demo: it is the daily workflow the project is built with.",
+          highlights: [
+            "I designed MCP tools, resources and prompts that expose the software's data to AI agents.",
+            "I instructed the agents with explicit rules and constraints: AI only accelerates inside rails set beforehand.",
+            "I automated the Cursor → GitLab CI/CD → deploy pipeline: zero manual intervention.",
+          ],
+        },
+      ],
     },
     {
       company: "Digital CV — Open Source AI-Augmented Project",
@@ -127,6 +151,19 @@ export const cvDataEn = {
         "Vitest",
       ],
       tags: ["tech", "ai-orchestration"],
+      facets: [
+        {
+          mode: "human",
+          role: "AI Workflow Designer",
+          description:
+            "This site is the public demonstration of my AI workflow: an MCP server with tools, resources and prompt templates exposing the CV data to agents (VS Code Copilot, Claude Desktop), and AI-augmented development with GitHub Copilot and Claude inside constraints set beforehand.",
+          highlights: [
+            "I designed the MCP server that turns the CV into an API for AI agents.",
+            "I set the vibe-coding rules before the components: tokens, animation rules, explicit DO NOTs.",
+            "I documented the method in the site's case study: every choice can be defended in an interview.",
+          ],
+        },
+      ],
     },
     {
       company: "ALTEN Italia",
@@ -156,6 +193,29 @@ export const cvDataEn = {
         "Material Design",
         "Jest",
       ],
+      facets: [
+        {
+          mode: "creative",
+          role: "Design System Developer — Aruba",
+          description:
+            "I built the Aruba design system from the side of the people who use it every day: a library of over 100 WebComponents in Lit, designed together with the designers so every component respects the typography, spacing and states defined in Figma.",
+          highlights: [
+            "I translated the designers' visual specifications into reusable cross-product components, with shared naming and APIs.",
+            "I defended typographic consistency, spacing and component states in code reviews, on a team of over 30 people.",
+          ],
+        },
+        {
+          mode: "management",
+          role: "Tech Lead & Scrum Master — Aruba Design System",
+          description:
+            "I led the Aruba design system team for over 3 years: more than 30 people across development and design, Agile ceremonies, backlog priorities and shared code review standards. My job was removing friction: fewer dependencies between teams, more predictable releases.",
+          highlights: [
+            "I coordinated more than 30 people across developers and designers on a library adopted cross-product.",
+            "I set code review and testing standards with a direct impact on release stability.",
+            "I bridged business, design and development in setting backlog priorities.",
+          ],
+        },
+      ],
     },
     {
       company: "Music Agency (collaboration)",
@@ -184,6 +244,29 @@ export const cvDataEn = {
         "Project management",
       ],
       tags: ["creative", "management"],
+      facets: [
+        {
+          mode: "management",
+          role: "Tour Manager",
+          description:
+            "I managed the roster's booking and tours independently: venue research, promoter negotiations, contracts and date coordination, all the way to the live event at Arci Bellezza in Milan followed end-to-end.",
+          highlights: [
+            "I coordinated booking and concerts across the whole roster, independently.",
+            "I followed the Arci Bellezza event in Milan from booking to communications.",
+            "I negotiated with venues and promoters through to signed contracts.",
+          ],
+        },
+        {
+          mode: "human",
+          role: "Digital Strategist",
+          description:
+            "I designed the agency's digital presence to speak to the industry, not to a generic audience: content strategy, a playlist as a networking tool and channels grown with contacts that matter.",
+          highlights: [
+            "I doubled the followers with a targeted audience: musicians, labels, promoters.",
+            "I conceived a playlist of emerging artists as a direct contact channel with the industry.",
+          ],
+        },
+      ],
     },
     {
       company: "Freelance",
@@ -487,6 +570,46 @@ export const cvDataEn = {
         "Customer service",
         "Precision under pressure",
       ],
+    },
+    {
+      company: "Bambagia Design Lab (collaboration)",
+      role: "UX/UI Designer",
+      startDate: "2026-04",
+      endDate: "2026-05",
+      location: "Italy",
+      remote: true,
+      description:
+        "I designed the interfaces for a client's website for Bambagia Design Lab: research on the client and competitors, wireframes and a prototype, hand-written HTML and CSS and site variants with different palettes, converted into Figma drawings with dedicated plugins.",
+      highlights: [
+        "I studied the client and the competitors before designing: every interface choice is motivated, not aesthetic.",
+        "I produced site variants with different palettes, converted into Figma drawings with dedicated plugins.",
+        "I chose the right delivery flow so the client can edit the site independently.",
+      ],
+      facets: [
+        {
+          mode: "human",
+          role: "AI Workflow Designer",
+          description:
+            "I built a reusable environment in VS Code with Figma MCP and Wix MCP, instructing the agent with the project's graphic rules to export correct wireframes and prototypes. I verified the limits of Wix MCP and found the right path with the Figma → Wix plugin.",
+          highlights: [
+            "I built a reusable VS Code environment with Figma MCP and Wix MCP, with the agent instructed on the project's graphic rules.",
+            "I found that Wix MCP generates a static frame via Astro: valid only when the client doesn't need to edit the site.",
+            "I found the Figma → Wix plugin for modules: the client edits the site on their own after delivery.",
+          ],
+        },
+      ],
+      skills: [
+        "Figma",
+        "MCP",
+        "Wix",
+        "HTML5",
+        "CSS",
+        "AI Orchestration",
+        "Prompt Engineering",
+        "UX Research",
+        "Prototyping",
+      ],
+      tags: ["creative", "ai-orchestration"],
     },
   ] as WorkExperience[],
 
@@ -1335,17 +1458,32 @@ export const cvDataEn = {
     {
       name: "Multifaceted curiosity",
       reframe:
-        "I explore different fields by nature and this requires conscious focus management. It is not scattering: every skill acquired becomes a new angle from which to read technical and creative problems, and it generates solutions that those who know a single domain cannot see.",
+        "I explore different fields out of a restlessness that does not stop. I refuse to be boxed into one field, and every new stimulus becomes another angle to read a problem from.",
     },
     {
       name: "Parallel thinking",
       reframe:
-        "I hold multiple scenarios and non-linear connections active at once, something that from the outside can look like a lack of linearity. In system design or complex debugging it is what leads me to identify the right problem to solve, not just the most visible symptom.",
+        "I work out solutions across multiple mental tracks at once. I find connections between distant elements that a linear reading of the problem would miss.",
     },
     {
       name: "Emotional communication",
       reframe:
-        "I pay attention to relational dynamics and people's emotional states, something that can seem distant from the technical world. In practice it accelerates delivery in distributed teams and with non-technical counterparts: it reduces friction in code reviews, surfaces the real, undeclared requirements and builds trust faster than any presentation.",
+        "I express moods and doubts directly, without defensive masks. It cuts friction in teams and speeds up trust with whoever I am working with.",
+    },
+    {
+      name: "Intellectual honesty",
+      reframe:
+        "I recognize facts for what they are, even when they contradict my beliefs or bruise my ego. On a technical project that means admitting a mistake before it costs someone else weeks.",
+    },
+    {
+      name: "Stepping into others' shoes",
+      reframe:
+        "I simulate the other person's perspective to read their motivations and needs, beyond my own judgement. In distributed teams I catch objections before they turn into blockers.",
+    },
+    {
+      name: "Assertiveness",
+      reframe:
+        "I set my own boundaries and hold my positions firmly, without folding to avoid conflict and without attacking the other side. Technical decisions stay contestable on merit, not on tone.",
     },
   ] as GrowthArea[],
 
@@ -1521,7 +1659,7 @@ export const cvDataEn = {
     {
       name: 'Film "Double"',
       description:
-        'I played the deuteragonist in the short film "Double", presented at the Independent Film Festival in San Francisco in 2022.',
+        'I played the deuteragonist in the film "Double", produced in Turin by Filmine and presented at the Independent Film Festival in San Francisco in 2022.',
       date: "2022-01",
       tags: ["Cinema", "Acting"],
     },
@@ -1545,6 +1683,13 @@ export const cvDataEn = {
         "I co-founded and organised the Square Festival in the Quadrilatero Romano district of Turin, a multidisciplinary cultural event.",
       date: "2017-05",
       tags: ["Event management", "Culture", "Turin"],
+    },
+    {
+      name: "Veni Vidi Vinyl",
+      description:
+        "I created Veni Vidi Vinyl with a friend, a listening-session night built around vinyl records brought by the people who showed up. I designed it to give weight to material listening: every playback wears the vinyl down, so every listen is unrepeatable. I did it purely for the fun of doing it.",
+      date: "2017-01",
+      tags: ["Event management", "Music", "Vinyl"],
     },
     {
       name: "Invented word — Turin International Book Fair",

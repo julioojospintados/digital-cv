@@ -11,6 +11,11 @@ import ProjectCard from "../../components/cards/ProjectCard.astro";
 import SkillSquare from "../../components/cards/SkillSquare.astro";
 import SoftItem from "../../components/cards/SoftItem.astro";
 import ContactFooter from "../../components/ContactFooter.astro";
+import {
+  EXP_CLUSTER_DEFS,
+  PROJ_CARD_META,
+  type ClusterRef,
+} from "../../lib/exp-clusters";
 
 // Hero copy — EN page is always static, default persona is 'tech' (see
 // mode-buttons comment below: mode switch only filters cards client-side,
@@ -172,104 +177,74 @@ function isActiveSkill(modeTags: string): boolean {
   return tags.includes("tech") || tags.includes("ai");
 }
 
-// ── Experience mode tags ───────────────────────────────────────────────────
-const EXP_MODE_TAGS = [
-  "tech management", // 0 — Business Management Internal Project
-  "tech", // 1 — Digital CV AI-Augmented
-  "tech management", // 2 — ALTEN Italia (Angular/WebComponents enterprise)
-  "creative human", // 3 — Music Agency
-  "creative", // 4 — Freelance Videomaker
-  "tech", // 5 — ForgeLab (React/Covid dashboard)
-  "tech management", // 6 — Consoft (Angular gestionali)
-  "tech management", // 7 — Satispay
-  "human creative", // 8 — Festival & Cultural Events
-  "creative human", // 9 — Freelance Photographer
-  "creative human", // 10 — Corriere di Chieri
-  "creative human", // 11 — Artiversum
-  "creative", // 12 — FreeGinevro / Graphic Designer
-  "human", // 13 — Gruppo Mondadori
-  "human creative", // 14 — None Teatro
-  "human creative", // 15 — B-Teatro
-  "human", // 16 — Bestar Hotel
-  "human", // 17 — UCI Cinemas
-  "human", // 18 — Starbucks Coffee
-  "creative human", // 19 — Sogni Animazione
-  "human management", // 20 — Metamorfosi / Fun Factory
-  "human", // 21 — Caveja srl
-];
-
-// ── Experience clusters ───────────────────────────────────────────────────
-const EXP_CLUSTER_DEFS_EN = [
-  {
-    key: "tech",
-    label: "Software Development & AI",
-    tags: "tech management",
-    openForModes: ["tech", "management"],
-    // ALTEN (2) first: recruiters look for the current role on top
-    // (reverse-chronological, Jakob's law). Then the personal projects (0, 1),
-    // then past roles.
-    indices: [2, 0, 1, 5, 6, 7],
-  },
-  {
-    key: "creative",
-    label: "Design & Communication",
-    tags: "creative",
-    openForModes: ["creative"],
-    indices: [3, 4, 9, 10, 11, 12],
-  },
-  {
-    key: "human",
-    label: "Facilitation & Culture",
-    tags: "human management",
-    openForModes: ["human", "management"],
-    indices: [8, 13, 20, 21],
-  },
-  {
-    key: "roots",
-    label: "Roots",
-    tags: "human creative",
-    openForModes: ["human", "creative"],
-    indices: [14, 15, 16, 17, 18, 19],
-  },
-];
-
 const skillViewLabels = {
   graph: "Graph",
   cards: "Cards",
 } as const;
 
-const featuredExpData = cvDataEn.experience.map((exp, i) => ({
-  company: exp.company,
-  role: exp.role,
-  startYear: exp.startDate.substring(0, 4),
-  endYear: exp.endDate === "present" ? "present" : exp.endDate.substring(0, 4),
-  location: exp.location ?? "",
-  remote: exp.remote ?? false,
-  description: exp.description,
-  highlights: exp.highlights ?? [],
-  skills: exp.skills ?? [],
-  modeTags: EXP_MODE_TAGS[i] ?? "tech creative human",
-  aiAugmented: !!(
-    exp.tags?.includes("ai-orchestration") ||
-    exp.skills?.some((s: string) =>
-      [
-        "MCP Protocol",
-        "Prompt Engineering",
-        "GitHub Copilot",
-        "Claude",
-        "Cursor",
-        "AI Orchestration",
-        "MCP",
-      ].includes(s),
-    )
-  ),
-}));
+// ── Experience clusters — shared IT/EN definition in lib/exp-clusters.ts.
+// Each ref becomes a card: the same experience can appear in more clusters
+// with the right facet (role/description/highlights for that lens).
+const AI_SKILL_HINTS = [
+  "MCP Protocol",
+  "Prompt Engineering",
+  "GitHub Copilot",
+  "Claude",
+  "Cursor",
+  "AI Orchestration",
+  "MCP",
+];
+
+function refToCard(ref: ClusterRef, clusterTags: string) {
+  if ("proj" in ref) {
+    const p = cvDataEn.projects[ref.proj];
+    const meta = PROJ_CARD_META[ref.proj];
+    if (!p) return null;
+    return {
+      company: p.name,
+      role: meta?.role.en ?? "",
+      startYear: meta?.startYear ?? "",
+      endYear: meta?.endYear ?? meta?.startYear ?? "",
+      location: meta?.location?.en ?? "",
+      remote: false,
+      description: p.description,
+      highlights: [] as string[],
+      skills: p.tags ?? [],
+      modeTags: clusterTags,
+      aiAugmented: false,
+    };
+  }
+  const exp = cvDataEn.experience[ref.exp];
+  if (!exp) return null;
+  const facet = ref.facet
+    ? exp.facets?.find((f) => f.mode === ref.facet)
+    : undefined;
+  return {
+    company: exp.company,
+    role: facet?.role ?? exp.role,
+    startYear: exp.startDate.substring(0, 4),
+    endYear: exp.endDate === "present" ? "present" : exp.endDate.substring(0, 4),
+    location: exp.location ?? "",
+    remote: exp.remote ?? false,
+    description: facet?.description ?? exp.description,
+    highlights: facet?.highlights ?? exp.highlights ?? [],
+    skills: exp.skills ?? [],
+    modeTags: clusterTags,
+    aiAugmented: !!(
+      exp.tags?.includes("ai-orchestration") ||
+      exp.skills?.some((s: string) => AI_SKILL_HINTS.includes(s))
+    ),
+  };
+}
 
 const FEATURED_N = 3;
-const expClustersEn = EXP_CLUSTER_DEFS_EN.map((cluster) => {
-  const items = cluster.indices.map((i) => featuredExpData[i]).filter(Boolean);
+const expClustersEn = EXP_CLUSTER_DEFS.map((cluster) => {
+  const items = cluster.refs
+    .map((r) => refToCard(r, cluster.tags))
+    .filter((c): c is NonNullable<typeof c> => c !== null);
   return {
-    ...cluster,
+    key: cluster.key,
+    label: cluster.labels.en,
     isDefaultOpen: cluster.key === "tech", // EN page is always static at 'tech'
     items,
     featured: items.slice(0, FEATURED_N),
@@ -298,10 +273,21 @@ const SOFT_MODE_TAGS = [
 
 // Index-based maps must stay aligned with the data: failing the build beats
 // shipping a silently wrong visual emphasis.
-if (EXP_MODE_TAGS.length !== cvDataEn.experience.length)
-  throw new Error(
-    `EXP_MODE_TAGS (${EXP_MODE_TAGS.length}) out of sync with cvDataEn.experience (${cvDataEn.experience.length}): update the map in en/cv.astro.`,
-  );
+for (const cluster of EXP_CLUSTER_DEFS)
+  for (const ref of cluster.refs) {
+    if ("exp" in ref && !cvDataEn.experience[ref.exp])
+      throw new Error(
+        `Cluster "${cluster.key}": exp ref ${ref.exp} outside cvDataEn.experience — update lib/exp-clusters.ts.`,
+      );
+    if ("proj" in ref && !cvDataEn.projects[ref.proj])
+      throw new Error(
+        `Cluster "${cluster.key}": proj ref ${ref.proj} outside cvDataEn.projects — update lib/exp-clusters.ts.`,
+      );
+    if ("exp" in ref && ref.facet && !cvDataEn.experience[ref.exp].facets?.some((f) => f.mode === ref.facet))
+      throw new Error(
+        `Cluster "${cluster.key}": experience ${ref.exp} has no "${ref.facet}" facet — add it in cv.en.ts.`,
+      );
+  }
 if (SOFT_MODE_TAGS.length !== cvDataEn.softSkills.length)
   throw new Error(
     `SOFT_MODE_TAGS (${SOFT_MODE_TAGS.length}) out of sync with cvDataEn.softSkills (${cvDataEn.softSkills.length}): update the map in en/cv.astro.`,
@@ -444,6 +430,11 @@ const projectsData = cvDataEn.projects.slice(0, 6).map((p) => {
         <span class="mode-btn__abbr" aria-hidden="true">AI</span>
         <span class="mode-btn__label">AI &amp; Digital</span>
       </button>
+      <!-- Navigation entry, not a mode: opens the "Off the clock" personal
+           cluster and scrolls to it (handler in cv-init.ts). -->
+      <button class="mode-btn mode-btn--personal" data-nav-personal type="button">
+        <span class="mode-btn__label">Off the clock</span>
+      </button>
     </div>
     <!-- Mobile dropdown -->
     <div class="mode-dropdown" id="mode-dropdown">
@@ -467,6 +458,7 @@ const projectsData = cvDataEn.projects.slice(0, 6).map((p) => {
         <li class="mode-dropdown__option" role="option" data-dropdown-mode="creative" tabindex="-1">Web &amp; UX</li>
         <li class="mode-dropdown__option" role="option" data-dropdown-mode="management" tabindex="-1">Project Manager</li>
         <li class="mode-dropdown__option" role="option" data-dropdown-mode="human" tabindex="-1">AI &amp; Digital</li>
+        <li class="mode-dropdown__option mode-dropdown__option--personal" role="option" data-dropdown-personal tabindex="-1">Off the clock</li>
       </ul>
     </div>
     <!-- Desktop: switch a 2 chip, sempre entrambe le lingue visibili.

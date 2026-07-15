@@ -47,6 +47,14 @@ const abroadLabel =
   !italianLocationHints.some((hint) => normalizedLocation.includes(hint))
     ? "Estero"
     : null;
+
+// "2026 — 2026" diventa "2026"; senza startYear (card progetto del cluster
+// personale, es. poesia senza data singola) l'intervallo non si mostra.
+const datesLabel = startYear
+  ? startYear === endYear
+    ? startYear
+    : `${startYear} — ${endYear}`
+  : "";
 ---
 
 <article class="exp-card cv-card" data-tags={modeTags}>
@@ -63,7 +71,7 @@ const abroadLabel =
   <header class="exp-card__header">
     <div class="exp-card__top">
       <span class="exp-card__company">{company}</span>
-      <span class="exp-card__dates">{startYear} — {endYear}</span>
+      {datesLabel && <span class="exp-card__dates">{datesLabel}</span>}
     </div>
     <h3 class="exp-card__role">{role}</h3>
     {

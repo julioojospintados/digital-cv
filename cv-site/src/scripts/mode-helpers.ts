@@ -4,12 +4,18 @@
  * Nessuna dipendenza da GSAP, ScrollTrigger o Lenis.
  */
 
-/** Mappa mode → chiavi cluster che devono essere aperti (coerente con EXP_CLUSTER_DEFS in [mode].astro) */
+/**
+ * Mappa mode → chiavi cluster da aprire (coerente con lib/exp-clusters.ts).
+ * Mapping 1:1 dal 2026-07-15: prima "human" apriva il vecchio cluster
+ * "Facilitazione & Cultura" e "management" quelli degli altri — chi cliccava
+ * "AI & Digital" atterrava su contenuti fuori tema. Il cluster "personal"
+ * non appartiene a nessun mode: si apre dalla voce "Fuori orario" (cv-init).
+ */
 export const CLUSTER_OPEN_FOR: Record<string, string[]> = {
   tech: ["tech"],
-  creative: ["creative", "roots"],
-  human: ["human", "roots"],
-  management: ["tech", "human"],
+  creative: ["creative"],
+  human: ["human"],
+  management: ["management"],
 };
 
 /**

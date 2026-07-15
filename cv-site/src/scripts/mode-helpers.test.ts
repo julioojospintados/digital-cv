@@ -60,20 +60,27 @@ function gridOrder(grid: HTMLElement): string[] {
 // ── CLUSTER_OPEN_FOR ─────────────────────────────────────────────────────────
 
 describe("CLUSTER_OPEN_FOR", () => {
+  // Mapping 1:1 dal 2026-07-15: ogni mode apre solo il proprio cluster.
+  // Il cluster "personal" non appartiene a nessun mode (voce "Fuori orario").
   it("tech apre solo il cluster 'tech'", () => {
     expect(CLUSTER_OPEN_FOR["tech"]).toEqual(["tech"]);
   });
 
-  it("creative apre 'creative' e 'roots'", () => {
-    expect(CLUSTER_OPEN_FOR["creative"]).toEqual(["creative", "roots"]);
+  it("creative apre solo 'creative'", () => {
+    expect(CLUSTER_OPEN_FOR["creative"]).toEqual(["creative"]);
   });
 
-  it("human apre 'human' e 'roots'", () => {
-    expect(CLUSTER_OPEN_FOR["human"]).toEqual(["human", "roots"]);
+  it("human apre solo 'human' (AI & Digital)", () => {
+    expect(CLUSTER_OPEN_FOR["human"]).toEqual(["human"]);
   });
 
-  it("management apre 'tech' e 'human'", () => {
-    expect(CLUSTER_OPEN_FOR["management"]).toEqual(["tech", "human"]);
+  it("management apre solo 'management'", () => {
+    expect(CLUSTER_OPEN_FOR["management"]).toEqual(["management"]);
+  });
+
+  it("nessun mode apre 'personal'", () => {
+    for (const clusters of Object.values(CLUSTER_OPEN_FOR))
+      expect(clusters).not.toContain("personal");
   });
 
   it("ha esattamente 4 mode definiti", () => {
@@ -84,7 +91,7 @@ describe("CLUSTER_OPEN_FOR", () => {
 // ── applyAccordions ───────────────────────────────────────────────────────────
 
 describe("applyAccordions", () => {
-  const ALL_CLUSTERS = ["tech", "creative", "human", "roots"];
+  const ALL_CLUSTERS = ["tech", "creative", "management", "human", "personal"];
 
   function setupClusters(): HTMLElement[] {
     const clusters = ALL_CLUSTERS.map((key) => makeCluster(key));
@@ -102,38 +109,50 @@ describe("applyAccordions", () => {
 
     expect(clusters[0].hasAttribute("data-open")).toBe(true);   // tech
     expect(clusters[1].hasAttribute("data-open")).toBe(false);  // creative
-    expect(clusters[2].hasAttribute("data-open")).toBe(false);  // human
-    expect(clusters[3].hasAttribute("data-open")).toBe(false);  // roots
+    expect(clusters[2].hasAttribute("data-open")).toBe(false);  // management
+    expect(clusters[3].hasAttribute("data-open")).toBe(false);  // human
+    expect(clusters[4].hasAttribute("data-open")).toBe(false);  // personal
   });
 
-  it("mode=creative: apre 'creative' e 'roots', chiude gli altri", () => {
+  it("mode=creative: apre solo 'creative'", () => {
     const clusters = setupClusters();
     applyAccordions("creative");
 
     expect(clusters[0].hasAttribute("data-open")).toBe(false);  // tech
     expect(clusters[1].hasAttribute("data-open")).toBe(true);   // creative
-    expect(clusters[2].hasAttribute("data-open")).toBe(false);  // human
-    expect(clusters[3].hasAttribute("data-open")).toBe(true);   // roots
+    expect(clusters[2].hasAttribute("data-open")).toBe(false);  // management
+    expect(clusters[3].hasAttribute("data-open")).toBe(false);  // human
+    expect(clusters[4].hasAttribute("data-open")).toBe(false);  // personal
   });
 
-  it("mode=human: apre 'human' e 'roots', chiude gli altri", () => {
+  it("mode=human: apre solo 'human' (AI & Digital)", () => {
     const clusters = setupClusters();
     applyAccordions("human");
 
-    expect(clusters[0].hasAttribute("data-open")).toBe(false);
-    expect(clusters[1].hasAttribute("data-open")).toBe(false);
-    expect(clusters[2].hasAttribute("data-open")).toBe(true);
-    expect(clusters[3].hasAttribute("data-open")).toBe(true);
+    expect(clusters[0].hasAttribute("data-open")).toBe(false);  // tech
+    expect(clusters[1].hasAttribute("data-open")).toBe(false);  // creative
+    expect(clusters[2].hasAttribute("data-open")).toBe(false);  // management
+    expect(clusters[3].hasAttribute("data-open")).toBe(true);   // human
+    expect(clusters[4].hasAttribute("data-open")).toBe(false);  // personal
   });
 
-  it("mode=management: apre 'tech' e 'human', chiude gli altri", () => {
+  it("mode=management: apre solo 'management'", () => {
     const clusters = setupClusters();
     applyAccordions("management");
 
-    expect(clusters[0].hasAttribute("data-open")).toBe(true);   // tech
+    expect(clusters[0].hasAttribute("data-open")).toBe(false);  // tech
     expect(clusters[1].hasAttribute("data-open")).toBe(false);  // creative
-    expect(clusters[2].hasAttribute("data-open")).toBe(true);   // human
-    expect(clusters[3].hasAttribute("data-open")).toBe(false);  // roots
+    expect(clusters[2].hasAttribute("data-open")).toBe(true);   // management
+    expect(clusters[3].hasAttribute("data-open")).toBe(false);  // human
+    expect(clusters[4].hasAttribute("data-open")).toBe(false);  // personal
+  });
+
+  it("il cambio mode chiude il cluster 'personal' se era aperto", () => {
+    const clusters = setupClusters();
+    clusters[4].setAttribute("data-open", "");
+
+    applyAccordions("tech");
+    expect(clusters[4].hasAttribute("data-open")).toBe(false);
   });
 
   it("aggiorna aria-expanded sull'header del cluster aperto", () => {

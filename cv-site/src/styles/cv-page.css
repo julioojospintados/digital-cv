@@ -349,6 +349,48 @@ go-logo:not(:defined) {
   }
 }
 
+/* ── Voce "Fuori orario" — navigazione, non mode ─────────────────────
+   Nessun --btn-accent (resta neutra sui fallback muted), larghezza a
+   contenuto e divider a sinistra: segnala che non è una quinta persona
+   ma un'altra categoria di azione. GSAP non la tocca (niente
+   data-nav-mode); su mobile vive nella dropdown. */
+.mode-btn--personal {
+  position: relative;
+  margin-left: 0.55rem;
+}
+
+.mode-btn--personal::before {
+  content: "";
+  position: absolute;
+  left: -0.42rem;
+  top: 22%;
+  bottom: 22%;
+  width: 1px;
+  background: var(--color-border);
+}
+
+@media (min-width: 40.0625rem) {
+  .mode-btn--personal {
+    width: auto;
+    flex: 0 0 auto;
+  }
+}
+
+/* Opzione dropdown corrispondente: separatore sopra, stessa logica */
+.mode-dropdown__option--personal {
+  border-top: 1px solid var(--color-border);
+}
+
+/* "Fuori orario" toggla aria-pressed come i mode-btn reali (è un vero
+   toggle: apre/richiude il cluster), quindi eredita il glow di
+   [aria-pressed="true"] — comportamento voluto. Non deve però ereditare
+   la larghezza fissa 7.5rem pensata per le label persona (regola SSR
+   pre-JS più in alto in cascata, stessa specificità: qui vince per
+   ordine, dichiarata dopo): qui la larghezza resta sempre a contenuto. */
+.mode-btn--personal[aria-pressed] {
+  width: auto;
+}
+
 /* ── Entrance nav controls — partono invisibili, GSAP li rivela in
    sincrono con l'atterraggio dei caratteri G/O (cv-init, heroTl).
    Maschera anche il FOUC del primo paint: i bottoni/dropdown mostravano
@@ -1709,7 +1751,7 @@ a.lang-switch__opt:hover {
   margin: 0;
   padding: 0;
   display: flex;
-  flex-direction: column;
+  flex-flow: row wrap;
   gap: 0.5rem;
 }
 
