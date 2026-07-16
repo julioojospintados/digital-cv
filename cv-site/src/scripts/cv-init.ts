@@ -501,8 +501,14 @@ document
       setMode(mode);
       // setMode → subscribe → applyMode + applyAccordions già eseguiti (sincrono).
       // Il button handler gestisce solo l'animazione visiva (stamp + scan + scroll).
-      const currentSegment = window.location.pathname.split("/").filter(Boolean)[0];
-      if ((CV_MODES as readonly string[]).includes(currentSegment)) {
+      // Condizione sulla STRUTTURA della pagina (ha i cluster esperienza da
+      // scansionare?), non sull'URL: "en/cv" mostra lo stesso layout CV di
+      // "/tech" ecc. ma non ha il mode nel path (è una pagina statica, il
+      // mode è solo un filtro client-side) — un controllo su pathname[0]
+      // la escludeva sempre, disattivando l'intera animazione sulla
+      // dropdown/nav in versione EN. Così vale ovunque il markup lo preveda.
+      const hasExpClusters = document.querySelector(".exp-clusters") !== null;
+      if (hasExpClusters) {
 
         // ── Animazione 2+3: Mode stamp fullscreen → Scan laser reveal ────
         //
@@ -682,9 +688,17 @@ document
               el.classList.add("is-visible");
             });
 
-            // 2. Attendi il prossimo frame di layout per garantire che i transform
-            //    rimossi siano stati applicati prima di leggere getBoundingClientRect().
-            requestAnimationFrame(() => {
+            // 2. Attendi i font (document.fonts.ready) PRIMA del frame di
+            //    layout: Lexend nei pesi 400-700 carica con font-display:swap
+            //    (solo il peso 800 dell'hero è "block"), quindi appena dopo
+            //    il primo load il testo sopra il target può essere ancora nel
+            //    font di fallback. Se calcoliamo la posizione in quel momento,
+            //    lo scroll atterra dove il fallback metteva il titolo — non
+            //    dove lo mette Lexend appena swappa, un attimo dopo. Succede
+            //    solo al primo cambio mode: dal secondo in poi i font sono
+            //    già stabili e la promise (già risolta) non aggiunge ritardo
+            //    percepibile. Poi un frame di layout per i transform rimossi.
+            document.fonts.ready.then(() => requestAnimationFrame(() => {
               const navEl = document.querySelector<HTMLElement>("#cv-nav");
               const NAV_HEIGHT = navEl ? navEl.getBoundingClientRect().height : 52;
               const absoluteTop =
@@ -722,11 +736,12 @@ document
                 gsap.to(allClusters, { opacity: 1, duration: 0.5, ease: "power2.out" });
                 gsap.to(scanTarget, { boxShadow: "none", duration: 0.5 });
               });
-            }); // end requestAnimationFrame
+            })); // end requestAnimationFrame (dentro document.fonts.ready.then)
           }, 650);
         }
       }
-      // else: non su pagina mode — subscribe ha già chiamato applyMode.
+      // else: pagina senza cluster esperienza (es. home) — subscribe ha
+      // già chiamato applyMode, non c'è altro da animare/scrollare qui.
     });
 
     btn.addEventListener("mousemove", (e) => {
