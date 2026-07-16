@@ -1831,20 +1831,9 @@ export const cvDataEn = {
     {
       name: "Lorenzo Rando",
       role: "Recruiter / Head Hunter",
-      keywords: [
-        "articulate",
-        "humour",
-        "attentiveness",
-        "active listening",
-        "empathy",
-        "creativity",
-        "respect",
-        "loyalty",
-        "reliability",
-        "sincerity",
-        "curiosity",
-        "assertiveness",
-      ],
+      quote:
+        "I met Giulio during an interview that was meant to last thirty minutes and ended up running for almost two hours, because every question opened up a real train of thought, never a rehearsed answer. He listens before he responds, and he's one of the few people who can be direct without ever making the other person uncomfortable. He has a genuine curiosity about people, not just about the role to fill: you can feel it from the first question.",
+      keywords: [],
     },
     {
       name: "Eleonora D'Agostino",

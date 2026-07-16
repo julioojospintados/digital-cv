@@ -388,7 +388,14 @@ body {
   background: var(--color-accent);
   border-radius: 50%;
   pointer-events: none;
-  z-index: 99999;
+  /* 100001: sopra a tutto, floating-menu incluso (99999). A z-index pari
+     vince l'ultimo nel DOM (Layout.astro monta <floating-menu> DOPO il
+     cursore), quindi il cursore finiva coperto passandoci sopra — il
+     mouse "spariva" dietro il FAB e i suoi item. Il cursore sostituisce
+     il puntatore di sistema (cursor:none globale): non deve mai finire
+     sotto un elemento fixed, tranne il vero top-layer del browser
+     (<dialog>, già gestito sotto via html.dialog-open). */
+  z-index: 100001;
   mix-blend-mode: difference;
   transition:
     width 0.25s ease,
@@ -406,7 +413,8 @@ body {
   border: 1.5px solid var(--color-accent);
   border-radius: 50%;
   pointer-events: none;
-  z-index: 99998;
+  /* 100000: appena sotto #cursor-dot, sempre sopra floating-menu (99999) — vedi commento lì. */
+  z-index: 100000;
   opacity: 0.5;
   transition:
     width 0.3s ease,

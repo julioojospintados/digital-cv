@@ -2273,32 +2273,150 @@ a.lang-switch__opt:hover {
   margin: 0 0 0.9rem;
 }
 
-/* ── Feedback — cosa dicono di me ─────────────────────────────── */
-.feedback-grid {
-  display: grid;
-  grid-template-columns: 1fr;
+/* ── Feedback — cosa dicono di me: carousel orizzontale ──────────
+   Scroll-snap nativo (swipe su touch/trackpad) + wheel-redirect da
+   mouse e frecce da tastiera/click su desktop (cv-init.ts). Il fade ai
+   bordi (mask-image, --fade-l/--fade-r) segnala "c'è altro" senza un
+   testo esplicito — si spegne da solo a inizio/fine corsa. */
+.feedback-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
   gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
 }
 
-@media (min-width: 48rem) {
-  .feedback-grid {
-    grid-template-columns: repeat(auto-fit, minmax(18rem, 30rem));
+.feedback-header .section-title {
+  margin-bottom: 0;
+}
+
+/* Nascosto finché JS non conferma che il carousel scrolla davvero
+   (abbastanza card da eccedere la larghezza) — con 2 card su schermi
+   larghi potrebbero starci tutte, niente frecce inutili. */
+.feedback-nav {
+  display: none;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  flex-shrink: 0;
+}
+
+.feedback-nav[data-visible="true"] {
+  display: flex;
+}
+
+.feedback-nav__btn {
+  width: 2.25rem;
+  height: 2.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.02);
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition:
+    border-color var(--duration-micro) ease,
+    color var(--duration-micro) ease,
+    opacity var(--duration-micro) ease,
+    transform var(--duration-micro) ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .feedback-nav__btn:hover:not(:disabled) {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
   }
 }
 
+.feedback-nav__btn:active:not(:disabled) {
+  transform: scale(0.92);
+}
+
+.feedback-nav__btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+/* Stessa tecnica di .exp-cluster__chevron: bordi ruotati, mai un glifo Unicode. */
+.feedback-nav__arrow {
+  width: 0.45rem;
+  height: 0.45rem;
+  border: solid currentColor;
+  border-width: 0 1.5px 1.5px 0;
+}
+
+.feedback-nav__btn--prev .feedback-nav__arrow {
+  rotate: 135deg;
+  translate: 1px 0;
+}
+
+.feedback-nav__btn--next .feedback-nav__arrow {
+  rotate: -45deg;
+  translate: -1px 0;
+}
+
+.feedback-track {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  /* padding-block: overflow-x:auto forza overflow-y a "auto" (non può
+     restare "visible" quando l'altro asse non lo è, per spec) — con le
+     card stretchate all'altezza del container alcuni browser arrotondano
+     quell'altezza per eccesso di una frazione di pixel e overflow-y la
+     taglia via, portandosi dietro il bordo superiore delle card. Il
+     padding assorbe l'arrotondamento prima che tocchi il contenuto. */
+  padding-block: 0.3rem;
+  scroll-snap-type: x mandatory;
+  scroll-padding-inline-start: 0;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  --fade-l: 0;
+  --fade-r: 0;
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    black calc(var(--fade-l) * 2.5rem),
+    black calc(100% - var(--fade-r) * 2.5rem),
+    transparent
+  );
+}
+
+.feedback-track::-webkit-scrollbar {
+  display: none;
+}
+
 .feedback-card {
+  scroll-snap-align: start;
+  flex: 0 0 min(26rem, 82vw);
+  min-height: 15rem;
+  display: flex;
+  flex-direction: column;
   margin: 0;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-16);
   background: var(--color-surface);
-  padding: 1.25rem 1.4rem;
+  padding: 1.5rem 1.5rem 1.25rem;
 }
 
+/* Virgolette tipografiche via CSS, non testo hardcoded nel markup —
+   coerenti anche se il contenuto cambia lingua/citazione. */
 .feedback-quote {
   margin: 0 0 1rem;
-  font-size: var(--fs-16);
+  font-size: var(--fs-14);
   line-height: 1.65;
+  font-style: italic;
   color: var(--color-text-primary);
+  quotes: "\201C" "\201D";
+}
+
+.feedback-quote::before {
+  content: open-quote;
+}
+
+.feedback-quote::after {
+  content: close-quote;
 }
 
 .feedback-keywords {
@@ -2318,7 +2436,15 @@ a.lang-switch__opt:hover {
   border-radius: 999px;
 }
 
+/* Sempre in fondo a sinistra, quale che sia la lunghezza della citazione:
+   .feedback-card è una flex column, margin-top:auto spinge questo blocco
+   giù. Le card sono tutte alte quanto la più alta della riga (stretch di
+   default sul flex row .feedback-track), quindi l'ancoraggio resta
+   allineato card per card. */
 .feedback-who {
+  margin-top: auto;
+  padding-top: 1rem;
+  text-align: left;
   font-family: var(--font-mono);
   font-size: var(--fs-12);
   color: var(--color-text-muted);
@@ -2327,6 +2453,38 @@ a.lang-switch__opt:hover {
 .feedback-who b {
   color: var(--color-text-primary);
   font-weight: 600;
+}
+
+@media (max-width: 40rem) {
+  /* Full-bleed fino al bordo viewport (stessa tecnica di .journey): il
+     peek della card successiva arriva davvero al filo schermo, non al
+     gutter interno — la firma "swipe" di un carousel premium da mobile.
+     scroll-padding-inline riallinea lo snap al gutter reale (1.25rem,
+     lo stesso di .cv-main) così la card ferma combacia col resto del
+     testo della pagina. */
+  .feedback-track {
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    padding-inline: 1.25rem;
+    scroll-padding-inline: 1.25rem;
+  }
+
+  .feedback-card {
+    flex-basis: 82vw;
+    min-height: 13rem;
+  }
+
+  /* Mobile: l'affordance è lo swipe nativo, non le frecce — meno chrome,
+     più gesto. */
+  .feedback-nav {
+    display: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .feedback-track {
+    scroll-behavior: auto;
+  }
 }
 
 /* ── Timeline formazione collassata — stessa tecnica di .skills-collapsible ── */

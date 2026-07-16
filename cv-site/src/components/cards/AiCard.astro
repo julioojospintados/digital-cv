@@ -68,11 +68,14 @@ const { tool, title, desc, impact } = Astro.props;
     display: inline-flex;
     align-items: center;
     padding: 0.22rem 0.55rem;
-    /* Outline style: ottanio bg + accent border/text.
+    /* Outline style: sfondo trasparente, solo bordo/testo accent.
        Il filled-accent originale falliva WCAG in management (viola → ottanio ~2.65:1)
-       e in creative (arancio → ottanio ~3.2:1). Con ottanio bg l'accent text
-       supera sempre 4.5:1 su tutti i 4 mode. */
-    background: rgba(8, 73, 67, 0.95);
+       e in creative (arancio → ottanio ~3.2:1); la versione con bg ottanio pieno
+       risolveva il contrasto ma copriva il knolling sotto. Il badge sta sempre
+       sopra lo sfondo ottanio della sezione (mai su contenuto saturo), quindi
+       l'accent text supera comunque 4.5:1 su tutti i 4 mode anche trasparente —
+       non reintrodurre un bg pieno senza riverificare il contrasto. */
+    background: transparent;
     border: 1px solid color-mix(in srgb, var(--color-accent) 60%, transparent);
     border-radius: var(--radius-4);
     color: var(--color-accent);

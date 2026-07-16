@@ -1741,3 +1741,71 @@ if (skillsViewButtons.length) {
 
 // (Lazy-load di SkillForceGraph + listener dei bottoni vista skill: vedi
 // ensureGraphLoaded/applySkillsView più in alto in questo file.)
+
+// ── Feedback carousel — scroll-snap orizzontale ─────────────────────────
+// Nativo su touch/trackpad (swipe). Su desktop aggiunge: redirect della
+// rotellina del mouse (che manda solo deltaY) in scroll orizzontale
+// mentre il cursore è sopra il carousel, frecce prev/next, e un fade ai
+// bordi (--fade-l/--fade-r, CSS) che segnala "c'è altro" e si spegne da
+// solo a inizio/fine corsa.
+{
+  const track = document.querySelector<HTMLElement>("[data-feedback-track]");
+  const nav = document.querySelector<HTMLElement>("[data-feedback-nav]");
+  const prevBtn = document.querySelector<HTMLButtonElement>("[data-feedback-prev]");
+  const nextBtn = document.querySelector<HTMLButtonElement>("[data-feedback-next]");
+
+  if (track) {
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    const maxScroll = () => track.scrollWidth - track.clientWidth;
+
+    function updateFeedbackState() {
+      const max = maxScroll();
+      const scrollable = max > 4;
+      // Frecce visibili solo se il carousel ha davvero altro da scorrere —
+      // con poche card su schermi larghi potrebbero starci già tutte.
+      nav?.setAttribute("data-visible", String(scrollable));
+      if (prevBtn) prevBtn.disabled = !scrollable || track.scrollLeft <= 4;
+      if (nextBtn) nextBtn.disabled = !scrollable || track.scrollLeft >= max - 4;
+      track.style.setProperty("--fade-l", track.scrollLeft > 4 ? "1" : "0");
+      track.style.setProperty("--fade-r", track.scrollLeft < max - 4 ? "1" : "0");
+    }
+
+    function scrollFeedbackByCard(dir: 1 | -1) {
+      const card = track.querySelector<HTMLElement>(".feedback-card");
+      const gap = 16; // 1rem — stesso valore del gap CSS di .feedback-track
+      const step = card ? card.getBoundingClientRect().width + gap : track.clientWidth * 0.85;
+      track.scrollBy({ left: dir * step, behavior: reducedMotion ? "auto" : "smooth" });
+    }
+
+    prevBtn?.addEventListener("click", () => scrollFeedbackByCard(-1));
+    nextBtn?.addEventListener("click", () => scrollFeedbackByCard(1));
+
+    // Wheel del mouse (non trackpad, che manda già deltaX) diventa scroll
+    // orizzontale mentre il cursore è sul carousel — su desktop senza
+    // trackpad è l'unico modo per scoprire che si scorre di lato. Ai
+    // bordi lascia il controllo alla pagina, non intrappola lo scroll.
+    track.addEventListener(
+      "wheel",
+      (e) => {
+        if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
+        const max = maxScroll();
+        if (max <= 4) return;
+        const atStart = track.scrollLeft <= 4 && e.deltaY < 0;
+        const atEnd = track.scrollLeft >= max - 4 && e.deltaY > 0;
+        if (atStart || atEnd) return;
+        e.preventDefault();
+        track.scrollLeft += e.deltaY;
+      },
+      { passive: false },
+    );
+
+    track.addEventListener("scroll", updateFeedbackState, { passive: true });
+    window.addEventListener("resize", updateFeedbackState);
+    updateFeedbackState();
+    // Le card possono cambiare misura dopo il primo paint (font swap,
+    // reveal) — un secondo check a freddo evita frecce/fade calcolate su
+    // dimensioni non ancora definitive.
+    setTimeout(updateFeedbackState, 400);
+  }
+}

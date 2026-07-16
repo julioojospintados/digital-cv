@@ -855,14 +855,27 @@ const projectsData = cvDataEn.projects.slice(0, 6).map((p) => {
     {
       cvDataEn.feedbacks.length > 0 && (
         <section class="feedback-section reveal" id="feedback" aria-label="What people say">
-          <h2 class="section-title">
-            <span>What people say</span>
-            <span class="section-subtitle">Words from people who worked with me.</span>
-          </h2>
-          <div class="feedback-grid">
+          <div class="feedback-header">
+            <h2 class="section-title">
+              <span>What people say</span>
+              <span class="section-subtitle">Words from people who worked with me.</span>
+            </h2>
+            <!-- Visible only when the carousel actually has more to scroll
+                 (JS: cv-init.ts measures scrollWidth vs clientWidth). Hidden
+                 on mobile: the affordance there is the swipe itself. -->
+            <div class="feedback-nav" data-feedback-nav>
+              <button class="feedback-nav__btn feedback-nav__btn--prev" type="button" data-feedback-prev aria-label="Previous feedback">
+                <span class="feedback-nav__arrow" aria-hidden="true"></span>
+              </button>
+              <button class="feedback-nav__btn feedback-nav__btn--next" type="button" data-feedback-next aria-label="Next feedback">
+                <span class="feedback-nav__arrow" aria-hidden="true"></span>
+              </button>
+            </div>
+          </div>
+          <div class="feedback-track" data-feedback-track tabindex="0" aria-label="Feedback list, scroll for more">
             {cvDataEn.feedbacks.map((f) => (
               <figure class="feedback-card cv-card" data-tags="tech creative human management">
-                {f.quote && <blockquote class="feedback-quote">"{f.quote}"</blockquote>}
+                {f.quote && <blockquote class="feedback-quote">{f.quote}</blockquote>}
                 {!f.quote && f.keywords.length > 0 && (
                   <ul class="feedback-keywords" aria-label={`The words ${f.name} used to describe me`}>
                     {f.keywords.map((k) => (
