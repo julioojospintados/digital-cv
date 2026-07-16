@@ -13,7 +13,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "parse-cv": "node --import tsx/esm scripts/parse-cv.ts"
+    "parse-cv": "node --import tsx/esm scripts/parse-cv.ts",
+    "pdf:cv": "node --import tsx/esm scripts/generate-cv-pdf.ts"
   },
   "keywords": [
     "mcp",
