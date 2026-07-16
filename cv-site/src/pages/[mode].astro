@@ -905,14 +905,27 @@ const heroSummary = heroSummaries[mode] ?? cvData.personal.summary;
     {
       cvData.feedbacks.length > 0 && (
         <section class="feedback-section reveal" id="feedback" aria-label="Cosa dicono di me">
-          <h2 class="section-title">
-            <span>Dicono di me</span>
-            <span class="section-subtitle">Parole di chi ci ha lavorato insieme.</span>
-          </h2>
-          <div class="feedback-grid">
+          <div class="feedback-header">
+            <h2 class="section-title">
+              <span>Dicono di me</span>
+              <span class="section-subtitle">Parole di chi ci ha lavorato insieme.</span>
+            </h2>
+            <!-- Visibili solo se il carousel ha davvero altro da scorrere
+                 (JS: cv-init.ts misura scrollWidth vs clientWidth). Su
+                 mobile restano nascoste: lì l'affordance è lo swipe. -->
+            <div class="feedback-nav" data-feedback-nav>
+              <button class="feedback-nav__btn feedback-nav__btn--prev" type="button" data-feedback-prev aria-label="Feedback precedente">
+                <span class="feedback-nav__arrow" aria-hidden="true"></span>
+              </button>
+              <button class="feedback-nav__btn feedback-nav__btn--next" type="button" data-feedback-next aria-label="Feedback successivo">
+                <span class="feedback-nav__arrow" aria-hidden="true"></span>
+              </button>
+            </div>
+          </div>
+          <div class="feedback-track" data-feedback-track tabindex="0" aria-label="Elenco feedback, scorri per vederne altri">
             {cvData.feedbacks.map((f) => (
               <figure class="feedback-card cv-card" data-tags="tech creative human management">
-                {f.quote && <blockquote class="feedback-quote">"{f.quote}"</blockquote>}
+                {f.quote && <blockquote class="feedback-quote">{f.quote}</blockquote>}
                 {!f.quote && f.keywords.length > 0 && (
                   <ul class="feedback-keywords" aria-label={`Le parole che ${f.name} ha usato per descrivermi`}>
                     {f.keywords.map((k) => (

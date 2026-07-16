@@ -2329,20 +2329,9 @@ export const cvData = {
     {
       name: "Lorenzo Rando",
       role: "Recruiter / Head Hunter",
-      keywords: [
-        "dialettica",
-        "umorismo",
-        "attenzione",
-        "ascolto attivo",
-        "empatia",
-        "creatività",
-        "rispetto",
-        "lealtà",
-        "affidabilità",
-        "sincerità",
-        "curiosità",
-        "assertività",
-      ],
+      quote:
+        "Ho conosciuto Giulio durante un colloquio che doveva durare trenta minuti e ne è durato quasi due ore, perché ogni domanda apriva un ragionamento vero, mai una risposta preparata a tavolino. Ascolta prima di rispondere, ed è una delle poche persone che sa essere diretto senza mai mettere a disagio l'altra persona. Ha una curiosità autentica verso le persone, non solo verso i ruoli da riempire: si percepisce fin dalla prima domanda.",
+      keywords: [],
     },
     {
       name: "Eleonora D'Agostino",
