@@ -5,12 +5,15 @@
  * skill): questa pagina li mostra, non li ridefinisce. I colori letterali
  * qui sotto sono dati documentali (la palette è il contenuto), non stile UI.
  *
- * Layout bento a 6 tile, tutto visibile (niente accordion: la leggibilità
- * viene prima). Ogni tile ha una demo viva della regola che documenta:
- *  - le 4 "luci" cambiano davvero l'accent dell'intera sezione (--ds-accent);
- *  - il motion tile dimostra enter lento / exit veloce al hover;
- *  - il mode tile riproduce i sussurri (opacity, mai display:none).
- * Animazioni solo transform/opacity, hover gated, reduced-motion rispettato.
+ * Layout bento a 6 tile (7/5, knolling: asimmetrico, gap costante, tutto
+ * allineato alla griglia). Ogni tile è una sezione richiudibile in stile
+ * pannello ispezione (Figma): header sempre visibile con indice/titolo/
+ * tagline, corpo con la demo viva e la nota. Di default solo la prima
+ * (Colore) è aperta, le altre sono chiuse, sia su desktop che su mobile:
+ * stesso meccanismo dell'accordion dei cluster esperienza (cv-init.ts),
+ * "chiudi le altre" forzato solo sotto i 900px per non allungare la pagina
+ * a colonna singola. Animazioni solo transform/opacity/max-height, hover
+ * gated, reduced-motion rispettato.
  */
 interface Props {
   lang?: "it" | "en";
@@ -21,27 +24,27 @@ const isEN = lang === "en";
 const t = {
   title: "Design System",
   intro: isEN
-    ? "I set the rules before the components: a fixed teal stage, one accent per mode, two typefaces, motion only where it carries meaning. Every sample below runs on the site's real tokens, and every demo is live: touch it."
-    : "Ho fissato le regole prima dei componenti: palco ottanio fisso, un accent per mode, due famiglie tipografiche, animazione solo dove porta significato. Ogni esempio qui sotto gira sui token reali del sito, e ogni demo è viva: toccala.",
+    ? "I set the rules before the components: a fixed teal stage, one accent per mode, two typefaces, motion only where it carries meaning. Below, the site's real tokens: open a section, every demo is live, touch it."
+    : "Ho fissato le regole prima dei componenti: palco ottanio fisso, un accent per mode, due famiglie tipografiche, animazione solo dove porta significato. Sotto, i token reali del sito: apri una sezione, ogni demo è viva, toccala.",
   colors: isEN ? "Color" : "Colore",
   colorsTag: isEN ? "One stage, four lights." : "Un palco, quattro luci.",
   colorsNote: isEN
-    ? "The teal background never changes. Switching mode only changes the accent, like a stage light: press one and this whole section follows. Every accent has a muted variant recalibrated for WCAG AA contrast (≥4.5:1) on teal."
-    : "Lo sfondo ottanio non cambia mai. Cambiare mode cambia solo l'accent, come una luce di scena: premine una e tutta questa sezione la segue. Ogni accent ha una variante muted ricalibrata per contrasto WCAG AA (≥4.5:1) su ottanio.",
+    ? "The teal background never changes. Mode only changes the accent, like a stage light. Every accent has a muted variant at WCAG AA contrast, ≥4.5:1 on teal."
+    : "Lo sfondo ottanio non cambia mai. Il mode cambia solo l'accent, come una luce di scena. Ogni accent ha una variante muted a contrasto WCAG AA, ≥4.5:1 su ottanio.",
   lightsHint: isEN ? "Press a light" : "Premi una luce",
   type: isEN ? "Typography" : "Tipografia",
   typeTag: isEN ? "Spoken and measured." : "Parlato e misurato.",
   typeNote: isEN
-    ? "Lexend covers everything spoken, titles and body. JetBrains Mono covers everything measured: labels, counts, data, impactScore. Self-hosted via Fontsource, zero external requests; Lexend 800 loads with font-display: block and keeps the preloader flash-free."
-    : "Lexend copre tutto ciò che è parlato, titoli e testo. JetBrains Mono copre tutto ciò che è misurato: label, conteggi, dati, impactScore. Self-hosted via Fontsource, zero richieste esterne; il peso 800 di Lexend carica con font-display: block e tiene il preloader senza flash.",
+    ? "Lexend speaks: titles and body. JetBrains Mono measures: labels, counts, impactScore. Self-hosted via Fontsource, zero external requests."
+    : "Lexend copre il parlato: titoli e testo. JetBrains Mono copre il misurato: label, conteggi, impactScore. Self-hosted via Fontsource, zero richieste esterne.",
   typeScale: isEN
     ? "hero clamp(2rem, 5vw, 4.5rem) · fixed scale --fs-12 → --fs-48 · 12px floor for readable text"
     : "hero clamp(2rem, 5vw, 4.5rem) · scala fissa --fs-12 → --fs-48 · pavimento 12px per il testo che si legge",
   squares: isEN ? "Skill levels" : "Livelli skill",
   squaresTag: isEN ? "Square and glow, never bars." : "Square e glow, mai barre.",
   squaresNote: isEN
-    ? "Percentage bars promise a precision that does not exist. The border grows with the level, 1 to 4px (uniform 1px on mobile, where thick borders crowd the narrow cells), and the glow marks mastery: it lights up on hover or when the skill matches the active mode. Whispers, even here."
-    : "Le barre percentuali promettono una precisione che non esiste. Il bordo cresce col livello, da 1 a 4px (su mobile si uniforma a 1px, i bordi spessi affollano le celle strette), e il glow segna la padronanza: si accende al hover o quando la skill è attinente al mode attivo. Sussurri anche qui.",
+    ? "Percentage bars promise a precision that does not exist. The border grows from 1 to 4px with the level, the glow marks mastery. Whispers, even here."
+    : "Le barre percentuali promettono una precisione che non esiste. Il bordo cresce da 1 a 4px col livello, il glow segna la padronanza. Sussurri anche qui.",
   sqLevels: isEN
     ? ["Basic", "Intermediate", "Advanced", "Expert"]
     : ["Base", "Intermedio", "Avanzato", "Esperto"],
@@ -52,29 +55,29 @@ const t = {
     : "Passa sul binario: entrata lenta (300ms), uscita veloce (150ms).",
   motionRules: isEN
     ? [
-        "UI durations: 150ms for micro-interactions, 300ms for state changes. Beyond 300ms, only hero and preloader.",
-        "Only transform and opacity are animated, both GPU properties. Never width, height or margin.",
-        "Hover effects gated behind (hover: hover), no sticky hovers on touch.",
+        "150ms for micro-interactions, 300ms for state changes. Beyond that, only hero and preloader.",
+        "Only transform and opacity animate. Never width, height or margin.",
+        "Hover gated behind (hover: hover): no sticky hovers on touch.",
         "prefers-reduced-motion always respected: I remove the motion, not the meaning.",
       ]
     : [
-        "Durate UI: 150ms per le micro-interazioni, 300ms per i cambi di stato. Oltre i 300ms solo hero e preloader.",
-        "Si animano solo transform e opacity, proprietà GPU. Mai width, height o margin.",
-        "Hover solo dietro (hover: hover), niente hover appiccicosi su touch.",
+        "150ms per le micro-interazioni, 300ms per i cambi di stato. Oltre, solo hero e preloader.",
+        "Si anima solo transform e opacity, mai width, height o margin.",
+        "Hover dietro (hover: hover): niente hover appiccicosi su touch.",
         "prefers-reduced-motion sempre rispettato: tolgo il movimento, non il significato.",
       ],
   surfaces: isEN ? "Surfaces and signs" : "Superfici e segni",
   surfacesTag: isEN ? "This card is the sample." : "Questa card è il campione.",
   surfacesRules: isEN
     ? [
-        "One SVG icon (touch-icon) applied via CSS mask and currentColor: a single file, tinted by context across all four modes.",
-        "Chevrons are drawn in CSS with rotated borders, never Unicode glyphs: their stroke would depend on the OS font.",
-        "8 knolling objects in WebP, about 15KB each: every mode has its physical counterparts on the table.",
+        "One SVG icon (touch-icon) via CSS mask and currentColor: one file, tinted by context in every mode.",
+        "Chevrons are rotated CSS borders, never Unicode glyphs: the stroke would depend on the OS font.",
+        "8 knolling objects in WebP, about 15KB each: every mode has its counterparts on the table.",
       ]
     : [
-        "Una sola icona SVG (touch-icon) applicata via CSS mask e currentColor: un file unico, tinto dal contesto in tutti e quattro i mode.",
-        "I chevron sono disegnati in CSS con bordi ruotati, mai glifi Unicode: il loro tratto dipenderebbe dal font di sistema.",
-        "8 oggetti knolling in WebP, circa 15KB l'uno: ogni mode ha i suoi corrispettivi fisici sul tavolo.",
+        "Un'icona SVG (touch-icon) via CSS mask e currentColor: un file solo, tinto dal contesto in ogni mode.",
+        "I chevron sono bordi ruotati in CSS, mai glifi Unicode: il tratto dipenderebbe dal font di sistema.",
+        "8 oggetti knolling in WebP, circa 15KB l'uno: ogni mode ha i suoi corrispettivi sul tavolo.",
       ],
   callouts: isEN
     ? { border: "1px --color-border", radius: "1rem --radius-16", surface: "surface rgba(255,255,255,0.02)" }
@@ -82,8 +85,9 @@ const t = {
   modes: "Mode system",
   modesTag: isEN ? "Emphasis, never structure." : "Enfasi, mai struttura.",
   modesNote: isEN
-    ? "Switching mode never changes template or content: active cards come forward, the others drop to low opacity. Whispers, not silences. Pick a mode and watch the cards below."
-    : "Cambiare mode non cambia mai template né contenuti: le card attive avanzano, le altre scendono a bassa opacità. Sussurri, non silenzi. Scegli un mode e guarda le card qui sotto.",
+    ? "Switching mode never changes template or content: active cards come forward, the others stay at low opacity. Whispers, not silences."
+    : "Cambiare mode non cambia mai template né contenuti: le attive avanzano, le altre restano a bassa opacità. Sussurri, non silenzi.",
+  modesHint: isEN ? "Pick a mode" : "Scegli un mode",
 };
 
 const modes = [
@@ -116,139 +120,181 @@ const demoCards = [
 
   <div class="ds__bento">
     <!-- 01 · Colore — le luci cambiano davvero l'accent della sezione -->
-    <article class="ds__tile ds__tile--w7">
-      <span class="ds__wm" aria-hidden="true">01</span>
-      <header class="ds__tile-head">
-        <h3 class="ds__name">{t.colors}</h3>
-        <p class="ds__tagline">{t.colorsTag}</p>
-      </header>
-      <p class="ds__note">{t.colorsNote}</p>
-      <div class="ds__lights" role="group" aria-label={t.lightsHint}>
-        {modes.map((m, i) => (
-          <button
-            type="button"
-            class="ds__light"
-            style={`--light:${m.accent}`}
-            data-ds-light={m.accent}
-            aria-pressed={i === 0 ? "true" : "false"}
-            aria-label={`Accent ${m.key}`}
-          >
-            <span class="ds__light-dot" aria-hidden="true"></span>
-            <span class="ds__light-key">{m.key}</span>
-          </button>
-        ))}
-        <span class="ds__hint" aria-hidden="true">{t.lightsHint} ↑</span>
-      </div>
-      <div class="ds__tokens">
-        {baseTokens.map((tok) => (
-          <div class="ds__swatch">
-            <span class="ds__chip" style={`background:${tok.value}`}></span>
-            <span class="ds__tok">{tok.name}</span>
-            <span class="ds__val">{tok.value} · {tok.note}</span>
+    <article class="ds__tile ds__tile--w7" data-open>
+      <button type="button" class="ds__tile-toggle" id="ds-toggle-colors" aria-controls="ds-body-colors" aria-expanded="true">
+        <span class="ds__idx" aria-hidden="true">01</span>
+        <span class="ds__tile-headtext">
+          <span class="ds__name">{t.colors}</span>
+          <span class="ds__tagline">{t.colorsTag}</span>
+        </span>
+        <span class="ds__chevron" aria-hidden="true"></span>
+      </button>
+      <div class="ds__tile-body" id="ds-body-colors">
+        <div class="ds__tile-body-inner">
+          <p class="ds__note">{t.colorsNote}</p>
+          <div class="ds__lights" role="group" aria-label={t.lightsHint}>
+            {modes.map((m, i) => (
+              <button
+                type="button"
+                class="ds__light"
+                style={`--light:${m.accent}`}
+                data-ds-light={m.accent}
+                aria-pressed={i === 0 ? "true" : "false"}
+                aria-label={`Accent ${m.key}`}
+              >
+                <span class="ds__light-dot" aria-hidden="true"></span>
+                <span class="ds__light-key">{m.key}</span>
+              </button>
+            ))}
+            <span class="ds__hint" aria-hidden="true">{t.lightsHint} ↑</span>
           </div>
-        ))}
+          <div class="ds__tokens">
+            {baseTokens.map((tok) => (
+              <div class="ds__swatch">
+                <span class="ds__chip" style={`background:${tok.value}`}></span>
+                <span class="ds__tok">{tok.name}</span>
+                <span class="ds__val">{tok.value} · {tok.note}</span>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </article>
 
     <!-- 02 · Tipografia -->
     <article class="ds__tile ds__tile--w5">
-      <span class="ds__wm" aria-hidden="true">02</span>
-      <header class="ds__tile-head">
-        <h3 class="ds__name">{t.type}</h3>
-        <p class="ds__tagline">{t.typeTag}</p>
-      </header>
-      <div class="ds__specimen" aria-hidden="true">
-        <span class="ds__specimen-go">
-          <span class="ds__specimen-heavy">GO</span>
-          <span class="ds__specimen-light">GO</span>
+      <button type="button" class="ds__tile-toggle" id="ds-toggle-type" aria-controls="ds-body-type" aria-expanded="false">
+        <span class="ds__idx" aria-hidden="true">02</span>
+        <span class="ds__tile-headtext">
+          <span class="ds__name">{t.type}</span>
+          <span class="ds__tagline">{t.typeTag}</span>
         </span>
-        <span class="ds__specimen-weights">Lexend 400 · 500 · 600 · 700 · <b>800</b></span>
-        <span class="ds__specimen-mono">JetBrains Mono · -87% · 04 / · impactScore</span>
+        <span class="ds__chevron" aria-hidden="true"></span>
+      </button>
+      <div class="ds__tile-body" id="ds-body-type">
+        <div class="ds__tile-body-inner">
+          <div class="ds__specimen" aria-hidden="true">
+            <span class="ds__specimen-go">
+              <span class="ds__specimen-heavy">GO</span>
+              <span class="ds__specimen-light">GO</span>
+            </span>
+            <span class="ds__specimen-weights">Lexend 400 · 500 · 600 · 700 · <b>800</b></span>
+            <span class="ds__specimen-mono">JetBrains Mono · -87% · 04 / · impactScore</span>
+          </div>
+          <p class="ds__note ds__note--tight">{t.typeNote}</p>
+          <p class="ds__val ds__scale-line">{t.typeScale}</p>
+        </div>
       </div>
-      <p class="ds__note ds__note--tight">{t.typeNote}</p>
-      <p class="ds__val ds__scale-line">{t.typeScale}</p>
     </article>
 
     <!-- 03 · Livelli skill -->
     <article class="ds__tile ds__tile--w5">
-      <span class="ds__wm" aria-hidden="true">03</span>
-      <header class="ds__tile-head">
-        <h3 class="ds__name">{t.squares}</h3>
-        <p class="ds__tagline">{t.squaresTag}</p>
-      </header>
-      <div class="ds__squares">
-        {t.sqLevels.map((label, i) => (
-          <div class="ds__square-wrap">
-            <span class:list={["ds__square", { "ds__square--glow": i >= 2 }]} style={`border-width:${i + 1}px`}></span>
-            <span class="ds__val">{label}</span>
-            <span class="ds__val ds__val--dim">{i + 1}px</span>
+      <button type="button" class="ds__tile-toggle" id="ds-toggle-squares" aria-controls="ds-body-squares" aria-expanded="false">
+        <span class="ds__idx" aria-hidden="true">03</span>
+        <span class="ds__tile-headtext">
+          <span class="ds__name">{t.squares}</span>
+          <span class="ds__tagline">{t.squaresTag}</span>
+        </span>
+        <span class="ds__chevron" aria-hidden="true"></span>
+      </button>
+      <div class="ds__tile-body" id="ds-body-squares">
+        <div class="ds__tile-body-inner">
+          <div class="ds__squares">
+            {t.sqLevels.map((label, i) => (
+              <div class="ds__square-wrap">
+                <span class:list={["ds__square", { "ds__square--glow": i >= 2 }]} style={`border-width:${i + 1}px`}></span>
+                <span class="ds__val">{label}</span>
+                <span class="ds__val ds__val--dim">{i + 1}px</span>
+              </div>
+            ))}
           </div>
-        ))}
+          <p class="ds__note ds__note--tight">{t.squaresNote}</p>
+        </div>
       </div>
-      <p class="ds__note ds__note--tight">{t.squaresNote}</p>
     </article>
 
     <!-- 04 · Motion — demo viva enter/exit -->
     <article class="ds__tile ds__tile--w7">
-      <span class="ds__wm" aria-hidden="true">04</span>
-      <header class="ds__tile-head">
-        <h3 class="ds__name">{t.motion}</h3>
-        <p class="ds__tagline">{t.motionTag}</p>
-      </header>
-      <div class="ds__track" aria-hidden="true">
-        <span class="ds__runner"></span>
-        <span class="ds__track-label ds__track-label--in">enter 300ms</span>
-        <span class="ds__track-label ds__track-label--out">exit 150ms</span>
+      <button type="button" class="ds__tile-toggle" id="ds-toggle-motion" aria-controls="ds-body-motion" aria-expanded="false">
+        <span class="ds__idx" aria-hidden="true">04</span>
+        <span class="ds__tile-headtext">
+          <span class="ds__name">{t.motion}</span>
+          <span class="ds__tagline">{t.motionTag}</span>
+        </span>
+        <span class="ds__chevron" aria-hidden="true"></span>
+      </button>
+      <div class="ds__tile-body" id="ds-body-motion">
+        <div class="ds__tile-body-inner">
+          <div class="ds__track" aria-hidden="true">
+            <span class="ds__runner"></span>
+            <span class="ds__track-label ds__track-label--in">enter 300ms</span>
+            <span class="ds__track-label ds__track-label--out">exit 150ms</span>
+          </div>
+          <p class="ds__hint">{t.motionDemoHint}</p>
+          <ul class="ds__rules">
+            {t.motionRules.map((r) => <li>{r}</li>)}
+          </ul>
+          <p class="ds__val ds__scale-line">--duration-micro 150ms · --duration-state 300ms · --ease-standard cubic-bezier(0.4, 0, 0.2, 1)</p>
+        </div>
       </div>
-      <p class="ds__hint">{t.motionDemoHint}</p>
-      <ul class="ds__rules">
-        {t.motionRules.map((r) => <li>{r}</li>)}
-      </ul>
-      <p class="ds__val ds__scale-line">--duration-micro 150ms · --duration-state 300ms · --ease-standard cubic-bezier(0.4, 0, 0.2, 1)</p>
     </article>
 
     <!-- 05 · Superfici — la card si annota da sola -->
-    <article class="ds__tile ds__tile--w5 ds__tile--annotated">
-      <span class="ds__wm" aria-hidden="true">05</span>
-      <span class="ds__callout ds__callout--tl" aria-hidden="true">{t.callouts.radius}</span>
-      <span class="ds__callout ds__callout--r" aria-hidden="true">{t.callouts.border}</span>
-      <span class="ds__callout ds__callout--b" aria-hidden="true">{t.callouts.surface}</span>
-      <header class="ds__tile-head">
-        <h3 class="ds__name">{t.surfaces}</h3>
-        <p class="ds__tagline">{t.surfacesTag}</p>
-      </header>
-      <ul class="ds__rules">
-        {t.surfacesRules.map((r) => <li>{r}</li>)}
-      </ul>
+    <article class="ds__tile ds__tile--w5">
+      <button type="button" class="ds__tile-toggle" id="ds-toggle-surfaces" aria-controls="ds-body-surfaces" aria-expanded="false">
+        <span class="ds__idx" aria-hidden="true">05</span>
+        <span class="ds__tile-headtext">
+          <span class="ds__name">{t.surfaces}</span>
+          <span class="ds__tagline">{t.surfacesTag}</span>
+        </span>
+        <span class="ds__chevron" aria-hidden="true"></span>
+      </button>
+      <div class="ds__tile-body" id="ds-body-surfaces">
+        <div class="ds__tile-body-inner ds__tile-body-inner--annotated">
+          <span class="ds__callout ds__callout--tl" aria-hidden="true">{t.callouts.radius}</span>
+          <span class="ds__callout ds__callout--r" aria-hidden="true">{t.callouts.border}</span>
+          <span class="ds__callout ds__callout--b" aria-hidden="true">{t.callouts.surface}</span>
+          <ul class="ds__rules">
+            {t.surfacesRules.map((r) => <li>{r}</li>)}
+          </ul>
+        </div>
+      </div>
     </article>
 
     <!-- 06 · Mode system — sussurri cliccabili -->
     <article class="ds__tile ds__tile--w7">
-      <span class="ds__wm" aria-hidden="true">06</span>
-      <header class="ds__tile-head">
-        <h3 class="ds__name">{t.modes}</h3>
-        <p class="ds__tagline">{t.modesTag}</p>
-      </header>
-      <p class="ds__note">{t.modesNote}</p>
-      <div class="ds__mode-pills" role="group" aria-label="Mode demo">
-        {modes.map((m, i) => (
-          <button
-            type="button"
-            class="ds__mode-pill"
-            style={`--pill-accent:${m.accent}`}
-            data-ds-mode={m.key}
-            aria-pressed={i === 0 ? "true" : "false"}
-          >{m.key}</button>
-        ))}
-      </div>
-      <div class="ds__demo-cards" data-ds-demo="tech">
-        {demoCards.map((c) => (
-          <div class="ds__demo-card" data-demo-mode={c.mode}>
-            <span class="ds__demo-dot" aria-hidden="true"></span>
-            <span class="ds__tok">{c.label}</span>
-            <span class="ds__val">{c.mode}</span>
+      <button type="button" class="ds__tile-toggle" id="ds-toggle-modes" aria-controls="ds-body-modes" aria-expanded="false">
+        <span class="ds__idx" aria-hidden="true">06</span>
+        <span class="ds__tile-headtext">
+          <span class="ds__name">{t.modes}</span>
+          <span class="ds__tagline">{t.modesTag}</span>
+        </span>
+        <span class="ds__chevron" aria-hidden="true"></span>
+      </button>
+      <div class="ds__tile-body" id="ds-body-modes">
+        <div class="ds__tile-body-inner">
+          <p class="ds__note">{t.modesNote}</p>
+          <div class="ds__mode-pills" role="group" aria-label={t.modesHint}>
+            {modes.map((m, i) => (
+              <button
+                type="button"
+                class="ds__mode-pill"
+                style={`--pill-accent:${m.accent}`}
+                data-ds-mode={m.key}
+                aria-pressed={i === 0 ? "true" : "false"}
+              >{m.key}</button>
+            ))}
           </div>
-        ))}
+          <div class="ds__demo-cards" data-ds-demo="tech">
+            {demoCards.map((c) => (
+              <div class="ds__demo-card" data-demo-mode={c.mode}>
+                <span class="ds__demo-dot" aria-hidden="true"></span>
+                <span class="ds__tok">{c.label}</span>
+                <span class="ds__val">{c.mode}</span>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </article>
   </div>
@@ -256,7 +302,7 @@ const demoCards = [
 
 <script>
   // Demo vive del design system: nessuna dipendenza, solo class/attribute
-  // toggling. Le transizioni le fa il CSS (transform/opacity).
+  // toggling. Le transizioni le fa il CSS (transform/opacity/max-height).
   const ds = document.getElementById("design-system");
   if (ds) {
     // 01 · Luci: l'accent scelto guida tutta la sezione via --ds-accent
@@ -275,6 +321,37 @@ const demoCards = [
       pill.addEventListener("click", () => {
         if (demo) demo.dataset.dsDemo = pill.dataset.dsMode;
         pills.forEach((p) => p.setAttribute("aria-pressed", String(p === pill)));
+      });
+    });
+
+    // Accordion dei tile: stesso meccanismo di .exp-cluster (cv-init.ts).
+    // Sotto i 900px (breakpoint del bento) aprirne uno chiude gli altri,
+    // così la pagina a colonna singola resta corta. Sopra i 900px più tile
+    // possono restare aperti insieme, come i pannelli di Figma.
+    const tiles = Array.from(ds.querySelectorAll<HTMLElement>(".ds__tile"));
+    tiles.forEach((tile) => {
+      const toggle = tile.querySelector<HTMLButtonElement>(".ds__tile-toggle");
+      if (!toggle) return;
+      toggle.addEventListener("click", () => {
+        const isOpen = tile.hasAttribute("data-open");
+        const isMobile = window.matchMedia("(max-width: 56.24rem)").matches;
+
+        if (isOpen) {
+          tile.removeAttribute("data-open");
+          toggle.setAttribute("aria-expanded", "false");
+          return;
+        }
+
+        if (isMobile) {
+          tiles.forEach((other) => {
+            if (other === tile) return;
+            other.removeAttribute("data-open");
+            other.querySelector<HTMLButtonElement>(".ds__tile-toggle")?.setAttribute("aria-expanded", "false");
+          });
+        }
+
+        tile.setAttribute("data-open", "");
+        toggle.setAttribute("aria-expanded", "true");
       });
     });
   }
@@ -296,7 +373,7 @@ const demoCards = [
   .ds__bento {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 1rem;
+    gap: 0.75rem;
   }
 
   @media (min-width: 56.25rem) {
@@ -307,6 +384,9 @@ const demoCards = [
       --bento-w: min(72rem, 100vw - 3rem);
       width: var(--bento-w);
       margin-left: calc(50% - var(--bento-w) / 2);
+      /* I tile aperti/chiusi hanno altezze diverse: ogni riga segue la
+         propria altezza, non si stira dietro al vicino più alto. */
+      align-items: start;
     }
 
     .ds__tile--w7 {
@@ -324,49 +404,75 @@ const demoCards = [
     border: 1px solid var(--color-border);
     border-radius: var(--radius-16);
     background: rgba(255, 255, 255, 0.02);
-    padding: 1.5rem 1.5rem 1.6rem;
     transition:
-      transform var(--duration-state) var(--ease-standard),
       border-color var(--duration-state) var(--ease-standard);
   }
 
   @media (hover: hover) and (pointer: fine) {
     .ds__tile:hover {
-      transform: translateY(-3px);
       border-color: color-mix(in srgb, var(--ds-accent) 45%, transparent);
     }
   }
 
-  /* Numero watermark: outlined, come le sigle giganti della home */
-  .ds__wm {
-    position: absolute;
-    top: 0.4rem;
-    right: 0.9rem;
-    font-family: var(--font-display);
-    font-size: clamp(4rem, 8vw, 6rem);
-    font-weight: 800;
-    line-height: 1;
-    letter-spacing: -0.05em;
-    color: transparent;
-    -webkit-text-stroke: 1px color-mix(in srgb, var(--ds-accent) 28%, transparent);
-    pointer-events: none;
-    user-select: none;
-    transition: -webkit-text-stroke-color var(--duration-state) var(--ease-standard);
+  .ds__tile[data-open] {
+    border-color: color-mix(in srgb, var(--ds-accent) 30%, var(--color-border));
   }
 
-  .ds__tile-head {
-    margin-bottom: 0.9rem;
-    padding-right: 4.5rem;
+  /* ── Header/toggle: riga sempre visibile, stile pannello ispezione ── */
+  .ds__tile-toggle {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 0.85rem;
+    padding: 1rem 1.15rem;
+    background: none;
+    border: none;
+    text-align: left;
+    /* Cursore nativo nascosto: lo indica il cursore custom (Layout.astro) */
+    cursor: none;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .ds__tile-toggle:hover {
+      background: rgba(255, 255, 255, 0.03);
+    }
+  }
+
+  .ds__idx {
+    font-family: var(--font-mono);
+    font-size: var(--fs-16);
+    font-weight: 800;
+    line-height: 1;
+    flex-shrink: 0;
+    color: rgba(192, 220, 215, 0.45);
+    transition: color var(--duration-state) var(--ease-standard);
+  }
+
+  .ds__idx::after {
+    content: " /";
+    font-weight: 400;
+    color: rgba(192, 220, 215, 0.35);
+  }
+
+  .ds__tile[data-open] .ds__idx {
+    color: var(--ds-accent);
+  }
+
+  .ds__tile-headtext {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
   }
 
   .ds__name {
     font-family: var(--font-display);
-    font-size: var(--fs-24);
+    font-size: var(--fs-18);
     font-weight: 700;
     letter-spacing: -0.01em;
-    line-height: 1.15;
+    line-height: 1.2;
     color: var(--color-text-primary);
-    margin: 0 0 0.25rem;
   }
 
   .ds__tagline {
@@ -376,8 +482,50 @@ const demoCards = [
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--ds-accent);
-    margin: 0;
     transition: color var(--duration-state) var(--ease-standard);
+  }
+
+  /* Chevron in CSS puro (bordo ad angolo ruotato): stessa tecnica di
+     .exp-cluster__chevron in cv-page.css, mai un glifo Unicode. */
+  .ds__chevron {
+    width: 0.5rem;
+    height: 0.5rem;
+    flex-shrink: 0;
+    border: solid rgba(192, 220, 215, 0.55);
+    border-width: 0 1.5px 1.5px 0;
+    rotate: 45deg;
+    transition:
+      rotate 0.4s var(--ease-standard),
+      border-color 0.25s ease;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .ds__tile-toggle:hover .ds__chevron {
+      border-color: var(--color-text-primary);
+    }
+  }
+
+  .ds__tile[data-open] .ds__chevron {
+    rotate: 225deg;
+    border-color: var(--ds-accent);
+  }
+
+  /* ── Body: collassa in altezza, il padding vive sul figlio interno così
+     non lascia un bordo/spazio residuo a tile chiuso (stessa tecnica di
+     .exp-cluster__body + .exp-grid). ── */
+  .ds__tile-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.55s var(--ease-standard);
+  }
+
+  .ds__tile[data-open] .ds__tile-body {
+    max-height: 3000px;
+  }
+
+  .ds__tile-body-inner {
+    border-top: 1px solid var(--color-border);
+    padding: 0.9rem 1.15rem 1.25rem;
   }
 
   .ds__note {
@@ -418,7 +566,7 @@ const demoCards = [
     background: none;
     border: none;
     padding: 0.35rem;
-    cursor: pointer;
+    cursor: none;
     transition: transform var(--duration-micro) var(--ease-standard);
   }
 
@@ -467,18 +615,12 @@ const demoCards = [
     margin: 0 0 0 0.5rem;
   }
 
+  /* Lista token in righe, stile pannello variabili: label mono a sinistra,
+     valore a destra, un separatore 1px per riga (Figma, non più chip 2 col). */
   .ds__tokens {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 0.5rem;
+    display: flex;
+    flex-direction: column;
     border-top: 1px solid var(--color-border);
-    padding-top: 1rem;
-  }
-
-  @media (min-width: 40rem) {
-    .ds__tokens {
-      grid-template-columns: 1fr 1fr;
-    }
   }
 
   .ds__swatch {
@@ -486,7 +628,17 @@ const demoCards = [
     align-items: center;
     gap: 0.6rem;
     min-width: 0;
-    flex-wrap: wrap;
+    padding: 0.55rem 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .ds__swatch:last-child {
+    border-bottom: none;
+  }
+
+  .ds__swatch .ds__val {
+    margin-left: auto;
+    text-align: right;
   }
 
   .ds__chip {
@@ -503,6 +655,7 @@ const demoCards = [
     font-weight: 700;
     letter-spacing: 0.06em;
     color: var(--color-text-primary);
+    flex-shrink: 0;
   }
 
   .ds__val {
@@ -712,9 +865,10 @@ const demoCards = [
     transition: background var(--duration-state) var(--ease-standard);
   }
 
-  /* ── 05 · Superfici: callout auto-referenziali ── */
-  .ds__tile--annotated {
-    padding-bottom: 2.6rem;
+  /* ── 05 · Superfici: callout auto-referenziali, ancorati al corpo ── */
+  .ds__tile-body-inner--annotated {
+    position: relative;
+    padding: 1.6rem 2.4rem 2.4rem 1.5rem;
   }
 
   .ds__callout {
@@ -728,8 +882,8 @@ const demoCards = [
   }
 
   .ds__callout--tl {
-    top: 0.55rem;
-    left: 1rem;
+    top: 0.6rem;
+    left: 1.5rem;
   }
 
   .ds__callout--r {
@@ -740,16 +894,8 @@ const demoCards = [
   }
 
   .ds__callout--b {
-    bottom: 0.55rem;
-    left: 1rem;
-  }
-
-  .ds__tile--annotated .ds__tile-head {
-    margin-top: 1.1rem;
-  }
-
-  .ds__tile--annotated .ds__wm {
-    top: 1.6rem;
+    bottom: 0.6rem;
+    left: 1.5rem;
   }
 
   /* ── 06 · Mode demo: sussurri ── */
@@ -771,7 +917,7 @@ const demoCards = [
     border: 1px solid var(--pill-accent);
     border-radius: 2rem;
     padding: 0.32rem 0.85rem;
-    cursor: pointer;
+    cursor: none;
     opacity: 0.4;
     transition:
       opacity var(--duration-state) var(--ease-standard),
@@ -842,6 +988,8 @@ const demoCards = [
   /* ── Reduced motion: resta tutto leggibile, sparisce il movimento ── */
   @media (prefers-reduced-motion: reduce) {
     .ds__tile,
+    .ds__tile-body,
+    .ds__chevron,
     .ds__runner,
     .ds__square,
     .ds__specimen-heavy,
@@ -853,12 +1001,16 @@ const demoCards = [
   }
 
   @media (max-width: 40rem) {
-    .ds__tile {
-      padding: 1.2rem 1.1rem 1.3rem;
+    .ds__tile-toggle {
+      padding: 0.9rem 1rem;
     }
 
-    .ds__wm {
-      font-size: 3.5rem;
+    .ds__tile-body-inner {
+      padding: 0.85rem 1rem 1.1rem;
+    }
+
+    .ds__tile-body-inner--annotated {
+      padding: 1.5rem 2.1rem 2.2rem 1.25rem;
     }
   }
 </style>

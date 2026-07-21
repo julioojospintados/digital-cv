@@ -124,6 +124,7 @@ src/                      ← MCP server + HTTP API (Node.js / TypeScript)
     app.ts                ← Hono app factory + error handler + /openapi.json
     errors.ts             ← Typed HTTP error classes
     routes/               ← One file per feature route
+      qr.ts               ← /api/qr — QR code generation (JSON base64, PNG, SVG)
   tools/index.ts          ← MCP tool registry
   tools/echo.ts           ← Example tool — copy as template
   resources/index.ts      ← MCP resource registry
@@ -132,28 +133,60 @@ src/                      ← MCP server + HTTP API (Node.js / TypeScript)
 
 cv-site/                  ← Astro site (the actual CV)
   DESIGN.md               ← Full visual system specification
+  public/
+    cv/                   ← Generated CV PDFs (IT + EN) — output of scripts/generate-cv-pdf.ts
+    qr/                   ← Static QR codes for the site (light/dark, signature, card variants)
+    photos/               ← Personal photos (trip/, belongings/) for the "About me" drawer
+    knolling/             ← Knolling object images (webp)
+    fonts/Lexend/         ← Preloaded 800-weight woff2 (font-display: block)
   src/
     pages/
       index.astro         ← Entry point with GO preloader
       home.astro          ← Landing with the 4 mode-cards (knolling)
       [mode].astro        ← CV page for /tech /creative /human /management
       cv.astro            ← Legacy — redirects to /tech
-      en/cv.astro         ← English CV
+      work/index.astro    ← Case study index
+      work/[slug].astro   ← Project case studies
       en/index.astro      ← English entry point
+      en/cv.astro         ← English CV (static page — mode is client-side only, no mode in path)
+      en/work/            ← English case studies (index.astro + [slug].astro)
     components/           ← Static Astro components
+      ContactFooter.astro ← Shared contact footer
+      WorkDesignSystem.astro ← Design system section inside /work case studies
       cards/              ← Reusable card components
         ExpCard.astro     ← Experience card (mode tags, impactScore, company logo)
         AiCard.astro      ← AI-enhanced workflow card (impactScore badge)
         ProjectCard.astro ← Project card (tech stack, links)
         SkillSquare.astro ← Skill square with glow (NO progress bars)
         SoftItem.astro    ← Soft / transversal skill item
+        WorkIndexCard.astro ← Case study index card
     islands/              ← Lit interactive web components
       GoLogo.lit.ts       ← <go-logo>: animated logo, click = reset to /, mode-reactive color
       FloatingMenu.lit.ts ← <floating-menu>: FAB with contact/feedback links
-      SkillForceGraph.lit.ts ← <skill-force-graph>: D3 force-directed skill network
+      SkillForceGraph.lit.ts ← <skill-force-graph>: D3 force-directed skill network (lazy-loaded)
       stores/modeStore.ts ← NanoStore for global mode state (tech/creative/human/management)
-    styles/global.css     ← CSS custom properties for 4 modes
-    layouts/Layout.astro  ← Base layout
+    lib/
+      exp-clusters.ts     ← Shared experience-cluster definitions (IT/EN labels, exp+proj refs)
+    scripts/              ← Shared client-side logic (vanilla TS + GSAP)
+      cv-init.ts          ← CV page init: mode switch, scroll, accordions, feedback carousel
+      index-init.ts       ← Home init: preloader, knolling, mode cards, launch journey
+      mode-helpers.ts     ← Pure mode-system functions (tested in mode-helpers.test.ts)
+      work-journey.ts     ← /work page animations
+      memory-drawer.ts    ← "About me" photo/story drawer (3D page-flip)
+      intro-seen.ts       ← sessionStorage flag to skip the GO intro on return visits
+    styles/
+      global.css          ← CSS custom properties for 4 modes, reset, cursor, focus
+      cv-page.css         ← CV page styles ([mode].astro / en/cv.astro)
+      index-page.css      ← Home/entry styles
+      work-page.css       ← /work page styles
+    layouts/Layout.astro  ← Base layout (head/SEO/JSON-LD, fonts, Lenis, custom cursor, FAB)
+
+scripts/                  ← Root utility scripts (Node)
+  parse-cv.ts             ← Parse source CV data
+  generate-cv-pdf.ts      ← Render the knolling CV to A4 PDFs with QR (npm run pdf:cv)
+  gen-og-image.mjs        ← Generate the Open Graph image
+  qa-mobile.js            ← Responsive QA via Playwright
+  record-demo-playwright.js ← Record the site demo video
 
 .vscode/
   mcp.json                ← External MCP servers config (VS Code)
