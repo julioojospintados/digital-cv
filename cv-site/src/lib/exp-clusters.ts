@@ -65,7 +65,7 @@ export const PROJ_CARD_META: Record<
     endYear: "2018",
     location: { it: "Torino", en: "Turin" },
   },
-  // Poesia premiata — nessuna data singola: la card nasconde l'intervallo
+  // Poesia  — nessuna data singola: la card nasconde l'intervallo
   9: {
     role: { it: "Poeta", en: "Poet" },
     location: { it: "Italia · Australia", en: "Italy · Australia" },
@@ -139,8 +139,9 @@ export const EXP_CLUSTER_DEFS: ExpClusterDef[] = [
       { exp: 8 }, // Presentatore & Live Host
       { proj: 3 }, // Film "Double"
       { proj: 7 }, // Veni Vidi Vinyl
-      { proj: 9 }, // Poesia premiata
-      { exp: 15 }, // B-Teatro — attore e improvvisazione
+      { proj: 9 }, // Poesia
+      { exp: 23 }, // B-Teatro — attore e improvvisatore (2013–2019)
+      { exp: 15 }, // B-Teatro — tecnico audio-visivo (2014–2018)
       { exp: 14 }, // None Teatro — insegnante di impro
       { exp: 18 }, // Starbucks — Londra
       { exp: 16 }, // Bestar Hotel — Tulum

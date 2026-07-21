@@ -1,7 +1,7 @@
 # Digital CV — Giulio Occhipinti
 
 **CV digitale interattivo** costruito come un'esperienza di esplorazione narrativa ("The Explorer's Journey").
-Tre modalità — TECH, CREATIVE, HUMAN — raccontano lo stesso profilo da tre prospettive diverse.
+Quattro modalità — TECH, CREATIVE, HUMAN, MANAGEMENT — raccontano lo stesso profilo da quattro prospettive diverse.
 
 Il progetto è composto da due sistemi indipendenti:
 
@@ -39,44 +39,62 @@ Digital_CV/
 │   ├── tsconfig.json
 │   │
 │   ├── public/
-│   │   ├── favicon.ico / favicon.svg
+│   │   ├── favicon.ico / favicon-32.png / favicon-192.png / apple-touch-icon.png
+│   │   ├── og-cover.jpg            ← Immagine Open Graph (1200×630, screenshot reale della home)
+│   │   ├── cv/                     ← PDF generati da scripts/generate-cv-pdf.ts (IT + EN)
+│   │   ├── qr/                     ← QR code statici del sito (varianti chiare/scure, firma, biglietto)
 │   │   ├── fonts/
 │   │   │   └── Lexend/             ← lexend-latin-800-normal.woff2 (preloaded, font-display:block)
-│   │   └── knolling/               ← Asset visivi knolling (camera, compass, laptop, ecc.)
+│   │   ├── knolling/               ← Asset visivi knolling (camera, compass, laptop, ecc.)
+│   │   └── photos/                 ← Foto personali (trip/, belongings/) usate nella sezione "Chi sono"
 │   │
 │   └── src/
 │       ├── components/             ← Componenti Astro statici (server-rendered)
-│       │   ├── HeroSection.astro   ← Sezione hero della landing page
-│       │   ├── Navbar.astro        ← Barra di navigazione con <go-logo>
-│       │   ├── ExperienceSection.astro  ← Card esperienze lavorative
-│       │   ├── EducationSection.astro   ← Card formazione
-│       │   ├── SkillsSection.astro      ← Griglia skill (quadrati, no barre percentuali)
-│       │   ├── ProjectsSection.astro    ← Card progetti
+│       │   ├── ContactFooter.astro ← Footer contatti condiviso tra le pagine
+│       │   ├── WorkDesignSystem.astro ← Sezione design system nei case study /work
 │       │   └── cards/              ← Card riutilizzabili per ogni sezione
 │       │       ├── ExpCard.astro   ← Card esperienza (tag mode, impactScore, logo azienda)
 │       │       ├── AiCard.astro    ← Card AI-enhanced workflow (badge impactScore)
 │       │       ├── ProjectCard.astro ← Card progetto (tech stack, link)
 │       │       ├── SkillSquare.astro  ← Skill quadrato con glow (NO barre %)
-│       │       └── SoftItem.astro  ← Item soft / transversal skill
+│       │       ├── SoftItem.astro  ← Item soft / transversal skill
+│       │       └── WorkIndexCard.astro ← Card indice dei case study /work
 │       │
 │       ├── islands/                ← Lit web components interattivi (client-side)
 │       │   ├── GoLogo.lit.ts       ← <go-logo>: logo animato, click = reset a /, cambia colore per mode
-│       │   ├── FloatingMenu.lit.ts ← <floating-menu>: FAB contatti / feedback / AI-section
-│       │   ├── SkillForceGraph.lit.ts ← <skill-force-graph>: grafo D3 force-directed
+│       │   ├── FloatingMenu.lit.ts ← <floating-menu>: FAB contatti / feedback
+│       │   ├── SkillForceGraph.lit.ts ← <skill-force-graph>: grafo D3 force-directed (lazy-loaded)
 │       │   └── stores/
 │       │       ├── modeStore.ts    ← NanoStore globale per il mode attivo (tech/creative/human/management)
 │       │       └── modeStore.test.ts
 │       │
 │       ├── layouts/
-│       │   └── Layout.astro        ← Layout base (head, font, global CSS, view transitions)
+│       │   └── Layout.astro        ← Layout base (head/SEO/JSON-LD, font, Lenis, cursor custom, FAB)
+│       │
+│       ├── lib/
+│       │   └── exp-clusters.ts     ← Definizione condivisa dei cluster esperienza (IT/EN, refs exp+proj)
 │       │
 │       ├── pages/
-│       │   ├── index.astro         ← Landing page: scelta del mode (TECH / CREATIVE / HUMAN)
-│       │   ├── cv.astro            ← Pagina CV completa in italiano
-│       │   └── en/                 ← (placeholder) Versione inglese del CV
+│       │   ├── index.astro         ← Entry IT: preloader GO + knolling + scelta del mode
+│       │   ├── home.astro          ← Landing alternativa con le 4 mode-card
+│       │   ├── [mode].astro        ← Pagina CV per /tech /creative /human /management
+│       │   ├── cv.astro            ← Legacy — redirect a /tech
+│       │   ├── work/               ← Indice + case study progetti ([slug].astro)
+│       │   └── en/                 ← Versione inglese (index, cv, work/)
+│       │
+│       ├── scripts/                ← Logica client condivisa (vanilla TS + GSAP)
+│       │   ├── cv-init.ts          ← Init pagina CV: mode switch, scroll, accordion, carousel feedback
+│       │   ├── index-init.ts       ← Init home: preloader, knolling, mode card, launch journey
+│       │   ├── mode-helpers.ts     ← Funzioni pure del mode system (testate in mode-helpers.test.ts)
+│       │   ├── work-journey.ts     ← Animazioni pagine /work
+│       │   ├── memory-drawer.ts    ← Drawer foto/racconto "Chi sono" (page-flip 3D)
+│       │   └── intro-seen.ts       ← Flag sessionStorage per saltare l'intro GO al ritorno
 │       │
 │       └── styles/
-│           └── global.css          ← CSS custom properties per i 3 mode (colori, opacity, ecc.)
+│           ├── global.css          ← CSS custom properties per i 4 mode, reset, cursor, focus
+│           ├── cv-page.css         ← Stili pagina CV ([mode].astro / en/cv.astro)
+│           ├── index-page.css      ← Stili home/entry
+│           └── work-page.css       ← Stili pagine /work
 │
 ├── src/                            ← Server MCP + HTTP API (Node.js / TypeScript)
 │   ├── index.ts                    ← Entry point MCP (stdio transport) — non aggiungere HTTP qui
@@ -96,7 +114,9 @@ Digital_CV/
 │   │   ├── app.ts                  ← Hono app factory + error handler + /openapi.json
 │   │   ├── app.test.ts
 │   │   ├── errors.ts               ← Classi di errore HTTP tipizzate (NotFoundError, ValidationError, ecc.)
-│   │   └── errors.test.ts
+│   │   ├── errors.test.ts
+│   │   └── routes/
+│   │       └── qr.ts               ← /api/qr — genera QR code (JSON base64, PNG, SVG)
 │   │
 │   ├── tools/
 │   │   ├── index.ts                ← Registry tool MCP (registra tutti i tool qui)
@@ -113,7 +133,11 @@ Digital_CV/
 │       └── logger.ts               ← Logger MCP-safe (scrive su stderr, mai su stdout)
 │
 ├── scripts/
-│   └── parse-cv.ts                 ← Script per estrarre/parsare dati dal CV sorgente
+│   ├── parse-cv.ts                 ← Estrae/parsa dati dal CV sorgente
+│   ├── generate-cv-pdf.ts          ← Genera il CV knolling in PDF A4 con QR (npm run pdf:cv)
+│   ├── gen-og-image.mjs            ← Genera l'immagine Open Graph dalla home
+│   ├── qa-mobile.js                ← QA responsive via Playwright
+│   └── record-demo-playwright.js   ← Registra la demo video del sito
 │
 ├── _cv-source/
 │   └── extracted-text.txt          ← Testo grezzo estratto dal CV originale (sorgente dati)
@@ -171,20 +195,26 @@ Digital_CV/
 
 ### Sito CV (`cv-site/`)
 
-| Comando           | Azione                             |
-| ----------------- | ---------------------------------- |
-| `npm run dev`     | Dev server Astro con hot reload    |
-| `npm run build`   | Build statica produzione → `dist/` |
-| `npm run preview` | Anteprima del build statico        |
+| Comando           | Azione                                             |
+| ----------------- | -------------------------------------------------- |
+| `npm run dev`     | Dev server Astro con hot reload                    |
+| `npm run build`   | Build statica produzione → `dist/`                 |
+| `npm run preview` | Anteprima del build statico                        |
+| `npm test`        | Test Vitest (`mode-helpers`, `modeStore`)          |
 
-### Server MCP / HTTP (root)
+### Server MCP / HTTP + utility (root)
 
-| Comando               | Azione                                 |
-| --------------------- | -------------------------------------- |
-| `npm run build`       | Compila TypeScript → `dist/`           |
-| `npm run dev`         | Watch mode (ricompila automaticamente) |
-| `npm start`           | Avvia il server compilato              |
-| `npm run build:start` | Build + avvio in un comando            |
+| Comando                    | Azione                                          |
+| -------------------------- | ----------------------------------------------- |
+| `npm run build`            | Compila TypeScript → `dist/`                    |
+| `npm run dev`              | Watch mode (ricompila automaticamente)          |
+| `npm start`                | Avvia il server MCP compilato (stdio)           |
+| `npm run build:start`      | Build + avvio MCP in un comando                 |
+| `npm run http:start`       | Avvia il server HTTP (Hono)                     |
+| `npm run http:build:start` | Build + avvio HTTP in un comando                |
+| `npm test`                 | Test Vitest (`src/`)                            |
+| `npm run parse-cv`         | Estrae/parsa dati dal CV sorgente               |
+| `npm run pdf:cv`           | Genera i PDF del CV (IT + EN) in `cv-site/public/cv/` |
 
 ---
 
@@ -246,17 +276,13 @@ Configurati in `.vscode/mcp.json` (Copilot/VS Code):
 
 | Server                | Stato     | Cosa fa                                             |
 | --------------------- | --------- | --------------------------------------------------- |
-| `mcp-base-template`   | ✅ attivo | Server MCP locale — espone cv.ts come tool/resource |
+| `mcp-base-template`   | ✅ attivo | Server MCP locale del progetto (vedi `src/`)        |
 | `memory`              | ✅ attivo | Knowledge graph persistente tra sessioni            |
 | `sequential-thinking` | ✅ attivo | Ragionamento strutturato step-by-step               |
-| `filesystem`          | ✅ attivo | Lettura/scrittura file nel workspace                |
-| `github`              | ✅ attivo | Repos, issues, PR, branch, commit                   |
-| `gitlab`              | ✅ attivo | Repos, MR, issues, pipelines                        |
 | `playwright`          | ✅ attivo | Browser automation, screenshot, E2E                 |
-| `google-maps`         | ✅ attivo | Geocoding, places, directions, distance matrix      |
-
-Server commentati (attivabili rimuovendo `//`): `fetch`, `postgres`, `sqlite`, `git`, `context7`,
-`tavily`, `n8n`, `notion`, `figma`, `office-word/excel/powerpoint`, `task-master`, `tam`, `fred`.
+| `github`              | ✅ attivo | Repos, issues, PR, branch, commit                   |
+| `gsc`                 | ✅ attivo | Google Search Console (SEO, sitemap, indexing)      |
+| `vercel`              | ✅ attivo | Deploy e progetti Vercel                            |
 
 Claude Code legge invece `.mcp.json` (root del progetto, non `.vscode/`): solo `mcp-base-template` e `sequential-thinking`.
 

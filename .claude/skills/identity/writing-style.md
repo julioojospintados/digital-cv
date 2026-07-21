@@ -61,6 +61,41 @@ Se il contesto richiede ironia, umorismo o una nota di colore, applica queste re
 
 ---
 
+## 6. PROTOCOLLO DI UMANIZZAZIONE (integrato il 2026-07-16 da "prompt_umanizzazione_cv.md")
+
+Tre passaggi da applicare, in quest'ordine, a ogni testo nuovo o revisionato. Non sono prompt da incollare: sono i controlli che chi scrive esegue direttamente.
+
+### Passo 1. Rendilo incisivo (descrizioni di ruolo, punti elenco, card)
+
+- Chi legge un CV dedica pochi secondi alla prima scansione. Taglia tutto ciò che è debole, troppo ragionato o dimenticabile.
+- Ogni frase deve avere peso. Ogni parola deve guadagnarsi il suo posto. Se una frase sopravvive solo perché "suona professionale", va eliminata.
+- Isola i fatti concreti prima di scrivere: numeri, tecnologie, risultati, contesti reali. Il testo si costruisce intorno a quelli.
+
+### Passo 2. Il test del lettore scettico (bio, introduzioni, summary)
+
+- Rileggi frase per frase come un lettore che nota subito quando un testo è troppo levigato o artificiale.
+- Riscrivi tutto ciò che suona costruito, troppo editato o innaturalmente preciso. La prova: la diresti ad alta voce a una persona vera? Se no, riscrivila come la diresti.
+- Elimina l'autocelebrazione travestita da descrizione. Le banned words della sezione 2 sono il primo bersaglio, ma il test vale anche per le frasi formalmente pulite che nessuno pronuncerebbe.
+
+### Passo 3. Elimina gli schemi da AI (omogeneizzazione finale, tutto il testo)
+
+- Varia la lunghezza e la struttura delle frasi. Tre frasi consecutive con lo stesso ritmo o la stessa costruzione sono un pattern da rompere.
+- Sciogli le triadi automatiche ("X, Y e Z" usata come riempitivo ritmico), i parallelismi perfetti e i raccordi da template ("non solo... ma anche", "che si tratti di... o di", "in un mondo in cui").
+- Ogni parola deve sembrare scelta sul momento, non prodotta da un modello. Se due frasi vicine dicono la stessa cosa con parole diverse, una delle due è di troppo.
+
+### Con cautela: voce e grezzo (SOLO bio, presentazioni personali, narrativa dei case study)
+
+- Nei testi personali il tono può farsi più diretto e parlato: opinioni genuine, piccole asimmetrie, cambi di ritmo naturali. Mai nelle sezioni tecniche o nei riepiloghi competenze.
+- Un punto di vista chiaro batte il tono neutro che cerca di piacere a tutti. Il deadpan della sezione 5 è lo strumento giusto quando serve colore.
+
+### Ordine di lavorazione per le revisioni
+
+1. Prima il taglio (Passo 1) per isolare i fatti.
+2. Poi il test scettico (Passo 2) sulle parti discorsive.
+3. Alla fine l'omogeneizzazione anti pattern (Passo 3) su tutto il risultato.
+
+---
+
 ## Nota operativa per i testi del sito (decisioni 2026-07-11)
 
 - Il trattino lungo `—` usato come interruzione nei testi discorsivi rientra nella regola "niente trattini": va sostituito con virgola, due punti o punto fermo.

@@ -27,8 +27,11 @@ export const cvDataEn = {
   personal: {
     name: "Giulio Occhipinti",
     title: "Digital Innovation Consultant & Technical Partner for businesses of all sizes",
+    // Rendered ONLY in the application PDF (generate-cv-pdf.ts): the reader
+    // is a recruiter, not a client. Voice chosen by the user on 2026-07-16:
+    // the person first, the proof after (posizionamento-ux-ui-first).
     summary:
-      "I support businesses of all sizes across three integrated pillars: Design (UX/UI, IBM and SkillUp certifications), Technology (Angular, Lit, MCP, Node.js) and Method (lean Agile, short sprints, team autonomy). I have designed and built web interfaces for over 6 years in enterprise contexts (Intesa San Paolo, Aruba, Rai Pubblicità). I choose the tool based on the problem and I have worked in 5 countries. I don't deliver slide decks: I get inside the business, understand the real problem, build the solution and run it.",
+      "I came to design by a route no manual describes: theatre, stages, photography, 5 countries and over 6 years of enterprise frontend (Intesa San Paolo, Aruba, Rai Pubblicità). Today I design interfaces with IBM and SkillUp certifications in UX/UI, work in short sprints and use AI inside the workflow. I can build what I design: that is the difference between a mockup and a product.",
     location: "Turin, Italy",
     age: 36,
     avatar: "",
@@ -276,7 +279,7 @@ export const cvDataEn = {
       location: "Tuscany, Italy",
       remote: false,
       description:
-        "I assist the lead videographer in video production for high-end international weddings in Tuscany, a sector demanding extreme attention to detail.",
+        "I assist the lead videographer in video production for high-end international weddings in Tuscany. A wedding cannot be reshot: every moment has to be captured right the first time.",
       highlights: [
         "I shot ceremonies with hundreds of international guests as second operator.",
         "I worked on multi-day events in multicultural contexts.",
@@ -346,7 +349,7 @@ export const cvDataEn = {
       location: "Milan, Italy",
       remote: false,
       description:
-        "I worked externally with Satispay during a fast-growth phase, inside processes still evolving and with deliveries of immediate impact.",
+        "I worked externally with Satispay during a fast-growth phase: processes changing week to week and deliveries going straight to production.",
       highlights: [],
       skills: ["Fintech", "Startup mindset", "Digital communication"],
     },
@@ -354,11 +357,11 @@ export const cvDataEn = {
       company: "Cultural festivals and events",
       role: "MC & Live Host",
       startDate: "2015-01",
-      endDate: "present",
+      endDate: "2024-12",
       location: "Italy",
       remote: false,
       description:
-        "I host cultural festivals and live shows across Italy and solve on-stage surprises with theatre improvisation techniques.",
+        "I hosted cultural festivals and live shows around Italy, on and off: rarely for a contract, mostly for the pleasure of being on stage. On-stage surprises got solved with theatre improvisation.",
       highlights: [
         "I hosted multidisciplinary cultural festivals (music, art, theatre).",
         "I moderated panels and talks with international guests.",
@@ -392,7 +395,7 @@ export const cvDataEn = {
       location: "Chieri, Turin",
       remote: false,
       description:
-        "I wrote local news and cultural events for the Corriere di Chieri. There I learned to turn raw information into readable stories, a skill I still use in copy and technical documentation.",
+        "I wrote local news and cultural events for the Corriere di Chieri: raw information to turn into readable pieces, on a weekly paper's deadlines.",
       highlights: [],
       skills: ["Journalism", "Writing", "Editing", "Editorial work"],
     },
@@ -419,7 +422,7 @@ export const cvDataEn = {
       location: "Turin, Italy",
       remote: false,
       description:
-        "I designed visual materials and brand identity for local clients, combining technical graphic design training with an eye built over years of photography.",
+        "I designed visual materials and brand identity for local clients. Graphic design training gave me the method, photography gave me the eye.",
       highlights: [
         "I designed graphic materials and brand identity for clients in the local and cultural sector.",
         "I applied visual hierarchy and typography principles to print and digital materials.",
@@ -447,8 +450,8 @@ export const cvDataEn = {
     {
       company: "None Teatro",
       role: "Theatre and Improvisation Teacher",
-      startDate: "2016-09",
-      endDate: "2020-02",
+      startDate: "2016-01",
+      endDate: "2016-12",
       location: "None, Turin",
       remote: false,
       description:
@@ -467,23 +470,15 @@ export const cvDataEn = {
     },
     {
       company: "B-Teatro",
-      role: "AV Technician and Actor",
-      startDate: "2014-10",
-      endDate: "2018-02",
+      role: "AV Technician",
+      startDate: "2014-01",
+      endDate: "2018-12",
       location: "Turin, Italy",
       remote: false,
       description:
-        "I ran the audio and lighting for theatre productions. I performed as an actor and improviser in Italy and Luxembourg.",
-      highlights: [
-        "I performed in theatre improvisation shows in Italy and Luxembourg.",
-      ],
-      skills: [
-        "Technical direction",
-        "Audio",
-        "Lighting",
-        "Acting",
-        "Theatre improvisation",
-      ],
+        "I ran the audio and lighting for theatre productions: scene changes in the dark, comic timing to hit to the second and no replay available.",
+      highlights: [],
+      skills: ["Technical direction", "Audio", "Lighting"],
     },
     {
       company: "Bestar Hotel",
@@ -505,7 +500,7 @@ export const cvDataEn = {
       location: "Turin, Italy",
       remote: false,
       description:
-        "I worked across theatre operations, box office and front-of-house at one of Italy's most-visited cinema chains, hundreds of guests a day. That is where my attention to every user touchpoint in UX comes from.",
+        "I worked across theatre operations, box office and front-of-house at one of Italy's most-visited cinema chains: hundreds of guests a day, each with a different problem to solve on the spot.",
       highlights: [],
       skills: ["Customer service", "Audience management", "Theatre operations"],
     },
@@ -541,9 +536,9 @@ export const cvDataEn = {
       location: "Ravenna and Crotone, Italy",
       remote: false,
       description:
-        "I coordinated entertainment teams and programmes at seasonal beach resorts in Ravenna and Crotone, in highly variable seasonal contexts.",
+        "I coordinated entertainment teams and programmes at seasonal beach resorts in Ravenna and Crotone: new staff every season, new guests every week.",
       highlights: [
-        "I coordinated entertainment teams in high-variability, high-pressure seasonal contexts.",
+        "I coordinated entertainment teams under peak-season pressure.",
         "I designed and delivered entertainment programmes for international guests.",
       ],
       skills: [
@@ -562,7 +557,7 @@ export const cvDataEn = {
       location: "Turin, Italy",
       remote: false,
       description:
-        "I worked the counter and supported the kitchen, often on late-night shifts, in a high-pace context with minimal margin for error.",
+        "I worked the counter and supported the kitchen, often on late-night shifts: fast pace, no margin for error.",
       highlights: [],
       skills: [
         "Teamwork",
@@ -610,6 +605,22 @@ export const cvDataEn = {
         "Prototyping",
       ],
       tags: ["creative", "ai-orchestration"],
+    },
+    // Appended like Bambagia: adding here keeps the indices referenced by
+    // exp-clusters.ts (ClusterRef → index into this array) stable.
+    {
+      company: "B-Teatro",
+      role: "Actor and Improviser",
+      startDate: "2013-01",
+      endDate: "2019-12",
+      location: "Turin, Italy",
+      remote: false,
+      description:
+        "I performed as an actor and improviser with B-Teatro, in Italy and Luxembourg. On a stage with no script you learn something that holds everywhere: whatever happens is not up for debate, it is material to use.",
+      highlights: [
+        "I performed in theatre improvisation shows in Italy and Luxembourg.",
+      ],
+      skills: ["Acting", "Theatre improvisation"],
     },
   ] as WorkExperience[],
 
@@ -1152,7 +1163,7 @@ export const cvDataEn = {
     {
       name: "Effective communication",
       description:
-        "I have hosted public events for over 10 years, with theatre training behind me: I convey complex messages clearly, calibrated to any type of audience.",
+        "I have hosted public events for over 10 years, with theatre training behind me: I can explain complex things to very different people without changing the substance.",
       links: [
         { target: "Public speaking", type: "cross-domain" },
         { target: "Theatre and improvisation", type: "conceptual" },
@@ -1187,7 +1198,7 @@ export const cvDataEn = {
     {
       name: "Relational intelligence",
       description:
-        "I build trust with colleagues, clients and counterparts, in high-variability environments: from international customer service to coordinating cross-functional teams.",
+        "I build trust with colleagues, clients and counterparts: from international customer service to coordinating cross-functional teams.",
       links: [
         { target: "Effective communication", type: "conceptual" },
         { target: "Cultural adaptability", type: "conceptual" },
@@ -1242,7 +1253,7 @@ export const cvDataEn = {
     {
       name: "Aesthetic sensibility",
       description:
-        "I have been photographing for over 15 years: that eye translates into sharper UI choices, with a direct impact on brand perception and the quality of the user experience.",
+        "I have been photographing for over 15 years: that eye goes straight into interface choices, where a pixel out of place shows.",
       links: [
         { target: "Applied creativity", type: "conceptual" },
         { target: "Photography", type: "cross-domain" },
@@ -1255,7 +1266,7 @@ export const cvDataEn = {
     {
       name: "T-shaped thinking",
       description:
-        "I bridge engineering (frontend), design (UX/UI) and marketing (SEO/SEM): fewer communication silos, faster time-to-market.",
+        "I bridge engineering (frontend), design (UX/UI) and marketing (SEO/SEM): fewer misunderstandings between departments, faster deliveries.",
       links: [
         { target: "Lateral problem solving", type: "conceptual" },
         { target: "Strategic autonomy", type: "conceptual" },
@@ -1292,7 +1303,7 @@ export const cvDataEn = {
     {
       name: "Theatre and improvisation",
       description:
-        "I trained and performed with B-Teatro (2013–2020), with shows in Italy and Luxembourg. Improvisation trains active listening, rapid thinking and the ability to turn failure into a resource.",
+        "I trained and performed with B-Teatro (2013–2019), with shows in Italy and Luxembourg. Improvisation trains listening and speed: when a scene collapses you learn to build on it, not to redo it.",
       links: [
         { target: "Public speaking", type: "workflow" },
         { target: "Effective communication", type: "workflow" },
@@ -1398,7 +1409,7 @@ export const cvDataEn = {
     {
       name: "Writing and poetry",
       description:
-        "I have won poetry awards in Italy and Australia. Creative writing translates into sharper copy, product storytelling and synthesis.",
+        "I have won poetry awards in Italy and Australia, and one of my poems was read on Radio Capital. At work that writing becomes copy and documentation: the text on this site is mine.",
       links: [
         { target: "Effective communication", type: "cross-domain" },
         { target: "Applied creativity", type: "cross-domain" },
@@ -1424,22 +1435,22 @@ export const cvDataEn = {
     {
       name: "Agile & Iterative Development",
       description:
-        "Every project is an opportunity for incremental learning. Short delivery cycles reduce risk, keep focus on business objectives and allow rapid adaptation to feedback. I have applied this mindset on enterprise systems with distributed teams and on creative projects managed independently.",
+        "I work in short cycles: they reduce risk, keep the focus on business objectives and leave room for feedback before it gets expensive. It holds on enterprise systems with distributed teams as well as on projects I run alone.",
     },
     {
       name: "AI as a Value Multiplier",
       description:
-        "I integrate artificial intelligence as an extension of the cognitive process, not a shortcut. GitHub Copilot for development speed, ChatGPT for rapid conceptual prototyping, Midjourney for visual exploration. The goal is to reduce time on repetitive tasks and expand the solution space during creative phases.",
+        "I use AI every day, each tool with a precise role: GitHub Copilot for development speed, ChatGPT for conceptual prototyping, Midjourney for visual exploration. The time saved on repetitive tasks goes into the creative phases, where it matters more.",
     },
     {
       name: "T-shaped Problem Solving",
       description:
-        "My background spans engineering, design and marketing: I identify solution patterns invisible to mono-disciplinary teams. I don't just execute, I identify the right problem to solve.",
+        "My background spans engineering, design and marketing: I see patterns that mono-disciplinary teams miss. Before solving a problem, I check it is the right one.",
     },
     {
       name: "Framework-Agnostic Thinking",
       description:
-        "I have worked with Angular, React, Lit, WebComponents, Astro and heterogeneous creative paradigms: I choose the tool based on the problem, not the other way around. This avoids technological solutionism and produces architectures that stay maintainable in the long run.",
+        "I have worked with Angular, React, Lit, WebComponents and Astro: I choose the tool based on the problem, not the other way around. Architectures age better when nobody has bent them to the framework of the moment.",
     },
   ] as MethodologyItem[],
 
@@ -1684,20 +1695,20 @@ export const cvDataEn = {
     {
       name: "Invented word — Turin International Book Fair",
       description:
-        "I created and publicly presented a new word, with its roots, sound and meaning, at the Turin International Book Fair. An extreme exercise in linguistic and poetic synthesis: the same capacity for maximum impact with minimum means that I apply every day in clean code and product communication.",
+        "I created and publicly presented a new word, with its roots, sound and meaning, at the Turin International Book Fair. Inventing a word that holds up is the most serious language game I know.",
       date: "2019-05",
       tags: ["Poetry", "Linguistics", "Creativity", "Book Fair"],
     },
     {
-      name: "Internationally awarded poetry",
+      name: "Poetry",
       description:
-        "I have written poems awarded in national and international competitions (Italy and Australia). Creative writing and software development share the same root: synthesis, formal precision and meaning within explicit constraints.",
+        "I have written poems awarded in competitions in Italy and Australia, and one was chosen and read on a Radio Capital programme. I write in free verse, no schemes: it is the part of my writing that answers to no one.",
       tags: ["Poetry", "Creative writing", "International awards"],
     },
     {
       name: "The 'Moustache Paper' — featured in La Stampa",
       description:
-        "My school paper on moustaches, an involuntary case of marketing and anthropological curiosity, ended up on the pages of La Stampa. Practical proof that originality of thought generates unexpected attention, and that narrative matters more than format.",
+        "My school paper on moustaches ended up on the pages of La Stampa. There was no strategy: just moustaches, taken very seriously, and a newspaper deciding that was news.",
       tags: ["Storytelling", "Involuntary marketing", "Media", "Writing"],
     },
   ] as Project[],
@@ -1738,7 +1749,7 @@ export const cvDataEn = {
     {
       tool: "MCP",
       title: "MCP servers for GitLab, Jira and Playwright",
-      desc: "I connect GitLab, Jira and Playwright as MCP tools: I manage issues, merge requests and end-to-end tests directly from the AI chat.",
+      desc: "I connect GitLab, Jira and Playwright as MCP tools: I open and close issues, merge requests and end-to-end tests directly from the AI chat.",
       impact: "GitLab · Jira · Playwright",
       tags: "tech management",
     },
@@ -1787,7 +1798,7 @@ export const cvDataEn = {
     {
       name: "Team Delivery & Agile Facilitation",
       description:
-        "How I take a team from 'operational chaos' to 'conscious autonomy': improvisation as methodology, Agile as structure, communication as the binding agent.",
+        "How a team goes from operational chaos to autonomy: the method comes from improvisation, the structure from Agile, and in between a lot of communication.",
       steps: [
         "Theatre and improvisation",
         "Agile Methodology",
@@ -1800,7 +1811,7 @@ export const cvDataEn = {
     {
       name: "Strategic Product Communication",
       description:
-        "From copy to campaign: the narrative flow that transforms a technical product into a story the client actually wants to hear.",
+        "From copy to campaign: how a technical product finds the words to be understood, and bought.",
       steps: [
         "Writing and poetry",
         "Public speaking",
@@ -1813,7 +1824,7 @@ export const cvDataEn = {
     {
       name: "AI-First Implementation Workflow",
       description:
-        "The GO Automated method: every repeatable process becomes an agent. From AI architecture to zero-touch deployment in 1–2 week sprints.",
+        "The GO Automated method: every repeatable process becomes an agent. From AI architecture to deployment with no manual steps, in 1–2 week sprints.",
       steps: [
         "Prompt Engineering",
         "MCP Protocol",

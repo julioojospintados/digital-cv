@@ -161,3 +161,28 @@ Perimetro rivisto: pagine Astro (index/[mode]/en/work), scripts (memory-drawer, 
 
 - Il "vuoto hero desktop" visto nei primi screenshot era un artefatto del dev server Vite (504 Outdated Optimize Dep durante re-optimize), NON un bug del sito: verificato con probe (opacity 1, posizioni corrette) e re-screenshot.
 - La duplicazione di contenuto nello screenshot full-page mobile era un artefatto di cattura (Lenis syncTouch + fullPage), NON DOM duplicato: verificato (1 h1, 1 hero-section, 1 skills-section).
+
+## Analisi codice 2026-07-16 — migliorie UX/UI e tecniche
+
+46. ✅ **Documentazione allineata al codebase reale.** README.md diceva ancora "tre modalità", elencava componenti rimossi da tempo (HeroSection, Navbar, ExperienceSection...) e una tabella MCP con server mai configurati; cv-site/README.md descriveva il mode come `?mode=` URL param con temi inesistenti; AGENTS.md non citava `work/`, `scripts/`, `lib/exp-clusters.ts`, i 4 CSS né `http/routes/qr.ts`.
+    — **Fatto (2026-07-16):** i tre file riflettono ora l'albero reale (pagine work/en, scripts client e root, lib, styles, public/cv|qr|photos), gli script npm completi (`pdf:cv`, `http:start`, `test`) e i server MCP effettivi di `.vscode/mcp.json`.
+
+47. **Unificazione template IT/EN — la miglioria più redditizia del progetto.** `[mode].astro` (~1035 righe) ed `en/cv.astro` (~989 righe) sono template quasi identici mantenuti a mano (idem `index.astro`/`en/index.astro`, `work/`). Ogni feature va scritta due volte; i bug di parità (dropdown EN senza scrollTo, fixata il 2026-07-16) nascono esattamente qui. Piano: estrarre il markup in un componente condiviso `CvPage.astro` che riceve `lang` + dati (`cvData`/`cvDataEn`) + dizionario stringhe UI in `lib/` (stesso pattern già validato con `exp-clusters.ts`); le due pagine diventano wrapper di poche righe. Migrazione incrementale sezione per sezione con confronto dell'HTML compilato prima/dopo per garantire output identico. **Richiede revisione ampia → da fare per ultima, dopo i punti piccoli.**
+
+48. **`scroll-behavior: smooth` convive con Lenis.** `global.css:148` + classe `scroll-smooth` su `<html>` (Layout.astro): Lenis sconsiglia il CSS smooth scrolling in parallelo — ogni `window.scrollTo({top})` di fallback/correzione (settle correction in cv-init.ts) diventa animato invece che istantaneo. Possibile concausa dei drift di scroll inseguiti nelle ultime sessioni. Rimuovere e ri-testare gli scroll (nav, dot-nav, accordion, FAB).
+
+49. ✅ **`launchJourney` duplicata (~120 righe × 2).** La warp animation (speed line, blur, vignette, navigate) viveva identica in `index-init.ts` e `GoLogo.lit.ts`.
+    — **Fatto (2026-07-16):** estratta in `cv-site/src/scripts/launch-journey.ts` (`launchJourney(options)` + helper `createLaunchOverlay()`). index-init passa i target home (header+card con scala, knolling in fade, `#launch-overlay` del markup); GoLogo passa `#main-content`, overlay creato ad hoc e speed line su `<html>`. Comportamento e timing invariati (stesse costanti touch/desktop). Build 17 pagine + 53/53 test verdi.
+
+50. **Il server MCP non mantiene la promessa dei docs.** CLAUDE.md/.mcp.json dichiarano che `mcp-base-template` "espone i dati di cv.ts come tool/resource", ma `tools/` registra solo `echo` e `resources/index.ts` è uno stub vuoto. Decidere: implementare i tool CV reali (`get-experience`, `get-skills`, `search-cv`...) oppure ridimensionare la descrizione (nel README già neutralizzata il 2026-07-16).
+
+51. **Cursor custom: un tween nuovo per ogni mousemove.** Layout.astro crea due `gsap.to` a ogni movimento; `gsap.quickTo()` fa lo stesso lavoro senza allocazioni per frame. Inoltre i listener hover sono agganciati solo agli elementi presenti al load: elementi aggiunti dopo non ricevono lo stato hover (migrare a event delegation con `mouseover`).
+
+52. ✅ **Ramo morto in `modeStore.setMode`.** `if ('startViewTransition' in document)` aveva i due rami identici (`run()` in entrambi).
+    — **Fatto (2026-07-16):** ramo eliminato, resta `run()` con il commento che spiega perché la ViewTransition non si usa (crossfade full-page ~300ms vs aggiornamento immediato di CSS var + card state).
+
+53. **Micro-fix accumulati:** (a) `scrollFeedbackByCard` in cv-init.ts hardcoda il gap a 16px invece di leggere `columnGap` computato (tecnica già usata nel marquee di index-init); (b) la skill design-system dice Lenis `lerp: 0.08` ma Layout.astro usa `0.15` — allineare doc o codice; (c) `public/og-image.png` legacy e `public/prototype/` sono candidati a pulizia.
+
+54. **A11y: dropdown mode mobile inutilizzabile da tastiera.** `role="listbox"`/`role="option"` con `tabindex="-1"` e soli listener click: niente frecce, Enter, Esc, niente `aria-activedescendant`. I ruoli ARIA dichiarano un comportamento che non esiste (peggio che ometterli). Fix: gestire keydown, oppure convertire al pattern `<details>` nativo già usato dal lang-dropdown. (L'accordion esperienze invece è corretto: `<button>` + `aria-expanded`/`aria-controls`.)
+
+55. **UX: carousel feedback senza indicatore di posizione.** Frecce e fade ai bordi ci sono, ma manca il "dove sono / quante sono" (dots o contatore "2/6" in font mono, coerente col resto). Su mobile, dove le frecce sono nascoste, l'unico segnale è il peek della card successiva. Valutare anche un annuncio `aria-live` della card corrente.
