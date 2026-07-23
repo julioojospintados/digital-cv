@@ -36,7 +36,6 @@ export const cvDataEn = {
     age: 36,
     avatar: "",
     availability: "available" as "available" | "open" | "not-available",
-    phone: "+39 373 800 5769",
   },
 
   // ── Contact & social ───────────────────────────────────────────────────────

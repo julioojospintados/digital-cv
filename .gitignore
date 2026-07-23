@@ -1,5 +1,12 @@
 # Compiled output
 dist/
+.astro/
+
+# Deploy build output (never commit — was accidentally committed on a bot branch)
+.vercel/
+
+# Standalone throwaway prototype — not part of the live site
+cv-site/public/prototype/
 
 # Dependencies
 node_modules/
@@ -28,8 +35,8 @@ Thumbs.db
 # Playwright MCP — runtime snapshots, never commit
 .playwright-mcp/
 
-# todo
-# todo.md
+# Internal working notes — not for the public repo
+todo.md
 bash.exe.stackdump
 tmp-diff.mjs
 .tmp-lh*
