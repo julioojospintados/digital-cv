@@ -1788,7 +1788,10 @@ if (skillsViewButtons.length) {
 
     function scrollFeedbackByCard(dir: 1 | -1) {
       const card = track.querySelector<HTMLElement>(".feedback-card");
-      const gap = 16; // 1rem — stesso valore del gap CSS di .feedback-track
+      // Letto dal computed style invece di hardcodare 16 (1rem): stessa
+      // tecnica già usata per il marquee in index-init.ts, evita che i due
+      // valori divergano se il gap CSS di .feedback-track cambia.
+      const gap = parseFloat(getComputedStyle(track).columnGap) || 16;
       const step = card ? card.getBoundingClientRect().width + gap : track.clientWidth * 0.85;
       track.scrollBy({ left: dir * step, behavior: reducedMotion ? "auto" : "smooth" });
     }
