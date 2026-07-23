@@ -1,10 +1,9 @@
 ---
 // ContactFooter.astro — blocco contatti CTA condiviso (home + pagine CV).
-// Email, LinkedIn e telefono sono azioni cliccabili, non testo da copiare:
-// ogni card ha label mono, valore reale e verbo d'azione con freccia.
-// LinkedIn apre in una nuova scheda (è l'unico link che naviga verso un
-// altro sito); mailto e tel restano nella stessa scheda perché aprono il
-// client di posta o il dialer, non una pagina.
+// Email e LinkedIn sono azioni cliccabili, non testo da copiare: ogni card
+// ha label mono, valore reale e verbo d'azione con freccia. LinkedIn apre in
+// una nuova scheda (naviga verso un altro sito); mailto resta nella stessa
+// scheda perché apre il client di posta, non una pagina.
 import { cvData } from "@cv-data";
 import { cvDataEn } from "@cv-data-en";
 
@@ -16,25 +15,22 @@ const data = lang === "en" ? cvDataEn : cvData;
 
 const email = data.social.find((s) => s.platform === "Email");
 const linkedin = data.social.find((s) => s.platform === "LinkedIn");
-const phone = data.personal.phone;
 
 const t =
   lang === "en"
     ? {
         eyebrow: "Contacts",
         title: "Let's talk",
-        sub: "An email, a call or a LinkedIn message.",
+        sub: "An email or a LinkedIn message.",
         email: { label: "Email", action: "Write to me", aria: "Write an email to Giulio" },
         linkedin: { label: "LinkedIn", action: "Let's connect", aria: "Open Giulio's LinkedIn profile in a new tab" },
-        phone: { label: "Phone", action: "Call me", aria: "Call Giulio" },
       }
     : {
         eyebrow: "Contatti",
         title: "Parliamone",
-        sub: "Una mail, una chiamata o un messaggio su LinkedIn.",
+        sub: "Una mail o un messaggio su LinkedIn.",
         email: { label: "Email", action: "Scrivimi", aria: "Scrivi una email a Giulio" },
         linkedin: { label: "LinkedIn", action: "Connettiamoci", aria: "Apri il profilo LinkedIn di Giulio in una nuova scheda" },
-        phone: { label: "Telefono", action: "Chiamami", aria: "Chiama Giulio" },
       };
 ---
 
@@ -71,16 +67,6 @@ const t =
         <span class="contact-card__value">{linkedin.label ?? linkedin.url}</span>
         <span class="contact-card__action">
           {t.linkedin.action}
-          <span class="contact-card__arrow" aria-hidden="true">→</span>
-        </span>
-      </a>
-    )}
-    {phone && (
-      <a class="contact-card" href={`tel:${phone.replace(/\s+/g, "")}`} aria-label={t.phone.aria}>
-        <span class="contact-card__label">{t.phone.label}</span>
-        <span class="contact-card__value">{phone}</span>
-        <span class="contact-card__action">
-          {t.phone.action}
           <span class="contact-card__arrow" aria-hidden="true">→</span>
         </span>
       </a>
@@ -136,7 +122,7 @@ const t =
 
   @media (min-width: 48rem) {
     .contact-cta__grid {
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(2, 1fr);
     }
   }
 

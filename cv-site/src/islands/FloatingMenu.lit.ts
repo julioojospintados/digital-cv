@@ -4,15 +4,13 @@ import { modeStore } from "./stores/modeStore.js";
 /**
  * <floating-menu>
  *
- * FAB (Floating Action Button) con 4 voci espandibili:
- *  - WhatsApp   → wa.me (nuova scheda)
- *  - Chiamami   → tel:
+ * FAB (Floating Action Button) con 2 voci espandibili:
  *  - Contattami → mailto (nuova scheda: se il gestore è webmail,
  *                 _self sostituirebbe il CV con la composizione)
  *  - Portfolio  → /work (o /en/work)
  *
- * (Le voci "AI Workflow" e "Feedback" sono state rimosse su richiesta,
- * 2026-07-13 e 2026-07-15: azioni di contatto immediato al loro posto.)
+ * (Le voci "AI Workflow" e "Feedback" rimosse 2026-07-13/15; WhatsApp e
+ * Chiamami rimosse 2026-07-23 per non esporre il numero nel repo pubblico.)
  *
  * Mode-reactive: colore del trigger segue --color-accent.
  * Chiude con click fuori o con Escape.
@@ -303,12 +301,6 @@ class FloatingMenu extends LitElement {
     const isEN = lang === "en";
 
     const t = {
-      whatsappLabel: "WhatsApp",
-      whatsappAria: isEN
-        ? "Message Giulio on WhatsApp (opens in a new tab)"
-        : "Scrivi a Giulio su WhatsApp (apre in nuova scheda)",
-      callLabel: isEN ? "Call me" : "Chiamami",
-      callAria: isEN ? "Call Giulio" : "Chiama Giulio",
       contactLabel: isEN ? "E-mail" : "E-mail",
       contactAriaLabel: isEN ? "Send email to Giulio" : "Invia email a Giulio",
       portfolioLabel: "Portfolio",
@@ -320,34 +312,12 @@ class FloatingMenu extends LitElement {
     // Icone inline currentColor: nessun glifo Unicode (il tratto dipenderebbe
     // dal font di sistema — stessa regola dei chevron nel design system).
     const icons = {
-      whatsapp: html`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5.1-1.3A10 10 0 1 0 12 2zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.6-6.1c-.3-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1-.2.3-.6.8-.8 1-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.4-3c-.3-.4 0-.5.1-.7l.4-.5c.1-.2.2-.3.3-.5v-.5c0-.1-.6-1.4-.8-1.9-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5 0-.7.3-.2.3-.9.9-.9 2.1s.9 2.4 1 2.6c.1.2 1.8 2.8 4.4 3.9.6.3 1.1.4 1.5.6.6.2 1.2.2 1.6.1.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2 0-.1-.2-.2-.4-.3z"/></svg>`,
-      phone: html`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.6 10.8a15.9 15.9 0 0 0 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.6.1.3 0 .7-.2 1l-2.3 2.2z"/></svg>`,
       mail: html`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg>`,
       folder: html`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-8l-2-2z"/></svg>`,
     };
 
     return html`
       <div class="fab-items" ?inert="${!this._open}" aria-hidden="${!this._open}">
-        <a
-          class="fab-item"
-          href="https://wa.me/39[REDACTED]"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="${t.whatsappAria}"
-          @click=${() => this._closeOnNav()}
-        >
-          <span class="fab-item__icon">${icons.whatsapp}</span>
-          <span>${t.whatsappLabel}</span>
-        </a>
-        <a
-          class="fab-item"
-          href="tel:+39[REDACTED]"
-          aria-label="${t.callAria}"
-          @click=${() => this._closeOnNav()}
-        >
-          <span class="fab-item__icon">${icons.phone}</span>
-          <span>${t.callLabel}</span>
-        </a>
         <a
           class="fab-item"
           href="mailto:giulio.occhipinti.g@gmail.com"
