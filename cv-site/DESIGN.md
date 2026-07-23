@@ -1,5 +1,14 @@
 # DESIGN.md — Digital CV · Visual System & Architecture
 
+> Riscritto il 2026-07-23: la versione precedente era lo spec pre-implementazione
+> (3 mode, sfondi chiari, font Inter/Playfair/Georgia, `?mode=` come URL param,
+> `--color-accent-2`) e non rifletteva più il sito reale da anni. Questo
+> documento descrive il sito **com'è oggi**, verificato riga per riga contro
+> `global.css`, i componenti Astro/Lit e gli script client. Fonte di verità
+> gerarchica: `global.css` (codice) → `.claude/skills/design-system/SKILL.md`
+> (regole operative sintetiche) → questo file (spec estesa/narrativa).
+> Se in futuro questo file diverge dal codice, il codice vince sempre.
+
 > **Philosophy**: "Yes, and..." — ogni elemento si collega al successivo in modo fluido.
 > Ogni componente accetta il contesto attuale e lo amplifica. Nessun dead-end.
 
@@ -9,437 +18,386 @@
 
 Il sito si ispira alla fotografia **Knolling** (oggetti disposti su un piano come un inventario):
 - Tutto è visibile, catalogato, disposto con intenzione.
-- Gli oggetti (card, skill, esperienze) vivono su un **piano neutro** come attrezzi su un banco da lavoro.
-- Il movimento è **traslazione e scala** — niente rotazioni caotiche, niente profondità esagerata.
+- Gli oggetti (card, skill, esperienze) vivono su un **piano neutro** — qui il piano è
+  letteralmente lo sfondo ottanio fisso, mai il bianco/cream della versione originale del sito.
+- Il movimento è **traslazione, scala, opacità** — niente rotazioni caotiche a runtime
+  (gli 8 oggetti knolling della home hanno una rotazione statica via `--kr`, decisa in
+  markup, non animata).
 - L'ordine visivo comunica competenza; il dettaglio comunica profondità.
+- Quando un oggetto è inattivo, **non sparisce** — sbiadisce (`opacity`), resta presente
+  come inventario. Regola non negoziabile: mai `display:none` per le card passive.
 
 ### Regole stilistiche Knolling
-- Elementi allineati a griglia rigorosa (multipli di 8px / Tailwind spacing scale).
-- Sfondo: tono neutro spento (cream, warm gray o white off).
-- Bordi sottili, ombre piatte (no `box-shadow` con blur alto).
-- Ogni card è un "oggetto": ha peso visivo proporzionale alla sua importanza.
-- Quando un oggetto è inattivo, **non sparisce** — sbiadisce, rimane presente come inventario.
+- Elementi allineati a griglia rigorosa, gap costante in tutte le direzioni.
+- Sfondo: **ottanio** `rgba(8,73,67,1)`, fisso in ogni mode e in ogni pagina.
+- Bordi sottili (1px, `--color-border`), ombre/glow piatti — mai blur eccessivo che
+  simuli profondità 3D vera.
+- Ogni card è un "oggetto": ha peso visivo proporzionale alla sua importanza (weight
+  in `cv.ts` guida lo span in griglia delle skill square).
+- Il bianco/vuoto tra gli oggetti è parte del design, non spazio di scarto.
 
 ---
 
-## 2. Modalità (Stato Globale)
+## 2. Mode System (Stato Globale)
 
-L'interfaccia ha **3 modalità** gestite via NanoStore (`@nanostores/react` o store Lit).
-Il valore è persistito in `localStorage` + parametro URL (`?mode=tech|creative|human`).
+L'interfaccia ha **4 mode**, non 3: `tech`, `creative`, `human`, `management`. Il valore
+è persistito in `localStorage` via NanoStore (`cv-site/src/islands/stores/modeStore.ts`),
+letto/scritto da `mode-helpers.ts` e applicato ad ogni card con classe `.cv-card`.
 
-| Modalità | Chiave URL | Tema | Elementi in evidenza |
+Il mode **non è un `?mode=` query param**: su `/[mode].astro` è la route stessa
+(`/tech`, `/creative`, `/human`, `/management`) a fissare il mode iniziale via SSR;
+il cambio successivo (dropdown/pillole in navbar) aggiorna solo CSS custom property
+e `data-state` delle card, senza ricaricare la pagina. La pagina inglese (`en/cv.astro`)
+è single-page: il mode è solo client-side, non c'è una route `en/[mode]` per persona
+(vedi `todo.md` #40 per la decisione ancora aperta su questo punto).
+
+### Comportamento per mode — whisper, non silenzio
+
+Il mode **non cambia mai template o layout**, solo enfasi visiva:
+- Card con `data-tags` che combacia col mode attivo → `data-state="active"`,
+  `opacity: var(--card-opacity-active)` (1).
+- Le altre → `data-state="passive"`, opacity ridotta (0.2–0.28 a seconda del token
+  di mode, mai 0, mai `display:none`) — sono "sussurri", restano leggibili e
+  utilizzabili da tastiera/screen reader.
+
+Lo sfondo ottanio `rgba(8,73,67,1)` **non cambia mai**. Cambiano invece — per ogni mode,
+non solo l'accent — questi 4 token: `--color-surface`, `--color-border`,
+`--color-text-primary`, `--color-text-muted`, oltre a `--color-accent` stesso. Vedi
+tabella completa in §9.
+
+| Mode | Persona | Target | Oggetto knolling |
 |---|---|---|---|
-| **TECH** | `?mode=tech` | Scuro, neon, griglia densa | Tag: `tech`, `logic`, `agile` |
-| **CREATIVE** | `?mode=creative` | Caldo, editoriale, ampio respiro | Tag: `creative`, `storytelling`, `marketing` |
-| **HUMAN** | `?mode=human` | Neutro, calore umano, dettaglio | Tag: `human`, `solving`, `international` |
-
-### Comportamento per modalità
-
-**TECH**
-- Background: `#0a0a0f` (quasi nero)
-- Accent: `#00ff88` (neon verde) + `#0066ff` (neon blu)
-- Card attive: bordi neon, `opacity: 1`, leggero `glow` in `box-shadow`
-- Card inattive: `opacity: 0.25`, bordi `#333`, testo desaturato
-- Font: `JetBrains Mono` per dati tecnici, `Inter` per testo corrente
-- Layout: griglia densa, colonne strette, spazio ridotto
-
-**CREATIVE**
-- Background: `#fdfaf5` (cream caldo)
-- Accent: `#e85d04` (arancione bruciato) + `#9b2226` (rosso tiziano)
-- Card attive: bordi colorati, layout editoriale asimmetrico, immagini/video in primo piano
-- Card inattive: `opacity: 0.4`, scala ridotta (`scale: 0.92`)
-- Font: `Playfair Display` per titoli, `Inter` per testo
-- Layout: grid ampia, colonne variabili, spazio generoso
-
-**HUMAN**
-- Background: `#f5f0eb` (warm paper)
-- Accent: `#2d6a4f` (verde salvia) + `#403d39` (marrone corda)
-- Card attive: bordi solidi, contenuto narrativo espanso, X-Factor badge visibili
-- Card inattive: `opacity: 0.35`, senza bordi
-- Font: `Inter` per tutto, `Georgia` per le citazioni
-- Layout: layout misto, blocchi larghi con testo narrativo
+| `tech` | Software Developer | CTO, recruiter tecnico | `laptop.webp`, `flashlight.webp` |
+| `creative` | Web & UX Designer | Art director, agenzia | `camera.webp`, `multitool.webp` |
+| `human` | AI & Digital Specialist | HR, fondatore, no-profit | `plant.webp`, `megaphone.webp` |
+| `management` | Project Manager | Recruiter, aziende, innovazione | `chess.webp`, `compass.webp` |
 
 ---
 
-## 3. Struttura delle pagine
+## 3. Struttura del sito
 
-### 3.1 Entry Portal (`/` o `/entry`)
-
-Una landing **minimal** con 3 scelte. Prima interazione, nessun contenuto CV visibile.
+Flusso reale (non "Entry Portal" generico — la home ha un nome e un rituale precisi):
 
 ```
-┌─────────────────────────────────────────┐
-│                                         │
-│         GIULIO OCCHIPINTI               │
-│   "Chi sei, dipende da come mi guardi." │
-│                                         │
-│  ┌────────┐  ┌──────────┐  ┌────────┐  │
-│  │ [TECH] │  │[CREATIVE]│  │[HUMAN] │  │
-│  └────────┘  └──────────┘  └────────┘  │
-│                                         │
-└─────────────────────────────────────────┘
+/ (index.astro)
+  → Preloader: "GO" appare, G/O atterrano nel nome "Giulio Occhipinti" (GSAP, char-by-char)
+  → 8 oggetti knolling disposti in scena (knolling-stage), reattivi al mode scelto
+  → 4 mode-card (griglia 2×2 su mobile, riga su desktop) — non sono bottoni, sono "portali"
+  → Sezione "Chi sono" + 4 profile-section (una per mode), dot-nav laterale per saltare
+  → Ogni profile-section ha una CTA "GO to <persona>" → naviga a /<mode>
+
+/tech /creative /human /management ([mode].astro, stesso template)
+  → Hero con titolo/summary mode-aware, blocco T-shaped (profondità/ampiezza)
+  → Skills — vista Square di default (Grafico D3 come opt-in, non default)
+  → Esperienze — cluster/accordion per dominio, featured + "Leggi altre N" incrementale
+  → AI-Enhanced Workflow — sempre a piena opacità, indipendente dal mode
+  → Soft skills / Mindset, Progetti (indice case study), Formazione, Feedback carousel
+  → Footer con contatti reali (da cvData.personal/social, non hardcoded)
+
+/cv → redirect legacy a /tech
+
+/work → indice case study (WorkIndexCard per progetto con slug)
+/work/[slug] → case study dedicato: hero, ruolo+team, problema, processo, risultato
+  misurabile, sezione Design System (questo componente, WorkDesignSystem.astro),
+  CTA contatto in fondo
+
+/en/* → mirror inglese di index/cv/work (cv.astro è single-mode, vedi §2)
 ```
 
-- Le 3 card sono grandi, cliccabili, con micro-descrizione sotto:
-  - TECH → "Architetture, codice, sistemi"
-  - CREATIVE → "Racconto, immagine, suono"
-  - HUMAN → "Impatto, relazione, presenza"
-- Al click: View Transition animata verso la main page con il mode impostato.
-- Stile: sfondo neutro, card monocromatiche con hover che anticipa il tema del mode.
-
-### 3.2 The Knolling Grid (main page)
-
-La pagina principale è una **griglia dinamica** che cambia layout e priorità in base al mode.
-
-Struttura base (desktop, 12 colonne):
-
-```
-[NAVBAR / MODE SWITCHER sempre visibile]
-
-[HERO CARD — 4col]  [SUMMARY CARD — 4col]  [AVAILABILITY — 4col]
-
-[EXPERIENCE CARDS — 8col]  [SKILLS BENTO — 4col]
-
-[PROJECTS — 6col]  [TRANSVERSAL — 6col]
-
-[AI-ENHANCED WORKFLOW — 12col]
-
-[SOCIAL IMPACT — 6col]  [METHODOLOGY — 6col]
-
-[FOOTER — 12col]
-```
-
-Su mobile: single column, ordine gestito da `order` Tailwind in base al mode.
+Nessuna griglia Tailwind a 12 colonne generica: ogni sezione ha il proprio CSS
+dedicato (`cv-page.css`, `index-page.css`, `work-page.css`), niente `col-span-N`
+riusato ovunque.
 
 ---
 
-## 4. Sistema delle Card (Knolling Objects)
+## 4. Sistema delle Card
 
-Ogni card è un "oggetto" con stati ben definiti:
+Ogni card che partecipa al sistema mode ha classe `.cv-card` + attributo
+`data-tags="tech creative ..."` (una o più chiavi mode). Lo stato viene scritto da
+`applyCardStates()` (`mode-helpers.ts`), mai deciso lato server:
 
-```typescript
-type CardState = "active" | "passive" | "hidden";
-type CardSize = "xs" | "sm" | "md" | "lg" | "hero";
+```ts
+// data-state, non una classe: più facile da leggere in CSS e devtools
+type CardState = "active" | "passive";
 ```
 
-### Anatomia di una card
+Card che **non** entrano nel sistema mode (restano sempre a piena opacità): le card
+della sezione AI-Enhanced Workflow (`AiCard.astro` — la regola "sempre visibile"
+è più importante del whisper system lì).
+
+### Anatomia reale di una card esperienza (`ExpCard.astro`)
 
 ```
-┌──────────────────────┐
-│ [TAG BADGE] [X-FACTOR?] │  ← header row
-│                      │
-│  TITLE               │  ← nome skill / ruolo / progetto
-│  company / context   │  ← subtitle
-│                      │
-│  description (passiv:│  ← visibile solo se active o expanded
-│  si rivela al hover) │
-│                      │
-│  [skill pills]       │  ← chips tecnologie / tag
-│  [impact score]      │  ← solo AI-Enhanced section
-└──────────────────────┘
+┌───────────────────────────────┐
+│                    [AI clip]  │ ← badge opzionale, solo se aiAugmented
+│ COMPANY               2024–26 │
+│ Ruolo                         │
+│ Location · Remote  [Estero]   │
+│                                │
+│ Descrizione (line-clamp 4,     │
+│ 10 se card attiva; su mobile   │
+│ nessun clamp, single-column)   │
+│                                │
+│ • highlight 1                 │
+│ • highlight 2 (max 3)          │
+│                                │
+│ [skill-chip] [skill-chip] ...  │
+└───────────────────────────────┘
 ```
 
-### Regole card sizing (Bento Grid)
-
-| Tipo di contenuto | Size | Colonne Tailwind |
-|---|---|---|
-| Hero / Nome | `hero` | `col-span-4 row-span-2` |
-| Esperienza primaria (ALTEN) | `lg` | `col-span-4` |
-| Esperienza secondaria | `md` | `col-span-2` |
-| Esperienza minore | `sm` | `col-span-1` |
-| Skill tecnica | `sm` | `col-span-1` (quadrato) |
-| Social impact | `md` | `col-span-2` |
-| AI workflow item | `lg` | `col-span-3` |
+Niente `CardSize`/`col-span` generico: la griglia esperienze (`.exp-grid`) è
+1 colonna su mobile, 2 da 48rem, 3 da 68.75rem — layout responsive via CSS grid
+diretto, non un sistema di taglie astratto per card.
 
 ---
 
-## 5. Skills — Bento Grid (niente barre percentuali)
+## 5. Skills — Square & Glow (niente barre percentuali)
 
-Le skill **non usano progress bar**. Ogni skill è un **quadrato cliccabile**.
+Le skill **non usano progress bar** (regola non negoziabile). Ogni skill è un
+quadrato (`SkillSquare.astro`) con due segnali **indipendenti**:
 
-### Visualizzazione skill
+1. **Bordo — il vero segnale di livello.** Cresce da 1 a 4px (Base→Esperto),
+   sempre visibile a riposo. Su mobile (`<40rem`) è fisso a 1px: lo spazio in
+   griglia stretta non basta a far percepire la differenza, e i bordi spessi
+   affollavano più del testo stesso.
+2. **Glow — segnale di pertinenza al mode, non di livello.** Spento (`box-shadow`
+   trasparente) a riposo per *tutti*, anche gli square "Esperto". Si accende solo
+   con `:hover` **oppure** quando `data-state="active"` (lo skill combacia col mode
+   che stai guardando) — e solo gli square di livello Avanzato/Esperto sono
+   *idonei* ad accendersi (`isGlow` prop, classe `.skill-sq--glow`). I due segnali
+   non vanno confusi: "il glow marca la padronanza" è impreciso — marca la
+   pertinenza contestuale, disponibile solo per chi ha già superato una soglia
+   di padronanza.
 
-```
-┌────────┐  ┌────────┐  ┌────────┐  ┌────────────────┐
-│ Angular│  │  Lit   │  │TypeScr.│  │  WebComponents │
-│ EXPERT │  │  ADV   │  │  ADV   │  │     ADV        │
-└────────┘  └────────┘  └────────┘  └────────────────┘
-```
+Dimensione della cella in griglia (`.skill-sq--w1..w5`) segue `weight` (1–5) da
+`cv.ts`, non una taglia decisa a mano per skill.
 
-- Dimensione quadrato: `w-16 h-16` (base) — le skill "Esperto" sono `w-20 h-20`
-- Icona da SimpleIcons (se disponibile via `icon` field in cv.ts)
-- Livello mostrato come **numero di punti** o **colore di bordo** (non testo):
-  - Base → bordo `1px`
-  - Intermedio → bordo `2px`
-  - Avanzato → bordo `3px` + leggero glow
-  - Esperto → bordo `4px` + glow forte + dimensione aumentata
-- Al click: espansione inline con contesto d'uso (da `transversalSkills` corrispondente)
+### Vista alternativa: Force Graph
 
-### Raggruppamento per mode
-
-- **TECH mode**: mostra prima Angular/Lit/TS/WebComp/NGRX/RXJS, poi gli altri
-- **CREATIVE mode**: mostra prima Figma/UX/Video editing/Adobe Suite/Fotografia
-- **HUMAN mode**: mostra prima Improv/Public speaking/Leadership/Agile
+Esiste una seconda visualizzazione, `<skill-force-graph>` (Lit + D3, lazy-loaded
+solo al primo click su "Grafico"): rete di connessioni tra skill. **Non è la vista
+di default** — le card square lo sono, scansionabili in ~5s (Legge di Jakob);
+il grafo è un "wow" opt-in, non il primo contatto.
 
 ---
 
 ## 6. Sezione AI-Enhanced Workflow
 
-Sezione dedicata, sempre visibile a prescindere dal mode (ma il layout cambia).
-
-### Struttura
-
-Per ogni item AI workflow:
-
-```
-┌────────────────────────────────────────────┐
-│ 🤖 [TOOL USATO]             [IMPACT SCORE] │
-│                                            │
-│  TITOLO WORKFLOW                           │
-│  Descrizione concreta di come viene usato │
-│                                            │
-│  Esempio pratico / output tipo             │
-│  Prima: [x tempo]  →  Dopo: [y tempo]     │
-└────────────────────────────────────────────┘
-```
-
-### Items AI Workflow (da implementare come componenti)
-
-```typescript
-const aiWorkflowItems = [
-  {
-    tool: "GitHub Copilot",
-    title: "Accelerazione sviluppo Angular enterprise",
-    description: "Generazione di boilerplate NGRX, testing Jest e pattern architetturali ripetitivi, con validazione critica dell'output.",
-    example: "Scaffold completo di un feature module NGRX in 3 minuti vs 40 minuti",
-    impactScore: "-87% tempo boilerplate",
-    tags: ["tech", "agile"],
-  },
-  {
-    tool: "ChatGPT / Claude",
-    title: "Prompt Engineering per prototipazione UX rapida",
-    description: "Generazione di user personas, flussi di navigazione e scenari di test a partire da brief testuali. Usato nella fase di UX Research IBM.",
-    example: "5 user personas dettagliate in 20 minuti vs 2 giorni di ricerca",
-    impactScore: "-90% tempo fase discovery",
-    tags: ["creative", "tech"],
-  },
-  {
-    tool: "Claude / GPT-4",
-    title: "Ottimizzazione architetture Angular tramite LLM",
-    description: "Analisi di code smell, refactoring suggerito e revisione di architetture a microfrontend con LLM come pair reviewer.",
-    example: "Identificazione di memory leak in observable chain — diagnosi in 5 min",
-    impactScore: "-60% tempo debug",
-    tags: ["tech", "logic"],
-  },
-  {
-    tool: "Midjourney",
-    title: "Esplorazione visiva per brief UX/UI",
-    description: "Generazione rapida di moodboard e concept visivi prima della fase di wireframing, per allineare stakeholder senza iterazioni costose.",
-    example: "10 direzioni visive per un design system in 30 minuti",
-    impactScore: "-70% cicli di allineamento visivo",
-    tags: ["creative", "tech"],
-  },
-  {
-    tool: "AI Tools (vari)",
-    title: "Copywriting e storytelling di prodotto",
-    description: "Ottimizzazione SEO di copy, generazione di varianti A/B per landing page e redazione di documentazione tecnica accessibile.",
-    example: "Documentazione API da codice annotato in 10 minuti",
-    impactScore: "+3x velocità contenuti",
-    tags: ["creative", "marketing"],
-  },
-]
-```
-
-### Impact Score — regole di visualizzazione
-
-- Visualizzato come **badge** colorato in alto a destra della card
-- Colore: verde per risparmio tempo, blu per moltiplicatore di output
-- Formato: sempre una stringa concisa (`-50% tempo`, `+3x output`, `-80% cicli`)
-- Non è un dato scientifico — è una stima narrativa. Visivamente deve sembrare data, non marketing.
+Sempre visibile a piena opacità, **indipendentemente dal mode attivo** — non entra
+nel sistema whisper (vedi §4). Ogni `AiCard.astro` mostra: tool, titolo, descrizione,
+e un badge `impactScore` in font mono (es. `-87% boilerplate`, `+3x velocità`) che
+deve leggersi come un dato, non come marketing. La sezione porta anche il badge
+`MCP` come firma del metodo (architettura MCP = API per agenti AI, non solo per
+umani — è il vantaggio competitivo che il sito stesso dimostra).
 
 ---
 
 ## 7. Navbar / Mode Switcher
 
-La navbar è **sticky**, sottile, sempre visibile. Contiene:
+Due varianti per viewport, stesso stato sorgente (`modeStore.ts`):
+- **Desktop** (`.mode-btn`): pulsanti pieni con label a 3 lettere quando compressi
+  (`<374px` di larghezza bottone), bordo/testo tinti nell'accent del proprio mode
+  a bassa intensità quando non attivi, piena intensità su `aria-pressed="true"`.
+- **Mobile** (`<=640px`): dropdown con `role="listbox"`/`option` — **nota**: la
+  navigazione da tastiera (frecce/Enter/Esc) non è ancora implementata, vedi
+  `todo.md` #54. Label compresse per non troncare in ellissi: "Software Dev",
+  "Web & UX", "AI & Digital", "Project Manager" (`MODE_LABELS` in `cv-init.ts`).
 
-```
-[GIULIO]  ·  [TECH] [CREATIVE] [HUMAN]  ·  [IT | EN]
-```
-
-- Il mode attivo è marcato (colore o underline animato)
-- Il cambio mode usa **View Transitions API** (`document.startViewTransition`)
-- Il toggle lingua (IT/EN) usa le stesse transizioni
+Al cambio mode: nessuna `View Transitions API` — un "stamp" fullscreen editoriale
+(overlay con la label del mode in maiuscolo, `MODE_LABELS[mode]`) accompagna il
+cambio, poi CSS custom property e `data-state` delle card si aggiornano. La
+scelta di non usare `document.startViewTransition` è esplicita: un crossfade
+full-page (~300ms) è stato scartato a favore dell'aggiornamento immediato di
+CSS var + card state (vedi commento in `modeStore.ts`).
 
 ---
 
 ## 8. Tipografia
 
-| Ruolo | Font | Peso | Tailwind class |
+Due famiglie, due mestieri, entrambe self-hosted via Fontsource (nessuna
+richiesta a Google Fonts, GDPR compliant):
+
+| Famiglia | Ruolo | CSS var | Pesi installati |
 |---|---|---|---|
-| Heading principale | Inter / Playfair (CREATIVE) | 700 | `text-4xl font-bold` |
-| Heading sezione | Inter | 600 | `text-2xl font-semibold` |
-| Body | Inter | 400 | `text-base` |
-| Mono / Dati tecnici | JetBrains Mono | 400 | `font-mono text-sm` |
-| Quote / Impatto | Georgia (italic) | 400 italic | `italic` |
-| Badge / Label | Inter | 500 uppercase | `text-xs font-medium tracking-widest uppercase` |
+| **Lexend** | Titoli, testo, tutto ciò che è "parlato" | `--font-display`, `--font-sans` | 400 500 600 700 800 |
+| **JetBrains Mono** | Tag, label, numeri, dati tecnici, "misurato" | `--font-mono` | 400 500 600 700 |
+
+Il peso 800 di Lexend ha `font-display: block` + `<link rel="preload">` in
+`Layout.astro`: previene il FOUC durante il preloader/nome hero (il browser
+trattiene il testo invisibile invece di fare swap col fallback di sistema).
+
+### Scala tipografica fissa
+
+Ogni `font-size` non fluido nel progetto è un token `--fs-N` (mai un rem "a
+occhio" tipo `0.68rem`): `--fs-10` (eccezione, solo badge cortissimi ALL CAPS +
+bold), `--fs-12` (pavimento assoluto per prosa/label/nomi), poi `--fs-14/16/18/
+20/24/28/32/36/40/48`. I `clamp()` di hero/display restano fluidi di proposito,
+ma il loro floor non scende mai sotto `--fs-12` (eccetto `--fs-10` per badge).
+Regola completa: `.claude/skills/design-system/SKILL.md` → "Typography Scale".
 
 ---
 
 ## 9. Palette colori per mode
 
-### Tokens condivisi (CSS custom properties)
+**Un solo token è davvero invariante**: `--color-bg` (ottanio, `rgba(8,73,67,1)`
+in ogni mode, ogni pagina). Tutti gli altri 4 token cambiano per mode — un
+componente o un documento che li mostra come costanti fisse (es. sempre gli
+stessi valori `:root`) mostra dati sbagliati appena gira in un mode diverso dal
+default. Bug reale trovato e corretto il 2026-07-23 in `WorkDesignSystem.astro`
+(leggeva `:root` invece del mode attivo della pagina che lo ospitava).
 
-```css
-:root {
-  --color-bg: #fafaf8;
-  --color-surface: #ffffff;
-  --color-border: #e2e2dc;
-  --color-text-primary: #1a1a18;
-  --color-text-muted: #6b6b65;
-  --color-accent: #1a1a18;
-  --card-opacity-active: 1;
-  --card-opacity-passive: 0.28;
-  --card-scale-passive: 1;
-}
+| Mode | `--color-accent` | `--color-text-muted` (WCAG AA) | `--color-surface` | `--color-border` | `--color-text-primary` |
+|---|---|---|---|---|---|
+| default (`:root`) | `rgba(255,255,255,0.9)` | `rgba(192,220,215,0.85)` — ~5.7:1 ✅ | `rgba(12,95,87,0.5)` | `rgba(255,255,255,0.12)` | `rgba(245,240,230,1)` |
+| `tech` | `rgba(0,255,200,1)` | `rgba(0,255,200,0.70)` — ~4.8:1 ✅ | `rgba(5,50,45,0.6)` | `rgba(0,255,200,0.2)` | `rgba(220,255,245,1)` |
+| `creative` | `rgba(255,107,53,1)` | `rgba(255,195,155,0.82)` — ~4.9:1 ✅ | `rgba(40,20,5,0.5)` | `rgba(255,107,53,0.25)` | `rgba(255,240,220,1)` |
+| `human` | `rgba(240,200,127,1)` | `rgba(240,210,148,0.75)` — ~4.6:1 ✅ | `rgba(20,60,30,0.4)` | `rgba(240,200,127,0.25)` | `rgba(250,240,215,1)` |
+| `management` | `rgba(180,100,255,1)` | `rgba(200,170,255,0.78)` — ~4.6:1 ✅ | `rgba(30,10,60,0.4)` | `rgba(180,100,255,0.25)` | `rgba(240,230,255,1)` |
 
-[data-mode="tech"] {
-  --color-bg: #0a0a0f;
-  --color-surface: #12121a;
-  --color-border: #1e1e2e;
-  --color-text-primary: #e8e8f0;
-  --color-text-muted: #6b6b88;
-  --color-accent: #00ff88;
-  --color-accent-2: #0066ff;
-  --card-opacity-passive: 0.2;
-  --card-scale-passive: 1;
-}
+### Token rimossi — non esistono più, non reintrodurli
 
-[data-mode="creative"] {
-  --color-bg: #fdfaf5;
-  --color-surface: #ffffff;
-  --color-border: #e8ddd0;
-  --color-text-primary: #2c1810;
-  --color-text-muted: #8b7355;
-  --color-accent: #e85d04;
-  --color-accent-2: #9b2226;
-  --card-opacity-passive: 0.35;
-  --card-scale-passive: 0.95;
-}
-
-[data-mode="human"] {
-  --color-bg: #f5f0eb;
-  --color-surface: #faf7f2;
-  --color-border: #d4c9b8;
-  --color-text-primary: #2d2926;
-  --color-text-muted: #7a6e62;
-  --color-accent: #2d6a4f;
-  --color-accent-2: #403d39;
-  --card-opacity-passive: 0.3;
-  --card-scale-passive: 0.97;
-}
-```
+- ~~`--color-accent-2`~~ — era nella versione originaria del sito (Blu/Rosso
+  tiziano/Marrone per secondo accent), mai portato nella redesign ottanio.
+- ~~`--color-ottanio-dark`~~ / ~~`--color-ottanio-light`~~ — rimossi, inutilizzati.
 
 ---
 
-## 10. Animazioni e View Transitions
+## 10. Raggi e forme
 
-### Regole di animazione
+Un raggio per ruolo, deciso una volta (2026-07-10), mai a occhio:
 
-- **Nessuna animazione decorativa senza scopo** — ogni movimento comunica un cambiamento di stato.
-- Duration: `150ms` per micro-interazioni, `300ms` per transizioni di stato, `500ms` per page transition.
-- Easing: `cubic-bezier(0.4, 0, 0.2, 1)` (Material standard) per tutto.
-- **Rispetta `prefers-reduced-motion`**: se attivo, tutte le animazioni → `duration: 0ms`.
-
-### View Transitions
-
-```astro
-<!-- In Layout.astro -->
-<meta name="view-transition" />
-```
-
-```typescript
-// Cambio mode
-document.startViewTransition(() => {
-  document.documentElement.dataset.mode = newMode;
-  updateURL(newMode);
-});
-```
-
-### Transizioni card (mode switch)
-
-Le card inattive non spariscono — transitano verso `opacity: var(--card-opacity-passive)`.
-Le card attive scalano lievemente verso l'alto (`transform: translateY(-2px)`).
-
----
-
-## 11. X-Factor Badge
-
-Alcune card mostrano un badge **X-FACTOR** — segnala competenze non convenzionali ad alto valore.
-
-- Appare sulle card con `socialImpact`, `transversalSkills` non tech, esperienze internazionali.
-- In HUMAN mode: sempre visibile.
-- In TECH/CREATIVE mode: visibile al hover.
-- Visual: piccolo rettangolo colorato, testo `X` bold, tooltip con descrizione al hover.
-
-Trigger per X-Factor badge:
-- Esperienze con location internazionali (≠ Italia)
-- Skill con categoria `human` o `international`
-- Social impact items (sempre)
-- Voce "Scrittura e poesia" (premio internazionale)
-- Voce "Teatro e improvvisazione"
-
----
-
-## 12. Componenti Astro + Lit richiesti
-
-| Componente | Tipo | Responsabilità |
+| Token | Valore | Ruolo |
 |---|---|---|
-| `<mode-store>` | Lit | NanoStore wrapper, emette `mode-change` event |
-| `<entry-portal>` | Astro + Lit | Landing con 3 card giganti |
-| `<knolling-grid>` | Astro | Grid container, legge mode da store |
-| `<cv-card>` | Lit | Card singola con stati active/passive |
-| `<skill-bento>` | Lit | Grid di skill quadrati cliccabile |
-| `<skill-item>` | Lit | Singolo quadrato skill espandibile |
-| `<ai-workflow>` | Lit | Sezione AI con impact score |
-| `<ai-workflow-item>` | Lit | Singola card AI con before/after |
-| `<mode-switcher>` | Lit | Navbar toggle TECH/CREATIVE/HUMAN |
-| `<lang-toggle>` | Lit | Switch IT/EN con View Transition |
-| `<impact-badge>` | Lit | Badge impact score per AI section |
-| `<xfactor-badge>` | Lit | Badge X-Factor con tooltip |
+| `--radius-16` | 1rem | Card, sezioni, sottosezioni |
+| `--radius-4` | 0.25rem | Bottoni |
+| — | 1px | Tag/chip netti (es. `.skill-chip`) |
+| — | pillola piena (999px) | Toggle mode, chip "about" tratteggiati |
 
 ---
 
-## 13. Routing e URL structure
+## 11. Bottoni e controlli — gerarchia, non decorazione
 
-```
-/             → Entry portal (scelta mode)
-/?mode=tech   → Main page in TECH mode
-/?mode=creative → Main page in CREATIVE mode
-/?mode=human  → Main page in HUMAN mode
-/en/          → Entry portal EN
-/en/?mode=tech → Main page EN in TECH mode
-```
+Una sola azione primaria per vista: bordo accent + glow che pulsa finché non
+ci interagisci (`.profile-cta`, `.exp-deeper-btn` per il "leggi altro"). Le
+azioni secondarie restano sobrie (`.about-action`: bordo neutro, raggio card).
+I toggle di mode si riempiono solo da attivi (`.mode-btn.is-active`). I tag
+sono etichette d'inventario, non pulsanti (`.skill-chip` bordo 1px netto,
+`.about-chip` bordo tratteggiato + pillola — fatti concreti, non categorie
+generiche). Tutti i controlli testuali usano JetBrains Mono, maiuscolo,
+tracking largo.
 
 ---
 
-## 14. Accessibilità
+## 12. Animazioni — Regole (Emil Kowalski)
 
-- Tutte le card hanno `role="article"` e `aria-label` descrittivo.
-- Il mode switcher ha `aria-pressed` sul bottone attivo, `aria-label="Modalità [NOME]"`.
-- I quadrati skill hanno `role="button"`, `aria-expanded` quando aperti, `aria-label="[Skill] — livello [Level]"`.
-- Contrasto: verificare ratio minimo 4.5:1 su tutti i temi. Il TECH mode scuro richiede attenzione particolare.
-- Focus ring: sempre visibile, `outline: 2px solid var(--color-accent)`.
+Riferimento operativo completo: `.claude/skills/design-system/SKILL.md` →
+"Animation Engineering". Sintesi:
+
+- Easing custom (`--ease-out`, `--ease-in-out`, `--ease-drawer`), mai gli
+  ease-out/ease-in CSS di base, troppo deboli.
+- Mai `scale(0)` in entrata — si parte da `scale(0.92–0.95) + opacity:0`.
+- Si anima **solo** `transform` e `opacity` (GPU) — mai `padding`, `margin`,
+  `height`, `width`, `top`, `left`.
+- Durate: 100–160ms per `:active`, 125–250ms per tooltip/dropdown, 200–500ms
+  per modal/drawer. Oltre 300ms solo per hero/preloader/marketing.
+- Hover sempre dietro `@media (hover: hover) and (pointer: fine)` — niente
+  hover appiccicosi su touch.
+- `prefers-reduced-motion: reduce` sempre rispettato (regola globale in
+  `global.css`, `!important` sulle duration).
+- Asimmetria enter/exit: entrata lenta e deliberata, uscita veloce.
+
+### Smooth scroll
+
+**Lenis** (`lerp: 0.15`, `Layout.astro`), integrato con `gsap.ticker`. Niente
+`scroll-behavior: smooth` CSS in parallelo (rimosso il 2026-07-23: confliggeva
+con Lenis, animava scroll di correzione pensati per essere istantanei). Lo
+smooth scroll intenzionale passa sempre da `lenis.scrollTo()` o da un
+`behavior:"smooth"` esplicito sulla singola chiamata.
+
+### Cursor custom
+
+Dot 8px pieno accent + ring 40px outline, mix-blend-mode difference. Segue il
+mouse via `gsap.quickTo()` (non un tween nuovo per ogni evento). Nascosto su
+touch, parcheggiato invisibile a `(0,0)` finché il mouse non si muove la
+prima volta.
+
+### View Transitions — non usate
+
+Nessuna pagina usa `astro:transitions`/`document.startViewTransition`, né per
+la navigazione tra route né per il cambio mode (vedi §7). Se in futuro si
+introduce, aggiornare questa sezione — è stata una scelta esplicita, non
+un'omissione, quindi non va assunta come "ancora da fare".
+
+---
+
+## 13. Componenti Astro + Lit reali
+
+```
+components/
+  ContactFooter.astro       ← footer contatti condiviso
+  WorkDesignSystem.astro    ← questa sezione, dentro /work/[slug]
+  cards/
+    ExpCard.astro           ← card esperienza (§4)
+    AiCard.astro             ← card AI workflow (§6)
+    ProjectCard.astro        ← card progetto (tech stack, link)
+    SkillSquare.astro        ← square skill (§5)
+    SoftItem.astro           ← soft/transversal skill
+    WorkIndexCard.astro      ← card indice case study
+
+islands/                     ← Lit web components
+  GoLogo.lit.ts               ← <go-logo>: logo animato, click = reset a /
+  FloatingMenu.lit.ts         ← <floating-menu>: FAB contatti/feedback
+  SkillForceGraph.lit.ts      ← <skill-force-graph>: rete D3 (lazy, §5)
+  stores/modeStore.ts         ← NanoStore stato mode globale
+```
+
+Nessun componente "Navbar.astro"/"HeroSection.astro"/"ExperienceSection.astro"
+generico: il markup delle sezioni vive direttamente in `[mode].astro`/
+`en/cv.astro` (duplicazione nota, vedi `todo.md` #47 per il piano di
+unificazione in un `CvPage.astro` condiviso).
+
+---
+
+## 14. Routing e URL structure reali
+
+| Route | File | Note |
+|---|---|---|
+| `/` | `pages/index.astro` | Home, preloader, mode-card, profile-section |
+| `/home` | `pages/home.astro` | — |
+| `/tech` `/creative` `/human` `/management` | `pages/[mode].astro` | Stesso template, mode via SSR |
+| `/cv` | `pages/cv.astro` | Redirect legacy → `/tech` |
+| `/work` | `pages/work/index.astro` | Indice case study |
+| `/work/[slug]` | `pages/work/[slug].astro` | Case study dedicato |
+| `/en/*` | `pages/en/**` | Mirror inglese (cv.astro è single-mode, §2) |
+
+Nessun `?mode=` query param in nessuna route.
+
+---
+
+## 15. Accessibilità (WCAG AA)
+
+- **Contrasto testo (1.4.3)**: ≥4.5:1 normale, ≥3:1 testo grande (≥18px bold) —
+  vedi tabella §9, tutti i `--color-text-muted` per mode verificati.
+- **Focus visible (2.4.7)**: `:focus-visible` in `global.css`, mai sovrascritto
+  con `outline:none` senza alternativa.
+- **Skip link (2.4.1)**: in `Layout.astro`, ogni `<main>` ha `id="main-content"`.
+- **Uso del colore (1.4.1)**: mai l'unico differenziatore — le mode-card hanno
+  anche label testuale, non solo colore.
+- **Riduzione movimento (2.3.3)**: `prefers-reduced-motion: reduce` rispettato
+  ovunque con `!important` sulle durate.
+- **Difetti noti aperti** (vedi `todo.md`): dropdown mode mobile non ancora
+  navigabile da tastiera (#54); carousel feedback senza indicatore di
+  posizione/`aria-live` (#55).
 
 ---
 
 ## File di riferimento
 
-| File | Contenuto |
-|---|---|
-| `src/data/cv.ts` | Dati IT — source of truth |
-| `src/data/cv.en.ts` | Dati EN |
-| `src/styles/global.css` | CSS custom properties (tokens per mode) |
-| `src/components/` | Componenti Astro |
-| `src/islands/` | Componenti Lit interattivi (da creare) |
-| `.vscode/design.instructions.md` | Istruzioni auto-iniettate in Copilot |
+- `cv-site/src/styles/global.css` — fonte di verità per ogni token (colori,
+  tipografia, raggi, durate).
+- `.claude/skills/design-system/SKILL.md` (+ mirror `.github/skills/design-system/SKILL.md`)
+  — regole operative sintetiche, stessa fonte di questo documento.
+- `.vscode/design.instructions.md` — versione compatta per Copilot,
+  auto-iniettata su `cv-site/src/**`.
+- `AGENTS.md` (root) — mappa completa dei file del progetto.
+- `todo.md` (root) — stato di avanzamento, decisioni prese/aperte, bug noti.

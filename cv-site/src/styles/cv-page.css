@@ -860,7 +860,10 @@ a.lang-switch__opt:hover {
   margin: 0 0 1.5rem;
   padding: 0.65rem 1rem;
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-card);
+  /* --radius-card non esiste (rinominato --radius-16 nella normalizzazione
+     del 2026-07-10): questa era l'unica occorrenza rimasta, rendeva la
+     dichiarazione invalida e il box T-shaped usciva a spigolo vivo. */
+  border-radius: var(--radius-16);
 }
 
 .hero-tshape__item {
