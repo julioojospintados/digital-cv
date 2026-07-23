@@ -95,6 +95,9 @@ interface Locale {
   positioning: string;
   creds: string;
   location: string;
+  linkedinUrl: string;
+  siteLabel: string;
+  workLinkLabel: string;
   qrCap: string;
   visitBtn: string;
   profileLead: string;
@@ -123,10 +126,13 @@ interface Locale {
 const EN: Locale = {
   lang: "en",
   file: "Giulio_Occhipinti_UX_Designer_CV_EN.pdf",
-  positioning: "UX/UI Designer · Creative Technologist",
+  positioning: "UX/UI Designer · Frontend Developer",
   creds:
-    "IBM UX Design Professional Certificate · 6+ years designing enterprise interfaces · Design Systems &amp; accessibility (WCAG AA)",
+    "IBM-certified in UX/UI · IED Master's in Digital Communication · Frontend developer, 6+ years on enterprise products · More on the site",
   location: "Turin, Italy",
+  linkedinUrl: "https://www.linkedin.com/in/giulio-occhipinti?locale=en_US",
+  siteLabel: "Website",
+  workLinkLabel: "Read the case study",
   qrCap: "Scan the code or tap the button —<br>the whole site is interactive",
   visitBtn: "Visit the site",
   profileLead: "Cultivating empathy, with jokes in my pocket.",
@@ -177,11 +183,11 @@ const EN: Locale = {
     {
       yr: "2019 — present",
       loc: "Turin, Italy",
-      role: "Design System Developer (UX/UI)",
+      role: "Frontend Developer",
       org: "ALTEN Italia @ Aruba &amp; Intesa San Paolo",
       bullets: [
-        "Built a <b>100+ component library</b> in Lit <b>with the design team</b>, honouring the typography, spacing and states defined in Figma.",
-        "<b>3+ years</b> as Tech Lead &amp; Scrum Master (30+ people); enterprise Angular for Intesa San Paolo (50+), with systematic testing (Jest).",
+        "For <b>Aruba</b> I built the design system: a <b>100+ component library</b> in Lit, with the design team, honouring the typography, spacing and states defined in Figma.",
+        "On the Aruba design system I was <b>Tech Lead and, in that role, Scrum Master</b>; for <b>Intesa San Paolo</b> I worked as a frontend developer on enterprise Angular, with systematic testing (Jest).",
       ],
     },
     {
@@ -191,7 +197,7 @@ const EN: Locale = {
       org: "Music Agency",
       bullets: [
         "Content strategy aimed at the industry, not a generic audience; <b>doubled a targeted following</b> (musicians, labels, promoters) organically.",
-        "Conceived a playlist as a networking channel; organised a live event end-to-end.",
+        "Conceived a <b>targeted playlist</b> to involve musicians and industry insiders — more followers, collaborations and industry contacts; organised a live event end-to-end.",
       ],
     },
   ],
@@ -227,11 +233,11 @@ const EN: Locale = {
     },
     {
       label: "Design tools",
-      chips: ["Figma", "Miro", "Visily", "UX Pilot", "Google Stitch", "GSAP", "WordPress", "Wix"],
+      chips: ["Figma", "Miro", "Visily", "UX Pilot", "Google Stitch", "GSAP", "WordPress", "Wix", "AI", "Claude"],
     },
     {
       label: "Frontend",
-      chips: ["HTML5", "CSS / SCSS", "TypeScript", "Angular", "Lit", "WebComponents", "Astro"],
+      chips: ["HTML5", "CSS / SCSS", "TypeScript", "Angular", "React", "Lit", "WebComponents", "Astro"],
     },
     {
       label: "AI workflow",
@@ -265,7 +271,7 @@ const EN: Locale = {
     { name: "Spanish", level: "B1" },
     { name: "French", level: "A2" },
   ],
-  ctaTitle: "See the work, not just the words.",
+  ctaTitle: "Take a look.",
   ctaSub:
     "Interactive CV, live case studies and design system — the links in this PDF are clickable.",
   portfolioBtn: "Open the portfolio",
@@ -274,10 +280,13 @@ const EN: Locale = {
 const IT: Locale = {
   lang: "it",
   file: "Giulio_Occhipinti_UX_Designer_CV.pdf",
-  positioning: "UX/UI Designer · Creative Technologist",
+  positioning: "UX/UI Designer · Frontend Developer",
   creds:
-    "Certificazione IBM UX Design Professional · 6+ anni di interfacce enterprise · Design system e accessibilità (WCAG AA)",
+    "UX/UI certificato IBM · Master IED in Comunicazione Digitale · Frontend developer, 6+ anni su prodotti enterprise · Altro nel sito",
   location: "Torino, Italia",
+  linkedinUrl: "https://www.linkedin.com/in/giulio-occhipinti?locale=it_IT",
+  siteLabel: "Sito",
+  workLinkLabel: "Leggi il case study",
   qrCap: "Inquadra il codice o tocca il pulsante,<br>tutto il sito è interattivo",
   visitBtn: "Visita il sito",
   profileLead: "Coltivatore di empatia e battute in tasca.",
@@ -301,7 +310,7 @@ const IT: Locale = {
       role: "UX Researcher &amp; Product Strategist",
       org: "Product discovery indipendente",
       bullets: [
-        "Ho ribaltato l'ideazione mettendo la <b>ricerca prima</b>: bisogni comportamentali mappati su Miro, classificati per gravità, prima di ogni idea.",
+        "Ho capovolto l'ideazione mettendo la <b>ricerca prima</b>: bisogni comportamentali mappati su Miro, classificati per gravità, prima di ogni idea.",
         "Validazione con <b>7 interviste a utenti target</b> e analisi dei competitor; una matrice Valore/Sforzo ha ridotto <b>17 concept a 1</b>, ora in un prototipo Figma ad alta fedeltà.",
       ],
     },
@@ -328,11 +337,11 @@ const IT: Locale = {
     {
       yr: "2019 — oggi",
       loc: "Torino, Italia",
-      role: "Design System Developer (UX/UI)",
+      role: "Frontend Developer",
       org: "ALTEN Italia @ Aruba &amp; Intesa San Paolo",
       bullets: [
-        "Ho costruito una <b>libreria di 100+ componenti</b> in Lit <b>insieme al team di design</b>, nel rispetto di tipografia, spaziature e stati definiti in Figma.",
-        "<b>3+ anni</b> come Tech Lead e Scrum Master (30+ persone); Angular enterprise per Intesa San Paolo (50+), con test sistematici (Jest).",
+        "Per <b>Aruba</b> ho costruito il design system: una <b>libreria di 100+ componenti</b> in Lit, insieme al team di design, nel rispetto di tipografia, spaziature e stati definiti in Figma.",
+        "Sul design system Aruba ero <b>Tech Lead e, in quel ruolo, Scrum Master</b>; per <b>Intesa San Paolo</b> ho lavorato come frontend developer su Angular enterprise, con test sistematici (Jest).",
       ],
     },
     {
@@ -342,7 +351,7 @@ const IT: Locale = {
       org: "Music Agency",
       bullets: [
         "Content strategy rivolta al settore, non a un pubblico generico; ho <b>raddoppiato un seguito mirato</b> (musicisti, etichette, promoter) in modo organico.",
-        "Ho ideato una playlist come canale di networking; ho organizzato un evento live end-to-end.",
+        "Ho ideato una <b>playlist mirata</b> per coinvolgere musicisti e addetti ai lavori: più follower, collaborazioni e contatti di settore; ho organizzato un evento live end-to-end.",
       ],
     },
   ],
@@ -378,11 +387,11 @@ const IT: Locale = {
     },
     {
       label: "Strumenti di design",
-      chips: ["Figma", "Miro", "Visily", "UX Pilot", "Google Stitch", "GSAP", "WordPress", "Wix"],
+      chips: ["Figma", "Miro", "Visily", "UX Pilot", "Google Stitch", "GSAP", "WordPress", "Wix", "AI", "Claude"],
     },
     {
       label: "Frontend",
-      chips: ["HTML5", "CSS / SCSS", "TypeScript", "Angular", "Lit", "WebComponents", "Astro"],
+      chips: ["HTML5", "CSS / SCSS", "TypeScript", "Angular", "React", "Lit", "WebComponents", "Astro"],
     },
     {
       label: "Flusso AI",
@@ -416,7 +425,7 @@ const IT: Locale = {
     { name: "Spagnolo", level: "B1" },
     { name: "Francese", level: "A2" },
   ],
-  ctaTitle: "Guarda il lavoro, non solo le parole.",
+  ctaTitle: "Dai un'occhiata.",
   ctaSub:
     "CV interattivo, case study live e design system: i link in questo PDF sono cliccabili.",
   portfolioBtn: "Apri il portfolio",
@@ -435,12 +444,12 @@ const expHtml = (e: Experience): string => `
     </div>
   </div>`;
 
-const workHtml = (w: Work): string => `
+const workHtml = (w: Work, linkLabel: string): string => `
     <article class="wcard">
       <div class="wt">${w.title}</div>
       <div class="wd">${w.desc}</div>
       <div class="wo">${w.outcome}</div>
-      <div class="wl"><a class="lnk" href="${w.url}">${w.url.replace("https://", "")}</a></div>
+      <div class="wl"><a class="lnk" href="${w.url}">${linkLabel}</a></div>
     </article>`;
 
 const skillHtml = (g: SkillGroup): string => `
@@ -504,11 +513,13 @@ a.lnk{color:var(--accent);text-decoration:underline;text-decoration-thickness:.8
 .posit{font-weight:700;font-size:12pt;color:var(--accent);margin-top:2mm;letter-spacing:-.01em;}
 .creds{font-family:var(--mono);font-weight:500;font-size:7.6pt;line-height:1.5;letter-spacing:.02em;
   color:var(--mut);margin-top:3mm;max-width:52em;}
-.contacts{display:flex;flex-wrap:wrap;gap:2.2mm 6mm;margin-top:4.5mm;
+.contacts{display:flex;flex-wrap:wrap;gap:2.4mm 5.5mm;margin-top:4.5mm;
   font-family:var(--mono);font-weight:500;font-size:8.2pt;}
+.contacts .ct{display:inline-flex;align-items:baseline;gap:1.6mm;}
+.contacts .lab{font-size:6.6pt;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);}
 .contacts .plain{color:var(--mut);}
-.contacts a.on-dark{color:var(--accent);text-decoration:underline;
-  text-decoration-thickness:.8pt;text-underline-offset:1.8pt;}
+.contacts a.on-dark{color:var(--cream);text-decoration:underline;
+  text-decoration-color:var(--accent);text-decoration-thickness:.8pt;text-underline-offset:1.8pt;}
 
 .qcol{display:flex;flex-direction:column;align-items:center;gap:3.5mm;width:42mm;}
 .qcol img{width:42mm;height:42mm;display:block;border-radius:3mm;}
@@ -517,18 +528,18 @@ a.lnk{color:var(--accent);text-decoration:underline;text-decoration-thickness:.8
 .qcol .btn{width:100%;}
 
 /* ── SECTIONS ── */
-section{margin-top:4.6mm;}
+section{margin-top:4mm;}
 .sec-h{display:flex;align-items:baseline;gap:3mm;margin-bottom:3mm;
   border-bottom:1.5px solid var(--line);padding-bottom:1.8mm;}
 .sec-h h2{font-weight:800;font-size:11pt;letter-spacing:-.01em;}
 .sec-h span{font-family:var(--mono);font-weight:700;font-size:6.6pt;letter-spacing:.16em;
   text-transform:uppercase;color:var(--accent);}
 
-.profile-lead{font-weight:700;font-size:11.5pt;letter-spacing:-.01em;color:var(--cream);margin-bottom:1.5mm;}
-.profile{font-size:9.1pt;line-height:1.4;max-width:64em;color:var(--cream);}
+.profile-lead{font-weight:700;font-size:11.5pt;letter-spacing:-.01em;color:var(--cream);margin-bottom:1.3mm;}
+.profile{font-size:9.1pt;line-height:1.36;max-width:64em;color:var(--cream);}
 
 /* Experience */
-.entry{display:grid;grid-template-columns:34mm 1fr;gap:6mm;padding:1.7mm 0;
+.entry{display:grid;grid-template-columns:34mm 1fr;gap:6mm;padding:1.5mm 0;
   break-inside:avoid;border-top:1px solid var(--line);}
 .entry:first-of-type{border-top:0;padding-top:.5mm;}
 .entry__meta{font-family:var(--mono);font-size:7.4pt;line-height:1.5;color:var(--mut);}
@@ -588,10 +599,10 @@ section{margin-top:4.6mm;}
     <p class="posit">${L.positioning}</p>
     <p class="creds">${L.creds}</p>
     <div class="contacts">
-      <a class="on-dark" href="mailto:giulio.occhipinti.g@gmail.com">giulio.occhipinti.g@gmail.com</a>
-      <a class="on-dark" href="https://www.linkedin.com/in/giulio-occhipinti">/in/giulio-occhipinti</a>
-      <a class="on-dark" href="${SITE}">giulio-occhipinti.com</a>
-      <span class="plain">${L.location}</span>
+      <span class="ct"><span class="lab">Email</span> <a class="on-dark" href="mailto:giulio.occhipinti.g@gmail.com">giulio.occhipinti.g@gmail.com</a></span>
+      <span class="ct"><span class="lab">LinkedIn</span> <a class="on-dark" href="${L.linkedinUrl}">in/giulio-occhipinti</a></span>
+      <span class="ct"><span class="lab">${L.siteLabel}</span> <a class="on-dark" href="${SITE}">giulio-occhipinti.com</a></span>
+      <span class="ct plain">${L.location}</span>
     </div>
   </div>
   <figure class="qcol">
@@ -617,7 +628,7 @@ section{margin-top:4.6mm;}
 <div class="sheet">
 <section>
   <div class="sec-h"><h2>${L.secWork}</h2><span>${L.workEyebrow}</span></div>
-  <div class="work">${L.works.map(workHtml).join("\n")}</div>
+  <div class="work">${L.works.map((w) => workHtml(w, L.workLinkLabel)).join("\n")}</div>
 </section>
 
 <section>
