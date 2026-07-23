@@ -1396,7 +1396,13 @@ a.lang-switch__opt:hover {
   display: inline-flex;
   align-items: center;
   padding: 0.22rem 0.55rem;
-  background: var(--color-accent);
+  /* Fill piatto nel colore del mode, niente glow pulsante (troppo
+     "luminescente", poco leggibile). Accent puro fallirebbe comunque WCAG
+     con testo ottanio in creative (~3.6:1) e management (~3:1), quindi
+     resta schiarito 65/35 con bianco per stare sopra 4.5:1 su tutti i 4
+     mode — non tornare a var(--color-accent) puro senza riverificare il
+     contrasto. */
+  background: color-mix(in srgb, var(--color-accent) 65%, white 35%);
   border-radius: var(--radius-4);
   color: rgba(8, 73, 67, 1);
   font-size: var(--fs-12);
@@ -1404,33 +1410,7 @@ a.lang-switch__opt:hover {
   letter-spacing: 0.2em;
   text-transform: uppercase;
   white-space: nowrap;
-  box-shadow:
-    0 0 18px var(--color-accent),
-    0 2px 8px rgba(0, 0, 0, 0.5),
-    inset 0 1px 0 rgba(255, 255, 255, 0.32),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.18);
-  animation: ai-clip-breathe 2.6s ease-in-out infinite;
-}
-
-@keyframes ai-clip-breathe {
-
-  0%,
-  100% {
-    box-shadow:
-      0 0 14px var(--color-accent),
-      0 2px 8px rgba(0, 0, 0, 0.5),
-      inset 0 1px 0 rgba(255, 255, 255, 0.32),
-      inset 0 -1px 0 rgba(0, 0, 0, 0.18);
-  }
-
-  50% {
-    box-shadow:
-      0 0 30px var(--color-accent),
-      0 0 14px var(--color-accent),
-      0 2px 8px rgba(0, 0, 0, 0.5),
-      inset 0 1px 0 rgba(255, 255, 255, 0.32),
-      inset 0 -1px 0 rgba(0, 0, 0, 0.18);
-  }
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 
 /* ── Experience ──────────────────────────────────────────────── */
