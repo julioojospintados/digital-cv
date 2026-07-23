@@ -50,3 +50,5 @@ clinerules.md
 .cline-skills/
 \.clineignore
 
+# Generated personal CV PDFs — regenerate with `npm run pdf:ux`, never commit
+cv-output/
