@@ -60,7 +60,7 @@ const jsonLd = {
 ---
 
 <!doctype html>
-<html lang={lang} class="scroll-smooth cursor-idle" data-mode={mode ?? "tech"} data-fab-scrollwait>
+<html lang={lang} class="cursor-idle" data-mode={mode ?? "tech"} data-fab-scrollwait>
   <head>
     <meta charset="utf-8" />
     <meta
@@ -194,20 +194,25 @@ const jsonLd = {
       // cursor: none è già in global.css con `* { cursor: none !important }` —
       // nessun loop JS necessario.
 
+      // quickTo() invece di gsap.to() per-mousemove (todo #51): pre-costruisce
+      // il tween una sola volta e sui frame successivi aggiorna solo il valore
+      // target, senza allocare un nuovo tween/oggetto di config ad ogni evento.
+      const moveDot = gsap.quickTo(dot, "x", { duration: 0.05, ease: "none" });
+      const moveDotY = gsap.quickTo(dot, "y", { duration: 0.05, ease: "none" });
+      const moveRing = gsap.quickTo(ring, "x", { duration: 0.22, ease: "power2.out" });
+      const moveRingY = gsap.quickTo(ring, "y", { duration: 0.22, ease: "power2.out" });
+
       window.addEventListener("mousemove", (e) => {
         // Primo movimento: rivela il cursore (era parcheggiato invisibile a 0,0)
         document.documentElement.classList.remove("cursor-idle");
         const mx = e.clientX;
         const my = e.clientY;
         // Dot: segue immediato il puntatore
-        gsap.to(dot, { x: mx - 4, y: my - 4, duration: 0.05, ease: "none" });
-        // Ring: lerp via GSAP to — aggiorna solo on mousemove, nessun ticker aggiuntivo
-        gsap.to(ring, {
-          x: mx - 20,
-          y: my - 20,
-          duration: 0.22,
-          ease: "power2.out",
-        });
+        moveDot(mx - 4);
+        moveDotY(my - 4);
+        // Ring: lerp via GSAP quickTo — aggiorna solo on mousemove, nessun ticker aggiuntivo
+        moveRing(mx - 20);
+        moveRingY(my - 20);
       });
 
       // Hover states

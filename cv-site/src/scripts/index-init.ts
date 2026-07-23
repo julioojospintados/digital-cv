@@ -553,6 +553,16 @@ function getOffsetTop(el: HTMLElement): number {
   return top;
 }
 
+function scrollToElement(target: HTMLElement) {
+  const absoluteTop = getOffsetTop(target);
+  const lenis = window.__lenis;
+  if (lenis && typeof lenis.scrollTo === "function") {
+    lenis.scrollTo(absoluteTop, { duration: 0.8 });
+  } else {
+    window.scrollTo({ top: absoluteTop, behavior: "smooth" });
+  }
+}
+
 function scrollToProfile(mode: string) {
   const target = document.querySelector<HTMLElement>(
     `.profile-section[data-mode="${mode}"]`,
@@ -561,13 +571,7 @@ function scrollToProfile(mode: string) {
     window.location.href = `/${mode}`;
     return;
   }
-  const absoluteTop = getOffsetTop(target);
-  const lenis = window.__lenis;
-  if (lenis && typeof lenis.scrollTo === "function") {
-    lenis.scrollTo(absoluteTop, { duration: 0.8 });
-  } else {
-    window.scrollTo({ top: absoluteTop, behavior: "smooth" });
-  }
+  scrollToElement(target);
 }
 
 // ── Seleziona mode: aggiorna card UI, knolling, modeStore ───────────────
@@ -668,6 +672,19 @@ document.querySelectorAll<HTMLElement>(".profile-cta").forEach((cta) => {
     e.preventDefault();
     const href = cta.getAttribute("href") ?? "/";
     launchJourney(href);
+  });
+});
+
+// ── Dot "Chi sono": stesso jump smooth via Lenis degli altri dot, ma senza
+// data-mode/stato attivo (non è un mode, non entra nel loop sotto). Serve
+// esplicitamente da quando html non ha più scroll-behavior:smooth (todo #48):
+// senza questo handler il salto nativo dell'anchor sarebbe tornato istantaneo.
+document.querySelectorAll<HTMLAnchorElement>(".section-dot:not([data-mode])").forEach((dot) => {
+  dot.addEventListener("click", (e) => {
+    e.preventDefault();
+    const id = dot.getAttribute("href")?.slice(1);
+    const target = id ? document.getElementById(id) : null;
+    if (target) scrollToElement(target);
   });
 });
 

@@ -145,7 +145,12 @@ button { background: none; border: 0; padding: 0; cursor: pointer; }
 /* ─── Base styles ─── */
 
 html {
-  scroll-behavior: smooth;
+  /* Niente scroll-behavior:smooth — confligge con Lenis (todo #48): ogni
+     window.scrollTo({top}) di correzione/fallback che non specifica un
+     behavior esplicito erediteva questo smooth e animava invece di saltare
+     istantaneamente, concausa dei drift di scroll inseguiti. Lo smooth
+     scroll intenzionale passa sempre da Lenis (lenis.scrollTo) o da un
+     behavior:"smooth" esplicito sulla singola chiamata. */
   scroll-padding-top: 5rem;
   background-color: var(--color-bg);
   color: var(--color-text-primary);
