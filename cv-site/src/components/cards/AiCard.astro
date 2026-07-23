@@ -68,42 +68,21 @@ const { tool, title, desc, impact } = Astro.props;
     display: inline-flex;
     align-items: center;
     padding: 0.22rem 0.55rem;
-    /* Outline style: sfondo trasparente, solo bordo/testo accent.
-       Il filled-accent originale falliva WCAG in management (viola → ottanio ~2.65:1)
-       e in creative (arancio → ottanio ~3.2:1); la versione con bg ottanio pieno
-       risolveva il contrasto ma copriva il knolling sotto. Il badge sta sempre
-       sopra lo sfondo ottanio della sezione (mai su contenuto saturo), quindi
-       l'accent text supera comunque 4.5:1 su tutti i 4 mode anche trasparente —
-       non reintrodurre un bg pieno senza riverificare il contrasto. */
-    background: transparent;
-    border: 1px solid color-mix(in srgb, var(--color-accent) 60%, transparent);
+    /* Fill piatto nel colore del mode, niente glow pulsante (troppo
+       "luminescente", poco leggibile). Accent puro fallirebbe comunque
+       WCAG con testo ottanio in creative (~3.6:1) e management (~3:1),
+       quindi resta schiarito 65/35 con bianco per stare sopra 4.5:1 su
+       tutti i 4 mode — non tornare a var(--color-accent) puro senza
+       riverificare il contrasto. */
+    background: color-mix(in srgb, var(--color-accent) 65%, white 35%);
     border-radius: var(--radius-4);
-    color: var(--color-accent);
+    color: rgba(8, 73, 67, 1);
     font-size: var(--fs-12);
     font-weight: 900;
     letter-spacing: 0.2em;
     text-transform: uppercase;
     white-space: nowrap;
-    box-shadow:
-      0 0 10px color-mix(in srgb, var(--color-accent) 28%, transparent),
-      0 2px 8px rgba(0, 0, 0, 0.5);
-    animation: ai-clip-breathe 2.6s ease-in-out infinite;
-  }
-
-  @keyframes ai-clip-breathe {
-    0%,
-    100% {
-      border-color: color-mix(in srgb, var(--color-accent) 55%, transparent);
-      box-shadow:
-        0 0 10px color-mix(in srgb, var(--color-accent) 28%, transparent),
-        0 2px 8px rgba(0, 0, 0, 0.5);
-    }
-    50% {
-      border-color: color-mix(in srgb, var(--color-accent) 85%, transparent);
-      box-shadow:
-        0 0 18px color-mix(in srgb, var(--color-accent) 45%, transparent),
-        0 2px 8px rgba(0, 0, 0, 0.5);
-    }
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
   }
 
   .ai-card__header {
