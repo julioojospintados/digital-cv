@@ -648,7 +648,6 @@ function buildHtml(
     <footer class="footer">
       <div class="contacts">
         <a href="mailto:${EMAIL}">${EMAIL}</a><span class="sep">·</span>
-        <span>${cvData.personal.phone}</span><span class="sep">·</span>
         <a href="${LINKEDIN}">${LINKEDIN.replace("https://www.", "")}</a><span class="sep">·</span>
         <a href="${GITHUB}">${GITHUB.replace("https://", "")}</a>
       </div>
