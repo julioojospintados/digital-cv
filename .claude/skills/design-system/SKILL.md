@@ -24,26 +24,34 @@ disposti in una fotografia knolling reale. È la **referenza visiva assoluta** p
 
 ## Colori — Sistema Fisso
 
-Lo sfondo è **sempre ottanio** `rgba(8,73,67,1)` in tutti e 3 i mode. Solo `--color-accent` cambia.
+Lo sfondo è **sempre ottanio** `rgba(8,73,67,1)` in tutti e 4 i mode — è l'unico token
+davvero invariante. **Tutti gli altri 4 token** (`--color-surface`, `--color-border`,
+`--color-text-primary`, `--color-text-muted`, oltre ad `--color-accent`) **cambiano per mode**:
+non sono valori fissi, sono ridefiniti dentro ogni blocco `[data-mode="..."]` in `global.css`.
+Un componente/doc che li mostra come costanti (es. sempre gli stessi valori `:root`) mostra
+dati sbagliati ogni volta che gira in un mode diverso dal default — bug reale trovato e
+corretto il 2026-07-23 in `WorkDesignSystem.astro` (leggeva `:root` invece del mode attivo).
 **Mai colori hardcoded — sempre CSS custom properties.**
 
 ```css
-/* Token attivi in global.css — NON aggiungere altri senza usarli */
---color-bg: rgba(8, 73, 67, 1) /* ottanio — invariabile */
-  --color-surface: rgba(12, 95, 87, 0.5) /* superfici card */
+/* Token attivi in global.css — NON aggiungere altri senza usarli.
+   Questi sono i valori :root (nessun mode attivo) — vedi tabella sotto
+   per i valori reali per mode, diversi da questi per 4 token su 5. */
+--color-bg: rgba(8, 73, 67, 1) /* ottanio — invariabile, unico fisso */
+  --color-surface: rgba(12, 95, 87, 0.5)
   --color-border: rgba(255, 255, 255, 0.12)
   --color-text-primary: rgba(245, 240, 230, 1)
   --color-text-muted: rgba(192, 220, 215, 0.85)
-  /* WCAG AA ~5.7:1 su bg ottanio */ --color-accent: /* vedi tabella mode */;
+  /* WCAG AA ~5.7:1 su bg ottanio */ --color-accent: rgba(255, 255, 255, 0.9);
 ```
 
-| Mode         | `--color-accent`        | `--color-text-muted` (WCAG AA verificato) | Target                      |
-| ------------ | ----------------------- | ----------------------------------------- | --------------------------- |
-| default      | `rgba(255,255,255,0.9)` | `rgba(192,220,215,0.85)` — ~5.7:1 ✅      | nessun mode attivo          |
-| `tech`       | `rgba(0,255,200,1)`     | `rgba(0,255,200,0.70)` — ~4.8:1 ✅        | CTO, recruiter tecnico      |
-| `creative`   | `rgba(255,107,53,1)`    | `rgba(255,195,155,0.82)` — ~4.9:1 ✅      | Art director, agenzia       |
-| `human`      | `rgba(240,200,127,1)`   | `rgba(240,210,148,0.75)` — ~4.6:1 ✅      | HR, fondatore, no-profit    |
-| `management` | `rgba(180,100,255,1)`   | `rgba(200,170,255,0.78)` — ~4.6:1 ✅      | Recruiter, aziende, innovazione |
+| Mode         | `--color-accent`        | `--color-text-muted` (WCAG AA verificato) | `--color-surface`      | `--color-border`        | `--color-text-primary`  | Target                      |
+| ------------ | ----------------------- | ----------------------------------------- | ----------------------- | ------------------------ | ------------------------ | ---------------------------- |
+| default      | `rgba(255,255,255,0.9)` | `rgba(192,220,215,0.85)` — ~5.7:1 ✅      | `rgba(12,95,87,0.5)`   | `rgba(255,255,255,0.12)` | `rgba(245,240,230,1)`   | nessun mode attivo          |
+| `tech`       | `rgba(0,255,200,1)`     | `rgba(0,255,200,0.70)` — ~4.8:1 ✅        | `rgba(5,50,45,0.6)`    | `rgba(0,255,200,0.2)`    | `rgba(220,255,245,1)`   | CTO, recruiter tecnico      |
+| `creative`   | `rgba(255,107,53,1)`    | `rgba(255,195,155,0.82)` — ~4.9:1 ✅      | `rgba(40,20,5,0.5)`    | `rgba(255,107,53,0.25)`  | `rgba(255,240,220,1)`   | Art director, agenzia       |
+| `human`      | `rgba(240,200,127,1)`   | `rgba(240,210,148,0.75)` — ~4.6:1 ✅      | `rgba(20,60,30,0.4)`   | `rgba(240,200,127,0.25)` | `rgba(250,240,215,1)`   | HR, fondatore, no-profit    |
+| `management` | `rgba(180,100,255,1)`   | `rgba(200,170,255,0.78)` — ~4.6:1 ✅      | `rgba(30,10,60,0.4)`   | `rgba(180,100,255,0.25)` | `rgba(240,230,255,1)`   | Recruiter, aziende, innovazione |
 
 ### Token NON esistenti — non usarli mai
 
@@ -197,7 +205,7 @@ La sezione mostra il badge `MCP` come firma del metodo.
 | Noise grain overlay     | SVG `feTurbulence` filter + CSS `body::after`  | ✅ implementato in global.css   |
 | Preloader brandizzato   | GSAP timeline (GO → nome)                      | ✅ implementato in index.astro  |
 | Magnetic buttons        | `mousemove` + GSAP translate                   | ✅ implementato sulle mode card |
-| View Transitions        | `astro:transitions` meta tag                   | ✅ presente nel Layout          |
+| View Transitions        | `astro:transitions` / `startViewTransition`    | ❌ non usate (scelta esplicita) |
 | Responsive Mobile-First | Tailwind breakpoints                           | ✅ parziale                     |
 | Skip link               | `.skip-link` in Layout.astro                   | ✅ implementato                 |
 | Focus visible           | `:focus-visible` in global.css                 | ✅ implementato                 |

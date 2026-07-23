@@ -24,26 +24,34 @@ disposti in una fotografia knolling reale. È la **referenza visiva assoluta** p
 
 ## Colori — Sistema Fisso
 
-Lo sfondo è **sempre ottanio** `rgba(8,73,67,1)` in tutti e 3 i mode. Solo `--color-accent` cambia.
+Lo sfondo è **sempre ottanio** `rgba(8,73,67,1)` in tutti e 4 i mode — è l'unico token
+davvero invariante. **Tutti gli altri 4 token** (`--color-surface`, `--color-border`,
+`--color-text-primary`, `--color-text-muted`, oltre ad `--color-accent`) **cambiano per mode**:
+non sono valori fissi, sono ridefiniti dentro ogni blocco `[data-mode="..."]` in `global.css`.
+Un componente/doc che li mostra come costanti (es. sempre gli stessi valori `:root`) mostra
+dati sbagliati ogni volta che gira in un mode diverso dal default — bug reale trovato e
+corretto il 2026-07-23 in `WorkDesignSystem.astro` (leggeva `:root` invece del mode attivo).
 **Mai colori hardcoded — sempre CSS custom properties.**
 
 ```css
-/* Token attivi in global.css — NON aggiungere altri senza usarli */
---color-bg: rgba(8, 73, 67, 1) /* ottanio — invariabile */
-  --color-surface: rgba(12, 95, 87, 0.5) /* superfici card */
+/* Token attivi in global.css — NON aggiungere altri senza usarli.
+   Questi sono i valori :root (nessun mode attivo) — vedi tabella sotto
+   per i valori reali per mode, diversi da questi per 4 token su 5. */
+--color-bg: rgba(8, 73, 67, 1) /* ottanio — invariabile, unico fisso */
+  --color-surface: rgba(12, 95, 87, 0.5)
   --color-border: rgba(255, 255, 255, 0.12)
   --color-text-primary: rgba(245, 240, 230, 1)
   --color-text-muted: rgba(192, 220, 215, 0.85)
-  /* WCAG AA ~5.7:1 su bg ottanio */ --color-accent: /* vedi tabella mode */;
+  /* WCAG AA ~5.7:1 su bg ottanio */ --color-accent: rgba(255, 255, 255, 0.9);
 ```
 
-| Mode         | `--color-accent`        | `--color-text-muted` (WCAG AA verificato) | Target                      |
-| ------------ | ----------------------- | ----------------------------------------- | --------------------------- |
-| default      | `rgba(255,255,255,0.9)` | `rgba(192,220,215,0.85)` — ~5.7:1 ✅      | nessun mode attivo          |
-| `tech`       | `rgba(0,255,200,1)`     | `rgba(0,255,200,0.70)` — ~4.8:1 ✅        | CTO, recruiter tecnico      |
-| `creative`   | `rgba(255,107,53,1)`    | `rgba(255,195,155,0.82)` — ~4.9:1 ✅      | Art director, agenzia       |
-| `human`      | `rgba(240,200,127,1)`   | `rgba(240,210,148,0.75)` — ~4.6:1 ✅      | HR, fondatore, no-profit    |
-| `management` | `rgba(180,100,255,1)`   | `rgba(200,170,255,0.78)` — ~4.6:1 ✅      | Recruiter, aziende, innovazione |
+| Mode         | `--color-accent`        | `--color-text-muted` (WCAG AA verificato) | `--color-surface`      | `--color-border`        | `--color-text-primary`  | Target                      |
+| ------------ | ----------------------- | ----------------------------------------- | ----------------------- | ------------------------ | ------------------------ | ---------------------------- |
+| default      | `rgba(255,255,255,0.9)` | `rgba(192,220,215,0.85)` — ~5.7:1 ✅      | `rgba(12,95,87,0.5)`   | `rgba(255,255,255,0.12)` | `rgba(245,240,230,1)`   | nessun mode attivo          |
+| `tech`       | `rgba(0,255,200,1)`     | `rgba(0,255,200,0.70)` — ~4.8:1 ✅        | `rgba(5,50,45,0.6)`    | `rgba(0,255,200,0.2)`    | `rgba(220,255,245,1)`   | CTO, recruiter tecnico      |
+| `creative`   | `rgba(255,107,53,1)`    | `rgba(255,195,155,0.82)` — ~4.9:1 ✅      | `rgba(40,20,5,0.5)`    | `rgba(255,107,53,0.25)`  | `rgba(255,240,220,1)`   | Art director, agenzia       |
+| `human`      | `rgba(240,200,127,1)`   | `rgba(240,210,148,0.75)` — ~4.6:1 ✅      | `rgba(20,60,30,0.4)`   | `rgba(240,200,127,0.25)` | `rgba(250,240,215,1)`   | HR, fondatore, no-profit    |
+| `management` | `rgba(180,100,255,1)`   | `rgba(200,170,255,0.78)` — ~4.6:1 ✅      | `rgba(30,10,60,0.4)`   | `rgba(180,100,255,0.25)` | `rgba(240,230,255,1)`   | Recruiter, aziende, innovazione |
 
 ### Token NON esistenti — non usarli mai
 
@@ -197,7 +205,7 @@ La sezione mostra il badge `MCP` come firma del metodo.
 | Noise grain overlay     | SVG `feTurbulence` filter + CSS `body::after`  | ✅ implementato in global.css   |
 | Preloader brandizzato   | GSAP timeline (GO → nome)                      | ✅ implementato in index.astro  |
 | Magnetic buttons        | `mousemove` + GSAP translate                   | ✅ implementato sulle mode card |
-| View Transitions        | `astro:transitions` meta tag                   | ✅ presente nel Layout          |
+| View Transitions        | `astro:transitions` / `startViewTransition`    | ❌ non usate (scelta esplicita) |
 | Responsive Mobile-First | Tailwind breakpoints                           | ✅ parziale                     |
 | Skip link               | `.skip-link` in Layout.astro                   | ✅ implementato                 |
 | Focus visible           | `:focus-visible` in global.css                 | ✅ implementato                 |
@@ -498,184 +506,3 @@ anche lì — nessun bound minimo di un clamp può scendere sotto `var(--fs-12)`
 - Sovrascrivere `:focus-visible` con `outline: none` senza alternativa visibile
 - `font-size` in rem/px letterale fuori da un `clamp()` — usa sempre `var(--fs-N)` (vedi "Typography Scale")
 - Scendere sotto `var(--fs-12)` per prosa/label/nomi — l'eccezione `var(--fs-10)` è solo per badge cortissimi ALL CAPS + bold
-
-Lo sfondo è **sempre ottanio** `rgba(8,73,67,1)` in tutti e 3 i mode. Solo `--color-accent` cambia.
-**Mai colori hardcoded — sempre CSS custom properties.**
-
-```css
---color-bg: rgba(8, 73, 67, 1) /* ottanio — invariabile */
-  --color-surface: rgba(12, 95, 87, 0.5) /* superfici card */
-  --color-border: rgba(255, 255, 255, 0.12)
-  --color-text-primary: rgba(245, 240, 230, 1)
-  --color-text-muted: rgba(180, 210, 205, 0.7)
-  --color-accent: /* vedi tabella mode */;
-````
-
-| Mode       | `--color-accent`                 | Target                   |
-| ---------- | -------------------------------- | ------------------------ |
-| `tech`     | `rgba(0,255,200,1)` — Cyan       | CTO, recruiter tecnico   |
-| `creative` | `rgba(255,107,53,1)` — Arancione | Art director, agenzia    |
-| `human`    | `rgba(240,200,127,1)` — Oro      | HR, fondatore, no-profit |
-
----
-
-## Mode System — Regola Fondamentale
-
-Il mode NON cambia template, NON cambia pagina.
-Cambia solo l'**enfasi visiva** tramite `data-state="active|passive"`:
-
-```html
-<div class="cv-card" data-tags="tech creative">...</div>
-```
-
-- Card con tag corrispondente al mode → `opacity: 1` (active)
-- Altre card → `opacity: var(--card-opacity-passive)` — mai `display:none` (sono sussurri)
-
-Il JavaScript in `cv.astro` applica `data-state` confrontando i `data-tags` con il mode corrente.
-Il CSS gestisce `opacity` e `transform` in base a `data-state`.
-
----
-
-## Oggetti Knolling
-
-8 PNG con sfondo trasparente in `cv-site/public/knolling/`:
-
-| File             | Mode             | Significato simbolico         |
-| ---------------- | ---------------- | ----------------------------- |
-| `laptop.png`     | tech             | Il lavoro digitale, il codice |
-| `flashlight.png` | tech             | Illuminare problemi complessi |
-| `multitool.png`  | tech + creative  | Versatilità, problem solving  |
-| `camera.png`     | creative         | Fotografia, visione estetica  |
-| `megaphone.png`  | creative + human | Comunicazione, palco, voce    |
-| `chess.png`      | human            | Strategia, pensiero laterale  |
-| `plant.png`      | human            | Crescita, cura, impatto       |
-| `compass.png`    | creative + human | Orientamento, esplorazione    |
-
-Posizionamento via CSS custom properties `--kx`, `--ky`, `--kr`, `--ks`.
-GSAP anima ingresso e cambio mode (`is-hero` / `is-dim`).
-Mobile `@media (max-width: 639px)`: riposiziona nei corner estremi, lontano dal contenuto centrale.
-
----
-
-## Skill Grid
-
-**Mai barre percentuali.** Quadrati con bordo proporzionale al livello:
-
-- Bordo: 1px / 2px / 3px / 4px (Base → Esperto)
-- Glow: solo Avanzato e Esperto — `box-shadow: 0 0 12px 3px var(--color-accent)`
-
----
-
-## AI Workflow — Sezione Dedicata
-
-Sempre visibile indipendentemente dal mode.
-Badge `impactScore`: font mono, colore accent, sembra un dato — non marketing.
-Esempi: `-87% boilerplate` · `+3x velocità` · `-50% costo sviluppo`.
-La sezione mostra il badge `MCP` come firma del metodo.
-
----
-
-## Flusso Utente
-
-```
-/ (index.astro)
-  → Attiva un'identità: TECH / CREATIVE / HUMAN
-  → GSAP: oggetti knolling "rispondono" alla scelta (is-hero / is-dim)
-  → CTA "GO Tech/Creative/Human" → /cv?mode=X (Astro View Transition)
-
-/cv (cv.astro)
-  → Dati da cv.ts via @cv-data
-  → Navbar sticky con toggle mode (cambia mode senza ricaricare)
-  → Sezioni: Hero · Skills Bento · Esperienze · AI Workflow · Soft Skills · Mindset · Progetti · Formazione
-  → Mode persiste in localStorage via modeStore.ts
-```
-
----
-
-## Componenti Gamification
-
-| Componente                   | Ruolo narrativo                                                                  |
-| ---------------------------- | -------------------------------------------------------------------------------- |
-| `<go-logo>`                  | Ancora universale — click = Master Reset a `/`. Mode-reactivo (cyan/orange/gold) |
-| Mode cards (`index.astro`)   | Non pulsanti: **portali** — sensazione di "entrare in un mondo"                  |
-| GSAP Flip bento (`cv.astro`) | Ribilanciamento spazio al cambio mode — "Yes, And..." della griglia              |
-| Knolling objects             | Risposta ambientale alla scelta: `is-hero` / `is-dim`                            |
-| Preloader GO                 | Rituale iniziatico — evento narrativo fondante, non animazione decorativa        |
-
----
-
-## Standard Awwwards — Checklist
-
-| Pattern                 | Libreria / Metodo               | Stato           |
-| ----------------------- | ------------------------------- | --------------- |
-| Smooth scroll           | `Lenis` (`lerp: 0.08`)          | da implementare |
-| Custom cursor           | CSS + GSAP follower             | da implementare |
-| ScrollTrigger reveals   | GSAP ScrollTrigger              | da implementare |
-| Split text hero         | char-by-char stagger            | da implementare |
-| Noise grain overlay     | SVG `feTurbulence` filter + CSS | da implementare |
-| Preloader brandizzato   | GSAP timeline                   | da implementare |
-| Magnetic buttons        | `mousemove` + GSAP translate    | da implementare |
-| View Transitions        | `astro:transitions`             | ✅ presente     |
-| Responsive Mobile-First | Tailwind breakpoints            | ✅ parziale     |
-
-### Principi Awwwards
-
-- **Ogni sezione ha "un dettaglio con cui giocare"** — interazione = messaggio
-- **Preloader → Identity → Transition** è il framework narrativo award
-- **Tipografia display bold + tracking stretto** — non body font standard per i titoli
-- **Transizioni di pagina fluide** — mai un flash bianco o un caricamento abrupt
-- **Cursor come firma visiva** — il cursore è parte del brand
-- **Impatto verticale nel fold iniziale** — il recruiter deve restare nei primi 3 secondi
-
----
-
-## Typography Scale
-
-```css
-/* h1 hero: clamp(4rem, 12vw, 10rem) — bold/black weight */
-/* h2 sezione: clamp(2rem, 5vw, 4.5rem) — bold */
-/* Label uppercase: 0.65rem, letter-spacing: 0.3em */
-/* Body: max 1.1rem, line-height: 1.65 */
-```
-
-Non usare Inter regular per h1/h2 grandi — servono font display bold.
-
----
-
-## Cursor Custom
-
-- Default: 12px cerchio pieno (colore `--color-accent`)
-- Hover interattivo: si espande a 40px, outline, lieve blur
-- Su testo: custom si rimpicciolisce, cursore browser visibile
-- Mai mostrare il cursore di default su elementi interattivi
-- Il cursore cambia colore con il mode
-
----
-
-## Smooth Scroll
-
-- `Lenis` in `Layout.astro`, integrato con GSAP ticker
-- `data-lenis-prevent` su modal/overlays
-- Velocità: `lerp: 0.08` (più lento = più premium)
-
----
-
-## Regole per il Codice UI
-
-- **Mobile-First** — costruisci sempre dal mobile, poi scala a desktop
-- **Tailwind 4** per lo styling — non CSS inline, non classi inventate
-- `will-change: transform` solo sugli elementi animati da GSAP
-- Feedback visivo "wow ma leggero" — nessuna animazione pesante
-- Pixel Perfect: spacing, kerning, allineamenti intenzionali, non approssimativi
-- Tutta la logica TypeScript va nel frontmatter `---` di Astro, non nel template JSX
-- Immagini knolling: `loading="eager"` solo above-fold, resto `lazy`
-
----
-
-## Do NOT
-
-- `display:none` per le card passive — sono sussurri, non silenzi
-- Colori hardcoded — sempre CSS custom properties
-- Barre percentuali per le skill — usa il sistema Square/Glow
-- Cambiare template/layout al cambio mode — solo opacity/scale
-- Modificare la struttura dei tipi in `cv.ts` senza aggiornare `cv.en.ts`
