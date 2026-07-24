@@ -24,7 +24,9 @@ import { cvDataEn } from "../src/data/cv.en.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
-const OUT_DIR = resolve(ROOT, "cv-site/public/cv");
+const OUT_DIR = process.env.CV_PDF_OUT_DIR
+  ? resolve(ROOT, process.env.CV_PDF_OUT_DIR)
+  : resolve(ROOT, "cv-site/public/cv");
 const PREVIEW_DIR = process.env.CV_PDF_PREVIEW_DIR ?? "";
 
 const SITE_URL = "https://giulio-occhipinti.com";
@@ -673,7 +675,12 @@ async function main(): Promise<void> {
     color: { dark: "#084943", light: "#0000" },
   });
 
-  const browser = await chromium.launch();
+  // CV_PDF_CHANNEL: usa un browser di sistema (es. "chrome") invece del
+  // Chromium bundled da Playwright, utile quando quest'ultimo non è
+  // installabile (rete ristretta) ma un browser reale è già presente.
+  const browser = await chromium.launch(
+    process.env.CV_PDF_CHANNEL ? { channel: process.env.CV_PDF_CHANNEL } : undefined,
+  );
   const page = await browser.newPage({
     viewport: { width: 794, height: 1123 },
     deviceScaleFactor: 2,

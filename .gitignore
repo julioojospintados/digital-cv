@@ -8,6 +8,10 @@ dist/
 # Standalone throwaway prototype — not part of the live site
 cv-site/public/prototype/
 
+# CV PDF drafts/previews — scratch output of scripts/generate-cv-pdf.ts
+# (CV_PDF_OUT_DIR / CV_PDF_PREVIEW_DIR), mai i PDF ufficiali in public/cv/
+cv-pdf-preview/
+
 # Dependencies
 node_modules/
 
