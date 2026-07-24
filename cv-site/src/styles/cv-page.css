@@ -730,7 +730,7 @@ a.lang-switch__opt:hover {
 .hero-badges,
 .hero-title,
 .hero-summary,
-.hero-stats,
+.hero-tagline,
 .hero-portfolio-card,
 .hero-footer {
   opacity: 0;
@@ -843,6 +843,14 @@ a.lang-switch__opt:hover {
   font-size: var(--fs-16);
   line-height: 1.75;
   color: rgba(192, 220, 215, 0.85);
+  max-width: 72ch;
+  margin: 0 0 0.75rem 0;
+}
+
+.hero-tagline {
+  font-size: var(--fs-14);
+  font-style: italic;
+  color: var(--color-text-muted);
   max-width: 72ch;
   margin: 0 0 0.75rem 0;
 }
@@ -998,17 +1006,17 @@ a.lang-switch__opt:hover {
   transition: transform 0.1s var(--ease-standard);
 }
 
-/* Icona da /touch-icon.svg via CSS mask — stessa tecnica e stesso file di
-   .profile-cta__arrow (index-page.css): background currentColor, un solo
-   SVG che eredita automaticamente il colore del contesto. */
+/* Icona da /caret-right-fill.svg via CSS mask — stessa tecnica e stesso
+   file di .profile-cta__arrow (index-page.css): background currentColor,
+   un solo SVG che eredita automaticamente il colore del contesto. */
 .social-link__icon {
   display: inline-block;
-  width: 0.65em;
-  height: 0.72em;
+  width: 0.68em;
+  height: 0.68em;
   flex-shrink: 0;
   background-color: currentColor;
-  -webkit-mask-image: url("/touch-icon.svg");
-  mask-image: url("/touch-icon.svg");
+  -webkit-mask-image: url("/caret-right-fill.svg");
+  mask-image: url("/caret-right-fill.svg");
   -webkit-mask-size: contain;
   mask-size: contain;
   -webkit-mask-repeat: no-repeat;
@@ -2155,41 +2163,6 @@ a.lang-switch__opt:hover {
 }
 
 /* cv-card passive/active states → global.css */
-
-/* ── Hero, "In breve" — quattro frasi di metodo in apertura ─────────
-   Principi argomentabili al colloquio, non percentuali: chip con
-   marcatore quadrato accent (stesso segno delle liste del sito). */
-.hero-stats {
-  list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem 0.75rem;
-  padding: 0;
-  margin: 1rem 0 1rem;
-  max-width: 80ch;
-}
-
-.hero-stat {
-  display: flex;
-  align-items: center;
-  gap: 0.55rem;
-  border: 1px solid var(--color-border);
-  border-radius: 999px;
-  padding: 0.35rem 0.9rem;
-  background: rgba(255, 255, 255, 0.02);
-  font-size: var(--fs-14);
-  color: rgba(192, 220, 215, 0.9);
-  line-height: 1.45;
-}
-
-.hero-stat::before {
-  content: "";
-  width: 6px;
-  height: 6px;
-  border-radius: 1px;
-  background: var(--color-accent);
-  flex-shrink: 0;
-}
 
 /* ── "Persona" — soft skills, mindset e aree in evoluzione, sempre visibili ──
    Header in stile catalogo (stessa grammatica di .exp-cluster__header:

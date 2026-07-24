@@ -1344,7 +1344,6 @@ export const cvData = {
         { target: "TypeScript", type: "technical" },
         { target: "REST API", type: "technical" },
         { target: "MCP Protocol", type: "workflow" },
-        { target: "Hono", type: "technical" },
         { target: "GraphQL", type: "technical" },
       ],
     },
@@ -1359,7 +1358,6 @@ export const cvData = {
         { target: "Node.js", type: "technical" },
         { target: "GraphQL", type: "technical" },
         { target: "MCP Protocol", type: "workflow" },
-        { target: "Hono", type: "technical" },
         { target: "SQL", type: "workflow" },
       ],
     },
@@ -1403,7 +1401,6 @@ export const cvData = {
         { target: "Node.js", type: "technical" },
         { target: "Prompt Engineering", type: "workflow" },
         { target: "REST API", type: "technical" },
-        { target: "Hono", type: "technical" },
         {
           target: "AI-Augmented Productivity",
           type: "workflow",
@@ -1499,17 +1496,36 @@ export const cvData = {
       ],
     },
     {
-      name: "Hono",
+      name: "PostHog",
       level: "Intermedio",
+      icon: "posthog",
       domain: "tech",
       weight: 3,
-      mastery: 65,
+      mastery: 62,
+      role: "bridge",
+      links: [
+        { target: "Astro", type: "technical" },
+        { target: "Agile Methodology", type: "cross-domain" },
+        {
+          target: "UX Research",
+          type: "cross-domain",
+          description:
+            "Session replay e heatmap trasformano l'uso reale del sito in decisioni di design, senza dover intervistare tutti.",
+        },
+        { target: "Vercel", type: "workflow" },
+      ],
+    },
+    {
+      name: "Vercel",
+      level: "Intermedio",
+      icon: "vercel",
+      domain: "tech",
+      weight: 2,
+      mastery: 60,
       role: "support",
       links: [
-        { target: "Node.js", type: "technical" },
-        { target: "REST API", type: "technical" },
-        { target: "MCP Protocol", type: "workflow" },
-        { target: "TypeScript", type: "technical" },
+        { target: "Astro", type: "technical" },
+        { target: "PostHog", type: "workflow" },
       ],
     },
   ] as Skill[],
@@ -1905,6 +1921,11 @@ export const cvData = {
       description:
         "Ho lavorato con Angular, React, Lit, WebComponents e Astro: scelgo lo strumento in base al problema, non il contrario. Le architetture invecchiano meglio quando nessuno le ha piegate al framework di moda.",
     },
+    {
+      name: "Analytics come bussola di prodotto",
+      description:
+        "Ho integrato PostHog e Vercel Analytics in questo progetto per chiudere il ciclo build-misura-impara. Da Product Manager leggo funnel e retention a 30/90 giorni per capire quali feature contano davvero. Da designer uso session replay, heatmap e rage click per trovare attrito nell'interfaccia senza dover intervistare ogni utente. Da developer uso feature flag per rilasciare senza rischiare un deploy tutto-o-niente, e A/B test per decidere con dati reali invece che con opinioni.",
+    },
   ] as MethodologyItem[],
 
   // ── Growth areas (presented as evolution paths) ────────────────────────────
@@ -1997,6 +2018,7 @@ export const cvData = {
       outcomes: [
         "Copertura test >80% (Vitest) sul layer MCP/HTTP.",
         "Server MCP con tool, resource e prompt template: API dei dati CV per agenti AI, dimostrazione live.",
+        "Osservabilità di prodotto con PostHog (funnel, retention, session replay, feature flag) e Vercel Analytics: il sito non è solo costruito, è misurato e iterato con dati reali.",
       ],
       learnings: [
         "L'AI accelera davvero solo dentro vincoli decisi prima: con token, regole di animazione e DO NOT espliciti il vibe coding produce; senza, produce caos da rifare.",
@@ -2326,11 +2348,16 @@ export const cvData = {
         "Prompt Engineering",
         "MCP Protocol",
         "Node.js",
-        "Hono",
         "REST API",
         "AI-Augmented Productivity",
         "Agile Methodology",
       ],
+    },
+    {
+      name: "Build → Measure → Learn",
+      description:
+        "Dal rilascio alla decisione: uso i dati di prodotto per capire cosa funziona davvero, prima di investirci settimane di sviluppo.",
+      steps: ["PostHog", "Vercel", "Agile Methodology", "UX Research"],
     },
   ] as ValueFlow[],
 

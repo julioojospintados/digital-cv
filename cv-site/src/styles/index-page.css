@@ -1647,25 +1647,26 @@ img[src*="flashlight"] {
     transform: scale(1.04);
   }
 }
-/* ── Profile CTAs — outline, stessa estetica delle mode-card (bordo
-   colorato + glow su sfondo scuro, MAI fill solido): piena rimossa a
-   favore dell'outline anche per la primaria, la gerarchia primaria/
-   secondaria si ottiene con intensità del bordo/glow, non col fill.
-   Colore = --ps-accent sempre: è il sistema di wayfinding del sito
-   (stesso linguaggio di nav, glow, chevron, dot-nav), non va uniformato
-   su un colore unico. Icona sempre .profile-cta__arrow (global.css):
-   sulla primaria segue il testo (→ "prosegui dentro"), sulla secondaria
-   lo precede (☞ "guarda qui") — stessa rotazione, cambia solo la
-   posizione nel markup/flex, mai il verso. */
+/* ── Profile CTAs — bordo + fill tinto, stessa estetica delle mode-card
+   (bordo colorato + glow su sfondo scuro): il fill (color-mix, non un
+   colore piatto) dà al bottone un peso che i chip trasparenti attorno
+   (skill marquee, .about-action) non hanno, così si riconosce a colpo
+   d'occhio come l'azione principale della sezione e non come un'altra
+   etichetta. Colore = --ps-accent sempre: è il sistema di wayfinding del
+   sito (stesso linguaggio di nav, glow, chevron, dot-nav), non va
+   uniformato su un colore unico. Label a sinistra, icona
+   .profile-cta__arrow (global.css) ancorata a destra (space-between): mai
+   centrato come un'etichetta statica, l'asimmetria segnala "questo
+   procede", non "questo descrive". */
 .profile-cta {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
+  justify-content: space-between;
+  gap: 0.75rem;
   margin-top: 0.85rem;
   padding: 0.65rem 1.25rem;
   color: var(--ps-accent);
-  background: rgba(255, 255, 255, 0.03);
+  background: color-mix(in srgb, var(--ps-accent) 14%, transparent);
   border: 1px solid var(--ps-accent);
   border-radius: var(--radius-4);
   font-family: var(--font-mono);
@@ -1724,7 +1725,7 @@ img[src*="flashlight"] {
   .profile-cta:hover {
     animation: none;
     background: rgba(255, 255, 255, 0.08);
-    background: color-mix(in srgb, var(--ps-accent) 10%, transparent);
+    background: color-mix(in srgb, var(--ps-accent) 24%, transparent);
     box-shadow:
       0 0 22px rgba(255, 255, 255, 0.18),
       inset 0 0 28px rgba(255, 255, 255, 0.06);
@@ -1742,7 +1743,7 @@ img[src*="flashlight"] {
 .profile-cta:focus-visible {
   animation: none;
   background: rgba(255, 255, 255, 0.08);
-  background: color-mix(in srgb, var(--ps-accent) 10%, transparent);
+  background: color-mix(in srgb, var(--ps-accent) 24%, transparent);
 }
 
 .profile-cta:active {

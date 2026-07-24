@@ -761,7 +761,7 @@ floating-menu {
   transition-delay: 500ms;
 }
 
-/* ── Icona "touch" condivisa — /touch-icon.svg via CSS mask ──────────────
+/* ── Icona "play" condivisa — /caret-right-fill.svg via CSS mask ─────────
    Usata da .profile-cta e .profile-portfolio-cta (home, index-page.css):
    stessa classe, stessa animazione idle ovunque — il "questo porta a un
    case study" ha sempre la stessa firma visiva. Il CTA portfolio della CV
@@ -769,17 +769,12 @@ floating-menu {
    icona delle card di /work — coerente con quel contesto, non con questo.
    currentColor eredita il colore del link che la contiene: un solo file
    SVG, tinta diversa per contesto/mode, zero duplicazione.
-   Nudge idle orizzontale in CSS puro (non GSAP): un tween infinito
-   scriverebbe uno style inline ad ogni frame, che vince SEMPRE sulla
-   cascata CSS — gli :hover/:focus-visible definiti per pagina (dove viene
-   usata) non avrebbero mai effetto visibile. Qui l'hover mette in pausa
-   l'animazione e la sostituisce con la propria `translate`.
-   NOTA — perché `translate` e non `transform: translateX()`: l'ordine di
-   composizione CSS è translate → rotate → scale → transform (shorthand).
-   `transform` è innermost: applicato PRIMA di `rotate: 90deg` sotto, un
-   translateX lì dentro finirebbe ruotato di 90° (destra → giù — bug reale,
-   già preso una volta). `translate` individuale è outermost, applicato
-   DOPO la rotazione — resta orizzontale nello spazio reale. */
+   cta-arrow-nudge (sotto) è condiviso con .work-chevron in work-page.css:
+   stesso nudge orizzontale, stessa direzione "avanti" — coerente con un
+   caret che punta a destra. Idle loop in CSS puro (non GSAP): un tween
+   infinito scriverebbe uno style inline che vince sempre sulla cascata,
+   rendendo hover/focus sull'icona senza effetto. L'hover mette in pausa
+   il loop e lo sostituisce con la propria `translate`. */
 @keyframes cta-arrow-nudge {
 
   0%,
@@ -795,12 +790,11 @@ floating-menu {
 .profile-cta__arrow {
   flex-shrink: 0;
   display: inline-block;
-  width: 0.95em;
-  height: 1.05em;
-  margin-right: 1rem;
+  width: 0.9em;
+  height: 0.9em;
   background-color: currentColor;
-  -webkit-mask-image: url("/touch-icon.svg");
-  mask-image: url("/touch-icon.svg");
+  -webkit-mask-image: url("/caret-right-fill.svg");
+  mask-image: url("/caret-right-fill.svg");
   -webkit-mask-size: contain;
   mask-size: contain;
   -webkit-mask-repeat: no-repeat;
@@ -808,7 +802,6 @@ floating-menu {
   -webkit-mask-position: center;
   mask-position: center;
   transition: translate 0.22s ease;
-  rotate: 90deg;
   animation: cta-arrow-nudge 1.3s ease-in-out infinite;
 }
 

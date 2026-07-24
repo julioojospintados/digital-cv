@@ -1032,7 +1032,6 @@ export const cvDataEn = {
         { target: "TypeScript", type: "technical" },
         { target: "REST API", type: "technical" },
         { target: "MCP Protocol", type: "workflow" },
-        { target: "Hono", type: "technical" },
         { target: "GraphQL", type: "technical" },
       ],
     },
@@ -1044,7 +1043,6 @@ export const cvDataEn = {
         { target: "Node.js", type: "technical" },
         { target: "GraphQL", type: "technical" },
         { target: "MCP Protocol", type: "workflow" },
-        { target: "Hono", type: "technical" },
         { target: "SQL", type: "workflow" },
       ],
     },
@@ -1079,7 +1077,6 @@ export const cvDataEn = {
         { target: "Node.js", type: "technical" },
         { target: "Prompt Engineering", type: "workflow" },
         { target: "REST API", type: "technical" },
-        { target: "Hono", type: "technical" },
         { target: "AI-Augmented Productivity", type: "workflow" },
       ],
     },
@@ -1145,14 +1142,30 @@ export const cvDataEn = {
       ],
     },
     {
-      name: "Hono",
+      name: "PostHog",
       level: "Intermedio",
-      mastery: 65,
+      icon: "posthog",
+      mastery: 62,
       links: [
-        { target: "Node.js", type: "technical" },
-        { target: "REST API", type: "technical" },
-        { target: "MCP Protocol", type: "workflow" },
-        { target: "TypeScript", type: "technical" },
+        { target: "Astro", type: "technical" },
+        { target: "Agile Methodology", type: "cross-domain" },
+        {
+          target: "UX Research",
+          type: "cross-domain",
+          description:
+            "Session replay and heatmaps turn real site usage into design decisions, without interviewing every user.",
+        },
+        { target: "Vercel", type: "workflow" },
+      ],
+    },
+    {
+      name: "Vercel",
+      level: "Intermedio",
+      icon: "vercel",
+      mastery: 60,
+      links: [
+        { target: "Astro", type: "technical" },
+        { target: "PostHog", type: "workflow" },
       ],
     },
   ] as Skill[],
@@ -1451,6 +1464,11 @@ export const cvDataEn = {
       description:
         "I have worked with Angular, React, Lit, WebComponents and Astro: I choose the tool based on the problem, not the other way around. Architectures age better when nobody has bent them to the framework of the moment.",
     },
+    {
+      name: "Analytics as a Product Compass",
+      description:
+        "I integrated PostHog and Vercel Analytics into this project to close the build-measure-learn loop. As Product Manager I read funnels and 30/90-day retention to see which features actually matter. As a designer I use session replay, heatmaps and rage clicks to find friction in the interface without interviewing every user. As a developer I use feature flags to ship without risking an all-or-nothing deploy, and A/B tests to decide with real data instead of opinions.",
+    },
   ] as MethodologyItem[],
 
   // ── Growth areas (presented as evolution paths) ────────────────────────────
@@ -1543,6 +1561,7 @@ export const cvDataEn = {
       outcomes: [
         ">80% test coverage (Vitest) on the MCP/HTTP layer.",
         "MCP server with tools, resources and prompt templates: CV data API for AI agents, live demonstration.",
+        "Product observability with PostHog (funnels, retention, session replay, feature flags) and Vercel Analytics: the site isn't just built, it's measured and iterated on with real data.",
       ],
       learnings: [
         "AI truly accelerates only inside constraints set beforehand: with tokens, animation rules and explicit DO NOTs, vibe coding delivers; without them, it delivers chaos to redo.",
@@ -1828,11 +1847,16 @@ export const cvDataEn = {
         "Prompt Engineering",
         "MCP Protocol",
         "Node.js",
-        "Hono",
         "REST API",
         "AI-Augmented Productivity",
         "Agile Methodology",
       ],
+    },
+    {
+      name: "Build → Measure → Learn",
+      description:
+        "From release to decision: I use product data to see what actually works, before spending weeks of development on it.",
+      steps: ["PostHog", "Vercel", "Agile Methodology", "UX Research"],
     },
   ] as ValueFlow[],
 
