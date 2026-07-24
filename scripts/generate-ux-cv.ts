@@ -470,7 +470,7 @@ const langHtml = (l: Lang): string =>
 
 export { locales };
 export function buildHtml(L: Locale): string {
-  return `<!doctype html><html lang="${L.lang}"><head><meta charset="utf-8"><style>
+  return `<!doctype html><html lang="${L.lang}"><head><meta charset="utf-8"><title>Giulio Occhipinti — UX/UI Designer</title><style>
 @font-face{font-family:'Lexend';font-weight:400;src:url(${lex(400)}) format('woff2');}
 @font-face{font-family:'Lexend';font-weight:600;src:url(${lex(600)}) format('woff2');}
 @font-face{font-family:'Lexend';font-weight:700;src:url(${lex(700)}) format('woff2');}
