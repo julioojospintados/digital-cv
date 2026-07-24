@@ -75,10 +75,11 @@ const EN: Locale = {
   siteLabel: "Website",
   greeting: "Dear Hiring Team,",
   paragraphs: [
-    "I design interfaces, and I can build them too. I'm a UX/UI Designer with an IBM certification and a Master's in Digital Communication from IED. Before the screen I did theatre, lived in three countries and worked dozens of different jobs. From there I bring something no course teaches: I listen to people before I design for them.",
-    "I start from research, not from the idea. On a product discovery project I mapped real needs on Miro, interviewed seven users and narrowed seventeen concepts down to one, the one that holds. On an enterprise design system I built a library of over a hundred Lit components, designed together with the design team. For a freelance client I ran the whole thing: research, wireframes, Figma prototype, a handover the client can edit alone.",
-    "I don't deliver slides. My CV is a site I designed and built from scratch, with an accessible design system and an AI-assisted workflow documented step by step: proof, not a promise. You'll find it at <a class=\"lnk\" href=\"" + SITE + "\">giulio-occhipinti.com</a>.",
-    "I play chess. I look for the move that sees ahead, in design too. If you need someone who designs and can build what they design, let's talk.",
+    "My name is Giulio and I design digital interfaces, but I got here by a long road. I did theatre and improvisation, I lived in three countries before moving back to Italy, and I worked many different jobs, some of them far from anything digital. I don't treat them as a footnote. They taught me to listen to people, to sense what they don't say, and to adapt quickly when things don't go as planned. It's the same thing I do when I design an interface.",
+    "Today I work as a UX/UI Designer, with an IBM certification and a Master's in Digital Communication from IED, and I have six years of frontend development behind me. This is what makes the difference for me: I design interfaces and I can build them too, so when I propose a solution I already know the way to make it real.",
+    "I always start from people and their real needs, not from my own idea. On a product discovery project I studied user behaviour, interviewed users and narrowed seventeen hypotheses down to the one that held. On an enterprise design system I built a library of over a hundred components, together with the design team. For a smaller client I handled everything myself, from research to prototype to a handover built so they could update the site on their own.",
+    "Outside work I tend my plants, take photographs and play chess. They say a lot about how I think: patience, attention to detail, and the wish to think a few moves ahead. I bring the same care to my projects and to the people I work with.",
+    "If you think a profile like this could be useful to you, I'd be glad to talk. You'll find my work and my full story at <a class=\"lnk\" href=\"" + SITE + "\">giulio-occhipinti.com</a>.",
   ],
   signoff: "Best,",
 };
@@ -91,10 +92,11 @@ const IT: Locale = {
   siteLabel: "Sito",
   greeting: "Gentile team,",
   paragraphs: [
-    "Progetto interfacce e so anche costruirle. Sono un UX/UI Designer con certificazione IBM e un Master in Comunicazione Digitale allo IED. Prima del computer ho fatto teatro, ho vissuto in tre Stati e ho cambiato decine di mestieri. Da lì porto una cosa che non si insegna a un corso: ascolto le persone prima di disegnare per loro.",
-    "Parto dalla ricerca, non dall'idea. In un progetto di product discovery ho mappato i bisogni reali su Miro, ho intervistato sette utenti e ho ridotto diciassette concept a uno solo, quello che regge. Su un design system enterprise ho costruito una libreria di oltre cento componenti in Lit, disegnati insieme al team di design. Per un cliente freelance ho seguito tutto: ricerca, wireframe, prototipo Figma, una consegna che il cliente modifica da solo.",
-    "Non consegno slide. Il mio CV è un sito che ho progettato e sviluppato da zero, con un design system accessibile e un flusso di lavoro con l'AI documentato passo per passo: la prova, non la promessa. Lo trovi su <a class=\"lnk\" href=\"" + SITE + "\">giulio-occhipinti.com</a>.",
-    "Gioco a scacchi. Cerco la mossa che anticipa, anche quando progetto. Se cercate qualcuno che disegna e sa costruire quello che disegna, parliamone.",
+    "Mi chiamo Giulio e progetto interfacce digitali, ma ci sono arrivato per una strada lunga. Ho fatto teatro e improvvisazione, ho vissuto in tre paesi prima di tornare in Italia e ho cambiato molti lavori, alcuni lontanissimi dal digitale. Non li considero un dettaglio del passato. Mi hanno insegnato ad ascoltare le persone, a intuire quello che non dicono e ad adattarmi in fretta quando le cose non vanno come previsto. È la stessa cosa che faccio quando progetto un'interfaccia.",
+    "Oggi lavoro come UX/UI Designer, con certificazione IBM e un Master in Comunicazione Digitale allo IED, e ho alle spalle sei anni di sviluppo frontend. Per me questo fa la differenza: disegno le interfacce e so anche costruirle, quindi quando propongo una soluzione conosco già la strada per realizzarla davvero.",
+    "Parto sempre dalle persone e dai loro bisogni reali, non dalla mia idea. In un progetto di product discovery ho studiato i comportamenti degli utenti, li ho intervistati e ho ridotto diciassette ipotesi a quella che reggeva. Su un design system enterprise ho costruito una libreria di oltre cento componenti, insieme al team di design. Per un cliente più piccolo ho seguito tutto io, dalla ricerca al prototipo fino alla consegna, pensata perché potesse aggiornare il sito da solo.",
+    "Fuori dal lavoro curo le mie piante, scatto fotografie e gioco a scacchi. Sono cose che dicono molto di come ragiono: pazienza, attenzione ai dettagli e la voglia di pensare qualche mossa in avanti. La stessa cura la porto nei progetti e nel rapporto con le persone con cui lavoro.",
+    "Se pensate che un profilo così possa esservi utile, mi farebbe piacere parlarne. Trovate il mio lavoro e la mia storia per esteso su <a class=\"lnk\" href=\"" + SITE + "\">giulio-occhipinti.com</a>.",
   ],
   signoff: "A presto,",
 };
@@ -128,7 +130,7 @@ body{font-family:var(--sans);color:var(--ink);background:var(--bg);}
 .page{width:210mm;min-height:297mm;background:var(--bg);display:flex;flex-direction:column;}
 
 /* ── Header band (ottanio, coordinato al CV) ── */
-.band{background:var(--ott);color:var(--cream);padding:15mm 18mm 12mm;
+.band{background:var(--ott);color:var(--cream);padding:14mm 18mm 10mm;
   display:grid;grid-template-columns:1fr auto;gap:10mm;align-items:start;}
 .name{font-weight:800;font-size:25pt;line-height:1;letter-spacing:-.02em;}
 .posit{font-weight:700;font-size:11.5pt;color:var(--or-dark);margin-top:2.5mm;letter-spacing:-.01em;}
@@ -142,9 +144,9 @@ body{font-family:var(--sans);color:var(--ink);background:var(--bg);}
 .qr{width:24mm;height:24mm;display:block;border-radius:2.5mm;}
 
 /* ── Letter body (fondo chiaro, leggibile) ── */
-.letter{padding:13mm 18mm 16mm;display:flex;flex-direction:column;gap:3.6mm;max-width:180mm;}
-.greeting{font-weight:700;font-size:11.5pt;color:var(--ink);}
-.letter p{font-size:10.8pt;line-height:1.55;color:var(--ink);max-width:64em;}
+.letter{padding:11mm 18mm 12mm;display:flex;flex-direction:column;gap:2.8mm;max-width:180mm;}
+.greeting{font-weight:700;font-size:11pt;color:var(--ink);}
+.letter p{font-size:10.4pt;line-height:1.5;color:var(--ink);max-width:64em;}
 .letter a.lnk{color:var(--or-light);font-weight:600;text-decoration:underline;
   text-decoration-thickness:.6pt;text-underline-offset:1.6pt;}
 .sign{margin-top:3mm;display:flex;flex-direction:column;gap:1mm;}
