@@ -34,7 +34,7 @@
 				"suganthan-gsc-mcp"
 			],
 			"env": {
-				"GSC_KEY_FILE": "C:\\Users\\gocchipinti\\Desktop\\Me\\cose\\settings\\gsc-mcp-project-501010-b08eaa4ff319.json",
+				"GSC_KEY_FILE": "${GSC}",
 				"GSC_AUTH_MODE": "service_account",
 				"GSC_SITE_URL": "sc-domain:giulio-occhipinti.com"
 			}

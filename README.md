@@ -33,7 +33,7 @@ npm run build:start  # compila e avvia il server MCP su stdio
 Digital_CV/
 │
 ├── cv-site/                        ← Sito Astro — il CV vero e proprio
-│   ├── astro.config.mjs            ← Configurazione Astro (integrazioni, Lit, Tailwind)
+│   ├── astro.config.mjs            ← Configurazione Astro (integrazioni: Lit, Sitemap, strip-comments)
 │   ├── DESIGN.md                   ← Specifica completa del design system (knolling, mode, colori, tipografia)
 │   ├── package.json
 │   ├── tsconfig.json
@@ -139,9 +139,6 @@ Digital_CV/
 │   ├── qa-mobile.js                ← QA responsive via Playwright
 │   └── record-demo-playwright.js   ← Registra la demo video del sito
 │
-├── _cv-source/
-│   └── extracted-text.txt          ← Testo grezzo estratto dal CV originale (sorgente dati)
-│
 ├── .vscode/                        ← Configurazione VS Code e Copilot AI
 │   ├── mcp.json                    ← Server MCP attivi in VS Code (GitHub, Sequential Thinking, ecc.)
 │   ├── settings.json               ← Impostazioni progetto + Copilot
@@ -166,23 +163,23 @@ Digital_CV/
 │       ├── knolling-cv/
 │       │   └── SKILL.md            ← Contesto globale progetto — caricata SEMPRE per prima
 │       ├── design-system/
-│       │   ├── SKILL.md            ← UI, animazioni Emil Kowalski, knolling, GSAP, Tailwind 4, Awwwards
+│       │   ├── SKILL.md            ← UI, animazioni Emil Kowalski, knolling, GSAP, CSS custom properties, Awwwards
 │       │   └── knolling-reference.png  ← Foto di riferimento layout knolling
 │       ├── identity/
 │       │   └── SKILL.md            ← Bio, tone of voice, narrativa GO, job hunting
 │       ├── agile-methodology/
-│       │   └── SKILL.md            ← Agile snello, Lean, PM per PMI, impactScore, sprint
+│       │   └── SKILL.md            ← Agile snello, Lean, PM per le aziende, impactScore, sprint
 │       ├── mcp-architecture/
 │       │   └── SKILL.md            ← MCP tools, Hono, cv.ts, test, AI workflow
 │       └── partnership-strategy/
-│           └── SKILL.md            ← Fractional partner, posizionamento consulente PMI
+│           └── SKILL.md            ← Fractional partner, posizionamento consulente per le aziende
 │
 ├── .claude/                         ← Configurazione Claude Code
 │   └── skills/                     ← Mirror delle skill sopra + `caveman/` (modalità risposta ultra-compressa, `/caveman`)
 │
 ├── AGENTS.md                       ← Guida per agenti AI (struttura, convenzioni, where to make changes)
 ├── CLAUDE.md                       ← Entry point Claude Code (importa AGENTS.md + regole skill-loading/MCP)
-├── .mcp.json                       ← Server MCP di progetto per Claude Code (mcp-base-template, sequential-thinking)
+├── .mcp.json                       ← Server MCP per Claude Code (progetto: mcp-base-template, sequential-thinking)
 ├── .env.example                    ← Template variabili d'ambiente (non committare .env)
 ├── package.json                    ← Dipendenze e script npm per il layer MCP/HTTP
 ├── tsconfig.json                   ← Configurazione TypeScript per src/
@@ -250,11 +247,11 @@ Le skill di dominio sono le stesse in entrambi gli strumenti:
 | Skill                  | Quando si carica                                               |
 | ---------------------- | -------------------------------------------------------------- |
 | `knolling-cv`          | **Sempre** per prima — contesto globale del progetto           |
-| `design-system`        | UI, animazioni, card, knolling, GSAP, Tailwind 4, Awwwards     |
+| `design-system`        | UI, animazioni, card, knolling, GSAP, CSS custom properties, Awwwards |
 | `identity`             | Bio, tone of voice, narrativa GO, copy, job hunting            |
 | `agile-methodology`    | Esperienze Agile, sprint, backlog, impactScore, certificazioni |
 | `mcp-architecture`     | Backend, MCP tools, Hono, test, cv.ts, AI workflow             |
-| `partnership-strategy` | Posizionamento Fractional Partner, offerta per PMI             |
+| `partnership-strategy` | Posizionamento Fractional Partner, offerta per le aziende      |
 
 Prompt Copilot riutilizzabili (`.vscode/prompts/*.prompt.md`, invocabili con `/nome-file`):
 
@@ -272,19 +269,23 @@ Solo Claude Code: `.claude/skills/caveman/SKILL.md` — modalità di risposta ul
 
 ## MCP server integrati
 
-Configurati in `.vscode/mcp.json` (Copilot/VS Code):
+Il progetto usa due config MCP separate: `.vscode/mcp.json` per Copilot/VS Code e `.mcp.json`
+(root) per Claude Code.
 
-| Server                | Stato     | Cosa fa                                             |
-| --------------------- | --------- | --------------------------------------------------- |
-| `mcp-base-template`   | ✅ attivo | Server MCP locale del progetto (vedi `src/`)        |
-| `memory`              | ✅ attivo | Knowledge graph persistente tra sessioni            |
-| `sequential-thinking` | ✅ attivo | Ragionamento strutturato step-by-step               |
-| `playwright`          | ✅ attivo | Browser automation, screenshot, E2E                 |
-| `github`              | ✅ attivo | Repos, issues, PR, branch, commit                   |
-| `gsc`                 | ✅ attivo | Google Search Console (SEO, sitemap, indexing)      |
-| `vercel`              | ✅ attivo | Deploy e progetti Vercel                            |
+`.vscode/mcp.json` (Copilot/VS Code):
 
-Claude Code legge invece `.mcp.json` (root del progetto, non `.vscode/`): solo `mcp-base-template` e `sequential-thinking`.
+| Server                | Stato         | Cosa fa                                         |
+| --------------------- | ------------- | ----------------------------------------------- |
+| `mcp-base-template`   | ✅ attivo     | Server MCP locale del progetto (vedi `src/`)    |
+| `memory`              | ✅ attivo     | Knowledge graph persistente tra sessioni        |
+| `sequential-thinking` | ✅ attivo     | Ragionamento strutturato step-by-step           |
+| `playwright`          | ✅ attivo     | Browser automation, screenshot, E2E             |
+| `github`              | ⚪ on-demand  | Repos, issues, PR — commentato, richiede token  |
+| `gsc`                 | ⚪ on-demand  | Google Search Console — commentato, richiede key|
+| `vercel`              | ⚪ on-demand  | Deploy Vercel — commentato, OAuth remoto        |
+
+`.mcp.json` (Claude Code): server di progetto `mcp-base-template` e `sequential-thinking`,
+più alcuni server di workflow personali (`playwright`, `vercel`, `posthog`, `github`, `gsc`).
 
 ---
 

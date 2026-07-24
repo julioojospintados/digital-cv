@@ -28,7 +28,8 @@ npm run preview  # anteprima del build
 | -------------------- | ---------- | -------------------------------------------------------------- |
 | **Astro**            | 5.x        | Shell statica, routing, rendering SSG, `compressHTML`          |
 | **Lit**              | 3.x        | Web components interattivi (islands pattern)                   |
-| **Tailwind CSS**     | 4.x        | Grid, spacing, utilities — zero hardcode CSS                   |
+| **CSS custom properties** | —     | Sistema di styling: token per i 4 mode + file CSS per-sezione, zero hardcode colori |
+| **postcss-custom-media** | 12.x   | Named media query (`@custom-media`) condivise in tutto il CSS  |
 | **NanoStores**       | —          | Stato globale mode (`tech/creative/human/management`)          |
 | **GSAP**             | 3.x        | Animazioni: timeline, ScrollTrigger, `back.out`, `elastic.out` |
 | **View Transitions** | API nativa | Transizioni tra pagine (disabilitata per click mode)           |

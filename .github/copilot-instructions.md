@@ -16,7 +16,7 @@ Prima di rispondere a **qualsiasi richiesta** su questo progetto, leggi:
 Poi carica la skill specializzata pertinente alla richiesta:
 
 - **`.github/skills/identity/SKILL.md`** — testi, bio, tone of voice, narrativa GO, job hunting
-- **`.github/skills/design-system/SKILL.md`** — UI, animazioni, card, knolling, GSAP, Tailwind 4, Awwwards
+- **`.github/skills/design-system/SKILL.md`** — UI, animazioni, card, knolling, GSAP, CSS custom properties, Awwwards
 <!-- - **`.github/skills/agile-methodology/SKILL.md`** — esperienze, Agile, UX/UI, certificazioni, sprint -->
 <!-- - **`.github/skills/mcp-architecture/SKILL.md`** — backend, MCP tools, Hono, test, cv.ts -->
 

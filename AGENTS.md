@@ -202,7 +202,7 @@ scripts/                  ← Root utility scripts (Node)
 .claude/
   skills/                 ← Claude Code skills — mirrors .github/skills, loaded on demand
     knolling-cv/SKILL.md         ← Global project context — load FIRST for any request
-    design-system/SKILL.md       ← UI, animations (Emil Kowalski rules), knolling, GSAP, Tailwind 4
+    design-system/SKILL.md       ← UI, animations (Emil Kowalski rules), knolling, GSAP, CSS custom properties
     design-system/knolling-reference.png  ← Visual reference for knolling layout
     identity/SKILL.md            ← Bio, tone of voice, GO narrative, job hunting
     agile-methodology/SKILL.md   ← Agile, Lean, PM for SMBs, impactScore, sprints

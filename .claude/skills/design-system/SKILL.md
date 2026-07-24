@@ -206,7 +206,7 @@ La sezione mostra il badge `MCP` come firma del metodo.
 | Preloader brandizzato   | GSAP timeline (GO → nome)                      | ✅ implementato in index.astro  |
 | Magnetic buttons        | `mousemove` + GSAP translate                   | ✅ implementato sulle mode card |
 | View Transitions        | `astro:transitions` / `startViewTransition`    | ❌ non usate (scelta esplicita) |
-| Responsive Mobile-First | Tailwind breakpoints                           | ✅ parziale                     |
+| Responsive Mobile-First | Named media query (`@custom-media`, postcss)   | ✅ parziale                     |
 | Skip link               | `.skip-link` in Layout.astro                   | ✅ implementato                 |
 | Focus visible           | `:focus-visible` in global.css                 | ✅ implementato                 |
 
@@ -496,7 +496,7 @@ anche lì — nessun bound minimo di un clamp può scendere sotto `var(--fs-12)`
 ## Regole per il Codice UI
 
 - **Mobile-First** — costruisci sempre dal mobile, poi scala a desktop
-- **Tailwind 4** per lo styling — non CSS inline, non classi inventate
+- **CSS custom properties + file CSS per-sezione** (`global` / `cv-page` / `index-page` / `work-page`) — mai colori hardcoded, mai CSS inline, mai classi utility inventate
 - `will-change: transform` solo sugli elementi animati da GSAP
 - Feedback visivo "wow ma leggero" — nessuna animazione pesante
 - Pixel Perfect: spacing, kerning, allineamenti intenzionali, non approssimativi

@@ -15,7 +15,7 @@ Poi carica la skill specializzata pertinente alla richiesta (i puntatori complet
 | Skill | Quando |
 |---|---|
 | `.claude/skills/identity/SKILL.md` | testi, bio, tone of voice, narrativa GO, job hunting |
-| `.claude/skills/design-system/SKILL.md` | UI, animazioni, card, knolling, GSAP, Tailwind 4, Awwwards |
+| `.claude/skills/design-system/SKILL.md` | UI, animazioni, card, knolling, GSAP, CSS custom properties, Awwwards |
 | `.claude/skills/agile-methodology/SKILL.md` | esperienze, Agile, UX/UI, certificazioni, sprint |
 | `.claude/skills/mcp-architecture/SKILL.md` | backend, MCP tools, Hono, test, cv.ts |
 | `.claude/skills/partnership-strategy/SKILL.md` | offerta Fractional, bio servizi, tono per le aziende, posizionamento |
