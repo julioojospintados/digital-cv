@@ -25,17 +25,6 @@
         "${workspaceFolder}/dist/index.js"
       ]
     },
-    // MEMORY — grafo di conoscenza persistente tra sessioni
-    // Ricorda decisioni, pattern, nomi, regole senza ripartire da zero ogni chat
-    // Installato globalmente: npm i -g @modelcontextprotocol/server-memory
-    "memory": {
-      "type": "stdio",
-      "command": "cmd",
-      "args": [
-        "/c",
-        "mcp-server-memory"
-      ]
-    },
     // SEQUENTIAL THINKING — ragionamento strutturato step-by-step
     // Attivare per decisioni architetturali, copy complesso, UX analysis
     // Installato globalmente: npm i -g @modelcontextprotocol/server-sequential-thinking
