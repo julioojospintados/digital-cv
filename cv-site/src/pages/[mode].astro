@@ -568,6 +568,18 @@ const heroSummary = heroSummaries[mode] ?? cvData.personal.summary;
       <p class="hero-title">{heroTitle}</p>
       <p class="hero-summary">{heroSummary}</p>
 
+      <!-- Titolo/summary sopra sono statici per la route caricata (SSG). Il
+           cambio mode via nav è client-side (modeStore, niente navigazione),
+           quindi cv-init.ts legge questi dati per riscrivere il testo a runtime
+           — stesso pattern del JSON-LD in Layout.astro (script non eseguibile,
+           set:html, niente is:inline). Unica fonte di verità: i dizionari qui
+           sopra, nessuna duplicazione in TS. -->
+      <script
+        type="application/json"
+        id="hero-copy"
+        set:html={JSON.stringify({ titles: heroTitles, summaries: heroSummaries })}
+      />
+
       <p class="hero-tagline">Comprendere la radice è l'unico modo per non perdersi lungo i rami.</p>
 
       <!-- Card teaser, non un link testuale: il portfolio è la prova del

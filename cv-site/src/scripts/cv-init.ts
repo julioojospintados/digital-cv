@@ -215,11 +215,30 @@ function reorderProjectsAnimated(mode: string) {
   });
 }
 
+// ── Hero title/summary mode-aware — dati letti dal JSON in [mode].astro
+// (unica fonte di verità, niente duplicazione dei testi in TS). Il cambio
+// mode via nav è client-side (nessuna navigazione reale), quindi senza
+// questo il titolo/descrizione restavano quelli della route caricata.
+let heroCopy: { titles: Record<string, string>; summaries: Record<string, string> } | null = null;
+try {
+  const heroCopyEl = document.getElementById("hero-copy");
+  heroCopy = heroCopyEl ? JSON.parse(heroCopyEl.textContent || "{}") : null;
+} catch {
+  heroCopy = null;
+}
+
+function applyHeroCopy(mode: string) {
+  if (!heroCopy) return;
+  if (heroTitle && heroCopy.titles[mode]) heroTitle.textContent = heroCopy.titles[mode];
+  if (heroSummary && heroCopy.summaries[mode]) heroSummary.textContent = heroCopy.summaries[mode];
+}
+
 function applyMode(mode: string) {
   applyCardStates(mode);
   updateNavButtons(mode);
   reorderSkillsAnimated(mode);
   reorderProjectsAnimated(mode);
+  applyHeroCopy(mode);
   // ScrollTrigger.refresh() rimosso da qui — il subscribe lo chiama già una sola volta.
 }
 

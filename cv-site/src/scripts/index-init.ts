@@ -528,14 +528,21 @@ function launchJourney(href: string) {
     blurStart,
   );
 
-  // Vignette scura chiude la scena
+  // Vignette scura chiude la scena — l'overlay è full-viewport e opaco
+  // (#launch-overlay, background pieno), quindi copre qualunque contenuto sia
+  // a schermo indipendentemente dallo scroll. La sua durata deve però finire
+  // esattamente quando scatta la navigazione: prima andava a 1 in 0.5s fissi,
+  // mentre navigateAt arriva dopo solo 0.28s (touch) / 0.4s (desktop) da
+  // vignetteStart — l'overlay era ancora semi-trasparente alla navigazione,
+  // lasciando intravedere il contenuto sotto (es. la card portfolio in una
+  // profile-section scrollata, mai toccata dal fade di header/cards sopra).
   journey.to(
     overlay,
-    { opacity: 1, duration: 0.5, ease: "power2.inOut" },
+    { opacity: 1, duration: navigateAt - vignetteStart, ease: "power2.inOut" },
     vignetteStart,
   );
 
-  // Naviga quando la vignette è abbastanza scura — non aspettare il completamento
+  // Naviga quando la vignette è ormai completamente opaca
   journey.call(() => { window.location.href = href; }, undefined, navigateAt);
 }
 
