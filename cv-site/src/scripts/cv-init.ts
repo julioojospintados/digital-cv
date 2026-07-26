@@ -495,45 +495,25 @@ function updateNavButtons(mode: string) {
   navInitialized = true;
 }
 
-// ── Nav button clicks + magnetic ─────────────────────────────────────
-document
-  .querySelectorAll<HTMLButtonElement>("[data-nav-mode]")
-  .forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const mode = btn.dataset.navMode as
-        | "tech"
-        | "creative"
-        | "human"
-        | "management";
-      if (!mode) return;
-
-      const isMobile = !window.matchMedia("(min-width: 40.0625rem)").matches;
-      const isAlreadyActive = btn.classList.contains("is-active");
-
-      // Mobile: primo tap = attiva il mode; secondo tap = scroll al contenuto
-      if (isMobile && isAlreadyActive) {
-        gsap.fromTo(
-          btn,
-          { scale: 0.88 },
-          { scale: 1, duration: 0.5, ease: "elastic.out(2, 0.4)" },
-        );
-        document
-          .querySelector<HTMLElement>(".skills-section")
-          ?.scrollIntoView({ behavior: "smooth", block: "start" });
-        return;
-      }
-
-      setMode(mode);
-      // setMode → subscribe → applyMode + applyAccordions già eseguiti (sincrono).
-      // Il button handler gestisce solo l'animazione visiva (stamp + scan + scroll).
-      // Condizione sulla STRUTTURA della pagina (ha i cluster esperienza da
-      // scansionare?), non sull'URL: "en/cv" mostra lo stesso layout CV di
-      // "/tech" ecc. ma non ha il mode nel path (è una pagina statica, il
-      // mode è solo un filtro client-side) — un controllo su pathname[0]
-      // la escludeva sempre, disattivando l'intera animazione sulla
-      // dropdown/nav in versione EN. Così vale ovunque il markup lo preveda.
-      const hasExpClusters = document.querySelector(".exp-clusters") !== null;
-      if (hasExpClusters) {
+// setMode + animazione completa di cambio mode (stamp fullscreen → laser scan
+// → scroll al cluster). Condivisa tra il click diretto sul bottone nav e la
+// dropdown mobile: entrambi devono rilanciare la STESSA animazione, anche
+// quando il mode selezionato è già quello attivo — solo il doppio-tap diretto
+// sul bottone nav ha la semantica speciale "secondo tap = scroll alle skill"
+// (gestita a parte, prima di chiamare questa funzione).
+function runModeChangeAnimation(mode: CVMode) {
+  setMode(mode);
+  // setMode → subscribe → applyMode + applyAccordions già eseguiti (sincrono).
+  // Qui gestiamo solo l'animazione visiva (stamp + scan + scroll).
+  const isMobile = !window.matchMedia("(min-width: 40.0625rem)").matches;
+  // Condizione sulla STRUTTURA della pagina (ha i cluster esperienza da
+  // scansionare?), non sull'URL: "en/cv" mostra lo stesso layout CV di
+  // "/tech" ecc. ma non ha il mode nel path (è una pagina statica, il
+  // mode è solo un filtro client-side) — un controllo su pathname[0]
+  // la escludeva sempre, disattivando l'intera animazione sulla
+  // dropdown/nav in versione EN. Così vale ovunque il markup lo preveda.
+  const hasExpClusters = document.querySelector(".exp-clusters") !== null;
+  if (hasExpClusters) {
 
         // ── Animazione 2+3: Mode stamp fullscreen → Scan laser reveal ────
         //
@@ -765,8 +745,37 @@ document
           }, 650);
         }
       }
-      // else: pagina senza cluster esperienza (es. home) — subscribe ha
-      // già chiamato applyMode, non c'è altro da animare/scrollare qui.
+  // else: pagina senza cluster esperienza (es. home) — subscribe ha
+  // già chiamato applyMode, non c'è altro da animare/scrollare qui.
+}
+
+// ── Nav button clicks + magnetic ─────────────────────────────────────
+document
+  .querySelectorAll<HTMLButtonElement>("[data-nav-mode]")
+  .forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const mode = btn.dataset.navMode as CVMode;
+      if (!mode) return;
+
+      const isMobile = !window.matchMedia("(min-width: 40.0625rem)").matches;
+      const isAlreadyActive = btn.classList.contains("is-active");
+
+      // Mobile: primo tap = attiva il mode; secondo tap = scroll al contenuto.
+      // Solo per il tap diretto sul bottone nav — la dropdown (che chiama
+      // runModeChangeAnimation direttamente) non passa da qui.
+      if (isMobile && isAlreadyActive) {
+        gsap.fromTo(
+          btn,
+          { scale: 0.88 },
+          { scale: 1, duration: 0.5, ease: "elastic.out(2, 0.4)" },
+        );
+        document
+          .querySelector<HTMLElement>(".skills-section")
+          ?.scrollIntoView({ behavior: "smooth", block: "start" });
+        return;
+      }
+
+      runModeChangeAnimation(mode);
     });
 
     btn.addEventListener("mousemove", (e) => {
@@ -841,12 +850,17 @@ document
 
     dropdownList.querySelectorAll<HTMLElement>("[data-dropdown-mode]").forEach((opt) => {
       opt.addEventListener("click", () => {
-        const mode = opt.dataset.dropdownMode;
+        const mode = opt.dataset.dropdownMode as CVMode | undefined;
         if (!mode) return;
         dropdownList.classList.remove("is-open");
         dropdownBtn.setAttribute("aria-expanded", "false");
-        // Proxy: click sul pulsante nascosto — riusa tutta la logica mode + animazioni
-        document.querySelector<HTMLButtonElement>(`button[data-nav-mode="${mode}"]`)?.click();
+        // Chiama l'animazione direttamente invece di simulare un click sul
+        // bottone nav nascosto: quel bottone ha la semantica "doppio tap"
+        // (secondo tap sullo stesso mode = scroll alle skill), pensata solo
+        // per il tap ripetuto sul bottone stesso. La dropdown è una scelta
+        // esplicita singola — anche riselezionando il mode già attivo deve
+        // rilanciare la normale animazione di cambio mode, non lo scroll.
+        runModeChangeAnimation(mode);
       });
     });
 
