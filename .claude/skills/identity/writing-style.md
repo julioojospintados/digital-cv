@@ -99,6 +99,32 @@ Tre passaggi da applicare, in quest'ordine, a ogni testo nuovo o revisionato. No
 ## Nota operativa per i testi del sito (decisioni 2026-07-11)
 
 - Il trattino lungo `—` usato come interruzione nei testi discorsivi rientra nella regola "niente trattini": va sostituito con virgola, due punti o punto fermo.
-- Restano ammessi i separatori strutturali NON discorsivi: il prefisso `"Ricerca — "` negli step di processo di `cv.ts` (parsato dal codice di `/work/[slug]`), i dati mono tipo `-87% boilerplate` (impactScore), gli intervalli di date `2023–2024`.
+- Restano ammessi i separatori strutturali NON discorsivi: il prefisso `"Ricerca — "` negli step di processo di `cv.ts` (parsato dal codice di `/work/[slug]`), gli intervalli di date `2023–2024`.
+
+## Numeri e percentuali (decisione 2026-07-26)
+
+**Un numero si scrive solo se esiste lo strumento che lo ha misurato.**
+Giulio non ha metriche aziendali da portare, quindi le percentuali stimate a
+posteriori sul proprio lavoro non vanno scritte: suonano da venditore e, cosa
+peggiore, si smontano da sole al primo colloquio. `"–80% tempo di sviluppo,
+progetto in corso"` dice al lettore attento che il numero è una proiezione.
+
+**Ammessi:**
+
+- Dati che uno strumento misura davvero: `copertura test oltre l'80%` (Vitest),
+  conteggi da PostHog o GSC quando ci sono.
+- Soglie decise **prima** del lancio: le percentuali del PPoC descrivono un
+  metodo di validazione, non vantano un risultato.
+- Fatti contabili: numero di sprint, durata degli sprint, anni, paesi, ruoli.
+
+**Vietati:** stime a posteriori di risparmio di tempo, aumenti di produttività,
+riduzioni di time-to-market e simili, anche se plausibili.
+
+**Cosa scrivere al loro posto:** il fatto verificabile che il numero voleva
+riassumere, meglio se con la negazione secca che è la struttura di Giulio.
+Modelli già presenti nei dati e più credibili di qualunque percentuale:
+
+> "Ho chiuso ogni sprint con una demo funzionante, non con un avanzamento su slide."
+> "Ho reso il team autonomo sui flussi nuovi: la conoscenza resta in azienda, non nel consulente."
 - Prima persona sempre (vedi memoria `prima-persona-sempre`): mai terza persona nei testi del sito.
 - Il termine "PMI" non si usa più nei testi del sito (decisione 2026-07-12): sostituire con "realtà" (con un qualificatore naturale, es. "piccole e grandi realtà", "realtà che vogliono scalare") o "aziende". In inglese "SMB/SME" diventa "businesses" o "businesses of all sizes".
