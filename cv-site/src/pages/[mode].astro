@@ -11,405 +11,34 @@ import ProjectCard from "../components/cards/ProjectCard.astro";
 import SkillSquare from "../components/cards/SkillSquare.astro";
 import SoftItem from "../components/cards/SoftItem.astro";
 import ContactFooter from "../components/ContactFooter.astro";
-import {
-  EXP_CLUSTER_DEFS,
-  PROJ_CARD_META,
-  type ClusterRef,
-} from "../lib/exp-clusters";
+import { buildCvViewModel } from "../lib/cv-view-model";
+import { MODES, type Mode } from "../lib/cv-i18n";
 
 export function getStaticPaths() {
-  return [
-    { params: { mode: "tech" } },
-    { params: { mode: "creative" } },
-    { params: { mode: "human" } },
-    { params: { mode: "management" } },
-  ];
+  return MODES.map((mode) => ({ params: { mode } }));
 }
 
-const { mode } = Astro.params as {
-  mode: "tech" | "creative" | "human" | "management";
-};
+const { mode } = Astro.params as { mode: Mode };
 
-type SkillSquareSource = {
-  name: string;
-  shortName?: string;
-  domain?: "tech" | "human" | "creative" | "management" | "ai";
-  level?: string;
-  weight?: number;
-  mastery?: number;
-};
-
-// ── Skill mode-tag sets ────────────────────────────────────────────────────
-const TECH_SKILL_SET = new Set([
-  "Angular",
-  "HTML5",
-  "CSS / SCSS",
-  "TypeScript",
-  "JavaScript",
-  "Lit",
-  "RXJS",
-  "NGRX",
-  "WebComponents",
-  "React",
-  "Git",
-  "Bootstrap",
-  "Material Design",
-  "GraphQL",
-  "SQL",
-  "Jest",
-  "Node.js",
-  "REST API",
-  "Spring",
-  "JSF",
-  "MCP Protocol",
-  "Prompt Engineering",
-  "GSAP",
-  "Astro",
-  "Hono",
-]);
-const CREATIVE_SKILL_SET = new Set([
-  "Figma",
-  "SEO",
-  "SEM",
-  "UX Research",
-  "Wireframing",
-  "Video editing",
-  "Wordpress",
-  "Adobe Suite",
-  "Typography",
-]);
-const DUAL_SKILL_SET = new Set([
-  "Accessibility / WCAG",
-  "UX Research",
-  "Wireframing",
-  "Figma",
-]);
-
-function deriveSkillLevel(mastery = 65): string {
-  if (mastery >= 85) return "Esperto";
-  if (mastery >= 70) return "Avanzato";
-  if (mastery >= 50) return "Intermedio";
-  return "Base";
-}
-
-function skillModeTags(skill: SkillSquareSource): string {
-  const tags = new Set<string>();
-
-  if (skill.domain) {
-    tags.add(skill.domain === "ai" ? "tech" : skill.domain);
-  }
-
-  if (TECH_SKILL_SET.has(skill.name)) {
-    tags.add("tech");
-  }
-
-  if (CREATIVE_SKILL_SET.has(skill.name) || DUAL_SKILL_SET.has(skill.name)) {
-    tags.add("creative");
-  }
-
-  if (tags.size === 0) {
-    tags.add("tech");
-    tags.add("creative");
-    tags.add("human");
-    tags.add("management");
-  }
-
-  return Array.from(tags).join(" ");
-}
-
-// ── Skill Grid ─────────────────────────────────────────────────────────────
-const LEVEL_BORDERS: Record<string, number> = {
-  Base: 1,
-  Intermedio: 2,
-  Avanzato: 3,
-  Esperto: 4,
-};
-function toSkillSquare(skill: SkillSquareSource) {
-  const level = skill.level ?? deriveSkillLevel(skill.mastery);
-  return {
-    name: skill.name,
-    shortName: skill.shortName,
-    level,
-    borderPx: LEVEL_BORDERS[level] ?? 1,
-    isGlow: level === "Avanzato" || level === "Esperto",
-    modeTags: skillModeTags(skill),
-    weight: skill.weight ?? 1,
-  };
-}
-
-function isActiveSkill(modeTags: string): boolean {
-  const tags = modeTags.split(" ");
-  return tags.includes(mode) || (mode === "tech" && tags.includes("ai"));
-}
-
-const skillSquares = [
-  ...cvData.technicalSkills.map((skill) => toSkillSquare(skill)),
-  ...cvData.softSkills
-    .filter(
-      (skill) => skill.domain === "human" || skill.domain === "management",
-    )
-    .map((skill) => toSkillSquare(skill)),
-  ...cvData.transversalSkills
-    .filter(
-      (skill) => skill.domain === "human" || skill.domain === "management",
-    )
-    .map((skill) => toSkillSquare(skill)),
-].sort((a, b) => {
-  const activeDelta =
-    Number(isActiveSkill(b.modeTags)) - Number(isActiveSkill(a.modeTags));
-  if (activeDelta !== 0) return activeDelta;
-
-  const areaA = (a.weight ?? 1) * (LEVEL_BORDERS[a.level] ?? 1);
-  const areaB = (b.weight ?? 1) * (LEVEL_BORDERS[b.level] ?? 1);
-  if (areaA !== areaB) return areaB - areaA;
-
-  return a.name.localeCompare(b.name);
-});
-
-// ── Experience clusters — definizione condivisa IT/EN in lib/exp-clusters.ts.
-// Ogni ref diventa una card: la stessa esperienza può comparire in più
-// cluster con la facet giusta (ruolo/descrizione/highlight per quella lente).
-const AI_SKILL_HINTS = [
-  "MCP Protocol",
-  "Prompt Engineering",
-  "GitHub Copilot",
-  "Claude",
-  "Cursor",
-  "AI Orchestration",
-  "MCP",
-];
-
-function refToCard(ref: ClusterRef, clusterTags: string) {
-  if ("proj" in ref) {
-    const p = cvData.projects[ref.proj];
-    const meta = PROJ_CARD_META[ref.proj];
-    if (!p) return null;
-    return {
-      company: p.name,
-      role: meta?.role.it ?? "",
-      startYear: meta?.startYear ?? "",
-      endYear: meta?.endYear ?? meta?.startYear ?? "",
-      location: meta?.location?.it ?? "",
-      remote: false,
-      description: p.description,
-      highlights: [] as string[],
-      skills: p.tags ?? [],
-      modeTags: clusterTags,
-      aiAugmented: false,
-    };
-  }
-  const exp = cvData.experience[ref.exp];
-  if (!exp) return null;
-  const facet = ref.facet
-    ? exp.facets?.find((f) => f.mode === ref.facet)
-    : undefined;
-  return {
-    company: exp.company,
-    role: facet?.role ?? exp.role,
-    startYear: exp.startDate.substring(0, 4),
-    endYear: exp.endDate === "present" ? "oggi" : exp.endDate.substring(0, 4),
-    location: exp.location ?? "",
-    remote: exp.remote ?? false,
-    description: facet?.description ?? exp.description,
-    highlights: facet?.highlights ?? exp.highlights ?? [],
-    skills: exp.skills ?? [],
-    modeTags: clusterTags,
-    aiAugmented: !!(
-      exp.tags?.includes("ai-orchestration") ||
-      exp.skills?.some((s) => AI_SKILL_HINTS.includes(s))
-    ),
-  };
-}
-
-const FEATURED_N = 3;
-const expClusters = EXP_CLUSTER_DEFS.map((cluster) => {
-  const items = cluster.refs
-    .map((r) => refToCard(r, cluster.tags))
-    .filter((c): c is NonNullable<typeof c> => c !== null);
-  return {
-    key: cluster.key,
-    label: cluster.labels.it,
-    isDefaultOpen: cluster.openForModes.includes(mode),
-    items,
-    featured: items.slice(0, FEATURED_N),
-    extra: items.slice(FEATURED_N),
-  };
-});
-
-const skillViewLabels = {
-  graph: "Grafico",
-  cards: "Card",
-} as const;
-
-// Una voce per ogni elemento di cvData.softSkills, nello stesso ordine.
-// Prima erano 9 tag per 11 skill: "Ascolto attivo" e "Assertività" (aggiunte
-// dopo) rubavano i tag di "Sensibilità estetica" e "Pensiero T-shaped", e le
-// ultime due finivano nel fallback attivo-ovunque.
-const SOFT_MODE_TAGS = [
-  "human creative", // Comunicazione efficace
-  "creative human", // Creatività applicata
-  "human", // Adattabilità culturale
-  "human management", // Intelligenza relazionale
-  "tech human management", // Problem solving laterale
-  "tech human management", // Autonomia strategica
-  "human management", // Resilienza e pensiero adattivo
-  "human management", // Ascolto attivo
-  "creative", // Sensibilità estetica
-  "tech creative human management", // Pensiero T-shaped
-];
-
-// Le mappe per indice devono restare allineate ai dati: meglio far fallire
-// la build che spedire un'enfasi visiva silenziosamente sbagliata.
-for (const cluster of EXP_CLUSTER_DEFS)
-  for (const ref of cluster.refs) {
-    if ("exp" in ref && !cvData.experience[ref.exp])
-      throw new Error(
-        `Cluster "${cluster.key}": ref exp ${ref.exp} fuori da cvData.experience — aggiorna lib/exp-clusters.ts.`,
-      );
-    if ("proj" in ref && !cvData.projects[ref.proj])
-      throw new Error(
-        `Cluster "${cluster.key}": ref proj ${ref.proj} fuori da cvData.projects — aggiorna lib/exp-clusters.ts.`,
-      );
-    if ("exp" in ref && ref.facet && !cvData.experience[ref.exp].facets?.some((f) => f.mode === ref.facet))
-      throw new Error(
-        `Cluster "${cluster.key}": l'esperienza ${ref.exp} non ha la facet "${ref.facet}" — aggiungila in cv.ts.`,
-      );
-  }
-if (SOFT_MODE_TAGS.length !== cvData.softSkills.length)
-  throw new Error(
-    `SOFT_MODE_TAGS (${SOFT_MODE_TAGS.length}) non allineato a cvData.softSkills (${cvData.softSkills.length}): aggiorna la mappa in [mode].astro.`,
-  );
-
-const softSkillsData = cvData.softSkills.map((skill, i) => ({
-  name: skill.name,
-  description: skill.description ?? "",
-  modeTags: SOFT_MODE_TAGS[i] ?? "tech creative human",
-}));
-
-const MONTHS_IT = [
-  "Gen",
-  "Feb",
-  "Mar",
-  "Apr",
-  "Mag",
-  "Giu",
-  "Lug",
-  "Ago",
-  "Set",
-  "Ott",
-  "Nov",
-  "Dic",
-];
-function isoToLabel(iso: string): string {
-  const [y, m] = iso.split("-");
-  return m ? `${MONTHS_IT[parseInt(m, 10) - 1]} ${y}` : y;
-}
-const timelineItems = [
-  ...cvData.education.map((e) => ({
-    date: e.endDate,
-    dateLabel: isoToLabel(e.endDate),
-    title: `${e.degree}${e.field ? ` — ${e.field}` : ""}`,
-    institution: e.institution,
-    type: "edu" as const,
-    inProgress: false,
-    credentialId: undefined as string | undefined,
-  })),
-  ...cvData.certifications.map((c) => ({
-    date: c.date,
-    dateLabel: isoToLabel(c.date),
-    title: c.name,
-    institution: c.issuer,
-    type: "cert" as const,
-    inProgress: c.inProgress ?? false,
-    credentialId: c.credentialId,
-  })),
-].sort((a, b) => b.date.localeCompare(a.date));
-
-const CEFR_STEPS: Record<string, number> = {
-  Madrelingua: 6,
-  Native: 6,
-  C2: 6,
-  C1: 5,
-  B2: 4,
-  B1: 3,
-  A2: 2,
-  A1: 1,
-};
-const langsWithSteps = cvData.languages.map((l) => ({
-  ...l,
-  steps: CEFR_STEPS[l.level] ?? 3,
-}));
-
-const PROJECT_TAGS_MAP: Record<string, string> = {
-  Cinema: "creative",
-  React: "tech",
-  Lit: "tech",
-  WebComponents: "tech",
-  "Event management": "human",
-  Poesia: "creative human",
-  Creatività: "creative",
-  "Tour management": "creative management",
-  "Content Strategy": "creative",
-  "Digital marketing": "creative management",
-};
-
-const projectsData = cvData.projects.slice(0, 6).map((p) => {
-  const tags = p.tags ?? [];
-  const modes = new Set<string>();
-  tags.forEach((t) => {
-    const mapped = PROJECT_TAGS_MAP[t];
-    if (mapped) mapped.split(" ").forEach((m) => modes.add(m));
-  });
-  if (p.primaryMode) modes.add(p.primaryMode);
-  const modeTags =
-    modes.size > 0 ? Array.from(modes).join(" ") : "tech creative human";
-  return { name: p.name, description: p.description, modeTags, slug: p.slug };
-})
-  // Mode first al primo paint (prima che il JS lato client riordini col
-  // cambio mode): stessa logica di reorderProjectCards in mode-helpers.ts.
-  .sort((a, b) => Number(b.modeTags.includes(mode)) - Number(a.modeTags.includes(mode)));
-
-const MODE_LABELS: Record<string, string> = {
-  tech: 'Software Developer',
-  creative: 'Web & UX Designer',
-  management: 'Project Manager',
-  human: 'AI & Digital Specialist',
-};
-const modeLabel = MODE_LABELS[mode] ?? mode;
-
-const modeDescriptions: Record<string, string> = {
-  tech: "Sviluppo web con Angular, Lit e TypeScript al servizio del design: interfacce curate, AI workflow e automazione per realtà che vogliono risultati misurabili.",
-  creative:
-    "UX/UI & Web Designer certificato IBM, Creative Technologist. Progetto esperienze digitali che uniscono estetica, usabilità e impatto sul brand per realtà di ogni dimensione.",
-  human:
-    "Consulente per l'Innovazione Digitale con background multidisciplinare: design, sviluppo web, teatro e comunicazione. Lavoro per un impatto reale sulle persone e sui processi.",
-  management:
-    "Partner Tecnico Agile per piccole e grandi realtà. Sprint brevi, backlog orientato al business, autonomia del team. Design + Tecnologia + Metodo in ogni ingaggio.",
-};
-const modeDescription =
-  modeDescriptions[mode] ??
-  "CV interattivo di Giulio Occhipinti: Consulente per l'Innovazione Digitale & Partner Tecnico per piccole e grandi realtà.";
-
-// Hero mode-aware: chi arriva su /tech o /creative cercando un profilo
-// specifico non deve leggere il posizionamento generico da partner tecnico
-// (quello resta su home e /management) — vedi memoria "posizionamento-ux-ui-first":
-// Design/UX-UI sempre prima, Tecnologia come strumento, mai "Senior
-// Frontend Developer" come identità.
-const heroTitles: Record<string, string> = {
-  tech: "Sviluppo al servizio del design: Angular, Lit, AI Workflow.",
-  creative: "UX/UI & Web Designer certificato IBM, Creative Technologist.",
-  human: "Consulente per l'Innovazione Digitale: comunicazione e impatto.",
-  management: "Partner Tecnico Agile: Design, Tecnologia, Metodo.",
-};
-const heroTitle = heroTitles[mode] ?? cvData.personal.title;
-
-const heroSummaries: Record<string, string> = {
-  tech: "Costruisco interfacce con Angular, Lit e TypeScript, e integro strumenti AI per velocizzare senza perdere qualità. In ALTEN Italia ho sviluppato design system e architetture per Aruba e Intesa San Paolo. Questo sito, ad esempio, l'ho realizzato con GitHub Copilot e Claude come assistenti operativi.",
-  creative: "Progetto interfacce curate fino al dettaglio, con certificazioni IBM e SkillUp in UX/UI Design e in Generative AI applicata al design. Per Aruba ho sviluppato una libreria di componenti riutilizzabile cross-prodotto; in questo sito ho progettato animazioni GSAP e un sistema knolling documentato passo per passo nel design system.",
-  human: "Il mio percorso unisce design, sviluppo, teatro e comunicazione. La formazione in improvvisazione teatrale con B-Teatro mi ha insegnato ad ascoltare prima di rispondere, un'attitudine che porto anche nella progettazione dei workflow AI. Ho condotto festival e panel con ospiti internazionali e ho progettato la comunicazione digitale del roster di un'agenzia musicale.",
-  management: "Applico Scrum e Kanban in contesti diversi: team enterprise distribuiti come Intesa San Paolo e Aruba, e collaborazioni più snelle come il tour management per un'agenzia musicale, dove ho seguito booking e strategia digitale in autonomia. Lavoro in sprint brevi, con un backlog costruito sugli obiettivi di business.",
-};
-const heroSummary = heroSummaries[mode] ?? cvData.personal.summary;
+// Skill, cluster esperienze, timeline, progetti e copy dell'hero arrivano da
+// lib/cv-view-model.ts: la stessa logica serve en/cv.astro e ogni lingua
+// futura, quindi qui restano solo il mode della route e il render.
+// Vedi AGENTS.md → "IT ↔ EN parity".
+const {
+  modeLabel,
+  modeDescription,
+  heroTitle,
+  heroSummary,
+  heroTitles,
+  heroSummaries,
+  skillViewLabels,
+  skillSquares,
+  expClusters,
+  softSkillsData,
+  timelineItems,
+  langsWithSteps,
+  projectsData,
+} = buildCvViewModel({ data: cvData, locale: "it", mode });
 ---
 
 <Layout
@@ -427,15 +56,6 @@ const heroSummary = heroSummaries[mode] ?? cvData.personal.summary;
       aria-label="Scegli modalità di visualizzazione"
     >
       <button
-        class:list={["mode-btn", { "is-active": mode === "tech" }]}
-        data-nav-mode="tech"
-        type="button"
-        aria-pressed={mode === "tech" ? "true" : "false"}
-      >
-        <span class="mode-btn__abbr" aria-hidden="true">SD</span>
-        <span class="mode-btn__label">Software Dev</span>
-      </button>
-      <button
         class:list={["mode-btn", { "is-active": mode === "creative" }]}
         data-nav-mode="creative"
         type="button"
@@ -443,6 +63,15 @@ const heroSummary = heroSummaries[mode] ?? cvData.personal.summary;
       >
         <span class="mode-btn__abbr" aria-hidden="true">WD</span>
         <span class="mode-btn__label">Web &amp; UX</span>
+      </button>
+      <button
+        class:list={["mode-btn", { "is-active": mode === "tech" }]}
+        data-nav-mode="tech"
+        type="button"
+        aria-pressed={mode === "tech" ? "true" : "false"}
+      >
+        <span class="mode-btn__abbr" aria-hidden="true">SD</span>
+        <span class="mode-btn__label">Software Dev</span>
       </button>
       <button
         class:list={["mode-btn", { "is-active": mode === "management" }]}
@@ -492,8 +121,8 @@ const heroSummary = heroSummaries[mode] ?? cvData.personal.summary;
         role="listbox"
         aria-labelledby="mode-dropdown-btn"
       >
-        <li class:list={["mode-dropdown__option", { "is-selected": mode === "tech" }]} role="option" data-dropdown-mode="tech" tabindex="-1">Software Dev</li>
         <li class:list={["mode-dropdown__option", { "is-selected": mode === "creative" }]} role="option" data-dropdown-mode="creative" tabindex="-1">Web &amp; UX</li>
+        <li class:list={["mode-dropdown__option", { "is-selected": mode === "tech" }]} role="option" data-dropdown-mode="tech" tabindex="-1">Software Dev</li>
         <li class:list={["mode-dropdown__option", { "is-selected": mode === "management" }]} role="option" data-dropdown-mode="management" tabindex="-1">Project Manager</li>
         <li class:list={["mode-dropdown__option", { "is-selected": mode === "human" }]} role="option" data-dropdown-mode="human" tabindex="-1">AI &amp; Digital</li>
         <li class="mode-dropdown__option mode-dropdown__option--personal" role="option" data-dropdown-personal tabindex="-1">Fuori orario</li>

@@ -19,7 +19,16 @@
  * ma fuori da ogni cluster (scelta del 2026-07-15).
  */
 
-export type ClusterMode = "tech" | "creative" | "management" | "human";
+import type { Locale, Mode } from "./cv-i18n";
+
+export type ClusterMode = Mode;
+
+/**
+ * Testo declinato per lingua. Tipizzato su `Locale`, non su `{ it, en }`:
+ * aggiungendo una lingua a `Locale` il compilatore segnala ogni voce da
+ * tradurre invece di lasciarla passare in silenzio.
+ */
+type Localized = Record<Locale, string>;
 
 export type ClusterRef =
   | { exp: number; facet?: ClusterMode }
@@ -27,7 +36,7 @@ export type ClusterRef =
 
 export interface ExpClusterDef {
   key: ClusterMode | "personal";
-  labels: { it: string; en: string };
+  labels: Localized;
   /** data-tags delle card del cluster (stato active/passive per mode) */
   tags: string;
   openForModes: string[];
@@ -42,10 +51,10 @@ export interface ExpClusterDef {
 export const PROJ_CARD_META: Record<
   number,
   {
-    role: { it: string; en: string };
+    role: Localized;
     startYear?: string;
     endYear?: string;
-    location?: { it: string; en: string };
+    location?: Localized;
   }
 > = {
   // Film "Double" — prodotto a Torino da Filmine, proiettato a San Francisco

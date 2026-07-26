@@ -1,0 +1,212 @@
+/**
+ * cv-i18n.ts — tutto ciò che cambia da una lingua all'altra nelle pagine CV.
+ *
+ * Le pagine CV (`[mode].astro` per l'italiano, `en/cv.astro` per l'inglese)
+ * condividono la stessa logica: vive in `cv-view-model.ts` ed è scritta una
+ * volta sola. Qui restano soltanto le stringhe.
+ *
+ * AGGIUNGERE UNA LINGUA
+ * 1. Aggiungi il codice a `Locale`.
+ * 2. Aggiungi il blocco corrispondente a `LOCALES` — il compilatore elenca
+ *    da solo i campi mancanti.
+ * 3. Crea la pagina (copia `en/cv.astro`, cambia locale e sorgente dati).
+ * Nessuna logica da duplicare: se ti ritrovi a copiare una funzione da una
+ * pagina all'altra, quella funzione va in `cv-view-model.ts`.
+ */
+
+export type Locale = "it" | "en";
+
+export type Mode = "tech" | "creative" | "human" | "management";
+
+export const MODES: readonly Mode[] = [
+  "creative",
+  "tech",
+  "management",
+  "human",
+] as const;
+
+/**
+ * Mode mostrato quando la route non ne indica uno (`/en/cv`, `/cv`, store
+ * vuoto). Design-first, identico in tutte le lingue.
+ *
+ * Cambiarlo richiede di allineare anche: `DEFAULT_MODE` in
+ * `scripts/cv-init.ts`, i fallback in `islands/stores/modeStore.ts`
+ * (`getInitialMode` e `initMode`) e il redirect in `pages/cv.astro`.
+ */
+export const DEFAULT_MODE: Mode = "creative";
+
+export interface LocaleStrings {
+  /** Abbreviazioni dei mesi, indice 0 = gennaio. Usate nella timeline. */
+  months: readonly string[];
+  /**
+   * Livelli skill tradotti. `deriveSkillLevel` in `cv-view-model.ts` produce
+   * sempre le chiavi italiane (sono i valori che stanno in `cv.ts`): qui si
+   * traducono per la visualizzazione.
+   */
+  levels: Record<string, string>;
+  /** Etichetta per un'esperienza ancora in corso (`endDate: "present"`). */
+  present: string;
+  /** Toggle di vista della sezione skill. */
+  skillView: { graph: string; cards: string };
+  /** Nome del profilo per ogni mode — usato nel `<title>` e nella nav. */
+  modeLabels: Record<Mode, string>;
+  /** Meta description per mode. */
+  modeDescriptions: Record<Mode, string>;
+  /** Fallback quando il mode non è tra quelli previsti. */
+  fallbackDescription: string;
+  /** Titolo dell'hero per mode. */
+  heroTitles: Record<Mode, string>;
+  /** Sommario dell'hero per mode. */
+  heroSummaries: Record<Mode, string>;
+  /**
+   * Tag dei progetti → mode in cui il progetto è attivo. Le chiavi sono i tag
+   * così come compaiono nel dataset di quella lingua (`cv.ts` usa "Poesia",
+   * `cv.en.ts` usa "Poetry"), quindi la mappa non è condivisibile.
+   */
+  projectTags: Record<string, string>;
+}
+
+const IT: LocaleStrings = {
+  months: [
+    "Gen",
+    "Feb",
+    "Mar",
+    "Apr",
+    "Mag",
+    "Giu",
+    "Lug",
+    "Ago",
+    "Set",
+    "Ott",
+    "Nov",
+    "Dic",
+  ],
+  levels: {
+    Base: "Base",
+    Intermedio: "Intermedio",
+    Avanzato: "Avanzato",
+    Esperto: "Esperto",
+  },
+  present: "oggi",
+  skillView: { graph: "Grafico", cards: "Card" },
+  modeLabels: {
+    tech: "Software Developer",
+    creative: "Web & UX Designer",
+    management: "Project Manager",
+    human: "AI & Digital Specialist",
+  },
+  modeDescriptions: {
+    tech: "Sviluppo web con Angular, Lit e TypeScript al servizio del design: interfacce curate, AI workflow e automazione per realtà che vogliono risultati misurabili.",
+    creative:
+      "UX/UI & Web Designer certificato IBM, Creative Technologist. Progetto esperienze digitali che uniscono estetica, usabilità e impatto sul brand per realtà di ogni dimensione.",
+    human:
+      "Consulente per l'Innovazione Digitale con background multidisciplinare: design, sviluppo web, teatro e comunicazione. Lavoro per un impatto reale sulle persone e sui processi.",
+    management:
+      "Partner Tecnico Agile per piccole e grandi realtà. Sprint brevi, backlog orientato al business, autonomia del team. Design + Tecnologia + Metodo in ogni ingaggio.",
+  },
+  fallbackDescription:
+    "CV interattivo di Giulio Occhipinti: Consulente per l'Innovazione Digitale & Partner Tecnico per piccole e grandi realtà.",
+  // Hero mode-aware: chi arriva su /tech o /creative cercando un profilo
+  // specifico non deve leggere il posizionamento generico da partner tecnico
+  // (quello resta su home e /management) — vedi memoria "posizionamento-ux-ui-first":
+  // Design/UX-UI sempre prima, Tecnologia come strumento, mai "Senior
+  // Frontend Developer" come identità.
+  heroTitles: {
+    tech: "Sviluppo al servizio del design: Angular, Lit, AI Workflow.",
+    creative: "UX/UI & Web Designer certificato IBM, Creative Technologist.",
+    human: "Consulente per l'Innovazione Digitale: comunicazione e impatto.",
+    management: "Partner Tecnico Agile: Design, Tecnologia, Metodo.",
+  },
+  heroSummaries: {
+    tech: "Costruisco interfacce con Angular, Lit e TypeScript, e integro strumenti AI per velocizzare senza perdere qualità. In ALTEN Italia ho sviluppato design system e architetture per Aruba e Intesa San Paolo. Questo sito, ad esempio, l'ho realizzato con GitHub Copilot e Claude come assistenti operativi.",
+    creative:
+      "Progetto interfacce curate fino al dettaglio, con certificazioni IBM e SkillUp in UX/UI Design e in Generative AI applicata al design. Per Aruba ho sviluppato una libreria di componenti riutilizzabile cross-prodotto; in questo sito ho progettato animazioni GSAP e un sistema knolling documentato passo per passo nel design system.",
+    human:
+      "Il mio percorso unisce design, sviluppo, teatro e comunicazione. La formazione in improvvisazione teatrale con B-Teatro mi ha insegnato ad ascoltare prima di rispondere, un'attitudine che porto anche nella progettazione dei workflow AI. Ho condotto festival e panel con ospiti internazionali e ho progettato la comunicazione digitale del roster di un'agenzia musicale.",
+    management:
+      "Applico Scrum e Kanban in contesti diversi: team enterprise distribuiti come Intesa San Paolo e Aruba, e collaborazioni più snelle come il tour management per un'agenzia musicale, dove ho seguito booking e strategia digitale in autonomia. Lavoro in sprint brevi, con un backlog costruito sugli obiettivi di business.",
+  },
+  projectTags: {
+    Cinema: "creative",
+    React: "tech",
+    Lit: "tech",
+    WebComponents: "tech",
+    "Event management": "human",
+    Poesia: "creative human",
+    Creatività: "creative",
+    "Tour management": "creative management",
+    "Content Strategy": "creative",
+    "Digital marketing": "creative management",
+  },
+};
+
+const EN: LocaleStrings = {
+  months: [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ],
+  levels: {
+    Base: "Basic",
+    Intermedio: "Intermediate",
+    Avanzato: "Advanced",
+    Esperto: "Expert",
+  },
+  present: "present",
+  skillView: { graph: "Graph", cards: "Cards" },
+  modeLabels: {
+    tech: "Software Developer",
+    creative: "Web & UX Designer",
+    management: "Project Manager",
+    human: "AI & Digital Specialist",
+  },
+  modeDescriptions: {
+    tech: "Web development with Angular, Lit and TypeScript in service of design: polished interfaces, AI workflows and automation for businesses that want measurable results.",
+    creative:
+      "IBM-certified UX/UI & Web Designer, Creative Technologist. I design digital experiences that combine aesthetics, usability and brand impact for businesses of every size.",
+    human:
+      "Digital Innovation Consultant with a multidisciplinary background: design, web development, theatre and communication. I work for real impact on people and processes.",
+    management:
+      "Agile Technical Partner for businesses large and small. Short sprints, a business-driven backlog, team autonomy. Design + Technology + Method in every engagement.",
+  },
+  fallbackDescription:
+    "Interactive CV of Giulio Occhipinti: Digital Innovation Consultant & Technical Partner for businesses large and small.",
+  heroTitles: {
+    tech: "Development in service of design: Angular, Lit, AI Workflow.",
+    creative: "IBM-certified UX/UI & Web Designer, Creative Technologist.",
+    human: "Digital Innovation Consultant: communication and impact.",
+    management: "Agile Technical Partner: Design, Technology, Method.",
+  },
+  heroSummaries: {
+    tech: "I build interfaces with Angular, Lit and TypeScript, and I integrate AI tooling to move faster without losing quality. At ALTEN Italia I developed design systems and architecture for Aruba and Intesa San Paolo. This site, for example, I built with GitHub Copilot and Claude as operational assistants.",
+    creative:
+      "I design interfaces polished down to the last detail, with IBM and SkillUp certifications in UX/UI Design and in Generative AI applied to design. For Aruba I built a reusable cross-product component library; on this site I designed the GSAP animations and a knolling system documented step by step in the design system.",
+    human:
+      "My path brings together design, development, theatre and communication. Training in theatrical improvisation with B-Teatro taught me to listen before answering, an attitude I carry into designing AI workflows too. I have hosted festivals and panels with international guests, and designed the digital communication for a music agency's roster.",
+    management:
+      "I apply Scrum and Kanban across very different contexts: distributed enterprise teams like Intesa San Paolo and Aruba, and leaner collaborations such as tour management for a music agency, where I ran booking and digital strategy on my own. I work in short sprints, with a backlog built around business goals.",
+  },
+  projectTags: {
+    Cinema: "creative",
+    React: "tech",
+    Lit: "tech",
+    WebComponents: "tech",
+    "Event management": "human",
+    Poetry: "creative human",
+    Creativity: "creative",
+    "Tour management": "creative management",
+    "Content Strategy": "creative",
+    "Digital marketing": "creative management",
+  },
+};
+
+export const LOCALES: Record<Locale, LocaleStrings> = { it: IT, en: EN };

@@ -11,383 +11,37 @@ import ProjectCard from "../../components/cards/ProjectCard.astro";
 import SkillSquare from "../../components/cards/SkillSquare.astro";
 import SoftItem from "../../components/cards/SoftItem.astro";
 import ContactFooter from "../../components/ContactFooter.astro";
-import {
-  EXP_CLUSTER_DEFS,
-  PROJ_CARD_META,
-  type ClusterRef,
-} from "../../lib/exp-clusters";
+import { buildCvViewModel } from "../../lib/cv-view-model";
+import { DEFAULT_MODE } from "../../lib/cv-i18n";
 
-// Hero copy — EN page is always static, default persona is 'tech' (see
-// mode-buttons comment below: mode switch only filters cards client-side,
-// it doesn't re-render hero text). Mirrors the "tech" entry of heroTitles/
-// heroSummaries in [mode].astro — same "Design first, Tech as a tool"
-// framing (see memory "posizionamento-ux-ui-first").
+// Unlike the IT side there is no mode in this page's path: it is a single
+// static page that renders DEFAULT_MODE and switches mode client-side
+// (cv-init.ts). That is the only intended difference — everything else comes
+// from the same lib/cv-view-model.ts the IT page uses, so the two can no
+// longer drift apart. See AGENTS.md → "IT ↔ EN parity".
+const mode = DEFAULT_MODE;
 
-const heroTitle =
-  "Development in service of design: Angular, Lit, AI Workflow.";
-const heroSummary =
-  "I build interfaces with Angular, Lit and TypeScript, and I integrate AI tooling to move faster without losing quality. At ALTEN Italia I developed design systems and architecture for Aruba and Intesa San Paolo. This site, for example, I built with GitHub Copilot and Claude as operational assistants.";
-
-// ── Skill level labels (English) ───────────────────────────────────────────
-const LEVEL_EN: Record<string, string> = {
-  Base: "Basic",
-  Intermedio: "Intermediate",
-  Avanzato: "Advanced",
-  Esperto: "Expert",
-};
-
-type SkillSquareSource = {
-  name: string;
-  shortName?: string;
-  domain?: "tech" | "human" | "creative" | "management" | "ai";
-  level?: string;
-  weight?: number;
-  mastery?: number;
-};
-
-// ── Skill mode-tag sets ────────────────────────────────────────────────────
-const TECH_SKILL_SET = new Set([
-  "Angular",
-  "HTML5",
-  "CSS / SCSS",
-  "TypeScript",
-  "JavaScript",
-  "Lit",
-  "RXJS",
-  "NGRX",
-  "WebComponents",
-  "React",
-  "Git",
-  "Bootstrap",
-  "Material Design",
-  "GraphQL",
-  "SQL",
-  "Jest",
-  "Node.js",
-  "REST API",
-  "Spring",
-  "JSF",
-  "MCP Protocol",
-  "Prompt Engineering",
-  "GSAP",
-  "Astro",
-  "Hono",
-]);
-const CREATIVE_SKILL_SET = new Set([
-  "Figma",
-  "SEO",
-  "SEM",
-  "UX Research",
-  "Wireframing",
-  "Video editing",
-  "Wordpress",
-  "Adobe Suite",
-  "Typography",
-]);
-const DUAL_SKILL_SET = new Set([
-  "Accessibility / WCAG",
-  "UX Research",
-  "Wireframing",
-  "Figma",
-]);
-
-function deriveSkillLevel(mastery = 65): string {
-  if (mastery >= 85) return "Esperto";
-  if (mastery >= 70) return "Avanzato";
-  if (mastery >= 50) return "Intermedio";
-  return "Base";
-}
-
-function skillModeTags(skill: SkillSquareSource): string {
-  const tags = new Set<string>();
-
-  if (skill.domain) {
-    tags.add(skill.domain === "ai" ? "tech" : skill.domain);
-  }
-
-  if (TECH_SKILL_SET.has(skill.name)) {
-    tags.add("tech");
-  }
-
-  if (CREATIVE_SKILL_SET.has(skill.name) || DUAL_SKILL_SET.has(skill.name)) {
-    tags.add("creative");
-  }
-
-  if (tags.size === 0) {
-    tags.add("tech");
-    tags.add("creative");
-    tags.add("human");
-    tags.add("management");
-  }
-
-  return Array.from(tags).join(" ");
-}
-
-// ── Skill Grid ─────────────────────────────────────────────────────────────
-const LEVEL_BORDERS: Record<string, number> = {
-  Base: 1,
-  Intermedio: 2,
-  Avanzato: 3,
-  Esperto: 4,
-  Basic: 1,
-  Intermediate: 2,
-  Advanced: 3,
-  Expert: 4,
-};
-function toSkillSquare(skill: SkillSquareSource) {
-  const level = skill.level ?? deriveSkillLevel(skill.mastery);
-  return {
-    name: skill.name,
-    shortName: skill.shortName,
-    level: LEVEL_EN[level] ?? level,
-    borderPx: LEVEL_BORDERS[level] ?? 1,
-    isGlow: level === "Avanzato" || level === "Esperto",
-    modeTags: skillModeTags(skill),
-    weight: skill.weight ?? 1,
-  };
-}
-
-const skillSquares = [
-  ...cvDataEn.technicalSkills.map((skill) => toSkillSquare(skill)),
-  ...cvDataEn.softSkills
-    .filter(
-      (skill) => skill.domain === "human" || skill.domain === "management",
-    )
-    .map((skill) => toSkillSquare(skill)),
-  ...cvDataEn.transversalSkills
-    .filter(
-      (skill) => skill.domain === "human" || skill.domain === "management",
-    )
-    .map((skill) => toSkillSquare(skill)),
-].sort((a, b) => {
-  const activeDelta =
-    Number(isActiveSkill(b.modeTags)) - Number(isActiveSkill(a.modeTags));
-  if (activeDelta !== 0) return activeDelta;
-
-  const areaA = (a.weight ?? 1) * (LEVEL_BORDERS[a.level] ?? 1);
-  const areaB = (b.weight ?? 1) * (LEVEL_BORDERS[b.level] ?? 1);
-  if (areaA !== areaB) return areaB - areaA;
-
-  return a.name.localeCompare(b.name);
-});
-
-function isActiveSkill(modeTags: string): boolean {
-  // EN page is always static; default mode is 'tech'
-  const tags = modeTags.split(" ");
-  return tags.includes("tech") || tags.includes("ai");
-}
-
-const skillViewLabels = {
-  graph: "Graph",
-  cards: "Cards",
-} as const;
-
-// ── Experience clusters — shared IT/EN definition in lib/exp-clusters.ts.
-// Each ref becomes a card: the same experience can appear in more clusters
-// with the right facet (role/description/highlights for that lens).
-const AI_SKILL_HINTS = [
-  "MCP Protocol",
-  "Prompt Engineering",
-  "GitHub Copilot",
-  "Claude",
-  "Cursor",
-  "AI Orchestration",
-  "MCP",
-];
-
-function refToCard(ref: ClusterRef, clusterTags: string) {
-  if ("proj" in ref) {
-    const p = cvDataEn.projects[ref.proj];
-    const meta = PROJ_CARD_META[ref.proj];
-    if (!p) return null;
-    return {
-      company: p.name,
-      role: meta?.role.en ?? "",
-      startYear: meta?.startYear ?? "",
-      endYear: meta?.endYear ?? meta?.startYear ?? "",
-      location: meta?.location?.en ?? "",
-      remote: false,
-      description: p.description,
-      highlights: [] as string[],
-      skills: p.tags ?? [],
-      modeTags: clusterTags,
-      aiAugmented: false,
-    };
-  }
-  const exp = cvDataEn.experience[ref.exp];
-  if (!exp) return null;
-  const facet = ref.facet
-    ? exp.facets?.find((f) => f.mode === ref.facet)
-    : undefined;
-  return {
-    company: exp.company,
-    role: facet?.role ?? exp.role,
-    startYear: exp.startDate.substring(0, 4),
-    endYear: exp.endDate === "present" ? "present" : exp.endDate.substring(0, 4),
-    location: exp.location ?? "",
-    remote: exp.remote ?? false,
-    description: facet?.description ?? exp.description,
-    highlights: facet?.highlights ?? exp.highlights ?? [],
-    skills: exp.skills ?? [],
-    modeTags: clusterTags,
-    aiAugmented: !!(
-      exp.tags?.includes("ai-orchestration") ||
-      exp.skills?.some((s: string) => AI_SKILL_HINTS.includes(s))
-    ),
-  };
-}
-
-const FEATURED_N = 3;
-const expClustersEn = EXP_CLUSTER_DEFS.map((cluster) => {
-  const items = cluster.refs
-    .map((r) => refToCard(r, cluster.tags))
-    .filter((c): c is NonNullable<typeof c> => c !== null);
-  return {
-    key: cluster.key,
-    label: cluster.labels.en,
-    isDefaultOpen: cluster.key === "tech", // EN page is always static at 'tech'
-    items,
-    featured: items.slice(0, FEATURED_N),
-    extra: items.slice(FEATURED_N),
-  };
-});
-
-// ── Soft skills mode tags ─────────────────────────────────────────────────
-// One entry per cvDataEn.softSkills item, same order. Mirrors [mode].astro:
-// the list used to have 9 tags for 11 skills, so "Active listening" and
-// "Assertiveness" (added later) stole the tags meant for "Aesthetic
-// sensibility" and "T-shaped thinking".
-const SOFT_MODE_TAGS = [
-  "human creative", // Effective communication
-  "creative human", // Applied creativity
-  "human", // Cultural adaptability
-  "human management", // Relational intelligence
-  "tech human management", // Lateral problem solving
-  "tech human management", // Strategic autonomy
-  "human management", // Resilience and adaptive thinking
-  "human management", // Active listening
-  "creative", // Aesthetic sensibility
-  "tech creative human management", // T-shaped thinking
-];
-
-// Index-based maps must stay aligned with the data: failing the build beats
-// shipping a silently wrong visual emphasis.
-for (const cluster of EXP_CLUSTER_DEFS)
-  for (const ref of cluster.refs) {
-    if ("exp" in ref && !cvDataEn.experience[ref.exp])
-      throw new Error(
-        `Cluster "${cluster.key}": exp ref ${ref.exp} outside cvDataEn.experience — update lib/exp-clusters.ts.`,
-      );
-    if ("proj" in ref && !cvDataEn.projects[ref.proj])
-      throw new Error(
-        `Cluster "${cluster.key}": proj ref ${ref.proj} outside cvDataEn.projects — update lib/exp-clusters.ts.`,
-      );
-    if ("exp" in ref && ref.facet && !cvDataEn.experience[ref.exp].facets?.some((f) => f.mode === ref.facet))
-      throw new Error(
-        `Cluster "${cluster.key}": experience ${ref.exp} has no "${ref.facet}" facet — add it in cv.en.ts.`,
-      );
-  }
-if (SOFT_MODE_TAGS.length !== cvDataEn.softSkills.length)
-  throw new Error(
-    `SOFT_MODE_TAGS (${SOFT_MODE_TAGS.length}) out of sync with cvDataEn.softSkills (${cvDataEn.softSkills.length}): update the map in en/cv.astro.`,
-  );
-
-const softSkillsData = cvDataEn.softSkills.map((skill, i) => ({
-  name: skill.name,
-  description: skill.description ?? "",
-  modeTags: SOFT_MODE_TAGS[i] ?? "tech creative human",
-}));
-
-// ── Timeline ───────────────────────────────────────────────────────────────
-const MONTHS_EN = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec",
-];
-function isoToLabel(iso: string): string {
-  const [y, m] = iso.split("-");
-  return m ? `${MONTHS_EN[parseInt(m, 10) - 1]} ${y}` : y;
-}
-const timelineItems = [
-  ...cvDataEn.education.map((e) => ({
-    date: e.endDate,
-    dateLabel: isoToLabel(e.endDate),
-    title: `${e.degree}${e.field ? ` — ${e.field}` : ""}`,
-    institution: e.institution,
-    type: "edu" as const,
-    inProgress: false,
-    credentialId: undefined as string | undefined,
-  })),
-  ...cvDataEn.certifications.map((c) => ({
-    date: c.date,
-    dateLabel: isoToLabel(c.date),
-    title: c.name,
-    institution: c.issuer,
-    type: "cert" as const,
-    inProgress: c.inProgress ?? false,
-    credentialId: c.credentialId,
-  })),
-].sort((a, b) => b.date.localeCompare(a.date));
-
-// ── CEFR steps ─────────────────────────────────────────────────────────────
-const CEFR_STEPS: Record<string, number> = {
-  Madrelingua: 6,
-  Native: 6,
-  C2: 6,
-  C1: 5,
-  B2: 4,
-  B1: 3,
-  A2: 2,
-  A1: 1,
-};
-const langsWithSteps = cvDataEn.languages.map((l) => ({
-  ...l,
-  steps: CEFR_STEPS[l.level] ?? 3,
-}));
-
-// ── Projects ───────────────────────────────────────────────────────────────
-const PROJECT_TAGS_MAP: Record<string, string> = {
-  Cinema: "creative",
-  React: "tech",
-  Lit: "tech",
-  WebComponents: "tech",
-  "Event management": "human",
-  Poetry: "creative human",
-  Poesia: "creative human",
-  Creativity: "creative",
-  "Tour management": "creative management",
-  "Content Strategy": "creative",
-  "Digital marketing": "creative management",
-};
-
-const projectsData = cvDataEn.projects.slice(0, 6).map((p) => {
-  const tags = p.tags ?? [];
-  const modes = new Set<string>();
-  tags.forEach((t) => {
-    const mapped = PROJECT_TAGS_MAP[t];
-    if (mapped) mapped.split(" ").forEach((m) => modes.add(m));
-  });
-  if (p.primaryMode) modes.add(p.primaryMode);
-  const modeTags =
-    modes.size > 0 ? Array.from(modes).join(" ") : "tech creative human";
-  return { name: p.name, description: p.description, modeTags, slug: p.slug };
-})
-  // EN page is always static at 'tech' — same mode-first logic as [mode].astro.
-  .sort((a, b) => Number(b.modeTags.includes("tech")) - Number(a.modeTags.includes("tech")));
+const {
+  modeLabel,
+  modeDescription,
+  heroTitle,
+  heroSummary,
+  heroTitles,
+  heroSummaries,
+  skillViewLabels,
+  skillSquares,
+  expClusters,
+  softSkillsData,
+  timelineItems,
+  langsWithSteps,
+  projectsData,
+} = buildCvViewModel({ data: cvDataEn, locale: "en", mode });
 ---
 
 <Layout
-  title="CV — Giulio Occhipinti"
-  description="Interactive CV: IBM-certified UX/UI & Web Designer, Creative Technologist, AI & Digital Specialist and Agile Project Manager."
+  title={`CV ${modeLabel} — Giulio Occhipinti`}
+  description={modeDescription}
+  mode={mode}
   lang="en"
   showFab
 >
@@ -397,21 +51,21 @@ const projectsData = cvDataEn.projects.slice(0, 6).map((p) => {
     <div class="mode-buttons" role="group" aria-label="Choose display mode">
       <button
         class="mode-btn is-active"
-        data-nav-mode="tech"
+        data-nav-mode="creative"
         type="button"
         aria-pressed="true"
       >
-        <span class="mode-btn__abbr" aria-hidden="true">SD</span>
-        <span class="mode-btn__label">Software Dev</span>
+        <span class="mode-btn__abbr" aria-hidden="true">WD</span>
+        <span class="mode-btn__label">Web &amp; UX</span>
       </button>
       <button
         class="mode-btn"
-        data-nav-mode="creative"
+        data-nav-mode="tech"
         type="button"
         aria-pressed="false"
       >
-        <span class="mode-btn__abbr" aria-hidden="true">WD</span>
-        <span class="mode-btn__label">Web &amp; UX</span>
+        <span class="mode-btn__abbr" aria-hidden="true">SD</span>
+        <span class="mode-btn__label">Software Dev</span>
       </button>
       <button
         class="mode-btn"
@@ -455,8 +109,8 @@ const projectsData = cvDataEn.projects.slice(0, 6).map((p) => {
         role="listbox"
         aria-labelledby="mode-dropdown-btn"
       >
-        <li class="mode-dropdown__option is-selected" role="option" data-dropdown-mode="tech" tabindex="-1">Software Dev</li>
-        <li class="mode-dropdown__option" role="option" data-dropdown-mode="creative" tabindex="-1">Web &amp; UX</li>
+        <li class="mode-dropdown__option is-selected" role="option" data-dropdown-mode="creative" tabindex="-1">Web &amp; UX</li>
+        <li class="mode-dropdown__option" role="option" data-dropdown-mode="tech" tabindex="-1">Software Dev</li>
         <li class="mode-dropdown__option" role="option" data-dropdown-mode="management" tabindex="-1">Project Manager</li>
         <li class="mode-dropdown__option" role="option" data-dropdown-mode="human" tabindex="-1">AI &amp; Digital</li>
         <li class="mode-dropdown__option mode-dropdown__option--personal" role="option" data-dropdown-personal tabindex="-1">Off the clock</li>
@@ -530,6 +184,17 @@ const projectsData = cvDataEn.projects.slice(0, 6).map((p) => {
       </h1>
       <p class="hero-title">{heroTitle}</p>
       <p class="hero-summary">{heroSummary}</p>
+
+      <!-- Title/summary above are static for the rendered default mode (SSG).
+           Switching mode from the nav is client-side (modeStore, no
+           navigation), so cv-init.ts reads this payload to rewrite the text at
+           runtime — same pattern as [mode].astro. Single source of truth: the
+           dictionaries in the frontmatter, no duplication in TS. -->
+      <script
+        type="application/json"
+        id="hero-copy"
+        set:html={JSON.stringify({ titles: heroTitles, summaries: heroSummaries })}
+      />
 
       <p class="hero-tagline">Understanding the root is the only way not to get lost among the branches.</p>
 
@@ -672,7 +337,7 @@ const projectsData = cvDataEn.projects.slice(0, 6).map((p) => {
       </h2>
       <div class="exp-clusters">
         {
-          expClustersEn.map((cluster, clusterIdx) => (
+          expClusters.map((cluster, clusterIdx) => (
             <div
               class="exp-cluster"
               data-cluster={cluster.key}
