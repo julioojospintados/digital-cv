@@ -2201,28 +2201,6 @@ export const cvData = {
   // ── Social impact ─────────────────────────────────────────────────────────
   socialImpact: [
     {
-      name: "Prevenzione in situazione di crisi",
-      description:
-        "Sono intervenuto in una situazione di rischio suicidio: ho riconosciuto i segnali, ho ascoltato e ho accompagnato la persona verso un supporto professionale. È l'esperienza che più mi ha insegnato cosa significa esserci davvero: accettare la realtà dell'altro e aggiungere presenza.",
-      tags: [
-        "Empatia",
-        "Ascolto attivo",
-        "Gestione della crisi",
-        "Human skills",
-      ],
-    },
-    {
-      name: "Assistenza legale a immigrato in difficoltà",
-      description:
-        "Ho aiutato un ragazzo bangladese in difficoltà con il sistema legale italiano: orientamento nel labirinto burocratico, traduzione del contesto normativo e raccordo con le risorse disponibili. Serviva qualcuno che non passasse oltre.",
-      tags: [
-        "Solidarietà",
-        "Interculturalità",
-        "Assistenza",
-        "Civic engagement",
-      ],
-    },
-    {
       name: "Intervento in difesa di terzi in spazio pubblico",
       description:
         "Sono intervenuto in una situazione di pericolo in strada per la tutela di terzi. L'improvvisazione insegna a restare nel momento senza paralizzarsi, e fuori dal palco vale uguale.",

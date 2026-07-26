@@ -142,7 +142,13 @@ L'utente esplora o torna senza mai ricominciare da zero. Il `<go-logo>` è il po
 - USA: "AI operativa senza assumere un team di data scientist", "fare in 2 quello che altri fanno in 8"
 - EVITA: "architettura enterprise", "scalabilità cloud-native", "tool MCP" (generico)
 
-**Storie vere da enfatizzare:** Film a San Francisco · Torneo di Scacchi · Soccorso Sociale · improvvisazione teatrale
+**Storie vere da enfatizzare:** Film a San Francisco · Torneo di Scacchi · improvvisazione teatrale
+
+**Non usare nei testi (decisione 2026-07-26):** gli episodi di soccorso alla
+persona — prevenzione in situazione di crisi e assistenza legale a un
+immigrato — sono stati rimossi da `cv.ts` e `cv.en.ts` su richiesta di Giulio.
+Erano contesto personale, non materiale da CV. Non reintrodurli né citarli
+come "storie da enfatizzare".
 
 ---
 
