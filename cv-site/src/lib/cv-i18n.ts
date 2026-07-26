@@ -96,13 +96,13 @@ const IT: LocaleStrings = {
     human: "AI & Digital Specialist",
   },
   modeDescriptions: {
-    tech: "Sviluppo web con Angular, Lit e TypeScript al servizio del design: interfacce curate, AI workflow e automazione per realtà che vogliono risultati misurabili.",
+    tech: "Angular, Lit e TypeScript al servizio del design. Progetto interfacce e le porto in produzione: disegnarle e costruirle sono lo stesso lavoro.",
     creative:
-      "UX/UI & Web Designer certificato IBM, Creative Technologist. Progetto esperienze digitali che uniscono estetica, usabilità e impatto sul brand per realtà di ogni dimensione.",
+      "UX/UI & Web Designer certificato IBM, Creative Technologist. Progetto interfacce belle da vedere e pensate per essere usate: le due cose insieme, o non escono.",
     human:
-      "Consulente per l'Innovazione Digitale con background multidisciplinare: design, sviluppo web, teatro e comunicazione. Lavoro per un impatto reale sulle persone e sui processi.",
+      "Consulente per l'Innovazione Digitale. Design, sviluppo, teatro e comunicazione nello stesso percorso: i workflow AI li costruisco e li so raccontare.",
     management:
-      "Partner Tecnico Agile per piccole e grandi realtà. Sprint brevi, backlog orientato al business, autonomia del team. Design + Tecnologia + Metodo in ogni ingaggio.",
+      "Partner Tecnico Agile per piccole e grandi realtà. Sprint da 1 a 2 settimane, backlog costruito sul business, demo funzionanti al posto dei report.",
   },
   fallbackDescription:
     "CV interattivo di Giulio Occhipinti: Consulente per l'Innovazione Digitale & Partner Tecnico per piccole e grandi realtà.",
@@ -170,13 +170,13 @@ const EN: LocaleStrings = {
     human: "AI & Digital Specialist",
   },
   modeDescriptions: {
-    tech: "Web development with Angular, Lit and TypeScript in service of design: polished interfaces, AI workflows and automation for businesses that want measurable results.",
+    tech: "Angular, Lit and TypeScript in service of design. I design interfaces and ship them: drawing them and building them are the same job.",
     creative:
-      "IBM-certified UX/UI & Web Designer, Creative Technologist. I design digital experiences that combine aesthetics, usability and brand impact for businesses of every size.",
+      "IBM-certified UX/UI & Web Designer, Creative Technologist. I design interfaces that look good and are built to be used: both at once, or they don't ship.",
     human:
-      "Digital Innovation Consultant with a multidisciplinary background: design, web development, theatre and communication. I work for real impact on people and processes.",
+      "Digital Innovation Consultant. Design, development, theatre and communication in one path: I build AI workflows and I can tell the story behind them.",
     management:
-      "Agile Technical Partner for businesses large and small. Short sprints, a business-driven backlog, team autonomy. Design + Technology + Method in every engagement.",
+      "Agile Technical Partner for businesses large and small. One to two week sprints, a backlog built on the business, working demos instead of reports.",
   },
   fallbackDescription:
     "Interactive CV of Giulio Occhipinti: Digital Innovation Consultant & Technical Partner for businesses large and small.",
