@@ -16,7 +16,10 @@ function getInitialMode(): Mode {
       return pathSegment as Mode;
     }
   }
-  return 'tech';
+  // Default 'creative': il posizionamento del CV è Design-first, quindi chi
+  // arriva senza un mode esplicito (link diretto, QR del PDF) vede la lente
+  // UX/UI. Stesso default in IT e EN — vedi DEFAULT_MODE in cv-init.ts.
+  return 'creative';
 }
 
 export const modeStore = persistentAtom<Mode>('cv-mode', getInitialMode(), {
@@ -74,9 +77,9 @@ export function initMode(): void {
     document.documentElement.dataset.mode = routeMode;
     modeStore.set(routeMode);
   } else if (MODE_AWARE_PATHS.some(p => pathname.startsWith(p))) {
-    // Pagina mode-aware senza route di mode (/en/cv) — usa localStorage o default 'tech'
+    // Pagina mode-aware senza route di mode (/en/cv) — usa localStorage o default 'creative'
     const stored = modeStore.get();
-    const mode = VALID_MODES.includes(stored) ? stored : 'tech';
+    const mode = VALID_MODES.includes(stored) ? stored : 'creative';
     document.documentElement.dataset.mode = mode;
   } else if (SSR_MODE_PATHS.some(p => pathname.startsWith(p))) {
     // Case study (/work/*) — il data-mode SSR del progetto resta com'è

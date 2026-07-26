@@ -12,6 +12,12 @@ gsap.registerPlugin(ScrollTrigger);
 const CV_MODES = ["tech", "creative", "human", "management"] as const;
 type CVMode = (typeof CV_MODES)[number];
 
+// Mode mostrato quando la route non ne indica uno (/en/cv, o store vuoto).
+// Design-first: chi arriva da un link diretto o dal QR del PDF vede la lente
+// UX/UI. Deve restare allineato al default in modeStore.ts e al redirect di
+// cv.astro — IT e EN identici salvo la lingua.
+const DEFAULT_MODE: CVMode = "creative";
+
 // ── Hero entrance — G and O first, then the rest ──────────────────────
 const heroEl = document.querySelector<HTMLElement>(".hero-section")!;
 const allChars = document.querySelectorAll<HTMLElement>(".hero-char");
@@ -908,16 +914,16 @@ if ((CV_MODES as readonly string[]).includes(initialRouteMode)) {
   setMode(initialRouteMode);
 } else {
   // Pagina mode-aware senza route di mode (es. /en/cv) — usa lo store (già inizializzato
-  // da initMode() in Layout.astro) oppure default 'tech'.
+  // da initMode() in Layout.astro) oppure DEFAULT_MODE.
   const stored = modeStore.get();
   if (!(CV_MODES as readonly string[]).includes(stored)) {
-    setMode("tech");
+    setMode(DEFAULT_MODE);
   }
 }
 
 // ── Subscribe to modeStore (fires immediately with current value) ─────
 modeStore.subscribe((mode) => {
-  const m = mode ?? "tech";
+  const m = mode ?? DEFAULT_MODE;
   applyMode(m);
   applyAccordions(m);
   // Nessun mode apre mai "personal" (mode-helpers.ts): un cambio mode lo

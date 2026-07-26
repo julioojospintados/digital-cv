@@ -20,9 +20,9 @@ describe("modeStore — valid modes", () => {
     }
   });
 
-  it("default value is 'tech'", () => {
-    modeStore.set("tech");
-    expect(modeStore.get()).toBe("tech");
+  it("accetta e restituisce il mode di default 'creative'", () => {
+    modeStore.set("creative");
+    expect(modeStore.get()).toBe("creative");
   });
 });
 
@@ -142,9 +142,10 @@ describe("initMode", () => {
     expect(document.documentElement.dataset.mode).toBe("creative");
   });
 
-  it("route mode-aware (/en/cv) → default 'tech' se store non valido", () => {
+  it("route mode-aware (/en/cv) → lo store vince sul default", () => {
     window.history.replaceState({}, "", "/en/cv");
-    // Forza uno store value valido ma diverso da default per testare il path reale
+    // Store valido ma diverso dal default: verifica che initMode legga lo
+    // store invece di forzare DEFAULT_MODE.
     modeStore.set("human");
     document.documentElement.removeAttribute("data-mode");
     initMode();
