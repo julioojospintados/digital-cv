@@ -839,6 +839,13 @@ document
         if (!mode) return;
         dropdownList.classList.remove("is-open");
         dropdownBtn.setAttribute("aria-expanded", "false");
+        // Mode già attivo: nessuna azione. Il proxy sotto simula un click sul
+        // bottone nav nascosto, che su mobile interpreta un secondo click sullo
+        // stesso mode come "scroll alle skill" (vedi doppio-tap in updateNavButtons/
+        // click handler [data-nav-mode]) — corretto per un tap ripetuto sul bottone,
+        // ma la dropdown è una scelta esplicita singola: riselezionare lo stesso mode
+        // non deve scrollare altrove.
+        if (modeStore.get() === mode) return;
         // Proxy: click sul pulsante nascosto — riusa tutta la logica mode + animazioni
         document.querySelector<HTMLButtonElement>(`button[data-nav-mode="${mode}"]`)?.click();
       });
