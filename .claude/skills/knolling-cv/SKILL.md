@@ -87,6 +87,22 @@ Lo sfondo è **sempre ottanio** rgba(8,73,67,1). Mai hardcodare colori.
 | `FloatingMenu.lit.ts` | `<floating-menu>` | FAB: contatti, feedback |
 | `SkillForceGraph.lit.ts` | `<skill-force-graph>` | Grafo D3 force-directed delle skill |
 
+### Parità IT ↔ EN — non solo i testi
+
+**Le pagine EN devono differire dalle IT solo per la lingua.** Nient'altro:
+non l'ordine degli elementi, non lo stato di default, non il comportamento,
+non la logica che li calcola. Vale per ordine DOM dei mode, voce attiva o
+accordion aperto di default, ordinamenti, contenuto delle dropdown.
+
+Unica asimmetria legittima: le pagine CV IT prendono il mode dalla route
+(`[mode].astro`), mentre `/en/cv` è una pagina statica senza mode nel path,
+quindi renderizza `DEFAULT_MODE` e cambia lato client. Va espressa
+**riusando la logica IT con `DEFAULT_MODE` al posto di `mode`**, mai con una
+condizione hardcoded tipo `=== "tech"`.
+
+Il mode di default è **`creative`** (Design-first). Cambiarlo tocca più file
+insieme — l'elenco completo è in `AGENTS.md` → "IT ↔ EN parity".
+
 ### Data Source of Truth
 
 - `src/data/cv.ts` — dati IT (unica fonte di verità)
@@ -110,4 +126,5 @@ L'interfaccia `Feedback` ha: `name`, `role?`, `quote?`, `keywords[]`.
 - No stdout nel layer MCP (src/) — usa logger da src/utils/logger.ts
 - No git commit o git push senza richiesta esplicita dell'utente
 - No modifiche ai tipi di cv.ts senza aggiornare cv.en.ts
+- No divergenze IT/EN oltre la lingua — ordine, default, comportamento e logica devono essere identici (vedi sezione "Parità IT ↔ EN")
 - No logica HTTP in src/index.ts né logica MCP in src/http.ts

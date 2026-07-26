@@ -61,15 +61,40 @@ Operative rules → `.vscode/design.instructions.md` (Copilot, auto-injected on 
 
 → Edit `src/data/cv.ts` (Italian). Mirror changes in `src/data/cv.en.ts` (English).
 
-### Mirroring IT → EN copy outside cv.ts
+### IT ↔ EN parity — copy AND structure
 
-→ Not just CV data: any Italian copy added or changed directly in an Astro
-  page or component (e.g. narrative sections on `cv-site/src/pages/index.astro`)
-  must be mirrored the same session in its EN counterpart
+**The EN pages must differ from their IT counterparts in language only.**
+Nothing else: not the order of elements, not the default state, not the
+behaviour, not the logic that computes them.
+
+→ **Copy.** Any Italian text added or changed directly in an Astro page or
+  component (e.g. narrative sections on `cv-site/src/pages/index.astro`) must
+  be mirrored the same session in its EN counterpart
   (`cv-site/src/pages/en/index.astro`, `en/cv.astro`, `en/work/...`) —
   translated, not just left out. If the text is personal/voice-heavy (bio,
   storytelling, wordplay), translate carefully to preserve tone and flag the
   translation to the user for review rather than treating it as final.
+
+→ **Structure and behaviour.** The same applies to everything that is not
+  text: DOM order of modes/cards/nav, which item is active or open by
+  default, sort order, dropdown contents, interactive affordances. If a
+  change makes IT and EN behave differently, it is a bug — fix both sides in
+  the same session.
+
+→ **Don't hardcode on the EN side what is data-driven on the IT side.**
+  The IT CV page gets its mode from the route (`[mode].astro`); `/en/cv` is a
+  single static page with no mode in its path, so it renders `DEFAULT_MODE`
+  and switches client-side. That is the *only* legitimate asymmetry, and it
+  must be expressed by reusing the IT logic with `DEFAULT_MODE` substituted
+  for `mode` — never by a hardcoded `=== "tech"` condition. Past bugs from
+  this: hero copy frozen on one persona, accordion opened on the wrong
+  cluster, projects and skills scored against the wrong mode.
+
+→ **Changing the default mode touches several files at once.** Keep these in
+  sync: `DEFAULT_MODE` in `cv-site/src/scripts/cv-init.ts`, the fallbacks in
+  `cv-site/src/islands/stores/modeStore.ts` (`getInitialMode` and `initMode`),
+  the `/cv` redirect in `cv-site/src/pages/cv.astro`, and `DEFAULT_MODE` plus
+  the `mode` prop passed to `Layout` in `cv-site/src/pages/en/cv.astro`.
 
 ### Adding a page or component to the site
 
