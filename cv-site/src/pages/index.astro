@@ -143,14 +143,14 @@ const scatterAngle = (i: number) => SCATTER_ANGLES[i % SCATTER_ANGLES.length];
       </div>
 
       <section class="mode-cards" id="mode-cards" aria-label="Scegli prospettiva">
-        <button class="mode-card" data-mode="tech" id="card-tech" type="button">
-          <span class="mode-card__label">Software Developer</span>
-          <span class="mode-card__desc">Automazione, AI e architetture.</span>
-        </button>
-
         <button class="mode-card" data-mode="creative" id="card-creative" type="button">
           <span class="mode-card__label">Web &amp; UX Designer</span>
           <span class="mode-card__desc">Brand, estetica e interfacce.</span>
+        </button>
+
+        <button class="mode-card" data-mode="tech" id="card-tech" type="button">
+          <span class="mode-card__label">Software Developer</span>
+          <span class="mode-card__desc">Automazione, AI e architetture.</span>
         </button>
 
         <button class="mode-card" data-mode="management" id="card-management" type="button">
@@ -170,8 +170,8 @@ const scatterAngle = (i: number) => SCATTER_ANGLES[i % SCATTER_ANGLES.length];
   <!-- Dot-nav verticale — jump diretto tra i 4 profili, desktop only -->
   <nav class="section-dots" aria-label="Naviga tra i profili">
     <a href="#profile-about" class="section-dot" aria-label="Chi sono"><span class="section-dot__tip">Chi sono</span></a>
-    <a href="#profile-tech" class="section-dot" data-mode="tech" aria-label="Software Developer"><span class="section-dot__tip">Software Developer</span></a>
     <a href="#profile-creative" class="section-dot" data-mode="creative" aria-label="Web & UX Designer"><span class="section-dot__tip">Web &amp; UX Designer</span></a>
+    <a href="#profile-tech" class="section-dot" data-mode="tech" aria-label="Software Developer"><span class="section-dot__tip">Software Developer</span></a>
     <a href="#profile-management" class="section-dot" data-mode="management" aria-label="Project Manager"><span class="section-dot__tip">Project Manager</span></a>
     <a href="#profile-human" class="section-dot" data-mode="human" aria-label="AI & Digital Specialist"><span class="section-dot__tip">AI &amp; Digital Specialist</span></a>
   </nav>
@@ -217,26 +217,6 @@ const scatterAngle = (i: number) => SCATTER_ANGLES[i % SCATTER_ANGLES.length];
       </div>
     </section>
 
-    <section class="profile-section" id="profile-tech" data-mode="tech">
-      <div class="profile-inner">
-        <div class="profile-content">
-          <h2 class="profile-title">Automazione,<br>AI e architetture.</h2>
-          <p class="profile-eyebrow">Software Developer</p>
-          <p class="profile-desc">Metto Angular, Lit e TypeScript al servizio del design: interfacce curate che arrivano in produzione. Costruisco AI workflow e automazione per realtà che vogliono scalare senza assumere un team intero.</p>
-          <div class="skills-marquee" aria-hidden="true">
-            <div class="skills-marquee__track">
-              <span>Angular</span><span>TypeScript</span><span>Lit</span><span>Node.js</span><span>MCP</span><span>AI Workflow</span><span>GSAP</span><span>RxJS</span><span>REST API</span><span>GraphQL</span><span>PostgreSQL</span><span>MongoDB</span><span>Docker</span><span>Git</span><span>Agile</span><span>TDD</span><span>CI/CD</span><span>Microservices</span><span>WebSockets</span><span>PWA</span>
-            </div>
-          </div>
-          <a href="/tech" class="profile-cta">
-            <span>GO to Software Developer</span>
-            <span class="profile-cta__arrow" aria-hidden="true"></span>
-          </a>
-        </div>
-        <div class="profile-deco" aria-hidden="true"><span class="profile-deco__text">SD</span><img class="profile-knoll-img" src="/knolling/laptop.webp" alt="" loading="lazy" decoding="async"></div>
-      </div>
-    </section>
-
     <section class="profile-section" id="profile-creative" data-mode="creative">
       <div class="profile-inner">
         <div class="profile-content">
@@ -267,6 +247,26 @@ const scatterAngle = (i: number) => SCATTER_ANGLES[i % SCATTER_ANGLES.length];
           </a>
         </div>
         <div class="profile-deco" aria-hidden="true"><span class="profile-deco__text">WD</span><img class="profile-knoll-img" src="/knolling/camera.webp" alt="" loading="lazy" decoding="async"></div>
+      </div>
+    </section>
+
+    <section class="profile-section" id="profile-tech" data-mode="tech">
+      <div class="profile-inner">
+        <div class="profile-content">
+          <h2 class="profile-title">Automazione,<br>AI e architetture.</h2>
+          <p class="profile-eyebrow">Software Developer</p>
+          <p class="profile-desc">Metto Angular, Lit e TypeScript al servizio del design: interfacce curate che arrivano in produzione. Costruisco AI workflow e automazione per realtà che vogliono scalare senza assumere un team intero.</p>
+          <div class="skills-marquee" aria-hidden="true">
+            <div class="skills-marquee__track">
+              <span>Angular</span><span>TypeScript</span><span>Lit</span><span>Node.js</span><span>MCP</span><span>AI Workflow</span><span>GSAP</span><span>RxJS</span><span>REST API</span><span>GraphQL</span><span>PostgreSQL</span><span>MongoDB</span><span>Docker</span><span>Git</span><span>Agile</span><span>TDD</span><span>CI/CD</span><span>Microservices</span><span>WebSockets</span><span>PWA</span>
+            </div>
+          </div>
+          <a href="/tech" class="profile-cta">
+            <span>GO to Software Developer</span>
+            <span class="profile-cta__arrow" aria-hidden="true"></span>
+          </a>
+        </div>
+        <div class="profile-deco" aria-hidden="true"><span class="profile-deco__text">SD</span><img class="profile-knoll-img" src="/knolling/laptop.webp" alt="" loading="lazy" decoding="async"></div>
       </div>
     </section>
 

@@ -117,7 +117,7 @@ let _lockedW = 0;         // larghezza totale del container (meno il gap)
  * Converti la griglia da fr a px (no-op visivo), poi anima la distribuzione
  * in modo che la cella selezionata ottenga il 60% dello spazio disponibile.
  * Chiamate successive tweenano direttamente px→px senza reset.
- * Ordine auto-placement: tech(0)=r0c0, creative(1)=r0c1, management(2)=r1c0, human(3)=r1c1
+ * Ordine auto-placement: creative(0)=r0c0, tech(1)=r0c1, management(2)=r1c0, human(3)=r1c1
  */
 function expandMobileGrid(cardIndex: number) {
   const EXPAND = 0.60;
@@ -310,7 +310,7 @@ gsap.delayedCall(introAlreadySeen ? 0 : 0.9, () => {
     },
   );
 
-  // 9. Mode cards — ordine spaziale TL→BR (ordine DOM = tech→creative→management→human)
+  // 9. Mode cards — ordine spaziale TL→BR (ordine DOM = creative→tech→management→human)
   // Segue la diagonale naturale di lettura: l'occhio è guidato senza sorprese.
   const orderedCards = Array.from(cards); // già in ordine DOM row-by-row (2x2 grid)
   tl.fromTo(
