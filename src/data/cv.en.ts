@@ -139,9 +139,9 @@ export const cvDataEn = {
       description:
         "I designed and developed internal business management software, from process analysis to deploy: MCP architecture with tools, resources and prompts as APIs for AI agents, integrated with VS Code Copilot and Cursor, simplified UX for non-technical operators and an automated Cursor → GitLab CI/CD → deploy pipeline. I work in 1 to 2 week sprints and measure impactScore at every release.",
       highlights: [
-        "I simplified the UX for non-technical operators: –40% training time on new workflows.",
+        "I designed the workflows for people who do not know the software, not for the person who wrote it.",
         "I automated the Cursor → GitLab CI/CD → deploy pipeline: zero manual intervention.",
-        "–80% average development time with an AI-augmented workflow, project ongoing.",
+        "I put Copilot and Cursor inside the development loop, not next to it.",
       ],
       skills: [
         "MCP",

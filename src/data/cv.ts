@@ -296,9 +296,9 @@ export const cvData = {
       description:
         "Ho progettato e sviluppato un gestionale aziendale interno, dall'analisi dei processi al deploy: architettura MCP con tool, resource e prompt come API per agenti AI, integrata con VS Code Copilot e Cursor, UX semplificata per operatori non tecnici e pipeline Cursor → GitLab CI/CD → deploy automatizzata. Lavoro in sprint da 1 a 2 settimane e misuro l'impactScore a ogni rilascio.",
       highlights: [
-        "Ho semplificato la UX per operatori non tecnici: –40% tempo di formazione sui nuovi flussi.",
+        "Ho progettato i flussi per chi il gestionale non lo conosce, non per chi lo ha scritto.",
         "Ho automatizzato la pipeline Cursor → GitLab CI/CD → deploy: zero interventi manuali.",
-        "–80% tempo medio di sviluppo con workflow AI-augmented, progetto in corso.",
+        "Ho messo Copilot e Cursor dentro il ciclo di sviluppo, non accanto.",
       ],
       skills: [
         "MCP",
@@ -915,14 +915,14 @@ export const cvData = {
       issuer: "IBM",
       date: "2026-02",
       credentialId: "L7GZFSYJYMAC",
-      // Impatto pratico: framework Scrum snello applicato a sprint aziendali — garantisce ROI misurabile a ogni rilascio e riduce il time-to-market del 30–40% rispetto a progetti waterfall
+      // Impatto pratico: Scrum snello applicato agli sprint aziendali, con una demo funzionante a chiusura di ogni ciclo
     },
     {
       name: "UX/UI Design Fundamentals: Usability and Visual Principles",
       issuer: "SkillUp",
       date: "2026-02",
       credentialId: "VELSWBCO2YEL",
-      // Impatto pratico: principi di usabilità applicati a interfacce per operatori non tecnici — riduzione tempi di formazione e tasso di errore operativo
+      // Impatto pratico: principi di usabilità applicati alle interfacce per operatori non tecnici, quelle che si usano senza averle studiate prima
     },
     {
       name: "Introduction to UX/UI Design",
