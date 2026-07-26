@@ -5,6 +5,7 @@
  * Import cvDataEn wherever an English locale is needed.
  */
 
+import { cvData } from "./cv.js";
 import type {
   Social,
   Language,
@@ -21,6 +22,62 @@ import type {
   ValueFlow,
   Feedback,
 } from "./cv.js";
+
+/**
+ * Skill metadata that is NOT translatable — it describes the skill itself, not
+ * how it is worded: which domain it belongs to, how much visual weight it
+ * carries, the mastery score, the graph role, the level and the icon.
+ *
+ * It lives in cv.ts only. Re-typing it here is what broke the English CV:
+ * every entry below had lost `domain`, `weight` and `role`, so the site
+ * dropped all soft and transversal skills from the grid (the filter keys on
+ * `domain`), rendered every square at the smallest size (`weight` defaulted to
+ * 1) and marked 86% of skills as active in every mode. The counts still
+ * matched, so the parity test stayed green.
+ */
+const INHERITED_SKILL_META = [
+  "domain",
+  "weight",
+  "mastery",
+  "role",
+  "level",
+  "icon",
+] as const;
+
+/**
+ * Merge the Italian metadata into the English entries, matching by position.
+ *
+ * English wins on everything it defines — name, description and links are
+ * genuinely translated (link targets point at translated skill names, so they
+ * must NOT be inherited). Italian only fills the fields English leaves out.
+ *
+ * Position is the join key because soft and transversal skill names are
+ * translated; the length guard turns a misalignment into a build failure
+ * instead of a silently wrong CV.
+ */
+function inheritSkillMeta<T extends { name: string }>(
+  translated: readonly T[],
+  italian: readonly object[],
+  section: string,
+): T[] {
+  if (translated.length !== italian.length) {
+    throw new Error(
+      `cv.en.ts — ${section}: ${translated.length} entries against ${italian.length} in cv.ts. ` +
+        `The two lists are merged by position, so they must stay aligned.`,
+    );
+  }
+  return translated.map((entry, i) => {
+    const source = italian[i] as Record<string, unknown> | undefined;
+    const meta: Record<string, unknown> = {};
+    for (const key of INHERITED_SKILL_META) {
+      const value = source?.[key];
+      if (value !== undefined) meta[key] = value;
+    }
+    // English last: name, description and links are genuinely translated and
+    // must never be overwritten by the Italian source.
+    return { ...meta, ...entry } as T;
+  });
+}
 
 export const cvDataEn = {
   // ── Personal info ──────────────────────────────────────────────────────────
@@ -732,7 +789,9 @@ export const cvDataEn = {
   ] as Certification[],
 
   // ── Technical skills ──────────────────────────────────────────────────────
-  technicalSkills: [
+  // domain / weight / mastery / role / level / icon are inherited from cv.ts —
+  // see inheritSkillMeta above. Only translated strings belong here.
+  technicalSkills: inheritSkillMeta([
     {
       name: "Angular",
       level: "Avanzato",
@@ -1168,10 +1227,10 @@ export const cvDataEn = {
         { target: "PostHog", type: "workflow" },
       ],
     },
-  ] as Skill[],
+  ], cvData.technicalSkills, "technicalSkills") as Skill[],
 
   // ── Soft skills ───────────────────────────────────────────────────────────
-  softSkills: [
+  softSkills: inheritSkillMeta([
     {
       name: "Effective communication",
       description:
@@ -1286,10 +1345,10 @@ export const cvDataEn = {
         { target: "Agile Methodology", type: "cross-domain" },
       ],
     },
-  ] as SoftSkill[],
+  ], cvData.softSkills, "softSkills") as SoftSkill[],
 
   // ── Transversal skills ────────────────────────────────────────────────────
-  transversalSkills: [
+  transversalSkills: inheritSkillMeta([
     {
       name: "Event management",
       description:
@@ -1440,7 +1499,7 @@ export const cvDataEn = {
         { target: "Effective communication", type: "cross-domain" },
       ],
     },
-  ] as TransversalSkill[],
+  ], cvData.transversalSkills, "transversalSkills") as TransversalSkill[],
 
   // ── Methodology & Mindset ─────────────────────────────────────────────────
   methodology: [
@@ -1740,6 +1799,27 @@ export const cvDataEn = {
     "Travel and international cultures",
     "Open source",
   ] as string[],
+
+  // ── Social impact ─────────────────────────────────────────────────────────
+  socialImpact: [
+    {
+      name: "Stepping in to protect others in a public space",
+      description:
+        "I stepped into a dangerous situation on the street to protect other people. Improvisation teaches you to stay in the moment without freezing, and off stage it works exactly the same.",
+      tags: ["Civic courage", "Composure under pressure", "Quick thinking"],
+    },
+    {
+      name: "Auctioneer at a European charity gala (Burger King)",
+      description:
+        "I hosted a charity auction in English during a European Burger King event with international guests. The pace of an auction, a live audience and a foreign language all at once: the kind of evening where theatre helps more than vocabulary.",
+      tags: [
+        "Professional English",
+        "Public speaking",
+        "Event hosting",
+        "Corporate events",
+      ],
+    },
+  ],
 
   // ── AI Workflow ───────────────────────────────────────────────────────────
   aiWorkflow: [
