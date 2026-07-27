@@ -47,18 +47,29 @@ const knolls = document.querySelectorAll<HTMLImageElement>(
 // Trigger agganciato alla stessa callback che fa entrare il knolling in
 // scena (step 10 della timeline d'ingresso, sotto) — richiesta esplicita
 // 2026-07-27: il badge deve comparire nello stesso istante delle immagini
-// knolling, non a coreografia già assestata. La finestra di visibilità (6s)
+// knolling, non a coreografia già assestata. La finestra di visibilità (8s)
 // e l'uscita usano setTimeout, non gsap.delayedCall: sotto
 // prefers-reduced-motion il globalTimeline gira a x50 (vedi sopra), il che
-// comprimerebbe i 6s di lettura a ~120ms — la riduzione del movimento non
+// comprimerebbe gli 8s di lettura a ~160ms — la riduzione del movimento non
 // deve ridurre anche il tempo per leggere il contenuto.
 const WIP_BADGE_SEEN_KEY = "wip-badge-seen";
-const WIP_BADGE_VISIBLE_MS = 6000;
+// Deve restare allineata all'animation-duration di .wip-badge__bar-fill
+// (index-page.css) — la barra è la rappresentazione visiva di questo timer.
+const WIP_BADGE_VISIBLE_MS = 8000;
 // Deve restare allineata alla transition di uscita in index-page.css (1s).
 const WIP_BADGE_EXIT_MS = 1000;
+// Stesso breakpoint di @media (max-width: 40rem) in index-page.css, dove il
+// badge è display:none — su mobile il nome hero occupa quasi tutta la
+// larghezza a ridosso del bordo alto e nessun angolo resta libero (vedi
+// screenshot utente 2026-07-27). Il check qui, non solo in CSS, evita di
+// consumare il flag "visto in questa sessione" su mobile: se la finestra
+// viene poi allargata a desktop nella stessa sessione, il badge può ancora
+// comparire.
+const WIP_BADGE_MOBILE_QUERY = "(max-width: 40rem)";
 const wipBadge = document.getElementById("wip-badge");
 function showWipBadge() {
   if (!wipBadge) return;
+  if (window.matchMedia(WIP_BADGE_MOBILE_QUERY).matches) return;
   try {
     if (sessionStorage.getItem(WIP_BADGE_SEEN_KEY) === "1") return;
     sessionStorage.setItem(WIP_BADGE_SEEN_KEY, "1");
@@ -375,7 +386,7 @@ gsap.delayedCall(introAlreadySeen ? 0 : 0.9, () => {
     // Badge "ciclo di sistemazione" nella stessa callback, non in un tl.call
     // separato più avanti nella timeline — richiesta esplicita 2026-07-27:
     // deve comparire nello stesso istante in cui il knolling entra in scena,
-    // non a coreografia già assestata. Il timer di visibilità (6s) resta
+    // non a coreografia già assestata. Il timer di visibilità (8s) resta
     // reale (setTimeout dentro showWipBadge), non legato al clock GSAP.
     showWipBadge();
   }, undefined, "-=0.55");

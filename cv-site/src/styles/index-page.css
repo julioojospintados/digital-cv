@@ -51,8 +51,8 @@
    none diretto, così la transition di uscita può girare prima di sparire. */
 .wip-badge {
   position: fixed;
-  left: 1.25rem;
-  top: 1.25rem;
+  left: 1rem;
+  top: 1rem;
   z-index: 9000;
   display: flex;
   align-items: flex-start;
@@ -128,26 +128,29 @@
 /* Scoperto in QA: l'animazione deve partire da quando il badge diventa
    visibile, non da quando l'elemento entra nel DOM — il markup esiste dal
    primo paint ma showWipBadge() aggiunge .is-visible solo a coreografia
-   d'ingresso conclusa (index-init.ts). Senza questo scoping il ciclo di
-   6s poteva già essere a metà (o finito) nel momento in cui il badge
-   appariva. Stesso pattern già usato per .wip-badge__bar-fill qui sotto. */
+   d'ingresso conclusa (index-init.ts). Senza questo scoping il ciclo
+   poteva già essere a metà (o finito) nel momento in cui il badge
+   appariva. Stesso pattern già usato per .wip-badge__bar-fill qui sotto.
+   Durata allineata a WIP_BADGE_VISIBLE_MS (index-init.ts, 8s): se cambia
+   uno dei due, le ultime parole del ciclo restano vuote (o il ciclo finisce
+   prima che il badge sparisca, lasciando un vuoto in coda). */
 .wip-badge.is-visible .wip-badge__word {
-  animation: wip-word-cycle 6s ease-out forwards;
+  animation: wip-word-cycle 8s ease-out forwards;
 }
 
 .wip-badge.is-visible .wip-badge__word:nth-child(1) {
   animation-delay: 0s;
 }
 .wip-badge.is-visible .wip-badge__word:nth-child(2) {
-  animation-delay: 2s;
+  animation-delay: 2.667s;
 }
 .wip-badge.is-visible .wip-badge__word:nth-child(3) {
-  animation-delay: 4s;
+  animation-delay: 5.333s;
 }
 
-/* 0–33% della finestra di 6s = 2s a parola: entra, resta leggibile, esce.
-   Le fasi fuori dal proprio turno restano piatte su opacity:0 — non c'è
-   "salto" visibile perché la parola non è ancora/più nel suo turno. */
+/* 0–33% della finestra di 8s = ~2.67s a parola: entra, resta leggibile,
+   esce. Le fasi fuori dal proprio turno restano piatte su opacity:0 — non
+   c'è "salto" visibile perché la parola non è ancora/più nel suo turno. */
 @keyframes wip-word-cycle {
   0% {
     opacity: 0;
@@ -228,9 +231,10 @@
 /* Il countdown gira solo mentre il badge è visibile — evita che la barra
    riparta già "consumata" se .is-visible viene ri-aggiunta (non succede
    oggi, one-shot per sessione, ma tiene lo stato coerente col markup).
-   6s per allinearsi alla finestra di visibilità in index-init.ts. */
+   8s per allinearsi a WIP_BADGE_VISIBLE_MS in index-init.ts — se cambia
+   uno dei due, la barra si svuota prima/dopo che il badge sparisca. */
 .wip-badge.is-visible .wip-badge__bar-fill {
-  animation: wip-badge-countdown 6s linear forwards;
+  animation: wip-badge-countdown 8s linear forwards;
 }
 
 @keyframes wip-badge-countdown {
@@ -239,16 +243,19 @@
   }
 }
 
-/* Su mobile il nome hero ("Giulio Occhipinti") parte a ridosso del bordo
-   alto: un max-width legato a 100vw allargherebbe il badge invece di
-   restringerlo. 10.5rem è il minimo che contiene comodamente la riga più
-   lunga della lista orari ("27/07 · 12:08", JetBrains Mono fs-12) senza
-   andare a capo — riduce quanto il badge invade il titolo sotto. */
+/* Su mobile il nome hero ("Giulio Occhipinti") occupa quasi tutta la
+   larghezza a ridosso del bordo alto: qualunque angolo alto ci finisce
+   sopra. Nessun restringimento l'ha risolto in modo pulito (provato fino a
+   10.5rem, copriva ancora il nome — vedi screenshot utente 2026-07-27) —
+   niente badge su mobile, non un dettaglio essenziale. Il trigger in
+   index-init.ts fa lo stesso check via matchMedia, così sotto i 40rem non
+   consuma nemmeno il flag "visto in questa sessione": se la finestra viene
+   allargata a desktop più tardi nella stessa sessione, il badge può ancora
+   comparire. Questa regola resta come difesa aggiuntiva (es. resize da
+   desktop a mobile a badge già visibile). */
 @media (max-width: 40rem) {
   .wip-badge {
-    left: 1rem;
-    top: 1rem;
-    max-width: 10.5rem;
+    display: none;
   }
 }
 
