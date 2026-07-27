@@ -43,7 +43,7 @@ const knolls = document.querySelectorAll<HTMLImageElement>(
   ".knoll-item, .knoll-m",
 );
 
-// ── Badge "ciclo di sistemazione" (Testing → Correggendo → Miglioramento) — una volta a sessione ──
+// ── Badge "ciclo di sistemazione" (Testing → Correggendo → Migliorando) — una volta a sessione ──
 // Trigger agganciato alla stessa callback che fa entrare il knolling in
 // scena (step 10 della timeline d'ingresso, sotto) — richiesta esplicita
 // 2026-07-27: il badge deve comparire nello stesso istante delle immagini

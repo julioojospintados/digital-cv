@@ -43,7 +43,7 @@
   outline: none;
 }
 
-/* ── Badge "ciclo di sistemazione" (Test → Correzione → Miglioramento) ──
+/* ── Badge "ciclo di sistemazione" (Test → Correzione → Migliorando) ──
    Fixed top-left, stesso trattamento del lang-switch top-right (top:1.25rem,
    z-index 9000) — i due chip si specchiano nei due angoli alti, lontano
    dal FAB (bottom-right) e senza mai competere per lo stesso spazio.
@@ -100,9 +100,9 @@
 
 /* ── Titolo a parola singola rotante — "marquee" richiesto dall'utente
    2026-07-27 al posto della riga statica "Test → Correzione →
-   Miglioramento": una parola alla volta scivola dentro da destra e esce
+   Migliorando": una parola alla volta scivola dentro da destra e esce
    da sinistra, la successiva la rivela. overflow:hidden + width fissa
-   (calibrata sulla parola più lunga, "Miglioramento", a fs-12/700/Lexend)
+   (calibrata sulla parola più lunga, "Migliorando", a fs-12/700/Lexend)
    evitano che le parole absolute facciano collassare il contenitore. */
 .wip-badge__title {
   position: relative;
