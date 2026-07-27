@@ -1,7 +1,12 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import ContactFooter from '../components/ContactFooter.astro';
+import { getRecentCommits, formatRecentCommit } from '../lib/recent-commits';
 import '../styles/index-page.css';
+
+// Badge "ciclo di sistemazione" — ultimi 3 commit, letti da git in build
+// (recent-commits.ts). Niente changelog scritto a mano da tenere aggiornato.
+const recentCommits = getRecentCommits(3);
 // .work-index-card / .work-chevron — stessa identità visiva della card
 // hero-portfolio-card in [mode].astro (vedi sezione Web & UX Designer sotto).
 import '../styles/work-page.css';
@@ -375,6 +380,43 @@ const scatterAngle = (i: number) => SCATTER_ANGLES[i % SCATTER_ANGLES.length];
 
   <!-- Language switch — fixed top-right, hidden until hero reveal -->
   <a href="/en" class="lang-switch" id="lang-switch" aria-label="Switch to English version">EN</a>
+
+  <!-- Badge "ciclo di sistemazione" — appare una volta a sessione dopo il
+       reveal dell'hero (index-init.ts), resta 6s con una barra che si
+       svuota, poi sparisce (uscita volutamente lenta, vedi index-page.css).
+       Orari reali, non un changelog scritto a mano: recentCommits arriva da
+       git log in build (recent-commits.ts) — ogni push rigenera il sito
+       (nuova astro build) e la lista si aggiorna da sola sugli ultimi 3
+       commit, senza bisogno di toccare questo file. Se il build gira senza
+       repo git (getRecentCommits torna []) l'etichetta e la lista spariscono
+       invece di mostrare un vuoto. Il titolo ruota una parola alla volta,
+       Testing → Correggendo → Miglioramento (CSS puro, wip-word-cycle in
+       index-page.css) — nessuna icona freccia, solo lo sprout resta a
+       comunicare il ciclo. aria-label sul <p> perché le singole parole
+       sono aria-hidden (sono solo l'animazione visiva).
+       Icona "sprout" (Lucide, ISC) invece di un'icona da dev-tool: riusa
+       il significato di plant.webp nel vocabolario knolling (crescita). -->
+  <div id="wip-badge" class="wip-badge" role="status" aria-hidden="true">
+    <svg class="wip-badge__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M14 9.536V7a4 4 0 0 1 4-4h1.5a.5.5 0 0 1 .5.5V5a4 4 0 0 1-4 4 4 4 0 0 0-4 4c0 2 1 3 1 5a5 5 0 0 1-1 3" />
+      <path d="M4 9a5 5 0 0 1 8 4 5 5 0 0 1-8-4" />
+      <path d="M5 21h14" />
+    </svg>
+    <div class="wip-badge__body">
+      <p class="wip-badge__title" aria-label="Testing, Correggendo, Miglioramento — ciclo continuo">
+        <span class="wip-badge__word" aria-hidden="true">Testing</span><span class="wip-badge__word" aria-hidden="true">Correggendo</span><span class="wip-badge__word" aria-hidden="true">Miglioramento</span>
+      </p>
+      {recentCommits.length > 0 && (
+        <>
+          <p class="wip-badge__times-label">Ultime modifiche:</p>
+          <ul class="wip-badge__times">
+            {recentCommits.map((c) => <li>{formatRecentCommit(c, 'it')}</li>)}
+          </ul>
+        </>
+      )}
+    </div>
+    <div class="wip-badge__bar" aria-hidden="true"><span class="wip-badge__bar-fill"></span></div>
+  </div>
 
 </Layout>
 

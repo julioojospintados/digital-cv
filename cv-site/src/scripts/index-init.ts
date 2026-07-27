@@ -43,6 +43,36 @@ const knolls = document.querySelectorAll<HTMLImageElement>(
   ".knoll-item, .knoll-m",
 );
 
+// ── Badge "ciclo di sistemazione" (Testing → Correggendo → Miglioramento) — una volta a sessione ──
+// Trigger agganciato alla stessa callback che fa entrare il knolling in
+// scena (step 10 della timeline d'ingresso, sotto) — richiesta esplicita
+// 2026-07-27: il badge deve comparire nello stesso istante delle immagini
+// knolling, non a coreografia già assestata. La finestra di visibilità (6s)
+// e l'uscita usano setTimeout, non gsap.delayedCall: sotto
+// prefers-reduced-motion il globalTimeline gira a x50 (vedi sopra), il che
+// comprimerebbe i 6s di lettura a ~120ms — la riduzione del movimento non
+// deve ridurre anche il tempo per leggere il contenuto.
+const WIP_BADGE_SEEN_KEY = "wip-badge-seen";
+const WIP_BADGE_VISIBLE_MS = 6000;
+// Deve restare allineata alla transition di uscita in index-page.css (1s).
+const WIP_BADGE_EXIT_MS = 1000;
+const wipBadge = document.getElementById("wip-badge");
+function showWipBadge() {
+  if (!wipBadge) return;
+  try {
+    if (sessionStorage.getItem(WIP_BADGE_SEEN_KEY) === "1") return;
+    sessionStorage.setItem(WIP_BADGE_SEEN_KEY, "1");
+  } catch {
+    // Storage bloccato: lo mostriamo comunque, non c'è modo di ricordare la sessione.
+  }
+  wipBadge.removeAttribute("aria-hidden");
+  wipBadge.classList.add("is-visible");
+  setTimeout(() => {
+    wipBadge.classList.remove("is-visible");
+    setTimeout(() => wipBadge.setAttribute("aria-hidden", "true"), WIP_BADGE_EXIT_MS);
+  }, WIP_BADGE_VISIBLE_MS);
+}
+
 // ── Immagini knolling cliccabili — seguono l'istinto dell'utente ──────────
 // Desktop (.knoll-item): listener sull'img — area precisa via clip-path CSS.
 // Mobile (.knoll-wrap): listener sul div wrapper — evita che la zona
@@ -342,6 +372,12 @@ gsap.delayedCall(introAlreadySeen ? 0 : 0.9, () => {
       knoll.style.setProperty("--knoll-delay", `${i * knollDelayStep}ms`);
       knoll.classList.add("do-enter");
     });
+    // Badge "ciclo di sistemazione" nella stessa callback, non in un tl.call
+    // separato più avanti nella timeline — richiesta esplicita 2026-07-27:
+    // deve comparire nello stesso istante in cui il knolling entra in scena,
+    // non a coreografia già assestata. Il timer di visibilità (6s) resta
+    // reale (setTimeout dentro showWipBadge), non legato al clock GSAP.
+    showWipBadge();
   }, undefined, "-=0.55");
 
    // 10b. Pulse attenzione sulle card — bordo che pulsa ogni 1.5s in loop

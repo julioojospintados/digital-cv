@@ -1,7 +1,12 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 import ContactFooter from '../../components/ContactFooter.astro';
+import { getRecentCommits, formatRecentCommit } from '../../lib/recent-commits';
 import '../../styles/index-page.css';
+
+// "Fix cycle" badge — last 3 commits, read from git at build time
+// (recent-commits.ts). Mirrors index.astro (IT).
+const recentCommits = getRecentCommits(3);
 // .work-index-card / .work-chevron — same visual identity as the
 // hero-portfolio-card in en/cv.astro (see Web & UX Designer section below).
 import '../../styles/work-page.css';
@@ -382,6 +387,43 @@ IBM and SkillUp certified, with a keen eye on how Generative AI is reshaping the
 
   <!-- Language switch — fixed top-right, hidden until hero reveal -->
   <a href="/" class="lang-switch" id="lang-switch" aria-label="Passa alla versione italiana">IT</a>
+
+  <!-- "Fix cycle" badge — same behaviour as index.astro (IT): appears once
+       per session after the hero reveal, stays 6s with a draining bar,
+       then dismisses (deliberately slow fade-out, see index-page.css).
+       Real timestamps, not a hand-written changelog: recentCommits comes
+       from git log at build time (recent-commits.ts) — every push rebuilds
+       the site and the list refreshes itself off the last 3 commits, no
+       manual edits to this file. If the build runs without a git repo
+       (getRecentCommits returns []) the label and list disappear instead of
+       showing empty. Mirrors index.astro 1:1 (same trigger, same timing,
+       same sessionStorage-once logic) — translated copy flagged for review,
+       not final. Title rotates one word at a time, Testing → Fixing → Improving
+       (pure CSS, wip-word-cycle in index-page.css) — no arrow icon, only
+       the sprout communicates the cycle. aria-label on the <p> because
+       the individual words are aria-hidden (they're the visual animation
+       only). -->
+  <div id="wip-badge" class="wip-badge" role="status" aria-hidden="true">
+    <svg class="wip-badge__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M14 9.536V7a4 4 0 0 1 4-4h1.5a.5.5 0 0 1 .5.5V5a4 4 0 0 1-4 4 4 4 0 0 0-4 4c0 2 1 3 1 5a5 5 0 0 1-1 3" />
+      <path d="M4 9a5 5 0 0 1 8 4 5 5 0 0 1-8-4" />
+      <path d="M5 21h14" />
+    </svg>
+    <div class="wip-badge__body">
+      <p class="wip-badge__title" aria-label="Testing, Fixing, Improving — continuous cycle">
+        <span class="wip-badge__word" aria-hidden="true">Testing</span><span class="wip-badge__word" aria-hidden="true">Fixing</span><span class="wip-badge__word" aria-hidden="true">Improving</span>
+      </p>
+      {recentCommits.length > 0 && (
+        <>
+          <p class="wip-badge__times-label">Latest changes:</p>
+          <ul class="wip-badge__times">
+            {recentCommits.map((c) => <li>{formatRecentCommit(c, 'en')}</li>)}
+          </ul>
+        </>
+      )}
+    </div>
+    <div class="wip-badge__bar" aria-hidden="true"><span class="wip-badge__bar-fill"></span></div>
+  </div>
 
 </Layout>
 
