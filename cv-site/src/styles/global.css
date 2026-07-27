@@ -355,12 +355,28 @@ body {
    <meta name="view-transition" content="same-origin"> (Layout.astro):
    Chrome l'ha deprecato intorno alla versione 126 a favore di questa
    at-rule, che va in un CSS caricato da entrambe le pagine — global.css
-   è già su ogni pagina del sito, quindi basta qui, una volta sola. */
+   è già su ogni pagina del sito, quindi basta qui, una volta sola.
+
+   .hero-portfolio-card NON riceve il nome qui in modo permanente — bug
+   scoperto 2026-07-27: la stessa card (con lo stesso nome) vive su
+   index.astro, [mode].astro ED en/cv.astro. Con il nome statico, QUALSIASI
+   navigazione reale tra queste pagine (es. il cambio mode via
+   launchJourney in index-init.ts, o il Master Reset di GoLogo) veniva
+   letta dal browser come "stessa card, nuova posizione" e faceva scattare
+   il cross-document view transition NATIVO su di essa — un morph tra due
+   istanze scorrelate, mai richiesto, che si sovrapponeva senza
+   coordinamento alla vignette/speed-line di launchJourney (due sistemi di
+   transizione indipendenti sullo stesso elemento). Il nome va assegnato
+   via JS solo al click sulla card stessa (vedi il listener "click" in
+   cv-init.ts/index-init.ts), cioè solo quando la destinazione è
+   davvero /work — mai per le altre navigazioni, che lasciano l'elemento
+   senza nome e quindi fuori dal transition automatico. .work-index-hero
+   vive solo sulla pagina di destinazione (mai sorgente di altre
+   navigazioni), quindi resta statico. */
 @view-transition {
   navigation: auto;
 }
 
-.hero-portfolio-card,
 .work-index-hero {
   view-transition-name: portfolio-hero;
 }
@@ -371,7 +387,6 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hero-portfolio-card,
   .work-index-hero {
     view-transition-name: none;
   }

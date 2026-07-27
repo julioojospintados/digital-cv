@@ -126,6 +126,19 @@ heroTl.to(
   "-=0.2",
 );
 
+// ── View transition solo verso /work ────────────────────────────────────
+// view-transition-name assegnato via JS al click, non in CSS: la card vive
+// (con lo stesso nome) anche su index.astro ed en/cv.astro, quindi un nome
+// statico farebbe scattare il morph nativo pure sulla navigazione mode→mode
+// (launchJourney) o sul reset di GoLogo, mai richiesto per quei percorsi.
+// Assegnandolo solo qui, al click sulla card stessa, resta attivo solo
+// quando la destinazione è davvero /work (vedi global.css per il resto).
+if (heroPortfolioCard && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  heroPortfolioCard.addEventListener("click", () => {
+    heroPortfolioCard.style.viewTransitionName = "portfolio-hero";
+  });
+}
+
 // ── Scroll progress bar ───────────────────────────────────────────────
 const progressBar = document.createElement("div");
 progressBar.className = "scroll-progress";

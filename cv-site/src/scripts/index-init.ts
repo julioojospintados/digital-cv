@@ -682,6 +682,23 @@ document.querySelectorAll<HTMLElement>(".profile-cta").forEach((cta) => {
   });
 });
 
+// ── View transition solo verso /work ────────────────────────────────────
+// view-transition-name assegnato via JS al click, non in CSS: la stessa
+// card vive anche su [mode].astro/en/cv.astro, quindi un nome statico
+// farebbe scattare il morph nativo anche sul cambio mode via launchJourney
+// qui sopra (destinazione /tech /creative ecc., mai /work) — un morph tra
+// due istanze scorrelate della card, mai richiesto, che si sovrapponeva
+// senza coordinamento alla vignette/speed-line di launchJourney. Assegnarlo
+// solo qui, al click sulla card stessa, lo mantiene attivo solo quando la
+// destinazione è davvero /work (vedi global.css per il resto).
+if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  document.querySelectorAll<HTMLAnchorElement>(".hero-portfolio-card").forEach((card) => {
+    card.addEventListener("click", () => {
+      card.style.viewTransitionName = "portfolio-hero";
+    });
+  });
+}
+
 // ── Dot "Chi sono": stesso jump smooth via Lenis degli altri dot, ma senza
 // data-mode/stato attivo (non è un mode, non entra nel loop sotto). Serve
 // esplicitamente da quando html non ha più scroll-behavior:smooth (todo #48):
