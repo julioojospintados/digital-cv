@@ -257,8 +257,8 @@ export const cvData = {
     },
     {
       platform: "GitHub",
-      url: "https://github.com/julioojospintados",
-      label: "julioojospintados",
+      url: "https://github.com/julioojospintados/digital-cv",
+      label: "julioojospintados/digital-cv",
     },
     {
       platform: "Email",
