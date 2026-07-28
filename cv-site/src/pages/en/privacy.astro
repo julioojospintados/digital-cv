@@ -1,0 +1,253 @@
+---
+import Layout from "../../layouts/Layout.astro";
+---
+
+<Layout
+  title="Privacy — Giulio Occhipinti"
+  description="Privacy notice for Giulio Occhipinti's digital CV: what data the site collects, with which tools, and how to manage consent."
+  lang="en"
+  showFab
+>
+  <nav class="privacy-nav">
+    <go-logo></go-logo>
+    <a href="/en/cv" class="privacy-back">← Back to CV</a>
+  </nav>
+
+  <main class="privacy-main" id="main-content">
+    <header class="privacy-hero">
+      <p class="privacy-hero__eyebrow">Privacy</p>
+      <h1 class="privacy-hero__title">What this site collects.</h1>
+      <p class="privacy-section__text">
+        A few lines, not an endless legal document: this site is my personal
+        CV, not a commercial product.
+      </p>
+    </header>
+
+    <section class="privacy-section">
+      <h2 class="privacy-section__title">Data controller</h2>
+      <p class="privacy-section__text">
+        Giulio Occhipinti — <a
+          class="privacy-link"
+          href="mailto:giulio.occhipinti.g@gmail.com">giulio.occhipinti.g@gmail.com</a
+        >.
+      </p>
+    </section>
+
+    <section class="privacy-section">
+      <h2 class="privacy-section__title">What I collect and with what</h2>
+      <ul class="privacy-list">
+        <li>
+          <strong>PostHog</strong> — browsing stats (page views, events) and,
+          only if you consent from the banner, heatmaps and anonymous
+          sessions. It only starts after your explicit consent.
+        </li>
+        <li>
+          <strong>Microsoft Clarity</strong> — session recording and
+          heatmaps, to understand where people get lost in the interface.
+          This also only starts after your consent.
+        </li>
+        <li>
+          <strong>Vercel Analytics &amp; Speed Insights</strong> — aggregated
+          traffic and performance stats, declared cookieless by the vendor:
+          they stay active without requiring prior consent.
+        </li>
+      </ul>
+    </section>
+
+    <section class="privacy-section">
+      <h2 class="privacy-section__title">Why</h2>
+      <p class="privacy-section__text">
+        Only to understand how the site is browsed and improve its
+        usability. No advertising, no commercial profiling, no selling data
+        to third parties.
+      </p>
+    </section>
+
+    <section class="privacy-section">
+      <h2 class="privacy-section__title">Retention</h2>
+      <p class="privacy-section__text">
+        The site is static: I don't have my own database where your data
+        gets stored. Everything collected stays within the systems of the
+        providers listed above, following their default retention periods.
+      </p>
+    </section>
+
+    <section class="privacy-section">
+      <h2 class="privacy-section__title">Your rights</h2>
+      <p class="privacy-section__text">
+        Access, rectification, erasure, objection: write to the email above
+        and I'll answer directly. You can also contact the <a
+          class="privacy-link"
+          href="https://www.garanteprivacy.it"
+          target="_blank"
+          rel="noopener noreferrer">Italian Data Protection Authority (Garante)</a
+        >.
+      </p>
+    </section>
+
+    <section class="privacy-section">
+      <h2 class="privacy-section__title">Change your choice</h2>
+      <p class="privacy-section__text">
+        Already accepted or rejected from the banner? You can reset your
+        choice at any time — the banner will reappear on the next page load.
+      </p>
+      <button type="button" class="privacy-reset" id="privacy-reset-consent">
+        Reset cookie preferences
+      </button>
+    </section>
+  </main>
+</Layout>
+
+<script>
+  import "../../islands/GoLogo.lit.ts";
+
+  document
+    .getElementById("privacy-reset-consent")
+    ?.addEventListener("click", () => {
+      try {
+        localStorage.removeItem("cv-consent");
+      } catch {
+        /* localStorage unavailable — nothing to reset */
+      }
+      location.reload();
+    });
+</script>
+
+<style>
+  .privacy-nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem 1.25rem;
+    max-width: 48rem;
+    margin: 0 auto;
+  }
+
+  .privacy-back {
+    font-family: var(--font-mono);
+    font-size: var(--fs-14);
+    font-weight: 600;
+    color: var(--color-text-muted);
+    text-decoration: none;
+    transition: color var(--duration-micro) var(--ease-standard);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .privacy-back:hover {
+      color: var(--color-accent);
+    }
+  }
+
+  .privacy-main {
+    max-width: 48rem;
+    margin: 0 auto;
+    padding: 1rem 1.25rem 4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .privacy-hero {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .privacy-hero__eyebrow {
+    font-family: var(--font-mono);
+    font-size: var(--fs-12);
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-accent);
+  }
+
+  .privacy-hero__title {
+    font-family: var(--font-display);
+    font-size: clamp(1.75rem, 5vw, 2.5rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    color: var(--color-text-primary);
+  }
+
+  .privacy-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1.25rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-16);
+  }
+
+  .privacy-section__title {
+    font-family: var(--font-display);
+    font-size: var(--fs-20);
+    font-weight: 700;
+    color: var(--color-text-primary);
+  }
+
+  .privacy-section__text {
+    font-size: var(--fs-16);
+    line-height: 1.6;
+    color: var(--color-text-muted);
+  }
+
+  .privacy-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    font-size: var(--fs-16);
+    line-height: 1.6;
+    color: var(--color-text-muted);
+  }
+
+  .privacy-list li {
+    padding-left: 1.1rem;
+    position: relative;
+  }
+
+  .privacy-list li::before {
+    content: "—";
+    position: absolute;
+    left: 0;
+    color: var(--color-accent);
+  }
+
+  .privacy-list strong {
+    color: var(--color-text-primary);
+    font-weight: 700;
+  }
+
+  .privacy-link {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .privacy-reset {
+    align-self: flex-start;
+    font-family: var(--font-mono);
+    font-size: var(--fs-14);
+    font-weight: 600;
+    color: var(--color-accent);
+    padding: 0.6rem 1rem;
+    border: 1px solid var(--color-accent);
+    border-radius: var(--radius-4);
+    transition:
+      transform 160ms var(--ease-standard),
+      opacity var(--duration-micro) var(--ease-standard);
+  }
+
+  .privacy-reset:active {
+    transform: scale(0.97);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .privacy-reset:hover {
+      opacity: 0.85;
+    }
+  }
+</style>

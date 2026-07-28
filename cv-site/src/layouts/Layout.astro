@@ -2,6 +2,7 @@
 import "../styles/global.css";
 import SpeedInsights from "@vercel/speed-insights/astro";
 import Analytics from "@vercel/analytics/astro";
+import ConsentBanner from "../components/ConsentBanner.astro";
 
 interface Props {
   title?: string;
@@ -10,6 +11,10 @@ interface Props {
   lang?: "it" | "en";
   /** FAB contatti — pagine CV ([mode], en/cv), home (index, en/index) e /work */
   showFab?: boolean;
+  /** true sulle home (index/en/index): il ConsentBanner aspetta l'evento
+   * "cv:wip-badge-shown" del preloader invece di comparire subito — vedi
+   * ConsentBanner.astro. */
+  consentBannerWaitForWip?: boolean;
 }
 
 const {
@@ -18,6 +23,7 @@ const {
   mode,
   lang = "it",
   showFab = false,
+  consentBannerWaitForWip = false,
 } = Astro.props;
 
 const siteUrl = "https://giulio-occhipinti.com";
@@ -99,20 +105,6 @@ const jsonLd = {
     <!-- JSON-LD structured data — Person schema (schema.org) -->
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 
-    <!-- Microsoft Clarity — riattivato (2026-07-28) per provare la sua UI
-         di recordings/heatmap al posto di quella di PostHog. Il replay/heatmap
-         di PostHog è in pausa lato progetto (session_recording_opt_in e
-         heatmaps_opt_in a false) per non far osservare il DOM a due recorder
-         in contemporanea — vedi commento sul blocco PostHog qui sotto. -->
-    {import.meta.env.PROD && (
-      <script is:inline type="text/javascript">
-        {`(function(c,l,a,r,i,t,y){
-            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-        })(window, document, "clarity", "script", "xresw2uoe6");`}
-      </script>
-    )}
 
     <!-- PostHog — solo in build di produzione E solo sull'hostname canonico.
          import.meta.env.PROD da solo non basta: i deploy preview di Vercel
@@ -124,7 +116,12 @@ const jsonLd = {
          dal solo snippet standard.
          disable_surveys: non usiamo survey — evita di scaricare surveys.js (~33KB) a vuoto.
          init posticipato a dopo 'load' + idle: array.js/recorder.js (~455KB da parsare)
-         non devono più competere con il preloader GO per banda e main thread. -->
+         non devono più competere con il preloader GO per banda e main thread.
+         Gate di consenso (banner ConsentBanner.astro, chiave localStorage
+         "cv-consent"): posthog.init parte da solo al load SOLO se il
+         consenso è già "granted" da una visita precedente. Se non ancora
+         deciso, __phInit resta esposto su window.__cvInitPostHog e viene
+         chiamato dal banner al click su "Accetta" — mai prima. -->
     {import.meta.env.PROD && (
       <script is:inline type="text/javascript" set:html={`!function(t,e){var o,n,p,r;e.__SV||(window.posthog && window.posthog.__loaded)||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="Ji Yi init fn mn Hr pn bn cn capture calculateEventProperties Sn register register_once register_for_session unregister unregister_for_session Tn getFeatureFlag getFeatureFlagPayload getFeatureFlagResult getAllFeatureFlags isFeatureEnabled reloadFeatureFlags updateFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSurveysLoaded onSessionId getSurveys getActiveMatchingSurveys renderSurvey displaySurvey cancelPendingSurvey canRenderSurvey canRenderSurveyAsync Mn identify setPersonProperties unsetPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset shutdown setIdentity clearIdentity get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException addExceptionStep captureLog startExceptionAutocapture stopExceptionAutocapture loadToolbar get_property getSessionProperty Cn xn createPersonProfile setInternalOrTestUser In hn Pn opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing get_explicit_consent_status is_capturing clear_opt_in_out_capturing debug Ur Rt getPageViewId captureTraceFeedback captureTraceMetric an".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
         function __phInit() {
@@ -139,7 +136,10 @@ const jsonLd = {
           }
         }
         function __phIdle() { (window.requestIdleCallback || function(cb){setTimeout(cb, 1)})(__phInit); }
-        if (document.readyState === 'complete') { __phIdle(); } else { window.addEventListener('load', __phIdle); }`}></script>
+        window.__cvInitPostHog = __phIdle;
+        if (localStorage.getItem('cv-consent') === 'granted') {
+          if (document.readyState === 'complete') { __phIdle(); } else { window.addEventListener('load', __phIdle); }
+        }`}></script>
     )}
 
     <!-- Preload critical fonts — 400 for body text, 800 for preloader & entry name -->
@@ -186,6 +186,8 @@ const jsonLd = {
          home e /work) -->
     {showFab && <floating-menu></floating-menu>}
 
+    <ConsentBanner lang={lang} waitForWipBadge={consentBannerWaitForWip} />
+
     <SpeedInsights />
     <Analytics />
 
@@ -194,6 +196,54 @@ const jsonLd = {
       import { initMode } from "../islands/stores/modeStore";
       initMode();
     </script>
+
+    <!-- Microsoft Clarity — riattivato il 2026-07-28 per provare la sua UI
+         di recordings/heatmap al posto di quella di PostHog. Il replay/
+         heatmap di PostHog restano in pausa lato progetto
+         (session_recording_opt_in e heatmaps_opt_in a false) per non far
+         osservare il DOM a due recorder in contemporanea.
+
+         Snippet ufficiale raw via is:inline + set:html, stesso pattern del
+         blocco PostHog qui sopra. Due tentativi precedenti sono falliti:
+         (1) mettere {`...`} come children di uno script is:inline — Astro
+             non valuta le espressioni nei children di uno script is:inline,
+             le stampa come testo letterale, quindi non partiva mai. Il fix è
+             passare il codice via set:html, non come children.
+             NB: non nominare mai il tag script per esteso, con parentesi
+             angolari, dentro un commento HTML di questo file — il post-build
+             hook stripComments() in astro.config.mjs protegge i blocchi
+             script/style con una regex che scansiona il testo grezzo, senza
+             sapere che è dentro un commento; se trova lì un'apertura di tag
+             senza una chiusura altrettanto vicina, la sua ricerca della
+             chiusura più vicina salta oltre la fine del commento e aggancia
+             il tag reale subito dopo, cancellando tutto il mezzo in
+             silenzio. Riprodotto proprio con questo commento.
+         (2) pacchetto npm @microsoft/clarity con import() dinamico al posto
+             dello snippet raw — il chunk veniva compilato in build ma Astro/
+             Vite lo escludeva comunque dall'HTML della pagina, a prescindere
+             dalla sua posizione nel documento (provato sia come primo script
+             che dopo initMode). Lo snippet raw is:inline evita del tutto
+             quel livello di bundling, quindi evita il bug.
+
+         Gate di consenso, stesso meccanismo del blocco PostHog sopra: la
+         iniezione dello script viene incapsulata in window.__cvInitClarity
+         e parte da sola solo se "cv-consent" è già "granted" da una visita
+         precedente; altrimenti resta in attesa del click su "Accetta" nel
+         banner (ConsentBanner.astro). -->
+    {import.meta.env.PROD && (
+      <script
+        is:inline
+        type="text/javascript"
+        set:html={`window.__cvInitClarity = function() {
+          (function(c,l,a,r,i,t,y){
+              c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+              t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+              y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+          })(window, document, "clarity", "script", "xresw2uoe6");
+        };
+        if (localStorage.getItem('cv-consent') === 'granted') { window.__cvInitClarity(); }`}
+      ></script>
+    )}
 
     <!-- Lenis smooth scroll + GSAP ScrollTrigger wiring — attivo su tutte
          le pagine, home inclusa. Niente più CSS scroll-snap: coerenza

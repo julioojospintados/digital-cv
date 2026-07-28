@@ -1,0 +1,249 @@
+---
+// ConsentBanner.astro — banner minimale per il consenso a PostHog/Clarity
+// (session recording + heatmap). Vercel Analytics/Speed Insights restano
+// fuori dal gate: sono cookieless per dichiarazione del vendor, non
+// impostano identificatori persistenti — vedi /privacy per il dettaglio.
+// La scelta persiste in localStorage ("cv-consent": "granted" | "denied"):
+// se assente il banner appare, altrimenti resta nascosto (nessun flash).
+// Il gate reale sugli script (PostHog/Clarity non partono finché non è
+// "granted") vive in Layout.astro, non qui — questo componente legge/scrive
+// la stessa chiave ma non è la fonte di verità sull'avvio dei tracker.
+interface Props {
+  lang?: "it" | "en";
+  /** true sulle home (index/en/index): il banner non si mostra da solo al
+   * load, aspetta l'evento "cv:wip-badge-shown" — sparato dalla timeline
+   * GSAP del preloader nello stesso istante in cui compare la card
+   * "ultime modifiche" (wip-badge, index-init.ts step 10), cioè per ultima
+   * dopo nome/card/knolling. Richiesta 2026-07-28: il banner deve comparire
+   * con lo stesso tempismo di quella card, non subito al parse. */
+  waitForWipBadge?: boolean;
+}
+const { lang = "it", waitForWipBadge = false } = Astro.props;
+
+const copy = {
+  it: {
+    label: "Consenso cookie",
+    text: "Uso PostHog e Microsoft Clarity per capire come navighi il sito (heatmap, sessioni anonime). Niente pubblicità, niente vendita dati.",
+    more: "Scopri di più",
+    morePath: "/privacy",
+    reject: "Rifiuta",
+    accept: "Accetta",
+  },
+  en: {
+    label: "Cookie consent",
+    text: "I use PostHog and Microsoft Clarity to understand how you browse the site (heatmaps, anonymous sessions). No ads, no data selling.",
+    more: "Learn more",
+    morePath: "/en/privacy",
+    reject: "Reject",
+    accept: "Accept",
+  },
+} as const;
+
+const t = copy[lang];
+---
+
+<div
+  id="consent-banner"
+  class="consent-banner"
+  role="region"
+  aria-label={t.label}
+  data-wait-for-wip={waitForWipBadge ? "true" : "false"}
+  hidden
+>
+  <div class="consent-banner__inner">
+    <p class="consent-banner__text">
+      {t.text}{" "}
+      <a href={t.morePath} class="consent-banner__link">{t.more}</a>
+    </p>
+    <div class="consent-banner__actions">
+      <button
+        type="button"
+        class="consent-banner__btn consent-banner__btn--reject"
+        id="consent-reject"
+      >
+        {t.reject}
+      </button>
+      <button
+        type="button"
+        class="consent-banner__btn consent-banner__btn--accept"
+        id="consent-accept"
+      >
+        {t.accept}
+      </button>
+    </div>
+  </div>
+</div>
+
+<style>
+  .consent-banner {
+    position: fixed;
+    inset: auto 0 0 0;
+    z-index: 99998;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    background: var(--color-surface);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-top: 1px solid var(--color-border);
+    box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.35);
+    opacity: 0;
+    transform: translateY(100%);
+    transition:
+      opacity var(--duration-state) var(--ease-standard),
+      transform var(--duration-state) var(--ease-standard);
+    pointer-events: none;
+  }
+
+  .consent-banner[data-visible="true"] {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .consent-banner__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1.5rem;
+    width: 100%;
+    max-width: 90rem;
+    padding: 0.85rem 1.5rem;
+  }
+
+  .consent-banner__text {
+    flex: 1 1 16rem;
+    font-size: var(--fs-12);
+    line-height: 1.5;
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+
+  .consent-banner__link {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .consent-banner__actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-shrink: 0;
+    margin-left: auto;
+  }
+
+  .consent-banner__btn {
+    font-family: var(--font-mono);
+    font-size: var(--fs-12);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    padding: 0.5rem 0.9rem;
+    border-radius: var(--radius-4);
+    border: 1px solid var(--color-border);
+    background: transparent;
+    transition:
+      transform 160ms var(--ease-standard),
+      border-color var(--duration-micro) var(--ease-standard),
+      opacity var(--duration-micro) var(--ease-standard);
+  }
+
+  .consent-banner__btn:active {
+    transform: scale(0.97);
+  }
+
+  .consent-banner__btn--reject {
+    color: var(--color-text-muted);
+  }
+
+  .consent-banner__btn--accept {
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .consent-banner__btn--reject:hover {
+      border-color: var(--color-text-muted);
+    }
+    .consent-banner__btn--accept:hover {
+      opacity: 0.85;
+    }
+  }
+
+  /* Stesso breakpoint di WIP_BADGE_MOBILE_QUERY in index-init.ts — sotto,
+     testo e azioni si impilano invece di stare su una riga sola. */
+  @media (max-width: 40rem) {
+    .consent-banner__inner {
+      flex-direction: column;
+      align-items: stretch;
+      padding: 0.85rem 1rem;
+    }
+
+    .consent-banner__actions {
+      margin-left: 0;
+      justify-content: flex-end;
+    }
+  }
+</style>
+
+<script>
+  const KEY = "cv-consent";
+  const banner = document.getElementById("consent-banner");
+  const acceptBtn = document.getElementById("consent-accept");
+  const rejectBtn = document.getElementById("consent-reject");
+
+  function getConsent(): string | null {
+    try {
+      return localStorage.getItem(KEY);
+    } catch {
+      return null;
+    }
+  }
+
+  function setConsent(value: "granted" | "denied") {
+    try {
+      localStorage.setItem(KEY, value);
+    } catch {
+      /* localStorage non disponibile (privato/bloccato) — il banner
+         ricomparirà al prossimo load, non è un errore da gestire qui. */
+    }
+  }
+
+  function hideBanner() {
+    if (!banner) return;
+    banner.removeAttribute("data-visible");
+    setTimeout(() => {
+      banner.hidden = true;
+    }, 320);
+  }
+
+  function showBannerIfUndecided() {
+    if (!banner) return;
+    if (getConsent() !== "granted" && getConsent() !== "denied") {
+      banner.hidden = false;
+      requestAnimationFrame(() => banner.setAttribute("data-visible", "true"));
+    }
+  }
+
+  if (banner?.dataset.waitForWip === "true") {
+    // Sparato dalla timeline GSAP del preloader (index-init.ts) nello stesso
+    // istante in cui compare la card "ultime modifiche" — non appena il
+    // parse è pronto come nel caso di default sotto.
+    window.addEventListener("cv:wip-badge-shown", showBannerIfUndecided, {
+      once: true,
+    });
+  } else {
+    showBannerIfUndecided();
+  }
+
+  acceptBtn?.addEventListener("click", () => {
+    setConsent("granted");
+    (window as any).__cvInitPostHog?.();
+    (window as any).__cvInitClarity?.();
+    hideBanner();
+  });
+
+  rejectBtn?.addEventListener("click", () => {
+    setConsent("denied");
+    hideBanner();
+  });
+</script>
