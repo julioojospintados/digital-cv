@@ -99,8 +99,11 @@ const jsonLd = {
     <!-- JSON-LD structured data — Person schema (schema.org) -->
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 
-    <!-- Microsoft Clarity — disattivato temporaneamente (2026-07-24).
-         Per riattivare: togliere questo commento HTML.
+    <!-- Microsoft Clarity — riattivato (2026-07-28) per provare la sua UI
+         di recordings/heatmap al posto di quella di PostHog. Il replay/heatmap
+         di PostHog è in pausa lato progetto (session_recording_opt_in e
+         heatmaps_opt_in a false) per non far osservare il DOM a due recorder
+         in contemporanea — vedi commento sul blocco PostHog qui sotto. -->
     {import.meta.env.PROD && (
       <script is:inline type="text/javascript">
         {`(function(c,l,a,r,i,t,y){
@@ -110,7 +113,6 @@ const jsonLd = {
         })(window, document, "clarity", "script", "xresw2uoe6");`}
       </script>
     )}
-    -->
 
     <!-- PostHog — solo in build di produzione E solo sull'hostname canonico.
          import.meta.env.PROD da solo non basta: i deploy preview di Vercel
