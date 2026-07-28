@@ -320,14 +320,16 @@ gsap.delayedCall(introAlreadySeen ? 0 : 0.9, () => {
     ease: "power2.in",
   });
 
-  // 6. "iulio" e "cchipinti" — stagger identico cv.astro hero
+  // 6. "iulio" e "cchipinti" — stagger accorciato (30ms, pavimento della
+  // regola Emil Kowalski in design-system/SKILL.md) per liberare prima le
+  // card mode: la scia resta leggibile, solo più compatta.
   tl.to(
     otherChars,
     {
       opacity: 1,
       y: 0,
       duration: 0.45,
-      stagger: { each: 0.04, from: "start" },
+      stagger: { each: 0.03, from: "start" },
       ease: "power3.out",
     },
     "-=0.35",
@@ -339,7 +341,10 @@ gsap.delayedCall(introAlreadySeen ? 0 : 0.9, () => {
     if (firstOChar) firstOChar.classList.add("name-go-o");
   });
 
-  // 8. "Digital CV" + tagline + lang-switch compaiono insieme, subito dopo il nome completo
+  // 8. "Digital CV" + tagline + lang-switch — sovrapposti alla coda del nome
+  // invece che in sequenza: riduce il tempo prima che le card diventino
+  // interagibili senza tagliare nessun beat del rituale (richiesta 2026-07-28,
+  // feedback Bojan su performance/bounce risk del preloader).
   tl.to(
     ["#entry-label", "#entry-tagline", "#entry-cred", "#lang-switch"],
     {
@@ -349,10 +354,13 @@ gsap.delayedCall(introAlreadySeen ? 0 : 0.9, () => {
       stagger: 0,
       ease: "power3.out",
     },
+    "-=0.25",
   );
 
   // 9. Mode cards — ordine spaziale TL→BR (ordine DOM = creative→tech→management→human)
   // Segue la diagonale naturale di lettura: l'occhio è guidato senza sorprese.
+  // Partono mentre tagline/label stanno ancora completandosi (overlap, non
+  // sequenza) — stesso motivo dello step 8: prima interazione possibile prima.
   const orderedCards = Array.from(cards); // già in ordine DOM row-by-row (2x2 grid)
   tl.fromTo(
     orderedCards,
@@ -365,7 +373,7 @@ gsap.delayedCall(introAlreadySeen ? 0 : 0.9, () => {
       stagger: 0.05, // 50ms — quasi simultanee, sembrano un gruppo compatto
       ease: "back.out(1.4)",
     },
-    "+=0.05",
+    "-=0.2",
   );
 
   // 10. Knolling — ordine spaziale: sort per posizione Y (peso 0.7) + X (peso 0.3)
