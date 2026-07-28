@@ -443,9 +443,10 @@ export const cvData = {
       description:
         "Ho organizzato booking e tour per gli artisti del roster di un'agenzia musicale italiana e ho progettato la loro comunicazione digitale e content strategy.",
       highlights: [
-        "Ho raddoppiato i follower con audience mirata (musicisti, etichette, promoter): crescita organica, non volume puro.",
-        "Ho organizzato un evento live all'Arci Bellezza di Milano, dal booking alla comunicazione.",
-        "Ho coordinato booking e concerti: ricerca venue, trattativa con i promoter, contratti.",
+        "Strategia B2B e Crescita Targettizzata: Ho impostato la comunicazione dell'agenzia per parlare agli addetti ai lavori (etichette, promoter, artisti) anziché al pubblico generico, raddoppiando i follower con contatti utili per il business.",
+        "Ideazione Playlist & Format Radio/Podcast: Ho ideato il concept di una playlist per artisti emergenti per creare connessioni e fare engagement organico. Ho anche proposto un format radio/podcast mensile per raccontare i brani e i progetti inseriti.",
+        "Outreach e Collaborazioni: Ho cercato e contattato possibili partner creando email custom, senza usare software di generazione automatica o modelli standard.",
+        "Public Speaking e Presentazione Eventi: Ho scritto i testi dei discorsi e presentato sul palco le serate del festival dell'agenzia.",
       ],
       skills: [
         "Booking",
@@ -596,7 +597,7 @@ export const cvData = {
       location: "Torino, Italia",
       remote: false,
       description:
-        "Lavoro come fotografo freelance dal 2009, in parallelo alle altre esperienze, con progetti in Italia, Tanzania e altri paesi.",
+        "Primi scatti nel 2008, fotografo in Tanzania nel 2009 e poi anni di viaggi in solitaria con la reflex al collo e lo zaino in spalla. Tra un timbro sul passaporto e l'altro, mi sono ritrovato persino a raccontare la complessità e il colore di matrimoni indiani luxury tra le colline toscane. Più un'attitudine che un'occupazione a tempo pieno, ma è stato il mio vero primo laboratorio di Visual Design. La fotografia mi ha insegnato la gerarchia visiva, la composizione e l'empatia nello sguardo: capire dove cade l'occhio e cosa cerca una persona prima ancora di premere il pulsante. Un'ossessione per il dettaglio che oggi mi porto dritta nella progettazione di layout, interfacce e storie digitali.",
       highlights: [],
       skills: ["Fotografia", "Editing", "Post-produzione"],
     },
@@ -690,7 +691,9 @@ export const cvData = {
       remote: false,
       description:
         "Ho fatto la regia tecnica audio e luci per spettacoli teatrali: cambi scena al buio, tempi comici da rispettare al secondo e nessuna possibilità di replay.",
-      highlights: [],
+      highlights: [
+        "Tecnica Audio & Live Sound: Gestione del supporto fonico e tecnico audio per la realizzazione delle produzioni e degli spettacoli teatrali della scuola, curando la parte audio durante le repliche dal vivo.",
+      ],
       skills: ["Regia tecnica", "Audio", "Luci"],
     },
     {
@@ -793,7 +796,7 @@ export const cvData = {
       description:
         "Ho progettato le interfacce del sito di un cliente per Bambagia Design Lab: ricerca su cliente e competitor, wireframe e prototipo, HTML e CSS scritti a mano e varianti del sito con palette diverse, convertite in disegno Figma con plugin dedicati.",
       highlights: [
-        "Ho studiato cliente e competitor prima di disegnare: ogni scelta di interfaccia è motivata, non estetica.",
+        "Ho analizzato cliente e competitor per definire l'architettura delle interfacce: ogni scelta è motivata, non estetica.",
         "Ho prodotto varianti del sito con palette diverse, convertite in disegno Figma con plugin dedicati.",
         "Ho scelto il flusso di consegna giusto perché il cliente possa modificare il sito in autonomia.",
       ],
@@ -802,11 +805,11 @@ export const cvData = {
           mode: "human",
           role: "AI Workflow Designer",
           description:
-            "Ho costruito su VS Code un ambiente riutilizzabile con MCP Figma e MCP Wix, istruendo l'agente con le regole grafiche del progetto per esportare wireframe e prototipi corretti. Ho verificato i limiti di MCP Wix e trovato la strada giusta con il plugin Figma → Wix.",
+            "Ho costruito su VS Code un ambiente riutilizzabile con MCP Figma e MCP Wix, con l'agente istruito sulle regole grafiche del progetto, per gestire un doppio flusso Figma ⇄ Code e applicare MCP anche a Wix, velocizzando il setup e definendo un handoff che lascia al cliente piena autonomia sul sito.",
           highlights: [
-            "Ho costruito un ambiente riutilizzabile su VS Code con MCP Figma e MCP Wix, con l'agente istruito sulle regole grafiche del progetto.",
-            "Ho verificato che MCP Wix genera un frame statico via Astro: valido solo se il cliente non deve modificare il sito.",
-            "Ho trovato il plugin Figma → Wix per i moduli: il cliente modifica il sito da solo dopo la consegna.",
+            "Figma-to-Code: ho trasformato prototipi e wireframe in codice HTML e CSS di produzione.",
+            "Code-to-Figma: ho riconvertito codice e varianti cromatiche/palette in componenti Figma, per tenere sincronizzato il Design System.",
+            "Ho verificato che MCP Wix genera un frame statico via Astro (valido solo se il cliente non deve modificare il sito) e risolto con il plugin Figma → Wix: il cliente modifica il sito in autonomia dopo la consegna.",
           ],
         },
       ],
@@ -835,7 +838,8 @@ export const cvData = {
       description:
         "Ho recitato come attore e improvvisatore con B-Teatro, in Italia e in Lussemburgo. Sul palco senza copione impari una cosa che vale ovunque: quello che succede non si discute, si usa.",
       highlights: [
-        "Ho recitato in spettacoli di improvvisazione teatrale in Italia e in Lussemburgo.",
+        "Recitazione & Teatro: Percorso focalizzato su improvvisazione comica e teatro di prosa, con tournée in Italia e all'estero e la partecipazione a workshop nazionali e internazionali.",
+        "Cinema: Deuteragonista (co-protagonista) nel film \"Double\", prodotto a Torino da Filmine. Il lungometraggio è stato presentato al San Francisco Independent Film Festival (2022) e proiettato al Cinema Massimo per la prima italiana.",
       ],
       skills: ["Recitazione", "Improvvisazione teatrale"],
     },

@@ -286,9 +286,10 @@ export const cvDataEn = {
       description:
         "I organised booking and tours for the roster artists of an Italian music agency and designed their digital communication and content strategy.",
       highlights: [
-        "I doubled the followers with a targeted audience (musicians, labels, promoters): organic growth, not pure volume.",
-        "I organised a live event at Arci Bellezza in Milan, from booking to communications.",
-        "I coordinated booking and concerts: venue research, promoter negotiation, contracts.",
+        "B2B Strategy & Targeted Growth: I shifted the agency's communication to speak to industry professionals (labels, promoters, artists) rather than a generic audience, doubling followers with business-relevant contacts.",
+        "Playlist & Radio/Podcast Format Design: I devised the concept for a playlist for emerging artists to build connections and drive organic engagement. I also proposed a monthly radio/podcast format to showcase the featured tracks and projects.",
+        "Outreach and Partnerships: I researched and contacted potential partners with custom emails, without using automated generation software or standard templates.",
+        "Public Speaking and Event Hosting: I wrote the speeches and presented on stage at the agency's festival evenings.",
       ],
       skills: [
         "Booking",
@@ -439,7 +440,7 @@ export const cvDataEn = {
       location: "Turin, Italy",
       remote: false,
       description:
-        "I have worked as a freelance photographer since 2009, alongside my other roles, with projects in Italy, Tanzania and beyond.",
+        "First shots in 2008, photographer in Tanzania in 2009, then years of solo travel with a camera around my neck and a backpack on my shoulders. Between one passport stamp and the next, I even found myself capturing the complexity and colour of luxury Indian weddings in the Tuscan hills. More an attitude than a full-time job, but it was my real first laboratory in Visual Design. Photography taught me visual hierarchy, composition and empathy of the eye: understanding where the gaze lands and what a person is looking for before they even press the shutter. An obsession with detail that today carries straight into designing layouts, interfaces and digital stories.",
       highlights: [],
       skills: ["Photography", "Editing", "Post-production"],
     },
@@ -533,7 +534,9 @@ export const cvDataEn = {
       remote: false,
       description:
         "I ran the audio and lighting for theatre productions: scene changes in the dark, comic timing to hit to the second and no replay available.",
-      highlights: [],
+      highlights: [
+        "Audio Technique & Live Sound: Managed sound support and audio engineering for the school's theatre productions and shows, handling audio during live performances.",
+      ],
       skills: ["Technical direction", "Audio", "Lighting"],
     },
     {
@@ -632,7 +635,7 @@ export const cvDataEn = {
       description:
         "I designed the interfaces for a client's website for Bambagia Design Lab: research on the client and competitors, wireframes and a prototype, hand-written HTML and CSS and site variants with different palettes, converted into Figma drawings with dedicated plugins.",
       highlights: [
-        "I studied the client and the competitors before designing: every interface choice is motivated, not aesthetic.",
+        "I analysed the client and competitors to define the interface architecture: every choice is motivated, not aesthetic.",
         "I produced site variants with different palettes, converted into Figma drawings with dedicated plugins.",
         "I chose the right delivery flow so the client can edit the site independently.",
       ],
@@ -641,11 +644,11 @@ export const cvDataEn = {
           mode: "human",
           role: "AI Workflow Designer",
           description:
-            "I built a reusable environment in VS Code with Figma MCP and Wix MCP, instructing the agent with the project's graphic rules to export correct wireframes and prototypes. I verified the limits of Wix MCP and found the right path with the Figma → Wix plugin.",
+            "I built a reusable environment in VS Code with Figma MCP and Wix MCP, with the agent instructed on the project's graphic rules, to manage a two-way Figma ⇄ Code flow and apply MCP to Wix too, speeding up setup and defining a handoff that leaves the client full autonomy over the site.",
           highlights: [
-            "I built a reusable VS Code environment with Figma MCP and Wix MCP, with the agent instructed on the project's graphic rules.",
-            "I found that Wix MCP generates a static frame via Astro: valid only when the client doesn't need to edit the site.",
-            "I found the Figma → Wix plugin for modules: the client edits the site on their own after delivery.",
+            "Figma-to-Code: I turned prototypes and wireframes into production-ready HTML and CSS.",
+            "Code-to-Figma: I converted code and chromatic/palette variants back into Figma components, to keep the Design System in sync.",
+            "I found that Wix MCP generates a static frame via Astro (valid only when the client doesn't need to edit the site) and solved it with the Figma → Wix plugin: the client edits the site independently after delivery.",
           ],
         },
       ],
@@ -674,7 +677,8 @@ export const cvDataEn = {
       description:
         "I performed as an actor and improviser with B-Teatro, in Italy and Luxembourg. On a stage with no script you learn something that holds everywhere: whatever happens is not up for debate, it is material to use.",
       highlights: [
-        "I performed in theatre improvisation shows in Italy and Luxembourg.",
+        "Acting & Theatre: A path focused on comedic improv and scripted theatre, with tours in Italy and abroad and participation in national and international workshops.",
+        "Cinema: Deuteragonist (co-lead) in the film \"Double\", produced in Turin by Filmine. The feature film premiered at the San Francisco Independent Film Festival (2022) and screened at Cinema Massimo for its Italian premiere.",
       ],
       skills: ["Acting", "Theatre improvisation"],
     },
