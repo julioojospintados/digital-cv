@@ -34,6 +34,14 @@
       "type": "http",
       "url": "https://mcp.posthog.com/mcp"
     },
+    "clarity": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@microsoft/clarity-mcp-server"],
+      "env": {
+        "CLARITY_API_TOKEN": "${CLARITY_TKN}"
+      }
+    },
     "github": {
       "type": "http",
       "url": "https://api.githubcopilot.com/mcp/"
