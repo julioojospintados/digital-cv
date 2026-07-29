@@ -73,11 +73,15 @@ Lo sfondo è **sempre ottanio** rgba(8,73,67,1). Mai hardcodare colori.
 
 | URL | File | Ruolo |
 |---|---|---|
-| `/` | `index.astro` | Entry con preloader GO |
-| `/home` | `home.astro` | Landing con le 4 mode-card (knolling) |
+| `/` | `index.astro` | Entry: preloader GO + le 4 mode-card (knolling) |
 | `/tech` `/creative` `/human` `/management` | `[mode].astro` | Pagina CV filtrata per mode |
-| `/en/cv` | `en/cv.astro` | Versione inglese del CV |
-| `/cv` | redirect → `/tech` | Legacy |
+| `/work` · `/work/<slug>` | `work/index.astro` · `work/[slug].astro` | Indice e case study |
+| `/privacy` | `privacy.astro` | Informativa (linkata dal banner di consenso) |
+| `/en` | `en/index.astro` | Entry inglese |
+| `/en/cv` | `en/cv.astro` | CV inglese (pagina statica, mode lato client) |
+| `/en/work` · `/en/work/<slug>` · `/en/privacy` | `en/…` | Controparti EN |
+| `/home` | `home.astro` | Legacy — redirect 301 a `/` |
+| `/cv` | `cv.astro` | Legacy — redirect 301 a `/creative` (DEFAULT_MODE) |
 
 ### Islands Lit attive
 

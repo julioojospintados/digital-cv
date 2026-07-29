@@ -8,7 +8,7 @@ description: "Regole visual e tecniche del Digital CV. Carica quando: crei compo
 ## Riferimento Visivo Knolling — CARICA SEMPRE
 
 **BLOCKING:** Prima di qualsiasi lavoro su layout, card, griglia o mobile — usa `view_image` per caricare:
-`.github/skills/design-system/knolling-reference.jpg`
+`.github/skills/design-system/knolling-reference.png`
 
 Questa foto mostra i TUOI oggetti (megafono, laptop, bussola, fotocamera, torcia, scacchi, pianta, multitool)
 disposti in una fotografia knolling reale. È la **referenza visiva assoluta** per ogni decisione di layout.
@@ -63,7 +63,7 @@ corretto il 2026-07-23 in `WorkDesignSystem.astro` (leggeva `:root` invece del m
 
 Accent viola `rgba(180,100,255,1)`. Target: recruiter, aziende, contenuti su metodo e consulenza.
 Le card con `data-tags="management"` sono attive in questo mode.
-L'oggetto knolling associato al management è `chess.png` (strategia) e `compass.png` (orientamento).
+L'oggetto knolling associato al management è `chess.webp` (strategia) e `compass.webp` (orientamento).
 
 ---
 
@@ -122,14 +122,14 @@ Il CSS gestisce `opacity` e `transform` in base a `data-state`.
 
 | File              | Mode                    | Significato simbolico         |
 | ----------------- | ----------------------- | ----------------------------- |
-| `laptop.png`      | tech + management       | Il lavoro digitale, il codice |
+| `laptop.webp`      | tech + management       | Il lavoro digitale, il codice |
 | `flashlight.webp` | tech + management       | Illuminare problemi complessi |
-| `multitool.png`   | tech + creative + mgmt  | Versatilità, problem solving  |
-| `camera.png`      | creative                | Fotografia, visione estetica  |
-| `megaphone.png`   | creative + human + mgmt | Comunicazione, palco, voce    |
-| `chess.png`       | human + management      | Strategia, pensiero laterale  |
-| `plant.png`       | human + management      | Crescita, cura, impatto       |
-| `compass.png`     | creative + human + mgmt | Orientamento, esplorazione    |
+| `multitool.webp`   | tech + creative + mgmt  | Versatilità, problem solving  |
+| `camera.webp`      | creative                | Fotografia, visione estetica  |
+| `megaphone.webp`   | creative + human + mgmt | Comunicazione, palco, voce    |
+| `chess.webp`       | human + management      | Strategia, pensiero laterale  |
+| `plant.webp`       | human + management      | Crescita, cura, impatto       |
+| `compass.webp`     | creative + human + mgmt | Orientamento, esplorazione    |
 
 Posizionamento via CSS custom properties `--kx`, `--ky`, `--kr`, `--ks` (e `--kfx` per flip X).
 GSAP anima ingresso (`.do-enter`) e cambio mode (`.is-hero` / `.is-dim`).
@@ -409,7 +409,9 @@ Esempio: `0.82rem` (13.12px) è più vicino a 14px che a 12px → `var(--fs-14)`
 display (es. `clamp(2rem, 5vw, 4.5rem)`) restano fuori da questa scala: sono
 deliberatamente continui/responsivi, il loro valore giusto dipende dal
 viewport reale, non da un token fisso. Il pavimento dei 12px vale comunque
-anche lì — nessun bound minimo di un clamp può scendere sotto `var(--fs-12)`.
+anche lì — nessun bound minimo di un clamp può scendere sotto `var(--fs-12)`
+(vedi `SkillSquare.astro`, i due clamp con `cqi` hanno pavimento a
+`--fs-12`/`--fs-10` per lo stesso motivo).
 
 ### Regole di accessibilità (non negoziabili)
 
@@ -418,23 +420,32 @@ anche lì — nessun bound minimo di un clamp può scendere sotto `var(--fs-12)`
   scendere sotto `var(--fs-12)` per prosa, nomi, descrizioni, dati.
 - **10px (`var(--fs-10)`) è un'eccezione**, non uno step normale: si usa SOLO
   per badge/timestamp brevissimi (2-4 caratteri) in ALL CAPS + bold + alto
-  contrasto. Se il testo è una frase o una parola intera, non qualifica: va
-  a `--fs-12`.
+  contrasto — es. l'abbreviazione di 3 lettere del livello skill
+  (`EXP`/`AVA`/`BAS`). Se il testo è una frase o una parola intera, non
+  qualifica per l'eccezione: va a `--fs-12`.
 - **Body mobile:** minimo 16px (`var(--fs-16)`) — standard iOS/Material.
 - **Body desktop:** 14-16px accettabili (`var(--fs-14)`/`var(--fs-16)`).
 - **Testo secondario (entrambi i device):** minimo 12px (`var(--fs-12)`).
 - **Contrasto:** sotto i 18px bold / 14px normal serve un rapporto WCAG
-  ≥4.5:1. Non abbassare l'opacità di un colore già a 12px.
-- **Line-height:** 140-150% del font-size per qualunque blocco a `--fs-12`
-  o `--fs-14`. Mai line-height <1.3 sotto i 14px.
-- **Font-weight:** mai `font-weight: 300`/`400` sotto i 14px su questo sito.
+  ≥4.5:1 (già verificato per `--color-text-muted` su tutti i mode — vedi
+  tabella colori sopra). Non abbassare l'opacità di un colore già a 12px.
+- **Line-height:** più piccolo è il font, più deve respirare — 140-150% del
+  font-size per qualunque blocco a `--fs-12` o `--fs-14`. Mai line-height
+  <1.3 sotto i 14px.
+- **Font-weight:** mai `font-weight: 300`/`400` sotto i 14px su questo sito —
+  i micro-label usano già 500-700 (JetBrains Mono compensa bene grazie
+  all'x-height alta; Lexend idem).
 
 ### DO NOT (typography)
 
 - Scrivere un `font-size` in rem/px letterale fuori da un `clamp()` — usa
   sempre `var(--fs-N)`.
+- Introdurre un nuovo step nella scala senza motivo — se serve una taglia
+  intermedia, verifica prima se lo step vicino (12/14/16...) funziona.
 - Scendere sotto `var(--fs-12)` per qualunque prosa/label/nome — l'unica
   eccezione è `var(--fs-10)` per badge cortissimi ALL CAPS + bold.
+- Alzare l'opacità/abbassare il contrasto per "far stare" un testo piccolo —
+  se il contrasto non regge a quella dimensione, la dimensione è sbagliata.
 
 **Font coppia tecnica — self-hosted via Fontsource (nessuna richiesta esterna, GDPR compliant):**
 
@@ -506,3 +517,4 @@ anche lì — nessun bound minimo di un clamp può scendere sotto `var(--fs-12)`
 - Sovrascrivere `:focus-visible` con `outline: none` senza alternativa visibile
 - `font-size` in rem/px letterale fuori da un `clamp()` — usa sempre `var(--fs-N)` (vedi "Typography Scale")
 - Scendere sotto `var(--fs-12)` per prosa/label/nomi — l'eccezione `var(--fs-10)` è solo per badge cortissimi ALL CAPS + bold
+

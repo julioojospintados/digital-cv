@@ -34,12 +34,16 @@ Digital_CV/
 │
 ├── cv-site/                        ← Sito Astro — il CV vero e proprio
 │   ├── astro.config.mjs            ← Configurazione Astro (integrazioni: Lit, Sitemap, strip-comments)
+│   ├── middleware.ts               ← Vercel Routing Middleware — IT/EN per paese (edge, non Astro middleware)
+│   ├── postcss.config.cjs          ← Unico plugin: postcss-custom-media (@custom-media condivise)
 │   ├── DESIGN.md                   ← Specifica completa del design system (knolling, mode, colori, tipografia)
 │   ├── package.json
 │   ├── tsconfig.json
+│   ├── vitest.config.ts
 │   │
 │   ├── public/
 │   │   ├── favicon.ico / favicon-32.png / favicon-192.png / apple-touch-icon.png
+│   │   ├── robots.txt              ← Blocca i crawler di training AI, ammette i fetch on-demand
 │   │   ├── og-cover.jpg            ← Immagine Open Graph (1200×630, screenshot reale della home)
 │   │   ├── cv/                     ← PDF generati da scripts/generate-cv-pdf.ts (IT + EN)
 │   │   ├── qr/                     ← QR code statici del sito (varianti chiare/scure, firma, biglietto)
@@ -50,6 +54,7 @@ Digital_CV/
 │   │
 │   └── src/
 │       ├── components/             ← Componenti Astro statici (server-rendered)
+│       │   ├── ConsentBanner.astro ← Banner consenso PostHog/Clarity (gate in Layout.astro)
 │       │   ├── ContactFooter.astro ← Footer contatti condiviso tra le pagine
 │       │   ├── WorkDesignSystem.astro ← Sezione design system nei case study /work
 │       │   └── cards/              ← Card riutilizzabili per ogni sezione
@@ -72,15 +77,19 @@ Digital_CV/
 │       │   └── Layout.astro        ← Layout base (head/SEO/JSON-LD, font, Lenis, cursor custom, FAB)
 │       │
 │       ├── lib/
-│       │   └── exp-clusters.ts     ← Definizione condivisa dei cluster esperienza (IT/EN, refs exp+proj)
+│       │   ├── cv-view-model.ts    ← Costruisce il view model della pagina CV (skill, cluster, hero) — condiviso IT/EN
+│       │   ├── cv-i18n.ts          ← Dizionari e tipi del mode system per lingua
+│       │   ├── exp-clusters.ts     ← Definizione condivisa dei cluster esperienza (IT/EN, refs exp+proj)
+│       │   └── recent-commits.ts   ← Ultimi commit letti da git a build time (badge "ciclo di sistemazione")
 │       │
 │       ├── pages/
 │       │   ├── index.astro         ← Entry IT: preloader GO + knolling + scelta del mode
-│       │   ├── home.astro          ← Landing alternativa con le 4 mode-card
 │       │   ├── [mode].astro        ← Pagina CV per /tech /creative /human /management
-│       │   ├── cv.astro            ← Legacy — redirect a /tech
+│       │   ├── privacy.astro       ← Informativa privacy (linkata dal banner di consenso)
 │       │   ├── work/               ← Indice + case study progetti ([slug].astro)
-│       │   └── en/                 ← Versione inglese (index, cv, work/)
+│       │   ├── en/                 ← Versione inglese (index, cv, privacy, work/)
+│       │   ├── home.astro          ← Legacy — redirect 301 a /
+│       │   └── cv.astro            ← Legacy — redirect 301 a /creative (DEFAULT_MODE)
 │       │
 │       ├── scripts/                ← Logica client condivisa (vanilla TS + GSAP)
 │       │   ├── cv-init.ts          ← Init pagina CV: mode switch, scroll, accordion, carousel feedback
@@ -135,9 +144,14 @@ Digital_CV/
 ├── scripts/
 │   ├── parse-cv.ts                 ← Estrae/parsa dati dal CV sorgente
 │   ├── generate-cv-pdf.ts          ← Genera il CV knolling in PDF A4 con QR (npm run pdf:cv)
+│   ├── generate-ux-cv.ts           ← Genera il CV UX/UI per le candidature (npm run pdf:ux)
 │   ├── gen-og-image.mjs            ← Genera l'immagine Open Graph dalla home
 │   ├── qa-mobile.js                ← QA responsive via Playwright
 │   └── record-demo-playwright.js   ← Registra la demo video del sito
+│
+├── docs/
+│   ├── RECORD-DEMO.md              ← Come registrare il video demo del sito
+│   └── UX-Mode-Pages-Proposta.md   ← Proposta UX per le pagine mode (documento storico, apr. 2026)
 │
 ├── .vscode/                        ← Configurazione VS Code e Copilot AI
 │   ├── mcp.json                    ← Server MCP attivi in VS Code (GitHub, Sequential Thinking, ecc.)
@@ -159,6 +173,8 @@ Digital_CV/
 ├── .github/
 │   ├── copilot-instructions.md     ← [COPILOT] Istruzioni globali iniettate in ogni chat
 │   │                                   (scopo progetto, GO concept, gamification, comportamento AI)
+│   ├── workflows/ci.yml            ← CI: lint+format, server (build/typecheck/test), sito (check/test/build)
+│   ├── dependabot.yml              ← Aggiornamenti mensili npm (root + cv-site) e GitHub Actions
 │   └── skills/                     ← Skill specializzate caricate da Copilot su richiesta
 │       ├── knolling-cv/
 │       │   └── SKILL.md            ← Contesto globale progetto — caricata SEMPRE per prima
@@ -166,7 +182,8 @@ Digital_CV/
 │       │   ├── SKILL.md            ← UI, animazioni Emil Kowalski, knolling, GSAP, CSS custom properties, Awwwards
 │       │   └── knolling-reference.png  ← Foto di riferimento layout knolling
 │       ├── identity/
-│       │   └── SKILL.md            ← Bio, tone of voice, narrativa GO, job hunting
+│       │   ├── SKILL.md            ← Bio, tone of voice, narrativa GO, job hunting
+│       │   └── writing-style.md    ← Regole di scrittura mandatorie (da leggere prima di ogni testo)
 │       ├── agile-methodology/
 │       │   └── SKILL.md            ← Agile snello, Lean, PM per le aziende, impactScore, sprint
 │       ├── mcp-architecture/
@@ -175,14 +192,25 @@ Digital_CV/
 │           └── SKILL.md            ← Fractional partner, posizionamento consulente per le aziende
 │
 ├── .claude/                         ← Configurazione Claude Code
-│   └── skills/                     ← Mirror delle skill sopra + `caveman/` (modalità risposta ultra-compressa, `/caveman`)
+│   └── skills/                     ← Fonte di verità delle skill (le .github/skills sono il mirror Copilot)
+│       ├── …/SKILL.md              ← Stesse 6 skill di dominio elencate sopra
+│       ├── identity/writing-style.md ← Regole di scrittura mandatorie (lettura obbligata prima di ogni testo)
+│       └── caveman/                ← Solo Claude — risposta ultra-compressa (`/caveman`)
+│
+├── .agents/skills/caveman/         ← Copia richiesta dal formato di skills-lock.json
 │
 ├── AGENTS.md                       ← Guida per agenti AI (struttura, convenzioni, where to make changes)
 ├── CLAUDE.md                       ← Entry point Claude Code (importa AGENTS.md + regole skill-loading/MCP)
-├── .mcp.json                       ← Server MCP per Claude Code (progetto: mcp-base-template, sequential-thinking)
+├── LICENSE                         ← Proprietaria: pubblica per valutazione, nessun diritto di riuso
+├── .mcp.json                       ← Server MCP per Claude Code
 ├── .env.example                    ← Template variabili d'ambiente (non committare .env)
+├── .editorconfig / .gitattributes  ← Stile e line-ending deterministici fuori da VS Code
+├── .prettierrc.json / .prettierignore  ← Formattazione (unica autorità sullo stile)
+├── eslint.config.js                ← ESLint flat config — copre root e cv-site insieme
+├── skills-lock.json                ← Lock delle skill installate da sorgente esterna (caveman)
 ├── package.json                    ← Dipendenze e script npm per il layer MCP/HTTP
-├── tsconfig.json                   ← Configurazione TypeScript per src/
+├── tsconfig.json                   ← TypeScript per src/ (build, esclude i test)
+├── tsconfig.test.json              ← TypeScript per test e scripts/ (solo --noEmit, `npm run typecheck`)
 └── vitest.config.ts                ← Configurazione test Vitest per src/
 ```
 
@@ -197,6 +225,7 @@ Digital_CV/
 | `npm run dev`     | Dev server Astro con hot reload                    |
 | `npm run build`   | Build statica produzione → `dist/`                 |
 | `npm run preview` | Anteprima del build statico                        |
+| `npm run check`   | Type-check di `.astro`/`.ts` (`astro check`)       |
 | `npm test`        | Test Vitest (`mode-helpers`, `modeStore`)          |
 
 ### Server MCP / HTTP + utility (root)
@@ -210,8 +239,12 @@ Digital_CV/
 | `npm run http:start`       | Avvia il server HTTP (Hono)                     |
 | `npm run http:build:start` | Build + avvio HTTP in un comando                |
 | `npm test`                 | Test Vitest (`src/`)                            |
+| `npm run typecheck`        | Type-check di test e `scripts/` (esclusi dalla build) |
+| `npm run lint`             | ESLint su tutto il repo (root + `cv-site/`)     |
+| `npm run format`           | Prettier in scrittura · `format:check` per verificare |
 | `npm run parse-cv`         | Estrae/parsa dati dal CV sorgente               |
 | `npm run pdf:cv`           | Genera i PDF del CV (IT + EN) in `cv-site/public/cv/` |
+| `npm run pdf:ux`           | Genera il CV UX/UI per le candidature           |
 
 ---
 
@@ -242,7 +275,9 @@ Il progetto supporta due agenti AI in parallelo, con struttura equivalente ma ca
 | Instructions scoped per path (`applyTo`) | `.vscode/*.instructions.md` | — (regole equivalenti dentro le skill) |
 | Prompt/comandi riutilizzabili | `.vscode/prompts/*.prompt.md` | `.claude/skills/<nome>/SKILL.md` (slash command) |
 
-Le skill di dominio sono le stesse in entrambi gli strumenti:
+Le skill di dominio sono le stesse in entrambi gli strumenti: `.claude/skills/` è la fonte
+di verità e `.github/skills/` ne è il mirror, identico a meno dei path interni. Modificando
+una skill, aggiorna entrambe le copie nella stessa sessione — sono già divergute in passato.
 
 | Skill                  | Quando si carica                                               |
 | ---------------------- | -------------------------------------------------------------- |
@@ -277,7 +312,6 @@ Il progetto usa due config MCP separate: `.vscode/mcp.json` per Copilot/VS Code 
 | Server                | Stato         | Cosa fa                                         |
 | --------------------- | ------------- | ----------------------------------------------- |
 | `mcp-base-template`   | ✅ attivo     | Server MCP locale del progetto (vedi `src/`)    |
-| `memory`              | ✅ attivo     | Knowledge graph persistente tra sessioni        |
 | `sequential-thinking` | ✅ attivo     | Ragionamento strutturato step-by-step           |
 | `playwright`          | ✅ attivo     | Browser automation, screenshot, E2E             |
 | `github`              | ⚪ on-demand  | Repos, issues, PR — commentato, richiede token  |

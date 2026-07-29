@@ -401,3 +401,8 @@ Nessun `?mode=` query param in nessuna route.
   auto-iniettata su `cv-site/src/**`.
 - `AGENTS.md` (root) — mappa completa dei file del progetto.
 - `todo.md` (root) — stato di avanzamento, decisioni prese/aperte, bug noti.
+  **File di lavoro locale, non versionato** (è in `.gitignore`): i riferimenti
+  del tipo `todo.md #40` o `todo #51` sparsi nel codice e in questo documento
+  sono numeri di appunto interni e non sono risolvibili da chi legge il
+  repository pubblico. Il motivo della scelta è sempre riportato per esteso
+  nel commento stesso, quindi il rimando è tracciabilità, non contesto mancante.

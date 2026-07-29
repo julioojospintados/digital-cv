@@ -1,3 +1,6 @@
 ---
-return Astro.redirect('/', 301);
+// Legacy → la landing con le 4 mode-card è "/" (index.astro), non questa.
+// Il file resta solo per non rompere i link esterni a /home già in circolazione
+// (QR stampati, vecchi post). Stesso pattern di cv.astro → /creative.
+return Astro.redirect("/", 301);
 ---

@@ -63,25 +63,15 @@ src/
 
 ## Data Layer — Source of Truth
 
-| File | Contenuto |
-|---|---|
-| `src/data/cv.ts` | Dati CV completi in **italiano** |
-| `src/data/cv.en.ts` | Traduzione in **inglese** — importa i tipi da `cv.ts` |
-
-**Non modificare la struttura dei tipi in `cv.ts` senza aggiornare anche `cv.en.ts`.**
-
-Sezioni esportate: `personal` · `social` · `languages` · `experience` · `education`
-· `certifications` · `technicalSkills` · `softSkills` · `transversalSkills`
-· `methodology` · `growthAreas` · `projects` · `interests` · `socialImpact`
-· `aiWorkflow` · `valueFlows` · `feedbacks`
-
-L'interfaccia `Feedback` ha: `name`, `role?`, `quote?`, `keywords[]`.
+Dettaglio completo (file, sezioni, interfaccia Feedback) in `knolling-cv/SKILL.md`.
+Regola da ricordare qui: **ogni modifica a `cv.ts` va rispecchiata in `cv.en.ts`** — non solo la struttura dei tipi, ma anche i contenuti (description, highlights, summary, ecc.). Se cambi una frase in italiano e non tocchi `cv.en.ts`, le due lingue divergono silenziosamente: nessun errore TypeScript te lo segnala, perché i tipi restano compatibili. Aggiorna entrambi i file nella stessa modifica, non "poi".
 
 ---
 
 ## MCP come Vantaggio Competitivo per le Aziende
 
-Quando scrivi testi in modalità TECH per AI Workflow / impactScore / card tecniche:
+Quando scrivi testi in modalità TECH per AI Workflow / impactScore / card tecniche
+(vocabolario base in `knolling-cv/SKILL.md`, qui le varianti tecniche):
 
 **USA:**
 - "AI operativa senza assumere un team di data scientist"

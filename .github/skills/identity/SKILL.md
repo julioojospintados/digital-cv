@@ -3,6 +3,15 @@ name: identity
 description: "Chi è Giulio Occhipinti — Consulente per l'Innovazione Digitale & Partner Tecnico per piccole e grandi realtà. Profilo multidisciplinare: Tech (Angular, Lit, MCP, Node.js), Design (UX/UI cert. IBM), Metodo (Agile snello). Carica quando: scrivi bio, testi di presentazione, copy delle card, descrizioni esperienze, tone of voice, storytelling, identità professionale, frasi guida, job hunting, target recruiter/CTO/art director/management, narrativa GO, 4 mode (tech/creative/human/management), preloader."
 ---
 
+## ⛔ BLOCKING — Writing Style di Giulio
+
+Prima di scrivere o revisionare QUALSIASI testo, leggi
+**`.github/skills/identity/writing-style.md`**: regole sintattiche mandatorie
+(maiuscole, punti fermi anche negli elenchi, niente trattini come interruzione),
+banned words di marketing, sintassi diretta Soggetto + Verbo + Oggetto, verbi
+d'impatto, tono peer-to-peer e ironia deadpan. In caso di conflitto con le
+sezioni qui sotto, vincono le regole di writing-style.md.
+
 ## 🎯 Regole di Copywriting Strategico (AIDA/PAS)
 
 Ogni volta che generi un testo per il sito o per una proposta:
@@ -23,17 +32,6 @@ Giulio non è un "esecutore", è un **abilitatore di autonomia**, un **facilitat
 
 - Non vendere "codice", vendi "processi ottimizzati".
 - Non vendere "design", vendi "riduzione dell'errore operativo".
-
-# Giulio Occhipinti — Identity & Professional Story
-
-## Chi è
-
-**Consulente Tecnico & AI Specialist per le aziende** — non un manager da organigramma.
-Entra nell'azienda, capisce il problema reale, costruisce la soluzione e la fa girare —
-con le proprie mani e con l'AI come moltiplicatore.
-
-Target: realtà che vogliono scalare senza assumere 10 persone.
-AI, automazione e metodi Agile snelli per fare in 2 quello che altri fanno in 8.
 
 ---
 
@@ -56,7 +54,7 @@ Giulio Occhipinti è un Frontend Developer con ~12 anni di esperienza.
 **Il sito deve convincere questi tre profili in ≤ 3 secondi:**
 
 | Profilo                    | Cosa cerca                               | Cosa deve vedere subito                      |
-| -------------------------- | ---------------------------------------- | -------------------------------------------- |
+| -------------------------- | ----------------------------------------- | --------------------------------------------- |
 | **Recruiter generalista**  | Affidabilità, seniorità, comunicazione   | Label "Digital CV", layout pulito, leggibile |
 | **CTO / Tech Lead**        | Architettura, AI workflow, stack moderno | Angular, Lit, microfrontend, impactScore     |
 | **Art Director / Agenzia** | Estetica, storytelling, "X-Factor"       | Fotografia, teatro, audio/video, knolling    |
@@ -94,7 +92,14 @@ un piano visivo come un inventario. Tutto è visibile, catalogato, intenzionale.
 ### CTA Semantica — Regola Ferrea
 
 Mai "Scopri di più", mai "Vedi", "Leggi", "Clicca qui".
-Usa sempre: `GO Tech` · `GO Creative` · `GO Management`· `GO Human` · "Esplora" · "Entra"
+Usa sempre: `GO Tech` · `GO Creative` · `GO Management` · `GO Human` · "Esplora" · "Entra"
+
+**Eccezione (decisione 2026-07-07):** per le liste a rivelazione progressiva
+(es. esperienze extra nei cluster) si usa il pattern read-more con conteggio —
+"Leggi altre N" / "Read N more" — perché è la convenzione che l'utente già
+conosce (Legge di Jakob: LinkedIn, Medium, ogni feed). Il CTA brandizzato "GO"
+resta per le azioni di *navigazione* (cambiare pagina/mondo), non per il
+disclosure incrementale dentro una lista.
 
 Ogni componente di navigazione usa il prefisso `go-` (es. `<go-button>`, `<go-card>`) e implementa
 micro-interazioni che danno la sensazione di "partenza/lancio".
@@ -125,6 +130,7 @@ L'utente esplora o torna senza mai ricominciare da zero. Il `<go-logo>` è il po
 
 - USA: "Consulente Tecnico & AI Specialist per le aziende", "hands-on", "operativo", "velocità di esecuzione"
 - EVITA: "Team Lead", "Manager", "Owner", "Stakeholder", gergo da multinazionale
+  (vocabolario base condiviso in `knolling-cv/SKILL.md` — qui solo le varianti specifiche per il copy)
 
 **Agile:**
 
@@ -148,8 +154,7 @@ come "storie da enfatizzare".
 
 ## Regole di Coerenza Narrativa
 
-1. Non usare "Vedi", "Scopri", "Leggi" come CTA — usa `GO`, "Esplora", "Entra"
-2. Ogni sezione di `/cv` deve avere un **micro-dettaglio con cui giocare** (hover, reveal, glow)
-3. Il mode cambia il **focus e l'umore** della pagina — mai la struttura o il template
-4. Il `<go-logo>` deve essere sempre visibile e sempre cliccabile — è l'ancora narrativa
-5. Le card passive sono **sussurri**, non silenzi — mai `display:none`, sempre `opacity` ridotta
+1. Ogni sezione di `/cv` deve avere un **micro-dettaglio con cui giocare** (hover, reveal, glow)
+2. Il mode cambia il **focus e l'umore** della pagina — mai la struttura o il template
+3. Il `<go-logo>` deve essere sempre visibile e sempre cliccabile — è l'ancora narrativa
+4. Le card passive sono **sussurri**, non silenzi — mai `display:none`, sempre `opacity` ridotta

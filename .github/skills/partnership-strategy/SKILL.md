@@ -5,102 +5,97 @@ description: "Strategia di posizionamento come Partner Tecnico / Facilitatore pe
 
 # Giulio Occhipinti — Partnership Digitale Integrata
 
-## Il Ruolo: Partner per l'Innovazione & Problem Solver
+## Il Ruolo
 
-Giulio non vende singoli servizi, ma si propone come il **referente unico per l'intero comparto digitale** dell'azienda.
-Il suo approccio è **Analitico e Strategico**: prima capisce il modello di business, poi applica la tecnologia corretta (AI, Codice, Design o Comunicazione).
+Giulio non vende singoli servizi: si propone come **referente unico per l'intero comparto
+digitale** dell'azienda. Approccio Analitico e Strategico — prima capisce il modello di business,
+poi applica la tecnologia corretta (AI, Codice, Design o Comunicazione). Non è un developer
+che prende ticket, né un consulente che consegna slide: è un partner che definisce i ticket
+insieme al cliente e porta il progetto in produzione.
+
+Il target non sono le multinazionali. Sono le **realtà che vogliono scalare senza assumere 10
+persone** — usando automazione, metodo Agile snello e design funzionale per fare in 2 quello
+che altri fanno in 8.
+
+> **Nota lessicale (2026-07-13):** il termine "PMI" è bandito da tutti i testi
+> (vedi `identity/writing-style.md`). Nei testi usare "realtà" con un
+> qualificatore naturale o "aziende"; in inglese "businesses".
 
 ---
 
-## Le Aree di Impatto (L'Ecosistema Integrato)
+## I 4 Pilastri dell'Ecosistema Integrato
 
-### 1. Analisi & Strategia (Il Punto di Partenza)
+### 1. Analisi Strategica & Business Logic (Il Punto di Partenza)
 
-Studio dei processi aziendali e dei flussi di lavoro. Identificazione dei colli di bottiglia che possono essere risolti con il digitale.
-**Outcome:** Una visione chiara di cosa serve davvero all'azienda, evitando investimenti inutili.
+Studio dei processi aziendali e dei flussi operativi, identificazione dei colli di bottiglia
+**prima** di toccare codice o design. Strumenti: interviste, process mapping, audit digitale.
+**Outcome:** chiarezza su cosa serve davvero, senza sprechi né over-engineering.
 
-### 2. Sviluppo, AI & Gestionale (Il Motore)
+### 2. Sviluppo, AI & Automazione (Il Motore)
 
-Costruzione di software gestionali e automazioni tramite architetture moderne (MCP, Cursor). L'AI viene usata per rendere l'azienda più veloce e autonoma.
-**Outcome:** Sistemi su misura che lavorano per l'azienda, non viceversa.
+Software gestionali su misura, architetture MCP (Model Context Protocol) per agenti AI,
+pipeline CI/CD automatizzate. L'AI integrata nei workflow reali — tool, resource e prompt
+come API, non demo in sandbox.
+**Outcome:** sistemi che lavorano H24 per l'azienda, non viceversa.
 
-### 3. UX, UI & Comunicazione Digitale (La Relazione)
+### 3. UX/UI & Comunicazione Digitale (La Relazione)
 
-Progettazione dell'esperienza utente (Certificazioni IBM/SkillUp) e della strategia comunicativa. Rendere il prodotto non solo funzionale, ma capace di parlare al mercato.
-**Outcome:** Strumenti facili da usare che migliorano il posizionamento del brand.
+Design dell'esperienza utente (cert. IBM + SkillUp) e strategia comunicativa del brand.
+Interfacce che riducono l'errore operativo, abbassano il tempo di formazione e comunicano
+chiaramente al mercato.
+**Outcome:** prodotti usabili dai dipendenti, percepiti come professionali dai clienti.
 
-### 4. Metodo Agile (La Garanzia)
+### 4. Metodo Agile (La Garanzia di Consegna)
 
-Facilitazione tramite Scrum snello per garantire che ogni progetto arrivi alla fine nei tempi previsti.
-**Outcome:** Ordine, trasparenza e velocità di rilascio.
+Facilitazione Scrum snello per team piccoli (2–10 persone). Sprint da 1–2 settimane,
+backlog orientato al business, retrospective con impactScore reale.
+**Outcome:** il progetto arriva in produzione nei tempi concordati — e il team impara a
+continuare da solo.
 
-### 5. Formazione & Autonomia
+> **Regola di comportamento:** ogni volta che descrivi Giulio, non limitarti a un solo
+> pilastro. Presentalo come il **Facilitatore** che orchestra Tecnologia + Design + Metodo
+> come un unico intervento integrato — mai come servizi separati.
 
-- **Obiettivo:** Risolvere problemi tecnici e organizzativi complessi con velocità misurabile.
-- **Valore:** Portare AI operativa (MCP) e metodo (Agile snello) in contesti dinamici,
-  senza la burocrazia delle multinazionali e senza assumere 10 persone.
-- **Modello:** Fractional — disponibile come partner a tempo parziale o per progetto,
-  con l'efficacia di un responsabile tecnico interno e la flessibilità di un consulente.
+---
+
+## Modello Operativo — Fractional
+
+Disponibile a tempo parziale o per progetto — con l'efficacia di un responsabile tecnico
+interno e la flessibilità di un consulente esterno.
+
+**Flusso tipo:**
+
+1. Audit del processo aziendale → individuazione del problema reale
+2. Design della soluzione (architettura + UX) → approvazione prima di costruire
+3. Build iterativo con sprint Agile → rilasci frequenti e misurabili
+4. Formazione e passaggio di autonomia → il team continua senza dipendere dal consulente
 
 ---
 
 ## Framework di Comunicazione & Psicologia
 
-- **AIDA per le aziende:** Attira l'attenzione sul caos digitale, crea interesse con l'AI (MCP), genera desiderio di ordine e spingi all'azione (Audit).
-- **PAS (Problem, Agitation, Solution):** Identifica il "dolore" (es. gestionale lento), enfatizza le perdite economiche, offri l'Ecosistema come cura.
-- **Hick's Law:** Applica la semplicità estrema nelle CTA. Una sola scelta chiara per evitare il blocco decisionale del cliente.
+- **AIDA per le aziende:** Attenzione sul caos digitale → Interesse con l'AI (MCP) → Desiderio di
+  ordine → Azione (Audit).
+- **PAS (Problem, Agitation, Solution):** identifica il "dolore" (es. gestionale lento),
+  enfatizza le perdite economiche, offri l'Ecosistema come cura.
+- **Hick's Law:** semplicità estrema nelle CTA — una sola scelta chiara, per evitare il
+  blocco decisionale del cliente.
 
 ---
 
-## I 3 Pilastri dell'Offerta
+## Vocabolario — Varianti per Contesto Commerciale
 
-### 1. Automazione & AI (Tech)
+Regola base (evita/usa) in `knolling-cv/SKILL.md`. Qui le aggiunte specifiche per bio/offerta:
 
-Sviluppo di interfacce e sistemi MCP che ottimizzano i processi aziendali.
-L'AI non rimane in una sandbox dimostrativa: viene integrata nei workflow reali,
-con tool, resource e prompt come API per agenti — H24, a costo fisso.
-
-**Outcome concreto:** fare in 2 quello che i competitor fanno in 8.
-
-### 2. Design Strategico (Creative)
-
-UX/UI orientata all'usabilità e all'efficienza operativa.
-Certificazioni IBM e SkillUp su UX/UI Design come garanzia che i progetti
-arrivano in produzione — leggibili dagli utenti finali, non solo dagli sviluppatori.
-
-**Outcome concreto:** interfacce che riducono l'errore operativo e il tempo di formazione.
-
-### 3. Metodo & Partnership (Human)
-
-Facilitazione dei processi tramite Scrum/Agile snello per piccoli team (2–8 persone).
-Giulio non gestisce gerarchie: **fa accadere le cose**.
-Sprint corti, backlog orientato al business, autonomia crescente del team — non dipendenza dal consulente.
-
-**Outcome concreto:** il team continua a funzionare dopo la fine dell'ingaggio.
-
----
-
-## Tono di Voce — Regole Lessicali
-
-**EVITA** (gergo da organigramma e da multinazionale):
-
-- "Team Lead", "Senior Director", "Manager", "Owner"
-- "Corporate Alignment", "Stakeholder Management", "Vertical Growth"
-- "KPI-driven", "Scalability Roadmap", "Governance Framework"
-
-**PREFERISCI** (linguaggio da partner operativo):
-
-- "Partner Tecnico", "Referente Tecnico", "Facilitatore"
-- "Risolutore", "Autonomia Strategica", "Impatto Diretto"
-- "Velocità di rilascio", "Automazione", "Risoluzione", "Impatto sul business"
-- "Fractional", "a progetto", "risultato misurabile"
+**EVITA in più:** "Senior Director", "Corporate Alignment"
+**USA in più:** "Referente Tecnico", "Risolutore", "Impatto Diretto", "a progetto"
 
 ---
 
 ## Differenziazione vs Altre Figure
 
 | Figura               | Problema                              | Giulio invece                                     |
-| -------------------- | ------------------------------------- | ------------------------------------------------- |
+| -------------------- | -------------------------------------- | -------------------------------------------------- |
 | Dipendente full-time | Costo fisso alto, onboarding lungo    | Operativo dal giorno 1, a progetto                |
 | Consulente classico  | Consegna slide, non esegue            | Progetta e scrive il codice nella stessa giornata |
 | Agenzia digitale     | Molti account, poca personalizzazione | Un referente unico, conoscenza del dominio        |

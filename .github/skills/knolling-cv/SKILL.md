@@ -1,19 +1,48 @@
 ---
 name: knolling-cv
-description: "Contesto globale del Digital CV di Giulio Occhipinti. Carica SEMPRE come prima skill per qualsiasi richiesta su questo progetto. Regole trasversali, puntatori alle skill specializzate e DO NOT fondamentali."
+description: "Contesto globale del Digital CV di Giulio Occhipinti. Carica SEMPRE come prima skill per qualsiasi richiesta su questo progetto. Regole trasversali, identità, vocabolario, puntatori alle skill specializzate e DO NOT fondamentali."
 ---
 
 # Digital CV — Contesto Globale
 
-Questo progetto ha 4 skill specializzate. Carica quella piu pertinente alla richiesta:
+Questo progetto ha 5 skill specializzate. Carica quella più pertinente alla richiesta:
 
 | Skill | Quando caricare |
 |---|---|
-| **identity** `.github/skills/identity/SKILL.md` | Testi, bio, tone of voice, narrativa GO, job hunting |
+| **identity** `.github/skills/identity/SKILL.md` | Testi, bio, tone of voice, narrativa GO, job hunting — per QUALSIASI testo leggi anche `identity/writing-style.md` (regole mandatorie di scrittura) |
 | **design-system** `.github/skills/design-system/SKILL.md` | UI, animazioni, card, knolling, GSAP, Awwwards |
 | **agile-methodology** `.github/skills/agile-methodology/SKILL.md` | Esperienze, Agile, UX/UI, certificazioni, sprint |
 | **mcp-architecture** `.github/skills/mcp-architecture/SKILL.md` | Backend, MCP tools, Hono, test, cv.ts, env |
 | **partnership-strategy** `.github/skills/partnership-strategy/SKILL.md` | Offerta Fractional, bio servizi, tono per le aziende, posizionamento |
+
+---
+
+## Chi è Giulio (in breve)
+
+**Giulio Occhipinti** — Consulente per l'Innovazione Digitale & Partner Tecnico per piccole e grandi realtà.
+Generalista esperto che supporta le aziende a 360° orchestrando **Tecnologia + Design + Metodo**
+in un unico ingaggio — mai un solo pilastro isolato. Non un manager da organigramma: entra
+nell'azienda, capisce il problema reale, costruisce la soluzione e la fa girare, con le proprie
+mani e con l'AI come moltiplicatore. Target: realtà che vogliono scalare senza assumere 10 persone.
+Il termine "PMI" è bandito dai testi (decisione 2026-07-12, vedi `identity/writing-style.md`):
+usare "realtà" con un qualificatore o "aziende"; in inglese "businesses".
+
+Descrizione lunga, storytelling e narrativa GO → `identity/SKILL.md`.
+Posizionamento commerciale e offerta Fractional → `partnership-strategy/SKILL.md`.
+
+## Vocabolario — Regola Ferrea (vale per tutti i testi del progetto)
+
+**EVITA sempre**: "alignment", "stakeholder management", "vertical growth", "ownership",
+"KPI-driven", "governance framework", "scalability roadmap", "Team Lead / Manager / Owner",
+e qualunque descrizione che riduca Giulio a "developer freelance" o "AI specialist".
+
+**USA sempre**: risoluzione, automazione, velocità di rilascio, impatto sul business,
+autonomia strategica, Tecnologia / Design / Metodo (come etichette dei 3 pilastri),
+Partner Tecnico, Referente Unico, Facilitatore, fractional, risultato misurabile.
+
+Le skill specializzate possono aggiungere varianti di tono per il proprio contesto
+(es. vocabolario Agile in `agile-methodology`, vocabolario tecnico in `mcp-architecture`),
+ma la regola base è questa — non ripeterla, solo estenderla se serve un termine specifico.
 
 ---
 
@@ -44,11 +73,15 @@ Lo sfondo è **sempre ottanio** rgba(8,73,67,1). Mai hardcodare colori.
 
 | URL | File | Ruolo |
 |---|---|---|
-| `/` | `index.astro` | Entry con preloader GO |
-| `/home` | `home.astro` | Landing con le 4 mode-card (knolling) |
+| `/` | `index.astro` | Entry: preloader GO + le 4 mode-card (knolling) |
 | `/tech` `/creative` `/human` `/management` | `[mode].astro` | Pagina CV filtrata per mode |
-| `/en/cv` | `en/cv.astro` | Versione inglese del CV |
-| `/cv` | redirect → `/tech` | Legacy |
+| `/work` · `/work/<slug>` | `work/index.astro` · `work/[slug].astro` | Indice e case study |
+| `/privacy` | `privacy.astro` | Informativa (linkata dal banner di consenso) |
+| `/en` | `en/index.astro` | Entry inglese |
+| `/en/cv` | `en/cv.astro` | CV inglese (pagina statica, mode lato client) |
+| `/en/work` · `/en/work/<slug>` · `/en/privacy` | `en/…` | Controparti EN |
+| `/home` | `home.astro` | Legacy — redirect 301 a `/` |
+| `/cv` | `cv.astro` | Legacy — redirect 301 a `/creative` (DEFAULT_MODE) |
 
 ### Islands Lit attive
 
@@ -58,7 +91,21 @@ Lo sfondo è **sempre ottanio** rgba(8,73,67,1). Mai hardcodare colori.
 | `FloatingMenu.lit.ts` | `<floating-menu>` | FAB: contatti, feedback |
 | `SkillForceGraph.lit.ts` | `<skill-force-graph>` | Grafo D3 force-directed delle skill |
 
-### Data Source of Truth
+### Parità IT ↔ EN — non solo i testi
+
+**Le pagine EN devono differire dalle IT solo per la lingua.** Nient'altro:
+non l'ordine degli elementi, non lo stato di default, non il comportamento,
+non la logica che li calcola. Vale per ordine DOM dei mode, voce attiva o
+accordion aperto di default, ordinamenti, contenuto delle dropdown.
+
+Unica asimmetria legittima: le pagine CV IT prendono il mode dalla route
+(`[mode].astro`), mentre `/en/cv` è una pagina statica senza mode nel path,
+quindi renderizza `DEFAULT_MODE` e cambia lato client. Va espressa
+**riusando la logica IT con `DEFAULT_MODE` al posto di `mode`**, mai con una
+condizione hardcoded tipo `=== "tech"`.
+
+Il mode di default è **`creative`** (Design-first). Cambiarlo tocca più file
+insieme — l'elenco completo è in `AGENTS.md` → "IT ↔ EN parity".
 
 ### Data Source of Truth
 
@@ -83,4 +130,5 @@ L'interfaccia `Feedback` ha: `name`, `role?`, `quote?`, `keywords[]`.
 - No stdout nel layer MCP (src/) — usa logger da src/utils/logger.ts
 - No git commit o git push senza richiesta esplicita dell'utente
 - No modifiche ai tipi di cv.ts senza aggiornare cv.en.ts
-- No logica HTTP in src/index.ts ne logica MCP in src/http.ts
+- No divergenze IT/EN oltre la lingua — ordine, default, comportamento e logica devono essere identici (vedi sezione "Parità IT ↔ EN")
+- No logica HTTP in src/index.ts né logica MCP in src/http.ts

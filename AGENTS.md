@@ -166,8 +166,8 @@ cv-site/                  ← Astro site (the actual CV)
     fonts/Lexend/         ← Preloaded 800-weight woff2 (font-display: block)
   src/
     pages/
-      index.astro         ← Entry point with GO preloader
-      home.astro          ← Landing with the 4 mode-cards (knolling)
+      index.astro         ← Entry point: GO preloader + the 4 mode-cards (knolling)
+      home.astro          ← Legacy — 301 redirect to /
       [mode].astro        ← CV page for /tech /creative /human /management
       cv.astro            ← Legacy — redirects to /tech
       work/index.astro    ← Case study index

@@ -47,6 +47,8 @@ ricevono la **priorità visiva massima** nel sistema Square/Glow:
 
 ## Tono della Sezione Agile — Regole Testo
 
+Vocabolario base (evita/usa) in `knolling-cv/SKILL.md`. Qui solo le varianti specifiche Agile:
+
 **USA:**
 
 - velocità di rilascio, sprint chiusi, impactScore, backlog orientato al business
