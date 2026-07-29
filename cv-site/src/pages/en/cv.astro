@@ -72,55 +72,51 @@ const {
       </button>
     </div>
     <!-- Mobile dropdown -->
-    <div class="mode-dropdown" id="mode-dropdown">
-      <button
-        class="mode-dropdown__trigger"
-        id="mode-dropdown-btn"
-        type="button"
-        aria-haspopup="listbox"
-        aria-expanded="false"
-      >
+    <!-- <details> nativo (stesso pattern del lang-dropdown accanto): le
+         opzioni sono <button> reali dentro la lista — bug di accessibilità
+         corretto 2026-07-29, vedi [mode].astro (IT) per il commento esteso. -->
+    <details class="mode-dropdown" id="mode-dropdown">
+      <summary class="mode-dropdown__trigger" id="mode-dropdown-btn" aria-label="Choose view mode">
         <span class="mode-dropdown__label" id="mode-dropdown-label">Software Dev</span>
         <span class="mode-dropdown__chevron" aria-hidden="true">›</span>
-      </button>
-      <ul
-        class="mode-dropdown__list"
-        id="mode-dropdown-list"
-        role="listbox"
-        aria-labelledby="mode-dropdown-btn"
-      >
-        <li
-          class="mode-dropdown__option is-selected"
-          role="option"
-          data-dropdown-mode="creative"
-          tabindex="-1"
-        >
-          Web &amp; UX
+      </summary>
+      <ul class="mode-dropdown__list" id="mode-dropdown-list" role="list">
+        <li>
+          <button
+            type="button"
+            class="mode-dropdown__option is-selected"
+            data-dropdown-mode="creative"
+            aria-current="true"
+          >
+            Web &amp; UX
+          </button>
         </li>
-        <li class="mode-dropdown__option" role="option" data-dropdown-mode="tech" tabindex="-1">
-          Software Dev
+        <li>
+          <button type="button" class="mode-dropdown__option" data-dropdown-mode="tech">
+            Software Dev
+          </button>
         </li>
-        <li
-          class="mode-dropdown__option"
-          role="option"
-          data-dropdown-mode="management"
-          tabindex="-1"
-        >
-          Project Manager
+        <li>
+          <button type="button" class="mode-dropdown__option" data-dropdown-mode="management">
+            Project Manager
+          </button>
         </li>
-        <li class="mode-dropdown__option" role="option" data-dropdown-mode="human" tabindex="-1">
-          AI &amp; Digital
+        <li>
+          <button type="button" class="mode-dropdown__option" data-dropdown-mode="human">
+            AI &amp; Digital
+          </button>
         </li>
-        <li
-          class="mode-dropdown__option mode-dropdown__option--personal"
-          role="option"
-          data-dropdown-personal
-          tabindex="-1"
-        >
-          Off the clock
+        <li>
+          <button
+            type="button"
+            class="mode-dropdown__option mode-dropdown__option--personal"
+            data-dropdown-personal
+          >
+            Off the clock
+          </button>
         </li>
       </ul>
-    </div>
+    </details>
     <!-- Desktop: switch a 2 chip, sempre entrambe le lingue visibili.
          Mobile: <details> nativo, zero JS — libera spazio per il mode-dropdown
          accanto, che su schermi stretti competeva con lo switch a 2 chip. -->

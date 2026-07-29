@@ -521,7 +521,10 @@ function updateNavButtons(mode: string) {
   document
     .querySelectorAll<HTMLElement>("#mode-dropdown-list [data-dropdown-mode]")
     .forEach((opt) => {
-      opt.classList.toggle("is-selected", opt.dataset.dropdownMode === mode);
+      const isSelected = opt.dataset.dropdownMode === mode;
+      opt.classList.toggle("is-selected", isSelected);
+      if (isSelected) opt.setAttribute("aria-current", "true");
+      else opt.removeAttribute("aria-current");
     });
   navInitialized = true;
 }
@@ -877,23 +880,21 @@ document
   .querySelectorAll<HTMLElement>("[data-nav-personal]")
   .forEach((btn) => btn.addEventListener("click", openPersonalCluster));
 
-// ── Mode dropdown (mobile) ──────────────────────────────────────────────
+// ── Mode dropdown (mobile, <details> nativo) ────────────────────────────
+// Apertura/chiusura è gratis (comportamento nativo dell'elemento, come il
+// lang-dropdown accanto): le opzioni sono <button> reali dentro la lista,
+// quindi Tab/Invio/Spazio funzionano senza handler keydown custom — bug di
+// accessibilità corretto 2026-07-29 (prima erano <li role="option"
+// tabindex="-1"> senza alcuna gestione da tastiera, vedi todo.md #54).
 {
-  const dropdownBtn = document.querySelector<HTMLButtonElement>("#mode-dropdown-btn");
+  const modeDropdown = document.querySelector<HTMLDetailsElement>("#mode-dropdown");
   const dropdownList = document.querySelector<HTMLElement>("#mode-dropdown-list");
-  if (dropdownBtn && dropdownList) {
-    dropdownBtn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      const isOpen = dropdownList.classList.toggle("is-open");
-      dropdownBtn.setAttribute("aria-expanded", String(isOpen));
-    });
-
+  if (modeDropdown && dropdownList) {
     dropdownList.querySelectorAll<HTMLElement>("[data-dropdown-mode]").forEach((opt) => {
       opt.addEventListener("click", () => {
         const mode = opt.dataset.dropdownMode as CVMode | undefined;
         if (!mode) return;
-        dropdownList.classList.remove("is-open");
-        dropdownBtn.setAttribute("aria-expanded", "false");
+        modeDropdown.open = false;
         // Chiama l'animazione direttamente invece di simulare un click sul
         // bottone nav nascosto: quel bottone ha la semantica "doppio tap"
         // (secondo tap sullo stesso mode = scroll alle skill), pensata solo
@@ -907,17 +908,15 @@ document
     // Voce personale: apre il cluster "Fuori orario", nessun cambio mode
     dropdownList.querySelectorAll<HTMLElement>("[data-dropdown-personal]").forEach((opt) => {
       opt.addEventListener("click", () => {
-        dropdownList.classList.remove("is-open");
-        dropdownBtn.setAttribute("aria-expanded", "false");
+        modeDropdown.open = false;
         openPersonalCluster();
       });
     });
 
     // Chiudi al click fuori
-    document.addEventListener("click", () => {
-      if (dropdownList.classList.contains("is-open")) {
-        dropdownList.classList.remove("is-open");
-        dropdownBtn.setAttribute("aria-expanded", "false");
+    document.addEventListener("click", (e) => {
+      if (modeDropdown.open && !modeDropdown.contains(e.target as Node)) {
+        modeDropdown.open = false;
       }
     });
   }

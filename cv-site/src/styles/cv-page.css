@@ -444,10 +444,15 @@ go-logo:not(:defined) {
   cursor: pointer;
   white-space: nowrap;
   overflow: hidden;
+  list-style: none;
   box-shadow: 0 0 8px color-mix(in srgb, var(--color-accent) 20%, transparent);
 }
 
-.mode-dropdown__trigger[aria-expanded="true"] {
+.mode-dropdown__trigger::-webkit-details-marker {
+  display: none;
+}
+
+.mode-dropdown[open] .mode-dropdown__trigger {
   border-radius: 2px 2px 0 0;
   background: color-mix(in srgb, var(--color-accent) 16%, transparent);
 }
@@ -466,12 +471,11 @@ go-logo:not(:defined) {
   line-height: 1;
 }
 
-.mode-dropdown__trigger[aria-expanded="true"] .mode-dropdown__chevron {
+.mode-dropdown[open] .mode-dropdown__chevron {
   transform: rotate(90deg);
 }
 
 .mode-dropdown__list {
-  display: none;
   position: absolute;
   top: 100%;
   left: 0;
@@ -488,25 +492,27 @@ go-logo:not(:defined) {
   z-index: 200;
 }
 
-.mode-dropdown__list.is-open {
-  display: block;
-}
-
 .mode-dropdown__option {
+  display: block;
+  width: 100%;
   padding: 0.65rem 0.75rem;
+  background: none;
+  border: none;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  font: inherit;
   font-family: var(--font-mono);
   font-size: var(--fs-12);
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
+  text-align: left;
   color: rgba(192, 220, 215, 0.85);
   cursor: pointer;
   user-select: none;
   -webkit-user-select: none;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
 }
 
-.mode-dropdown__option:last-child {
+.mode-dropdown__list li:last-child .mode-dropdown__option {
   border-bottom: none;
 }
 

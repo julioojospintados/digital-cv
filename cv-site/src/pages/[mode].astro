@@ -94,14 +94,18 @@ const {
         <span class="mode-btn__label">Fuori orario</span>
       </button>
     </div>
-    <!-- Mobile dropdown — sostituisce i 4 pulsanti su ≤640px -->
-    <div class="mode-dropdown" id="mode-dropdown">
-      <button
+    <!-- Mobile dropdown — sostituisce i 4 pulsanti su ≤640px.
+         <details> nativo (stesso pattern del lang-dropdown accanto): le
+         opzioni sono <button> reali dentro la lista, quindi Tab/Invio/Spazio
+         funzionano senza handler keydown custom — bug di accessibilità
+         corretto 2026-07-29 (prima erano <li role="option" tabindex="-1">
+         raggiungibili solo dal mouse, con ruoli ARIA che promettevano
+         una navigazione da tastiera mai implementata). -->
+    <details class="mode-dropdown" id="mode-dropdown">
+      <summary
         class="mode-dropdown__trigger"
         id="mode-dropdown-btn"
-        type="button"
-        aria-haspopup="listbox"
-        aria-expanded="false"
+        aria-label="Scegli modalità di visualizzazione"
       >
         <span class="mode-dropdown__label" id="mode-dropdown-label">
           {
@@ -115,55 +119,59 @@ const {
           }
         </span>
         <span class="mode-dropdown__chevron" aria-hidden="true">›</span>
-      </button>
-      <ul
-        class="mode-dropdown__list"
-        id="mode-dropdown-list"
-        role="listbox"
-        aria-labelledby="mode-dropdown-btn"
-      >
-        <li
-          class:list={["mode-dropdown__option", { "is-selected": mode === "creative" }]}
-          role="option"
-          data-dropdown-mode="creative"
-          tabindex="-1"
-        >
-          Web &amp; UX
+      </summary>
+      <ul class="mode-dropdown__list" id="mode-dropdown-list" role="list">
+        <li>
+          <button
+            type="button"
+            class:list={["mode-dropdown__option", { "is-selected": mode === "creative" }]}
+            data-dropdown-mode="creative"
+            aria-current={mode === "creative" ? "true" : undefined}
+          >
+            Web &amp; UX
+          </button>
         </li>
-        <li
-          class:list={["mode-dropdown__option", { "is-selected": mode === "tech" }]}
-          role="option"
-          data-dropdown-mode="tech"
-          tabindex="-1"
-        >
-          Software Dev
+        <li>
+          <button
+            type="button"
+            class:list={["mode-dropdown__option", { "is-selected": mode === "tech" }]}
+            data-dropdown-mode="tech"
+            aria-current={mode === "tech" ? "true" : undefined}
+          >
+            Software Dev
+          </button>
         </li>
-        <li
-          class:list={["mode-dropdown__option", { "is-selected": mode === "management" }]}
-          role="option"
-          data-dropdown-mode="management"
-          tabindex="-1"
-        >
-          Project Manager
+        <li>
+          <button
+            type="button"
+            class:list={["mode-dropdown__option", { "is-selected": mode === "management" }]}
+            data-dropdown-mode="management"
+            aria-current={mode === "management" ? "true" : undefined}
+          >
+            Project Manager
+          </button>
         </li>
-        <li
-          class:list={["mode-dropdown__option", { "is-selected": mode === "human" }]}
-          role="option"
-          data-dropdown-mode="human"
-          tabindex="-1"
-        >
-          AI &amp; Digital
+        <li>
+          <button
+            type="button"
+            class:list={["mode-dropdown__option", { "is-selected": mode === "human" }]}
+            data-dropdown-mode="human"
+            aria-current={mode === "human" ? "true" : undefined}
+          >
+            AI &amp; Digital
+          </button>
         </li>
-        <li
-          class="mode-dropdown__option mode-dropdown__option--personal"
-          role="option"
-          data-dropdown-personal
-          tabindex="-1"
-        >
-          Fuori orario
+        <li>
+          <button
+            type="button"
+            class="mode-dropdown__option mode-dropdown__option--personal"
+            data-dropdown-personal
+          >
+            Fuori orario
+          </button>
         </li>
       </ul>
-    </div>
+    </details>
     <!-- Desktop: switch a 2 chip, sempre entrambe le lingue visibili.
          Mobile: <details> nativo, zero JS — libera spazio per il mode-dropdown
          accanto, che su schermi stretti competeva con lo switch a 2 chip. -->
