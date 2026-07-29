@@ -11,14 +11,14 @@
  *   2. node scripts/gen-og-image.mjs [URL]      (default: http://localhost:4321/tech)
  */
 
-import { chromium } from 'playwright';
-import { fileURLToPath } from 'url';
-import { dirname, resolve } from 'path';
-import { existsSync } from 'fs';
+import { chromium } from "playwright";
+import { fileURLToPath } from "url";
+import { dirname, resolve } from "path";
+import { existsSync } from "fs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const OUT_PATH = resolve(__dirname, '../cv-site/public/og-image.png');
-const TARGET_URL = process.argv[2] ?? 'http://localhost:4321/';
+const OUT_PATH = resolve(__dirname, "../cv-site/public/og-image.png");
+const TARGET_URL = process.argv[2] ?? "http://localhost:4321/";
 
 console.log(`📸 Cattura screenshot da: ${TARGET_URL}`);
 console.log(`💾 Output: ${OUT_PATH}`);
@@ -31,7 +31,7 @@ await page.setViewportSize({ width: 1200, height: 630 });
 // Sposta il mouse fuori dal viewport prima ancora che la pagina carichi
 await page.mouse.move(1300, 700);
 
-await page.goto(TARGET_URL, { waitUntil: 'networkidle' });
+await page.goto(TARGET_URL, { waitUntil: "networkidle" });
 
 // Inietta subito CSS per nascondere elementi UI non desiderati
 await page.addStyleTag({
@@ -48,7 +48,7 @@ await page.addStyleTag({
       opacity: 0 !important;
       pointer-events: none !important;
     }
-  `
+  `,
 });
 
 // Attendi che il preloader GSAP finisca e la home sia visibile
@@ -56,21 +56,21 @@ await page.waitForTimeout(4500);
 
 // Forza rimozione dal DOM dopo che Lit ha montato i componenti
 await page.evaluate(() => {
-  ['#cursor-ring', '#cursor-dot', 'floating-menu', 'go-logo', '.skip-link'].forEach(sel => {
-    document.querySelectorAll(sel).forEach(el => el.parentNode?.removeChild(el));
+  ["#cursor-ring", "#cursor-dot", "floating-menu", "go-logo", ".skip-link"].forEach((sel) => {
+    document.querySelectorAll(sel).forEach((el) => el.parentNode?.removeChild(el));
   });
 });
 
 await page.screenshot({
   path: OUT_PATH,
-  type: 'png',
+  type: "png",
   clip: { x: 0, y: 0, width: 1200, height: 600 },
 });
 await browser.close();
 
 if (existsSync(OUT_PATH)) {
-  console.log('✅ og-image.png generata correttamente.');
+  console.log("✅ og-image.png generata correttamente.");
 } else {
-  console.error('❌ File non creato. Controlla gli errori sopra.');
+  console.error("❌ File non creato. Controlla gli errori sopra.");
   process.exit(1);
 }

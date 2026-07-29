@@ -39,8 +39,12 @@ Thumbs.db
 # Playwright MCP — runtime snapshots, never commit
 .playwright-mcp/
 
-# Internal working notes — not for the public repo
+# Internal working notes — not for the public repo.
+# Entrambe le forme: CLAUDE.md parla di `.todo.md` (col punto), lo storico del
+# repo di `todo.md` — un pattern solo copriva metà dei casi e l'altra metà
+# sarebbe finita nel repo pubblico alla prima creazione del file.
 todo.md
+.todo.md
 bash.exe.stackdump
 tmp-diff.mjs
 .tmp-lh*

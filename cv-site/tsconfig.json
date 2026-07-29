@@ -1,14 +1,7 @@
 {
   "extends": "astro/tsconfigs/strict",
-  "include": [
-    ".astro/types.d.ts",
-    "**/*",
-    "../src/data/cv.ts",
-    "../src/data/cv.en.ts"
-  ],
-  "exclude": [
-    "dist"
-  ],
+  "include": [".astro/types.d.ts", "**/*", "../src/data/cv.ts", "../src/data/cv.en.ts"],
+  "exclude": ["dist"],
   "compilerOptions": {
     // Disabilitato solo per il falso positivo Flip.d.ts/flip.d.ts (todo #42):
     // il conflitto di casing è interno al pacchetto gsap stesso, rilevabile
@@ -18,12 +11,8 @@
     // controllo riguarda i percorsi dei moduli, non il contenuto dei .d.ts.
     "forceConsistentCasingInFileNames": false,
     "paths": {
-      "@cv-data": [
-        "../src/data/cv.ts"
-      ],
-      "@cv-data-en": [
-        "../src/data/cv.en.ts"
-      ]
+      "@cv-data": ["../src/data/cv.ts"],
+      "@cv-data-en": ["../src/data/cv.en.ts"]
     }
   }
 }

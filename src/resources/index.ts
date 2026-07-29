@@ -19,6 +19,11 @@ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
  *     }),
  *   );
  */
+// `server` non è ancora usato perché il registry è vuoto: nessuna resource
+// è registrata oggi. Il parametro resta nella firma — è l'API che ogni
+// register*Resource() riceverà — quindi si disattiva la regola qui invece di
+// rinominarlo `_server`, che andrebbe rinominato di nuovo al primo uso.
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function registerAllResources(server: McpServer): void {
   // registerMyResource(server);
 }

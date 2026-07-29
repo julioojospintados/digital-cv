@@ -51,9 +51,9 @@ async function main(): Promise<void> {
 
     sections.push(
       `${"═".repeat(60)}\n` +
-      `FILE: ${basename(filename)}  (${result.numpages} pagine)\n` +
-      `${"═".repeat(60)}\n\n` +
-      result.text.trim()
+        `FILE: ${basename(filename)}  (${result.numpages} pagine)\n` +
+        `${"═".repeat(60)}\n\n` +
+        result.text.trim(),
     );
   }
 

@@ -42,9 +42,7 @@ const italianLocationHints = [
   "crotone",
 ];
 const abroadLabel =
-  locationText &&
-  !remote &&
-  !italianLocationHints.some((hint) => normalizedLocation.includes(hint))
+  locationText && !remote && !italianLocationHints.some((hint) => normalizedLocation.includes(hint))
     ? "Estero"
     : null;
 
@@ -81,9 +79,7 @@ const datesLabel = startYear
             {location}
             {remote ? " · Remote" : ""}
           </span>
-          {abroadLabel && (
-            <span class="exp-card__abroad-chip">{abroadLabel}</span>
-          )}
+          {abroadLabel && <span class="exp-card__abroad-chip">{abroadLabel}</span>}
         </p>
       )
     }
@@ -230,13 +226,8 @@ const datesLabel = startYear
     align-items: center;
     padding: 0.16rem 0.45rem;
     border-radius: 999px;
-    border: 1px solid
-      color-mix(in srgb, var(--color-accent) 48%, var(--color-border));
-    background: color-mix(
-      in srgb,
-      var(--color-accent) 18%,
-      rgba(8, 73, 67, 0.88)
-    );
+    border: 1px solid color-mix(in srgb, var(--color-accent) 48%, var(--color-border));
+    background: color-mix(in srgb, var(--color-accent) 18%, rgba(8, 73, 67, 0.88));
     font-weight: 500;
     letter-spacing: 0.14em;
     text-transform: uppercase;

@@ -1,0 +1,40 @@
+version: 2
+
+# Il repo ha due progetti npm indipendenti, ciascuno col proprio lockfile:
+# la root (server MCP + HTTP) e cv-site/ (sito Astro). Vanno dichiarati
+# separatamente — un solo blocco coprirebbe solo il manifest della root.
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: monthly
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "deps(server)"
+    groups:
+      # Aggiornamenti patch/minor in un'unica PR: le dipendenze del layer MCP
+      # si muovono insieme e una PR per pacchetto sarebbe solo rumore.
+      minor-and-patch:
+        update-types:
+          - minor
+          - patch
+
+  - package-ecosystem: npm
+    directory: /cv-site
+    schedule:
+      interval: monthly
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "deps(site)"
+    groups:
+      minor-and-patch:
+        update-types:
+          - minor
+          - patch
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    commit-message:
+      prefix: "deps(ci)"

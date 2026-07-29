@@ -233,11 +233,31 @@ const EN: Locale = {
     },
     {
       label: "Design tools",
-      chips: ["Figma", "Miro", "Visily", "UX Pilot", "Google Stitch", "GSAP", "WordPress", "Wix", "AI", "Claude"],
+      chips: [
+        "Figma",
+        "Miro",
+        "Visily",
+        "UX Pilot",
+        "Google Stitch",
+        "GSAP",
+        "WordPress",
+        "Wix",
+        "AI",
+        "Claude",
+      ],
     },
     {
       label: "Frontend",
-      chips: ["HTML5", "CSS / SCSS", "TypeScript", "Angular", "React", "Lit", "WebComponents", "Astro"],
+      chips: [
+        "HTML5",
+        "CSS / SCSS",
+        "TypeScript",
+        "Angular",
+        "React",
+        "Lit",
+        "WebComponents",
+        "Astro",
+      ],
     },
     {
       label: "AI workflow",
@@ -387,11 +407,31 @@ const IT: Locale = {
     },
     {
       label: "Strumenti di design",
-      chips: ["Figma", "Miro", "Visily", "UX Pilot", "Google Stitch", "GSAP", "WordPress", "Wix", "AI", "Claude"],
+      chips: [
+        "Figma",
+        "Miro",
+        "Visily",
+        "UX Pilot",
+        "Google Stitch",
+        "GSAP",
+        "WordPress",
+        "Wix",
+        "AI",
+        "Claude",
+      ],
     },
     {
       label: "Frontend",
-      chips: ["HTML5", "CSS / SCSS", "TypeScript", "Angular", "React", "Lit", "WebComponents", "Astro"],
+      chips: [
+        "HTML5",
+        "CSS / SCSS",
+        "TypeScript",
+        "Angular",
+        "React",
+        "Lit",
+        "WebComponents",
+        "Astro",
+      ],
     },
     {
       label: "Flusso AI",
@@ -426,8 +466,7 @@ const IT: Locale = {
     { name: "Francese", level: "A2" },
   ],
   ctaTitle: "Dai un'occhiata.",
-  ctaSub:
-    "CV interattivo, case study live e design system: i link in questo PDF sono cliccabili.",
+  ctaSub: "CV interattivo, case study live e design system: i link in questo PDF sono cliccabili.",
   portfolioBtn: "Apri il portfolio",
 };
 
@@ -666,9 +705,7 @@ section{margin-top:4mm;}
 async function main(): Promise<void> {
   mkdirSync(OUT_DIR, { recursive: true });
   const executablePath = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE;
-  const browser = await chromium.launch(
-    executablePath ? { executablePath } : {},
-  );
+  const browser = await chromium.launch(executablePath ? { executablePath } : {});
   const page = await browser.newPage();
 
   for (const L of locales) {
@@ -690,8 +727,7 @@ async function main(): Promise<void> {
 // Esegui solo se invocato direttamente (non all'import, così i preview/test
 // possono importare buildHtml senza lanciare Chromium).
 const invokedDirectly =
-  process.argv[1] &&
-  resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+  process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 if (invokedDirectly) {
   main().catch((err) => {
     console.error(err);

@@ -22,7 +22,10 @@ describe("registerEchoTool", () => {
     registerEchoTool(server as unknown as McpServer);
 
     expect(server.tool).toHaveBeenCalledTimes(1);
-    const [name] = server.tool.mock.calls[0];
+    // `!` invece di un check esplicito: l'expect qui sopra garantisce già che
+    // la chiamata esista. Serve perché noUncheckedIndexedAccess (tsconfig)
+    // tipizza ogni accesso per indice come possibilmente undefined.
+    const [name] = server.tool.mock.calls[0]!;
     expect(name).toBe("echo");
   });
 
@@ -30,7 +33,7 @@ describe("registerEchoTool", () => {
     const server = createMockServer();
     registerEchoTool(server as unknown as McpServer);
 
-    const description = server.tool.mock.calls[0][1] as string;
+    const description = server.tool.mock.calls[0]![1] as string;
     expect(typeof description).toBe("string");
     expect(description.length).toBeGreaterThan(0);
   });
@@ -41,7 +44,7 @@ describe("echo tool handler", () => {
     const server = createMockServer();
     registerEchoTool(server as unknown as McpServer);
     // The 4th argument (index 3) is the handler function
-    return server.tool.mock.calls[0][3] as unknown as ToolHandler;
+    return server.tool.mock.calls[0]![3] as unknown as ToolHandler;
   }
 
   it("returns a text content item", async () => {
@@ -49,27 +52,27 @@ describe("echo tool handler", () => {
     const result = await handler({ message: "hello" });
 
     expect(result.content).toHaveLength(1);
-    expect(result.content[0].type).toBe("text");
+    expect(result.content[0]!.type).toBe("text");
   });
 
   it("echoes the message with 'Echo: ' prefix", async () => {
     const handler = await getHandler();
     const result = await handler({ message: "world" });
 
-    expect(result.content[0].text).toBe("Echo: world");
+    expect(result.content[0]!.text).toBe("Echo: world");
   });
 
   it("preserves special characters in the message", async () => {
     const handler = await getHandler();
     const result = await handler({ message: "Hello, <World> & co!" });
 
-    expect(result.content[0].text).toBe("Echo: Hello, <World> & co!");
+    expect(result.content[0]!.text).toBe("Echo: Hello, <World> & co!");
   });
 
   it("preserves unicode in the message", async () => {
     const handler = await getHandler();
     const result = await handler({ message: "Ciao 🌍" });
 
-    expect(result.content[0].text).toBe("Echo: Ciao 🌍");
+    expect(result.content[0]!.text).toBe("Echo: Ciao 🌍");
   });
 });

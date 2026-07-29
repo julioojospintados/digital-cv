@@ -6,9 +6,7 @@ import { z } from "zod";
  * Zod throws at boot if required variables are missing or invalid.
  */
 const envSchema = z.object({
-  NODE_ENV: z
-    .enum(["development", "production", "test"])
-    .default("development"),
+  NODE_ENV: z.enum(["development", "production", "test"]).default("development"),
 
   // ── HTTP server (optional — only used by src/http.ts) ──────────────────
   PORT: z.coerce.number().min(1).max(65535).default(3000),

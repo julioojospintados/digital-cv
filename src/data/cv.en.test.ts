@@ -63,12 +63,8 @@ describe("cvDataEn structural parity with cvData", () => {
 
   it("experience dates match per-entry", () => {
     for (let i = 0; i < cvData.experience.length; i++) {
-      expect(cvDataEn.experience[i].startDate).toBe(
-        cvData.experience[i].startDate,
-      );
-      expect(cvDataEn.experience[i].endDate).toBe(
-        cvData.experience[i].endDate,
-      );
+      expect(cvDataEn.experience[i]!.startDate).toBe(cvData.experience[i]!.startDate);
+      expect(cvDataEn.experience[i]!.endDate).toBe(cvData.experience[i]!.endDate);
     }
   });
 
@@ -86,9 +82,7 @@ describe("cvDataEn structural parity with cvData", () => {
 
   it("technicalSkills levels match (same order)", () => {
     for (let i = 0; i < cvData.technicalSkills.length; i++) {
-      expect(cvDataEn.technicalSkills[i].level).toBe(
-        cvData.technicalSkills[i].level,
-      );
+      expect(cvDataEn.technicalSkills[i]!.level).toBe(cvData.technicalSkills[i]!.level);
     }
   });
 
@@ -110,10 +104,9 @@ describe("cvDataEn structural parity with cvData", () => {
 
   it("project urls match (same order)", () => {
     for (let i = 0; i < cvData.projects.length; i++) {
-      expect(cvDataEn.projects[i].url).toBe(cvData.projects[i].url);
+      expect(cvDataEn.projects[i]!.url).toBe(cvData.projects[i]!.url);
     }
   });
-
 });
 
 /**
@@ -128,19 +121,15 @@ describe("cvDataEn structural parity with cvData", () => {
  * these tests are the guard that the inheritance keeps working.
  */
 describe("cvDataEn skill metadata parity (non-translatable fields)", () => {
-  const SKILL_SECTIONS = [
-    "technicalSkills",
-    "softSkills",
-    "transversalSkills",
-  ] as const;
+  const SKILL_SECTIONS = ["technicalSkills", "softSkills", "transversalSkills"] as const;
 
   const META_FIELDS = ["domain", "weight", "mastery", "role", "level"] as const;
 
   for (const section of SKILL_SECTIONS) {
     for (const field of META_FIELDS) {
       it(`${section}: every entry keeps the same '${field}' as cv.ts`, () => {
-        const itList = cvData[section] as readonly Record<string, unknown>[];
-        const enList = cvDataEn[section] as readonly Record<string, unknown>[];
+        const itList = cvData[section] as unknown as readonly Record<string, unknown>[];
+        const enList = cvDataEn[section] as unknown as readonly Record<string, unknown>[];
         const mismatches = itList
           .map((entry, i) => ({
             name: entry.name as string,
@@ -153,13 +142,13 @@ describe("cvDataEn skill metadata parity (non-translatable fields)", () => {
     }
 
     it(`${section}: no entry lost its domain`, () => {
-      const enList = cvDataEn[section] as readonly Record<string, unknown>[];
-      const itList = cvData[section] as readonly Record<string, unknown>[];
+      const enList = cvDataEn[section] as unknown as readonly Record<string, unknown>[];
+      const itList = cvData[section] as unknown as readonly Record<string, unknown>[];
       // Only assert where the Italian source actually declares one.
       const missing = enList
         .map((entry, i) => ({ name: entry.name, i }))
-        .filter(({ i }) => itList[i].domain !== undefined)
-        .filter(({ i }) => enList[i].domain === undefined);
+        .filter(({ i }) => itList[i]!.domain !== undefined)
+        .filter(({ i }) => enList[i]!.domain === undefined);
       expect(missing).toEqual([]);
     });
   }

@@ -23,14 +23,22 @@ const t =
         title: "Let's talk",
         sub: "An email or a LinkedIn message.",
         email: { label: "Email", action: "Write to me", aria: "Write an email to Giulio" },
-        linkedin: { label: "LinkedIn", action: "Let's connect", aria: "Open Giulio's LinkedIn profile in a new tab" },
+        linkedin: {
+          label: "LinkedIn",
+          action: "Let's connect",
+          aria: "Open Giulio's LinkedIn profile in a new tab",
+        },
       }
     : {
         eyebrow: "Contatti",
         title: "Parliamone",
         sub: "Una mail o un messaggio su LinkedIn.",
         email: { label: "Email", action: "Scrivimi", aria: "Scrivi una email a Giulio" },
-        linkedin: { label: "LinkedIn", action: "Connettiamoci", aria: "Apri il profilo LinkedIn di Giulio in una nuova scheda" },
+        linkedin: {
+          label: "LinkedIn",
+          action: "Connettiamoci",
+          aria: "Apri il profilo LinkedIn di Giulio in una nuova scheda",
+        },
       };
 ---
 
@@ -45,32 +53,46 @@ const t =
     <!-- _blank anche sul mailto: se il gestore di posta è webmail (Gmail nel
          browser), _self sostituirebbe il CV con la pagina di composizione.
          Con il client nativo la scheda transitoria si chiude da sola. -->
-    {email && (
-      <a class="contact-card" href={email.url} target="_blank" rel="noopener noreferrer" aria-label={t.email.aria}>
-        <span class="contact-card__label">{t.email.label}</span>
-        <span class="contact-card__value">{email.label ?? email.url.replace("mailto:", "")}</span>
-        <span class="contact-card__action">
-          {t.email.action}
-          <span class="contact-card__arrow" aria-hidden="true">→</span>
-        </span>
-      </a>
-    )}
-    {linkedin && (
-      <a
-        class="contact-card"
-        href={linkedin.url}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label={t.linkedin.aria}
-      >
-        <span class="contact-card__label">{t.linkedin.label}</span>
-        <span class="contact-card__value">{linkedin.label ?? linkedin.url}</span>
-        <span class="contact-card__action">
-          {t.linkedin.action}
-          <span class="contact-card__arrow" aria-hidden="true">→</span>
-        </span>
-      </a>
-    )}
+    {
+      email && (
+        <a
+          class="contact-card"
+          href={email.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={t.email.aria}
+        >
+          <span class="contact-card__label">{t.email.label}</span>
+          <span class="contact-card__value">{email.label ?? email.url.replace("mailto:", "")}</span>
+          <span class="contact-card__action">
+            {t.email.action}
+            <span class="contact-card__arrow" aria-hidden="true">
+              →
+            </span>
+          </span>
+        </a>
+      )
+    }
+    {
+      linkedin && (
+        <a
+          class="contact-card"
+          href={linkedin.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={t.linkedin.aria}
+        >
+          <span class="contact-card__label">{t.linkedin.label}</span>
+          <span class="contact-card__value">{linkedin.label ?? linkedin.url}</span>
+          <span class="contact-card__action">
+            {t.linkedin.action}
+            <span class="contact-card__arrow" aria-hidden="true">
+              →
+            </span>
+          </span>
+        </a>
+      )
+    }
   </div>
 </section>
 
@@ -79,7 +101,7 @@ const t =
      pagina ospite (.cv-footer / .entry-footer) — qui solo spazio verticale. */
   .contact-cta {
     padding: 2rem 0 0.5rem;
-    display:flex;
+    display: flex;
     flex-direction: column;
     gap: 1rem;
   }

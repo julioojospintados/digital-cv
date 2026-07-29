@@ -2,7 +2,10 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    # develop è il branch di lavoro reale: senza elencarlo qui i push
+    # quotidiani non venivano verificati da nulla, e la CI si accorgeva dei
+    # problemi solo al merge su main.
+    branches: [main, develop]
   pull_request:
 
 # Cancel superseded runs on the same ref.
@@ -10,7 +13,32 @@ concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
+# Entrambi i progetti richiedono Node >= 22.12 (campo engines dei package.json):
+# la versione è dichiarata qui una volta sola per non farla divergere fra i job.
+env:
+  NODE_VERSION: "22"
+
 jobs:
+  quality:
+    name: Lint & format (repo intero)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      # ESLint e Prettier sono configurati nella root ma coprono anche
+      # cv-site/: serve quindi anche il suo node_modules, altrimenti il
+      # parser Astro non risolve le dipendenze del sito.
+      - name: Install cv-site deps (per il parser Astro)
+        run: npm ci --prefix cv-site
+      - name: Lint (eslint)
+        run: npm run lint
+      - name: Format (prettier --check)
+        run: npm run format:check
+
   server:
     name: MCP server & HTTP API (type-check + tests)
     runs-on: ubuntu-latest
@@ -18,16 +46,20 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: ${{ env.NODE_VERSION }}
           cache: npm
       - run: npm ci
-      - name: Type-check (tsc)
+      - name: Type-check build (tsc)
         run: npm run build
+      # tsconfig.json esclude i *.test.ts dalla build e vitest non type-checka:
+      # senza questo step i file di test non li controlla nessuno.
+      - name: Type-check tests & scripts
+        run: npm run typecheck
       - name: Tests (vitest)
         run: npm test
 
   site:
-    name: CV site (tests + Astro build)
+    name: CV site (check + tests + Astro build)
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -36,10 +68,14 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: ${{ env.NODE_VERSION }}
           cache: npm
           cache-dependency-path: cv-site/package-lock.json
       - run: npm ci
+      # @astrojs/check era già una dipendenza ma non lo invocava nessuno:
+      # 16 errori di tipo erano passati inosservati fino al 2026-07-29.
+      - name: Type-check (astro check)
+        run: npm run check
       - name: Tests (vitest)
         run: npm test
       - name: Build (astro)

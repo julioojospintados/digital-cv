@@ -90,8 +90,16 @@ const t = {
         "8 oggetti knolling in WebP, circa 15KB l'uno: ogni mode ha i suoi corrispettivi sul tavolo.",
       ],
   callouts: isEN
-    ? { border: "1px --color-border", radius: "1rem --radius-16", surface: "surface rgba(255,255,255,0.02)" }
-    : { border: "bordo 1px --color-border", radius: "raggio 1rem --radius-16", surface: "superficie rgba(255,255,255,0.02)" },
+    ? {
+        border: "1px --color-border",
+        radius: "1rem --radius-16",
+        surface: "surface rgba(255,255,255,0.02)",
+      }
+    : {
+        border: "bordo 1px --color-border",
+        radius: "raggio 1rem --radius-16",
+        surface: "superficie rgba(255,255,255,0.02)",
+      },
   modes: "Mode system",
   modesTag: isEN ? "Emphasis, never structure." : "Enfasi, mai struttura.",
   modesNote: isEN
@@ -120,10 +128,34 @@ const t = {
 };
 
 const modes = [
-  { key: "tech", label: "Software Developer", accent: "rgba(0, 255, 200, 1)", muted: "rgba(0, 255, 200, 0.70)", ratio: "4.8:1" },
-  { key: "creative", label: "Web & UX Designer", accent: "rgba(255, 107, 53, 1)", muted: "rgba(255, 195, 155, 0.82)", ratio: "4.9:1" },
-  { key: "human", label: "AI & Digital Specialist", accent: "rgba(240, 200, 127, 1)", muted: "rgba(240, 210, 148, 0.75)", ratio: "4.6:1" },
-  { key: "management", label: "Project Manager", accent: "rgba(180, 100, 255, 1)", muted: "rgba(200, 170, 255, 0.78)", ratio: "4.6:1" },
+  {
+    key: "tech",
+    label: "Software Developer",
+    accent: "rgba(0, 255, 200, 1)",
+    muted: "rgba(0, 255, 200, 0.70)",
+    ratio: "4.8:1",
+  },
+  {
+    key: "creative",
+    label: "Web & UX Designer",
+    accent: "rgba(255, 107, 53, 1)",
+    muted: "rgba(255, 195, 155, 0.82)",
+    ratio: "4.9:1",
+  },
+  {
+    key: "human",
+    label: "AI & Digital Specialist",
+    accent: "rgba(240, 200, 127, 1)",
+    muted: "rgba(240, 210, 148, 0.75)",
+    ratio: "4.6:1",
+  },
+  {
+    key: "management",
+    label: "Project Manager",
+    accent: "rgba(180, 100, 255, 1)",
+    muted: "rgba(200, 170, 255, 0.78)",
+    ratio: "4.6:1",
+  },
 ];
 
 // Niente valore hardcodato: solo --color-bg è davvero invariante, gli altri
@@ -134,11 +166,26 @@ const modes = [
 // che va sempre in data-mode="tech" (project.primaryMode). Il valore vero
 // viene letto dal vivo via getComputedStyle (script sotto).
 const baseTokens = [
-  { name: "--color-bg", note: isEN ? "teal — invariant across modes" : "ottanio — invariabile in ogni mode" },
-  { name: "--color-surface", note: isEN ? "card surfaces · varies per mode" : "superfici card · cambia per mode" },
-  { name: "--color-border", note: isEN ? "1px borders · varies per mode" : "bordi 1px · cambia per mode" },
-  { name: "--color-text-primary", note: isEN ? "titles, body · varies per mode" : "titoli, testo · cambia per mode" },
-  { name: "--color-text-muted", note: isEN ? "≥4.5:1 AA · varies per mode" : "≥4.5:1 AA · cambia per mode" },
+  {
+    name: "--color-bg",
+    note: isEN ? "teal — invariant across modes" : "ottanio — invariabile in ogni mode",
+  },
+  {
+    name: "--color-surface",
+    note: isEN ? "card surfaces · varies per mode" : "superfici card · cambia per mode",
+  },
+  {
+    name: "--color-border",
+    note: isEN ? "1px borders · varies per mode" : "bordi 1px · cambia per mode",
+  },
+  {
+    name: "--color-text-primary",
+    note: isEN ? "titles, body · varies per mode" : "titoli, testo · cambia per mode",
+  },
+  {
+    name: "--color-text-muted",
+    note: isEN ? "≥4.5:1 AA · varies per mode" : "≥4.5:1 AA · cambia per mode",
+  },
 ];
 
 // Card demo per il tile Mode system: contenuti reali del sito, un mode ciascuna
@@ -167,7 +214,13 @@ const radii = [
   <div class="ds__bento">
     <!-- 01 · Colore — le luci cambiano davvero l'accent della sezione -->
     <article class="ds__tile ds__tile--w7">
-      <button type="button" class="ds__tile-toggle" id="ds-toggle-colors" aria-controls="ds-body-colors" aria-expanded="false">
+      <button
+        type="button"
+        class="ds__tile-toggle"
+        id="ds-toggle-colors"
+        aria-controls="ds-body-colors"
+        aria-expanded="false"
+      >
         <span class="ds__idx" aria-hidden="true">01</span>
         <span class="ds__tile-headtext">
           <span class="ds__name">{t.colors}</span>
@@ -183,36 +236,45 @@ const radii = [
                l'accent su tutta la sezione), non l'unico modo per capire
                a cosa serve un colore — prima il tile lo richiedeva. -->
           <div class="ds__lights" role="group" aria-label={t.lightsHint}>
-            {modes.map((m, i) => (
-              <button
-                type="button"
-                class="ds__light"
-                style={`--light:${m.accent}; --light-muted:${m.muted}`}
-                data-ds-light={m.accent}
-                aria-pressed={i === 0 ? "true" : "false"}
-                aria-label={`${m.label} — accent ${m.key}`}
-              >
-                <span class="ds__light-swatches" aria-hidden="true">
-                  <span class="ds__light-dot" aria-hidden="true"></span>
-                  <span class="ds__light-dot ds__light-dot--muted" aria-hidden="true"></span>
-                </span>
-                <span class="ds__light-text">
-                  <span class="ds__light-key">{m.key}</span>
-                  <span class="ds__light-label">{m.label}</span>
-                </span>
-                <span class="ds__light-ratio">{m.ratio}<span class="ds__light-ratio-aa"> AA</span></span>
-              </button>
-            ))}
+            {
+              modes.map((m, i) => (
+                <button
+                  type="button"
+                  class="ds__light"
+                  style={`--light:${m.accent}; --light-muted:${m.muted}`}
+                  data-ds-light={m.accent}
+                  aria-pressed={i === 0 ? "true" : "false"}
+                  aria-label={`${m.label} — accent ${m.key}`}
+                >
+                  <span class="ds__light-swatches" aria-hidden="true">
+                    <span class="ds__light-dot" aria-hidden="true" />
+                    <span class="ds__light-dot ds__light-dot--muted" aria-hidden="true" />
+                  </span>
+                  <span class="ds__light-text">
+                    <span class="ds__light-key">{m.key}</span>
+                    <span class="ds__light-label">{m.label}</span>
+                  </span>
+                  <span class="ds__light-ratio">
+                    {m.ratio}
+                    <span class="ds__light-ratio-aa"> AA</span>
+                  </span>
+                </button>
+              ))
+            }
           </div>
           <p class="ds__hint">{t.lightsHint} ↑ · {t.accentColHead} · {t.mutedColHead}</p>
           <div class="ds__tokens">
-            {baseTokens.map((tok) => (
-              <div class="ds__swatch">
-                <span class="ds__chip" style={`background:var(${tok.name})`}></span>
-                <span class="ds__tok">{tok.name}</span>
-                <span class="ds__val" data-tok-value={tok.name}>{tok.note}</span>
-              </div>
-            ))}
+            {
+              baseTokens.map((tok) => (
+                <div class="ds__swatch">
+                  <span class="ds__chip" style={`background:var(${tok.name})`} />
+                  <span class="ds__tok">{tok.name}</span>
+                  <span class="ds__val" data-tok-value={tok.name}>
+                    {tok.note}
+                  </span>
+                </div>
+              ))
+            }
           </div>
         </div>
       </div>
@@ -220,7 +282,13 @@ const radii = [
 
     <!-- 02 · Tipografia -->
     <article class="ds__tile ds__tile--w5">
-      <button type="button" class="ds__tile-toggle" id="ds-toggle-type" aria-controls="ds-body-type" aria-expanded="false">
+      <button
+        type="button"
+        class="ds__tile-toggle"
+        id="ds-toggle-type"
+        aria-controls="ds-body-type"
+        aria-expanded="false"
+      >
         <span class="ds__idx" aria-hidden="true">02</span>
         <span class="ds__tile-headtext">
           <span class="ds__name">{t.type}</span>
@@ -265,7 +333,13 @@ const radii = [
 
     <!-- 03 · Livelli skill -->
     <article class="ds__tile ds__tile--w5">
-      <button type="button" class="ds__tile-toggle" id="ds-toggle-squares" aria-controls="ds-body-squares" aria-expanded="false">
+      <button
+        type="button"
+        class="ds__tile-toggle"
+        id="ds-toggle-squares"
+        aria-controls="ds-body-squares"
+        aria-expanded="false"
+      >
         <span class="ds__idx" aria-hidden="true">03</span>
         <span class="ds__tile-headtext">
           <span class="ds__name">{t.squares}</span>
@@ -280,15 +354,25 @@ const radii = [
                match), separato dall'hover — border invece è sempre visibile,
                a riposo, per tutti: è l'unico segnale che scala col livello. -->
           <div class="ds__squares" id="ds-squares">
-            {t.sqLevels.map((label, i) => (
-              <div class="ds__square-wrap">
-                <span class:list={["ds__square", { "ds__square--glow": i >= 2 }]} style={`border-width:${i + 1}px`}></span>
-                <span class="ds__val">{label}</span>
-                <span class="ds__val ds__val--dim">{i + 1}px</span>
-              </div>
-            ))}
+            {
+              t.sqLevels.map((label, i) => (
+                <div class="ds__square-wrap">
+                  <span
+                    class:list={["ds__square", { "ds__square--glow": i >= 2 }]}
+                    style={`border-width:${i + 1}px`}
+                  />
+                  <span class="ds__val">{label}</span>
+                  <span class="ds__val ds__val--dim">{i + 1}px</span>
+                </div>
+              ))
+            }
           </div>
-          <button type="button" class="ds__sim-toggle" id="ds-toggle-square-active" aria-pressed="false">
+          <button
+            type="button"
+            class="ds__sim-toggle"
+            id="ds-toggle-square-active"
+            aria-pressed="false"
+          >
             <span class="ds__sim-toggle-dot" aria-hidden="true"></span>
             {t.sqActiveToggle}
           </button>
@@ -300,7 +384,13 @@ const radii = [
 
     <!-- 04 · Motion — demo viva enter/exit -->
     <article class="ds__tile ds__tile--w7">
-      <button type="button" class="ds__tile-toggle" id="ds-toggle-motion" aria-controls="ds-body-motion" aria-expanded="false">
+      <button
+        type="button"
+        class="ds__tile-toggle"
+        id="ds-toggle-motion"
+        aria-controls="ds-body-motion"
+        aria-expanded="false"
+      >
         <span class="ds__idx" aria-hidden="true">04</span>
         <span class="ds__tile-headtext">
           <span class="ds__name">{t.motion}</span>
@@ -319,14 +409,23 @@ const radii = [
           <ul class="ds__rules">
             {t.motionRules.map((r) => <li>{r}</li>)}
           </ul>
-          <p class="ds__val ds__scale-line">--duration-micro 150ms · --duration-state 300ms · --ease-standard cubic-bezier(0.4, 0, 0.2, 1)</p>
+          <p class="ds__val ds__scale-line">
+            --duration-micro 150ms · --duration-state 300ms · --ease-standard cubic-bezier(0.4, 0,
+            0.2, 1)
+          </p>
         </div>
       </div>
     </article>
 
     <!-- 05 · Superfici — la card si annota da sola -->
     <article class="ds__tile ds__tile--w5">
-      <button type="button" class="ds__tile-toggle" id="ds-toggle-surfaces" aria-controls="ds-body-surfaces" aria-expanded="false">
+      <button
+        type="button"
+        class="ds__tile-toggle"
+        id="ds-toggle-surfaces"
+        aria-controls="ds-body-surfaces"
+        aria-expanded="false"
+      >
         <span class="ds__idx" aria-hidden="true">05</span>
         <span class="ds__tile-headtext">
           <span class="ds__name">{t.surfaces}</span>
@@ -348,7 +447,13 @@ const radii = [
 
     <!-- 06 · Mode system — sussurri cliccabili -->
     <article class="ds__tile ds__tile--w7">
-      <button type="button" class="ds__tile-toggle" id="ds-toggle-modes" aria-controls="ds-body-modes" aria-expanded="false">
+      <button
+        type="button"
+        class="ds__tile-toggle"
+        id="ds-toggle-modes"
+        aria-controls="ds-body-modes"
+        aria-expanded="false"
+      >
         <span class="ds__idx" aria-hidden="true">06</span>
         <span class="ds__tile-headtext">
           <span class="ds__name">{t.modes}</span>
@@ -360,24 +465,30 @@ const radii = [
         <div class="ds__tile-body-inner">
           <p class="ds__note">{t.modesNote}</p>
           <div class="ds__mode-pills" role="group" aria-label={t.modesHint}>
-            {modes.map((m, i) => (
-              <button
-                type="button"
-                class="ds__mode-pill"
-                style={`--pill-accent:${m.accent}`}
-                data-ds-mode={m.key}
-                aria-pressed={i === 0 ? "true" : "false"}
-              >{m.key}</button>
-            ))}
+            {
+              modes.map((m, i) => (
+                <button
+                  type="button"
+                  class="ds__mode-pill"
+                  style={`--pill-accent:${m.accent}`}
+                  data-ds-mode={m.key}
+                  aria-pressed={i === 0 ? "true" : "false"}
+                >
+                  {m.key}
+                </button>
+              ))
+            }
           </div>
           <div class="ds__demo-cards" data-ds-demo="tech">
-            {demoCards.map((c) => (
-              <div class="ds__demo-card" data-demo-mode={c.mode}>
-                <span class="ds__demo-dot" aria-hidden="true"></span>
-                <span class="ds__tok">{c.label}</span>
-                <span class="ds__val">{c.mode}</span>
-              </div>
-            ))}
+            {
+              demoCards.map((c) => (
+                <div class="ds__demo-card" data-demo-mode={c.mode}>
+                  <span class="ds__demo-dot" aria-hidden="true" />
+                  <span class="ds__tok">{c.label}</span>
+                  <span class="ds__val">{c.mode}</span>
+                </div>
+              ))
+            }
           </div>
         </div>
       </div>
@@ -385,7 +496,13 @@ const radii = [
 
     <!-- 07 · Raggi & forme — un raggio per ruolo -->
     <article class="ds__tile ds__tile--w5">
-      <button type="button" class="ds__tile-toggle" id="ds-toggle-radii" aria-controls="ds-body-radii" aria-expanded="false">
+      <button
+        type="button"
+        class="ds__tile-toggle"
+        id="ds-toggle-radii"
+        aria-controls="ds-body-radii"
+        aria-expanded="false"
+      >
         <span class="ds__idx" aria-hidden="true">07</span>
         <span class="ds__tile-headtext">
           <span class="ds__name">{t.radii}</span>
@@ -396,13 +513,15 @@ const radii = [
       <div class="ds__tile-body" id="ds-body-radii">
         <div class="ds__tile-body-inner">
           <div class="ds__radii" aria-hidden="true">
-            {radii.map((r) => (
-              <div class="ds__radius-item">
-                <span class="ds__radius-box" style={`border-radius:${r.css}`}></span>
-                <span class="ds__tok">{r.css}</span>
-                <span class="ds__val">{isEN ? r.en : r.it}</span>
-              </div>
-            ))}
+            {
+              radii.map((r) => (
+                <div class="ds__radius-item">
+                  <span class="ds__radius-box" style={`border-radius:${r.css}`} />
+                  <span class="ds__tok">{r.css}</span>
+                  <span class="ds__val">{isEN ? r.en : r.it}</span>
+                </div>
+              ))
+            }
           </div>
           <p class="ds__note ds__note--tight">{t.radiiNote}</p>
         </div>
@@ -411,7 +530,13 @@ const radii = [
 
     <!-- 08 · Bottoni & controlli — la gerarchia reale delle azioni del CV -->
     <article class="ds__tile ds__tile--w7">
-      <button type="button" class="ds__tile-toggle" id="ds-toggle-buttons" aria-controls="ds-body-buttons" aria-expanded="false">
+      <button
+        type="button"
+        class="ds__tile-toggle"
+        id="ds-toggle-buttons"
+        aria-controls="ds-body-buttons"
+        aria-expanded="false"
+      >
         <span class="ds__idx" aria-hidden="true">08</span>
         <span class="ds__tile-headtext">
           <span class="ds__name">{t.buttons}</span>
@@ -428,7 +553,9 @@ const radii = [
               <span class="ds__val ds__val--dim">{t.btnPrimary}</span>
             </span>
             <span class="ds__btn-demo">
-              <span class="ds__btn ds__btn--action"><span class="ds__btn-star">✦</span>{t.btnActionLabel}</span>
+              <span class="ds__btn ds__btn--action"
+                ><span class="ds__btn-star">✦</span>{t.btnActionLabel}</span
+              >
               <span class="ds__val ds__val--dim">{t.btnSecondary}</span>
             </span>
             <span class="ds__btn-demo">
@@ -519,7 +646,9 @@ const radii = [
           tiles.forEach((other) => {
             if (other === tile) return;
             other.removeAttribute("data-open");
-            other.querySelector<HTMLButtonElement>(".ds__tile-toggle")?.setAttribute("aria-expanded", "false");
+            other
+              .querySelector<HTMLButtonElement>(".ds__tile-toggle")
+              ?.setAttribute("aria-expanded", "false");
           });
         }
 
@@ -577,8 +706,7 @@ const radii = [
     border: 1px solid var(--color-border);
     border-radius: var(--radius-16);
     background: rgba(255, 255, 255, 0.02);
-    transition:
-      border-color var(--duration-state) var(--ease-standard);
+    transition: border-color var(--duration-state) var(--ease-standard);
   }
 
   @media (hover: hover) and (pointer: fine) {
@@ -983,8 +1111,12 @@ const radii = [
     transition: opacity var(--duration-state) var(--ease-standard);
   }
 
-  .ds__specimen-heavy { font-weight: 800; }
-  .ds__specimen-mono-thin { font-weight: 400; }
+  .ds__specimen-heavy {
+    font-weight: 800;
+  }
+  .ds__specimen-mono-thin {
+    font-weight: 400;
+  }
 
   .ds__specimen-light,
   .ds__specimen-mono-bold {
@@ -997,8 +1129,12 @@ const radii = [
     transition: opacity var(--duration-state) var(--ease-standard);
   }
 
-  .ds__specimen-light { font-weight: 400; }
-  .ds__specimen-mono-bold { font-weight: 700; }
+  .ds__specimen-light {
+    font-weight: 400;
+  }
+  .ds__specimen-mono-bold {
+    font-weight: 700;
+  }
 
   @media (hover: hover) and (pointer: fine) {
     .ds__font--sans:hover .ds__specimen-heavy,

@@ -2,7 +2,7 @@
 // L'istanza viene creata in Layout.astro (tutte le pagine) e esposta su
 // window per i page scripts. Opzionale solo perché lo script che la crea
 // gira in un modulo separato — nel dubbio i chiamanti verificano `if (lenis)`.
-import type Lenis from 'lenis';
+import type Lenis from "lenis";
 
 declare global {
   interface Window {

@@ -23,21 +23,71 @@
   font-weight: 800;
   src: url("/fonts/Lexend/lexend-latin-800-normal.woff2") format("woff2");
   unicode-range:
-    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC,
-    U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212,
-    U+2215, U+FEFF, U+FFFD;
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
 /* ── Minimal reset — sostituisce Tailwind preflight ── */
-*, *::before, *::after { box-sizing: border-box; }
-html { line-height: 1.5; -webkit-text-size-adjust: 100%; tab-size: 4; }
-body { margin: 0; }
-h1, h2, h3, h4, h5, h6 { font-size: inherit; font-weight: inherit; margin: 0; }
-p, ul, ol, figure, blockquote, dl, dd { margin: 0; }
-ul, ol { padding: 0; list-style: none; }
-img, svg, video, canvas, audio, iframe, embed, object { display: block; max-width: 100%; }
-input, button, textarea, select { font: inherit; }
-button { background: none; border: 0; padding: 0; cursor: pointer; }
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+html {
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+  tab-size: 4;
+}
+body {
+  margin: 0;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-size: inherit;
+  font-weight: inherit;
+  margin: 0;
+}
+p,
+ul,
+ol,
+figure,
+blockquote,
+dl,
+dd {
+  margin: 0;
+}
+ul,
+ol {
+  padding: 0;
+  list-style: none;
+}
+img,
+svg,
+video,
+canvas,
+audio,
+iframe,
+embed,
+object {
+  display: block;
+  max-width: 100%;
+}
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+button {
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
 
 /* ─── CSS Custom Properties — Knolling Design System ─── */
 
@@ -335,7 +385,6 @@ body {
 }
 
 @media (prefers-reduced-motion: reduce) {
-
   .section-dot,
   .section-dot__tip {
     transition: none !important;
@@ -495,8 +544,13 @@ html.dialog-open #cursor-ring {
 }
 
 @keyframes ring-passive-pulse {
-  0%, 100% { opacity: 0.55; }
-  50% { opacity: 0.9; }
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 0.9;
+  }
 }
 
 @media (hover: none), (pointer: coarse) {
@@ -592,8 +646,7 @@ body::after {
     border-left-color: var(--color-accent);
     box-shadow: -4px 0 20px rgba(255, 255, 255, 0.18);
     /* fallback: Safari < 16.2 / Firefox < 113 non supportano color-mix() */
-    box-shadow: -4px 0 20px
-      color-mix(in srgb, var(--color-accent) 30%, transparent);
+    box-shadow: -4px 0 20px color-mix(in srgb, var(--color-accent) 30%, transparent);
   }
 
   .cv-card[data-state="passive"] {
@@ -654,8 +707,9 @@ floating-menu {
   gap: 0.65rem;
   pointer-events: none;
   /* Base transition for preloader entrance */
-  transition: opacity 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
-              transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  transition:
+    opacity 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+    transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 /* FAB visibile solo dopo il primo scroll: l'attributo è nel markup SSR di
@@ -791,7 +845,6 @@ floating-menu {
    rendendo hover/focus sull'icona senza effetto. L'hover mette in pausa
    il loop e lo sostituisce con la propria `translate`. */
 @keyframes cta-arrow-nudge {
-
   0%,
   100% {
     translate: 0 0;

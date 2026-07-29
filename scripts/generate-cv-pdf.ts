@@ -212,10 +212,7 @@ function buildHtml(
     .join("\n");
 
   const chips = c.legendChips
-    .map(
-      (label, i) =>
-        `<span class="chip"><i class="chip-dot chip-dot--${i}"></i>${label}</span>`,
-    )
+    .map((label, i) => `<span class="chip"><i class="chip-dot chip-dot--${i}"></i>${label}</span>`)
     .join("\n");
 
   return `<!doctype html>

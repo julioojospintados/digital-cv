@@ -35,14 +35,7 @@ import type {
  * 1) and marked 86% of skills as active in every mode. The counts still
  * matched, so the parity test stayed green.
  */
-const INHERITED_SKILL_META = [
-  "domain",
-  "weight",
-  "mastery",
-  "role",
-  "level",
-  "icon",
-] as const;
+const INHERITED_SKILL_META = ["domain", "weight", "mastery", "role", "level", "icon"] as const;
 
 /**
  * Merge the Italian metadata into the English entries, matching by position.
@@ -342,12 +335,7 @@ export const cvDataEn = {
         "I worked on multi-day events in multicultural contexts.",
         "I adapted my role to on-set needs in real time, in high-complexity logistical contexts.",
       ],
-      skills: [
-        "Videography",
-        "Post-production",
-        "Color grading",
-        "Aesthetic sensibility",
-      ],
+      skills: ["Videography", "Post-production", "Color grading", "Aesthetic sensibility"],
     },
     {
       company: "ForgeLab",
@@ -387,16 +375,7 @@ export const cvDataEn = {
         "I developed a document and revision tool for Intesa San Paolo with JSF.",
         "I translated complex business requirements into interfaces usable by non-technical operators.",
       ],
-      skills: [
-        "Angular",
-        "Spring",
-        "JSF",
-        "Java",
-        "SQL",
-        "Bootstrap",
-        "HTML5",
-        "SCSS",
-      ],
+      skills: ["Angular", "Spring", "JSF", "Java", "SQL", "Bootstrap", "HTML5", "SCSS"],
     },
     {
       company: "Satispay",
@@ -424,13 +403,7 @@ export const cvDataEn = {
         "I moderated panels and talks with international guests.",
         "I solved live incidents on stage with my improvisation training.",
       ],
-      skills: [
-        "Public speaking",
-        "Improvisation",
-        "Moderation",
-        "Hosting",
-        "Audience management",
-      ],
+      skills: ["Public speaking", "Improvisation", "Moderation", "Hosting", "Audience management"],
     },
     {
       company: "Freelance",
@@ -484,13 +457,7 @@ export const cvDataEn = {
         "I designed graphic materials and brand identity for clients in the local and cultural sector.",
         "I applied visual hierarchy and typography principles to print and digital materials.",
       ],
-      skills: [
-        "Graphic design",
-        "Brand identity",
-        "Adobe Suite",
-        "Typography",
-        "Visual design",
-      ],
+      skills: ["Graphic design", "Brand identity", "Adobe Suite", "Typography", "Visual design"],
     },
     {
       company: "Mondadori Group",
@@ -582,8 +549,7 @@ export const cvDataEn = {
       endDate: "2010-04",
       location: "Zanzibar, Tanzania",
       remote: false,
-      description:
-        "I ran the photography centre of a tourist entertainment facility in Zanzibar.",
+      description: "I ran the photography centre of a tourist entertainment facility in Zanzibar.",
       highlights: [],
       skills: ["Photography", "Tourist entertainment"],
     },
@@ -678,7 +644,7 @@ export const cvDataEn = {
         "I performed as an actor and improviser with B-Teatro, in Italy and Luxembourg. On a stage with no script you learn something that holds everywhere: whatever happens is not up for debate, it is material to use.",
       highlights: [
         "Acting & Theatre: A path focused on comedic improv and scripted theatre, with tours in Italy and abroad and participation in national and international workshops.",
-        "Cinema: Deuteragonist (co-lead) in the film \"Double\", produced in Turin by Filmine. The feature film premiered at the San Francisco Independent Film Festival (2022) and screened at Cinema Massimo for its Italian premiere.",
+        'Cinema: Deuteragonist (co-lead) in the film "Double", produced in Turin by Filmine. The feature film premiered at the San Francisco Independent Film Festival (2022) and screened at Cinema Massimo for its Italian premiere.',
       ],
       skills: ["Acting", "Theatre improvisation"],
     },
@@ -795,715 +761,727 @@ export const cvDataEn = {
   // ── Technical skills ──────────────────────────────────────────────────────
   // domain / weight / mastery / role / level / icon are inherited from cv.ts —
   // see inheritSkillMeta above. Only translated strings belong here.
-  technicalSkills: inheritSkillMeta([
-    {
-      name: "Angular",
-      level: "Avanzato",
-      icon: "angular",
-      mastery: 82,
-      links: [
-        { target: "TypeScript", type: "technical" },
-        { target: "RXJS", type: "technical" },
-        { target: "WebComponents", type: "technical" },
-        { target: "Bootstrap", type: "technical" },
-        { target: "Jest", type: "workflow" },
-        { target: "Agile Methodology", type: "cross-domain" },
-      ],
-    },
-    {
-      name: "HTML5",
-      level: "Esperto",
-      icon: "html5",
-      mastery: 95,
-      links: [
-        { target: "CSS / SCSS", type: "technical" },
-        { target: "JavaScript", type: "technical" },
-        { target: "Accessibility / WCAG", type: "workflow" },
-        { target: "WebComponents", type: "technical" },
-      ],
-    },
-    {
-      name: "CSS / SCSS",
-      level: "Esperto",
-      icon: "css3",
-      mastery: 92,
-      links: [
-        { target: "HTML5", type: "technical" },
-        { target: "Bootstrap", type: "technical" },
-        { target: "GSAP", type: "workflow" },
-        { target: "UX / UI Design", type: "cross-domain" },
-        { target: "Aesthetic sensibility", type: "cross-domain" },
-      ],
-    },
-    {
-      name: "TypeScript",
-      level: "Avanzato",
-      icon: "typescript",
-      mastery: 85,
-      links: [
-        { target: "JavaScript", type: "technical" },
-        { target: "Angular", type: "technical" },
-        { target: "Lit", type: "technical" },
-        { target: "Node.js", type: "technical" },
-        { target: "MCP Protocol", type: "workflow" },
-      ],
-    },
-    {
-      name: "JavaScript",
-      level: "Esperto",
-      icon: "javascript",
-      mastery: 90,
-      links: [
-        { target: "TypeScript", type: "technical" },
-        { target: "React", type: "technical" },
-        { target: "GSAP", type: "workflow" },
-        { target: "Node.js", type: "technical" },
-        { target: "WebComponents", type: "technical" },
-      ],
-    },
-    {
-      name: "Lit",
-      level: "Avanzato",
-      icon: "lit",
-      mastery: 80,
-      links: [
-        { target: "WebComponents", type: "technical" },
-        { target: "TypeScript", type: "technical" },
-        { target: "Angular", type: "technical" },
-        { target: "GSAP", type: "workflow" },
-        { target: "Astro", type: "workflow" },
-      ],
-    },
-    {
-      name: "RXJS",
-      level: "Avanzato",
-      mastery: 76,
-      links: [
-        { target: "Angular", type: "technical" },
-        { target: "JavaScript", type: "technical" },
-        { target: "Node.js", type: "technical" },
-        { target: "T-shaped thinking", type: "cross-domain" },
-      ],
-    },
-    {
-      name: "NGRX",
-      level: "Intermedio",
-      links: [
-        { target: "Angular", type: "technical" },
-        { target: "RXJS", type: "technical" },
-        { target: "TypeScript", type: "technical" },
-      ],
-    },
-    {
-      name: "WebComponents",
-      level: "Avanzato",
-      mastery: 82,
-      links: [
-        { target: "Lit", type: "technical" },
-        { target: "HTML5", type: "technical" },
-        { target: "JavaScript", type: "technical" },
-        { target: "Angular", type: "technical" },
-      ],
-    },
-    {
-      name: "React",
-      level: "Intermedio",
-      icon: "react",
-      mastery: 65,
-      links: [
-        { target: "JavaScript", type: "technical" },
-        { target: "GraphQL", type: "workflow" },
-        { target: "Bootstrap", type: "technical" },
-        { target: "REST API", type: "workflow" },
-      ],
-    },
-    {
-      name: "Git",
-      level: "Avanzato",
-      icon: "git",
-      mastery: 82,
-      links: [
-        { target: "Node.js", type: "workflow" },
-        { target: "REST API", type: "workflow" },
-        { target: "Agile Methodology", type: "cross-domain" },
-        { target: "Strategic autonomy", type: "cross-domain" },
-      ],
-    },
-    {
-      name: "Bootstrap",
-      level: "Avanzato",
-      icon: "bootstrap",
-      mastery: 78,
-      links: [
-        { target: "CSS / SCSS", type: "technical" },
-        { target: "HTML5", type: "technical" },
-        { target: "Material Design", type: "conceptual" },
-        { target: "React", type: "technical" },
-      ],
-    },
-    {
-      name: "Material Design",
-      level: "Intermedio",
-      mastery: 58,
-      links: [
-        { target: "Bootstrap", type: "technical" },
-        { target: "Figma", type: "workflow" },
-        { target: "UX Research", type: "conceptual" },
-        { target: "UX / UI Design", type: "cross-domain" },
-      ],
-    },
-    {
-      name: "GraphQL",
-      level: "Base",
-      icon: "graphql",
-      mastery: 38,
-      links: [
-        { target: "REST API", type: "technical" },
-        { target: "Node.js", type: "technical" },
-        { target: "React", type: "workflow" },
-        { target: "SQL", type: "conceptual" },
-      ],
-    },
-    {
-      name: "SQL",
-      level: "Intermedio",
-      mastery: 55,
-      links: [
-        { target: "REST API", type: "workflow" },
-        { target: "Node.js", type: "workflow" },
-        { target: "GraphQL", type: "technical" },
-      ],
-    },
-    {
-      name: "Jest",
-      level: "Intermedio",
-      icon: "jest",
-      mastery: 62,
-      links: [
-        { target: "TypeScript", type: "technical" },
-        { target: "Angular", type: "technical" },
-        { target: "Node.js", type: "workflow" },
-        { target: "Agile Methodology", type: "cross-domain" },
-      ],
-    },
-    {
-      name: "Wordpress",
-      level: "Base",
-      icon: "wordpress",
-      mastery: 35,
-      links: [
-        { target: "SEO", type: "workflow" },
-        { target: "CSS / SCSS", type: "technical" },
-        { target: "HTML5", type: "technical" },
-        { target: "Social media management", type: "cross-domain" },
-      ],
-    },
-    {
-      name: "Figma",
-      level: "Intermedio",
-      icon: "figma",
-      mastery: 60,
-      links: [
-        { target: "UX Research", type: "workflow" },
-        { target: "Wireframing", type: "workflow" },
-        { target: "Material Design", type: "technical" },
-        { target: "UX / UI Design", type: "workflow" },
-        { target: "Graphic design", type: "cross-domain" },
-        { target: "Visily", type: "workflow" },
-        { target: "UX Pilot", type: "workflow" },
-      ],
-    },
-    {
-      name: "Visily",
-      level: "Intermedio",
-      mastery: 58,
-      links: [
-        { target: "Figma", type: "workflow" },
-        { target: "UX Research", type: "workflow" },
-        { target: "Wireframing", type: "workflow" },
-        { target: "UX / UI Design", type: "workflow" },
-      ],
-    },
-    {
-      name: "UX Pilot",
-      level: "Base",
-      mastery: 45,
-      links: [
-        { target: "UX Research", type: "workflow" },
-        { target: "Wireframing", type: "workflow" },
-        { target: "Figma", type: "workflow" },
-      ],
-    },
-    {
-      name: "Google Stitch",
-      level: "Base",
-      mastery: 38,
-      links: [
-        { target: "Figma", type: "workflow" },
-        { target: "Visily", type: "workflow" },
-        { target: "UX / UI Design", type: "workflow" },
-        { target: "Prompt Engineering", type: "workflow" },
-      ],
-    },
-    {
-      name: "SEO",
-      level: "Intermedio",
-      mastery: 58,
-      links: [
-        { target: "SEM", type: "technical" },
-        { target: "Digital marketing", type: "cross-domain" },
-        { target: "Wordpress", type: "workflow" },
-      ],
-    },
-    {
-      name: "SEM",
-      level: "Base",
-      mastery: 32,
-      links: [
-        { target: "SEO", type: "technical" },
-        { target: "Digital marketing", type: "cross-domain" },
-      ],
-    },
-    {
-      name: "UX Research",
-      level: "Intermedio",
-      mastery: 65,
-      links: [
-        { target: "Figma", type: "workflow" },
-        { target: "Wireframing", type: "workflow" },
-        { target: "Accessibility / WCAG", type: "conceptual" },
-        { target: "UX / UI Design", type: "workflow" },
-        { target: "Aesthetic sensibility", type: "cross-domain" },
-      ],
-    },
-    {
-      name: "Wireframing",
-      level: "Intermedio",
-      mastery: 62,
-      links: [
-        { target: "Figma", type: "workflow" },
-        { target: "UX Research", type: "workflow" },
-        { target: "UX / UI Design", type: "workflow" },
-      ],
-    },
-    {
-      name: "Node.js",
-      level: "Avanzato",
-      icon: "nodedotjs",
-      mastery: 80,
-      links: [
-        { target: "TypeScript", type: "technical" },
-        { target: "REST API", type: "technical" },
-        { target: "MCP Protocol", type: "workflow" },
-        { target: "GraphQL", type: "technical" },
-      ],
-    },
-    {
-      name: "REST API",
-      level: "Avanzato",
-      mastery: 82,
-      links: [
-        { target: "Node.js", type: "technical" },
-        { target: "GraphQL", type: "technical" },
-        { target: "MCP Protocol", type: "workflow" },
-        { target: "SQL", type: "workflow" },
-      ],
-    },
-    {
-      name: "Accessibility / WCAG",
-      shortName: "A11y / WCAG",
-      level: "Intermedio",
-      mastery: 65,
-      links: [
-        { target: "HTML5", type: "technical" },
-        { target: "UX Research", type: "workflow" },
-        { target: "CSS / SCSS", type: "technical" },
-        { target: "UX / UI Design", type: "cross-domain" },
-      ],
-    },
-    {
-      name: "Video editing",
-      level: "Intermedio",
-      mastery: 55,
-      links: [
-        { target: "Videography", type: "workflow" },
-        { target: "Aesthetic sensibility", type: "cross-domain" },
-        { target: "Photography", type: "cross-domain" },
-        { target: "Applied creativity", type: "cross-domain" },
-      ],
-    },
-    {
-      name: "MCP Protocol",
-      level: "Avanzato",
-      mastery: 88,
-      links: [
-        { target: "Node.js", type: "technical" },
-        { target: "Prompt Engineering", type: "workflow" },
-        { target: "REST API", type: "technical" },
-        { target: "AI-Augmented Productivity", type: "workflow" },
-      ],
-    },
-    {
-      name: "Prompt Engineering",
-      level: "Avanzato",
-      mastery: 90,
-      links: [
-        { target: "MCP Protocol", type: "workflow" },
-        { target: "AI-Augmented Productivity", type: "workflow" },
-        { target: "Node.js", type: "technical" },
-        { target: "T-shaped thinking", type: "cross-domain" },
-        { target: "GitHub Copilot", type: "workflow" },
-        { target: "Google Stitch", type: "workflow" },
-      ],
-    },
-    {
-      name: "GitHub Copilot",
-      level: "Avanzato",
-      icon: "githubcopilot",
-      mastery: 88,
-      links: [
-        { target: "Prompt Engineering", type: "workflow" },
-        { target: "MCP Protocol", type: "workflow" },
-        { target: "AI-Augmented Productivity", type: "workflow" },
-        { target: "TypeScript", type: "technical" },
-      ],
-    },
-    {
-      name: "Zed",
-      level: "Base",
-      mastery: 35,
-      links: [
-        { target: "TypeScript", type: "technical" },
-        { target: "Git", type: "workflow" },
-        { target: "GitHub Copilot", type: "workflow" },
-      ],
-    },
-    {
-      name: "GSAP",
-      level: "Avanzato",
-      icon: "greensock",
-      mastery: 80,
-      links: [
-        { target: "JavaScript", type: "technical" },
-        { target: "CSS / SCSS", type: "technical" },
-        { target: "Lit", type: "workflow" },
-        { target: "Aesthetic sensibility", type: "cross-domain" },
-        { target: "Applied creativity", type: "cross-domain" },
-      ],
-    },
-    {
-      name: "Astro",
-      level: "Intermedio",
-      icon: "astro",
-      mastery: 65,
-      links: [
-        { target: "TypeScript", type: "technical" },
-        { target: "HTML5", type: "technical" },
-        { target: "CSS / SCSS", type: "technical" },
-        { target: "Lit", type: "technical" },
-        { target: "Node.js", type: "technical" },
-      ],
-    },
-    {
-      name: "PostHog",
-      level: "Intermedio",
-      icon: "posthog",
-      mastery: 62,
-      links: [
-        { target: "Astro", type: "technical" },
-        { target: "Agile Methodology", type: "cross-domain" },
-        {
-          target: "UX Research",
-          type: "cross-domain",
-          description:
-            "Session replay and heatmaps turn real site usage into design decisions, without interviewing every user.",
-        },
-        { target: "Vercel", type: "workflow" },
-      ],
-    },
-    {
-      name: "Vercel",
-      level: "Intermedio",
-      icon: "vercel",
-      mastery: 60,
-      links: [
-        { target: "Astro", type: "technical" },
-        { target: "PostHog", type: "workflow" },
-      ],
-    },
-  ], cvData.technicalSkills, "technicalSkills") as Skill[],
+  technicalSkills: inheritSkillMeta(
+    [
+      {
+        name: "Angular",
+        level: "Avanzato",
+        icon: "angular",
+        mastery: 82,
+        links: [
+          { target: "TypeScript", type: "technical" },
+          { target: "RXJS", type: "technical" },
+          { target: "WebComponents", type: "technical" },
+          { target: "Bootstrap", type: "technical" },
+          { target: "Jest", type: "workflow" },
+          { target: "Agile Methodology", type: "cross-domain" },
+        ],
+      },
+      {
+        name: "HTML5",
+        level: "Esperto",
+        icon: "html5",
+        mastery: 95,
+        links: [
+          { target: "CSS / SCSS", type: "technical" },
+          { target: "JavaScript", type: "technical" },
+          { target: "Accessibility / WCAG", type: "workflow" },
+          { target: "WebComponents", type: "technical" },
+        ],
+      },
+      {
+        name: "CSS / SCSS",
+        level: "Esperto",
+        icon: "css3",
+        mastery: 92,
+        links: [
+          { target: "HTML5", type: "technical" },
+          { target: "Bootstrap", type: "technical" },
+          { target: "GSAP", type: "workflow" },
+          { target: "UX / UI Design", type: "cross-domain" },
+          { target: "Aesthetic sensibility", type: "cross-domain" },
+        ],
+      },
+      {
+        name: "TypeScript",
+        level: "Avanzato",
+        icon: "typescript",
+        mastery: 85,
+        links: [
+          { target: "JavaScript", type: "technical" },
+          { target: "Angular", type: "technical" },
+          { target: "Lit", type: "technical" },
+          { target: "Node.js", type: "technical" },
+          { target: "MCP Protocol", type: "workflow" },
+        ],
+      },
+      {
+        name: "JavaScript",
+        level: "Esperto",
+        icon: "javascript",
+        mastery: 90,
+        links: [
+          { target: "TypeScript", type: "technical" },
+          { target: "React", type: "technical" },
+          { target: "GSAP", type: "workflow" },
+          { target: "Node.js", type: "technical" },
+          { target: "WebComponents", type: "technical" },
+        ],
+      },
+      {
+        name: "Lit",
+        level: "Avanzato",
+        icon: "lit",
+        mastery: 80,
+        links: [
+          { target: "WebComponents", type: "technical" },
+          { target: "TypeScript", type: "technical" },
+          { target: "Angular", type: "technical" },
+          { target: "GSAP", type: "workflow" },
+          { target: "Astro", type: "workflow" },
+        ],
+      },
+      {
+        name: "RXJS",
+        level: "Avanzato",
+        mastery: 76,
+        links: [
+          { target: "Angular", type: "technical" },
+          { target: "JavaScript", type: "technical" },
+          { target: "Node.js", type: "technical" },
+          { target: "T-shaped thinking", type: "cross-domain" },
+        ],
+      },
+      {
+        name: "NGRX",
+        level: "Intermedio",
+        links: [
+          { target: "Angular", type: "technical" },
+          { target: "RXJS", type: "technical" },
+          { target: "TypeScript", type: "technical" },
+        ],
+      },
+      {
+        name: "WebComponents",
+        level: "Avanzato",
+        mastery: 82,
+        links: [
+          { target: "Lit", type: "technical" },
+          { target: "HTML5", type: "technical" },
+          { target: "JavaScript", type: "technical" },
+          { target: "Angular", type: "technical" },
+        ],
+      },
+      {
+        name: "React",
+        level: "Intermedio",
+        icon: "react",
+        mastery: 65,
+        links: [
+          { target: "JavaScript", type: "technical" },
+          { target: "GraphQL", type: "workflow" },
+          { target: "Bootstrap", type: "technical" },
+          { target: "REST API", type: "workflow" },
+        ],
+      },
+      {
+        name: "Git",
+        level: "Avanzato",
+        icon: "git",
+        mastery: 82,
+        links: [
+          { target: "Node.js", type: "workflow" },
+          { target: "REST API", type: "workflow" },
+          { target: "Agile Methodology", type: "cross-domain" },
+          { target: "Strategic autonomy", type: "cross-domain" },
+        ],
+      },
+      {
+        name: "Bootstrap",
+        level: "Avanzato",
+        icon: "bootstrap",
+        mastery: 78,
+        links: [
+          { target: "CSS / SCSS", type: "technical" },
+          { target: "HTML5", type: "technical" },
+          { target: "Material Design", type: "conceptual" },
+          { target: "React", type: "technical" },
+        ],
+      },
+      {
+        name: "Material Design",
+        level: "Intermedio",
+        mastery: 58,
+        links: [
+          { target: "Bootstrap", type: "technical" },
+          { target: "Figma", type: "workflow" },
+          { target: "UX Research", type: "conceptual" },
+          { target: "UX / UI Design", type: "cross-domain" },
+        ],
+      },
+      {
+        name: "GraphQL",
+        level: "Base",
+        icon: "graphql",
+        mastery: 38,
+        links: [
+          { target: "REST API", type: "technical" },
+          { target: "Node.js", type: "technical" },
+          { target: "React", type: "workflow" },
+          { target: "SQL", type: "conceptual" },
+        ],
+      },
+      {
+        name: "SQL",
+        level: "Intermedio",
+        mastery: 55,
+        links: [
+          { target: "REST API", type: "workflow" },
+          { target: "Node.js", type: "workflow" },
+          { target: "GraphQL", type: "technical" },
+        ],
+      },
+      {
+        name: "Jest",
+        level: "Intermedio",
+        icon: "jest",
+        mastery: 62,
+        links: [
+          { target: "TypeScript", type: "technical" },
+          { target: "Angular", type: "technical" },
+          { target: "Node.js", type: "workflow" },
+          { target: "Agile Methodology", type: "cross-domain" },
+        ],
+      },
+      {
+        name: "Wordpress",
+        level: "Base",
+        icon: "wordpress",
+        mastery: 35,
+        links: [
+          { target: "SEO", type: "workflow" },
+          { target: "CSS / SCSS", type: "technical" },
+          { target: "HTML5", type: "technical" },
+          { target: "Social media management", type: "cross-domain" },
+        ],
+      },
+      {
+        name: "Figma",
+        level: "Intermedio",
+        icon: "figma",
+        mastery: 60,
+        links: [
+          { target: "UX Research", type: "workflow" },
+          { target: "Wireframing", type: "workflow" },
+          { target: "Material Design", type: "technical" },
+          { target: "UX / UI Design", type: "workflow" },
+          { target: "Graphic design", type: "cross-domain" },
+          { target: "Visily", type: "workflow" },
+          { target: "UX Pilot", type: "workflow" },
+        ],
+      },
+      {
+        name: "Visily",
+        level: "Intermedio",
+        mastery: 58,
+        links: [
+          { target: "Figma", type: "workflow" },
+          { target: "UX Research", type: "workflow" },
+          { target: "Wireframing", type: "workflow" },
+          { target: "UX / UI Design", type: "workflow" },
+        ],
+      },
+      {
+        name: "UX Pilot",
+        level: "Base",
+        mastery: 45,
+        links: [
+          { target: "UX Research", type: "workflow" },
+          { target: "Wireframing", type: "workflow" },
+          { target: "Figma", type: "workflow" },
+        ],
+      },
+      {
+        name: "Google Stitch",
+        level: "Base",
+        mastery: 38,
+        links: [
+          { target: "Figma", type: "workflow" },
+          { target: "Visily", type: "workflow" },
+          { target: "UX / UI Design", type: "workflow" },
+          { target: "Prompt Engineering", type: "workflow" },
+        ],
+      },
+      {
+        name: "SEO",
+        level: "Intermedio",
+        mastery: 58,
+        links: [
+          { target: "SEM", type: "technical" },
+          { target: "Digital marketing", type: "cross-domain" },
+          { target: "Wordpress", type: "workflow" },
+        ],
+      },
+      {
+        name: "SEM",
+        level: "Base",
+        mastery: 32,
+        links: [
+          { target: "SEO", type: "technical" },
+          { target: "Digital marketing", type: "cross-domain" },
+        ],
+      },
+      {
+        name: "UX Research",
+        level: "Intermedio",
+        mastery: 65,
+        links: [
+          { target: "Figma", type: "workflow" },
+          { target: "Wireframing", type: "workflow" },
+          { target: "Accessibility / WCAG", type: "conceptual" },
+          { target: "UX / UI Design", type: "workflow" },
+          { target: "Aesthetic sensibility", type: "cross-domain" },
+        ],
+      },
+      {
+        name: "Wireframing",
+        level: "Intermedio",
+        mastery: 62,
+        links: [
+          { target: "Figma", type: "workflow" },
+          { target: "UX Research", type: "workflow" },
+          { target: "UX / UI Design", type: "workflow" },
+        ],
+      },
+      {
+        name: "Node.js",
+        level: "Avanzato",
+        icon: "nodedotjs",
+        mastery: 80,
+        links: [
+          { target: "TypeScript", type: "technical" },
+          { target: "REST API", type: "technical" },
+          { target: "MCP Protocol", type: "workflow" },
+          { target: "GraphQL", type: "technical" },
+        ],
+      },
+      {
+        name: "REST API",
+        level: "Avanzato",
+        mastery: 82,
+        links: [
+          { target: "Node.js", type: "technical" },
+          { target: "GraphQL", type: "technical" },
+          { target: "MCP Protocol", type: "workflow" },
+          { target: "SQL", type: "workflow" },
+        ],
+      },
+      {
+        name: "Accessibility / WCAG",
+        shortName: "A11y / WCAG",
+        level: "Intermedio",
+        mastery: 65,
+        links: [
+          { target: "HTML5", type: "technical" },
+          { target: "UX Research", type: "workflow" },
+          { target: "CSS / SCSS", type: "technical" },
+          { target: "UX / UI Design", type: "cross-domain" },
+        ],
+      },
+      {
+        name: "Video editing",
+        level: "Intermedio",
+        mastery: 55,
+        links: [
+          { target: "Videography", type: "workflow" },
+          { target: "Aesthetic sensibility", type: "cross-domain" },
+          { target: "Photography", type: "cross-domain" },
+          { target: "Applied creativity", type: "cross-domain" },
+        ],
+      },
+      {
+        name: "MCP Protocol",
+        level: "Avanzato",
+        mastery: 88,
+        links: [
+          { target: "Node.js", type: "technical" },
+          { target: "Prompt Engineering", type: "workflow" },
+          { target: "REST API", type: "technical" },
+          { target: "AI-Augmented Productivity", type: "workflow" },
+        ],
+      },
+      {
+        name: "Prompt Engineering",
+        level: "Avanzato",
+        mastery: 90,
+        links: [
+          { target: "MCP Protocol", type: "workflow" },
+          { target: "AI-Augmented Productivity", type: "workflow" },
+          { target: "Node.js", type: "technical" },
+          { target: "T-shaped thinking", type: "cross-domain" },
+          { target: "GitHub Copilot", type: "workflow" },
+          { target: "Google Stitch", type: "workflow" },
+        ],
+      },
+      {
+        name: "GitHub Copilot",
+        level: "Avanzato",
+        icon: "githubcopilot",
+        mastery: 88,
+        links: [
+          { target: "Prompt Engineering", type: "workflow" },
+          { target: "MCP Protocol", type: "workflow" },
+          { target: "AI-Augmented Productivity", type: "workflow" },
+          { target: "TypeScript", type: "technical" },
+        ],
+      },
+      {
+        name: "Zed",
+        level: "Base",
+        mastery: 35,
+        links: [
+          { target: "TypeScript", type: "technical" },
+          { target: "Git", type: "workflow" },
+          { target: "GitHub Copilot", type: "workflow" },
+        ],
+      },
+      {
+        name: "GSAP",
+        level: "Avanzato",
+        icon: "greensock",
+        mastery: 80,
+        links: [
+          { target: "JavaScript", type: "technical" },
+          { target: "CSS / SCSS", type: "technical" },
+          { target: "Lit", type: "workflow" },
+          { target: "Aesthetic sensibility", type: "cross-domain" },
+          { target: "Applied creativity", type: "cross-domain" },
+        ],
+      },
+      {
+        name: "Astro",
+        level: "Intermedio",
+        icon: "astro",
+        mastery: 65,
+        links: [
+          { target: "TypeScript", type: "technical" },
+          { target: "HTML5", type: "technical" },
+          { target: "CSS / SCSS", type: "technical" },
+          { target: "Lit", type: "technical" },
+          { target: "Node.js", type: "technical" },
+        ],
+      },
+      {
+        name: "PostHog",
+        level: "Intermedio",
+        icon: "posthog",
+        mastery: 62,
+        links: [
+          { target: "Astro", type: "technical" },
+          { target: "Agile Methodology", type: "cross-domain" },
+          {
+            target: "UX Research",
+            type: "cross-domain",
+            description:
+              "Session replay and heatmaps turn real site usage into design decisions, without interviewing every user.",
+          },
+          { target: "Vercel", type: "workflow" },
+        ],
+      },
+      {
+        name: "Vercel",
+        level: "Intermedio",
+        icon: "vercel",
+        mastery: 60,
+        links: [
+          { target: "Astro", type: "technical" },
+          { target: "PostHog", type: "workflow" },
+        ],
+      },
+    ],
+    cvData.technicalSkills,
+    "technicalSkills",
+  ) as Skill[],
 
   // ── Soft skills ───────────────────────────────────────────────────────────
-  softSkills: inheritSkillMeta([
-    {
-      name: "Effective communication",
-      description:
-        "I have hosted public events for over 10 years, with theatre training behind me: I can explain complex things to very different people without changing the substance.",
-      links: [
-        { target: "Public speaking", type: "cross-domain" },
-        { target: "Theatre and improvisation", type: "conceptual" },
-        { target: "Relational intelligence", type: "conceptual" },
-        { target: "Writing and poetry", type: "cross-domain" },
-      ],
-    },
-    {
-      name: "Applied creativity",
-      description:
-        "Software development, photography, theatre, writing and events: this background produces solutions that linear paths cannot see, even in technical contexts.",
-      links: [
-        { target: "Aesthetic sensibility", type: "conceptual" },
-        { target: "Lateral problem solving", type: "conceptual" },
-        { target: "Photography", type: "cross-domain" },
-        { target: "Theatre and improvisation", type: "cross-domain" },
-        { target: "Graphic design", type: "cross-domain" },
-        { target: "GSAP", type: "cross-domain" },
-      ],
-    },
-    {
-      name: "Cultural adaptability",
-      description:
-        "I have worked in 5 countries (Italy, UK, Mexico, Tanzania, Luxembourg), each with a different organisational, linguistic and cultural context.",
-      links: [
-        { target: "Relational intelligence", type: "conceptual" },
-        { target: "Resilience and adaptive thinking", type: "conceptual" },
-        { target: "Public speaking", type: "cross-domain" },
-        { target: "Event management", type: "cross-domain" },
-      ],
-    },
-    {
-      name: "Relational intelligence",
-      description:
-        "I build trust with colleagues, clients and counterparts: from international customer service to coordinating cross-functional teams.",
-      links: [
-        { target: "Effective communication", type: "conceptual" },
-        { target: "Cultural adaptability", type: "conceptual" },
-        { target: "Event management", type: "cross-domain" },
-        { target: "Public speaking", type: "cross-domain" },
-      ],
-    },
-    {
-      name: "Lateral problem solving",
-      description:
-        "I have solved problems in enterprise environments (microfrontend architectures, legacy systems) and in high-stress live situations (technical direction, event hosting): two different gyms, the same method.",
-      links: [
-        { target: "Applied creativity", type: "conceptual" },
-        { target: "T-shaped thinking", type: "conceptual" },
-        { target: "Agile Methodology", type: "cross-domain" },
-        { target: "MCP Protocol", type: "cross-domain" },
-      ],
-    },
-    {
-      name: "Strategic autonomy",
-      description:
-        "I run parallel projects on my own (freelance photography, videography, strategic consultancy): I set priorities, meet deadlines and deliver without direct supervision.",
-      links: [
-        { target: "Resilience and adaptive thinking", type: "conceptual" },
-        { target: "Agile Methodology", type: "cross-domain" },
-        { target: "T-shaped thinking", type: "conceptual" },
-        { target: "Git", type: "cross-domain" },
-      ],
-    },
-    {
-      name: "Resilience and adaptive thinking",
-      shortName: "Adaptive resilience",
-      description:
-        "I trained clarity under pressure through theatre technical direction, live event hosting and enterprise systems in production. I treat the unexpected as data to learn from.",
-      links: [
-        { target: "Strategic autonomy", type: "conceptual" },
-        { target: "Cultural adaptability", type: "conceptual" },
-        { target: "Theatre and improvisation", type: "cross-domain" },
-        { target: "Agile Methodology", type: "cross-domain" },
-      ],
-    },
-    {
-      name: "Active listening",
-      description:
-        "I ask the right questions before responding, recognise what goes unsaid and hold attention through long technical sessions. It is the foundation of any consulting that works.",
-      links: [
-        { target: "Relational intelligence", type: "conceptual" },
-        { target: "Effective communication", type: "conceptual" },
-        { target: "Theatre and improvisation", type: "cross-domain" },
-      ],
-    },
-    {
-      name: "Aesthetic sensibility",
-      description:
-        "I have been photographing for over 15 years: that eye goes straight into interface choices, where a pixel out of place shows.",
-      links: [
-        { target: "Applied creativity", type: "conceptual" },
-        { target: "Photography", type: "cross-domain" },
-        { target: "Graphic design", type: "cross-domain" },
-        { target: "UX / UI Design", type: "cross-domain" },
-        { target: "CSS / SCSS", type: "cross-domain" },
-        { target: "GSAP", type: "cross-domain" },
-      ],
-    },
-    {
-      name: "T-shaped thinking",
-      description:
-        "I bridge engineering (frontend), design (UX/UI) and marketing (SEO/SEM): fewer misunderstandings between departments, faster deliveries.",
-      links: [
-        { target: "Lateral problem solving", type: "conceptual" },
-        { target: "Strategic autonomy", type: "conceptual" },
-        { target: "AI-Augmented Productivity", type: "cross-domain" },
-        { target: "Agile Methodology", type: "cross-domain" },
-      ],
-    },
-  ], cvData.softSkills, "softSkills") as SoftSkill[],
+  softSkills: inheritSkillMeta(
+    [
+      {
+        name: "Effective communication",
+        description:
+          "I have hosted public events for over 10 years, with theatre training behind me: I can explain complex things to very different people without changing the substance.",
+        links: [
+          { target: "Public speaking", type: "cross-domain" },
+          { target: "Theatre and improvisation", type: "conceptual" },
+          { target: "Relational intelligence", type: "conceptual" },
+          { target: "Writing and poetry", type: "cross-domain" },
+        ],
+      },
+      {
+        name: "Applied creativity",
+        description:
+          "Software development, photography, theatre, writing and events: this background produces solutions that linear paths cannot see, even in technical contexts.",
+        links: [
+          { target: "Aesthetic sensibility", type: "conceptual" },
+          { target: "Lateral problem solving", type: "conceptual" },
+          { target: "Photography", type: "cross-domain" },
+          { target: "Theatre and improvisation", type: "cross-domain" },
+          { target: "Graphic design", type: "cross-domain" },
+          { target: "GSAP", type: "cross-domain" },
+        ],
+      },
+      {
+        name: "Cultural adaptability",
+        description:
+          "I have worked in 5 countries (Italy, UK, Mexico, Tanzania, Luxembourg), each with a different organisational, linguistic and cultural context.",
+        links: [
+          { target: "Relational intelligence", type: "conceptual" },
+          { target: "Resilience and adaptive thinking", type: "conceptual" },
+          { target: "Public speaking", type: "cross-domain" },
+          { target: "Event management", type: "cross-domain" },
+        ],
+      },
+      {
+        name: "Relational intelligence",
+        description:
+          "I build trust with colleagues, clients and counterparts: from international customer service to coordinating cross-functional teams.",
+        links: [
+          { target: "Effective communication", type: "conceptual" },
+          { target: "Cultural adaptability", type: "conceptual" },
+          { target: "Event management", type: "cross-domain" },
+          { target: "Public speaking", type: "cross-domain" },
+        ],
+      },
+      {
+        name: "Lateral problem solving",
+        description:
+          "I have solved problems in enterprise environments (microfrontend architectures, legacy systems) and in high-stress live situations (technical direction, event hosting): two different gyms, the same method.",
+        links: [
+          { target: "Applied creativity", type: "conceptual" },
+          { target: "T-shaped thinking", type: "conceptual" },
+          { target: "Agile Methodology", type: "cross-domain" },
+          { target: "MCP Protocol", type: "cross-domain" },
+        ],
+      },
+      {
+        name: "Strategic autonomy",
+        description:
+          "I run parallel projects on my own (freelance photography, videography, strategic consultancy): I set priorities, meet deadlines and deliver without direct supervision.",
+        links: [
+          { target: "Resilience and adaptive thinking", type: "conceptual" },
+          { target: "Agile Methodology", type: "cross-domain" },
+          { target: "T-shaped thinking", type: "conceptual" },
+          { target: "Git", type: "cross-domain" },
+        ],
+      },
+      {
+        name: "Resilience and adaptive thinking",
+        shortName: "Adaptive resilience",
+        description:
+          "I trained clarity under pressure through theatre technical direction, live event hosting and enterprise systems in production. I treat the unexpected as data to learn from.",
+        links: [
+          { target: "Strategic autonomy", type: "conceptual" },
+          { target: "Cultural adaptability", type: "conceptual" },
+          { target: "Theatre and improvisation", type: "cross-domain" },
+          { target: "Agile Methodology", type: "cross-domain" },
+        ],
+      },
+      {
+        name: "Active listening",
+        description:
+          "I ask the right questions before responding, recognise what goes unsaid and hold attention through long technical sessions. It is the foundation of any consulting that works.",
+        links: [
+          { target: "Relational intelligence", type: "conceptual" },
+          { target: "Effective communication", type: "conceptual" },
+          { target: "Theatre and improvisation", type: "cross-domain" },
+        ],
+      },
+      {
+        name: "Aesthetic sensibility",
+        description:
+          "I have been photographing for over 15 years: that eye goes straight into interface choices, where a pixel out of place shows.",
+        links: [
+          { target: "Applied creativity", type: "conceptual" },
+          { target: "Photography", type: "cross-domain" },
+          { target: "Graphic design", type: "cross-domain" },
+          { target: "UX / UI Design", type: "cross-domain" },
+          { target: "CSS / SCSS", type: "cross-domain" },
+          { target: "GSAP", type: "cross-domain" },
+        ],
+      },
+      {
+        name: "T-shaped thinking",
+        description:
+          "I bridge engineering (frontend), design (UX/UI) and marketing (SEO/SEM): fewer misunderstandings between departments, faster deliveries.",
+        links: [
+          { target: "Lateral problem solving", type: "conceptual" },
+          { target: "Strategic autonomy", type: "conceptual" },
+          { target: "AI-Augmented Productivity", type: "cross-domain" },
+          { target: "Agile Methodology", type: "cross-domain" },
+        ],
+      },
+    ],
+    cvData.softSkills,
+    "softSkills",
+  ) as SoftSkill[],
 
   // ── Transversal skills ────────────────────────────────────────────────────
-  transversalSkills: inheritSkillMeta([
-    {
-      name: "Event management",
-      description:
-        "I conceived and produced multidisciplinary cultural festivals (Square Festival, Artiversum, Quadrilatero Romano in Turin): artist coordination, logistics and institutional communications.",
-      links: [
-        { target: "Agile Methodology", type: "cross-domain" },
-        { target: "Relational intelligence", type: "cross-domain" },
-        { target: "Public speaking", type: "workflow" },
-        { target: "Effective communication", type: "workflow" },
-      ],
-    },
-    {
-      name: "Photography",
-      description:
-        "I have worked as a freelance photographer since 2009, with an international portfolio (Tanzania, Mexico, Italy). Reportage and portraiture.",
-      links: [
-        { target: "Applied creativity", type: "cross-domain" },
-        { target: "Aesthetic sensibility", type: "cross-domain" },
-        { target: "Videography", type: "technical" },
-        { target: "Video editing", type: "workflow" },
-      ],
-    },
-    {
-      name: "Theatre and improvisation",
-      description:
-        "I trained and performed with B-Teatro (2013–2019), with shows in Italy and Luxembourg. Improvisation trains listening and speed: when a scene collapses you learn to build on it, not to redo it.",
-      links: [
-        { target: "Public speaking", type: "workflow" },
-        { target: "Effective communication", type: "workflow" },
-        { target: "Resilience and adaptive thinking", type: "cross-domain" },
-        { target: "Agile Methodology", type: "conceptual" },
-      ],
-    },
-    {
-      name: "Public speaking",
-      description:
-        "I have hosted festivals, panels and talks with international guests since 2015. I hold diverse audiences and solve live surprises without losing the rhythm.",
-      links: [
-        { target: "Theatre and improvisation", type: "workflow" },
-        { target: "Effective communication", type: "workflow" },
-        { target: "Event management", type: "workflow" },
-        { target: "Relational intelligence", type: "conceptual" },
-      ],
-    },
-    {
-      name: "Graphic design",
-      description:
-        "I specialised with Immaginazione e Lavoro (2018) and have produced visual materials for events, brands and digital communications ever since.",
-      links: [
-        { target: "Aesthetic sensibility", type: "cross-domain" },
-        { target: "Applied creativity", type: "cross-domain" },
-        { target: "Figma", type: "cross-domain" },
-        { target: "UX / UI Design", type: "cross-domain" },
-        { target: "Social media management", type: "workflow" },
-      ],
-    },
-    {
-      name: "Social media management",
-      shortName: "Social media",
-      description:
-        "I trained with Immaginazione e Lavoro (2018) and built the editorial plan for cultural event channels and the music agency.",
-      links: [
-        { target: "Digital marketing", type: "workflow" },
-        { target: "SEO", type: "workflow" },
-        { target: "Effective communication", type: "cross-domain" },
-        { target: "Music industry", type: "workflow" },
-      ],
-    },
-    {
-      name: "Digital marketing",
-      description:
-        "I completed the IED Master in Digital Communication (2022–2023): content strategy, SEO/SEM, analytics, campaign management and brand storytelling in B2C and B2B contexts.",
-      links: [
-        { target: "Social media management", type: "workflow" },
-        { target: "SEO", type: "technical" },
-        { target: "SEM", type: "technical" },
-        { target: "Writing and poetry", type: "cross-domain" },
-        { target: "Music industry", type: "workflow" },
-      ],
-    },
-    {
-      name: "UX / UI Design",
-      description:
-        "I am completing the IBM UX Design Professional Certificate: user research, information architecture, wireframing and high-fidelity prototyping with Figma.",
-      links: [
-        { target: "Figma", type: "workflow" },
-        { target: "UX Research", type: "workflow" },
-        { target: "Wireframing", type: "workflow" },
-        { target: "Aesthetic sensibility", type: "cross-domain" },
-        { target: "Graphic design", type: "conceptual" },
-        { target: "Accessibility / WCAG", type: "workflow" },
-      ],
-    },
-    {
-      name: "Videography",
-      description:
-        "I assist the lead videographer on high-end weddings in Tuscany: shooting, color grading and narrative editing in multicultural contexts.",
-      links: [
-        { target: "Photography", type: "technical" },
-        { target: "Applied creativity", type: "cross-domain" },
-        { target: "Video editing", type: "workflow" },
-        { target: "Aesthetic sensibility", type: "cross-domain" },
-      ],
-    },
-    {
-      name: "Agile Methodology",
-      description:
-        "I applied Scrum and Kanban in distributed enterprise teams (ALTEN, Intesa San Paolo, Aruba) and in personal creative projects: sprint planning, retrospectives and backlog.",
-      links: [
-        { target: "T-shaped thinking", type: "cross-domain" },
-        { target: "Strategic autonomy", type: "cross-domain" },
-        { target: "Theatre and improvisation", type: "conceptual" },
-        { target: "Event management", type: "cross-domain" },
-        { target: "Git", type: "workflow" },
-        { target: "Jest", type: "workflow" },
-      ],
-    },
-    {
-      name: "AI-Augmented Productivity",
-      description:
-        "I integrated GitHub Copilot, ChatGPT and Midjourney into development, UX research and content production workflows. AI expands quality and speed, the critical judgement stays mine.",
-      links: [
-        { target: "Prompt Engineering", type: "workflow" },
-        { target: "MCP Protocol", type: "workflow" },
-        { target: "T-shaped thinking", type: "cross-domain" },
-        { target: "Agile Methodology", type: "cross-domain" },
-      ],
-    },
-    {
-      name: "Writing and poetry",
-      description:
-        "I have won poetry awards in Italy and Australia, and one of my poems was read on Radio Capital. At work that writing becomes copy and documentation: the text on this site is mine.",
-      links: [
-        { target: "Effective communication", type: "cross-domain" },
-        { target: "Applied creativity", type: "cross-domain" },
-        { target: "Public speaking", type: "workflow" },
-        { target: "Digital marketing", type: "cross-domain" },
-      ],
-    },
-    {
-      name: "Music industry",
-      description:
-        "I coordinated artists, digital aggregators and streaming platforms (Spotify, YouTube Music): release management, communications and editorial project management (2023–2024).",
-      links: [
-        { target: "Event management", type: "workflow" },
-        { target: "Social media management", type: "workflow" },
-        { target: "Digital marketing", type: "workflow" },
-        { target: "Effective communication", type: "cross-domain" },
-      ],
-    },
-  ], cvData.transversalSkills, "transversalSkills") as TransversalSkill[],
+  transversalSkills: inheritSkillMeta(
+    [
+      {
+        name: "Event management",
+        description:
+          "I conceived and produced multidisciplinary cultural festivals (Square Festival, Artiversum, Quadrilatero Romano in Turin): artist coordination, logistics and institutional communications.",
+        links: [
+          { target: "Agile Methodology", type: "cross-domain" },
+          { target: "Relational intelligence", type: "cross-domain" },
+          { target: "Public speaking", type: "workflow" },
+          { target: "Effective communication", type: "workflow" },
+        ],
+      },
+      {
+        name: "Photography",
+        description:
+          "I have worked as a freelance photographer since 2009, with an international portfolio (Tanzania, Mexico, Italy). Reportage and portraiture.",
+        links: [
+          { target: "Applied creativity", type: "cross-domain" },
+          { target: "Aesthetic sensibility", type: "cross-domain" },
+          { target: "Videography", type: "technical" },
+          { target: "Video editing", type: "workflow" },
+        ],
+      },
+      {
+        name: "Theatre and improvisation",
+        description:
+          "I trained and performed with B-Teatro (2013–2019), with shows in Italy and Luxembourg. Improvisation trains listening and speed: when a scene collapses you learn to build on it, not to redo it.",
+        links: [
+          { target: "Public speaking", type: "workflow" },
+          { target: "Effective communication", type: "workflow" },
+          { target: "Resilience and adaptive thinking", type: "cross-domain" },
+          { target: "Agile Methodology", type: "conceptual" },
+        ],
+      },
+      {
+        name: "Public speaking",
+        description:
+          "I have hosted festivals, panels and talks with international guests since 2015. I hold diverse audiences and solve live surprises without losing the rhythm.",
+        links: [
+          { target: "Theatre and improvisation", type: "workflow" },
+          { target: "Effective communication", type: "workflow" },
+          { target: "Event management", type: "workflow" },
+          { target: "Relational intelligence", type: "conceptual" },
+        ],
+      },
+      {
+        name: "Graphic design",
+        description:
+          "I specialised with Immaginazione e Lavoro (2018) and have produced visual materials for events, brands and digital communications ever since.",
+        links: [
+          { target: "Aesthetic sensibility", type: "cross-domain" },
+          { target: "Applied creativity", type: "cross-domain" },
+          { target: "Figma", type: "cross-domain" },
+          { target: "UX / UI Design", type: "cross-domain" },
+          { target: "Social media management", type: "workflow" },
+        ],
+      },
+      {
+        name: "Social media management",
+        shortName: "Social media",
+        description:
+          "I trained with Immaginazione e Lavoro (2018) and built the editorial plan for cultural event channels and the music agency.",
+        links: [
+          { target: "Digital marketing", type: "workflow" },
+          { target: "SEO", type: "workflow" },
+          { target: "Effective communication", type: "cross-domain" },
+          { target: "Music industry", type: "workflow" },
+        ],
+      },
+      {
+        name: "Digital marketing",
+        description:
+          "I completed the IED Master in Digital Communication (2022–2023): content strategy, SEO/SEM, analytics, campaign management and brand storytelling in B2C and B2B contexts.",
+        links: [
+          { target: "Social media management", type: "workflow" },
+          { target: "SEO", type: "technical" },
+          { target: "SEM", type: "technical" },
+          { target: "Writing and poetry", type: "cross-domain" },
+          { target: "Music industry", type: "workflow" },
+        ],
+      },
+      {
+        name: "UX / UI Design",
+        description:
+          "I am completing the IBM UX Design Professional Certificate: user research, information architecture, wireframing and high-fidelity prototyping with Figma.",
+        links: [
+          { target: "Figma", type: "workflow" },
+          { target: "UX Research", type: "workflow" },
+          { target: "Wireframing", type: "workflow" },
+          { target: "Aesthetic sensibility", type: "cross-domain" },
+          { target: "Graphic design", type: "conceptual" },
+          { target: "Accessibility / WCAG", type: "workflow" },
+        ],
+      },
+      {
+        name: "Videography",
+        description:
+          "I assist the lead videographer on high-end weddings in Tuscany: shooting, color grading and narrative editing in multicultural contexts.",
+        links: [
+          { target: "Photography", type: "technical" },
+          { target: "Applied creativity", type: "cross-domain" },
+          { target: "Video editing", type: "workflow" },
+          { target: "Aesthetic sensibility", type: "cross-domain" },
+        ],
+      },
+      {
+        name: "Agile Methodology",
+        description:
+          "I applied Scrum and Kanban in distributed enterprise teams (ALTEN, Intesa San Paolo, Aruba) and in personal creative projects: sprint planning, retrospectives and backlog.",
+        links: [
+          { target: "T-shaped thinking", type: "cross-domain" },
+          { target: "Strategic autonomy", type: "cross-domain" },
+          { target: "Theatre and improvisation", type: "conceptual" },
+          { target: "Event management", type: "cross-domain" },
+          { target: "Git", type: "workflow" },
+          { target: "Jest", type: "workflow" },
+        ],
+      },
+      {
+        name: "AI-Augmented Productivity",
+        description:
+          "I integrated GitHub Copilot, ChatGPT and Midjourney into development, UX research and content production workflows. AI expands quality and speed, the critical judgement stays mine.",
+        links: [
+          { target: "Prompt Engineering", type: "workflow" },
+          { target: "MCP Protocol", type: "workflow" },
+          { target: "T-shaped thinking", type: "cross-domain" },
+          { target: "Agile Methodology", type: "cross-domain" },
+        ],
+      },
+      {
+        name: "Writing and poetry",
+        description:
+          "I have won poetry awards in Italy and Australia, and one of my poems was read on Radio Capital. At work that writing becomes copy and documentation: the text on this site is mine.",
+        links: [
+          { target: "Effective communication", type: "cross-domain" },
+          { target: "Applied creativity", type: "cross-domain" },
+          { target: "Public speaking", type: "workflow" },
+          { target: "Digital marketing", type: "cross-domain" },
+        ],
+      },
+      {
+        name: "Music industry",
+        description:
+          "I coordinated artists, digital aggregators and streaming platforms (Spotify, YouTube Music): release management, communications and editorial project management (2023–2024).",
+        links: [
+          { target: "Event management", type: "workflow" },
+          { target: "Social media management", type: "workflow" },
+          { target: "Digital marketing", type: "workflow" },
+          { target: "Effective communication", type: "cross-domain" },
+        ],
+      },
+    ],
+    cvData.transversalSkills,
+    "transversalSkills",
+  ) as TransversalSkill[],
 
   // ── Methodology & Mindset ─────────────────────────────────────────────────
   methodology: [
@@ -1610,7 +1588,7 @@ export const cvDataEn = {
         },
         {
           title: "Conventions where the reader is in a hurry",
-          body: "Extra experiences are revealed with \"Read 3 more\", the LinkedIn and Medium pattern, instead of the branded CTA I tried first: where readers are in a hurry, convention beats originality. For the same reason the current role sits at the top of the experience cluster: recruiters read reverse-chronologically and look for \"where do they work now\".",
+          body: 'Extra experiences are revealed with "Read 3 more", the LinkedIn and Medium pattern, instead of the branded CTA I tried first: where readers are in a hurry, convention beats originality. For the same reason the current role sits at the top of the experience cluster: recruiters read reverse-chronologically and look for "where do they work now".',
         },
         {
           title: "Accessibility as a constraint, not a polish pass",
@@ -1618,7 +1596,7 @@ export const cvDataEn = {
         },
         {
           title: "Iteration: the wrong scroll",
-          body: "The first version of the home used native \"stepped\" scroll-snap: in real testing it felt rigid and inconsistent with the fluid scroll of the CV pages. I scrapped it and replaced it with one smooth scroll across the whole site plus per-section reveals: consistency of gesture is worth more than a single effect.",
+          body: 'The first version of the home used native "stepped" scroll-snap: in real testing it felt rigid and inconsistent with the fluid scroll of the CV pages. I scrapped it and replaced it with one smooth scroll across the whole site plus per-section reveals: consistency of gesture is worth more than a single effect.',
         },
       ],
       outcomes: [
@@ -1628,8 +1606,8 @@ export const cvDataEn = {
       ],
       learnings: [
         "AI truly accelerates only inside constraints set beforehand: with tokens, animation rules and explicit DO NOTs, vibe coding delivers; without them, it delivers chaos to redo.",
-        "Every detail must survive the question \"why?\": if a visual choice has no interview-ready answer, it's decoration.",
-        "Test your certainties early: the most \"wow\" ideas, the graph as the only view and the stepped scroll, were the first I scaled back in front of real use.",
+        'Every detail must survive the question "why?": if a visual choice has no interview-ready answer, it\'s decoration.',
+        'Test your certainties early: the most "wow" ideas, the graph as the only view and the stepped scroll, were the first I scaled back in front of real use.',
       ],
     },
     {
@@ -1710,7 +1688,7 @@ export const cvDataEn = {
         "The agency's roster needed two things at once: well-organised live dates, across venues, promoters and contracts, and a digital presence that spoke to the industry itself, not just a generic audience. The social channels were growing in volume but opening no doors: followers and the agency's real work were two disconnected worlds.",
       process: [
         "Research — I interviewed the agency's people to understand the work from the inside: how live dates actually come together, who the interlocutors that matter really are, and where contact with musicians, producers and labels breaks down.",
-        "Insight — The problem wasn't \"more followers\" but the right followers: communication had to work as a contact channel with the industry, not as a showcase for a generic audience. Every piece of content had to be rethought as an opportunity for a professional relationship.",
+        'Insight — The problem wasn\'t "more followers" but the right followers: communication had to work as a contact channel with the industry, not as a showcase for a generic audience. Every piece of content had to be rethought as an opportunity for a professional relationship.',
         "Ideation — I proposed a curated playlist of emerging artists as a networking tool: every addition opens a direct contact with musicians, producers and labels, mutual discovery instead of passive follows. On the same logic I proposed a radio show format to extend the idea beyond streaming platforms.",
         "Execution — I defined the content strategy on the channels, wrote the copy for the agency's birthday event and carried out the operational work of booking and tour management: venue research, promoter negotiation, contracts, all the way to the live event at Arci Bellezza in Milan, followed end-to-end.",
       ],
@@ -1816,12 +1794,7 @@ export const cvDataEn = {
       name: "Auctioneer at a European charity gala (Burger King)",
       description:
         "I hosted a charity auction in English during a European Burger King event with international guests. The pace of an auction, a live audience and a foreign language all at once: the kind of evening where theatre helps more than vocabulary.",
-      tags: [
-        "Professional English",
-        "Public speaking",
-        "Event hosting",
-        "Corporate events",
-      ],
+      tags: ["Professional English", "Public speaking", "Event hosting", "Corporate events"],
     },
   ],
 

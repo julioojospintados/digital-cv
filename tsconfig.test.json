@@ -1,0 +1,22 @@
+{
+  // Il tsconfig principale esclude *.test.ts perché `tsc` lì produce dist/ e
+  // i test non vanno compilati. Vitest, dal canto suo, esegue i test via esbuild
+  // senza type-check: risultato, i file di test non erano controllati da nessuno.
+  // Questo config li include e gira con --noEmit (script `npm run typecheck`).
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    // rootDir del config base è ./src, che escluderebbe scripts/. Qui non si
+    // emette nulla, quindi allargarlo alla root è innocuo e permette di
+    // type-checkare anche gli script di utilità (girano con tsx, mai compilati).
+    "rootDir": ".",
+    // DOM serve solo qui: gli script di generazione PDF/OG pilotano un browser
+    // via Playwright e il corpo dei page.evaluate() usa document/Image, che
+    // girano nella pagina, non in Node. Il tsconfig di build resta su ["esnext"]
+    // perché il server MCP/HTTP non deve vedere le API del browser.
+    "lib": ["esnext", "dom"],
+    "types": ["node", "vitest/globals"]
+  },
+  "include": ["src/**/*", "scripts/**/*.ts"],
+  "exclude": []
+}

@@ -278,7 +278,6 @@
   border-color: rgba(255, 255, 255, 0.35);
 }
 
-
 /* ── /work — pagina indice portfolio (griglia case study) ────────────── */
 .work-index-hero {
   padding-top: 1.5rem;
@@ -702,7 +701,6 @@
 }
 
 @keyframes journey-bob {
-
   0%,
   100% {
     translate: 0 0;

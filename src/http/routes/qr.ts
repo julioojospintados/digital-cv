@@ -15,17 +15,13 @@ export const qrRouter = new Hono();
 
 qrRouter.get("/qr", async (c) => {
   try {
-    const url =
-      c.req.query("url") || "https://giulio-occhipinti.com";
+    const url = c.req.query("url") || "https://giulio-occhipinti.com";
 
     // Validate URL format
     try {
       new URL(url);
     } catch {
-      return c.json(
-        { error: "InvalidURL", message: "Invalid URL format" },
-        400,
-      );
+      return c.json({ error: "InvalidURL", message: "Invalid URL format" }, 400);
     }
 
     const png = await QRCode.toDataURL(url, {
@@ -53,8 +49,7 @@ qrRouter.get("/qr", async (c) => {
  */
 qrRouter.get("/qr/png", async (c) => {
   try {
-    const url =
-      c.req.query("url") || "https://giulio-occhipinti.com";
+    const url = c.req.query("url") || "https://giulio-occhipinti.com";
 
     // Validate URL format
     try {
@@ -79,7 +74,7 @@ qrRouter.get("/qr/png", async (c) => {
     });
 
     return c.body(Uint8Array.from(buffer), 200, { "Content-Type": "image/png" });
-  } catch (error) {
+  } catch {
     return c.text("QR generation failed", 500);
   }
 });
@@ -89,8 +84,7 @@ qrRouter.get("/qr/png", async (c) => {
  */
 qrRouter.get("/qr/svg", async (c) => {
   try {
-    const url =
-      c.req.query("url") || "https://giulio-occhipinti.com";
+    const url = c.req.query("url") || "https://giulio-occhipinti.com";
 
     // Validate URL format
     try {
@@ -111,7 +105,7 @@ qrRouter.get("/qr/svg", async (c) => {
     });
 
     return c.text(svg, 200, { "Content-Type": "image/svg+xml" });
-  } catch (error) {
+  } catch {
     return c.text("QR generation failed", 500);
   }
 });

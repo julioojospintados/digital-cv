@@ -1,0 +1,22 @@
+# https://editorconfig.org
+# Allineato a .vscode/settings.json (tabSize 2, insertSpaces, final newline,
+# trim trailing whitespace) — questo file lo rende valido anche fuori da VS Code.
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+indent_style = space
+indent_size = 2
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+# Markdown: due spazi a fine riga sono un a capo significativo, non sporcizia.
+[*.md]
+trim_trailing_whitespace = false
+
+[*.{json,jsonc}]
+indent_size = 2
+
+[*.svg]
+insert_final_newline = false

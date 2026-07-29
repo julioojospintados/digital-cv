@@ -1,0 +1,22 @@
+# Line endings deterministiche. Senza questo file il risultato dipende dal
+# core.autocrlf di chi clona: su Windows il checkout diventa CRLF mentre
+# Prettier (endOfLine: "lf") riscrive LF, e ogni salvataggio produce diff
+# fantasma su file non toccati.
+* text=auto eol=lf
+
+# Binari — mai convertiti, mai diffati come testo.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.webp binary
+*.ico binary
+*.pdf binary
+*.woff2 binary
+*.mp4 binary
+
+# Lockfile: generati, il diff in review è rumore.
+package-lock.json linguist-generated=true -diff
+
+# Il knolling è il cuore visivo del progetto, non "altro":
+# senza questo GitHub classifica il repo sulla sola conta di righe.
+*.astro linguist-detectable=true

@@ -204,7 +204,6 @@ go-logo:not(:defined) {
 }
 
 @media (max-width: 43.5rem) {
-
   .mode-buttons {
     display: none;
   }
@@ -322,7 +321,7 @@ go-logo:not(:defined) {
     overflow: visible;
     padding: 0.3rem 0.75rem;
     will-change: auto;
-    opacity: 0.50;
+    opacity: 0.5;
   }
 
   .mode-btn__abbr {
@@ -339,12 +338,20 @@ go-logo:not(:defined) {
      il colore resta "intuibile" senza competere con quella attiva. */
   .mode-btn:not([aria-pressed="true"]) {
     border-color: color-mix(in srgb, var(--btn-accent, transparent) 30%, transparent);
-    color: color-mix(in srgb, var(--btn-accent, rgba(192, 220, 215, 0.85)) 55%, rgba(192, 220, 215, 0.85));
+    color: color-mix(
+      in srgb,
+      var(--btn-accent, rgba(192, 220, 215, 0.85)) 55%,
+      rgba(192, 220, 215, 0.85)
+    );
   }
 
   .mode-btn:not([aria-pressed="true"]):hover {
     border-color: color-mix(in srgb, var(--btn-accent, transparent) 60%, transparent);
-    color: color-mix(in srgb, var(--btn-accent, rgba(192, 220, 215, 0.85)) 85%, rgba(192, 220, 215, 0.85));
+    color: color-mix(
+      in srgb,
+      var(--btn-accent, rgba(192, 220, 215, 0.85)) 85%,
+      rgba(192, 220, 215, 0.85)
+    );
     background: color-mix(in srgb, var(--btn-accent, transparent) 8%, transparent);
   }
 }
@@ -705,7 +712,7 @@ a.lang-switch__opt:hover {
   margin: 0 0 1.5rem 0;
 }
 
-.section-title>span:first-child {
+.section-title > span:first-child {
   color: var(--color-text-primary);
 }
 
@@ -1082,9 +1089,7 @@ a.lang-switch__opt:hover {
   --skills-panel-bg: rgba(0, 0, 0, 0.14);
   --skills-panel-border: rgba(255, 255, 255, 0.08);
   --skills-panel-overlay:
-    radial-gradient(circle at 50% 35%,
-      rgba(255, 255, 255, 0.03),
-      transparent 45%),
+    radial-gradient(circle at 50% 35%, rgba(255, 255, 255, 0.03), transparent 45%),
     linear-gradient(160deg, rgba(255, 255, 255, 0.02), transparent 60%);
 }
 
@@ -1132,10 +1137,12 @@ a.lang-switch__opt:hover {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg,
-      transparent 0%,
-      rgba(255, 255, 255, 0.18) 50%,
-      transparent 100%);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.18) 50%,
+    transparent 100%
+  );
   transform: translateX(var(--sweep-x));
   pointer-events: none;
 }
@@ -1146,12 +1153,8 @@ a.lang-switch__opt:hover {
   background: rgba(255, 255, 255, 0.08);
   box-shadow: 0 0 12px rgba(255, 255, 255, 0.15);
   /* fallback: Safari < 16.2 / Firefox < 113 non supportano color-mix() */
-  border-color: color-mix(in srgb,
-      var(--color-accent) 65%,
-      var(--skills-panel-border));
-  background: color-mix(in srgb,
-      var(--color-accent) 10%,
-      var(--skills-panel-bg));
+  border-color: color-mix(in srgb, var(--color-accent) 65%, var(--skills-panel-border));
+  background: color-mix(in srgb, var(--color-accent) 10%, var(--skills-panel-bg));
   box-shadow: 0 0 12px color-mix(in srgb, var(--color-accent) 18%, transparent);
 }
 
@@ -1373,9 +1376,11 @@ a.lang-switch__opt:hover {
 }
 
 .ai-title span:first-child {
-  background: linear-gradient(135deg,
-      var(--color-accent) 0%,
-      color-mix(in srgb, var(--color-accent) 70%, var(--color-text-primary)) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--color-accent) 0%,
+    color-mix(in srgb, var(--color-accent) 70%, var(--color-text-primary)) 100%
+  );
   -webkit-background-clip: text;
   /* -webkit-text-fill-color: transparent; */
   background-clip: text;
@@ -1442,9 +1447,7 @@ a.lang-switch__opt:hover {
 }
 
 .exp-cluster[data-open] {
-  border-color: color-mix(in srgb,
-      var(--color-accent) 28%,
-      var(--color-border));
+  border-color: color-mix(in srgb, var(--color-accent) 28%, var(--color-border));
   /* Bordo sinistro accent — inset shadow: nessun reflow del contenuto */
   box-shadow: inset 2px 0 0 var(--color-accent);
 }
@@ -1657,7 +1660,6 @@ a.lang-switch__opt:hover {
 }
 
 @media (prefers-reduced-motion: reduce) {
-
   .exp-drawer .exp-card,
   .exp-grid--featured .exp-card {
     opacity: 1 !important;

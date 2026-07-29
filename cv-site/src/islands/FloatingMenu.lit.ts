@@ -45,7 +45,7 @@ class FloatingMenu extends LitElement {
       align-items: center;
       justify-content: center;
       box-shadow:
-        0 0 18px color-mix(in srgb, var(--color-accent, rgba(0,255,200,1)) 38%, transparent),
+        0 0 18px color-mix(in srgb, var(--color-accent, rgba(0, 255, 200, 1)) 38%, transparent),
         0 4px 18px rgba(0, 0, 0, 0.45);
       transition:
         transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
@@ -63,7 +63,7 @@ class FloatingMenu extends LitElement {
         rgba(8, 73, 67, 0.97) 58%
       );
       box-shadow:
-        0 0 32px color-mix(in srgb, var(--color-accent, rgba(0,255,200,1)) 55%, transparent),
+        0 0 32px color-mix(in srgb, var(--color-accent, rgba(0, 255, 200, 1)) 55%, transparent),
         0 4px 22px rgba(0, 0, 0, 0.5);
     }
 
@@ -74,7 +74,10 @@ class FloatingMenu extends LitElement {
       display: flex;
       align-items: center;
       justify-content: center;
-      color: var(--color-accent, rgba(0, 255, 200, 1)); /* accent su ottanio — legibile in tutti i mode */
+      color: var(
+        --color-accent,
+        rgba(0, 255, 200, 1)
+      ); /* accent su ottanio — legibile in tutti i mode */
       font-size: var(--fs-20);
       font-weight: 900;
       line-height: 1.5;
@@ -129,11 +132,7 @@ class FloatingMenu extends LitElement {
       border-radius: 100px;
       background: rgba(8, 73, 67, 0.96);
       border: 1px solid
-        color-mix(
-          in srgb,
-          var(--color-accent, rgba(0, 255, 200, 1)) 40%,
-          transparent
-        );
+        color-mix(in srgb, var(--color-accent, rgba(0, 255, 200, 1)) 40%, transparent);
       color: var(--color-text-primary, rgba(245, 240, 230, 1));
       font-family: "Lexend", ui-sans-serif, sans-serif;
       font-size: var(--fs-14);
@@ -202,8 +201,8 @@ class FloatingMenu extends LitElement {
     @keyframes fab-ring-pulse {
       0% {
         box-shadow:
-          0 0 0 0 color-mix(in srgb, var(--color-accent, rgba(0,255,200,1)) 45%, transparent),
-          0 0 18px color-mix(in srgb, var(--color-accent, rgba(0,255,200,1)) 22%, transparent);
+          0 0 0 0 color-mix(in srgb, var(--color-accent, rgba(0, 255, 200, 1)) 45%, transparent),
+          0 0 18px color-mix(in srgb, var(--color-accent, rgba(0, 255, 200, 1)) 22%, transparent);
       }
       70% {
         box-shadow:
@@ -233,7 +232,6 @@ class FloatingMenu extends LitElement {
         touch-action: manipulation;
       }
     }
-
   `;
 
   private _open = false;
@@ -312,8 +310,16 @@ class FloatingMenu extends LitElement {
     // Icone inline currentColor: nessun glifo Unicode (il tratto dipenderebbe
     // dal font di sistema — stessa regola dei chevron nel design system).
     const icons = {
-      mail: html`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg>`,
-      folder: html`<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-8l-2-2z"/></svg>`,
+      mail: html`<svg viewBox="0 0 24 24" aria-hidden="true">
+        <path
+          d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"
+        />
+      </svg>`,
+      folder: html`<svg viewBox="0 0 24 24" aria-hidden="true">
+        <path
+          d="M10 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-8l-2-2z"
+        />
+      </svg>`,
     };
 
     return html`
@@ -354,7 +360,10 @@ class FloatingMenu extends LitElement {
                non "profilo". I puntini sono subpath ritagliati via evenodd,
                nessun colore hardcoded. -->
           <svg viewBox="0 0 24 24" width="21" height="21" fill="currentColor">
-            <path fill-rule="evenodd" d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM8 9.6a1.4 1.4 0 1 1 0 2.8 1.4 1.4 0 0 1 0-2.8zm4 0a1.4 1.4 0 1 1 0 2.8 1.4 1.4 0 0 1 0-2.8zm4 0a1.4 1.4 0 1 1 0 2.8 1.4 1.4 0 0 1 0-2.8z"/>
+            <path
+              fill-rule="evenodd"
+              d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM8 9.6a1.4 1.4 0 1 1 0 2.8 1.4 1.4 0 0 1 0-2.8zm4 0a1.4 1.4 0 1 1 0 2.8 1.4 1.4 0 0 1 0-2.8zm4 0a1.4 1.4 0 1 1 0 2.8 1.4 1.4 0 0 1 0-2.8z"
+            />
           </svg>
         </span>
       </button>

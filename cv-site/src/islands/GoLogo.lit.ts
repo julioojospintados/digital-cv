@@ -71,11 +71,7 @@ class GoLogo extends LitElement {
     :host([data-mode="creative"]) .go-g,
     :host([data-mode="creative"]) .go-o {
       color: transparent;
-      background: linear-gradient(
-        135deg,
-        rgba(255, 107, 53, 1) 0%,
-        rgba(255, 200, 50, 1) 100%
-      );
+      background: linear-gradient(135deg, rgba(255, 107, 53, 1) 0%, rgba(255, 200, 50, 1) 100%);
       -webkit-background-clip: text;
       background-clip: text;
       animation: go-orange-pulse 2.2s ease-in-out infinite;
@@ -216,8 +212,7 @@ class GoLogo extends LitElement {
       },
     });
 
-    const isTouchDevice = !window.matchMedia("(hover: hover) and (pointer: fine)")
-      .matches;
+    const isTouchDevice = !window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 
     const phase1Duration = isTouchDevice ? 0.55 : 0.6;
     const phase1Stagger = isTouchDevice ? 0.02 : 0.018;
@@ -241,11 +236,7 @@ class GoLogo extends LitElement {
       },
     );
     // Fase 2: hold visibile prima di sparire
-    journey.to(
-      lineEls,
-      { opacity: 0.85, duration: phase2Duration, ease: "none" },
-      "-=0",
-    );
+    journey.to(lineEls, { opacity: 0.85, duration: phase2Duration, ease: "none" }, "-=0");
     // Fase 3: allontanamento warp e dissolvenza
     journey.to(
       lineEls,
@@ -275,14 +266,16 @@ class GoLogo extends LitElement {
     }
 
     // Vignette scura chiude la scena
-    journey.to(
-      overlay,
-      { opacity: 1, duration: 0.5, ease: "power2.inOut" },
-      vignetteStart,
-    );
+    journey.to(overlay, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, vignetteStart);
 
     // Naviga quando la vignette è abbastanza scura — non aspettare il completamento
-    journey.call(() => { window.location.href = "/"; }, undefined, navigateAt);
+    journey.call(
+      () => {
+        window.location.href = "/";
+      },
+      undefined,
+      navigateAt,
+    );
   }
 
   render() {

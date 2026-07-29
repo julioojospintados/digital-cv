@@ -41,10 +41,7 @@ const jsonLd = {
   jobTitle: "Consulente per l'Innovazione Digitale & Partner Tecnico per piccole e grandi realtà",
   url: siteUrl,
   email: "mailto:giulio.occhipinti.g@gmail.com",
-  sameAs: [
-    "https://www.linkedin.com/in/giulio-occhipinti",
-    "https://github.com/julioojospintados",
-  ],
+  sameAs: ["https://www.linkedin.com/in/giulio-occhipinti", "https://github.com/julioojospintados"],
   knowsAbout: [
     "UX Design",
     "UI Design",
@@ -70,10 +67,7 @@ const jsonLd = {
 <html lang={lang} class="cursor-idle" data-mode={mode ?? "tech"} data-fab-scrollwait>
   <head>
     <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, viewport-fit=cover"
-    />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={description} />
     <meta name="author" content="Giulio Occhipinti" />
@@ -105,7 +99,6 @@ const jsonLd = {
     <!-- JSON-LD structured data — Person schema (schema.org) -->
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 
-
     <!-- PostHog — solo in build di produzione E solo sull'hostname canonico.
          import.meta.env.PROD da solo non basta: i deploy preview di Vercel
          eseguono comunque una build "production" di Astro/Vite (stesso output
@@ -122,8 +115,12 @@ const jsonLd = {
          consenso è già "granted" da una visita precedente. Se non ancora
          deciso, __phInit resta esposto su window.__cvInitPostHog e viene
          chiamato dal banner al click su "Accetta" — mai prima. -->
-    {import.meta.env.PROD && (
-      <script is:inline type="text/javascript" set:html={`!function(t,e){var o,n,p,r;e.__SV||(window.posthog && window.posthog.__loaded)||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="Ji Yi init fn mn Hr pn bn cn capture calculateEventProperties Sn register register_once register_for_session unregister unregister_for_session Tn getFeatureFlag getFeatureFlagPayload getFeatureFlagResult getAllFeatureFlags isFeatureEnabled reloadFeatureFlags updateFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSurveysLoaded onSessionId getSurveys getActiveMatchingSurveys renderSurvey displaySurvey cancelPendingSurvey canRenderSurvey canRenderSurveyAsync Mn identify setPersonProperties unsetPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset shutdown setIdentity clearIdentity get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException addExceptionStep captureLog startExceptionAutocapture stopExceptionAutocapture loadToolbar get_property getSessionProperty Cn xn createPersonProfile setInternalOrTestUser In hn Pn opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing get_explicit_consent_status is_capturing clear_opt_in_out_capturing debug Ur Rt getPageViewId captureTraceFeedback captureTraceMetric an".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
+    {
+      import.meta.env.PROD && (
+        <script
+          is:inline
+          type="text/javascript"
+          set:html={`!function(t,e){var o,n,p,r;e.__SV||(window.posthog && window.posthog.__loaded)||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src=s.api_host.replace(".i.posthog.com","-assets.i.posthog.com")+"/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+".people (stub)"},o="Ji Yi init fn mn Hr pn bn cn capture calculateEventProperties Sn register register_once register_for_session unregister unregister_for_session Tn getFeatureFlag getFeatureFlagPayload getFeatureFlagResult getAllFeatureFlags isFeatureEnabled reloadFeatureFlags updateFlags updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures on onFeatureFlags onSurveysLoaded onSessionId getSurveys getActiveMatchingSurveys renderSurvey displaySurvey cancelPendingSurvey canRenderSurvey canRenderSurveyAsync Mn identify setPersonProperties unsetPersonProperties group resetGroups setPersonPropertiesForFlags resetPersonPropertiesForFlags setGroupPropertiesForFlags resetGroupPropertiesForFlags reset shutdown setIdentity clearIdentity get_distinct_id getGroups get_session_id get_session_replay_url alias set_config startSessionRecording stopSessionRecording sessionRecordingStarted captureException addExceptionStep captureLog startExceptionAutocapture stopExceptionAutocapture loadToolbar get_property getSessionProperty Cn xn createPersonProfile setInternalOrTestUser In hn Pn opt_in_capturing opt_out_capturing has_opted_in_capturing has_opted_out_capturing get_explicit_consent_status is_capturing clear_opt_in_out_capturing debug Ur Rt getPageViewId captureTraceFeedback captureTraceMetric an".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||[]);
         function __phInit() {
           if (location.hostname === '${new URL(siteUrl).hostname}' || location.hostname === 'www.${new URL(siteUrl).hostname}') {
             posthog.init('phc_wsRRcGh7HYR8yuR2jzPjf3kin2SpGqPXNcy9byhQ2pbc', {
@@ -139,8 +136,10 @@ const jsonLd = {
         window.__cvInitPostHog = __phIdle;
         if (localStorage.getItem('cv-consent') === 'granted') {
           if (document.readyState === 'complete') { __phIdle(); } else { window.addEventListener('load', __phIdle); }
-        }`}></script>
-    )}
+        }`}
+        />
+      )
+    }
 
     <!-- Preload critical fonts — 400 for body text, 800 for preloader & entry name -->
     <!-- font-display: block in global.css prevents FOUC during the preloader animation -->
@@ -184,7 +183,7 @@ const jsonLd = {
     <!-- FAB contatti (showFab) — la definizione dell'island è importata
          dalla pagina ospite (cv-init.ts sulle pagine CV, script inline su
          home e /work) -->
-    {showFab && <floating-menu></floating-menu>}
+    {showFab && <floating-menu />}
 
     <ConsentBanner lang={lang} waitForWipBadge={consentBannerWaitForWip} />
 
@@ -230,11 +229,12 @@ const jsonLd = {
          e parte da sola solo se "cv-consent" è già "granted" da una visita
          precedente; altrimenti resta in attesa del click su "Accetta" nel
          banner (ConsentBanner.astro). -->
-    {import.meta.env.PROD && (
-      <script
-        is:inline
-        type="text/javascript"
-        set:html={`window.__cvInitClarity = function() {
+    {
+      import.meta.env.PROD && (
+        <script
+          is:inline
+          type="text/javascript"
+          set:html={`window.__cvInitClarity = function() {
           (function(c,l,a,r,i,t,y){
               c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
               t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
@@ -242,8 +242,9 @@ const jsonLd = {
           })(window, document, "clarity", "script", "xresw2uoe6");
         };
         if (localStorage.getItem('cv-consent') === 'granted') { window.__cvInitClarity(); }`}
-      ></script>
-    )}
+        />
+      )
+    }
 
     <!-- Lenis smooth scroll + GSAP ScrollTrigger wiring — attivo su tutte
          le pagine, home inclusa. Niente più CSS scroll-snap: coerenza
@@ -270,10 +271,7 @@ const jsonLd = {
          tolto oltre gli 80px e rimesso quando si torna in cima -->
     <script>
       const fabSync = () => {
-        document.documentElement.toggleAttribute(
-          "data-fab-scrollwait",
-          window.scrollY <= 80,
-        );
+        document.documentElement.toggleAttribute("data-fab-scrollwait", window.scrollY <= 80);
       };
       fabSync();
       window.addEventListener("scroll", fabSync, { passive: true });
@@ -340,6 +338,5 @@ const jsonLd = {
         gsap.to([dot, ring], { opacity: 1, duration: 0.3 });
       });
     </script>
-
   </body>
 </html>

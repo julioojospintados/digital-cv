@@ -39,9 +39,7 @@ const preloader = document.getElementById("preloader")!;
 const header = document.getElementById("entry-header")!;
 const nameEl = document.getElementById("entry-name")!;
 const cards = document.querySelectorAll<HTMLButtonElement>(".mode-card");
-const knolls = document.querySelectorAll<HTMLImageElement>(
-  ".knoll-item, .knoll-m",
-);
+const knolls = document.querySelectorAll<HTMLImageElement>(".knoll-item, .knoll-m");
 
 // ── Badge "ciclo di sistemazione" (Testing → Correggendo → Migliorando) — una volta a sessione ──
 // Trigger agganciato alla stessa callback che fa entrare il knolling in
@@ -150,9 +148,9 @@ const cardPulseTweens: gsap.core.Tween[] = [];
 // Quando l'utente seleziona una card su touch, il grid si espande (60/40)
 // invece di usare scale() che causa overflow interno nella cella.
 const modeCardsEl = document.getElementById("mode-cards") as HTMLElement;
-let _gridLocked = false;  // true dopo la prima selezione (fr → px bloccati)
-let _lockedH = 0;         // altezza totale del container (meno il gap)
-let _lockedW = 0;         // larghezza totale del container (meno il gap)
+let _gridLocked = false; // true dopo la prima selezione (fr → px bloccati)
+let _lockedH = 0; // altezza totale del container (meno il gap)
+let _lockedW = 0; // larghezza totale del container (meno il gap)
 
 /**
  * Converti la griglia da fr a px (no-op visivo), poi anima la distribuzione
@@ -161,7 +159,7 @@ let _lockedW = 0;         // larghezza totale del container (meno il gap)
  * Ordine auto-placement: creative(0)=r0c0, tech(1)=r0c1, management(2)=r1c0, human(3)=r1c1
  */
 function expandMobileGrid(cardIndex: number) {
-  const EXPAND = 0.60;
+  const EXPAND = 0.6;
   const SHRINK = 1 - EXPAND;
   const GRID_GAP = 6; // corrisponde a gap: 0.4rem nel CSS
 
@@ -307,8 +305,7 @@ gsap.delayedCall(introAlreadySeen ? 0 : 0.9, () => {
   tl.to(
     goChars,
     {
-      textShadow:
-        "0 0 28px rgba(255,255,255,0.65), 0 0 12px rgba(255,255,255,0.4)",
+      textShadow: "0 0 28px rgba(255,255,255,0.65), 0 0 12px rgba(255,255,255,0.4)",
       duration: 0.2,
       ease: "power2.out",
     },
@@ -381,62 +378,71 @@ gsap.delayedCall(introAlreadySeen ? 0 : 0.9, () => {
   // offsetTop/offsetLeft invece di getBoundingClientRect → immune ai GSAP transform.
   // Inizia 0.25s dopo l'inizio delle card (overlap parziale: le ultime card escono
   // mentre le prime immagini entrano — composizione knolling che si assembla).
-  tl.call(() => {
-    const sortedKnolls = Array.from(knolls).sort((a, b) => {
-      const scoreA = a.offsetTop * 0.7 + a.offsetLeft * 0.3;
-      const scoreB = b.offsetTop * 0.7 + b.offsetLeft * 0.3;
-      return scoreA - scoreB;
-    });
-    sortedKnolls.forEach((knoll, i) => {
-      knoll.style.setProperty("--knoll-delay", `${i * knollDelayStep}ms`);
-      knoll.classList.add("do-enter");
-    });
-    // Badge "ciclo di sistemazione" nella stessa callback, non in un tl.call
-    // separato più avanti nella timeline — richiesta esplicita 2026-07-27:
-    // deve comparire nello stesso istante in cui il knolling entra in scena,
-    // non a coreografia già assestata. Il timer di visibilità (8s) resta
-    // reale (setTimeout dentro showWipBadge), non legato al clock GSAP.
-    showWipBadge();
-    // ConsentBanner (PostHog/Clarity) ascolta questo evento per comparire
-    // con lo stesso tempismo della card "ultime modifiche" — richiesta
-    // esplicita 2026-07-28. Sparato qui, non dentro showWipBadge(): quella
-    // funzione può fare early-return su mobile o se il badge è già stato
-    // visto in questa sessione, ma il banner deve comparire comunque, con
-    // lo stesso beat della timeline, a prescindere da quei guard.
-    window.dispatchEvent(new CustomEvent("cv:wip-badge-shown"));
-  }, undefined, "-=0.55");
+  tl.call(
+    () => {
+      const sortedKnolls = Array.from(knolls).sort((a, b) => {
+        const scoreA = a.offsetTop * 0.7 + a.offsetLeft * 0.3;
+        const scoreB = b.offsetTop * 0.7 + b.offsetLeft * 0.3;
+        return scoreA - scoreB;
+      });
+      sortedKnolls.forEach((knoll, i) => {
+        knoll.style.setProperty("--knoll-delay", `${i * knollDelayStep}ms`);
+        knoll.classList.add("do-enter");
+      });
+      // Badge "ciclo di sistemazione" nella stessa callback, non in un tl.call
+      // separato più avanti nella timeline — richiesta esplicita 2026-07-27:
+      // deve comparire nello stesso istante in cui il knolling entra in scena,
+      // non a coreografia già assestata. Il timer di visibilità (8s) resta
+      // reale (setTimeout dentro showWipBadge), non legato al clock GSAP.
+      showWipBadge();
+      // ConsentBanner (PostHog/Clarity) ascolta questo evento per comparire
+      // con lo stesso tempismo della card "ultime modifiche" — richiesta
+      // esplicita 2026-07-28. Sparato qui, non dentro showWipBadge(): quella
+      // funzione può fare early-return su mobile o se il badge è già stato
+      // visto in questa sessione, ma il banner deve comparire comunque, con
+      // lo stesso beat della timeline, a prescindere da quei guard.
+      window.dispatchEvent(new CustomEvent("cv:wip-badge-shown"));
+    },
+    undefined,
+    "-=0.55",
+  );
 
-   // 10b. Pulse attenzione sulle card — bordo che pulsa ogni 1.5s in loop
-   // per comunicare interattività persistente. Si ferma quando una card viene selezionata.
-   // Inizia 0.6s dopo che le card sono apparse (durata entrata = 0.8s + stagger 0.36s ≈ 1.16s totale).
-   tl.call(() => {
-     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-     // up (0.32s) + down (0.32s) = 0.64s — repeatDelay = 1.5 - 0.64 = 0.86s → ciclo totale 1.5s
-     cards.forEach((card, i) => {
-       const style = getComputedStyle(card);
-       const goColor = style.getPropertyValue("--card-go-color").trim() || "rgba(255,255,255,1)";
-       const goShadow = style.getPropertyValue("--card-go-shadow").trim() || "rgba(255,255,255,0.12)";
-       const tw = gsap.fromTo(
-         card,
-         { boxShadow: `inset 0 0 0 1px rgba(255,255,255,0.08)` },
-         {
-           boxShadow: `inset 0 0 0 1.5px ${goColor.replace("1)", "0.55)")}, 0 0 14px 2px ${goShadow.replace("0.35)", "0.18)")}`,
-           duration: 0.32,
-           delay: i * 0.12,
-           ease: "power2.out",
-           yoyo: true,
-           repeat: -1,
-           repeatDelay: 0.86,
-         },
-       );
-       cardPulseTweens.push(tw);
-     });
-   }, undefined, "+=0.6");
+  // 10b. Pulse attenzione sulle card — bordo che pulsa ogni 1.5s in loop
+  // per comunicare interattività persistente. Si ferma quando una card viene selezionata.
+  // Inizia 0.6s dopo che le card sono apparse (durata entrata = 0.8s + stagger 0.36s ≈ 1.16s totale).
+  tl.call(
+    () => {
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      // up (0.32s) + down (0.32s) = 0.64s — repeatDelay = 1.5 - 0.64 = 0.86s → ciclo totale 1.5s
+      cards.forEach((card, i) => {
+        const style = getComputedStyle(card);
+        const goColor = style.getPropertyValue("--card-go-color").trim() || "rgba(255,255,255,1)";
+        const goShadow =
+          style.getPropertyValue("--card-go-shadow").trim() || "rgba(255,255,255,0.12)";
+        const tw = gsap.fromTo(
+          card,
+          { boxShadow: `inset 0 0 0 1px rgba(255,255,255,0.08)` },
+          {
+            boxShadow: `inset 0 0 0 1.5px ${goColor.replace("1)", "0.55)")}, 0 0 14px 2px ${goShadow.replace("0.35)", "0.18)")}`,
+            duration: 0.32,
+            delay: i * 0.12,
+            ease: "power2.out",
+            yoyo: true,
+            repeat: -1,
+            repeatDelay: 0.86,
+          },
+        );
+        cardPulseTweens.push(tw);
+      });
+    },
+    undefined,
+    "+=0.6",
+  );
 
-   // Il nudge orizzontale della freccia .profile-cta__arrow è CSS puro
-   // (@keyframes cta-arrow-nudge in index-page.css) — un tween GSAP infinito
-   // scriverebbe uno style inline che vince sempre su :hover/:focus-visible,
-   // rendendo l'hover incoerente. Animazione predeterminata → CSS, non GSAP.
+  // Il nudge orizzontale della freccia .profile-cta__arrow è CSS puro
+  // (@keyframes cta-arrow-nudge in index-page.css) — un tween GSAP infinito
+  // scriverebbe uno style inline che vince sempre su :hover/:focus-visible,
+  // rendendo l'hover incoerente. Animazione predeterminata → CSS, non GSAP.
 });
 
 // ── Magnetic effect on mode cards ────────────────────────
@@ -465,7 +471,7 @@ cards.forEach((card) => {
     const relatedTarget = event.relatedTarget as Node | null;
     const isMovingWithinCards =
       !!relatedTarget && relatedTarget instanceof Node
-        ? card.parentElement?.contains(relatedTarget) ?? false
+        ? (card.parentElement?.contains(relatedTarget) ?? false)
         : false;
 
     // Rimuovi preview mode solo quando il puntatore lascia davvero l'area delle card.
@@ -521,8 +527,7 @@ function launchJourney(href: string) {
     },
   });
 
-  const isTouchDevice = !window.matchMedia("(hover: hover) and (pointer: fine)")
-    .matches;
+  const isTouchDevice = !window.matchMedia("(hover: hover) and (pointer: fine)").matches;
 
   // Speed lines sparano verso l'esterno (warp speed)
   // Su touch: durate bilanciate per visibilità senza ritardo eccessivo
@@ -549,11 +554,7 @@ function launchJourney(href: string) {
     },
   );
   // Fase 2: hold visibile (opacity stabile) prima di sparire
-  journey.to(
-    lineEls,
-    { opacity: 0.85, duration: phase2Duration, ease: "none" },
-    "-=0",
-  );
+  journey.to(lineEls, { opacity: 0.85, duration: phase2Duration, ease: "none" }, "-=0");
   // Fase 3: allontanamento warp e dissolvenza
   journey.to(
     lineEls,
@@ -605,7 +606,13 @@ function launchJourney(href: string) {
   );
 
   // Naviga quando la vignette è ormai completamente opaca
-  journey.call(() => { window.location.href = href; }, undefined, navigateAt);
+  journey.call(
+    () => {
+      window.location.href = href;
+    },
+    undefined,
+    navigateAt,
+  );
 }
 
 // ── Scroll alla profile-section — hero card ancora la preview sotto ────────
@@ -633,9 +640,7 @@ function scrollToElement(target: HTMLElement) {
 }
 
 function scrollToProfile(mode: string) {
-  const target = document.querySelector<HTMLElement>(
-    `.profile-section[data-mode="${mode}"]`,
-  );
+  const target = document.querySelector<HTMLElement>(`.profile-section[data-mode="${mode}"]`);
   if (!target) {
     window.location.href = `/${mode}`;
     return;
@@ -661,7 +666,7 @@ function selectMode(targetCard: HTMLButtonElement, mode: string) {
       c.classList.remove("is-passive");
       // Ingrandimento visibile (knolling effect) — prendi lo strumento dal tavolo
       // Stesso comportamento su mobile e desktop, solo la forma cambia (orizzontale vs quadrata)
-      gsap.to(c, { scaleX: 1.05, scaleY: 1.18,  duration: 0.4, ease: "back.out(1.8)" });
+      gsap.to(c, { scaleX: 1.05, scaleY: 1.18, duration: 0.4, ease: "back.out(1.8)" });
     } else {
       c.classList.add("is-passive");
       c.classList.remove("is-selected");
@@ -815,7 +820,6 @@ document.querySelectorAll<HTMLElement>(".skills-marquee__track").forEach((track)
 window.addEventListener("pageshow", (e) => {
   if (e.persisted) window.location.reload();
 });
-
 
 // ── Profile sections — reveal + parallax doppia profondità ────────────────────────
 if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {

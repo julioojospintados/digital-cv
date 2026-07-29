@@ -50,11 +50,7 @@ const {
   <!-- ────────────────────────────────────────────────────────── NAV -->
   <nav class="cv-nav" id="cv-nav" aria-label="Navigazione principale">
     <go-logo></go-logo>
-    <div
-      class="mode-buttons"
-      role="group"
-      aria-label="Scegli modalità di visualizzazione"
-    >
+    <div class="mode-buttons" role="group" aria-label="Scegli modalità di visualizzazione">
       <button
         class:list={["mode-btn", { "is-active": mode === "creative" }]}
         data-nav-mode="creative"
@@ -108,10 +104,15 @@ const {
         aria-expanded="false"
       >
         <span class="mode-dropdown__label" id="mode-dropdown-label">
-          {mode === "tech" ? "Software Dev"
-            : mode === "creative" ? "Web & UX"
-            : mode === "management" ? "Project Manager"
-            : "AI & Digital"}
+          {
+            mode === "tech"
+              ? "Software Dev"
+              : mode === "creative"
+                ? "Web & UX"
+                : mode === "management"
+                  ? "Project Manager"
+                  : "AI & Digital"
+          }
         </span>
         <span class="mode-dropdown__chevron" aria-hidden="true">›</span>
       </button>
@@ -121,11 +122,46 @@ const {
         role="listbox"
         aria-labelledby="mode-dropdown-btn"
       >
-        <li class:list={["mode-dropdown__option", { "is-selected": mode === "creative" }]} role="option" data-dropdown-mode="creative" tabindex="-1">Web &amp; UX</li>
-        <li class:list={["mode-dropdown__option", { "is-selected": mode === "tech" }]} role="option" data-dropdown-mode="tech" tabindex="-1">Software Dev</li>
-        <li class:list={["mode-dropdown__option", { "is-selected": mode === "management" }]} role="option" data-dropdown-mode="management" tabindex="-1">Project Manager</li>
-        <li class:list={["mode-dropdown__option", { "is-selected": mode === "human" }]} role="option" data-dropdown-mode="human" tabindex="-1">AI &amp; Digital</li>
-        <li class="mode-dropdown__option mode-dropdown__option--personal" role="option" data-dropdown-personal tabindex="-1">Fuori orario</li>
+        <li
+          class:list={["mode-dropdown__option", { "is-selected": mode === "creative" }]}
+          role="option"
+          data-dropdown-mode="creative"
+          tabindex="-1"
+        >
+          Web &amp; UX
+        </li>
+        <li
+          class:list={["mode-dropdown__option", { "is-selected": mode === "tech" }]}
+          role="option"
+          data-dropdown-mode="tech"
+          tabindex="-1"
+        >
+          Software Dev
+        </li>
+        <li
+          class:list={["mode-dropdown__option", { "is-selected": mode === "management" }]}
+          role="option"
+          data-dropdown-mode="management"
+          tabindex="-1"
+        >
+          Project Manager
+        </li>
+        <li
+          class:list={["mode-dropdown__option", { "is-selected": mode === "human" }]}
+          role="option"
+          data-dropdown-mode="human"
+          tabindex="-1"
+        >
+          AI &amp; Digital
+        </li>
+        <li
+          class="mode-dropdown__option mode-dropdown__option--personal"
+          role="option"
+          data-dropdown-personal
+          tabindex="-1"
+        >
+          Fuori orario
+        </li>
       </ul>
     </div>
     <!-- Desktop: switch a 2 chip, sempre entrambe le lingue visibili.
@@ -151,11 +187,21 @@ const {
 
   <!-- Dot-nav verticale — jump diretto tra le sezioni, desktop only -->
   <nav class="section-dots" aria-label="Naviga tra le sezioni">
-    <a href="#hero" class="section-dot" aria-label="Home"><span class="section-dot__tip">Home</span></a>
-    <a href="#skills" class="section-dot" aria-label="Competenze"><span class="section-dot__tip">Competenze</span></a>
-    <a href="#experience" class="section-dot" aria-label="Esperienze"><span class="section-dot__tip">Esperienze</span></a>
-    <a href="#ai-section" class="section-dot" aria-label="AI Workflow"><span class="section-dot__tip">AI Workflow</span></a>
-    <a href="#worklife" class="section-dot" aria-label="Persona"><span class="section-dot__tip">Persona</span></a>
+    <a href="#hero" class="section-dot" aria-label="Home"
+      ><span class="section-dot__tip">Home</span></a
+    >
+    <a href="#skills" class="section-dot" aria-label="Competenze"
+      ><span class="section-dot__tip">Competenze</span></a
+    >
+    <a href="#experience" class="section-dot" aria-label="Esperienze"
+      ><span class="section-dot__tip">Esperienze</span></a
+    >
+    <a href="#ai-section" class="section-dot" aria-label="AI Workflow"
+      ><span class="section-dot__tip">AI Workflow</span></a
+    >
+    <a href="#worklife" class="section-dot" aria-label="Persona"
+      ><span class="section-dot__tip">Persona</span></a
+    >
     {
       cvData.feedbacks.length > 0 && (
         <a href="#feedback" class="section-dot" aria-label="Dicono di me">
@@ -163,8 +209,12 @@ const {
         </a>
       )
     }
-    <a href="#projects" class="section-dot" aria-label="Progetti"><span class="section-dot__tip">Progetti</span></a>
-    <a href="#education" class="section-dot" aria-label="Formazione"><span class="section-dot__tip">Formazione</span></a>
+    <a href="#projects" class="section-dot" aria-label="Progetti"
+      ><span class="section-dot__tip">Progetti</span></a
+    >
+    <a href="#education" class="section-dot" aria-label="Formazione"
+      ><span class="section-dot__tip">Formazione</span></a
+    >
   </nav>
 
   <!-- ────────────────────────────────────────────────────────── MAIN -->
@@ -209,7 +259,9 @@ const {
         set:html={JSON.stringify({ titles: heroTitles, summaries: heroSummaries })}
       />
 
-      <p class="hero-tagline">Comprendere la radice è l'unico modo per non perdersi lungo i rami.</p>
+      <p class="hero-tagline">
+        Comprendere la radice è l'unico modo per non perdersi lungo i rami.
+      </p>
 
       <!-- Card teaser, non un link testuale: il portfolio è la prova del
            lavoro, merita lo stesso peso visivo delle card su /work (stile
@@ -217,13 +269,14 @@ const {
            paragrafo come un link sottolineato qualunque. -->
       <a href="/work" class="work-index-card hero-portfolio-card work-index-card--pulse">
         <p class="work-index-card__eyebrow">Portfolio</p>
-        <p class="work-index-card__role">Case study, non un elenco. Processi, decisioni e risultati.</p>
+        <p class="work-index-card__role">
+          Case study, non un elenco. Processi, decisioni e risultati.
+        </p>
         <span class="work-index-card__cta">
           Esplora il portfolio
           <span class="work-chevron" aria-hidden="true"></span>
         </span>
       </a>
-
 
       <div class="hero-footer">
         <div class="hero-socials">
@@ -240,7 +293,6 @@ const {
               </a>
             ))
           }
-
         </div>
         <div class="hero-langs">
           {
@@ -288,14 +340,8 @@ const {
           >Livello e glow proporzionali: apri il Grafico per esplorare le connessioni.</span
         >
       </h2>
-      <h3 class="skills-sub-title">
-        Competenze tecniche, management e human.
-      </h3>
-      <div
-        class="skills-view-toggle"
-        role="group"
-        aria-label="Scegli vista competenze"
-      >
+      <h3 class="skills-sub-title">Competenze tecniche, management e human.</h3>
+      <div class="skills-view-toggle" role="group" aria-label="Scegli vista competenze">
         <button
           class="skills-view-btn is-active"
           type="button"
@@ -322,7 +368,7 @@ const {
             >
               {skillSquares.map((skill) => <SkillSquare {...skill} />)}
             </div>
-            <div class="skills-fade" aria-hidden="true" />
+            <div class="skills-fade" aria-hidden="true"></div>
           </div>
           <button
             class="skills-expand-btn"
@@ -375,9 +421,7 @@ const {
                 </span>
                 <span class="exp-cluster__name">{cluster.label}</span>
                 <span class="exp-cluster__meta">
-                  <span class="exp-cluster__count">
-                    {cluster.items.length} ruoli
-                  </span>
+                  <span class="exp-cluster__count">{cluster.items.length} ruoli</span>
                   <span class="exp-cluster__chevron" aria-hidden="true" />
                 </span>
               </button>
@@ -388,10 +432,7 @@ const {
                   ))}
                 </div>
                 {cluster.extra.length > 0 && (
-                  <div
-                    class="exp-drawer"
-                    id={`exp-drawer-${cluster.key}`}
-                  >
+                  <div class="exp-drawer" id={`exp-drawer-${cluster.key}`}>
                     <div class="exp-grid">
                       {cluster.extra.map((exp) => (
                         <ExpCard {...exp} />
@@ -426,27 +467,19 @@ const {
          (ambient glow) + il trigger GSAP del parallax (cv-init.ts)
          coprivano solo il riquadro del titolo. Ora .ai-section avvolge
          tutto, come ogni altra sezione (skills/exp/soft/projects/edu). -->
-    <section
-      class="ai-section reveal delay-300"
-      id="ai-section"
-      aria-label="AI-Enhanced Workflow"
-    >
-      <img
-        class="bg-knoll bg-knoll--chess"
-        src="/knolling/chess.webp"
-        aria-hidden="true"
-        alt=""
-      />
+    <section class="ai-section reveal delay-300" id="ai-section" aria-label="AI-Enhanced Workflow">
+      <img class="bg-knoll bg-knoll--chess" src="/knolling/chess.webp" aria-hidden="true" alt="" />
       <h2 class="section-title ai-title">
-        <span>AI-Enhanced Workflow <span class="ai-title__clip" aria-hidden="true">
-          <span class="ai-title__clip-pin"></span>
-          <span class="ai-title__clip-text">⚡ AI</span>
-        </span></span>
+        <span
+          >AI-Enhanced Workflow <span class="ai-title__clip" aria-hidden="true">
+            <span class="ai-title__clip-pin"></span>
+            <span class="ai-title__clip-text">⚡ AI</span>
+          </span></span
+        >
 
         <span class="section-subtitle"
           >Come l'AI moltiplica l'output senza sostituire il giudizio.</span
         >
-
       </h2>
       <div class="ai-grid">
         {cvData.aiWorkflow.map((item) => <AiCard {...item} />)}
@@ -457,9 +490,13 @@ const {
          visibili. Prima <details> chiuso di default (materiale da "secondo
          colloquio"); header ora in stile catalogo come .exp-cluster__header
          ma statico — non è un accordion, niente chevron/toggle. -->
-    <section class="worklife reveal" id="worklife" aria-label="Persona: soft skills, mindset e aree in evoluzione">
+    <section
+      class="worklife reveal"
+      id="worklife"
+      aria-label="Persona: soft skills, mindset e aree in evoluzione"
+    >
       <div class="section-title">
-        <span >Persona</span>
+        <span>Persona</span>
         <span class="section-subtitle">Soft skills, mindset e aree in evoluzione</span>
       </div>
       <div class="soft-section" id="soft-skills" aria-label="Soft skills e metodologia">
@@ -520,10 +557,7 @@ const {
           </h2>
           <div class="growth-grid">
             {cvData.growthAreas.map((area) => (
-              <article
-                class="growth-card cv-card"
-                data-tags="tech creative human management"
-              >
+              <article class="growth-card cv-card" data-tags="tech creative human management">
                 <p class="growth-card__label">Area in evoluzione</p>
                 <p class="growth-card__name">{area.name}</p>
                 <p class="growth-card__reframe">{area.reframe}</p>
@@ -543,24 +577,45 @@ const {
               <span>Dicono di me</span>
               <span class="section-subtitle">Parole di chi ci ha lavorato insieme.</span>
             </h2>
-            <!-- Visibili solo se il carousel ha davvero altro da scorrere
-                 (JS: cv-init.ts misura scrollWidth vs clientWidth). Su
-                 mobile restano nascoste: lì l'affordance è lo swipe. -->
+            {/* Visibili solo se il carousel ha davvero altro da scorrere
+                (JS: cv-init.ts misura scrollWidth vs clientWidth). Su
+                mobile restano nascoste: lì l'affordance è lo swipe.
+                Commento in forma JSX e non HTML perché qui siamo dentro
+                un'espressione, dove il commento HTML non è sintassi valida
+                (Astro lo tollera, Prettier no) e finirebbe nell'output. */}
             <div class="feedback-nav" data-feedback-nav>
-              <button class="feedback-nav__btn feedback-nav__btn--prev" type="button" data-feedback-prev aria-label="Feedback precedente">
-                <span class="feedback-nav__arrow" aria-hidden="true"></span>
+              <button
+                class="feedback-nav__btn feedback-nav__btn--prev"
+                type="button"
+                data-feedback-prev
+                aria-label="Feedback precedente"
+              >
+                <span class="feedback-nav__arrow" aria-hidden="true" />
               </button>
-              <button class="feedback-nav__btn feedback-nav__btn--next" type="button" data-feedback-next aria-label="Feedback successivo">
-                <span class="feedback-nav__arrow" aria-hidden="true"></span>
+              <button
+                class="feedback-nav__btn feedback-nav__btn--next"
+                type="button"
+                data-feedback-next
+                aria-label="Feedback successivo"
+              >
+                <span class="feedback-nav__arrow" aria-hidden="true" />
               </button>
             </div>
           </div>
-          <div class="feedback-track" data-feedback-track tabindex="0" aria-label="Elenco feedback, scorri per vederne altri">
+          <div
+            class="feedback-track"
+            data-feedback-track
+            tabindex="0"
+            aria-label="Elenco feedback, scorri per vederne altri"
+          >
             {cvData.feedbacks.map((f) => (
               <figure class="feedback-card cv-card" data-tags="tech creative human management">
                 {f.quote && <blockquote class="feedback-quote">{f.quote}</blockquote>}
                 {!f.quote && f.keywords.length > 0 && (
-                  <ul class="feedback-keywords" aria-label={`Le parole che ${f.name} ha usato per descrivermi`}>
+                  <ul
+                    class="feedback-keywords"
+                    aria-label={`Le parole che ${f.name} ha usato per descrivermi`}
+                  >
                     {f.keywords.map((k) => (
                       <li class="feedback-kw">{k}</li>
                     ))}
@@ -621,9 +676,7 @@ const {
                     {item.inProgress && <span class="tl-wip">in corso</span>}
                   </p>
                   <p class="tl-inst">{item.institution}</p>
-                  {item.credentialId && (
-                    <p class="tl-cred">ID: {item.credentialId}</p>
-                  )}
+                  {item.credentialId && <p class="tl-cred">ID: {item.credentialId}</p>}
                 </div>
               </li>
             ))
@@ -646,21 +699,21 @@ const {
 
   <!-- ────────────────────────────────────────────────────────── FOOTER -->
   <footer class="cv-footer">
-  {
-    cvData.interests.length > 0 && (
-      <div class="interests-strip">
-        <p class="interests-label">Interessi</p>
-        <ul class="interests-chips" role="list">
-          {cvData.interests.map((interest) => (
-            <li class="interest-chip">{interest}</li>
-          ))}
-        </ul>
-      </div>
-    )
-  }
-  <ContactFooter lang="it" />
-  <p class="cv-footer__credit">{cvData.personal.name} · Digital CV</p>
-</footer>
+    {
+      cvData.interests.length > 0 && (
+        <div class="interests-strip">
+          <p class="interests-label">Interessi</p>
+          <ul class="interests-chips" role="list">
+            {cvData.interests.map((interest) => (
+              <li class="interest-chip">{interest}</li>
+            ))}
+          </ul>
+        </div>
+      )
+    }
+    <ContactFooter lang="it" />
+    <p class="cv-footer__credit">{cvData.personal.name} · Digital CV</p>
+  </footer>
 </Layout>
 
 <script>

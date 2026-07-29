@@ -18,17 +18,16 @@ import Layout from "../../layouts/Layout.astro";
       <p class="privacy-hero__eyebrow">Privacy</p>
       <h1 class="privacy-hero__title">What this site collects.</h1>
       <p class="privacy-section__text">
-        A few lines, not an endless legal document: this site is my personal
-        CV, not a commercial product.
+        A few lines, not an endless legal document: this site is my personal CV, not a commercial
+        product.
       </p>
     </header>
 
     <section class="privacy-section">
       <h2 class="privacy-section__title">Data controller</h2>
       <p class="privacy-section__text">
-        Giulio Occhipinti — <a
-          class="privacy-link"
-          href="mailto:giulio.occhipinti.g@gmail.com">giulio.occhipinti.g@gmail.com</a
+        Giulio Occhipinti — <a class="privacy-link" href="mailto:giulio.occhipinti.g@gmail.com"
+          >giulio.occhipinti.g@gmail.com</a
         >.
       </p>
     </section>
@@ -37,19 +36,16 @@ import Layout from "../../layouts/Layout.astro";
       <h2 class="privacy-section__title">What I collect and with what</h2>
       <ul class="privacy-list">
         <li>
-          <strong>PostHog</strong> — browsing stats (page views, events) and,
-          only if you consent from the banner, heatmaps and anonymous
-          sessions. It only starts after your explicit consent.
+          <strong>PostHog</strong> — browsing stats (page views, events) and, only if you consent from
+          the banner, heatmaps and anonymous sessions. It only starts after your explicit consent.
         </li>
         <li>
-          <strong>Microsoft Clarity</strong> — session recording and
-          heatmaps, to understand where people get lost in the interface.
-          This also only starts after your consent.
+          <strong>Microsoft Clarity</strong> — session recording and heatmaps, to understand where people
+          get lost in the interface. This also only starts after your consent.
         </li>
         <li>
-          <strong>Vercel Analytics &amp; Speed Insights</strong> — aggregated
-          traffic and performance stats, declared cookieless by the vendor:
-          they stay active without requiring prior consent.
+          <strong>Vercel Analytics &amp; Speed Insights</strong> — aggregated traffic and performance
+          stats, declared cookieless by the vendor: they stay active without requiring prior consent.
         </li>
       </ul>
     </section>
@@ -57,26 +53,25 @@ import Layout from "../../layouts/Layout.astro";
     <section class="privacy-section">
       <h2 class="privacy-section__title">Why</h2>
       <p class="privacy-section__text">
-        Only to understand how the site is browsed and improve its
-        usability. No advertising, no commercial profiling, no selling data
-        to third parties.
+        Only to understand how the site is browsed and improve its usability. No advertising, no
+        commercial profiling, no selling data to third parties.
       </p>
     </section>
 
     <section class="privacy-section">
       <h2 class="privacy-section__title">Retention</h2>
       <p class="privacy-section__text">
-        The site is static: I don't have my own database where your data
-        gets stored. Everything collected stays within the systems of the
-        providers listed above, following their default retention periods.
+        The site is static: I don't have my own database where your data gets stored. Everything
+        collected stays within the systems of the providers listed above, following their default
+        retention periods.
       </p>
     </section>
 
     <section class="privacy-section">
       <h2 class="privacy-section__title">Your rights</h2>
       <p class="privacy-section__text">
-        Access, rectification, erasure, objection: write to the email above
-        and I'll answer directly. You can also contact the <a
+        Access, rectification, erasure, objection: write to the email above and I'll answer
+        directly. You can also contact the <a
           class="privacy-link"
           href="https://www.garanteprivacy.it"
           target="_blank"
@@ -88,8 +83,8 @@ import Layout from "../../layouts/Layout.astro";
     <section class="privacy-section">
       <h2 class="privacy-section__title">Change your choice</h2>
       <p class="privacy-section__text">
-        Already accepted or rejected from the banner? You can reset your
-        choice at any time — the banner will reappear on the next page load.
+        Already accepted or rejected from the banner? You can reset your choice at any time — the
+        banner will reappear on the next page load.
       </p>
       <button type="button" class="privacy-reset" id="privacy-reset-consent">
         Reset cookie preferences
@@ -101,16 +96,14 @@ import Layout from "../../layouts/Layout.astro";
 <script>
   import "../../islands/GoLogo.lit.ts";
 
-  document
-    .getElementById("privacy-reset-consent")
-    ?.addEventListener("click", () => {
-      try {
-        localStorage.removeItem("cv-consent");
-      } catch {
-        /* localStorage unavailable — nothing to reset */
-      }
-      location.reload();
-    });
+  document.getElementById("privacy-reset-consent")?.addEventListener("click", () => {
+    try {
+      localStorage.removeItem("cv-consent");
+    } catch {
+      /* localStorage unavailable — nothing to reset */
+    }
+    location.reload();
+  });
 </script>
 
 <style>

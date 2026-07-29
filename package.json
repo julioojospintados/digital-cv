@@ -1,8 +1,11 @@
 {
-  "name": "mcp-base-template",
+  "name": "digital-cv-server",
   "version": "1.0.0",
-  "description": "Base template for MCP server projects with modular tools, resources and prompts.",
+  "description": "Server MCP (stdio) e API HTTP che espongono i dati del CV di Giulio Occhipinti come tool, resource e route REST.",
   "main": "dist/index.js",
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
@@ -13,6 +16,11 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
+    "typecheck": "tsc --noEmit -p tsconfig.test.json",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "parse-cv": "node --import tsx/esm scripts/parse-cv.ts",
     "pdf:cv": "node --import tsx/esm scripts/generate-cv-pdf.ts",
     "pdf:ux": "node --import tsx/esm scripts/generate-ux-cv.ts"
@@ -20,7 +28,9 @@
   "keywords": [
     "mcp",
     "model-context-protocol",
-    "template"
+    "cv",
+    "hono",
+    "astro"
   ],
   "author": "Giulio Occhipinti",
   "license": "UNLICENSED",
@@ -36,13 +46,22 @@
     "zod-to-json-schema": "^3.25.2"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@types/node": "^25.5.2",
     "@types/pdf-parse": "^1.1.5",
     "@types/qrcode": "^1.5.6",
     "@vitest/coverage-v8": "^4.1.4",
+    "astro-eslint-parser": "^3.0.0",
+    "eslint": "^10.8.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-astro": "^3.0.1",
+    "globals": "^17.8.0",
     "playwright": "^1.59.1",
+    "prettier": "^3.9.6",
+    "prettier-plugin-astro": "^0.14.1",
     "tsx": "^4.21.0",
     "typescript": "^6.0.2",
+    "typescript-eslint": "^8.65.0",
     "vitest": "^4.1.4"
   }
 }

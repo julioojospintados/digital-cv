@@ -352,7 +352,6 @@ html[data-intro-seen] #preloader {
 }
 
 @media (--desktop) {
-
   /* reduce vertical padding/gaps on wide viewports to avoid accidental overflow */
   .entry-main {
     padding: 1.25rem 1.5rem;
@@ -520,7 +519,6 @@ img[src*="flashlight"] {
 }
 
 @media (--touch) {
-
   /* knolling-mob visibile fino a 899px — knolling-stage già nascosto per default */
   .knolling-mob {
     display: grid;
@@ -660,7 +658,6 @@ img[src*="flashlight"] {
   }
 
   /* camera — piccoli nella cella */
-
 }
 
 /* ── Main content ── */
@@ -681,7 +678,6 @@ img[src*="flashlight"] {
    → header + images ≈ 50–55 % viewport, cards ≈ 45–50 %.
    100vh fallback per iOS Safari < 15.4 e Chromium < 108. */
 @media (--touch) {
-
   html,
   body {
     /* min-height garantisce il fullscreen iniziale del hero (entry-root 100svh)
@@ -821,7 +817,6 @@ img[src*="flashlight"] {
 }
 
 @keyframes go-orange-pulse {
-
   0%,
   100% {
     filter: brightness(1) drop-shadow(0 0 0px rgba(255, 107, 53, 0));
@@ -957,9 +952,11 @@ img[src*="flashlight"] {
   inset: 0;
   opacity: 0;
   transition: opacity 0.3s ease;
-  background: radial-gradient(ellipse at 50% 120%,
-      var(--card-glow, transparent) 0%,
-      transparent 70%);
+  background: radial-gradient(
+    ellipse at 50% 120%,
+    var(--card-glow, transparent) 0%,
+    transparent 70%
+  );
 }
 
 /* "Launch" light sweep on hover — GO concept */
@@ -970,10 +967,12 @@ img[src*="flashlight"] {
   left: -80%;
   width: 50%;
   height: 100%;
-  background: linear-gradient(90deg,
-      transparent 0%,
-      rgba(255, 255, 255, 0.08) 50%,
-      transparent 100%);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.08) 50%,
+    transparent 100%
+  );
   transform: skewX(-14deg);
   pointer-events: none;
   transition: left 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
@@ -1001,7 +1000,7 @@ img[src*="flashlight"] {
   --card-go-color: rgba(0, 255, 200, 1);
   --card-go-border: rgba(0, 255, 200, 0.45);
   --card-go-shadow: rgba(0, 255, 200, 0.35);
-  --card-desc-color: rgba(0, 255, 200, 0.70);
+  --card-desc-color: rgba(0, 255, 200, 0.7);
 }
 
 .mode-card[data-mode="creative"] {
@@ -1131,7 +1130,6 @@ img[src*="flashlight"] {
     font-size: var(--fs-12);
     margin: 0;
   }
-
 }
 
 /* Ripple effect su card */
@@ -1166,12 +1164,14 @@ img[src*="flashlight"] {
   right: -2px;
   top: 0;
   height: 2px;
-  background: linear-gradient(90deg,
-      transparent 0%,
-      var(--card-go-color, rgba(255, 255, 255, 0.6)) 25%,
-      rgba(255, 255, 255, 0.95) 50%,
-      var(--card-go-color, rgba(255, 255, 255, 0.6)) 75%,
-      transparent 100%);
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--card-go-color, rgba(255, 255, 255, 0.6)) 25%,
+    rgba(255, 255, 255, 0.95) 50%,
+    var(--card-go-color, rgba(255, 255, 255, 0.6)) 75%,
+    transparent 100%
+  );
   box-shadow: 0 0 10px 3px var(--card-go-color, rgba(255, 255, 255, 0.3));
   pointer-events: none;
   z-index: 4;
@@ -1267,11 +1267,7 @@ img[src*="flashlight"] {
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: radial-gradient(
-    ellipse 90% 70% at 50% 25%,
-    var(--ps-glow),
-    transparent 70%
-  );
+  background: radial-gradient(ellipse 90% 70% at 50% 25%, var(--ps-glow), transparent 70%);
   opacity: var(--ambient, 0);
 }
 
@@ -1339,7 +1335,6 @@ img[src*="flashlight"] {
     padding-right: 1.5rem;
   }
 }
-
 
 .profile-eyebrow {
   font-family: var(--font-mono);
@@ -2160,12 +2155,20 @@ img[src*="flashlight"] {
 
 .skills-marquee::before {
   left: 0;
-  background: linear-gradient(90deg, var(--color-bg) 0%, color-mix(in srgb, var(--color-bg) 0%, transparent) 100%);
+  background: linear-gradient(
+    90deg,
+    var(--color-bg) 0%,
+    color-mix(in srgb, var(--color-bg) 0%, transparent) 100%
+  );
 }
 
 .skills-marquee::after {
   right: 0;
-  background: linear-gradient(90deg, color-mix(in srgb, var(--color-bg) 0%, transparent) 0%, var(--color-bg) 100%);
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--color-bg) 0%, transparent) 0%,
+    var(--color-bg) 100%
+  );
 }
 
 .skills-marquee__track {

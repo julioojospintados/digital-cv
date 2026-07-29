@@ -1,7 +1,13 @@
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { modeStore, setMode } from "../islands/stores/modeStore.ts";
-import { applyAccordions, applyCardStates, reorderSkillSquares, reorderProjectCards, CLUSTER_OPEN_FOR } from "./mode-helpers.ts";
+import {
+  applyAccordions,
+  applyCardStates,
+  reorderSkillSquares,
+  reorderProjectCards,
+  CLUSTER_OPEN_FOR,
+} from "./mode-helpers.ts";
 import "../islands/GoLogo.lit.ts";
 // FAB contatti — solo le pagine CV lo renderizzano (Layout, prop showFab)
 import "../islands/FloatingMenu.lit.ts";
@@ -22,9 +28,7 @@ const DEFAULT_MODE: CVMode = "creative";
 const heroEl = document.querySelector<HTMLElement>(".hero-section")!;
 const allChars = document.querySelectorAll<HTMLElement>(".hero-char");
 const goChars = document.querySelectorAll<HTMLElement>(".hero-char--go");
-const restChars = [...allChars].filter(
-  (el) => !el.classList.contains("hero-char--go"),
-);
+const restChars = [...allChars].filter((el) => !el.classList.contains("hero-char--go"));
 const heroTitle = heroEl.querySelector<HTMLElement>(".hero-title");
 const heroSummary = heroEl.querySelector<HTMLElement>(".hero-summary");
 const heroTagline = heroEl.querySelector<HTMLElement>(".hero-tagline");
@@ -279,7 +283,10 @@ function scrollToPositionThen(targetY: number, maxWait = 2200): Promise<void> {
 
     function check() {
       const currentY = window.scrollY;
-      if (Math.abs(currentY - targetY) <= 4 || (window.innerHeight + currentY) >= document.body.scrollHeight) {
+      if (
+        Math.abs(currentY - targetY) <= 4 ||
+        window.innerHeight + currentY >= document.body.scrollHeight
+      ) {
         timeoutId = window.setTimeout(() => {
           cleanup();
           resolve();
@@ -292,21 +299,26 @@ function scrollToPositionThen(targetY: number, maxWait = 2200): Promise<void> {
     if (lenis) {
       try {
         lenis.scrollTo(targetY, { duration: 1.1 });
-      } catch (e) {
-        try { lenis.scrollTo(targetY); } catch (_) { window.scrollTo({ top: targetY, behavior: "smooth" }); }
+      } catch {
+        try {
+          lenis.scrollTo(targetY);
+        } catch (_) {
+          window.scrollTo({ top: targetY, behavior: "smooth" });
+        }
       }
     } else {
       window.scrollTo({ top: targetY, behavior: "smooth" });
     }
 
     rafId = requestAnimationFrame(check);
-    timeoutId = window.setTimeout(() => { cleanup(); resolve(); }, maxWait);
+    timeoutId = window.setTimeout(() => {
+      cleanup();
+      resolve();
+    }, maxWait);
   });
 }
 const skillsSection = document.querySelector<HTMLElement>(".skills-section");
-const skillsViewButtons = document.querySelectorAll<HTMLElement>(
-  "[data-skills-view-button]",
-);
+const skillsViewButtons = document.querySelectorAll<HTMLElement>("[data-skills-view-button]");
 
 function applySkillsView(view: "graph" | "cards") {
   if (!skillsSection) return;
@@ -322,9 +334,7 @@ function applySkillsView(view: "graph" | "cards") {
   // Gestione fullscreen + landscape su mobile per il grafico
   const isMobile = window.matchMedia("(max-width: 40rem)").matches;
   if (isMobile && view === "graph") {
-    const panel = skillsSection.querySelector(
-      ".skills-stage__panel--graph",
-    ) as HTMLElement | null;
+    const panel = skillsSection.querySelector(".skills-stage__panel--graph") as HTMLElement | null;
     if (panel && panel.requestFullscreen && !document.fullscreenElement) {
       panel.requestFullscreen().catch(() => {
         /* fullscreen non disponibile — rimane inline */
@@ -370,10 +380,7 @@ function ensureGraphLoaded(): void {
 
 skillsViewButtons.forEach((button) => {
   button.addEventListener("click", () => {
-    const view = button.dataset.skillsViewButton as
-      | "graph"
-      | "cards"
-      | undefined;
+    const view = button.dataset.skillsViewButton as "graph" | "cards" | undefined;
     if (!view) return;
     // Avvia l'import PRIMA dello switch: se l'utente clicca "Grafico" da
     // mobile (dove non è ancora caricato) il pannello passa a display:block
@@ -396,9 +403,7 @@ if (isDesktopViewport) ensureGraphLoaded();
 // collassata (skills-collapsible + dissolvenza in cv-page.css). Le card
 // restano tutte nel DOM anche da collassate — solo altezza/opacity della
 // dissolvenza cambiano, mai display:none (sussurri, non silenzi). ──────────
-const skillsExpandBtn = document.querySelector<HTMLButtonElement>(
-  "[data-skills-expand-toggle]",
-);
+const skillsExpandBtn = document.querySelector<HTMLButtonElement>("[data-skills-expand-toggle]");
 const skillsCollapsible = document.querySelector<HTMLElement>(".skills-collapsible");
 if (skillsExpandBtn && skillsCollapsible) {
   skillsExpandBtn.addEventListener("click", () => {
@@ -406,8 +411,8 @@ if (skillsExpandBtn && skillsCollapsible) {
     skillsCollapsible.dataset.skillsExpanded = String(!expanded);
     skillsExpandBtn.setAttribute("aria-expanded", String(!expanded));
     skillsExpandBtn.textContent = expanded
-      ? skillsExpandBtn.dataset.labelCollapsed ?? skillsExpandBtn.textContent ?? ""
-      : skillsExpandBtn.dataset.labelExpanded ?? skillsExpandBtn.textContent ?? "";
+      ? (skillsExpandBtn.dataset.labelCollapsed ?? skillsExpandBtn.textContent ?? "")
+      : (skillsExpandBtn.dataset.labelExpanded ?? skillsExpandBtn.textContent ?? "");
     // La griglia cresce/si contrae (max-height) — ScrollTrigger deve
     // ricalcolare le posizioni delle sezioni sottostanti.
     requestAnimationFrame(() => ScrollTrigger.refresh());
@@ -416,9 +421,7 @@ if (skillsExpandBtn && skillsCollapsible) {
 
 // ── Timeline formazione: "Mostra tutta la cronologia" — stessa meccanica
 // della skills-grid (tl-collapsible + dissolvenza in cv-page.css). ─────────
-const tlExpandBtn = document.querySelector<HTMLButtonElement>(
-  "[data-tl-expand-toggle]",
-);
+const tlExpandBtn = document.querySelector<HTMLButtonElement>("[data-tl-expand-toggle]");
 const tlCollapsible = document.querySelector<HTMLElement>(".tl-collapsible");
 if (tlExpandBtn && tlCollapsible) {
   tlExpandBtn.addEventListener("click", () => {
@@ -426,12 +429,11 @@ if (tlExpandBtn && tlCollapsible) {
     tlCollapsible.dataset.tlExpanded = String(!expanded);
     tlExpandBtn.setAttribute("aria-expanded", String(!expanded));
     tlExpandBtn.textContent = expanded
-      ? tlExpandBtn.dataset.labelCollapsed ?? tlExpandBtn.textContent ?? ""
-      : tlExpandBtn.dataset.labelExpanded ?? tlExpandBtn.textContent ?? "";
+      ? (tlExpandBtn.dataset.labelCollapsed ?? tlExpandBtn.textContent ?? "")
+      : (tlExpandBtn.dataset.labelExpanded ?? tlExpandBtn.textContent ?? "");
     requestAnimationFrame(() => ScrollTrigger.refresh());
   });
 }
-
 
 // ── Update nav buttons: morph larghezza + crossfade testo ───────────
 // Larghezze FISSE anche su desktop: evitano jitter e tengono le 4 voci allineate.
@@ -502,9 +504,11 @@ function updateNavButtons(mode: string) {
   // Sync mobile dropdown label + selected option
   const dropdownLabel = document.querySelector<HTMLElement>("#mode-dropdown-label");
   if (dropdownLabel) dropdownLabel.textContent = MODE_LABELS[mode] ?? mode;
-  document.querySelectorAll<HTMLElement>("#mode-dropdown-list [data-dropdown-mode]").forEach((opt) => {
-    opt.classList.toggle("is-selected", opt.dataset.dropdownMode === mode);
-  });
+  document
+    .querySelectorAll<HTMLElement>("#mode-dropdown-list [data-dropdown-mode]")
+    .forEach((opt) => {
+      opt.classList.toggle("is-selected", opt.dataset.dropdownMode === mode);
+    });
   navInitialized = true;
 }
 
@@ -527,281 +531,294 @@ function runModeChangeAnimation(mode: CVMode) {
   // dropdown/nav in versione EN. Così vale ovunque il markup lo preveda.
   const hasExpClusters = document.querySelector(".exp-clusters") !== null;
   if (hasExpClusters) {
+    // ── Animazione 2+3: Mode stamp fullscreen → Scan laser reveal ────
+    //
+    // Fase 1 (0ms): il nome del mode appare a caratteri enormi (fullscreen stamp)
+    //   con clip-path che si apre dal centro — effetto editorial magazine.
+    // Fase 2 (300ms): lo stamp esplode verso l'esterno e svanisce.
+    //   Contemporaneamente applyMode/applyAccordions.
+    // Fase 3 (450ms): laser accent scorre dall'alto verso il basso della pagina,
+    //   ogni card che tocca "si accende" nel suo nuovo stato (glow flash).
+    // Fase 4 (650ms layout stabile): scroll Lenis al cluster target.
+    // Fase 5 (dopo scroll): spotlight glow sul target, poi spegni.
 
-        // ── Animazione 2+3: Mode stamp fullscreen → Scan laser reveal ────
-        //
-        // Fase 1 (0ms): il nome del mode appare a caratteri enormi (fullscreen stamp)
-        //   con clip-path che si apre dal centro — effetto editorial magazine.
-        // Fase 2 (300ms): lo stamp esplode verso l'esterno e svanisce.
-        //   Contemporaneamente applyMode/applyAccordions.
-        // Fase 3 (450ms): laser accent scorre dall'alto verso il basso della pagina,
-        //   ogni card che tocca "si accende" nel suo nuovo stato (glow flash).
-        // Fase 4 (650ms layout stabile): scroll Lenis al cluster target.
-        // Fase 5 (dopo scroll): spotlight glow sul target, poi spegni.
+    const primaryClusterKey = (CLUSTER_OPEN_FOR[mode] ?? ["tech"])[0];
+    const scanTarget = document.querySelector<HTMLElement>(
+      `.exp-cluster[data-cluster="${primaryClusterKey}"]`,
+    );
+    const allClusters = document.querySelectorAll<HTMLElement>(".exp-cluster");
+    // Lo scroll si ferma sul titolo della sezione Esperienze, non sul
+    // cluster: il cluster resta più in basso della viewport, il titolo
+    // (contesto "Esperienze") altrimenti finirebbe nascosto sotto la
+    // navbar e chi arriva dalla dropdown perderebbe l'orientamento.
+    const scrollTarget =
+      scanTarget
+        ?.closest<HTMLElement>(".exp-section")
+        ?.querySelector<HTMLElement>(".section-title") ?? scanTarget;
 
-        const primaryClusterKey = (CLUSTER_OPEN_FOR[mode] ?? ["tech"])[0];
-        const scanTarget = document.querySelector<HTMLElement>(
-          `.exp-cluster[data-cluster="${primaryClusterKey}"]`,
-        );
-        const allClusters = document.querySelectorAll<HTMLElement>(".exp-cluster");
-        // Lo scroll si ferma sul titolo della sezione Esperienze, non sul
-        // cluster: il cluster resta più in basso della viewport, il titolo
-        // (contesto "Esperienze") altrimenti finirebbe nascosto sotto la
-        // navbar e chi arriva dalla dropdown perderebbe l'orientamento.
-        const scrollTarget =
-          scanTarget
-            ?.closest<HTMLElement>(".exp-section")
-            ?.querySelector<HTMLElement>(".section-title") ?? scanTarget;
+    // ── Crea stamp fullscreen ──────────────────────────────────────────
+    const stamp = document.createElement("div");
+    stamp.textContent = (MODE_LABELS[mode] ?? mode).toUpperCase();
+    Object.assign(stamp.style, {
+      position: "fixed",
+      inset: "0",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      /* Reduce base font-size and allow wrapping for long labels */
+      fontSize: "clamp(3rem, 16vw, 12rem)",
+      fontFamily: "Lexend, sans-serif",
+      fontWeight: "800",
+      letterSpacing: "-0.02em",
+      color: "var(--color-accent)",
+      opacity: "0",
+      zIndex: "9998",
+      pointerEvents: "none",
+      clipPath: "inset(50% 50% 50% 50%)",
+      userSelect: "none",
+      textAlign: "center",
+      whiteSpace: "pre-wrap",
+      overflowWrap: "break-word",
+      wordBreak: "break-word",
+      paddingLeft: "1rem",
+      paddingRight: "1rem",
+      lineHeight: "0.9",
+      maxWidth: "calc(100% - 2rem)",
+    });
+    document.body.appendChild(stamp);
 
-        // ── Crea stamp fullscreen ──────────────────────────────────────────
-        const stamp = document.createElement("div");
-        stamp.textContent = (MODE_LABELS[mode] ?? mode).toUpperCase();
-        Object.assign(stamp.style, {
-          position: "fixed",
-          inset: "0",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          /* Reduce base font-size and allow wrapping for long labels */
-          fontSize: "clamp(3rem, 16vw, 12rem)",
-          fontFamily: "Lexend, sans-serif",
-          fontWeight: "800",
-          letterSpacing: "-0.02em",
-          color: "var(--color-accent)",
-          opacity: "0",
-          zIndex: "9998",
-          pointerEvents: "none",
-          clipPath: "inset(50% 50% 50% 50%)",
-          userSelect: "none",
-          textAlign: "center",
-          whiteSpace: "pre-wrap",
-          overflowWrap: "break-word",
-          wordBreak: "break-word",
-          paddingLeft: "1rem",
-          paddingRight: "1rem",
-          lineHeight: "0.9",
-          maxWidth: "calc(100% - 2rem)",
-        });
-        document.body.appendChild(stamp);
+    // ── Timeline principale ────────────────────────────────────────────
+    const tl = gsap.timeline();
 
-        // ── Timeline principale ────────────────────────────────────────────
-        const tl = gsap.timeline();
+    // Fase 1 — stamp appare: clip-path si apre dal centro
+    tl.to(stamp, {
+      opacity: 0.1,
+      clipPath: "inset(0% 0% 0% 0%)",
+      duration: 0.28,
+      ease: "expo.out",
+    });
 
-        // Fase 1 — stamp appare: clip-path si apre dal centro
-        tl.to(stamp, {
-          opacity: 0.1,
-          clipPath: "inset(0% 0% 0% 0%)",
-          duration: 0.28,
-          ease: "expo.out",
-        });
+    // Fase 2 — stamp esplode fuori schermo (scale + opacity 0)
+    tl.to(stamp, {
+      scale: 1.6,
+      opacity: 0,
+      duration: 0.38,
+      ease: "expo.in",
+      onComplete: () => {
+        stamp.remove();
+        // Aggiorna accordion durante l'esplosione (invisibile all'utente)
+      },
+    });
 
-        // Fase 2 — stamp esplode fuori schermo (scale + opacity 0)
-        tl.to(stamp, {
-          scale: 1.6,
-          opacity: 0,
-          duration: 0.38,
-          ease: "expo.in",
-          onComplete: () => {
-            stamp.remove();
-            // Aggiorna accordion durante l'esplosione (invisibile all'utente)
-          },
-        });
-
-        // ── Fase 3: laser scan (parte a ~450ms, dopo lo stamp) ────────────
-        setTimeout(() => {
-          // Rispetta preferenze reduce-motion
-          if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-            // minimal visual feedback
-            if (!isMobile && scanTarget) {
-              gsap.to(scanTarget, { boxShadow: "0 0 0 6px var(--color-accent)", duration: 0.18, yoyo: true, repeat: 1 });
-            }
-            return;
-          }
-
-          const isDesktop = !isMobile;
-
-          // Prima del feedback visivo: rivela tutte le sezioni ancora nascoste (opacity:0
-          // da gsap.set al init). Se l'utente non ha ancora scrollato oltre la hero,
-          // exp-section e sezioni successive sarebbero invisibili indipendentemente
-          // da qualsiasi manipolazione dei cluster figli.
-          document.querySelectorAll<HTMLElement>(".reveal:not(.is-visible)").forEach((el) => {
-            gsap.set(el, { opacity: 1, y: 0 });
-            el.classList.add("is-visible");
+    // ── Fase 3: laser scan (parte a ~450ms, dopo lo stamp) ────────────
+    setTimeout(() => {
+      // Rispetta preferenze reduce-motion
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        // minimal visual feedback
+        if (!isMobile && scanTarget) {
+          gsap.to(scanTarget, {
+            boxShadow: "0 0 0 6px var(--color-accent)",
+            duration: 0.18,
+            yoyo: true,
+            repeat: 1,
           });
+        }
+        return;
+      }
 
-          // Mobile: mostra un breve highlight sul cluster target, niente scanner pesante
-          if (!isDesktop) {
-            if (scanTarget) {
+      const isDesktop = !isMobile;
+
+      // Prima del feedback visivo: rivela tutte le sezioni ancora nascoste (opacity:0
+      // da gsap.set al init). Se l'utente non ha ancora scrollato oltre la hero,
+      // exp-section e sezioni successive sarebbero invisibili indipendentemente
+      // da qualsiasi manipolazione dei cluster figli.
+      document.querySelectorAll<HTMLElement>(".reveal:not(.is-visible)").forEach((el) => {
+        gsap.set(el, { opacity: 1, y: 0 });
+        el.classList.add("is-visible");
+      });
+
+      // Mobile: mostra un breve highlight sul cluster target, niente scanner pesante
+      if (!isDesktop) {
+        if (scanTarget) {
+          gsap.fromTo(
+            scanTarget,
+            { boxShadow: "0 0 0 0 rgba(0,0,0,0)" },
+            {
+              boxShadow: "0 0 0 12px var(--color-accent)",
+              duration: 0.34,
+              yoyo: true,
+              repeat: 1,
+              ease: "power2.out",
+            },
+          );
+        }
+        return;
+      }
+
+      // Desktop: scanner ottimizzato — calcola posizioni una sola volta e avanza un indice
+      const scanner = document.createElement("div");
+      Object.assign(scanner.style, {
+        position: "fixed",
+        left: "0",
+        right: "0",
+        height: "2px",
+        background: "var(--color-accent)",
+        zIndex: "9999",
+        boxShadow: "0 0 22px 8px var(--color-accent)",
+        top: "0",
+        pointerEvents: "none",
+      });
+      document.body.appendChild(scanner);
+
+      const cards = Array.from(document.querySelectorAll<HTMLElement>(".cv-card"));
+      const cardPositions = cards.map((el) => ({
+        el,
+        top: el.getBoundingClientRect().top + window.scrollY,
+      }));
+      cardPositions.sort((a, b) => a.top - b.top);
+      let scanIndex = 0;
+      const pageHeight = document.documentElement.scrollHeight;
+
+      // Proxy object: evita DOM read (parseFloat(el.style.top)) in ogni frame.
+      const scanProxy = { y: 0 };
+      gsap.to(scanProxy, {
+        y: pageHeight,
+        duration: 0.85,
+        ease: "none",
+        onUpdate() {
+          scanner.style.top = scanProxy.y + "px";
+          // Avanza l'indice finché le card sono sopra la linea di scansione
+          while (scanIndex < cardPositions.length && cardPositions[scanIndex].top <= scanProxy.y) {
+            const card = cardPositions[scanIndex].el;
+            if (!card.dataset.scanned) {
+              card.dataset.scanned = "1";
+              // box-shadow invece di filter: brightness — evita compositing layer per ogni card
               gsap.fromTo(
-                scanTarget,
-                { boxShadow: "0 0 0 0 rgba(0,0,0,0)" },
-                { boxShadow: "0 0 0 12px var(--color-accent)", duration: 0.34, yoyo: true, repeat: 1, ease: "power2.out" },
+                card,
+                { boxShadow: "0 0 0 1px var(--color-accent), 0 0 16px var(--color-accent)" },
+                { boxShadow: "0 0 0 0 transparent", duration: 0.45, ease: "power2.out" },
               );
             }
-            return;
+            scanIndex += 1;
           }
-
-          // Desktop: scanner ottimizzato — calcola posizioni una sola volta e avanza un indice
-          const scanner = document.createElement("div");
-          Object.assign(scanner.style, {
-            position: "fixed",
-            left: "0",
-            right: "0",
-            height: "2px",
-            background: "var(--color-accent)",
-            zIndex: "9999",
-            boxShadow: "0 0 22px 8px var(--color-accent)",
-            top: "0",
-            pointerEvents: "none",
+        },
+        onComplete() {
+          scanner.remove();
+          cardPositions.forEach((p) => {
+            delete p.el.dataset.scanned;
           });
-          document.body.appendChild(scanner);
+        },
+      });
+    }, 450);
 
-          const cards = Array.from(document.querySelectorAll<HTMLElement>(".cv-card"));
-          const cardPositions = cards.map((el) => ({ el, top: el.getBoundingClientRect().top + window.scrollY }));
-          cardPositions.sort((a, b) => a.top - b.top);
-          let scanIndex = 0;
-          const pageHeight = document.documentElement.scrollHeight;
+    // ── Fase 4+5: scroll + spotlight (layout stabile a 650ms) ─────────
+    if (scanTarget) {
+      setTimeout(() => {
+        // 1. Svela PRIMA le sezioni .reveal ancora nascoste (y:32 da gsap.set al init).
+        //    Questo deve accadere PRIMA del calcolo della posizione —
+        //    se una sezione sopra il target ha ancora transform:translateY(32px),
+        //    getBoundingClientRect() restituirebbe una posizione errata (32px in più).
+        //    Sul primo click il timeout a 450ms può arrivare tardi (main thread occupato),
+        //    quindi qui è il posto sicuro per garantire il flush prima del calcolo.
+        document.querySelectorAll<HTMLElement>(".reveal:not(.is-visible)").forEach((el) => {
+          gsap.set(el, { opacity: 1, y: 0 });
+          el.classList.add("is-visible");
+        });
 
-          // Proxy object: evita DOM read (parseFloat(el.style.top)) in ogni frame.
-          const scanProxy = { y: 0 };
-          gsap.to(scanProxy, {
-            y: pageHeight,
-            duration: 0.85,
-            ease: "none",
-            onUpdate() {
-              scanner.style.top = scanProxy.y + "px";
-              // Avanza l'indice finché le card sono sopra la linea di scansione
-              while (scanIndex < cardPositions.length && cardPositions[scanIndex].top <= scanProxy.y) {
-                const card = cardPositions[scanIndex].el;
-                if (!card.dataset.scanned) {
-                  card.dataset.scanned = "1";
-                  // box-shadow invece di filter: brightness — evita compositing layer per ogni card
-                  gsap.fromTo(
-                    card,
-                    { boxShadow: "0 0 0 1px var(--color-accent), 0 0 16px var(--color-accent)" },
-                    { boxShadow: "0 0 0 0 transparent", duration: 0.45, ease: "power2.out" },
-                  );
-                }
-                scanIndex += 1;
-              }
-            },
-            onComplete() {
-              scanner.remove();
-              cardPositions.forEach((p) => { delete p.el.dataset.scanned; });
-            },
-          });
-        }, 450);
+        // 2. Attendi i font (document.fonts.ready) PRIMA del frame di
+        //    layout: Lexend nei pesi 400-700 carica con font-display:swap
+        //    (solo il peso 800 dell'hero è "block"), quindi appena dopo
+        //    il primo load il testo sopra il target può essere ancora nel
+        //    font di fallback. Se calcoliamo la posizione in quel momento,
+        //    lo scroll atterra dove il fallback metteva il titolo — non
+        //    dove lo mette Lexend appena swappa, un attimo dopo. Succede
+        //    solo al primo cambio mode: dal secondo in poi i font sono
+        //    già stabili e la promise (già risolta) non aggiunge ritardo
+        //    percepibile. Poi un frame di layout per i transform rimossi.
+        document.fonts.ready.then(() =>
+          requestAnimationFrame(() => {
+            const navEl = document.querySelector<HTMLElement>("#cv-nav");
+            const NAV_HEIGHT = navEl ? navEl.getBoundingClientRect().height : 52;
+            const absoluteTop =
+              (scrollTarget ?? scanTarget).getBoundingClientRect().top +
+              window.scrollY -
+              NAV_HEIGHT;
 
-        // ── Fase 4+5: scroll + spotlight (layout stabile a 650ms) ─────────
-        if (scanTarget) {
-          setTimeout(() => {
-            // 1. Svela PRIMA le sezioni .reveal ancora nascoste (y:32 da gsap.set al init).
-            //    Questo deve accadere PRIMA del calcolo della posizione —
-            //    se una sezione sopra il target ha ancora transform:translateY(32px),
-            //    getBoundingClientRect() restituirebbe una posizione errata (32px in più).
-            //    Sul primo click il timeout a 450ms può arrivare tardi (main thread occupato),
-            //    quindi qui è il posto sicuro per garantire il flush prima del calcolo.
-            document.querySelectorAll<HTMLElement>(".reveal:not(.is-visible)").forEach((el) => {
-              gsap.set(el, { opacity: 1, y: 0 });
-              el.classList.add("is-visible");
+            // Spotlight: dim gli altri, glow sul target
+            gsap.to(allClusters, { opacity: 0.2, duration: 0.25 });
+            gsap.to(scanTarget, {
+              opacity: 1,
+              boxShadow:
+                "0 0 0 2px var(--color-accent), 0 0 28px color-mix(in srgb, var(--color-accent) 35%, transparent)",
+              duration: 0.25,
             });
 
-            // 2. Attendi i font (document.fonts.ready) PRIMA del frame di
-            //    layout: Lexend nei pesi 400-700 carica con font-display:swap
-            //    (solo il peso 800 dell'hero è "block"), quindi appena dopo
-            //    il primo load il testo sopra il target può essere ancora nel
-            //    font di fallback. Se calcoliamo la posizione in quel momento,
-            //    lo scroll atterra dove il fallback metteva il titolo — non
-            //    dove lo mette Lexend appena swappa, un attimo dopo. Succede
-            //    solo al primo cambio mode: dal secondo in poi i font sono
-            //    già stabili e la promise (già risolta) non aggiunge ritardo
-            //    percepibile. Poi un frame di layout per i transform rimossi.
-            document.fonts.ready.then(() => requestAnimationFrame(() => {
-              const navEl = document.querySelector<HTMLElement>("#cv-nav");
-              const NAV_HEIGHT = navEl ? navEl.getBoundingClientRect().height : 52;
-              const absoluteTop =
-                (scrollTarget ?? scanTarget).getBoundingClientRect().top + window.scrollY - NAV_HEIGHT;
-
-              // Spotlight: dim gli altri, glow sul target
-              gsap.to(allClusters, { opacity: 0.2, duration: 0.25 });
-              gsap.to(scanTarget, {
-                opacity: 1,
-                boxShadow:
-                  "0 0 0 2px var(--color-accent), 0 0 28px color-mix(in srgb, var(--color-accent) 35%, transparent)",
-                duration: 0.25,
-              });
-
-              // Usa helper scrollToPositionThen per attendere l'arrivo e spegnere
-              // lo spotlight in modo affidabile (gestisce Lenis o fallback).
-              scrollToPositionThen(absoluteTop).then(() => {
-                // Correzione finale: l'apertura/chiusura dei cluster (CSS
-                // max-height, ~550ms) e le re-reveal dell'accordion possono
-                // continuare a leggero spostare il layout durante lo scroll
-                // stesso — ricalcola e correggi in un colpo solo, senza
-                // animazione, così il titolo non resta mai sotto la navbar.
-                const settledTop =
-                  (scrollTarget ?? scanTarget).getBoundingClientRect().top +
-                  window.scrollY -
-                  NAV_HEIGHT;
-                if (Math.abs(settledTop - window.scrollY) > 4) {
-                  const lenis = window.__lenis;
-                  if (lenis && typeof lenis.scrollTo === "function") {
-                    lenis.scrollTo(settledTop, { immediate: true });
-                  } else {
-                    window.scrollTo({ top: settledTop });
-                  }
+            // Usa helper scrollToPositionThen per attendere l'arrivo e spegnere
+            // lo spotlight in modo affidabile (gestisce Lenis o fallback).
+            scrollToPositionThen(absoluteTop).then(() => {
+              // Correzione finale: l'apertura/chiusura dei cluster (CSS
+              // max-height, ~550ms) e le re-reveal dell'accordion possono
+              // continuare a leggero spostare il layout durante lo scroll
+              // stesso — ricalcola e correggi in un colpo solo, senza
+              // animazione, così il titolo non resta mai sotto la navbar.
+              const settledTop =
+                (scrollTarget ?? scanTarget).getBoundingClientRect().top +
+                window.scrollY -
+                NAV_HEIGHT;
+              if (Math.abs(settledTop - window.scrollY) > 4) {
+                const lenis = window.__lenis;
+                if (lenis && typeof lenis.scrollTo === "function") {
+                  lenis.scrollTo(settledTop, { immediate: true });
+                } else {
+                  window.scrollTo({ top: settledTop });
                 }
-                gsap.to(allClusters, { opacity: 1, duration: 0.5, ease: "power2.out" });
-                gsap.to(scanTarget, { boxShadow: "none", duration: 0.5 });
-              });
-            })); // end requestAnimationFrame (dentro document.fonts.ready.then)
-          }, 650);
-        }
-      }
+              }
+              gsap.to(allClusters, { opacity: 1, duration: 0.5, ease: "power2.out" });
+              gsap.to(scanTarget, { boxShadow: "none", duration: 0.5 });
+            });
+          }),
+        ); // end requestAnimationFrame (dentro document.fonts.ready.then)
+      }, 650);
+    }
+  }
   // else: pagina senza cluster esperienza (es. home) — subscribe ha
   // già chiamato applyMode, non c'è altro da animare/scrollare qui.
 }
 
 // ── Nav button clicks + magnetic ─────────────────────────────────────
-document
-  .querySelectorAll<HTMLButtonElement>("[data-nav-mode]")
-  .forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const mode = btn.dataset.navMode as CVMode;
-      if (!mode) return;
+document.querySelectorAll<HTMLButtonElement>("[data-nav-mode]").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const mode = btn.dataset.navMode as CVMode;
+    if (!mode) return;
 
-      const isMobile = !window.matchMedia("(min-width: 40.0625rem)").matches;
-      const isAlreadyActive = btn.classList.contains("is-active");
+    const isMobile = !window.matchMedia("(min-width: 40.0625rem)").matches;
+    const isAlreadyActive = btn.classList.contains("is-active");
 
-      // Mobile: primo tap = attiva il mode; secondo tap = scroll al contenuto.
-      // Solo per il tap diretto sul bottone nav — la dropdown (che chiama
-      // runModeChangeAnimation direttamente) non passa da qui.
-      if (isMobile && isAlreadyActive) {
-        gsap.fromTo(
-          btn,
-          { scale: 0.88 },
-          { scale: 1, duration: 0.5, ease: "elastic.out(2, 0.4)" },
-        );
-        document
-          .querySelector<HTMLElement>(".skills-section")
-          ?.scrollIntoView({ behavior: "smooth", block: "start" });
-        return;
-      }
+    // Mobile: primo tap = attiva il mode; secondo tap = scroll al contenuto.
+    // Solo per il tap diretto sul bottone nav — la dropdown (che chiama
+    // runModeChangeAnimation direttamente) non passa da qui.
+    if (isMobile && isAlreadyActive) {
+      gsap.fromTo(btn, { scale: 0.88 }, { scale: 1, duration: 0.5, ease: "elastic.out(2, 0.4)" });
+      document
+        .querySelector<HTMLElement>(".skills-section")
+        ?.scrollIntoView({ behavior: "smooth", block: "start" });
+      return;
+    }
 
-      runModeChangeAnimation(mode);
-    });
-
-    btn.addEventListener("mousemove", (e) => {
-      const rect = btn.getBoundingClientRect();
-      const dx = ((e.clientX - rect.left - rect.width / 2) / rect.width) * 6;
-      const dy = ((e.clientY - rect.top - rect.height / 2) / rect.height) * 6;
-      gsap.to(btn, { x: dx, y: dy, duration: 0.3, ease: "power2.out" });
-    });
-
-    btn.addEventListener("mouseleave", () => {
-      gsap.to(btn, { x: 0, y: 0, duration: 0.5, ease: "elastic.out(1, 0.4)" });
-    });
+    runModeChangeAnimation(mode);
   });
+
+  btn.addEventListener("mousemove", (e) => {
+    const rect = btn.getBoundingClientRect();
+    const dx = ((e.clientX - rect.left - rect.width / 2) / rect.width) * 6;
+    const dy = ((e.clientY - rect.top - rect.height / 2) / rect.height) * 6;
+    gsap.to(btn, { x: dx, y: dy, duration: 0.3, ease: "power2.out" });
+  });
+
+  btn.addEventListener("mouseleave", () => {
+    gsap.to(btn, { x: 0, y: 0, duration: 0.5, ease: "elastic.out(1, 0.4)" });
+  });
+});
 
 // ── Voce "Fuori orario" — navigazione, non mode ─────────────────────────
 // Sync visivo tra lo stato realmente aperto del cluster "personal" e il
@@ -810,9 +827,7 @@ document
 // automatica quando si cambia mode (applyAccordions non include mai
 // "personal" in nessun mode — vedi mode-helpers.ts).
 function syncPersonalNavState() {
-  const cluster = document.querySelector<HTMLElement>(
-    '.exp-cluster[data-cluster="personal"]',
-  );
+  const cluster = document.querySelector<HTMLElement>('.exp-cluster[data-cluster="personal"]');
   const isOpen = !!cluster?.hasAttribute("data-open");
   document.querySelectorAll<HTMLElement>("[data-nav-personal]").forEach((btn) => {
     btn.classList.toggle("is-active", isOpen);
@@ -828,9 +843,7 @@ function syncPersonalNavState() {
 // pagina initFeaturedCardReveal() le salta: il cluster "personal" non è
 // mai aperto di default, quindi non le trova.
 function openPersonalCluster() {
-  const cluster = document.querySelector<HTMLElement>(
-    '.exp-cluster[data-cluster="personal"]',
-  );
+  const cluster = document.querySelector<HTMLElement>('.exp-cluster[data-cluster="personal"]');
   const header = cluster?.querySelector<HTMLElement>(".exp-cluster__header");
   if (!cluster || !header) return;
 
@@ -934,9 +947,7 @@ document
 // La persistentAtom legge localStorage ma la route IS la fonte corretta.
 // setMode PRIMA del subscribe → la prima emissione del subscribe è già giusta,
 // nessun doppio applyMode con mode sbagliato da localStorage stale.
-const initialRouteMode = window.location.pathname
-  .split("/")
-  .filter(Boolean)[0] as CVMode;
+const initialRouteMode = window.location.pathname.split("/").filter(Boolean)[0] as CVMode;
 if ((CV_MODES as readonly string[]).includes(initialRouteMode)) {
   setMode(initialRouteMode);
 } else {
@@ -1108,35 +1119,31 @@ document
 // ── Animated counters on AI impact badges ────────────────────────────────
 // Parses strings like "-87% boilerplate" or "+3x velocità contenuti"
 // and counts from 0 → target when the badge enters the viewport.
-const counterRe = /^([+\-]?)(\d+(?:\.\d+)?)(.*)$/;
-document
-  .querySelectorAll<HTMLElement>(".ai-card__impact[data-count]")
-  .forEach((el) => {
-    const raw = el.dataset.count!;
-    const match = raw.match(counterRe);
-    if (!match) return;
-    const [, sign, numStr, suffix] = match;
-    const target = parseFloat(numStr);
-    ScrollTrigger.create({
-      trigger: el,
-      start: "top 88%",
-      once: true,
-      onEnter() {
-        const obj = { val: 0 };
-        gsap.to(obj, {
-          val: target,
-          duration: 1.2,
-          ease: "power2.out",
-          onUpdate() {
-            const v = Number.isInteger(target)
-              ? Math.round(obj.val)
-              : obj.val.toFixed(1);
-            el.textContent = `${sign}${v}${suffix}`;
-          },
-        });
-      },
-    });
+const counterRe = /^([+-]?)(\d+(?:\.\d+)?)(.*)$/;
+document.querySelectorAll<HTMLElement>(".ai-card__impact[data-count]").forEach((el) => {
+  const raw = el.dataset.count!;
+  const match = raw.match(counterRe);
+  if (!match) return;
+  const [, sign, numStr, suffix] = match;
+  const target = parseFloat(numStr);
+  ScrollTrigger.create({
+    trigger: el,
+    start: "top 88%",
+    once: true,
+    onEnter() {
+      const obj = { val: 0 };
+      gsap.to(obj, {
+        val: target,
+        duration: 1.2,
+        ease: "power2.out",
+        onUpdate() {
+          const v = Number.isInteger(target) ? Math.round(obj.val) : obj.val.toFixed(1);
+          el.textContent = `${sign}${v}${suffix}`;
+        },
+      });
+    },
   });
+});
 
 // ── ScrollTrigger refresh — fixes Lit web components (GoLogo, FloatingMenu etc.)
 // expanding after init and pushing bottom sections out of calculated trigger range.
@@ -1147,63 +1154,62 @@ window.addEventListener("load", () => ScrollTrigger.refresh());
 setTimeout(() => ScrollTrigger.refresh(), 500);
 
 // ── Experience cluster accordion ──────────────────────────────────────────
-document
-  .querySelectorAll<HTMLElement>(".exp-cluster__header")
-  .forEach((header) => {
-    header.addEventListener("click", () => {
-      const cluster = header.closest<HTMLElement>(".exp-cluster");
-      if (!cluster) return;
-      const isOpen = cluster.hasAttribute("data-open");
-      const isMobile = typeof window !== "undefined" && window.matchMedia("(max-width: 40rem)").matches;
+document.querySelectorAll<HTMLElement>(".exp-cluster__header").forEach((header) => {
+  header.addEventListener("click", () => {
+    const cluster = header.closest<HTMLElement>(".exp-cluster");
+    if (!cluster) return;
+    const isOpen = cluster.hasAttribute("data-open");
+    const isMobile =
+      typeof window !== "undefined" && window.matchMedia("(max-width: 40rem)").matches;
 
-      if (isOpen) {
-        cluster.removeAttribute("data-open");
-        header.setAttribute("aria-expanded", "false");
-      } else {
-        // On mobile behave like a true accordion: close others
-        if (isMobile) {
-          document.querySelectorAll<HTMLElement>(".exp-cluster").forEach((c) => {
-            if (c !== cluster) {
-              c.removeAttribute("data-open");
-              const h = c.querySelector<HTMLElement>(".exp-cluster__header");
-              if (h) h.setAttribute("aria-expanded", "false");
-            }
-          });
-        }
-
-        cluster.setAttribute("data-open", "");
-        header.setAttribute("aria-expanded", "true");
-
-        // Move focus into the opened body for keyboard users
-        const body = cluster.querySelector<HTMLElement>(".exp-cluster__body");
-        if (body) {
-          body.setAttribute("tabindex", "-1");
-          body.focus({ preventScroll: true });
-        }
-
-        // Il body transiziona max-height 0 → 9000px (cv-page.css) per permettere
-        // contenuto di altezza arbitraria: durante quella transizione alcuni
-        // browser "inseguono" l'elemento a fuoco e finiscono per allineare la
-        // FINE del contenuto appena aperto invece dell'inizio. Controlliamo lo
-        // scroll esplicitamente sull'header (che non si sposta) una volta che
-        // la transizione (0.55s) e l'eventuale chiusura di altri cluster
-        // (mobile) si sono assestate.
-        setTimeout(() => {
-          const navEl = document.querySelector<HTMLElement>("#cv-nav");
-          const navHeight = navEl ? navEl.getBoundingClientRect().height : 52;
-          const targetY = header.getBoundingClientRect().top + window.scrollY - navHeight - 8;
-          scrollToPositionThen(targetY);
-        }, 600);
+    if (isOpen) {
+      cluster.removeAttribute("data-open");
+      header.setAttribute("aria-expanded", "false");
+    } else {
+      // On mobile behave like a true accordion: close others
+      if (isMobile) {
+        document.querySelectorAll<HTMLElement>(".exp-cluster").forEach((c) => {
+          if (c !== cluster) {
+            c.removeAttribute("data-open");
+            const h = c.querySelector<HTMLElement>(".exp-cluster__header");
+            if (h) h.setAttribute("aria-expanded", "false");
+          }
+        });
       }
 
-      // After layout change, refresh ScrollTrigger to recompute offsets
-      setTimeout(() => ScrollTrigger.refresh(), 320);
+      cluster.setAttribute("data-open", "");
+      header.setAttribute("aria-expanded", "true");
 
-      // Click diretto sull'header del cluster personale (non passando dalla
-      // voce "Fuori orario"): sincronizza comunque lo stato del bottone.
-      if (cluster.dataset.cluster === "personal") syncPersonalNavState();
-    });
+      // Move focus into the opened body for keyboard users
+      const body = cluster.querySelector<HTMLElement>(".exp-cluster__body");
+      if (body) {
+        body.setAttribute("tabindex", "-1");
+        body.focus({ preventScroll: true });
+      }
+
+      // Il body transiziona max-height 0 → 9000px (cv-page.css) per permettere
+      // contenuto di altezza arbitraria: durante quella transizione alcuni
+      // browser "inseguono" l'elemento a fuoco e finiscono per allineare la
+      // FINE del contenuto appena aperto invece dell'inizio. Controlliamo lo
+      // scroll esplicitamente sull'header (che non si sposta) una volta che
+      // la transizione (0.55s) e l'eventuale chiusura di altri cluster
+      // (mobile) si sono assestate.
+      setTimeout(() => {
+        const navEl = document.querySelector<HTMLElement>("#cv-nav");
+        const navHeight = navEl ? navEl.getBoundingClientRect().height : 52;
+        const targetY = header.getBoundingClientRect().top + window.scrollY - navHeight - 8;
+        scrollToPositionThen(targetY);
+      }, 600);
+    }
+
+    // After layout change, refresh ScrollTrigger to recompute offsets
+    setTimeout(() => ScrollTrigger.refresh(), 320);
+
+    // Click diretto sull'header del cluster personale (non passando dalla
+    // voce "Fuori orario"): sincronizza comunque lo stato del bottone.
+    if (cluster.dataset.cluster === "personal") syncPersonalNavState();
   });
+});
 
 // ── "Leggi altro" — reveal incrementale delle card extra (3 per click) ────
 // Pattern read-more (Legge di Jakob): ogni click rivela il batch successivo;
@@ -1212,64 +1218,57 @@ document
 // height animata: l'altezza segue naturalmente le card visibili.
 const REVEAL_BATCH = 3;
 const isEnglishPage = document.documentElement.lang.startsWith("en");
-document
-  .querySelectorAll<HTMLElement>(".exp-deeper-btn")
-  .forEach((btn) => {
-    const key = btn.dataset.drawer;
-    const drawer = key ? document.getElementById(`exp-drawer-${key}`) : null;
-    if (!drawer) return;
+document.querySelectorAll<HTMLElement>(".exp-deeper-btn").forEach((btn) => {
+  const key = btn.dataset.drawer;
+  const drawer = key ? document.getElementById(`exp-drawer-${key}`) : null;
+  if (!drawer) return;
 
-    const cards = Array.from(drawer.querySelectorAll<HTMLElement>(".exp-card"));
-    cards.forEach((card) => card.setAttribute("hidden", ""));
-    // La visibilità è per-card via [hidden] — il drawer stesso resta nel flusso
-    drawer.removeAttribute("aria-hidden");
+  const cards = Array.from(drawer.querySelectorAll<HTMLElement>(".exp-card"));
+  cards.forEach((card) => card.setAttribute("hidden", ""));
+  // La visibilità è per-card via [hidden] — il drawer stesso resta nel flusso
+  drawer.removeAttribute("aria-hidden");
 
-    const label = btn.querySelector<HTMLElement>(".exp-deeper-btn__label");
-    const updateLabel = () => {
-      const remaining = cards.filter((c) => c.hasAttribute("hidden")).length;
-      const next = Math.min(REVEAL_BATCH, remaining);
-      if (label)
-        label.textContent = isEnglishPage
-          ? `Read ${next} more`
-          : `Leggi altre ${next}`;
-    };
-    updateLabel();
+  const label = btn.querySelector<HTMLElement>(".exp-deeper-btn__label");
+  const updateLabel = () => {
+    const remaining = cards.filter((c) => c.hasAttribute("hidden")).length;
+    const next = Math.min(REVEAL_BATCH, remaining);
+    if (label) label.textContent = isEnglishPage ? `Read ${next} more` : `Leggi altre ${next}`;
+  };
+  updateLabel();
 
-    btn.addEventListener("click", () => {
-      const batch = cards
-        .filter((c) => c.hasAttribute("hidden"))
-        .slice(0, REVEAL_BATCH);
-      if (!batch.length) return;
+  btn.addEventListener("click", () => {
+    const batch = cards.filter((c) => c.hasAttribute("hidden")).slice(0, REVEAL_BATCH);
+    if (!batch.length) return;
 
-      batch.forEach((card) => {
-        card.removeAttribute("hidden");
-        card.classList.add("is-revealed");
-      });
-      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-        gsap.set(batch, { opacity: 1, y: 0 });
-      } else {
-        gsap.fromTo(
-          batch,
-          { opacity: 0, y: 20 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 0.45,
-            stagger: { each: 0.07, from: "start" },
-            ease: "power3.out",
-          },
-        );
-      }
-
-      const remaining = cards.filter((c) => c.hasAttribute("hidden")).length;
-      if (remaining === 0) {
-        btn.setAttribute("hidden", "");
-      } else {
-        updateLabel();
-      }
-      setTimeout(() => ScrollTrigger.refresh(), 100);
+    batch.forEach((card) => {
+      card.removeAttribute("hidden");
+      card.classList.add("is-revealed");
     });
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      gsap.set(batch, { opacity: 1, y: 0 });
+    } else {
+      gsap.fromTo(
+        batch,
+        { opacity: 0, y: 20 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 0.45,
+          stagger: { each: 0.07, from: "start" },
+          ease: "power3.out",
+        },
+      );
+    }
+
+    const remaining = cards.filter((c) => c.hasAttribute("hidden")).length;
+    if (remaining === 0) {
+      btn.setAttribute("hidden", "");
+    } else {
+      updateLabel();
+    }
+    setTimeout(() => ScrollTrigger.refresh(), 100);
   });
+});
 
 // ── ScrollTrigger stagger for featured exp cards ──────────────────────────
 function initFeaturedCardReveal() {
@@ -1280,9 +1279,9 @@ function initFeaturedCardReveal() {
     card.classList.remove("is-revealed");
   });
 
-  const featuredCards = Array.from(document.querySelectorAll<HTMLElement>(
-    ".exp-cluster[data-open] .exp-grid--featured .exp-card",
-  ));
+  const featuredCards = Array.from(
+    document.querySelectorAll<HTMLElement>(".exp-cluster[data-open] .exp-grid--featured .exp-card"),
+  );
   if (!featuredCards.length) return;
 
   gsap.set(featuredCards, { opacity: 0, y: 24 });
@@ -1349,7 +1348,6 @@ document.querySelectorAll<HTMLElement>(".exp-cluster__header").forEach((header) 
 // delta: desktop 500px (grande, visibile), mobile 300px (~50% meno).
 // scrub: true = risposta 1:1 allo scroll in entrambe le direzioni.
 if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-
   // Imposta le rotazioni: GSAP prende ownership del transform prima dell'animazione
   gsap.set(".bg-knoll--laptop", { rotation: -10 });
   gsap.set(".bg-knoll--multitool", { rotation: 8 });
@@ -1375,7 +1373,8 @@ if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     const triggerEl = document.querySelector<HTMLElement>(trigger);
     if (!el || !triggerEl) return;
 
-    gsap.fromTo(el,
+    gsap.fromTo(
+      el,
       { y: delta },
       {
         y: -delta,
@@ -1386,7 +1385,7 @@ if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
           end: "bottom top",
           scrub: true,
         },
-      }
+      },
     );
   });
 
@@ -1412,7 +1411,6 @@ if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
         },
       );
     });
-
 }
 
 // ── Skills toggle hint: pulse glow (A) + scan sweep (C) ───────────────────
@@ -1481,7 +1479,7 @@ if (skillsViewButtons.length) {
     management: "rgba(180,100,255,1)",
   };
   const CV_MODE_KEYS = ["tech", "creative", "human", "management"] as const;
-  const O = 4;  // px fuori dal bordo card
+  const O = 4; // px fuori dal bordo card
   const CW = 18; // lunghezza ala orizzontale del bracket
 
   let _peekCard: HTMLElement | null = null;
@@ -1490,8 +1488,14 @@ if (skillsViewButtons.length) {
   let _scrollCancel: (() => void) | null = null;
 
   const resetPeek = () => {
-    if (_peekTimer) { clearTimeout(_peekTimer); _peekTimer = null; }
-    if (_scrollCancel) { window.removeEventListener("scroll", _scrollCancel); _scrollCancel = null; }
+    if (_peekTimer) {
+      clearTimeout(_peekTimer);
+      _peekTimer = null;
+    }
+    if (_scrollCancel) {
+      window.removeEventListener("scroll", _scrollCancel);
+      _scrollCancel = null;
+    }
     _peekEls.forEach((el) => el.remove());
     _peekEls = [];
     if (_peekCard) {
@@ -1548,10 +1552,13 @@ if (skillsViewButtons.length) {
       const accentDim = accent.replace("1)", "0.22)");
 
       const side: "left" | "right" | "center" =
-        modes.length === 1 ? "left" :
-          i === 0 ? "left" :
-            i === modes.length - 1 ? "right" :
-              "center";
+        modes.length === 1
+          ? "left"
+          : i === 0
+            ? "left"
+            : i === modes.length - 1
+              ? "right"
+              : "center";
 
       // ── BRACKET: figlio absolute della card ─────────────────────────────
       if (side !== "center") {
@@ -1573,8 +1580,10 @@ if (skillsViewButtons.length) {
         const defs = document.createElementNS(ns, "defs");
         const grad = document.createElementNS(ns, "linearGradient");
         grad.setAttribute("id", gradId);
-        grad.setAttribute("x1", "0"); grad.setAttribute("y1", "1");
-        grad.setAttribute("x2", "0"); grad.setAttribute("y2", "0");
+        grad.setAttribute("x1", "0");
+        grad.setAttribute("y1", "1");
+        grad.setAttribute("x2", "0");
+        grad.setAttribute("y2", "0");
         grad.setAttribute("gradientUnits", "objectBoundingBox");
         const s0 = document.createElementNS(ns, "stop");
         s0.setAttribute("offset", "0%");
@@ -1584,8 +1593,10 @@ if (skillsViewButtons.length) {
         s1.setAttribute("offset", "100%");
         s1.setAttribute("stop-color", accent);
         s1.setAttribute("stop-opacity", "0.92");
-        grad.appendChild(s0); grad.appendChild(s1);
-        defs.appendChild(grad); bSvg.appendChild(defs);
+        grad.appendChild(s0);
+        grad.appendChild(s1);
+        defs.appendChild(grad);
+        bSvg.appendChild(defs);
 
         // Path del bracket in coordinate locali SVG
         let d: string;
@@ -1617,7 +1628,8 @@ if (skillsViewButtons.length) {
         dot.style.opacity = "0";
         dot.style.filter = `drop-shadow(0 0 7px ${accent})`;
 
-        bSvg.appendChild(bPath); bSvg.appendChild(dot);
+        bSvg.appendChild(bPath);
+        bSvg.appendChild(dot);
         card.appendChild(bSvg);
         if (managed) _peekEls.push(bSvg);
 
@@ -1629,10 +1641,17 @@ if (skillsViewButtons.length) {
         const bTl = gsap.timeline({ delay: i * 0.14 });
         bTl.to(bPath, { attr: { "stroke-dashoffset": 0 }, duration: 0.65, ease: "power2.inOut" });
         bTl.set(dot, { opacity: 1 }, "-=0.08");
-        bTl.fromTo(dot, { attr: { r: "0" } }, { attr: { r: "3.5" }, duration: 0.22, ease: "back.out(3)" }, "<");
+        bTl.fromTo(
+          dot,
+          { attr: { r: "0" } },
+          { attr: { r: "3.5" }, duration: 0.22, ease: "back.out(3)" },
+          "<",
+        );
         bTl.to({}, { duration: holdDelay });
         bTl.to([bPath, dot], {
-          opacity: 0, duration: 0.3, ease: "power2.in",
+          opacity: 0,
+          duration: 0.3,
+          ease: "power2.in",
           onComplete() {
             bSvg.remove();
             if (managed) _peekEls = _peekEls.filter((el) => el !== bSvg);
@@ -1696,7 +1715,7 @@ if (skillsViewButtons.length) {
         tPath.setAttribute("stroke-dashoffset", String(tLen));
 
         // Il thread parte dopo che il bracket ha raggiunto il top (~0.65s + stagger)
-        const tDelay = (i * 0.14) + 0.55;
+        const tDelay = i * 0.14 + 0.55;
         gsap.to(tPath, {
           attr: { "stroke-dashoffset": 0 },
           duration: 0.45,
@@ -1756,13 +1775,21 @@ if (skillsViewButtons.length) {
         const rect = card.getBoundingClientRect();
 
         if (!reducedMotionPeek) {
-          const glowLayers = modes.map((m) => {
-            const c = PEEK_ACCENT[m];
-            return `0 0 22px ${c.replace("1)", "0.22)")}, 0 0 8px ${c.replace("1)", "0.1)")}`;
-          }).join(", ");
-          gsap.fromTo(card,
+          const glowLayers = modes
+            .map((m) => {
+              const c = PEEK_ACCENT[m];
+              return `0 0 22px ${c.replace("1)", "0.22)")}, 0 0 8px ${c.replace("1)", "0.1)")}`;
+            })
+            .join(", ");
+          gsap.fromTo(
+            card,
             { borderColor: "rgba(255,255,255,0.12)", boxShadow: "none" },
-            { borderColor: PEEK_ACCENT[modes[0]], boxShadow: glowLayers, duration: 0.4, ease: "power2.out" },
+            {
+              borderColor: PEEK_ACCENT[modes[0]],
+              boxShadow: glowLayers,
+              duration: 0.4,
+              ease: "power2.out",
+            },
           );
         }
 
@@ -1773,10 +1800,21 @@ if (skillsViewButtons.length) {
             const dropdownTrigger = document.querySelector<HTMLElement>("#mode-dropdown-btn");
             if (dropdownTrigger) {
               const accent = PEEK_ACCENT[modes[0]];
-              gsap.timeline()
+              gsap
+                .timeline()
                 .to(dropdownTrigger, { scale: 1.08, duration: 0.18, ease: "power2.out" })
                 .to(dropdownTrigger, { scale: 1, duration: 0.4, ease: "elastic.out(1.8, 0.4)" })
-                .to(dropdownTrigger, { boxShadow: `0 0 20px ${accent.replace("1)", "0.55)")}`, duration: 0.28, yoyo: true, repeat: 1, repeatDelay: 1.2 }, "<");
+                .to(
+                  dropdownTrigger,
+                  {
+                    boxShadow: `0 0 20px ${accent.replace("1)", "0.55)")}`,
+                    duration: 0.28,
+                    yoyo: true,
+                    repeat: 1,
+                    repeatDelay: 1.2,
+                  },
+                  "<",
+                );
             }
           } else {
             modes.forEach((mode, i) => {
@@ -1786,10 +1824,23 @@ if (skillsViewButtons.length) {
               const abbr = navBtn.querySelector<HTMLElement>(".mode-btn__abbr");
               const label = navBtn.querySelector<HTMLElement>(".mode-btn__label");
               const tl = gsap.timeline({ delay: i * 0.12 });
-              tl.to(navBtn, { scale: 1.15, duration: 0.18, ease: "power2.out" })
-                .to(navBtn, { scale: 1, duration: 0.4, ease: "elastic.out(1.8, 0.4)" });
-              if (abbr) tl.to(abbr, { color: accent, duration: 0.28, yoyo: true, repeat: 1, repeatDelay: 1.55 }, "<");
-              if (label) tl.to(label, { color: accent, duration: 0.28, yoyo: true, repeat: 1, repeatDelay: 1.55 }, "<");
+              tl.to(navBtn, { scale: 1.15, duration: 0.18, ease: "power2.out" }).to(navBtn, {
+                scale: 1,
+                duration: 0.4,
+                ease: "elastic.out(1.8, 0.4)",
+              });
+              if (abbr)
+                tl.to(
+                  abbr,
+                  { color: accent, duration: 0.28, yoyo: true, repeat: 1, repeatDelay: 1.55 },
+                  "<",
+                );
+              if (label)
+                tl.to(
+                  label,
+                  { color: accent, duration: 0.28, yoyo: true, repeat: 1, repeatDelay: 1.55 },
+                  "<",
+                );
             });
           }
         }
@@ -1798,12 +1849,13 @@ if (skillsViewButtons.length) {
         _peekTimer = setTimeout(resetPeek, 3500);
         _scrollCancel = () => resetPeek();
         window.addEventListener("scroll", _scrollCancel, { once: true, passive: true });
-
       }
     });
   });
 
-  document.addEventListener("click", () => { if (_peekCard) resetPeek(); });
+  document.addEventListener("click", () => {
+    if (_peekCard) resetPeek();
+  });
 }
 
 // (Lazy-load di SkillForceGraph + listener dei bottoni vista skill: vedi
@@ -1826,7 +1878,12 @@ if (skillsViewButtons.length) {
 
     const maxScroll = () => track.scrollWidth - track.clientWidth;
 
-    function updateFeedbackState() {
+    // Arrow function assegnate a const, non `function` dichiarate: TypeScript
+    // non propaga il narrowing di `track` (qui non-null grazie all'if sopra)
+    // dentro una function declaration, perché l'hoisting la renderebbe
+    // invocabile prima del controllo. Con const l'ordine è garantito e il
+    // narrowing sopravvive — stessa forma di maxScroll() qui sopra.
+    const updateFeedbackState = () => {
       const max = maxScroll();
       const scrollable = max > 4;
       // Frecce visibili solo se il carousel ha davvero altro da scorrere —
@@ -1836,9 +1893,9 @@ if (skillsViewButtons.length) {
       if (nextBtn) nextBtn.disabled = !scrollable || track.scrollLeft >= max - 4;
       track.style.setProperty("--fade-l", track.scrollLeft > 4 ? "1" : "0");
       track.style.setProperty("--fade-r", track.scrollLeft < max - 4 ? "1" : "0");
-    }
+    };
 
-    function scrollFeedbackByCard(dir: 1 | -1) {
+    const scrollFeedbackByCard = (dir: 1 | -1) => {
       const card = track.querySelector<HTMLElement>(".feedback-card");
       // Letto dal computed style invece di hardcodare 16 (1rem): stessa
       // tecnica già usata per il marquee in index-init.ts, evita che i due
@@ -1846,7 +1903,7 @@ if (skillsViewButtons.length) {
       const gap = parseFloat(getComputedStyle(track).columnGap) || 16;
       const step = card ? card.getBoundingClientRect().width + gap : track.clientWidth * 0.85;
       track.scrollBy({ left: dir * step, behavior: reducedMotion ? "auto" : "smooth" });
-    }
+    };
 
     prevBtn?.addEventListener("click", () => scrollFeedbackByCard(-1));
     nextBtn?.addEventListener("click", () => scrollFeedbackByCard(1));

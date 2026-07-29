@@ -1,21 +1,45 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import ContactFooter from '../components/ContactFooter.astro';
-import { getRecentCommits, formatRecentCommit } from '../lib/recent-commits';
-import '../styles/index-page.css';
+import Layout from "../layouts/Layout.astro";
+import ContactFooter from "../components/ContactFooter.astro";
+import { getRecentCommits, formatRecentCommit } from "../lib/recent-commits";
+import "../styles/index-page.css";
 
 // Badge "ciclo di sistemazione" — ultimi 3 commit, letti da git in build
 // (recent-commits.ts). Niente changelog scritto a mano da tenere aggiornato.
 const recentCommits = getRecentCommits(3);
 // .work-index-card / .work-chevron — stessa identità visiva della card
 // hero-portfolio-card in [mode].astro (vedi sezione Web & UX Designer sotto).
-import '../styles/work-page.css';
+import "../styles/work-page.css";
 
 // Foto in cv-site/public/photos/{trip,belongings} — caricate dall'utente,
 // elencate qui a mano perché sono in public/ (import.meta.glob non le vede,
 // funziona solo su src/). Usate dai bottoni sotto "Chi sono" (memory-drawer.ts).
-const tripPhotos = ["camp", "cave-light", "cave", "family-party", "ha-giang", "hoi-an", "lantern", "river"];
-const belongingsPhotos = ["acting", "cheers", "square-festival", "giulia", "kid",  "concerto", "libreria","salone-del-libro", "opera-lirica", "stampa", "reading",  "songwriter", "lettera-natale",  "sunset"];
+const tripPhotos = [
+  "camp",
+  "cave-light",
+  "cave",
+  "family-party",
+  "ha-giang",
+  "hoi-an",
+  "lantern",
+  "river",
+];
+const belongingsPhotos = [
+  "acting",
+  "cheers",
+  "square-festival",
+  "giulia",
+  "kid",
+  "concerto",
+  "libreria",
+  "salone-del-libro",
+  "opera-lirica",
+  "stampa",
+  "reading",
+  "songwriter",
+  "lettera-natale",
+  "sunset",
+];
 
 // Racconto lungo — card "featured" nello scatter, diviso in 2 "pagine" di
 // libro (page-flip 3D, memory-drawer.ts). white-space:pre-line in CSS
@@ -73,12 +97,30 @@ const SCATTER_ANGLES = [-6, 4, -3, 7, -8, 2, -5, 6, -4, 8, -7, 3, -2, 5];
 const scatterAngle = (i: number) => SCATTER_ANGLES[i % SCATTER_ANGLES.length];
 ---
 
-<Layout title="Giulio Occhipinti — Digital CV" description="CV interattivo di Giulio Occhipinti: UX/UI & Web Designer certificato IBM, Creative Technologist (Angular, Lit, GSAP), AI & Digital Specialist e Project Manager Agile." showFab consentBannerWaitForWip>
-
+<Layout
+  title="Giulio Occhipinti — Digital CV"
+  description="CV interattivo di Giulio Occhipinti: UX/UI & Web Designer certificato IBM, Creative Technologist (Angular, Lit, GSAP), AI & Digital Specialist e Project Manager Agile."
+  showFab
+  consentBannerWaitForWip
+>
   <!-- Preload LCP image — laptop è l'elemento più largo della knolling-mob (7/15 col) -->
-  <link slot="head" rel="preload" as="image" href="/knolling/laptop.webp" fetchpriority="high" media="(max-width: 899px)" />
+  <link
+    slot="head"
+    rel="preload"
+    as="image"
+    href="/knolling/laptop.webp"
+    fetchpriority="high"
+    media="(max-width: 899px)"
+  />
   <!-- Preload LCP image desktop — megaphone è il più grande (colonna sinistra riga 1) -->
-  <link slot="head" rel="preload" as="image" href="/knolling/megaphone.webp" fetchpriority="high" media="(min-width: 900px)" />
+  <link
+    slot="head"
+    rel="preload"
+    as="image"
+    href="/knolling/megaphone.webp"
+    fetchpriority="high"
+    media="(min-width: 900px)"
+  />
 
   <!-- Anti-flash: su un ritorno in-sessione (intro GO già vista, flag settato
        da index-init.ts o dal click sul logo GO) il preloader non deve mai
@@ -103,22 +145,83 @@ const scatterAngle = (i: number) => SCATTER_ANGLES[i % SCATTER_ANGLES.length];
   </div>
 
   <div class="entry-root" id="entry-root">
-
-
     <div class="knolling-stage" id="knolling-stage" aria-hidden="true">
-      <img class="knoll-item" data-modes="creative human"  src="/knolling/megaphone.webp"  alt="" loading="eager" fetchpriority="high" decoding="async" style="--kx:7%;--ky:14%;--kr:0deg;--ks:0.82;">
-      <img class="knoll-item" data-modes="tech"            src="/knolling/flashlight.webp" alt="" loading="eager" decoding="async" style="--kx:9%;--ky:38%;--kr:0deg;--ks:1.2;--kfx:-1;">
-      <img class="knoll-item" data-modes="management"      src="/knolling/multitool.webp"  alt="" loading="eager" decoding="async" style="--kx:7%;--ky:62%;--kr:0deg;--ks:0.85;">
-      <img class="knoll-item" data-modes="creative"        src="/knolling/camera.webp"     alt="" loading="eager" decoding="async" style="--kx:7%;--ky:86%;--kr:0deg;--ks:0.8;">
-      <img class="knoll-item" data-modes="management"      src="/knolling/chess.webp"      alt="" loading="eager" decoding="async" style="--kx:91%;--ky:14%;--kr:0deg;--ks:0.52;">
-      <img class="knoll-item" data-modes="tech"            src="/knolling/laptop.webp"     alt="" loading="eager" decoding="async" style="--kx:91%;--ky:38%;--kr:0deg;--ks:0.75;">
-      <img class="knoll-item" data-modes="management"      src="/knolling/compass.webp"    alt="" loading="eager" decoding="async" style="--kx:91%;--ky:62%;--kr:0deg;--ks:0.65;">
-      <img class="knoll-item" data-modes="human"           src="/knolling/plant.webp"      alt="" loading="eager" decoding="async" style="--kx:91%;--ky:86%;--kr:0deg;--ks:0.72;">
+      <img
+        class="knoll-item"
+        data-modes="creative human"
+        src="/knolling/megaphone.webp"
+        alt=""
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+        style="--kx:7%;--ky:14%;--kr:0deg;--ks:0.82;"
+      />
+      <img
+        class="knoll-item"
+        data-modes="tech"
+        src="/knolling/flashlight.webp"
+        alt=""
+        loading="eager"
+        decoding="async"
+        style="--kx:9%;--ky:38%;--kr:0deg;--ks:1.2;--kfx:-1;"
+      />
+      <img
+        class="knoll-item"
+        data-modes="management"
+        src="/knolling/multitool.webp"
+        alt=""
+        loading="eager"
+        decoding="async"
+        style="--kx:7%;--ky:62%;--kr:0deg;--ks:0.85;"
+      />
+      <img
+        class="knoll-item"
+        data-modes="creative"
+        src="/knolling/camera.webp"
+        alt=""
+        loading="eager"
+        decoding="async"
+        style="--kx:7%;--ky:86%;--kr:0deg;--ks:0.8;"
+      />
+      <img
+        class="knoll-item"
+        data-modes="management"
+        src="/knolling/chess.webp"
+        alt=""
+        loading="eager"
+        decoding="async"
+        style="--kx:91%;--ky:14%;--kr:0deg;--ks:0.52;"
+      />
+      <img
+        class="knoll-item"
+        data-modes="tech"
+        src="/knolling/laptop.webp"
+        alt=""
+        loading="eager"
+        decoding="async"
+        style="--kx:91%;--ky:38%;--kr:0deg;--ks:0.75;"
+      />
+      <img
+        class="knoll-item"
+        data-modes="management"
+        src="/knolling/compass.webp"
+        alt=""
+        loading="eager"
+        decoding="async"
+        style="--kx:91%;--ky:62%;--kr:0deg;--ks:0.65;"
+      />
+      <img
+        class="knoll-item"
+        data-modes="human"
+        src="/knolling/plant.webp"
+        alt=""
+        loading="eager"
+        decoding="async"
+        style="--kx:91%;--ky:86%;--kr:0deg;--ks:0.72;"
+      />
     </div>
 
-
-<main class="entry-main" id="main-content">
-
+    <main class="entry-main" id="main-content">
       <header class="entry-header" id="entry-header">
         <p class="entry-label" id="entry-label">Digital CV</p>
         <h1 class="entry-name" id="entry-name" aria-label="Giulio Occhipinti">
@@ -137,14 +240,87 @@ const scatterAngle = (i: number) => SCATTER_ANGLES[i % SCATTER_ANGLES.length];
       <!-- Riga 1 (4+7+4): Megafono · Laptop · Bussola -->
       <!-- Riga 2 (3×5):   Pianta · Torcia(120°→laptop) · Scacchi · Camera · Multitool -->
       <div class="knolling-mob" aria-hidden="true">
-        <div class="knoll-wrap"><img class="knoll-m" data-modes="creative human"  src="/knolling/megaphone.webp"   alt="" loading="eager" decoding="async"></div>
-        <div class="knoll-wrap"><img class="knoll-m" data-modes="tech"            src="/knolling/laptop.webp"      alt="" loading="eager" decoding="sync" fetchpriority="high"></div>
-        <div class="knoll-wrap"><img class="knoll-m" data-modes="management"      src="/knolling/compass.webp"     alt="" loading="eager" decoding="async"></div>
-        <div class="knoll-wrap"><img class="knoll-m" data-modes="human"           src="/knolling/plant.webp"       alt="" loading="eager" decoding="async"></div>
-        <div class="knoll-wrap"><img class="knoll-m" data-modes="tech"            src="/knolling/flashlight.webp" alt="" loading="eager" decoding="async"></div>
-        <div class="knoll-wrap"><img class="knoll-m" data-modes="management"      src="/knolling/chess.webp"       alt="" loading="eager" decoding="async"></div>
-        <div class="knoll-wrap"><img class="knoll-m" data-modes="creative"        src="/knolling/camera.webp"      alt="" loading="eager" decoding="async"></div>
-        <div class="knoll-wrap"><img class="knoll-m" data-modes="management"      src="/knolling/multitool.webp"   alt="" loading="eager" decoding="async"></div>
+        <div class="knoll-wrap">
+          <img
+            class="knoll-m"
+            data-modes="creative human"
+            src="/knolling/megaphone.webp"
+            alt=""
+            loading="eager"
+            decoding="async"
+          />
+        </div>
+        <div class="knoll-wrap">
+          <img
+            class="knoll-m"
+            data-modes="tech"
+            src="/knolling/laptop.webp"
+            alt=""
+            loading="eager"
+            decoding="sync"
+            fetchpriority="high"
+          />
+        </div>
+        <div class="knoll-wrap">
+          <img
+            class="knoll-m"
+            data-modes="management"
+            src="/knolling/compass.webp"
+            alt=""
+            loading="eager"
+            decoding="async"
+          />
+        </div>
+        <div class="knoll-wrap">
+          <img
+            class="knoll-m"
+            data-modes="human"
+            src="/knolling/plant.webp"
+            alt=""
+            loading="eager"
+            decoding="async"
+          />
+        </div>
+        <div class="knoll-wrap">
+          <img
+            class="knoll-m"
+            data-modes="tech"
+            src="/knolling/flashlight.webp"
+            alt=""
+            loading="eager"
+            decoding="async"
+          />
+        </div>
+        <div class="knoll-wrap">
+          <img
+            class="knoll-m"
+            data-modes="management"
+            src="/knolling/chess.webp"
+            alt=""
+            loading="eager"
+            decoding="async"
+          />
+        </div>
+        <div class="knoll-wrap">
+          <img
+            class="knoll-m"
+            data-modes="creative"
+            src="/knolling/camera.webp"
+            alt=""
+            loading="eager"
+            decoding="async"
+          />
+        </div>
+        <div class="knoll-wrap">
+          <img
+            class="knoll-m"
+            data-modes="management"
+            src="/knolling/multitool.webp"
+            alt=""
+            loading="eager"
+            decoding="async"
+          />
+        </div>
       </div>
 
       <section class="mode-cards" id="mode-cards" aria-label="Scegli prospettiva">
@@ -168,22 +344,40 @@ const scatterAngle = (i: number) => SCATTER_ANGLES[i % SCATTER_ANGLES.length];
           <span class="mode-card__desc">Storie, comunicazione e strategia.</span>
         </button>
       </section>
-
     </main>
   </div>
 
   <!-- Dot-nav verticale — jump diretto tra i 4 profili, desktop only -->
   <nav class="section-dots" aria-label="Naviga tra i profili">
-    <a href="#profile-about" class="section-dot" aria-label="Chi sono"><span class="section-dot__tip">Chi sono</span></a>
-    <a href="#profile-creative" class="section-dot" data-mode="creative" aria-label="Web & UX Designer"><span class="section-dot__tip">Web &amp; UX Designer</span></a>
-    <a href="#profile-tech" class="section-dot" data-mode="tech" aria-label="Software Developer"><span class="section-dot__tip">Software Developer</span></a>
-    <a href="#profile-management" class="section-dot" data-mode="management" aria-label="Project Manager"><span class="section-dot__tip">Project Manager</span></a>
-    <a href="#profile-human" class="section-dot" data-mode="human" aria-label="AI & Digital Specialist"><span class="section-dot__tip">AI &amp; Digital Specialist</span></a>
+    <a href="#profile-about" class="section-dot" aria-label="Chi sono"
+      ><span class="section-dot__tip">Chi sono</span></a
+    >
+    <a
+      href="#profile-creative"
+      class="section-dot"
+      data-mode="creative"
+      aria-label="Web & UX Designer"><span class="section-dot__tip">Web &amp; UX Designer</span></a
+    >
+    <a href="#profile-tech" class="section-dot" data-mode="tech" aria-label="Software Developer"
+      ><span class="section-dot__tip">Software Developer</span></a
+    >
+    <a
+      href="#profile-management"
+      class="section-dot"
+      data-mode="management"
+      aria-label="Project Manager"><span class="section-dot__tip">Project Manager</span></a
+    >
+    <a
+      href="#profile-human"
+      class="section-dot"
+      data-mode="human"
+      aria-label="AI & Digital Specialist"
+      ><span class="section-dot__tip">AI &amp; Digital Specialist</span></a
+    >
   </nav>
 
   <!-- ── PROFILE SECTIONS — below hero fold, scrollable ── -->
   <div class="profiles-root" aria-label="Profili professionali">
-
     <!-- Chi sono — sotto le mode-card, prima delle 4 lenti professionali:
          la persona prima delle maschere. Nessun mode/CTA, non è un quinto
          profilo cliccabile. -->
@@ -192,7 +386,17 @@ const scatterAngle = (i: number) => SCATTER_ANGLES[i % SCATTER_ANGLES.length];
         <div class="profile-content">
           <h2 class="profile-title">Coltivatore di empatia e battute in tasca.</h2>
           <p class="profile-eyebrow">Chi sono</p>
-          <p class="profile-desc">Tantissimi lavori diversi alle spalle, alcune piante in casa e un passaporto ben timbrato. Ho vissuto in tre Stati diversi prima di tornare in Italia, ma sono riuscito a fare il bagno nei tre oceani balneabili, gli altri due sono troppo freddi. Improvvisatore di battute e in viaggio, ho messo radici nel digitale, mantenendo una forte sensibilità, caratteristica che le persone mi fanno notare spesso, verso gli altri e me stesso, strizzando l'occhiolino alla poesia e alla fotografia. Attualmente cerco di unire i puntini nel mondo UX/UI design, sviluppo software e strategie digitali, applicando la stessa logica che serve negli scacchi. Gioco cercando la mossa che anticipa.</p>
+          <p class="profile-desc">
+            Tantissimi lavori diversi alle spalle, alcune piante in casa e un passaporto ben
+            timbrato. Ho vissuto in tre Stati diversi prima di tornare in Italia, ma sono riuscito a
+            fare il bagno nei tre oceani balneabili, gli altri due sono troppo freddi.
+            Improvvisatore di battute e in viaggio, ho messo radici nel digitale, mantenendo una
+            forte sensibilità, caratteristica che le persone mi fanno notare spesso, verso gli altri
+            e me stesso, strizzando l'occhiolino alla poesia e alla fotografia. Attualmente cerco di
+            unire i puntini nel mondo UX/UI design, sviluppo software e strategie digitali,
+            applicando la stessa logica che serve negli scacchi. Gioco cercando la mossa che
+            anticipa.
+          </p>
           <!-- Etichette d'inventario, non bottoni (bordo dashed, nessun hover):
                fatti concreti da aggancio, non categorie generiche. -->
           <ul class="about-chips" aria-label="Fuori dal codice">
@@ -218,17 +422,29 @@ const scatterAngle = (i: number) => SCATTER_ANGLES[i % SCATTER_ANGLES.length];
             </button>
           </div>
         </div>
-        <div class="profile-deco" aria-hidden="true"><span class="profile-deco__text">IO</span><img class="profile-knoll-img" src="/knolling/plant.webp" alt="" loading="lazy" decoding="async"></div>
+        <div class="profile-deco" aria-hidden="true">
+          <span class="profile-deco__text">IO</span><img
+            class="profile-knoll-img"
+            src="/knolling/plant.webp"
+            alt=""
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
       </div>
     </section>
 
     <section class="profile-section" id="profile-creative" data-mode="creative">
       <div class="profile-inner">
         <div class="profile-content">
-          <h2 class="profile-title">Brand,<br>estetica e interfacce.</h2>
+          <h2 class="profile-title">Brand,<br />estetica e interfacce.</h2>
           <p class="profile-eyebrow">Web &amp; UX Designer</p>
-          <p class="profile-desc">Di natura cerco di risolvere problemi: che siano di un amico, di un passante per strada o di un collega. Questa "deformazione" professionale mi ha portato ad appassionarmi alla UX/UI e a unirla all'estetica.
-              Formazione IBM e SkillUp, con un interesse attento a come la Generative AI sta ridisegnando il settore.</p>
+          <p class="profile-desc">
+            Di natura cerco di risolvere problemi: che siano di un amico, di un passante per strada
+            o di un collega. Questa "deformazione" professionale mi ha portato ad appassionarmi alla
+            UX/UI e a unirla all'estetica. Formazione IBM e SkillUp, con un interesse attento a come
+            la Generative AI sta ridisegnando il settore.
+          </p>
           <!-- Stessa identica card hero-portfolio-card di [mode].astro (stesse
                classi, stesso testo) — "Portfolio" vive come eyebrow dentro la
                card, non come link separato sopra. work-index-card--pulse
@@ -236,7 +452,9 @@ const scatterAngle = (i: number) => SCATTER_ANGLES[i % SCATTER_ANGLES.length];
                ricetta dei bottoni "GO to…" (.profile-cta). -->
           <a href="/work" class="work-index-card hero-portfolio-card work-index-card--pulse">
             <p class="work-index-card__eyebrow">Portfolio</p>
-        <p class="work-index-card__role">Case study, non un elenco. Processi, decisioni e risultati.</p>
+            <p class="work-index-card__role">
+              Case study, non un elenco. Processi, decisioni e risultati.
+            </p>
             <span class="work-index-card__cta">
               Esplora il portfolio
               <span class="work-chevron" aria-hidden="true"></span>
@@ -244,7 +462,15 @@ const scatterAngle = (i: number) => SCATTER_ANGLES[i % SCATTER_ANGLES.length];
           </a>
           <div class="skills-marquee" aria-hidden="true">
             <div class="skills-marquee__track">
-              <span>Figma</span><span>Adobe XD</span><span>Sketch</span><span>UX Research</span><span>Wireframing</span><span>Prototyping</span><span>Design System</span><span>GSAP</span><span>CSS Animations</span><span>Responsive Design</span><span>Accessibility</span><span>Brand Identity</span><span>Typography</span><span>Color Theory</span><span>UI Design</span><span>User Testing</span><span>Photoshop</span><span>Illustrator</span><span>After Effects</span><span>Webflow</span>
+              <span>Figma</span><span>Adobe XD</span><span>Sketch</span><span>UX Research</span
+              ><span>Wireframing</span><span>Prototyping</span><span>Design System</span><span
+                >GSAP</span
+              ><span>CSS Animations</span><span>Responsive Design</span><span>Accessibility</span
+              ><span>Brand Identity</span><span>Typography</span><span>Color Theory</span><span
+                >UI Design</span
+              ><span>User Testing</span><span>Photoshop</span><span>Illustrator</span><span
+                >After Effects</span
+              ><span>Webflow</span>
             </div>
           </div>
           <a href="/creative" class="profile-cta">
@@ -252,19 +478,39 @@ const scatterAngle = (i: number) => SCATTER_ANGLES[i % SCATTER_ANGLES.length];
             <span class="profile-cta__arrow" aria-hidden="true"></span>
           </a>
         </div>
-        <div class="profile-deco" aria-hidden="true"><span class="profile-deco__text">WD</span><img class="profile-knoll-img" src="/knolling/camera.webp" alt="" loading="lazy" decoding="async"></div>
+        <div class="profile-deco" aria-hidden="true">
+          <span class="profile-deco__text">WD</span><img
+            class="profile-knoll-img"
+            src="/knolling/camera.webp"
+            alt=""
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
       </div>
     </section>
 
     <section class="profile-section" id="profile-tech" data-mode="tech">
       <div class="profile-inner">
         <div class="profile-content">
-          <h2 class="profile-title">Automazione,<br>AI e architetture.</h2>
+          <h2 class="profile-title">Automazione,<br />AI e architetture.</h2>
           <p class="profile-eyebrow">Software Developer</p>
-          <p class="profile-desc">Sviluppo da anni per il mondo enterprise, muovendomi tra TypeScript, Angular e React. Sono passato da team di 30 persone a progetti in solitaria potenziati dall'AI, dove creo workflow e integrazioni MCP su misura. Tutta la lista di tecnologie e sigle la trovi cliccando qua sotto.</p>
+          <p class="profile-desc">
+            Sviluppo da anni per il mondo enterprise, muovendomi tra TypeScript, Angular e React.
+            Sono passato da team di 30 persone a progetti in solitaria potenziati dall'AI, dove creo
+            workflow e integrazioni MCP su misura. Tutta la lista di tecnologie e sigle la trovi
+            cliccando qua sotto.
+          </p>
           <div class="skills-marquee" aria-hidden="true">
             <div class="skills-marquee__track">
-              <span>Angular</span><span>TypeScript</span><span>Lit</span><span>Node.js</span><span>MCP</span><span>AI Workflow</span><span>GSAP</span><span>RxJS</span><span>REST API</span><span>GraphQL</span><span>PostgreSQL</span><span>MongoDB</span><span>Docker</span><span>Git</span><span>Agile</span><span>TDD</span><span>CI/CD</span><span>Microservices</span><span>WebSockets</span><span>PWA</span>
+              <span>Angular</span><span>TypeScript</span><span>Lit</span><span>Node.js</span><span
+                >MCP</span
+              ><span>AI Workflow</span><span>GSAP</span><span>RxJS</span><span>REST API</span><span
+                >GraphQL</span
+              ><span>PostgreSQL</span><span>MongoDB</span><span>Docker</span><span>Git</span><span
+                >Agile</span
+              ><span>TDD</span><span>CI/CD</span><span>Microservices</span><span>WebSockets</span
+              ><span>PWA</span>
             </div>
           </div>
           <a href="/tech" class="profile-cta">
@@ -272,19 +518,40 @@ const scatterAngle = (i: number) => SCATTER_ANGLES[i % SCATTER_ANGLES.length];
             <span class="profile-cta__arrow" aria-hidden="true"></span>
           </a>
         </div>
-        <div class="profile-deco" aria-hidden="true"><span class="profile-deco__text">SD</span><img class="profile-knoll-img" src="/knolling/laptop.webp" alt="" loading="lazy" decoding="async"></div>
+        <div class="profile-deco" aria-hidden="true">
+          <span class="profile-deco__text">SD</span><img
+            class="profile-knoll-img"
+            src="/knolling/laptop.webp"
+            alt=""
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
       </div>
     </section>
 
     <section class="profile-section" id="profile-management" data-mode="management">
       <div class="profile-inner">
         <div class="profile-content">
-          <h2 class="profile-title">Agile snello<br>e sprint brevi.</h2>
+          <h2 class="profile-title">Agile snello<br />e sprint brevi.</h2>
           <p class="profile-eyebrow">Project Manager</p>
-          <p class="profile-desc">Opero come partner tecnico per aziende e progetti digitali. Lavoro con metodo Agile, concentrandomi sul risolvere i problemi reali e nel fare da ponte tra i diversi ruoli del team. Il mio obiettivo è semplice: trovare soluzioni efficaci e rendere le persone autonome, senza creare dipendenze. Quanto è bello facilitare il lavoro alle persone?</p>
+          <p class="profile-desc">
+            Opero come partner tecnico per aziende e progetti digitali. Lavoro con metodo Agile,
+            concentrandomi sul risolvere i problemi reali e nel fare da ponte tra i diversi ruoli
+            del team. Il mio obiettivo è semplice: trovare soluzioni efficaci e rendere le persone
+            autonome, senza creare dipendenze. Quanto è bello facilitare il lavoro alle persone?
+          </p>
           <div class="skills-marquee" aria-hidden="true">
             <div class="skills-marquee__track">
-              <span>Agile</span><span>Scrum</span><span>Kanban</span><span>Sprint 1–2 settimane</span><span>Backlog orientato al business</span><span>impactScore</span><span>Jira</span><span>Trello</span><span>Asana</span><span>Facilitatore</span><span>Risk Management</span><span>Budget Planning</span><span>Referente Unico</span><span>Lean</span><span>Rilasci misurabili</span><span>Velocità di rilascio</span><span>Retrospettive</span><span>Daily Standup</span><span>Aziende</span><span>Autonomia del team</span>
+              <span>Agile</span><span>Scrum</span><span>Kanban</span><span
+                >Sprint 1–2 settimane</span
+              ><span>Backlog orientato al business</span><span>impactScore</span><span>Jira</span
+              ><span>Trello</span><span>Asana</span><span>Facilitatore</span><span
+                >Risk Management</span
+              ><span>Budget Planning</span><span>Referente Unico</span><span>Lean</span><span
+                >Rilasci misurabili</span
+              ><span>Velocità di rilascio</span><span>Retrospettive</span><span>Daily Standup</span
+              ><span>Aziende</span><span>Autonomia del team</span>
             </div>
           </div>
           <a href="/management" class="profile-cta">
@@ -292,20 +559,41 @@ const scatterAngle = (i: number) => SCATTER_ANGLES[i % SCATTER_ANGLES.length];
             <span class="profile-cta__arrow" aria-hidden="true"></span>
           </a>
         </div>
-        <div class="profile-deco" aria-hidden="true"><span class="profile-deco__text">PM</span><img class="profile-knoll-img" src="/knolling/chess.webp" alt="" loading="lazy" decoding="async"></div>
+        <div class="profile-deco" aria-hidden="true">
+          <span class="profile-deco__text">PM</span><img
+            class="profile-knoll-img"
+            src="/knolling/chess.webp"
+            alt=""
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
       </div>
     </section>
 
     <section class="profile-section" id="profile-human" data-mode="human">
       <div class="profile-inner">
         <div class="profile-content">
-          <h2 class="profile-title">Storytelling<br>e strategia.</h2>
+          <h2 class="profile-title">Storytelling<br />e strategia.</h2>
           <p class="profile-eyebrow">AI &amp; Digital Specialist</p>
-          <p class="profile-desc">L'AI esegue, calcola e velocizza, ma non comprende intrinsecamente le persone.
-Unisco la progettazione di workflow automatizzati alla sensibilità narrativa che mi arriva dal marketing, dalla scrittura e dal teatro. L'AI fa davvero un gran lavoro, ma senza un pilota potrebbe non farti mai arrivare a Itaca.</p>
+          <p class="profile-desc">
+            L'AI esegue, calcola e velocizza, ma non comprende intrinsecamente le persone. Unisco la
+            progettazione di workflow automatizzati alla sensibilità narrativa che mi arriva dal
+            marketing, dalla scrittura e dal teatro. L'AI fa davvero un gran lavoro, ma senza un
+            pilota potrebbe non farti mai arrivare a Itaca.
+          </p>
           <div class="skills-marquee" aria-hidden="true">
             <div class="skills-marquee__track">
-              <span>Claude</span><span>ChatGPT</span><span>GitHub Copilot</span><span>Prompt Engineering</span><span>AI Workflow</span><span>Automation</span><span>Storytelling</span><span>Content Strategy</span><span>Digital Marketing</span><span>SEO</span><span>Copywriting</span><span>Social Media</span><span>Brand Strategy</span><span>Communication</span><span>Public Speaking</span><span>Theater</span><span>Creative Writing</span><span>Video Editing</span><span>Podcast</span><span>Community Building</span>
+              <span>Claude</span><span>ChatGPT</span><span>GitHub Copilot</span><span
+                >Prompt Engineering</span
+              ><span>AI Workflow</span><span>Automation</span><span>Storytelling</span><span
+                >Content Strategy</span
+              ><span>Digital Marketing</span><span>SEO</span><span>Copywriting</span><span
+                >Social Media</span
+              ><span>Brand Strategy</span><span>Communication</span><span>Public Speaking</span
+              ><span>Theater</span><span>Creative Writing</span><span>Video Editing</span><span
+                >Podcast</span
+              ><span>Community Building</span>
             </div>
           </div>
           <a href="/human" class="profile-cta">
@@ -313,10 +601,17 @@ Unisco la progettazione di workflow automatizzati alla sensibilità narrativa ch
             <span class="profile-cta__arrow" aria-hidden="true"></span>
           </a>
         </div>
-        <div class="profile-deco" aria-hidden="true"><span class="profile-deco__text">AI</span><img class="profile-knoll-img" src="/knolling/compass.webp" alt="" loading="lazy" decoding="async"></div>
+        <div class="profile-deco" aria-hidden="true">
+          <span class="profile-deco__text">AI</span><img
+            class="profile-knoll-img"
+            src="/knolling/compass.webp"
+            alt=""
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
       </div>
     </section>
-
   </div>
 
   <!-- Footer contatti — email, LinkedIn e telefono come CTA (ContactFooter),
@@ -332,8 +627,15 @@ Unisco la progettazione di workflow automatizzati alla sensibilità narrativa ch
        animato all'apertura da memory-drawer.ts. data-lenis-prevent: senza,
        Lenis intercetta la rotellina e scrolla la pagina sotto invece del
        contenuto interno del dialog (regola già nota del design system). -->
-  <dialog class="memory-dialog memory-dialog--book" id="dialog-funfact" aria-labelledby="dialog-funfact-title" data-lenis-prevent>
-    <button class="memory-dialog__close" type="button" data-drawer-close aria-label="Chiudi">✕</button>
+  <dialog
+    class="memory-dialog memory-dialog--book"
+    id="dialog-funfact"
+    aria-labelledby="dialog-funfact-title"
+    data-lenis-prevent
+  >
+    <button class="memory-dialog__close" type="button" data-drawer-close aria-label="Chiudi"
+      >✕</button
+    >
     <p class="memory-dialog__eyebrow" id="dialog-funfact-title">Fun fact</p>
     <div class="memory-scatter memory-scatter--facts">
       <article class="memory-fact memory-fact--story" style="--mr:0deg">
@@ -353,27 +655,59 @@ Unisco la progettazione di workflow automatizzati alla sensibilità narrativa ch
     </div>
   </dialog>
 
-  <dialog class="memory-dialog" id="dialog-belongings" aria-labelledby="dialog-belongings-title" data-lenis-prevent>
-    <button class="memory-dialog__close" type="button" data-drawer-close aria-label="Chiudi">✕</button>
+  <dialog
+    class="memory-dialog"
+    id="dialog-belongings"
+    aria-labelledby="dialog-belongings-title"
+    data-lenis-prevent
+  >
+    <button class="memory-dialog__close" type="button" data-drawer-close aria-label="Chiudi"
+      >✕</button
+    >
     <p class="memory-dialog__eyebrow" id="dialog-belongings-title">Cose mie</p>
     <div class="memory-scatter">
-      {belongingsPhotos.map((name, i) => (
-        <button type="button" class="memory-photo-btn" aria-label="Espandi la foto">
-          <img class="memory-photo" src={`/photos/belongings/${name}.webp`} alt="" loading="lazy" decoding="async" style={`--mr:${scatterAngle(i)}deg`} />
-        </button>
-      ))}
+      {
+        belongingsPhotos.map((name, i) => (
+          <button type="button" class="memory-photo-btn" aria-label="Espandi la foto">
+            <img
+              class="memory-photo"
+              src={`/photos/belongings/${name}.webp`}
+              alt=""
+              loading="lazy"
+              decoding="async"
+              style={`--mr:${scatterAngle(i)}deg`}
+            />
+          </button>
+        ))
+      }
     </div>
   </dialog>
 
-  <dialog class="memory-dialog" id="dialog-trip" aria-labelledby="dialog-trip-title" data-lenis-prevent>
-    <button class="memory-dialog__close" type="button" data-drawer-close aria-label="Chiudi">✕</button>
+  <dialog
+    class="memory-dialog"
+    id="dialog-trip"
+    aria-labelledby="dialog-trip-title"
+    data-lenis-prevent
+  >
+    <button class="memory-dialog__close" type="button" data-drawer-close aria-label="Chiudi"
+      >✕</button
+    >
     <p class="memory-dialog__eyebrow" id="dialog-trip-title">Viaggio</p>
     <div class="memory-scatter">
-      {tripPhotos.map((name, i) => (
-        <button type="button" class="memory-photo-btn" aria-label="Espandi la foto">
-          <img class="memory-photo" src={`/photos/trip/${name}.webp`} alt="" loading="lazy" decoding="async" style={`--mr:${scatterAngle(i)}deg`} />
-        </button>
-      ))}
+      {
+        tripPhotos.map((name, i) => (
+          <button type="button" class="memory-photo-btn" aria-label="Espandi la foto">
+            <img
+              class="memory-photo"
+              src={`/photos/trip/${name}.webp`}
+              alt=""
+              loading="lazy"
+              decoding="async"
+              style={`--mr:${scatterAngle(i)}deg`}
+            />
+          </button>
+        ))
+      }
     </div>
   </dialog>
 
@@ -398,34 +732,49 @@ Unisco la progettazione di workflow automatizzati alla sensibilità narrativa ch
        Icona "sprout" (Lucide, ISC) invece di un'icona da dev-tool: riusa
        il significato di plant.webp nel vocabolario knolling (crescita). -->
   <div id="wip-badge" class="wip-badge" role="status" aria-hidden="true">
-    <svg class="wip-badge__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <path d="M14 9.536V7a4 4 0 0 1 4-4h1.5a.5.5 0 0 1 .5.5V5a4 4 0 0 1-4 4 4 4 0 0 0-4 4c0 2 1 3 1 5a5 5 0 0 1-1 3" />
-      <path d="M4 9a5 5 0 0 1 8 4 5 5 0 0 1-8-4" />
-      <path d="M5 21h14" />
+    <svg
+      class="wip-badge__icon"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      <path
+        d="M14 9.536V7a4 4 0 0 1 4-4h1.5a.5.5 0 0 1 .5.5V5a4 4 0 0 1-4 4 4 4 0 0 0-4 4c0 2 1 3 1 5a5 5 0 0 1-1 3"
+      ></path>
+      <path d="M4 9a5 5 0 0 1 8 4 5 5 0 0 1-8-4"></path>
+      <path d="M5 21h14"></path>
     </svg>
     <div class="wip-badge__body">
       <p class="wip-badge__title" aria-label="Testing, Correggendo, Migliorando — ciclo continuo">
-        <span class="wip-badge__word" aria-hidden="true">Testing</span><span class="wip-badge__word" aria-hidden="true">Correggendo</span><span class="wip-badge__word" aria-hidden="true">Migliorando</span>
+        <span class="wip-badge__word" aria-hidden="true">Testing</span><span
+          class="wip-badge__word"
+          aria-hidden="true">Correggendo</span
+        ><span class="wip-badge__word" aria-hidden="true">Migliorando</span>
       </p>
-      {recentCommits.length > 0 && (
-        <>
-          <p class="wip-badge__times-label">Ultime modifiche:</p>
-          <ul class="wip-badge__times">
-            {recentCommits.map((c) => <li>{formatRecentCommit(c, 'it')}</li>)}
-          </ul>
-        </>
-      )}
+      {
+        recentCommits.length > 0 && (
+          <>
+            <p class="wip-badge__times-label">Ultime modifiche:</p>
+            <ul class="wip-badge__times">
+              {recentCommits.map((c) => (
+                <li>{formatRecentCommit(c, "it")}</li>
+              ))}
+            </ul>
+          </>
+        )
+      }
     </div>
     <div class="wip-badge__bar" aria-hidden="true"><span class="wip-badge__bar-fill"></span></div>
   </div>
-
 </Layout>
 
-
 <script>
-  import '../scripts/index-init.ts';
-  import '../scripts/memory-drawer.ts';
+  import "../scripts/index-init.ts";
+  import "../scripts/memory-drawer.ts";
   // FAB contatti — la home ora ha showFab: serve la definizione dell'island
-  import '../islands/FloatingMenu.lit.ts';
+  import "../islands/FloatingMenu.lit.ts";
 </script>
-

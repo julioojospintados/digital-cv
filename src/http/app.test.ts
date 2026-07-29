@@ -98,4 +98,3 @@ describe("Global error handler", () => {
     expect(body.error).toBe("InternalError");
   });
 });
-

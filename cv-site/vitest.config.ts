@@ -13,13 +13,18 @@ export default defineConfig({
     },
   },
   test: {
-    include: ["src/**/*.test.ts", "src/**/*.spec.ts"],
+    // .js incluso oltre a .ts: strip-html-comments è JS con JSDoc perché deve
+    // essere importabile da astro.config.mjs, che gira prima di ogni build TS.
+    include: ["src/**/*.test.{ts,js}", "src/**/*.spec.{ts,js}"],
     environment: "jsdom",
     coverage: {
       provider: "v8",
       reporter: ["text", "lcov"],
-      include: ["src/islands/**/*.ts"],
-      exclude: ["src/**/*.test.ts", "src/**/*.spec.ts"],
+      // Prima misurava solo src/islands/, quindi la copertura sembrava buona
+      // ignorando lib/ e scripts/ — cioè la logica pura che regge la parità
+      // IT/EN e il mode system, dove i bug sono già usciti in passato.
+      include: ["src/islands/**/*.ts", "src/lib/**/*.{ts,js}", "src/scripts/mode-helpers.ts"],
+      exclude: ["src/**/*.test.{ts,js}", "src/**/*.spec.{ts,js}"],
     },
   },
 });

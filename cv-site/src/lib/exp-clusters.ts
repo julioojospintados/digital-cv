@@ -30,9 +30,7 @@ export type ClusterMode = Mode;
  */
 type Localized = Record<Locale, string>;
 
-export type ClusterRef =
-  | { exp: number; facet?: ClusterMode }
-  | { proj: number };
+export type ClusterRef = { exp: number; facet?: ClusterMode } | { proj: number };
 
 export interface ExpClusterDef {
   key: ClusterMode | "personal";

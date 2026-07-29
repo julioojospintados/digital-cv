@@ -17,17 +17,16 @@ import Layout from "../layouts/Layout.astro";
       <p class="privacy-hero__eyebrow">Privacy</p>
       <h1 class="privacy-hero__title">Cosa raccoglie questo sito.</h1>
       <p class="privacy-section__text">
-        Poche righe, non un documento legale infinito: questo sito è il mio
-        CV personale, non un prodotto commerciale.
+        Poche righe, non un documento legale infinito: questo sito è il mio CV personale, non un
+        prodotto commerciale.
       </p>
     </header>
 
     <section class="privacy-section">
       <h2 class="privacy-section__title">Titolare del trattamento</h2>
       <p class="privacy-section__text">
-        Giulio Occhipinti — <a
-          class="privacy-link"
-          href="mailto:giulio.occhipinti.g@gmail.com">giulio.occhipinti.g@gmail.com</a
+        Giulio Occhipinti — <a class="privacy-link" href="mailto:giulio.occhipinti.g@gmail.com"
+          >giulio.occhipinti.g@gmail.com</a
         >.
       </p>
     </section>
@@ -36,19 +35,16 @@ import Layout from "../layouts/Layout.astro";
       <h2 class="privacy-section__title">Cosa raccolgo e con cosa</h2>
       <ul class="privacy-list">
         <li>
-          <strong>PostHog</strong> — statistiche di navigazione (pagine viste,
-          eventi) e, solo se acconsenti dal banner, heatmap e sessioni
-          anonime. Parte solo dopo il tuo consenso esplicito.
+          <strong>PostHog</strong> — statistiche di navigazione (pagine viste, eventi) e, solo se acconsenti
+          dal banner, heatmap e sessioni anonime. Parte solo dopo il tuo consenso esplicito.
         </li>
         <li>
-          <strong>Microsoft Clarity</strong> — registrazione di sessione e
-          heatmap, per capire dove le persone si perdono nell'interfaccia.
-          Anche questo parte solo dopo il tuo consenso.
+          <strong>Microsoft Clarity</strong> — registrazione di sessione e heatmap, per capire dove le
+          persone si perdono nell'interfaccia. Anche questo parte solo dopo il tuo consenso.
         </li>
         <li>
-          <strong>Vercel Analytics &amp; Speed Insights</strong> — statistiche
-          aggregate di traffico e performance, dichiarate cookieless dal
-          fornitore: restano attive senza richiedere consenso preventivo.
+          <strong>Vercel Analytics &amp; Speed Insights</strong> — statistiche aggregate di traffico e
+          performance, dichiarate cookieless dal fornitore: restano attive senza richiedere consenso preventivo.
         </li>
       </ul>
     </section>
@@ -56,27 +52,25 @@ import Layout from "../layouts/Layout.astro";
     <section class="privacy-section">
       <h2 class="privacy-section__title">Perché</h2>
       <p class="privacy-section__text">
-        Solo per capire come si naviga il sito e migliorarne l'usabilità.
-        Nessuna pubblicità, nessuna profilazione a scopo commerciale, nessuna
-        vendita di dati a terzi.
+        Solo per capire come si naviga il sito e migliorarne l'usabilità. Nessuna pubblicità,
+        nessuna profilazione a scopo commerciale, nessuna vendita di dati a terzi.
       </p>
     </section>
 
     <section class="privacy-section">
       <h2 class="privacy-section__title">Conservazione</h2>
       <p class="privacy-section__text">
-        Il sito è statico: non ho un database mio dove i tuoi dati vengono
-        salvati. Tutto quello che viene raccolto resta nei sistemi dei
-        fornitori sopra elencati, secondo i loro tempi di conservazione
-        predefiniti.
+        Il sito è statico: non ho un database mio dove i tuoi dati vengono salvati. Tutto quello che
+        viene raccolto resta nei sistemi dei fornitori sopra elencati, secondo i loro tempi di
+        conservazione predefiniti.
       </p>
     </section>
 
     <section class="privacy-section">
       <h2 class="privacy-section__title">I tuoi diritti</h2>
       <p class="privacy-section__text">
-        Accesso, rettifica, cancellazione, opposizione: scrivimi all'email
-        sopra e rispondo direttamente io. Puoi anche rivolgerti al <a
+        Accesso, rettifica, cancellazione, opposizione: scrivimi all'email sopra e rispondo
+        direttamente io. Puoi anche rivolgerti al <a
           class="privacy-link"
           href="https://www.garanteprivacy.it"
           target="_blank"
@@ -88,9 +82,8 @@ import Layout from "../layouts/Layout.astro";
     <section class="privacy-section">
       <h2 class="privacy-section__title">Cambia la tua scelta</h2>
       <p class="privacy-section__text">
-        Hai già accettato o rifiutato dal banner? Puoi resettare la scelta in
-        qualsiasi momento — al prossimo caricamento della pagina il banner
-        ricompare.
+        Hai già accettato o rifiutato dal banner? Puoi resettare la scelta in qualsiasi momento — al
+        prossimo caricamento della pagina il banner ricompare.
       </p>
       <button type="button" class="privacy-reset" id="privacy-reset-consent">
         Resetta le preferenze cookie
@@ -102,16 +95,14 @@ import Layout from "../layouts/Layout.astro";
 <script>
   import "../islands/GoLogo.lit.ts";
 
-  document
-    .getElementById("privacy-reset-consent")
-    ?.addEventListener("click", () => {
-      try {
-        localStorage.removeItem("cv-consent");
-      } catch {
-        /* localStorage non disponibile — niente da resettare */
-      }
-      location.reload();
-    });
+  document.getElementById("privacy-reset-consent")?.addEventListener("click", () => {
+    try {
+      localStorage.removeItem("cv-consent");
+    } catch {
+      /* localStorage non disponibile — niente da resettare */
+    }
+    location.reload();
+  });
 </script>
 
 <style>

@@ -1,10 +1,9 @@
-# Crawler AI usati per addestramento di modelli — rispettato su base
-# volontaria dai bot dei principali provider, non da tutti. La ricerca
-# organica (Googlebot, Bingbot, ecc.) resta indicizzata normalmente.
+# Due categorie di bot AI, trattate in modo opposto di proposito.
+#
+# 1. CRAWLER DI TRAINING — raccolgono contenuti per addestrare modelli.
+#    Bloccati: il CV non è materiale di training. Rispettato su base
+#    volontaria dai provider principali, non da tutti.
 User-agent: GPTBot
-Disallow: /
-
-User-agent: ChatGPT-User
 Disallow: /
 
 User-agent: CCBot
@@ -13,19 +12,10 @@ Disallow: /
 User-agent: Google-Extended
 Disallow: /
 
-User-agent: ClaudeBot
-Disallow: /
-
 User-agent: anthropic-ai
 Disallow: /
 
-User-agent: Claude-Web
-Disallow: /
-
-User-agent: Bytespider
-Disallow: /
-
-User-agent: PerplexityBot
+User-agent: ClaudeBot
 Disallow: /
 
 User-agent: Applebot-Extended
@@ -34,12 +24,30 @@ Disallow: /
 User-agent: Meta-ExternalAgent
 Disallow: /
 
+User-agent: Bytespider
+Disallow: /
+
 User-agent: Amazonbot
 Disallow: /
 
 User-agent: Diffbot
 Disallow: /
 
+# 2. FETCH ON-DEMAND — non raccolgono nulla: leggono la pagina nel momento
+#    in cui una persona chiede all'assistente "parlami di Giulio Occhipinti".
+#    Ammessi (scelta 2026-07-29): bloccarli significava rendere il CV
+#    invisibile proprio nel canale in cui un recruiter lo cerca oggi, su un
+#    profilo che si posiziona sull'AI e che espone i propri dati via MCP.
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+# 3. Tutto il resto — ricerca organica inclusa (Googlebot, Bingbot, ecc.)
 User-agent: *
 Allow: /
 

@@ -14,17 +14,18 @@ const { name, shortName, level, borderPx, isGlow, weight = 1, modeTags } = Astro
 const levelAbbr = level.substring(0, 3).toUpperCase();
 // sizeClass guida anche il grid-column/row — regole in cv-page.css (.skill-sq--w*),
 // non più inline: così il mobile può ridurre lo span senza !important.
-const sizeClass = weight >= 5 ? 'skill-sq--w5'
-                : weight >= 4 ? 'skill-sq--w4'
-                : weight >= 3 ? 'skill-sq--w3'
-                : 'skill-sq--w1';
+const sizeClass =
+  weight >= 5
+    ? "skill-sq--w5"
+    : weight >= 4
+      ? "skill-sq--w4"
+      : weight >= 3
+        ? "skill-sq--w3"
+        : "skill-sq--w1";
 
-const classes = [
-  'skill-sq',
-  'cv-card',
-  sizeClass,
-  isGlow ? 'skill-sq--glow' : '',
-].filter(Boolean).join(' ');
+const classes = ["skill-sq", "cv-card", sizeClass, isGlow ? "skill-sq--glow" : ""]
+  .filter(Boolean)
+  .join(" ");
 ---
 
 <div
@@ -41,11 +42,17 @@ const classes = [
   {
     shortName ? (
       <>
-        <span class="skill-sq__name skill-sq__name--full" aria-hidden="true">{name}</span>
-        <span class="skill-sq__name skill-sq__name--short" aria-hidden="true">{shortName}</span>
+        <span class="skill-sq__name skill-sq__name--full" aria-hidden="true">
+          {name}
+        </span>
+        <span class="skill-sq__name skill-sq__name--short" aria-hidden="true">
+          {shortName}
+        </span>
       </>
     ) : (
-      <span class="skill-sq__name" aria-hidden="true">{name}</span>
+      <span class="skill-sq__name" aria-hidden="true">
+        {name}
+      </span>
     )
   }
   <span class="skill-sq__level" aria-hidden="true">{levelAbbr}</span>
@@ -80,7 +87,6 @@ const classes = [
   @media (max-width: 39.9375rem) {
     .skill-sq {
       border-width: 1px;
-
     }
     .skill-sq__name {
       font-weight: 400 !important;
@@ -105,11 +111,13 @@ const classes = [
   }
 
   .skill-sq--glow {
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0), 0 0 0px var(--color-accent);
+    box-shadow:
+      0 0 8px rgba(0, 0, 0, 0),
+      0 0 0px var(--color-accent);
   }
 
   .skill-sq--glow:hover,
-  .skill-sq--glow[data-state='active'] {
+  .skill-sq--glow[data-state="active"] {
     box-shadow: 0 0 12px color-mix(in srgb, var(--color-accent) 40%, transparent);
   }
 

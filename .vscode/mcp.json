@@ -21,32 +21,22 @@
     "mcp-base-template": {
       "type": "stdio",
       "command": "node",
-      "args": [
-        "${workspaceFolder}/dist/index.js"
-      ]
+      "args": ["${workspaceFolder}/dist/index.js"]
     },
     // SEQUENTIAL THINKING — ragionamento strutturato step-by-step
     // Attivare per decisioni architetturali, copy complesso, UX analysis
     // Installato globalmente: npm i -g @modelcontextprotocol/server-sequential-thinking
     "sequential-thinking": {
       "command": "cmd",
-      "args": [
-        "/c",
-        "mcp-server-sequential-thinking"
-      ]
+      "args": ["/c", "mcp-server-sequential-thinking"]
     },
     // PLAYWRIGHT — automazione browser: naviga, clicca, screenshot, verifica UI
     // Scarica on-demand via npx al primo avvio (nessuna install globale richiesta)
     "playwright": {
       "type": "stdio",
       "command": "cmd",
-      "args": [
-        "/c",
-        "npx",
-        "-y",
-        "@playwright/mcp@latest"
-      ]
-    },
+      "args": ["/c", "npx", "-y", "@playwright/mcp@latest"]
+    }
 
     // ═══════════════════════════════════════════════════════════════════════
     // ○ ON-DEMAND — attivare solo quando servono (richiedono token/auth)

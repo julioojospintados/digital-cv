@@ -5,7 +5,14 @@ const ISO_DATE_RE = /^\d{4}-\d{2}$/;
 const VALID_AVAILABILITY = ["available", "open", "not-available"] as const;
 const VALID_SKILL_LEVELS = ["Base", "Intermedio", "Avanzato", "Esperto"] as const;
 const VALID_LANGUAGE_LEVELS = [
-  "A1", "A2", "B1", "B2", "C1", "C2", "Madrelingua", "Native",
+  "A1",
+  "A2",
+  "B1",
+  "B2",
+  "C1",
+  "C2",
+  "Madrelingua",
+  "Native",
 ] as const;
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -111,8 +118,7 @@ describe("cvData.experience", () => {
 
   it("every endDate is YYYY-MM or 'present'", () => {
     for (const exp of cvData.experience) {
-      const valid =
-        exp.endDate === "present" || ISO_DATE_RE.test(exp.endDate);
+      const valid = exp.endDate === "present" || ISO_DATE_RE.test(exp.endDate);
       expect(valid, `endDate "${exp.endDate}" in "${exp.company}" is invalid`).toBe(true);
     }
   });
@@ -267,10 +273,16 @@ describe("cvData.experience tags", () => {
     for (const exp of cvData.experience) {
       if (exp.tags !== undefined) {
         expect(Array.isArray(exp.tags), `${exp.company} tags must be an array`).toBe(true);
-        expect((exp.tags as string[]).length, `${exp.company} tags must not be empty`).toBeGreaterThan(0);
+        expect(
+          (exp.tags as string[]).length,
+          `${exp.company} tags must not be empty`,
+        ).toBeGreaterThan(0);
         for (const tag of exp.tags as string[]) {
           expect(typeof tag).toBe("string");
-          expect(tag.trim().length, `tag "${tag}" in "${exp.company}" must not be blank`).toBeGreaterThan(0);
+          expect(
+            tag.trim().length,
+            `tag "${tag}" in "${exp.company}" must not be blank`,
+          ).toBeGreaterThan(0);
         }
       }
     }

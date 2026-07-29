@@ -14,15 +14,7 @@
 // Types
 // ─────────────────────────────────────────────────────────────────────────────
 
-export type LanguageLevel =
-  | "A1"
-  | "A2"
-  | "B1"
-  | "B2"
-  | "C1"
-  | "C2"
-  | "Madrelingua"
-  | "Native";
+export type LanguageLevel = "A1" | "A2" | "B1" | "B2" | "C1" | "C2" | "Madrelingua" | "Native";
 export type SkillLevel = "Base" | "Intermedio" | "Avanzato" | "Esperto";
 
 export interface Language {
@@ -215,14 +207,7 @@ export interface Feedback {
 
 export interface Social {
   platform:
-  | "LinkedIn"
-  | "GitHub"
-  | "Twitter"
-  | "Website"
-  | "Email"
-  | "Behance"
-  | "Dribbble"
-  | string;
+    "LinkedIn" | "GitHub" | "Twitter" | "Website" | "Email" | "Behance" | "Dribbble" | string;
   url: string;
   /** Display label, e.g. "@username" */
   label?: string;
@@ -286,8 +271,7 @@ export const cvData = {
   // ── Work experience (most recent first) ───────────────────────────────────
   experience: [
     {
-      company:
-        "Progetto Interno — Gestionale aziendale (caso studio di Partnering Operativo)",
+      company: "Progetto Interno — Gestionale aziendale (caso studio di Partnering Operativo)",
       role: "Consulente per l'Innovazione Digitale & Lead Developer",
       startDate: "2025-09",
       endDate: "present",
@@ -499,12 +483,7 @@ export const cvData = {
         "Ho lavorato su eventi multi-giornata in contesti multiculturali.",
         "Ho adattato il mio ruolo alle esigenze del set in tempo reale, in contesti ad alta complessità logistica.",
       ],
-      skills: [
-        "Videomaking",
-        "Post-produzione",
-        "Correzione colore",
-        "Sensibilità estetica",
-      ],
+      skills: ["Videomaking", "Post-produzione", "Correzione colore", "Sensibilità estetica"],
     },
     {
       company: "ForgeLab",
@@ -544,16 +523,7 @@ export const cvData = {
         "Ho sviluppato un tool documentale e revisionale per Intesa San Paolo con JSF.",
         "Ho tradotto requisiti di business complessi in interfacce usabili da operatori non tecnici.",
       ],
-      skills: [
-        "Angular",
-        "Spring",
-        "JSF",
-        "Java",
-        "SQL",
-        "Bootstrap",
-        "HTML5",
-        "SCSS",
-      ],
+      skills: ["Angular", "Spring", "JSF", "Java", "SQL", "Bootstrap", "HTML5", "SCSS"],
     },
     {
       company: "Satispay",
@@ -641,13 +611,7 @@ export const cvData = {
         "Ho progettato materiali grafici e brand identity per clienti del settore locale e culturale.",
         "Ho applicato principi di visual hierarchy e typography ai materiali stampa e digitali.",
       ],
-      skills: [
-        "Graphic design",
-        "Brand identity",
-        "Adobe Suite",
-        "Typography",
-        "Visual design",
-      ],
+      skills: ["Graphic design", "Brand identity", "Adobe Suite", "Typography", "Visual design"],
     },
     {
       company: "Gruppo Mondadori",
@@ -718,11 +682,7 @@ export const cvData = {
       description:
         "Ho lavorato tra sala, biglietteria e accoglienza in uno dei circuiti cinema più frequentati d'Italia: centinaia di spettatori al giorno, ognuno con un problema diverso da risolvere al volo.",
       highlights: [],
-      skills: [
-        "Customer service",
-        "Gestione del pubblico",
-        "Operazioni di sala",
-      ],
+      skills: ["Customer service", "Gestione del pubblico", "Operazioni di sala"],
     },
     {
       company: "Starbucks Coffee",
@@ -839,7 +799,7 @@ export const cvData = {
         "Ho recitato come attore e improvvisatore con B-Teatro, in Italia e in Lussemburgo. Sul palco senza copione impari una cosa che vale ovunque: quello che succede non si discute, si usa.",
       highlights: [
         "Recitazione & Teatro: Percorso focalizzato su improvvisazione comica e teatro di prosa, con tournée in Italia e all'estero e la partecipazione a workshop nazionali e internazionali.",
-        "Cinema: Deuteragonista (co-protagonista) nel film \"Double\", prodotto a Torino da Filmine. Il lungometraggio è stato presentato al San Francisco Independent Film Festival (2022) e proiettato al Cinema Massimo per la prima italiana.",
+        'Cinema: Deuteragonista (co-protagonista) nel film "Double", prodotto a Torino da Filmine. Il lungometraggio è stato presentato al San Francisco Independent Film Festival (2022) e proiettato al Cinema Massimo per la prima italiana.',
       ],
       skills: ["Recitazione", "Improvvisazione teatrale"],
     },
@@ -1029,8 +989,7 @@ export const cvData = {
         {
           target: "MCP Protocol",
           type: "workflow",
-          description:
-            "Il sistema di tipi è la lingua comune tra sviluppatore e agente AI.",
+          description: "Il sistema di tipi è la lingua comune tra sviluppatore e agente AI.",
         },
       ],
     },
@@ -1408,8 +1367,7 @@ export const cvData = {
         {
           target: "AI-Augmented Productivity",
           type: "workflow",
-          description:
-            "L'MCP trasforma l'AI da chatbot a collaboratore operativo del processo.",
+          description: "L'MCP trasforma l'AI da chatbot a collaboratore operativo del processo.",
         },
       ],
     },
@@ -2008,7 +1966,7 @@ export const cvData = {
         },
         {
           title: "Convenzioni dove l'utente ha fretta",
-          body: "Le esperienze extra si rivelano con \"Leggi altre 3\", il pattern di LinkedIn e Medium, al posto di un CTA brandizzato che avevo provato prima: dove chi legge ha fretta, la convenzione batte l'originalità. Per lo stesso motivo il ruolo attuale sta in cima al cluster esperienze: i recruiter leggono in reverse-chronological e cercano \"dove lavora ora\".",
+          body: 'Le esperienze extra si rivelano con "Leggi altre 3", il pattern di LinkedIn e Medium, al posto di un CTA brandizzato che avevo provato prima: dove chi legge ha fretta, la convenzione batte l\'originalità. Per lo stesso motivo il ruolo attuale sta in cima al cluster esperienze: i recruiter leggono in reverse-chronological e cercano "dove lavora ora".',
         },
         {
           title: "Accessibilità come vincolo, non rifinitura",
@@ -2026,8 +1984,8 @@ export const cvData = {
       ],
       learnings: [
         "L'AI accelera davvero solo dentro vincoli decisi prima: con token, regole di animazione e DO NOT espliciti il vibe coding produce; senza, produce caos da rifare.",
-        "Ogni dettaglio deve sopravvivere alla domanda \"perché?\": se una scelta visiva non ha una risposta da colloquio, è decorazione.",
-        "Le certezze vanno testate presto: le idee più \"wow\", il grafo come vista unica e lo scroll a step, sono le prime che ho ridimensionato davanti all'uso reale.",
+        'Ogni dettaglio deve sopravvivere alla domanda "perché?": se una scelta visiva non ha una risposta da colloquio, è decorazione.',
+        'Le certezze vanno testate presto: le idee più "wow", il grafo come vista unica e lo scroll a step, sono le prime che ho ridimensionato davanti all\'uso reale.',
       ],
     },
     {
@@ -2108,7 +2066,7 @@ export const cvData = {
         "Il roster dell'agenzia aveva bisogno di due cose insieme: date live organizzate bene, tra venue, promoter e contratti, e una presenza digitale che parlasse alla filiera del settore, non solo al pubblico generico. I canali social crescevano di volume ma non aprivano contatti: follower e lavoro reale dell'agenzia erano due mondi scollegati.",
       process: [
         "Ricerca — Ho intervistato le persone dell'agenzia per capire il lavoro dall'interno: come nascono le date, chi sono gli interlocutori che contano davvero, dove si inceppa il contatto con musicisti, produttori ed etichette.",
-        "Insight — Il problema non era \"più follower\", ma follower giusti: la comunicazione doveva funzionare da canale di contatto con la filiera, non da vetrina per il pubblico generico. Ogni contenuto andava ripensato come un'occasione di relazione professionale.",
+        'Insight — Il problema non era "più follower", ma follower giusti: la comunicazione doveva funzionare da canale di contatto con la filiera, non da vetrina per il pubblico generico. Ogni contenuto andava ripensato come un\'occasione di relazione professionale.',
         "Ideazione — Ho proposto una playlist curata di artisti emergenti come strumento di networking: ogni inserimento apre un contatto diretto con musicisti, produttori ed etichette, la scoperta reciproca al posto del follow passivo. Sulla stessa logica ho proposto un format radiofonico per estendere l'idea oltre le piattaforme streaming.",
         "Esecuzione — Ho definito la content strategy dei canali, ho scritto il copy per la serata di compleanno dell'agenzia e ho portato avanti il lavoro operativo di booking e tour management: ricerca venue, trattativa con i promoter, contratti, fino all'evento live all'Arci Bellezza di Milano, seguito end-to-end.",
       ],
@@ -2214,12 +2172,7 @@ export const cvData = {
       name: "Battitore d'asta per gala di beneficenza europeo (Burger King)",
       description:
         "Ho condotto in inglese un'asta di beneficenza durante un evento europeo Burger King con partecipanti internazionali. Ritmo dell'asta, pubblico e lingua straniera insieme: il tipo di serata in cui il teatro serve più del vocabolario.",
-      tags: [
-        "Inglese professionale",
-        "Public speaking",
-        "Event hosting",
-        "Corporate events",
-      ],
+      tags: ["Inglese professionale", "Public speaking", "Event hosting", "Corporate events"],
     },
   ],
 

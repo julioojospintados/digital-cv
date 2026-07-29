@@ -1,0 +1,16 @@
+node_modules/
+dist/
+.astro/
+.vercel/
+coverage/
+package-lock.json
+
+# Asset generati o di terze parti — non riformattare
+cv-site/public/
+cv-output/
+cv-pdf-preview/
+
+# Documentazione e istruzioni per agenti: l'allineamento delle tabelle e i
+# blocchi ASCII sono curati a mano e leggibili così. Prettier li riflow-erebbe
+# senza guadagno.
+*.md

@@ -9,11 +9,11 @@ interface Props {
   name: string;
   description: string;
   modeTags: string;
-  variant?: 'soft' | 'method';
+  variant?: "soft" | "method";
 }
 
-const { name, description, modeTags, variant = 'soft' } = Astro.props;
-const cls = variant === 'method' ? 'method-item' : 'soft-item';
+const { name, description, modeTags, variant = "soft" } = Astro.props;
+const cls = variant === "method" ? "method-item" : "soft-item";
 ---
 
 <li class={`${cls} cv-card`} data-tags={modeTags} title={description}>
@@ -41,13 +41,13 @@ const cls = variant === 'method' ? 'method-item' : 'soft-item';
   /* Attive in testa: .soft-list/.method-list sono flex-wrap, order riordina
      solo visivamente — le attive (order 0 default) salgono, le passive scendono.
      Il recruiter vede subito le skill pertinenti al mode corrente. */
-  .soft-item[data-state='passive'],
-  .method-item[data-state='passive'] {
+  .soft-item[data-state="passive"],
+  .method-item[data-state="passive"] {
     order: 1;
   }
 
-  .soft-item[data-state='active'],
-  .method-item[data-state='active'] {
+  .soft-item[data-state="active"],
+  .method-item[data-state="active"] {
     border-color: color-mix(in srgb, var(--color-accent) 30%, transparent);
   }
 

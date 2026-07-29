@@ -237,8 +237,10 @@ const t = copy[lang];
 
   acceptBtn?.addEventListener("click", () => {
     setConsent("granted");
-    (window as any).__cvInitPostHog?.();
-    (window as any).__cvInitClarity?.();
+    // Tipizzati in src/consent.d.ts — definiti dagli script is:inline di
+    // Layout.astro solo in build di produzione, da cui l'optional call.
+    window.__cvInitPostHog?.();
+    window.__cvInitClarity?.();
     hideBanner();
   });
 

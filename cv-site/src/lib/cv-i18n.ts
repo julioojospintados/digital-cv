@@ -18,12 +18,7 @@ export type Locale = "it" | "en";
 
 export type Mode = "tech" | "creative" | "human" | "management";
 
-export const MODES: readonly Mode[] = [
-  "creative",
-  "tech",
-  "management",
-  "human",
-] as const;
+export const MODES: readonly Mode[] = ["creative", "tech", "management", "human"] as const;
 
 /**
  * Mode mostrato quando la route non ne indica uno (`/en/cv`, `/cv`, store
@@ -67,20 +62,7 @@ export interface LocaleStrings {
 }
 
 const IT: LocaleStrings = {
-  months: [
-    "Gen",
-    "Feb",
-    "Mar",
-    "Apr",
-    "Mag",
-    "Giu",
-    "Lug",
-    "Ago",
-    "Set",
-    "Ott",
-    "Nov",
-    "Dic",
-  ],
+  months: ["Gen", "Feb", "Mar", "Apr", "Mag", "Giu", "Lug", "Ago", "Set", "Ott", "Nov", "Dic"],
   levels: {
     Base: "Base",
     Intermedio: "Intermedio",
@@ -141,20 +123,7 @@ const IT: LocaleStrings = {
 };
 
 const EN: LocaleStrings = {
-  months: [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
-  ],
+  months: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
   levels: {
     Base: "Basic",
     Intermedio: "Intermediate",

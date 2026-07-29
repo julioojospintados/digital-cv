@@ -4,18 +4,18 @@
 // 2) npm i -D playwright
 // 3) node scripts/record-demo-playwright.js
 
-const { chromium } = require('playwright');
+const { chromium } = require("playwright");
 (async () => {
   const browser = await chromium.launch();
   const context = await browser.newContext({
     viewport: { width: 390, height: 844 },
-    recordVideo: { dir: 'videos', size: { width: 390, height: 844 } }
+    recordVideo: { dir: "videos", size: { width: 390, height: 844 } },
   });
   const page = await context.newPage();
-  await page.goto('http://localhost:3000/prototype/mobile-demo/index.html');
+  await page.goto("http://localhost:3000/prototype/mobile-demo/index.html");
   // Wait for demo to run (adjust if you extended the demo sequence)
   await page.waitForTimeout(6000);
   await context.close();
   await browser.close();
-  console.log('Recording saved to videos/ (webm). Convert to GIF with ffmpeg if needed.');
+  console.log("Recording saved to videos/ (webm). Convert to GIF with ffmpeg if needed.");
 })();

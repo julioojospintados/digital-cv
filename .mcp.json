@@ -1,55 +1,42 @@
 {
-	"mcpServers": {
-		"mcp-base-template": {
-			"type": "stdio",
-			"command": "node",
-			"args": [
-				"${CLAUDE_PROJECT_DIR:-.}/dist/index.js"
-			]
-		},
-		"sequential-thinking": {
-			"command": "cmd",
-			"args": [
-				"/c",
-				"mcp-server-sequential-thinking"
-			],
-			"disabled": false,
-			"alwaysAllow": []
-		},
-		"playwright": {
-			"type": "stdio",
-			"command": "cmd",
-			"args": [
-				"/c",
-				"npx",
-				"-y",
-				"@playwright/mcp@latest"
-			]
-		},
-		"gsc": {
-			"type": "stdio",
-			"command": "npx",
-			"args": [
-				"-y",
-				"suganthan-gsc-mcp"
-			],
-			"env": {
-				"GSC_KEY_FILE": "${GSC}",
-				"GSC_AUTH_MODE": "service_account",
-				"GSC_SITE_URL": "sc-domain:giulio-occhipinti.com"
-			}
-		},
-		"vercel": {
-			"type": "http",
-			"url": "https://mcp.vercel.com"
-		},
-		"posthog": {
-			"type": "http",
-			"url": "https://mcp.posthog.com/mcp"
-		},
-		"github": {
-			"type": "http",
-			"url": "https://api.githubcopilot.com/mcp/"
-		}
-	}
+  "mcpServers": {
+    "mcp-base-template": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["${CLAUDE_PROJECT_DIR:-.}/dist/index.js"]
+    },
+    "sequential-thinking": {
+      "command": "cmd",
+      "args": ["/c", "mcp-server-sequential-thinking"],
+      "disabled": false,
+      "alwaysAllow": []
+    },
+    "playwright": {
+      "type": "stdio",
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "@playwright/mcp@latest"]
+    },
+    "gsc": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "suganthan-gsc-mcp"],
+      "env": {
+        "GSC_KEY_FILE": "${GSC}",
+        "GSC_AUTH_MODE": "service_account",
+        "GSC_SITE_URL": "sc-domain:giulio-occhipinti.com"
+      }
+    },
+    "vercel": {
+      "type": "http",
+      "url": "https://mcp.vercel.com"
+    },
+    "posthog": {
+      "type": "http",
+      "url": "https://mcp.posthog.com/mcp"
+    },
+    "github": {
+      "type": "http",
+      "url": "https://api.githubcopilot.com/mcp/"
+    }
+  }
 }

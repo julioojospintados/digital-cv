@@ -49,39 +49,19 @@ const {
   <nav class="cv-nav" id="cv-nav" aria-label="Main navigation">
     <go-logo></go-logo>
     <div class="mode-buttons" role="group" aria-label="Choose display mode">
-      <button
-        class="mode-btn is-active"
-        data-nav-mode="creative"
-        type="button"
-        aria-pressed="true"
-      >
+      <button class="mode-btn is-active" data-nav-mode="creative" type="button" aria-pressed="true">
         <span class="mode-btn__abbr" aria-hidden="true">WD</span>
         <span class="mode-btn__label">Web &amp; UX</span>
       </button>
-      <button
-        class="mode-btn"
-        data-nav-mode="tech"
-        type="button"
-        aria-pressed="false"
-      >
+      <button class="mode-btn" data-nav-mode="tech" type="button" aria-pressed="false">
         <span class="mode-btn__abbr" aria-hidden="true">SD</span>
         <span class="mode-btn__label">Software Dev</span>
       </button>
-      <button
-        class="mode-btn"
-        data-nav-mode="management"
-        type="button"
-        aria-pressed="false"
-      >
+      <button class="mode-btn" data-nav-mode="management" type="button" aria-pressed="false">
         <span class="mode-btn__abbr" aria-hidden="true">PM</span>
         <span class="mode-btn__label">Project Mgr</span>
       </button>
-      <button
-        class="mode-btn"
-        data-nav-mode="human"
-        type="button"
-        aria-pressed="false"
-      >
+      <button class="mode-btn" data-nav-mode="human" type="button" aria-pressed="false">
         <span class="mode-btn__abbr" aria-hidden="true">AI</span>
         <span class="mode-btn__label">AI &amp; Digital</span>
       </button>
@@ -109,11 +89,36 @@ const {
         role="listbox"
         aria-labelledby="mode-dropdown-btn"
       >
-        <li class="mode-dropdown__option is-selected" role="option" data-dropdown-mode="creative" tabindex="-1">Web &amp; UX</li>
-        <li class="mode-dropdown__option" role="option" data-dropdown-mode="tech" tabindex="-1">Software Dev</li>
-        <li class="mode-dropdown__option" role="option" data-dropdown-mode="management" tabindex="-1">Project Manager</li>
-        <li class="mode-dropdown__option" role="option" data-dropdown-mode="human" tabindex="-1">AI &amp; Digital</li>
-        <li class="mode-dropdown__option mode-dropdown__option--personal" role="option" data-dropdown-personal tabindex="-1">Off the clock</li>
+        <li
+          class="mode-dropdown__option is-selected"
+          role="option"
+          data-dropdown-mode="creative"
+          tabindex="-1"
+        >
+          Web &amp; UX
+        </li>
+        <li class="mode-dropdown__option" role="option" data-dropdown-mode="tech" tabindex="-1">
+          Software Dev
+        </li>
+        <li
+          class="mode-dropdown__option"
+          role="option"
+          data-dropdown-mode="management"
+          tabindex="-1"
+        >
+          Project Manager
+        </li>
+        <li class="mode-dropdown__option" role="option" data-dropdown-mode="human" tabindex="-1">
+          AI &amp; Digital
+        </li>
+        <li
+          class="mode-dropdown__option mode-dropdown__option--personal"
+          role="option"
+          data-dropdown-personal
+          tabindex="-1"
+        >
+          Off the clock
+        </li>
       </ul>
     </div>
     <!-- Desktop: switch a 2 chip, sempre entrambe le lingue visibili.
@@ -139,11 +144,21 @@ const {
 
   <!-- Vertical dot-nav — direct jump between sections, desktop only -->
   <nav class="section-dots" aria-label="Jump between sections">
-    <a href="#hero" class="section-dot" aria-label="Home"><span class="section-dot__tip">Home</span></a>
-    <a href="#skills" class="section-dot" aria-label="Skills"><span class="section-dot__tip">Skills</span></a>
-    <a href="#experience" class="section-dot" aria-label="Experience"><span class="section-dot__tip">Experience</span></a>
-    <a href="#ai-section" class="section-dot" aria-label="AI Workflow"><span class="section-dot__tip">AI Workflow</span></a>
-    <a href="#worklife" class="section-dot" aria-label="Character"><span class="section-dot__tip">Character</span></a>
+    <a href="#hero" class="section-dot" aria-label="Home"
+      ><span class="section-dot__tip">Home</span></a
+    >
+    <a href="#skills" class="section-dot" aria-label="Skills"
+      ><span class="section-dot__tip">Skills</span></a
+    >
+    <a href="#experience" class="section-dot" aria-label="Experience"
+      ><span class="section-dot__tip">Experience</span></a
+    >
+    <a href="#ai-section" class="section-dot" aria-label="AI Workflow"
+      ><span class="section-dot__tip">AI Workflow</span></a
+    >
+    <a href="#worklife" class="section-dot" aria-label="Character"
+      ><span class="section-dot__tip">Character</span></a
+    >
     {
       cvDataEn.feedbacks.length > 0 && (
         <a href="#feedback" class="section-dot" aria-label="What people say">
@@ -151,8 +166,12 @@ const {
         </a>
       )
     }
-    <a href="#projects" class="section-dot" aria-label="Projects"><span class="section-dot__tip">Projects</span></a>
-    <a href="#education" class="section-dot" aria-label="Education"><span class="section-dot__tip">Education</span></a>
+    <a href="#projects" class="section-dot" aria-label="Projects"
+      ><span class="section-dot__tip">Projects</span></a
+    >
+    <a href="#education" class="section-dot" aria-label="Education"
+      ><span class="section-dot__tip">Education</span></a
+    >
   </nav>
 
   <!-- ────────────────────────────────────────────────────────── MAIN -->
@@ -196,7 +215,9 @@ const {
         set:html={JSON.stringify({ titles: heroTitles, summaries: heroSummaries })}
       />
 
-      <p class="hero-tagline">Understanding the root is the only way not to get lost among the branches.</p>
+      <p class="hero-tagline">
+        Understanding the root is the only way not to get lost among the branches.
+      </p>
 
       <!-- Card teaser, not a plain text link: the portfolio is proof of the
            work, it deserves the same visual weight as the cards on /work
@@ -204,7 +225,9 @@ const {
            paragraph as just another underlined link. -->
       <a href="/en/work" class="work-index-card hero-portfolio-card work-index-card--pulse">
         <p class="work-index-card__eyebrow">Portfolio</p>
-          <p class="work-index-card__role">Case studies, not a list. Process, decisions and outcomes.</p>
+        <p class="work-index-card__role">
+          Case studies, not a list. Process, decisions and outcomes.
+        </p>
         <span class="work-index-card__cta">
           Explore the portfolio
           <span class="work-chevron" aria-hidden="true"></span>
@@ -215,17 +238,16 @@ const {
         <div class="hero-socials">
           {
             cvDataEn.social.map((s) => (
-              <a
-                href={s.url}
-                class="social-link"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
+              <a href={s.url} class="social-link" target="_blank" rel="noopener noreferrer">
                 {s.platform}
               </a>
             ))
           }
-          <a href="/en/work" class="social-link social-link--portfolio" aria-label="Go to the portfolio with case studies">
+          <a
+            href="/en/work"
+            class="social-link social-link--portfolio"
+            aria-label="Go to the portfolio with case studies"
+          >
             <span class="social-link__icon" aria-hidden="true"></span>
             Portfolio
           </a>
@@ -275,14 +297,8 @@ const {
           >Level and glow proportional: open the Graph to explore connections.</span
         >
       </h2>
-      <h3 class="skills-sub-title">
-        Technical, management and human skills.
-      </h3>
-      <div
-        class="skills-view-toggle"
-        role="tablist"
-        aria-label="Choose skills view"
-      >
+      <h3 class="skills-sub-title">Technical, management and human skills.</h3>
+      <div class="skills-view-toggle" role="tablist" aria-label="Choose skills view">
         <button
           class="skills-view-btn is-active"
           type="button"
@@ -305,7 +321,7 @@ const {
             <div class="skills-grid">
               {skillSquares.map((skill) => <SkillSquare {...skill} />)}
             </div>
-            <div class="skills-fade" aria-hidden="true" />
+            <div class="skills-fade" aria-hidden="true"></div>
           </div>
           <button
             class="skills-expand-btn"
@@ -354,9 +370,7 @@ const {
                 </span>
                 <span class="exp-cluster__name">{cluster.label}</span>
                 <span class="exp-cluster__meta">
-                  <span class="exp-cluster__count">
-                    {cluster.items.length} roles
-                  </span>
+                  <span class="exp-cluster__count">{cluster.items.length} roles</span>
                   <span class="exp-cluster__chevron" aria-hidden="true" />
                 </span>
               </button>
@@ -367,10 +381,7 @@ const {
                   ))}
                 </div>
                 {cluster.extra.length > 0 && (
-                  <div
-                    class="exp-drawer"
-                    id={`exp-drawer-${cluster.key}`}
-                  >
+                  <div class="exp-drawer" id={`exp-drawer-${cluster.key}`}>
                     <div class="exp-grid">
                       {cluster.extra.map((exp) => (
                         <ExpCard {...exp} />
@@ -399,27 +410,17 @@ const {
     </section>
 
     <!-- ── AI WORKFLOW ─────────────────────────────────────────────── -->
-    <section
-      class="ai-section reveal delay-300"
-      id="ai-section"
-      aria-label="AI-Enhanced Workflow"
-    >
-      <img
-        class="bg-knoll bg-knoll--chess"
-        src="/knolling/chess.webp"
-        aria-hidden="true"
-        alt=""
-      />
+    <section class="ai-section reveal delay-300" id="ai-section" aria-label="AI-Enhanced Workflow">
+      <img class="bg-knoll bg-knoll--chess" src="/knolling/chess.webp" aria-hidden="true" alt="" />
       <h2 class="section-title ai-title">
-        <span>AI-Enhanced Workflow <span class="ai-title__clip" aria-hidden="true">
-          <span class="ai-title__clip-pin"></span>
-          <span class="ai-title__clip-text">⚡ AI</span>
-        </span></span>
-
-        <span class="section-subtitle"
-          >How AI multiplies output without replacing judgement.</span
+        <span
+          >AI-Enhanced Workflow <span class="ai-title__clip" aria-hidden="true">
+            <span class="ai-title__clip-pin"></span>
+            <span class="ai-title__clip-text">⚡ AI</span>
+          </span></span
         >
 
+        <span class="section-subtitle">How AI multiplies output without replacing judgement.</span>
       </h2>
       <div class="ai-grid">
         {cvDataEn.aiWorkflow.map((item) => <AiCard {...item} />)}
@@ -431,9 +432,13 @@ const {
          interview material"); header now catalog-style like
          .exp-cluster__header but static — not an accordion, no
          chevron/toggle. Mirrors [mode].astro. -->
-    <section class="worklife reveal" id="worklife" aria-label="Character: soft skills, mindset and growing areas">
+    <section
+      class="worklife reveal"
+      id="worklife"
+      aria-label="Character: soft skills, mindset and growing areas"
+    >
       <div class="section-title">
-        <span >Character</span>
+        <span>Character</span>
         <span class="section-subtitle">Soft skills, mindset and growing areas</span>
       </div>
       <div class="soft-section" id="soft-skills" aria-label="Soft skills and methodology">
@@ -481,23 +486,14 @@ const {
     <!-- ── GROWTH AREAS ─────────────────────────────────────────────── -->
     {
       cvDataEn.growthAreas.length > 0 && (
-        <section
-          class="growth-section reveal"
-          id="growth"
-          aria-label="Areas of conscious growth"
-        >
+        <section class="growth-section reveal" id="growth" aria-label="Areas of conscious growth">
           <h2 class="section-title">
             <span>Self-awareness</span>
-            <span class="section-subtitle">
-              What I am still working on, no spin.
-            </span>
+            <span class="section-subtitle">What I am still working on, no spin.</span>
           </h2>
           <div class="growth-grid">
             {cvDataEn.growthAreas.map((area) => (
-              <article
-                class="growth-card cv-card"
-                data-tags="tech creative human management"
-              >
+              <article class="growth-card cv-card" data-tags="tech creative human management">
                 <p class="growth-card__label">Growing area</p>
                 <p class="growth-card__name">{area.name}</p>
                 <p class="growth-card__reframe">{area.reframe}</p>
@@ -517,24 +513,46 @@ const {
               <span>What people say</span>
               <span class="section-subtitle">Words from people who worked with me.</span>
             </h2>
-            <!-- Visible only when the carousel actually has more to scroll
-                 (JS: cv-init.ts measures scrollWidth vs clientWidth). Hidden
-                 on mobile: the affordance there is the swipe itself. -->
+            {/* Visible only when the carousel actually has more to scroll
+                (JS: cv-init.ts measures scrollWidth vs clientWidth). Hidden
+                on mobile: the affordance there is the swipe itself.
+                JSX-form comment rather than an HTML one because this sits
+                inside an expression, where an HTML comment is not valid
+                syntax (Astro tolerates it, Prettier does not) and would
+                ship to the output. */}
             <div class="feedback-nav" data-feedback-nav>
-              <button class="feedback-nav__btn feedback-nav__btn--prev" type="button" data-feedback-prev aria-label="Previous feedback">
-                <span class="feedback-nav__arrow" aria-hidden="true"></span>
+              <button
+                class="feedback-nav__btn feedback-nav__btn--prev"
+                type="button"
+                data-feedback-prev
+                aria-label="Previous feedback"
+              >
+                <span class="feedback-nav__arrow" aria-hidden="true" />
               </button>
-              <button class="feedback-nav__btn feedback-nav__btn--next" type="button" data-feedback-next aria-label="Next feedback">
-                <span class="feedback-nav__arrow" aria-hidden="true"></span>
+              <button
+                class="feedback-nav__btn feedback-nav__btn--next"
+                type="button"
+                data-feedback-next
+                aria-label="Next feedback"
+              >
+                <span class="feedback-nav__arrow" aria-hidden="true" />
               </button>
             </div>
           </div>
-          <div class="feedback-track" data-feedback-track tabindex="0" aria-label="Feedback list, scroll for more">
+          <div
+            class="feedback-track"
+            data-feedback-track
+            tabindex="0"
+            aria-label="Feedback list, scroll for more"
+          >
             {cvDataEn.feedbacks.map((f) => (
               <figure class="feedback-card cv-card" data-tags="tech creative human management">
                 {f.quote && <blockquote class="feedback-quote">{f.quote}</blockquote>}
                 {!f.quote && f.keywords.length > 0 && (
-                  <ul class="feedback-keywords" aria-label={`The words ${f.name} used to describe me`}>
+                  <ul
+                    class="feedback-keywords"
+                    aria-label={`The words ${f.name} used to describe me`}
+                  >
                     {f.keywords.map((k) => (
                       <li class="feedback-kw">{k}</li>
                     ))}
@@ -565,11 +583,7 @@ const {
       </div>
     </section>
     <!-- ── EDUCATION & CERTIFICATIONS ─────────────────────────────── -->
-    <section
-      class="edu-section reveal"
-      id="education"
-      aria-label="Education and certifications"
-    >
+    <section class="edu-section reveal" id="education" aria-label="Education and certifications">
       <div class="edu-header">
         <h2 class="section-title">
           <span>Education &amp; Certifications</span>
@@ -583,30 +597,28 @@ const {
       <!-- Collapsed timeline: recent entries are enough for the first scan,
            the rest (back to 2010) opens with "Show full timeline". -->
       <div class="tl-collapsible" data-tl-expanded="false">
-      <ol class="timeline" role="list">
-        {
-          timelineItems.map((item) => (
-            <li class="tl-item" data-type={item.type}>
-              <time class="tl-date" datetime={item.date} title={item.date}>
-                {item.dateLabel}
-              </time>
-              <span class="tl-dot-col" aria-hidden="true">
-                <span class="tl-dot" />
-              </span>
-              <div class="tl-body">
-                <p class="tl-title">
-                  {item.title}
-                  {item.inProgress && <span class="tl-wip">in progress</span>}
-                </p>
-                <p class="tl-inst">{item.institution}</p>
-                {item.credentialId && (
-                  <p class="tl-cred">ID: {item.credentialId}</p>
-                )}
-              </div>
-            </li>
-          ))
-        }
-      </ol>
+        <ol class="timeline" role="list">
+          {
+            timelineItems.map((item) => (
+              <li class="tl-item" data-type={item.type}>
+                <time class="tl-date" datetime={item.date} title={item.date}>
+                  {item.dateLabel}
+                </time>
+                <span class="tl-dot-col" aria-hidden="true">
+                  <span class="tl-dot" />
+                </span>
+                <div class="tl-body">
+                  <p class="tl-title">
+                    {item.title}
+                    {item.inProgress && <span class="tl-wip">in progress</span>}
+                  </p>
+                  <p class="tl-inst">{item.institution}</p>
+                  {item.credentialId && <p class="tl-cred">ID: {item.credentialId}</p>}
+                </div>
+              </li>
+            ))
+          }
+        </ol>
         <div class="tl-fade" aria-hidden="true"></div>
       </div>
       <button

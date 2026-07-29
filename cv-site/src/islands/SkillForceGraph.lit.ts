@@ -9,7 +9,6 @@ import {
   forceSimulation,
   forceX,
   forceY,
-  pointer,
   select,
   zoom,
   zoomIdentity,
@@ -160,9 +159,7 @@ function buildGraphData(): { nodes: GraphNode[]; links: GraphLink[] } {
       const targetId = link.target.trim();
       if (!nodesById.has(targetId) || sourceId === targetId) return;
 
-      const key = [sourceId, targetId]
-        .sort((a, b) => a.localeCompare(b))
-        .join("::");
+      const key = [sourceId, targetId].sort((a, b) => a.localeCompare(b)).join("::");
       if (seen.has(key)) return;
 
       seen.add(key);
@@ -230,11 +227,7 @@ class SkillForceGraph extends LitElement {
       touch-action: none; /* necessario per pinch-to-zoom via D3 */
       background: var(
         --skills-panel-overlay,
-        radial-gradient(
-          circle at 50% 35%,
-          rgba(255, 255, 255, 0.03),
-          transparent 45%
-        ),
+        radial-gradient(circle at 50% 35%, rgba(255, 255, 255, 0.03), transparent 45%),
         linear-gradient(160deg, rgba(255, 255, 255, 0.02), transparent 60%)
       );
     }
@@ -290,8 +283,7 @@ class SkillForceGraph extends LitElement {
       justify-content: center;
       gap: 0.9rem;
       padding: 0.55rem 1rem 0.6rem;
-      border-top: 1px solid
-        var(--skills-panel-border, rgba(255, 255, 255, 0.05));
+      border-top: 1px solid var(--skills-panel-border, rgba(255, 255, 255, 0.05));
     }
 
     .graph-legend-item {
@@ -316,8 +308,7 @@ class SkillForceGraph extends LitElement {
     .graph-meta {
       padding: 0.5rem;
       margin: 0;
-      border-top: 1px solid
-        var(--skills-panel-border, rgba(255, 255, 255, 0.05));
+      border-top: 1px solid var(--skills-panel-border, rgba(255, 255, 255, 0.05));
       font-family: "JetBrains Mono", monospace;
       font-size: var(--fs-14);
       color: rgba(192, 220, 215, 0.58);
@@ -342,14 +333,23 @@ class SkillForceGraph extends LitElement {
     /* ── Expand button hint animation ── */
     /* Durata totale 6s: il pulse avviene nel primo 20% (~1.2s), poi pausa fino al prossimo ciclo */
     @keyframes expand-btn-hint {
-      0%   { box-shadow: 0 0 0px transparent;
-             border-color: rgba(255,255,255,0.18); }
-      10%  { box-shadow: 0 0 14px color-mix(in srgb, var(--color-accent, rgba(0,255,200,1)) 65%, transparent);
-             border-color: var(--color-accent, rgba(0,255,200,1)); }
-      20%  { box-shadow: 0 0 0px transparent;
-             border-color: rgba(255,255,255,0.18); }
-      100% { box-shadow: 0 0 0px transparent;
-             border-color: rgba(255,255,255,0.18); }
+      0% {
+        box-shadow: 0 0 0px transparent;
+        border-color: rgba(255, 255, 255, 0.18);
+      }
+      10% {
+        box-shadow: 0 0 14px
+          color-mix(in srgb, var(--color-accent, rgba(0, 255, 200, 1)) 65%, transparent);
+        border-color: var(--color-accent, rgba(0, 255, 200, 1));
+      }
+      20% {
+        box-shadow: 0 0 0px transparent;
+        border-color: rgba(255, 255, 255, 0.18);
+      }
+      100% {
+        box-shadow: 0 0 0px transparent;
+        border-color: rgba(255, 255, 255, 0.18);
+      }
     }
 
     /* ── Expand button — position:absolute relativo a graph-svg-clip ── */
@@ -360,9 +360,9 @@ class SkillForceGraph extends LitElement {
       width: 2rem;
       height: 2rem;
       border-radius: var(--radius-4);
-      border: 1px solid rgba(255,255,255,0.18);
-      background: rgba(8,73,67,0.92);
-      color: rgba(192,220,215,0.8);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      background: rgba(8, 73, 67, 0.92);
+      color: rgba(192, 220, 215, 0.8);
       font-size: var(--fs-16);
       line-height: 1.5;
       display: flex;
@@ -371,7 +371,10 @@ class SkillForceGraph extends LitElement {
       cursor: pointer;
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
-      transition: border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+      transition:
+        border-color 0.2s ease,
+        color 0.2s ease,
+        background 0.2s ease;
       z-index: 3;
     }
     @media (prefers-reduced-motion: no-preference) {
@@ -380,13 +383,13 @@ class SkillForceGraph extends LitElement {
       }
     }
     .graph-expand-btn:hover {
-      border-color: var(--color-accent, rgba(0,255,200,1));
-      color: var(--color-accent, rgba(0,255,200,1));
-      background: rgba(8,73,67,0.98);
+      border-color: var(--color-accent, rgba(0, 255, 200, 1));
+      color: var(--color-accent, rgba(0, 255, 200, 1));
+      background: rgba(8, 73, 67, 0.98);
       animation: none;
     }
     .graph-expand-btn:focus-visible {
-      outline: 2px solid var(--color-accent, rgba(0,255,200,1));
+      outline: 2px solid var(--color-accent, rgba(0, 255, 200, 1));
       outline-offset: 2px;
     }
 
@@ -399,7 +402,7 @@ class SkillForceGraph extends LitElement {
       font-family: "Lexend", sans-serif;
       font-size: var(--fs-14);
       letter-spacing: 0.09em;
-      color: rgba(192,220,215,0.38);
+      color: rgba(192, 220, 215, 0.38);
       pointer-events: none;
       white-space: nowrap;
       transition: opacity 0.4s ease;
@@ -420,20 +423,20 @@ class SkillForceGraph extends LitElement {
       margin: 0;
       padding: 0;
       border: none;
-      background: rgba(8,73,67,1);
+      background: rgba(8, 73, 67, 1);
       display: flex;
       flex-direction: column;
       z-index: 9999;
     }
     .graph-dialog::backdrop {
-      background: rgba(0,0,0,0.7);
+      background: rgba(0, 0, 0, 0.7);
     }
     .graph-dialog-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
       padding: 0.6rem 1rem;
-      border-bottom: 1px solid rgba(255,255,255,0.08);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       flex-shrink: 0;
     }
     .graph-dialog-title {
@@ -442,12 +445,12 @@ class SkillForceGraph extends LitElement {
       font-weight: 700;
       letter-spacing: 0.14em;
       text-transform: uppercase;
-      color: var(--color-accent, rgba(0,255,200,1));
+      color: var(--color-accent, rgba(0, 255, 200, 1));
     }
     .graph-dialog-close {
       background: none;
       border: none;
-      color: rgba(192,220,215,0.7);
+      color: rgba(192, 220, 215, 0.7);
       font-size: var(--fs-18);
       line-height: 1.5;
       cursor: pointer;
@@ -459,10 +462,10 @@ class SkillForceGraph extends LitElement {
       transition: color 0.2s ease;
     }
     .graph-dialog-close:hover {
-      color: rgba(245,240,230,1);
+      color: rgba(245, 240, 230, 1);
     }
     .graph-dialog-close:focus-visible {
-      outline: 2px solid var(--color-accent, rgba(0,255,200,1));
+      outline: 2px solid var(--color-accent, rgba(0, 255, 200, 1));
       outline-offset: 2px;
     }
     .graph-dialog-body {
@@ -488,9 +491,9 @@ class SkillForceGraph extends LitElement {
       padding: 0.3rem 1rem;
       font-family: "JetBrains Mono", monospace;
       font-size: var(--fs-14);
-      color: rgba(192,220,215,0.5);
+      color: rgba(192, 220, 215, 0.5);
       text-align: center;
-      border-top: 1px solid rgba(255,255,255,0.05);
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
       flex-shrink: 0;
     }
   `;
@@ -510,18 +513,8 @@ class SkillForceGraph extends LitElement {
   private _touchHintHidden = false;
 
   private _simulation?: Simulation<GraphNode, GraphLink>;
-  private _nodeSelection?: Selection<
-    SVGGElement,
-    GraphNode,
-    SVGGElement,
-    unknown
-  >;
-  private _linkSelection?: Selection<
-    SVGLineElement,
-    GraphLink,
-    SVGGElement,
-    unknown
-  >;
+  private _nodeSelection?: Selection<SVGGElement, GraphNode, SVGGElement, unknown>;
+  private _linkSelection?: Selection<SVGLineElement, GraphLink, SVGGElement, unknown>;
   private _unsub?: () => void;
   private _releasePinTimer?: number;
   private _zoomBehavior?: ZoomBehavior<SVGSVGElement, unknown>;
@@ -566,7 +559,9 @@ class SkillForceGraph extends LitElement {
       if (sessionStorage.getItem("graph-hint-seen")) {
         this._touchHintHidden = true;
       }
-    } catch { /* noop */ }
+    } catch {
+      /* noop */
+    }
   }
 
   override updated() {
@@ -711,27 +706,29 @@ class SkillForceGraph extends LitElement {
           ${domainLabel} · peso ${node.weight}/5 · padronanza ${node.mastery}%
         </p>
         <ul class="graph-tooltip__list">
-          ${insights.length > 0
-          ? insights.map(
-            (insight) => html`
+          ${
+            insights.length > 0
+              ? insights.map(
+                  (insight) => html`
+                    <li class="graph-tooltip__item">
+                      <div class="graph-tooltip__row">
+                        <span>${insight.id}</span>
+                        <span class="graph-tooltip__type">${insight.type}</span>
+                      </div>
+                      ${
+                        insight.description
+                          ? html`<p class="graph-tooltip__desc">${insight.description}</p>`
+                          : null
+                      }
+                    </li>
+                  `,
+                )
+              : html`
                   <li class="graph-tooltip__item">
-                    <div class="graph-tooltip__row">
-                      <span>${insight.id}</span>
-                      <span class="graph-tooltip__type">${insight.type}</span>
-                    </div>
-                    ${insight.description
-                ? html`<p class="graph-tooltip__desc">${insight.description}</p>`
-                : null}
+                    <p class="graph-tooltip__desc">Nessuna relazione collegata a questo nodo.</p>
                   </li>
-                `,
-          )
-          : html`
-                <li class="graph-tooltip__item">
-                  <p class="graph-tooltip__desc">
-                    Nessuna relazione collegata a questo nodo.
-                  </p>
-                </li>
-              `}
+                `
+          }
         </ul>
       `,
       portal,
@@ -743,7 +740,11 @@ class SkillForceGraph extends LitElement {
   private _hideTouchHint() {
     if (this._touchHintHidden) return;
     this._touchHintHidden = true;
-    try { sessionStorage.setItem("graph-hint-seen", "1"); } catch { /* noop */ }
+    try {
+      sessionStorage.setItem("graph-hint-seen", "1");
+    } catch {
+      /* noop */
+    }
     this.requestUpdate();
   }
 
@@ -889,21 +890,34 @@ class SkillForceGraph extends LitElement {
     });
 
     // Apply mode visual state
-    this._dialogNodeSel.attr("opacity", (n) =>
-      this._isModeActive(n.domain) ? 1 : 0.22,
-    );
+    this._dialogNodeSel.attr("opacity", (n) => (this._isModeActive(n.domain) ? 1 : 0.22));
 
     this._dialogSimulation = forceSimulation<GraphNode>(clonedNodes)
-      .force("link", forceLink<GraphNode, GraphLink>(clonedLinks)
-        .id((n) => n.id)
-        .distance((l) => {
-          const s = nodeMap.get(typeof l.source === "string" ? l.source : (l.source as GraphNode).id);
-          const t = nodeMap.get(typeof l.target === "string" ? l.target : (l.target as GraphNode).id);
-          return s && t && s.domain === t.domain ? 90 : 142;
-        })
-        .strength(0.2))
-      .force("charge", forceManyBody<GraphNode>().strength((n) => -48 - n.weight * 12))
-      .force("collide", forceCollide<GraphNode>().radius((n) => n.r + 16).strength(0.95))
+      .force(
+        "link",
+        forceLink<GraphNode, GraphLink>(clonedLinks)
+          .id((n) => n.id)
+          .distance((l) => {
+            const s = nodeMap.get(
+              typeof l.source === "string" ? l.source : (l.source as GraphNode).id,
+            );
+            const t = nodeMap.get(
+              typeof l.target === "string" ? l.target : (l.target as GraphNode).id,
+            );
+            return s && t && s.domain === t.domain ? 90 : 142;
+          })
+          .strength(0.2),
+      )
+      .force(
+        "charge",
+        forceManyBody<GraphNode>().strength((n) => -48 - n.weight * 12),
+      )
+      .force(
+        "collide",
+        forceCollide<GraphNode>()
+          .radius((n) => n.r + 16)
+          .strength(0.95),
+      )
       .force("center", forceCenter(WIDTH / 2, HEIGHT / 2))
       .force("x", forceX<GraphNode>((n) => DOMAIN_ANCHOR[n.domain].x).strength(0.06))
       .force("y", forceY<GraphNode>((n) => DOMAIN_ANCHOR[n.domain].y).strength(0.06))
@@ -912,12 +926,34 @@ class SkillForceGraph extends LitElement {
       .alphaMin(0.01)
       .on("tick", () => {
         this._dialogLinkSel
-          ?.attr("x1", (l) => { const n = nodeMap.get(typeof l.source === "string" ? l.source : (l.source as GraphNode).id); return clamp(n?.x ?? WIDTH / 2, n?.r ?? 0, WIDTH - (n?.r ?? 0)); })
-          .attr("y1", (l) => { const n = nodeMap.get(typeof l.source === "string" ? l.source : (l.source as GraphNode).id); return clamp(n?.y ?? HEIGHT / 2, n?.r ?? 0, HEIGHT - (n?.r ?? 0)); })
-          .attr("x2", (l) => { const n = nodeMap.get(typeof l.target === "string" ? l.target : (l.target as GraphNode).id); return clamp(n?.x ?? WIDTH / 2, n?.r ?? 0, WIDTH - (n?.r ?? 0)); })
-          .attr("y2", (l) => { const n = nodeMap.get(typeof l.target === "string" ? l.target : (l.target as GraphNode).id); return clamp(n?.y ?? HEIGHT / 2, n?.r ?? 0, HEIGHT - (n?.r ?? 0)); });
-        this._dialogNodeSel?.attr("transform", (n) =>
-          `translate(${clamp(n.x ?? WIDTH / 2, n.r, WIDTH - n.r)},${clamp(n.y ?? HEIGHT / 2, n.r, HEIGHT - n.r)})`,
+          ?.attr("x1", (l) => {
+            const n = nodeMap.get(
+              typeof l.source === "string" ? l.source : (l.source as GraphNode).id,
+            );
+            return clamp(n?.x ?? WIDTH / 2, n?.r ?? 0, WIDTH - (n?.r ?? 0));
+          })
+          .attr("y1", (l) => {
+            const n = nodeMap.get(
+              typeof l.source === "string" ? l.source : (l.source as GraphNode).id,
+            );
+            return clamp(n?.y ?? HEIGHT / 2, n?.r ?? 0, HEIGHT - (n?.r ?? 0));
+          })
+          .attr("x2", (l) => {
+            const n = nodeMap.get(
+              typeof l.target === "string" ? l.target : (l.target as GraphNode).id,
+            );
+            return clamp(n?.x ?? WIDTH / 2, n?.r ?? 0, WIDTH - (n?.r ?? 0));
+          })
+          .attr("y2", (l) => {
+            const n = nodeMap.get(
+              typeof l.target === "string" ? l.target : (l.target as GraphNode).id,
+            );
+            return clamp(n?.y ?? HEIGHT / 2, n?.r ?? 0, HEIGHT - (n?.r ?? 0));
+          });
+        this._dialogNodeSel?.attr(
+          "transform",
+          (n) =>
+            `translate(${clamp(n.x ?? WIDTH / 2, n.r, WIDTH - n.r)},${clamp(n.y ?? HEIGHT / 2, n.r, HEIGHT - n.r)})`,
         );
       });
   }
@@ -1039,30 +1075,21 @@ class SkillForceGraph extends LitElement {
 
     this._nodeSelection.call(
       drag<SVGGElement, GraphNode>()
-        .on(
-          "start",
-          (event: D3DragEvent<SVGGElement, GraphNode, GraphNode>, node) => {
-            if (!event.active) this._simulation?.alphaTarget(0.25).restart();
-            this._tooltip = null;
-            node.fx = node.x;
-            node.fy = node.y;
-          },
-        )
-        .on(
-          "drag",
-          (event: D3DragEvent<SVGGElement, GraphNode, GraphNode>, node) => {
-            node.fx = clamp(event.x, node.r, WIDTH - node.r);
-            node.fy = clamp(event.y, node.r, HEIGHT - node.r);
-          },
-        )
-        .on(
-          "end",
-          (event: D3DragEvent<SVGGElement, GraphNode, GraphNode>, node) => {
-            if (!event.active) this._simulation?.alphaTarget(0);
-            node.fx = null;
-            node.fy = null;
-          },
-        ),
+        .on("start", (event: D3DragEvent<SVGGElement, GraphNode, GraphNode>, node) => {
+          if (!event.active) this._simulation?.alphaTarget(0.25).restart();
+          this._tooltip = null;
+          node.fx = node.x;
+          node.fy = node.y;
+        })
+        .on("drag", (event: D3DragEvent<SVGGElement, GraphNode, GraphNode>, node) => {
+          node.fx = clamp(event.x, node.r, WIDTH - node.r);
+          node.fy = clamp(event.y, node.r, HEIGHT - node.r);
+        })
+        .on("end", (event: D3DragEvent<SVGGElement, GraphNode, GraphNode>, node) => {
+          if (!event.active) this._simulation?.alphaTarget(0);
+          node.fx = null;
+          node.fy = null;
+        }),
     );
 
     this._simulation = forceSimulation<GraphNode>(this._nodes)
@@ -1096,19 +1123,15 @@ class SkillForceGraph extends LitElement {
       .force("center", forceCenter(WIDTH / 2, HEIGHT / 2))
       .force(
         "x",
-        forceX<GraphNode>((node) => DOMAIN_ANCHOR[node.domain].x).strength(
-          (node) => {
-            return node.domain === "ai" ? 0.04 : 0.06;
-          },
-        ),
+        forceX<GraphNode>((node) => DOMAIN_ANCHOR[node.domain].x).strength((node) => {
+          return node.domain === "ai" ? 0.04 : 0.06;
+        }),
       )
       .force(
         "y",
-        forceY<GraphNode>((node) => DOMAIN_ANCHOR[node.domain].y).strength(
-          (node) => {
-            return node.domain === "ai" ? 0.04 : 0.06;
-          },
-        ),
+        forceY<GraphNode>((node) => DOMAIN_ANCHOR[node.domain].y).strength((node) => {
+          return node.domain === "ai" ? 0.04 : 0.06;
+        }),
       )
       .alpha(1.1)
       .alphaDecay(0.028)
@@ -1133,9 +1156,7 @@ class SkillForceGraph extends LitElement {
   }
 
   private _runCinematicEntryAnimation() {
-    const indexById = new Map(
-      this._nodes.map((node, index) => [node.id, index]),
-    );
+    const indexById = new Map(this._nodes.map((node, index) => [node.id, index]));
 
     this._nodeSelection
       ?.select<SVGCircleElement>(".force-node-dot")
@@ -1195,25 +1216,15 @@ class SkillForceGraph extends LitElement {
 
     this._releasePinnedNodes();
 
-    const activeNodes = this._nodes.filter((node) =>
-      this._isModeActive(node.domain),
-    );
+    const activeNodes = this._nodes.filter((node) => this._isModeActive(node.domain));
     if (activeNodes.length === 0) return;
 
     activeNodes.forEach((node, index) => {
       const anchor = DOMAIN_ANCHOR[node.domain];
       const orbit = 24 + (index % 6) * 7;
       const angle = (index / activeNodes.length) * Math.PI * 2;
-      node.fx = clamp(
-        anchor.x + Math.cos(angle) * orbit,
-        node.r,
-        WIDTH - node.r,
-      );
-      node.fy = clamp(
-        anchor.y + Math.sin(angle) * orbit,
-        node.r,
-        HEIGHT - node.r,
-      );
+      node.fx = clamp(anchor.x + Math.cos(angle) * orbit, node.r, WIDTH - node.r);
+      node.fy = clamp(anchor.y + Math.sin(angle) * orbit, node.r, HEIGHT - node.r);
       this._autoPinnedNodeIds.add(node.id);
     });
 
@@ -1227,7 +1238,7 @@ class SkillForceGraph extends LitElement {
   }
 
   private _updateTooltip(_event: MouseEvent, nodeId: string) {
-  /* Su mobile non mostriamo la scheda. */
+    /* Su mobile non mostriamo la scheda. */
     if (window.innerWidth < 900) return;
     /* Posizione fissa top-right — nessun calcolo coordinate necessario. */
     this._tooltip = { nodeId, x: 0, y: 0 };
@@ -1294,8 +1305,7 @@ class SkillForceGraph extends LitElement {
       const modeOpacity = this._isModeActive(node.domain) ? 1 : 0.22;
       if (!activeId) return modeOpacity;
       if (node.id === activeId) return 1;
-      if (this._isConnectedToHovered(node.id))
-        return Math.max(0.75, modeOpacity);
+      if (this._isConnectedToHovered(node.id)) return Math.max(0.75, modeOpacity);
       return Math.min(0.12, modeOpacity);
     });
     this._nodeSelection
@@ -1307,10 +1317,8 @@ class SkillForceGraph extends LitElement {
         return 1.2;
       })
       .attr("stroke", (node) => {
-        if (node.id === selectedId || node.id === hoveredId)
-          return "rgba(245,240,230,0.98)";
-        if (activeId && this._isConnectedToHovered(node.id))
-          return DOMAIN_COLOR[node.domain];
+        if (node.id === selectedId || node.id === hoveredId) return "rgba(245,240,230,0.98)";
+        if (activeId && this._isConnectedToHovered(node.id)) return DOMAIN_COLOR[node.domain];
         return "rgba(8,73,67,0.9)";
       })
       .attr("filter", (node) => {
@@ -1333,8 +1341,7 @@ class SkillForceGraph extends LitElement {
         const targetNode = this._resolveNode(link.target);
         const modeActive =
           !!sourceNode && !!targetNode
-            ? this._isModeActive(sourceNode.domain) ||
-            this._isModeActive(targetNode.domain)
+            ? this._isModeActive(sourceNode.domain) || this._isModeActive(targetNode.domain)
             : true;
         const baseOpacity = modeActive ? 0.4 : 0.14;
         if (!activeId) return baseOpacity;
@@ -1344,8 +1351,7 @@ class SkillForceGraph extends LitElement {
       .attr("stroke-width", (link) => {
         const sourceId = nodeIdFromEndpoint(link.source);
         const targetId = nodeIdFromEndpoint(link.target);
-        if (activeId && (sourceId === activeId || targetId === activeId))
-          return 1.8;
+        if (activeId && (sourceId === activeId || targetId === activeId)) return 1.8;
         return 1.1;
       })
       .attr("stroke", (link) => {
@@ -1359,8 +1365,7 @@ class SkillForceGraph extends LitElement {
       const modeOpacity = this._isModeActive(node.domain) ? 1 : 0.22;
       if (!activeId) return modeOpacity;
       if (node.id === activeId) return 1;
-      if (this._isConnectedToHovered(node.id))
-        return Math.max(0.75, modeOpacity);
+      if (this._isConnectedToHovered(node.id)) return Math.max(0.75, modeOpacity);
       return Math.min(0.12, modeOpacity);
     });
     this._dialogNodeSel
@@ -1372,10 +1377,8 @@ class SkillForceGraph extends LitElement {
         return 1.2;
       })
       .attr("stroke", (node) => {
-        if (node.id === selectedId || node.id === hoveredId)
-          return "rgba(245,240,230,0.98)";
-        if (activeId && this._isConnectedToHovered(node.id))
-          return DOMAIN_COLOR[node.domain];
+        if (node.id === selectedId || node.id === hoveredId) return "rgba(245,240,230,0.98)";
+        if (activeId && this._isConnectedToHovered(node.id)) return DOMAIN_COLOR[node.domain];
         return "rgba(8,73,67,0.9)";
       })
       .attr("filter", (node) => {
@@ -1398,8 +1401,7 @@ class SkillForceGraph extends LitElement {
         const targetNode = this._resolveNode(link.target);
         const modeActive =
           !!sourceNode && !!targetNode
-            ? this._isModeActive(sourceNode.domain) ||
-              this._isModeActive(targetNode.domain)
+            ? this._isModeActive(sourceNode.domain) || this._isModeActive(targetNode.domain)
             : true;
         const baseOpacity = modeActive ? 0.4 : 0.14;
         if (!activeId) return baseOpacity;
@@ -1409,8 +1411,7 @@ class SkillForceGraph extends LitElement {
       .attr("stroke-width", (link) => {
         const sourceId = nodeIdFromEndpoint(link.source);
         const targetId = nodeIdFromEndpoint(link.target);
-        if (activeId && (sourceId === activeId || targetId === activeId))
-          return 1.8;
+        if (activeId && (sourceId === activeId || targetId === activeId)) return 1.8;
         return 1.1;
       })
       .attr("stroke", (link) => {
@@ -1439,8 +1440,7 @@ class SkillForceGraph extends LitElement {
       .join(", ");
 
     const domainLabel = DOMAIN_LABEL[node.domain] ?? node.domain;
-    const connectionLabel =
-      linkedNames.length > 0 ? linkedNames : "nessuna connessione diretta";
+    const connectionLabel = linkedNames.length > 0 ? linkedNames : "nessuna connessione diretta";
     return `${node.label} · ${domainLabel} · peso ${node.weight}/5 · padronanza ${node.mastery}% · connessioni: ${connectionLabel}`;
   }
 
@@ -1465,27 +1465,29 @@ class SkillForceGraph extends LitElement {
           ${domainLabel} · peso ${node.weight}/5 · padronanza ${node.mastery}%
         </p>
         <ul class="graph-tooltip__list">
-          ${insights.length > 0
-            ? insights.map(
-                (insight) => html`
+          ${
+            insights.length > 0
+              ? insights.map(
+                  (insight) => html`
+                    <li class="graph-tooltip__item">
+                      <div class="graph-tooltip__row">
+                        <span>${insight.id}</span>
+                        <span class="graph-tooltip__type">${insight.type}</span>
+                      </div>
+                      ${
+                        insight.description
+                          ? html`<p class="graph-tooltip__desc">${insight.description}</p>`
+                          : null
+                      }
+                    </li>
+                  `,
+                )
+              : html`
                   <li class="graph-tooltip__item">
-                    <div class="graph-tooltip__row">
-                      <span>${insight.id}</span>
-                      <span class="graph-tooltip__type">${insight.type}</span>
-                    </div>
-                    ${insight.description
-                  ? html`<p class="graph-tooltip__desc">${insight.description}</p>`
-                  : null}
+                    <p class="graph-tooltip__desc">Nessuna relazione collegata a questo nodo.</p>
                   </li>
-                `,
-              )
-            : html`
-                <li class="graph-tooltip__item">
-                  <p class="graph-tooltip__desc">
-                    Nessuna relazione collegata a questo nodo.
-                  </p>
-                </li>
-              `}
+                `
+          }
         </ul>
       </aside>
     `;
@@ -1505,50 +1507,68 @@ class SkillForceGraph extends LitElement {
             @touchstart=${this._hideTouchHint}
           ></svg>
 
-          ${isMobile ? html`
-            <span class="graph-touch-hint ${this._touchHintHidden ? "graph-touch-hint--hidden" : ""}">
-              Trascina · Pizzica per zoom
-            </span>
-            <button
-              class="graph-expand-btn"
-              @click=${this._openDialog}
-              aria-label="Espandi grafico a schermo intero"
-              title="Schermo intero"
-              type="button"
-            >⛶</button>
-          ` : ""}
+          ${
+            isMobile
+              ? html`
+                  <span
+                    class="graph-touch-hint ${this._touchHintHidden ? "graph-touch-hint--hidden" : ""}"
+                  >
+                    Trascina · Pizzica per zoom
+                  </span>
+                  <button
+                    class="graph-expand-btn"
+                    @click=${this._openDialog}
+                    aria-label="Espandi grafico a schermo intero"
+                    title="Schermo intero"
+                    type="button"
+                  >
+                    ⛶
+                  </button>
+                `
+              : ""
+          }
         </div>
 
         <p class="graph-meta">${this._getMetaText()}</p>
       </div>
 
-      ${this._dialogOpen ? html`
-        <dialog
-          class="graph-dialog"
-          aria-label="Grafico skill — schermo intero"
-          @cancel=${this._closeDialog}
-          @click=${(e: MouseEvent) => { if (e.target === e.currentTarget) this._closeDialog(); }}
-        >
-          <div class="graph-dialog-header">
-            <span class="graph-dialog-title">✦ Mappa delle Skill</span>
-            <button
-              class="graph-dialog-close"
-              @click=${this._closeDialog}
-              aria-label="Chiudi schermo intero"
-              type="button"
-            >✕</button>
-          </div>
-          <div class="graph-dialog-body">
-            <svg
-              class="graph-dialog-svg"
-              viewBox="0 0 ${WIDTH} ${HEIGHT}"
-              role="img"
-              aria-label="Grafico skill a schermo intero"
-            ></svg>
-          </div>
-          <p class="graph-dialog-meta">Trascina · Pizzica per zoom · Premi Esc per chiudere</p>
-        </dialog>
-      ` : ""}
+      ${
+        this._dialogOpen
+          ? html`
+              <dialog
+                class="graph-dialog"
+                aria-label="Grafico skill — schermo intero"
+                @cancel=${this._closeDialog}
+                @click=${(e: MouseEvent) => {
+                  if (e.target === e.currentTarget) this._closeDialog();
+                }}
+              >
+                <div class="graph-dialog-header">
+                  <span class="graph-dialog-title">✦ Mappa delle Skill</span>
+                  <button
+                    class="graph-dialog-close"
+                    @click=${this._closeDialog}
+                    aria-label="Chiudi schermo intero"
+                    type="button"
+                  >
+                    ✕
+                  </button>
+                </div>
+                <div class="graph-dialog-body">
+                  <svg
+                    class="graph-dialog-svg"
+                    viewBox="0 0 ${WIDTH} ${HEIGHT}"
+                    role="img"
+                    aria-label="Grafico skill a schermo intero"
+                  ></svg>
+                </div>
+                <p class="graph-dialog-meta">
+                  Trascina · Pizzica per zoom · Premi Esc per chiudere
+                </p>
+              </dialog>
+            `
+          : ""
+      }
     `;
   }
 }

@@ -44,8 +44,7 @@ const openApiPaths: Record<string, unknown> = {
             type: "string",
             example: "https://giulio-occhipinti.com",
           },
-          description:
-            "URL to encode in QR code (defaults to digital CV domain)",
+          description: "URL to encode in QR code (defaults to digital CV domain)",
         },
       ],
       responses: {
@@ -144,9 +143,7 @@ export function createApp(): Hono {
   });
 
   // ── Built-in routes ───────────────────────────────────────────────────────
-  app.get("/health", (c) =>
-    c.json({ status: "ok", timestamp: new Date().toISOString() }),
-  );
+  app.get("/health", (c) => c.json({ status: "ok", timestamp: new Date().toISOString() }));
 
   app.get("/openapi.json", (c) =>
     c.json({
