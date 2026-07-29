@@ -379,6 +379,17 @@ gsap.delayedCall(introAlreadySeen ? 0 : 0.9, () => {
   const entryScrollCue = document.querySelector<HTMLElement>(".entry-scroll-cue");
   if (entryScrollCue) {
     tl.to(entryScrollCue, { opacity: 1, duration: 0.35, ease: "power2.out" }, "-=0.1");
+    // Sparisce al primo scroll, non ha senso oltre quel punto (richiesta
+    // esplicita 2026-07-29). Registrato con .call() dopo il reveal, non da
+    // subito: uno scroll durante l'entrata delle card consumerebbe il
+    // listener {once:true} prima ancora che la cue sia comparsa.
+    tl.call(() => {
+      window.addEventListener(
+        "scroll",
+        () => gsap.to(entryScrollCue, { opacity: 0, duration: 0.3, ease: "power2.out" }),
+        { once: true, passive: true },
+      );
+    });
   }
 
   // 10. Knolling — ordine spaziale: sort per posizione Y (peso 0.7) + X (peso 0.3)

@@ -131,6 +131,19 @@ heroTl.to(
   "-=0.2",
 );
 
+// 5b. Scroll cue — sparisce al primo scroll, non ha senso oltre quel punto
+// (richiesta esplicita 2026-07-29). Registrato con .call() dopo il reveal,
+// non da subito: uno scroll durante l'entrata della hero andrebbe a
+// consumare il listener {once:true} prima ancora che la cue sia comparsa.
+heroTl.call(() => {
+  if (!heroScrollCue) return;
+  window.addEventListener(
+    "scroll",
+    () => gsap.to(heroScrollCue, { opacity: 0, duration: 0.3, ease: "power2.out" }),
+    { once: true, passive: true },
+  );
+});
+
 // ── View transition solo verso /work ────────────────────────────────────
 // view-transition-name assegnato via JS al click, non in CSS: la card vive
 // (con lo stesso nome) anche su index.astro ed en/cv.astro, quindi un nome
