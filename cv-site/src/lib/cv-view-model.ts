@@ -24,11 +24,7 @@ import type {
   TransversalSkill,
   WorkExperience,
 } from "@cv-data";
-import {
-  EXP_CLUSTER_DEFS,
-  PROJ_CARD_META,
-  type ClusterRef,
-} from "./exp-clusters";
+import { EXP_CLUSTER_DEFS, PROJ_CARD_META, type ClusterRef } from "./exp-clusters";
 import { LOCALES, type Locale, type Mode } from "./cv-i18n";
 
 // ── Forma dei dati richiesta al dataset ────────────────────────────────────
@@ -101,12 +97,7 @@ const CREATIVE_SKILL_SET = new Set([
   "Typography",
 ]);
 
-const DUAL_SKILL_SET = new Set([
-  "Accessibility / WCAG",
-  "UX Research",
-  "Wireframing",
-  "Figma",
-]);
+const DUAL_SKILL_SET = new Set(["Accessibility / WCAG", "UX Research", "Wireframing", "Figma"]);
 
 /**
  * Livello di padronanza a partire dal punteggio. Restituisce sempre le chiavi
@@ -252,9 +243,7 @@ export function buildCvViewModel({ data, locale, mode }: BuildOptions) {
   // ── Skill grid ───────────────────────────────────────────────────────────
   const toSkillSquare = (skill: SkillSource) => {
     // Solo `Skill` dichiara `level`: soft e transversal lo derivano da mastery.
-    const level =
-      ("level" in skill ? skill.level : undefined) ??
-      deriveSkillLevel(skill.mastery);
+    const level = ("level" in skill ? skill.level : undefined) ?? deriveSkillLevel(skill.mastery);
     return {
       name: skill.name,
       shortName: skill.shortName,
@@ -269,25 +258,35 @@ export function buildCvViewModel({ data, locale, mode }: BuildOptions) {
     };
   };
 
-  const isRelational = (s: SkillSource) =>
-    s.domain === "human" || s.domain === "management";
+  const isRelational = (s: SkillSource) => s.domain === "human" || s.domain === "management";
 
   const skillSquares = [
-    ...data.technicalSkills.map(toSkillSquare),
-    ...data.softSkills.filter(isRelational).map(toSkillSquare),
-    ...data.transversalSkills.filter(isRelational).map(toSkillSquare),
-  ].sort((a, b) => {
-    const activeDelta =
-      Number(isActiveSkill(b.modeTags, mode)) -
-      Number(isActiveSkill(a.modeTags, mode));
-    if (activeDelta !== 0) return activeDelta;
+    ...data.technicalSkills,
+    ...data.softSkills.filter(isRelational),
+    ...data.transversalSkills.filter(isRelational),
+  ]
+    // sourceIndex = posizione di dichiarazione in cv.ts. È il criterio di
+    // spareggio finale al posto del nome: vedi il commento nel sort qui sotto.
+    .map((skill, sourceIndex) => ({ ...toSkillSquare(skill), sourceIndex }))
+    .sort((a, b) => {
+      const activeDelta =
+        Number(isActiveSkill(b.modeTags, mode)) - Number(isActiveSkill(a.modeTags, mode));
+      if (activeDelta !== 0) return activeDelta;
 
-    const areaA = (a.weight ?? 1) * (LEVEL_BORDERS[a.sortLevel] ?? 1);
-    const areaB = (b.weight ?? 1) * (LEVEL_BORDERS[b.sortLevel] ?? 1);
-    if (areaA !== areaB) return areaB - areaA;
+      const areaA = (a.weight ?? 1) * (LEVEL_BORDERS[a.sortLevel] ?? 1);
+      const areaB = (b.weight ?? 1) * (LEVEL_BORDERS[b.sortLevel] ?? 1);
+      if (areaA !== areaB) return areaB - areaA;
 
-    return a.name.localeCompare(b.name);
-  });
+      // Spareggio sull'ordine di dichiarazione, non su `name`: il nome è
+      // tradotto, quindi ordinarci sopra faceva divergere la griglia fra le
+      // due lingue — "Autonomia strategica" cade sotto la A, "Strategic
+      // autonomy" sotto la S, a parità di area. Erano 5 posizioni su 52,
+      // in violazione dell'invariante IT/EN di AGENTS.md.
+      // L'ordine di dichiarazione è invece identico nei due dataset (lo
+      // verificano i test di parità in src/data/cv.en.test.ts) ed è scelto
+      // a mano in cv.ts, quindi porta anche più informazione dell'alfabetico.
+      return a.sourceIndex - b.sourceIndex;
+    });
 
   // ── Experience clusters ──────────────────────────────────────────────────
   // Definizione condivisa in lib/exp-clusters.ts. Ogni ref diventa una card:
@@ -314,15 +313,12 @@ export function buildCvViewModel({ data, locale, mode }: BuildOptions) {
     }
     const exp = data.experience[ref.exp];
     if (!exp) return null;
-    const facet = ref.facet
-      ? exp.facets?.find((f) => f.mode === ref.facet)
-      : undefined;
+    const facet = ref.facet ? exp.facets?.find((f) => f.mode === ref.facet) : undefined;
     return {
       company: exp.company,
       role: facet?.role ?? exp.role,
       startYear: exp.startDate.substring(0, 4),
-      endYear:
-        exp.endDate === "present" ? t.present : exp.endDate.substring(0, 4),
+      endYear: exp.endDate === "present" ? t.present : exp.endDate.substring(0, 4),
       location: exp.location ?? "",
       remote: exp.remote ?? false,
       description: facet?.description ?? exp.description,
@@ -400,8 +396,7 @@ export function buildCvViewModel({ data, locale, mode }: BuildOptions) {
         if (mapped) mapped.split(" ").forEach((m) => modes.add(m));
       });
       if (p.primaryMode) modes.add(p.primaryMode);
-      const modeTags =
-        modes.size > 0 ? Array.from(modes).join(" ") : "tech creative human";
+      const modeTags = modes.size > 0 ? Array.from(modes).join(" ") : "tech creative human";
       return {
         name: p.name,
         description: p.description,
@@ -411,10 +406,7 @@ export function buildCvViewModel({ data, locale, mode }: BuildOptions) {
     })
     // Mode first al primo paint (prima che il JS lato client riordini col
     // cambio mode): stessa logica di reorderProjectCards in mode-helpers.ts.
-    .sort(
-      (a, b) =>
-        Number(b.modeTags.includes(mode)) - Number(a.modeTags.includes(mode)),
-    );
+    .sort((a, b) => Number(b.modeTags.includes(mode)) - Number(a.modeTags.includes(mode)));
 
   // ── Testi ────────────────────────────────────────────────────────────────
   const modeLabel = t.modeLabels[mode] ?? mode;
