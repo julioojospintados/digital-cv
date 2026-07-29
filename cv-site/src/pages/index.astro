@@ -1,12 +1,13 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import ContactFooter from "../components/ContactFooter.astro";
-import { getRecentCommits, formatRecentCommit } from "../lib/recent-commits";
+// In standby col badge "ciclo di sistemazione" sotto — richiesta 2026-07-29.
+// import { getRecentCommits, formatRecentCommit } from "../lib/recent-commits";
 import "../styles/index-page.css";
 
 // Badge "ciclo di sistemazione" — ultimi 3 commit, letti da git in build
 // (recent-commits.ts). Niente changelog scritto a mano da tenere aggiornato.
-const recentCommits = getRecentCommits(3);
+// const recentCommits = getRecentCommits(3);
 // .work-index-card / .work-chevron — stessa identità visiva della card
 // hero-portfolio-card in [mode].astro (vedi sezione Web & UX Designer sotto).
 import "../styles/work-page.css";
@@ -724,21 +725,14 @@ const scatterAngle = (i: number) => SCATTER_ANGLES[i % SCATTER_ANGLES.length];
   <!-- Language switch — fixed top-right, hidden until hero reveal -->
   <a href="/en" class="lang-switch" id="lang-switch" aria-label="Switch to English version">EN</a>
 
-  <!-- Badge "ciclo di sistemazione" — appare una volta a sessione dopo il
-       reveal dell'hero (index-init.ts), resta 6s con una barra che si
-       svuota, poi sparisce (uscita volutamente lenta, vedi index-page.css).
-       Orari reali, non un changelog scritto a mano: recentCommits arriva da
-       git log in build (recent-commits.ts) — ogni push rigenera il sito
-       (nuova astro build) e la lista si aggiorna da sola sugli ultimi 3
-       commit, senza bisogno di toccare questo file. Se il build gira senza
-       repo git (getRecentCommits torna []) l'etichetta e la lista spariscono
-       invece di mostrare un vuoto. Il titolo ruota una parola alla volta,
-       Testing → Correggendo → Migliorando (CSS puro, wip-word-cycle in
-       index-page.css) — nessuna icona freccia, solo lo sprout resta a
-       comunicare il ciclo. aria-label sul <p> perché le singole parole
-       sono aria-hidden (sono solo l'animazione visiva).
-       Icona "sprout" (Lucide, ISC) invece di un'icona da dev-tool: riusa
-       il significato di plant.webp nel vocabolario knolling (crescita). -->
+  <!-- Badge "ciclo di sistemazione" — in standby per adesso (richiesta
+       2026-07-29), markup commentato sotto insieme a import/const in cima
+       al frontmatter. cv-init.ts NON va toccato: window.dispatchEvent(new
+       CustomEvent("cv:wip-badge-shown")) in index-init.ts resta invariato e
+       spara comunque, così il ConsentBanner (waitForWipBadge) continua a
+       comparire con lo stesso tempismo anche a badge disattivato. Per
+       riattivare: scommenta import/const sopra e il blocco qui sotto. -->
+  <!--
   <div id="wip-badge" class="wip-badge" role="status" aria-hidden="true">
     <svg
       class="wip-badge__icon"
@@ -778,6 +772,7 @@ const scatterAngle = (i: number) => SCATTER_ANGLES[i % SCATTER_ANGLES.length];
     </div>
     <div class="wip-badge__bar" aria-hidden="true"><span class="wip-badge__bar-fill"></span></div>
   </div>
+  -->
 </Layout>
 
 <script>
