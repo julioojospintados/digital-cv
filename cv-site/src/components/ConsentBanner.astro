@@ -23,7 +23,7 @@ const { lang = "it", waitForWipBadge = false } = Astro.props;
 const copy = {
   it: {
     label: "Consenso cookie",
-    text: "Uso PostHog e Microsoft Clarity per capire come navighi il sito (heatmap, sessioni anonime). Niente pubblicità, niente vendita dati.",
+    text: "Uso PostHog e Microsoft Clarity per capire come navighi il sito (heatmap, sessioni anonime). Niente pubblicità, niente vendita dati.<br /><strong>Solo un aiuto per migliorare.</strong>",
     more: "Scopri di più",
     morePath: "/privacy",
     reject: "Rifiuta",
@@ -31,7 +31,7 @@ const copy = {
   },
   en: {
     label: "Cookie consent",
-    text: "I use PostHog and Microsoft Clarity to understand how you browse the site (heatmaps, anonymous sessions). No ads, no data selling.",
+    text: "I use PostHog and Microsoft Clarity to understand how you browse the site (heatmaps, anonymous sessions). No ads, no data selling.<br /><strong>Just here to help me improve.</strong>",
     more: "Learn more",
     morePath: "/en/privacy",
     reject: "Reject",
@@ -52,7 +52,7 @@ const t = copy[lang];
 >
   <div class="consent-banner__inner">
     <p class="consent-banner__text">
-      {t.text}{" "}
+      <span set:html={t.text} />
       <a href={t.morePath} class="consent-banner__link">{t.more}</a>
     </p>
     <div class="consent-banner__actions">
@@ -120,6 +120,9 @@ const t = copy[lang];
   }
 
   .consent-banner__link {
+    display: block;
+    text-align: right;
+    margin-top: 0.35rem;
     color: var(--color-accent);
     text-decoration: underline;
     text-underline-offset: 2px;
@@ -176,6 +179,13 @@ const t = copy[lang];
       flex-direction: column;
       align-items: stretch;
       padding: 0.85rem 1rem;
+    }
+
+    /* flex: 1 1 16rem è pensato per la larghezza in riga (desktop): in
+       colonna quel flex-basis si applica all'altezza e gonfia il banner
+       con un vuoto forzato di 16rem — va azzerato qui. */
+    .consent-banner__text {
+      flex: 0 1 auto;
     }
 
     .consent-banner__actions {
