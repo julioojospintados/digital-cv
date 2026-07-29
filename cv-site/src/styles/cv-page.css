@@ -957,6 +957,26 @@ a.lang-switch__opt:hover {
   border-color: var(--color-accent);
 }
 
+/* ── Hero scroll cue ─────────────────────────────────────────────
+   .section-dots (global.css) è desktop-only sopra i 900px: sotto quella
+   soglia la hero non dà nessun indizio che la pagina continua. In-flow
+   (non position:fixed) apposta — spinge giù il resto della hero come
+   qualunque altro elemento e sparisce da solo scrollando oltre, quindi
+   non può mai coprire la card portfolio o il footer social/lingue. */
+.hero-scroll-cue {
+  margin: 2rem 0 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  opacity: 0;
+  transform: translateY(14px);
+  /* Stato iniziale coerente con gli altri figli della hero (vedi sopra) —
+     GSAP anima a 1 nello stesso stagger di hero-footer, cv-init.ts. */
+}
+
 /* Portfolio: non è un'identità social come LinkedIn/GitHub/Email, è la
    prova del lavoro — merita un peso visivo diverso, non lo stesso outline
    neutro. Stesso trattamento del link "Portfolio" in home

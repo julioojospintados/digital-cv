@@ -342,6 +342,44 @@ html[data-intro-seen] #preloader {
   justify-content: center;
 }
 
+/* ── Home scroll cue ─────────────────────────────────────────────
+   .entry-main è bloccata a max-height:100vh + overflow:hidden apposta (vedi
+   commento sotto): un cue in-flow lì dentro sparirebbe clippato, o si
+   sovrapporrebbe all'ultima mode-card, dato che su touch la griglia
+   riempie lo schermo senza margine (vedi @media (--touch)). Ancorata invece
+   a #entry-root: quello resta dentro i propri bound (non viene clippato
+   dal proprio overflow:hidden), ed è position:absolute non fixed — scompare
+   da sola scrollando oltre l'hero, non segue la viewport come farebbe un
+   elemento fixed. */
+.entry-scroll-cue {
+  position: absolute;
+  left: 50%;
+  bottom: max(0.6rem, env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  z-index: 15;
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  opacity: 0;
+  pointer-events: none;
+  /* Stato iniziale — GSAP anima a 1 nello stesso beat delle mode-card,
+     index-init.ts. Nessun translateY qui: sposteremmo anche la centratura
+     orizzontale (transform è già occupato da translateX(-50%)). */
+}
+
+/* Verificato con Playwright su 375×667: sotto i 900px la griglia touch
+   (align-items:stretch, righe 1fr 1fr) riempie i 100svh senza margine per
+   costruzione — la cue finiva addosso alle card Project Manager/AI & Digital
+   Specialist. Zero slack qui non è un caso limite, è la norma: niente cue. */
+@media (--touch) {
+  .entry-scroll-cue {
+    display: none;
+  }
+}
+
 /* Force entry content to fit inside the viewport and avoid vertical scroll
    on both desktop and mobile: the home is a single-screen hero/knolling stage. */
 .entry-main {

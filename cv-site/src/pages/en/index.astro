@@ -348,6 +348,14 @@ const scatterAngle = (i: number) => SCATTER_ANGLES[i % SCATTER_ANGLES.length];
         </button>
       </section>
     </main>
+
+    <!-- Direct child of #entry-root, not of .entry-main: the latter has
+         overflow:hidden (locks the touch grid to 100svh, "never beyond the
+         viewport" — see index-page.css), so any child of its that overflows
+         would get clipped. From here it disappears on its own once you
+         scroll past the hero, without covering the mode cards: it's anchored
+         to the bottom of entry-root, not to the viewport (no position:fixed). -->
+    <div class="entry-scroll-cue" aria-hidden="true">Scroll</div>
   </div>
 
   <!-- Vertical dot-nav — direct jump between the 4 profiles, desktop only -->

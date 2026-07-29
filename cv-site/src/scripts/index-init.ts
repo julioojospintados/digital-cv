@@ -373,6 +373,14 @@ gsap.delayedCall(introAlreadySeen ? 0 : 0.9, () => {
     "-=0.2",
   );
 
+  // 9b. Scroll cue — arriva subito dopo le card, come ultimo tocco della
+  // composizione (solo opacity: il transform di .entry-scroll-cue è già
+  // occupato dal translateX(-50%) di centratura, in index-page.css).
+  const entryScrollCue = document.querySelector<HTMLElement>(".entry-scroll-cue");
+  if (entryScrollCue) {
+    tl.to(entryScrollCue, { opacity: 1, duration: 0.35, ease: "power2.out" }, "-=0.1");
+  }
+
   // 10. Knolling — ordine spaziale: sort per posizione Y (peso 0.7) + X (peso 0.3)
   // Crea un'onda diagonale TL→BR: prima le immagini in alto, poi quelle in basso.
   // offsetTop/offsetLeft invece di getBoundingClientRect → immune ai GSAP transform.

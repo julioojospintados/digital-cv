@@ -34,6 +34,7 @@ const heroSummary = heroEl.querySelector<HTMLElement>(".hero-summary");
 const heroTagline = heroEl.querySelector<HTMLElement>(".hero-tagline");
 const heroPortfolioCard = heroEl.querySelector<HTMLElement>(".hero-portfolio-card");
 const heroFooter = heroEl.querySelector<HTMLElement>(".hero-footer");
+const heroScrollCue = heroEl.querySelector<HTMLElement>(".hero-scroll-cue");
 
 // Initial states are set in CSS (.hero-section, .hero-char, .hero-title, etc.)
 // GSAP only needs to animate: opacity → 1, y → 0
@@ -117,7 +118,7 @@ heroTl.to(
 
 // 5. Resto della sezione hero (titolo, summary, card portfolio, footer)
 heroTl.to(
-  [heroTitle, heroSummary, heroPortfolioCard, heroFooter, heroTagline].filter(
+  [heroTitle, heroSummary, heroPortfolioCard, heroFooter, heroTagline, heroScrollCue].filter(
     (el): el is HTMLElement => el !== null,
   ),
   {
