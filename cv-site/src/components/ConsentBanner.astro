@@ -25,7 +25,7 @@ const { lang = "it", waitForWipBadge = false } = Astro.props;
 const copy = {
   it: {
     label: "Consenso cookie",
-    text: "Uso PostHog per capire come navighi il sito (pagine viste, eventi). Niente pubblicità, niente vendita dati.<br /><strong>Solo un aiuto per migliorare.</strong>",
+    text: "Uso PostHog per capire come navighi il sito (pagine viste, eventi). Niente pubblicità, niente vendita dati.<br /><strong class=\"consent-banner__emphasis\">Solo un aiuto per migliorare.</strong>",
     more: "Scopri di più",
     morePath: "/privacy",
     reject: "Rifiuta",
@@ -33,7 +33,7 @@ const copy = {
   },
   en: {
     label: "Cookie consent",
-    text: "I use PostHog to understand how you browse the site (page views, events). No ads, no data selling.<br /><strong>Just here to help me improve.</strong>",
+    text: "I use PostHog to understand how you browse the site (page views, events). No ads, no data selling.<br /><strong class=\"consent-banner__emphasis\">Just here to help me improve.</strong>",
     more: "Learn more",
     morePath: "/en/privacy",
     reject: "Reject",
@@ -53,6 +53,12 @@ const t = copy[lang];
   hidden
 >
   <div class="consent-banner__inner">
+    <img
+      src="/knolling/plant.webp"
+      alt=""
+      class="consent-banner__icon"
+      loading="lazy"
+    />
     <p class="consent-banner__text">
       <span set:html={t.text} />
       <a href={t.morePath} class="consent-banner__link">{t.more}</a>
@@ -103,9 +109,15 @@ const t = copy[lang];
     pointer-events: auto;
   }
 
+  /* Grid, non flex: su mobile "icona" e "azioni" devono stare sulla stessa
+     riga in basso pur essendo due elementi non adiacenti nel markup (il
+     testo sta in mezzo nel DOM) — un flex a wrap non può farli condividere
+     una riga indipendente dal testo, una griglia con aree nominate sì:
+     basta ridefinire `grid-template-areas` nel breakpoint sotto. */
   .consent-banner__inner {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas: "icon text actions";
     align-items: center;
     gap: 0.75rem 1.5rem;
     width: 100%;
@@ -113,12 +125,39 @@ const t = copy[lang];
     padding: 0.85rem 1.5rem;
   }
 
+  /* Plant: "crescita, cura, impatto" nel vocabolario del progetto — lega
+     "un aiuto per migliorare" alla stessa pianta che l'oggetto knolling
+     della home ha già, ma che qui è coperto dal banner: la si ritrova qui. */
+  .consent-banner__icon {
+    grid-area: icon;
+    width: 3.5rem;
+    height: 3.5rem;
+    object-fit: contain;
+  }
+
   .consent-banner__text {
-    flex: 1 1 16rem;
+    grid-area: text;
     font-size: var(--fs-12);
     line-height: 1.5;
     color: var(--color-text-muted);
     margin: 0;
+  }
+
+  /* :global() necessario — questo <strong> vive dentro set:html={t.text},
+     non nel template statico: Astro applica lo scoping (data-astro-cid-*)
+     solo agli elementi che scrive lui a compile-time, quindi una regola
+     scoped normale non l'avrebbe mai trovato (bug reale: il colore non
+     arrivava mai, non era "poco visibile", proprio non applicato).
+     Il badge con sfondo/bordo/glow (tentativo precedente) è stato bocciato
+     ("terribile con quello sfondo") — tornato a testo semplice. Verde
+     deliberatamente non legato a --color-accent: qui serve un segnale
+     semantico di rassicurazione ("va tutto bene, nessun rischio"),
+     indipendente dal mode attivo — un accent viola/oro/arancio non
+     comunicherebbe la stessa cosa. Grassetto (già <strong>) + colore +
+     dimensione = tre differenziatori, non solo il colore (WCAG 1.4.1). */
+  :global(.consent-banner__emphasis) {
+    color: #4ade80;
+    font-size: var(--fs-14);
   }
 
   .consent-banner__link {
@@ -131,10 +170,9 @@ const t = copy[lang];
   }
 
   .consent-banner__actions {
+    grid-area: actions;
     display: flex;
     gap: 0.5rem;
-    flex-shrink: 0;
-    margin-left: auto;
   }
 
   .consent-banner__btn {
@@ -175,24 +213,22 @@ const t = copy[lang];
   }
 
   /* Stesso breakpoint di WIP_BADGE_MOBILE_QUERY in index-init.ts — sotto,
-     testo e azioni si impilano invece di stare su una riga sola. */
+     il layout passa da una riga sola a due: testo sopra, pianta+azioni
+     sotto (vedi il commento sul grid-template-areas qui sotto). */
   @media (max-width: 40rem) {
+    /* Testo sopra su tutta la larghezza; sotto, pianta a sinistra e
+       bottoni a destra sulla stessa riga — stesso `align-items: center`
+       del container, quindi condividono l'allineamento verticale. */
     .consent-banner__inner {
-      flex-direction: column;
-      align-items: stretch;
+      grid-template-columns: auto 1fr;
+      grid-template-areas:
+        "text text"
+        "icon actions";
       padding: 0.85rem 1rem;
     }
 
-    /* flex: 1 1 16rem è pensato per la larghezza in riga (desktop): in
-       colonna quel flex-basis si applica all'altezza e gonfia il banner
-       con un vuoto forzato di 16rem — va azzerato qui. */
-    .consent-banner__text {
-      flex: 0 1 auto;
-    }
-
     .consent-banner__actions {
-      margin-left: 0;
-      justify-content: flex-end;
+      justify-self: end;
     }
   }
 </style>
@@ -247,13 +283,16 @@ const t = copy[lang];
 
   function showBannerIfUndecided() {
     if (!banner) return;
-    if (getConsent() !== "granted" && getConsent() !== "denied") {
-      banner.hidden = false;
-      requestAnimationFrame(() => {
-        banner.setAttribute("data-visible", "true");
-        syncFabLift();
-      });
-    }
+    // TEMP — forzato a comparire sempre per verifica visiva dell'icona
+    // multitool, ignora il consenso già salvato in localStorage. RIPRISTINARE
+    // la condizione originale (commentata sotto) prima di committare.
+    // if (getConsent() !== "granted" && getConsent() !== "denied") {
+    banner.hidden = false;
+    requestAnimationFrame(() => {
+      banner.setAttribute("data-visible", "true");
+      syncFabLift();
+    });
+    // }
   }
 
   // Il banner può andare a capo su più righe se la finestra si ridimensiona
