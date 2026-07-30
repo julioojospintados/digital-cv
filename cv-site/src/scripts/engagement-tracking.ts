@@ -48,7 +48,9 @@ if (sessionStorage.getItem(STORAGE_NOTIFIED_KEY) !== "1") {
   let fired = false;
 
   function currentPageVisibleMs(): number {
-    return visibleSince !== null ? pageVisibleMs + (performance.now() - visibleSince) : pageVisibleMs;
+    return visibleSince !== null
+      ? pageVisibleMs + (performance.now() - visibleSince)
+      : pageVisibleMs;
   }
 
   function persist(totalMs: number): void {
