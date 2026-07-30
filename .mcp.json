@@ -4,7 +4,10 @@
       "type": "stdio",
       "command": "node",
       "args": ["${CLAUDE_PROJECT_DIR:-.}/dist/index.js"]
-    },
+    }
+  },
+  "_disabledMcpServers": {
+    "_comment": "Regola 2026-07-30 (memoria feedback-disable-unused-mcp-servers): gli MCP server non in uso o non richiesti esplicitamente restano disattivati qui invece che connessi di default — emerso da crash OOM ripetuti (astro check, vitest, perfino npm run dev) su una macchina con 4GB di RAM, dove più server MCP come processi node in background contribuivano alla pressione di memoria insieme a VS Code/Chrome. Per riattivarne uno: sposta la sua voce dentro mcpServers sopra (probabile necessario riavviare la sessione Claude Code perché la connessione parta).",
     "sequential-thinking": {
       "command": "cmd",
       "args": ["/c", "mcp-server-sequential-thinking"],
@@ -34,6 +37,10 @@
       "type": "http",
       "url": "https://mcp.posthog.com/mcp"
     },
+    "github": {
+      "type": "http",
+      "url": "https://api.githubcopilot.com/mcp/"
+    },
     "clarity": {
       "type": "stdio",
       "command": "npx",
@@ -41,10 +48,6 @@
       "env": {
         "CLARITY_API_TOKEN": "${CLARITY_TKN}"
       }
-    },
-    "github": {
-      "type": "http",
-      "url": "https://api.githubcopilot.com/mcp/"
     }
   }
 }
