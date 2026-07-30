@@ -1064,21 +1064,36 @@ a.lang-switch__opt:hover {
   flex-wrap: wrap;
 }
 
+/* Le lingue sono CONTENUTO, non meta decorativa: il nome della lingua e il
+   livello CEFR sono esattamente ciò che un recruiter cerca. Erano a --fs-12
+   (il "pavimento chip" della scala) perché classificate come chip dal nome
+   della classe, ma la regola del pavimento vale per eyebrow/badge/timestamp —
+   non per un dato che l'utente deve leggere. Riallineate a livello contenuto
+   (decisione 2026-07-30, feedback accessibilità esterno): il bold da solo
+   alza il contrasto percepito, non l'acuità richiesta per leggere 12px. */
 .lang-chip {
-  font-size: var(--fs-12);
-  color: rgba(192, 220, 215, 0.85);
+  font-size: var(--fs-14);
+  color: var(--color-text-muted);
   display: flex;
   align-items: center;
-  gap: 0.3rem;
+  gap: 0.4rem;
 }
 
+/* Il nome della lingua sale a body-size: è l'informazione primaria della riga */
 .lang-chip b {
+  font-size: var(--fs-16);
   color: var(--color-text-primary);
   font-weight: 600;
 }
 
+/* Il codice CEFR in chiaro accanto ai quadratini. Niente opacity: riduceva il
+   contrasto effettivo a ~3:1 su bg ottanio (sotto il 4.5:1 di 1.4.3) — la
+   gerarchia la fa già la dimensione rispetto al nome. */
 .lang-level {
-  opacity: 0.6;
+  font-family: var(--font-mono);
+  font-size: var(--fs-14);
+  color: var(--color-text-muted);
+  letter-spacing: 0.02em;
 }
 
 .lang-cefr {
@@ -1087,11 +1102,20 @@ a.lang-switch__opt:hover {
   align-items: center;
 }
 
-/* Square dot — coerente con il sistema SkillSquare (no cerchi) */
+/* Square dot — coerente con il sistema SkillSquare (no cerchi).
+   I quadratini vuoti erano a rgba(192,220,215,0.25) = ~1.75:1 su bg ottanio,
+   sotto il 3:1 richiesto da 1.4.11 (Non-text Contrast) per grafica che porta
+   informazione — e portano informazione, sono la scala del livello. Alzati a
+   --color-text-muted al 70% e da 5px a 6px, con il colore preso dal token
+   invece che hardcoded: il valore fisso era quello del mode default e non
+   seguiva gli altri quattro mode (stesso bug di WorkDesignSystem, §9).
+   Il 70% è la soglia minima che tiene ≥3:1 in TUTTI i mode, non solo nel
+   default: verificato ~3.6:1 su default e ~3.2:1 su tech, che è il più
+   critico perché parte da un muted già ad alpha 0.7. */
 .lang-dot {
-  width: 5px;
-  height: 5px;
-  border: 1px solid rgba(192, 220, 215, 0.25);
+  width: 6px;
+  height: 6px;
+  border: 1px solid color-mix(in srgb, var(--color-text-muted) 70%, transparent);
   background: transparent;
   transition:
     background var(--duration-state, 0.3s) var(--ease-standard, ease),
