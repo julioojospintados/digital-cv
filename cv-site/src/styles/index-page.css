@@ -1145,6 +1145,14 @@ img[src*="flashlight"] {
   line-height: 1.4;
 }
 
+/* Card selezionata: la desc resta a --fs-14 anche dove il breakpoint
+   mobile-only qui sotto la comprime a --fs-12 per le celle passive — la
+   card attiva/espansa ha spazio per il testo pieno. Specificità (3 classi)
+   vince sulla regola con media query, niente bisogno di ripeterla lì. */
+.mode-card.is-selected .mode-card__desc {
+  font-size: var(--fs-14);
+}
+
 /* Touch (tablet+): limita la desc a 2 righe — su 320px il testo può espandersi
    a 4-5 righe e sforare l'altezza della card (overflow:hidden la taglia). */
 @media (--touch) {
