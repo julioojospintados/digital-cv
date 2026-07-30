@@ -253,7 +253,11 @@ const {
             langsWithSteps.map((l) => (
               <span class="lang-chip">
                 <b>{l.name}</b>
-                <span class="lang-cefr" aria-label={l.level} title={l.level}>
+                {/* Dots are aria-hidden and the level is rendered as text: it used
+                    to live only in an aria-label, so a sighted user had to count
+                    six 5px squares to tell B2 from C1. The text is now the single
+                    source — readable by eye and announced once by screen readers. */}
+                <span class="lang-cefr" aria-hidden="true">
                   {Array.from({ length: 6 }, (_, i) => (
                     <span
                       class:list={[
@@ -264,6 +268,7 @@ const {
                     />
                   ))}
                 </span>
+                <span class="lang-level">{l.level}</span>
               </span>
             ))
           }

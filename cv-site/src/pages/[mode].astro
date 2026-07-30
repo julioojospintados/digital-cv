@@ -307,7 +307,12 @@ const {
             langsWithSteps.map((l) => (
               <span class="lang-chip">
                 <b>{l.name}</b>
-                <span class="lang-cefr" aria-label={l.level} title={l.level}>
+                {/* I quadratini sono aria-hidden e il livello sta in chiaro accanto:
+                    prima il livello esisteva solo come aria-label, quindi chi vede
+                    lo schermo doveva contare sei quadratini da 5px per sapere se
+                    l'inglese è B2 o C1. Ora il testo è la fonte unica — leggibile a
+                    occhio e annunciato dagli screen reader senza doppioni. */}
+                <span class="lang-cefr" aria-hidden="true">
                   {Array.from({ length: 6 }, (_, i) => (
                     <span
                       class:list={[
@@ -318,6 +323,7 @@ const {
                     />
                   ))}
                 </span>
+                <span class="lang-level">{l.level}</span>
               </span>
             ))
           }
