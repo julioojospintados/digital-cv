@@ -414,7 +414,7 @@ gsap.delayedCall(introAlreadySeen ? 0 : 0.9, () => {
       // non a coreografia già assestata. Il timer di visibilità (8s) resta
       // reale (setTimeout dentro showWipBadge), non legato al clock GSAP.
       showWipBadge();
-      // ConsentBanner (PostHog/Clarity) ascolta questo evento per comparire
+      // ConsentBanner (PostHog) ascolta questo evento per comparire
       // con lo stesso tempismo della card "ultime modifiche" — richiesta
       // esplicita 2026-07-28. Sparato qui, non dentro showWipBadge(): quella
       // funzione può fare early-return su mobile o se il badge è già stato

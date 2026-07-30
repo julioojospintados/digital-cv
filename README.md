@@ -54,7 +54,7 @@ Digital_CV/
 │   │
 │   └── src/
 │       ├── components/             ← Componenti Astro statici (server-rendered)
-│       │   ├── ConsentBanner.astro ← Banner consenso PostHog/Clarity (gate in Layout.astro)
+│       │   ├── ConsentBanner.astro ← Banner consenso PostHog (gate in Layout.astro)
 │       │   ├── ContactFooter.astro ← Footer contatti condiviso tra le pagine
 │       │   ├── WorkDesignSystem.astro ← Sezione design system nei case study /work
 │       │   └── cards/              ← Card riutilizzabili per ogni sezione

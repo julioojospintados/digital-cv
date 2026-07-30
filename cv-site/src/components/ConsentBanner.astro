@@ -1,13 +1,15 @@
 ---
-// ConsentBanner.astro — banner minimale per il consenso a PostHog/Clarity
-// (session recording + heatmap). Vercel Analytics/Speed Insights restano
+// ConsentBanner.astro — banner minimale per il consenso a PostHog
+// (statistiche di navigazione). Vercel Analytics/Speed Insights restano
 // fuori dal gate: sono cookieless per dichiarazione del vendor, non
 // impostano identificatori persistenti — vedi /privacy per il dettaglio.
 // La scelta persiste in localStorage ("cv-consent": "granted" | "denied"):
 // se assente il banner appare, altrimenti resta nascosto (nessun flash).
-// Il gate reale sugli script (PostHog/Clarity non partono finché non è
-// "granted") vive in Layout.astro, non qui — questo componente legge/scrive
-// la stessa chiave ma non è la fonte di verità sull'avvio dei tracker.
+// Il gate reale sugli script (PostHog non parte finché non è "granted")
+// vive in Layout.astro, non qui — questo componente legge/scrive la stessa
+// chiave ma non è la fonte di verità sull'avvio del tracker.
+// Microsoft Clarity è stato rimosso il 2026-07-30 (sostituito dalla
+// notifica di engagement PostHog, vedi engagement-tracking.ts).
 interface Props {
   lang?: "it" | "en";
   /** true sulle home (index/en/index): il banner non si mostra da solo al
@@ -23,7 +25,7 @@ const { lang = "it", waitForWipBadge = false } = Astro.props;
 const copy = {
   it: {
     label: "Consenso cookie",
-    text: "Uso PostHog e Microsoft Clarity per capire come navighi il sito (heatmap, sessioni anonime). Niente pubblicità, niente vendita dati.<br /><strong>Solo un aiuto per migliorare.</strong>",
+    text: "Uso PostHog per capire come navighi il sito (pagine viste, eventi). Niente pubblicità, niente vendita dati.<br /><strong>Solo un aiuto per migliorare.</strong>",
     more: "Scopri di più",
     morePath: "/privacy",
     reject: "Rifiuta",
@@ -31,7 +33,7 @@ const copy = {
   },
   en: {
     label: "Cookie consent",
-    text: "I use PostHog and Microsoft Clarity to understand how you browse the site (heatmaps, anonymous sessions). No ads, no data selling.<br /><strong>Just here to help me improve.</strong>",
+    text: "I use PostHog to understand how you browse the site (page views, events). No ads, no data selling.<br /><strong>Just here to help me improve.</strong>",
     more: "Learn more",
     morePath: "/en/privacy",
     reject: "Reject",
@@ -121,7 +123,7 @@ const t = copy[lang];
 
   .consent-banner__link {
     display: block;
-    text-align: right;
+    text-align: left;
     margin-top: 0.35rem;
     color: var(--color-accent);
     text-decoration: underline;
@@ -200,6 +202,22 @@ const t = copy[lang];
   const banner = document.getElementById("consent-banner");
   const acceptBtn = document.getElementById("consent-accept");
   const rejectBtn = document.getElementById("consent-reject");
+  // Il FAB (floating-menu, z-index 99999) sta sopra il banner (99998) per
+  // costruzione — deve restare sopra qualsiasi overlay del sito. A banner
+  // visibile però le due cose si sovrappongono in scroll: invece di
+  // abbassare lo z-index del FAB (che gli servirebbe altrove), lo si alza
+  // dell'altezza del banner via --fab-lift, così restano entrambi visibili
+  // senza toccarsi. Richiesta esplicita 2026-07-30.
+  const fab = document.querySelector<HTMLElement>("floating-menu");
+
+  function syncFabLift() {
+    if (!fab || !banner) return;
+    if (banner.getAttribute("data-visible") === "true") {
+      fab.style.setProperty("--fab-lift", `${banner.offsetHeight + 12}px`);
+    } else {
+      fab.style.removeProperty("--fab-lift");
+    }
+  }
 
   function getConsent(): string | null {
     try {
@@ -221,6 +239,7 @@ const t = copy[lang];
   function hideBanner() {
     if (!banner) return;
     banner.removeAttribute("data-visible");
+    syncFabLift();
     setTimeout(() => {
       banner.hidden = true;
     }, 320);
@@ -230,9 +249,19 @@ const t = copy[lang];
     if (!banner) return;
     if (getConsent() !== "granted" && getConsent() !== "denied") {
       banner.hidden = false;
-      requestAnimationFrame(() => banner.setAttribute("data-visible", "true"));
+      requestAnimationFrame(() => {
+        banner.setAttribute("data-visible", "true");
+        syncFabLift();
+      });
     }
   }
+
+  // Il banner può andare a capo su più righe se la finestra si ridimensiona
+  // (rotazione mobile, resize desktop) mentre è aperto — ricalcola il lift
+  // solo in quel caso, non c'è nulla da fare se è già chiuso.
+  window.addEventListener("resize", () => {
+    if (banner?.getAttribute("data-visible") === "true") syncFabLift();
+  });
 
   if (banner?.dataset.waitForWip === "true") {
     // Sparato dalla timeline GSAP del preloader (index-init.ts) nello stesso
@@ -247,10 +276,9 @@ const t = copy[lang];
 
   acceptBtn?.addEventListener("click", () => {
     setConsent("granted");
-    // Tipizzati in src/consent.d.ts — definiti dagli script is:inline di
+    // Tipizzato in src/consent.d.ts — definito dallo script is:inline di
     // Layout.astro solo in build di produzione, da cui l'optional call.
     window.__cvInitPostHog?.();
-    window.__cvInitClarity?.();
     hideBanner();
   });
 

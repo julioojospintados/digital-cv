@@ -697,7 +697,10 @@ body::after {
 
 floating-menu {
   position: fixed !important;
-  bottom: 1.5rem;
+  /* --fab-lift: alzato da ConsentBanner.astro (script) all'altezza del banner
+     quando è visibile, così il FAB non ci si sovrappone mai in scroll — a
+     banner chiuso la var è assente e bottom torna al valore base. */
+  bottom: calc(1.5rem + var(--fab-lift, 0px));
   right: 1.5rem;
   /* z-index sopra preloader (99997), scroll-progress (9997), nav (100) e qualsiasi overlay */
   z-index: 99999;
@@ -706,10 +709,11 @@ floating-menu {
   align-items: flex-end;
   gap: 0.65rem;
   pointer-events: none;
-  /* Base transition for preloader entrance */
+  /* Base transition for preloader entrance — bottom aggiunta per il lift sopra il banner di consenso */
   transition:
     opacity 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
-    transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+    bottom 0.3s var(--ease-standard);
 }
 
 /* FAB visibile solo dopo il primo scroll: l'attributo è nel markup SSR di
@@ -722,7 +726,7 @@ floating-menu {
 
 @media (max-width: 40rem) {
   floating-menu {
-    bottom: 1.25rem;
+    bottom: calc(1.25rem + var(--fab-lift, 0px));
     right: 1rem;
   }
 }
@@ -731,7 +735,7 @@ floating-menu {
 @supports (bottom: env(safe-area-inset-bottom)) {
   @media (max-width: 40rem) {
     floating-menu {
-      bottom: max(1.25rem, env(safe-area-inset-bottom) + 0.75rem);
+      bottom: calc(max(1.25rem, env(safe-area-inset-bottom) + 0.75rem) + var(--fab-lift, 0px));
     }
   }
 }
