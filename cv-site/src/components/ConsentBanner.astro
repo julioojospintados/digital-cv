@@ -25,7 +25,7 @@ const { lang = "it", waitForWipBadge = false } = Astro.props;
 const copy = {
   it: {
     label: "Consenso cookie",
-    text: "Uso PostHog per capire come navighi il sito (pagine viste, eventi). Niente pubblicità, niente vendita dati.<br /><strong class=\"consent-banner__emphasis\">Solo un aiuto per migliorare.</strong>",
+    text: 'Uso PostHog per capire come navighi il sito (pagine viste, eventi). Niente pubblicità, niente vendita dati.<br /><strong class="consent-banner__emphasis">Solo un aiuto per migliorare.</strong>',
     more: "Scopri di più",
     morePath: "/privacy",
     reject: "Rifiuta",
@@ -33,7 +33,7 @@ const copy = {
   },
   en: {
     label: "Cookie consent",
-    text: "I use PostHog to understand how you browse the site (page views, events). No ads, no data selling.<br /><strong class=\"consent-banner__emphasis\">Just here to help me improve.</strong>",
+    text: 'I use PostHog to understand how you browse the site (page views, events). No ads, no data selling.<br /><strong class="consent-banner__emphasis">Just here to help me improve.</strong>',
     more: "Learn more",
     morePath: "/en/privacy",
     reject: "Reject",
@@ -53,12 +53,7 @@ const t = copy[lang];
   hidden
 >
   <div class="consent-banner__inner">
-    <img
-      src="/knolling/plant.webp"
-      alt=""
-      class="consent-banner__icon"
-      loading="lazy"
-    />
+    <img src="/knolling/plant.webp" alt="" class="consent-banner__icon" loading="lazy" />
     <p class="consent-banner__text">
       <span set:html={t.text} />
       <a href={t.morePath} class="consent-banner__link">{t.more}</a>
@@ -287,16 +282,13 @@ const t = copy[lang];
 
   function showBannerIfUndecided() {
     if (!banner) return;
-    // TEMP — forzato a comparire sempre per verifica visiva dell'icona
-    // multitool, ignora il consenso già salvato in localStorage. RIPRISTINARE
-    // la condizione originale (commentata sotto) prima di committare.
-    // if (getConsent() !== "granted" && getConsent() !== "denied") {
-    banner.hidden = false;
-    requestAnimationFrame(() => {
-      banner.setAttribute("data-visible", "true");
-      syncFabLift();
-    });
-    // }
+    if (getConsent() !== "granted" && getConsent() !== "denied") {
+      banner.hidden = false;
+      requestAnimationFrame(() => {
+        banner.setAttribute("data-visible", "true");
+        syncFabLift();
+      });
+    }
   }
 
   // Il banner può andare a capo su più righe se la finestra si ridimensiona
