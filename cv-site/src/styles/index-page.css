@@ -1860,6 +1860,7 @@ img[src*="flashlight"] {
    centrato come un'etichetta statica, l'asimmetria segnala "questo
    procede", non "questo descrive". */
 .profile-cta {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: space-between;
@@ -1886,7 +1887,8 @@ img[src*="flashlight"] {
   min-width: min(22rem, 100%);
   /* Glow bordo luminescente — stessa formula di .cv-card[data-state="active"]
      in global.css, ma ancorata a --ps-accent (colore della sezione) invece
-     di --color-accent (colore del mode globale). */
+     di --color-accent (colore del mode globale). Stato di riposo, statico:
+     il "respiro" del pulse vive solo su ::after (sotto), non qui. */
   box-shadow:
     0 0 16px rgba(255, 255, 255, 0.12),
     inset 0 0 24px rgba(255, 255, 255, 0.04);
@@ -1898,33 +1900,48 @@ img[src*="flashlight"] {
     filter 0.2s ease,
     background 0.2s ease,
     box-shadow 0.2s ease;
-  /* Pulse persistente sul bordo — stessa cadenza (1.5s, ease-in-out, loop)
-     del pulse GSAP delle mode-card (index-init.ts, "10b. Pulse attenzione
-     sulle card"): qui in CSS puro perché la CTA vive fuori dalla timeline
-     d'ingresso dell'hero. Si interrompe su hover/focus (l'utente sta già
-     interagendo, non serve più richiamare l'attenzione) e rispetta
-     prefers-reduced-motion via la regola globale in global.css. */
-  animation: profile-cta-pulse 1.5s ease-in-out infinite;
 }
 
-@keyframes profile-cta-pulse {
+/* Pulse persistente sul bordo — stessa cadenza (1.5s, ease-in-out, loop) del
+   pulse GSAP delle mode-card (index-init.ts, "10b. Pulse attenzione sulle
+   card"): qui in CSS puro perché la CTA vive fuori dalla timeline d'ingresso
+   dell'hero. Il glow "acceso" (box-shadow più intenso) è pre-dipinto e
+   STATICO su questo pseudo-elemento; il pulse anima solo la sua opacity
+   (0 → 1 → 0) invece del box-shadow stesso — box-shadow è una proprietà di
+   paint (ricalcolo del blur ad ogni frame sul main thread), opacity gira sul
+   compositor thread (nessun repaint). Stesso identico respiro visivo,
+   nessun costo di animazione non composta (audit Lighthouse "Evita
+   animazioni non composte"). Si interrompe su hover/focus (l'utente sta già
+   interagendo, non serve più richiamare l'attenzione) e rispetta
+   prefers-reduced-motion via la regola globale in global.css (si applica
+   anche agli pseudo-elementi). */
+.profile-cta::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  box-shadow:
+    0 0 26px color-mix(in srgb, var(--ps-accent) 62%, transparent),
+    inset 0 0 30px color-mix(in srgb, var(--ps-accent) 18%, transparent);
+  animation: profile-cta-pulse-glow 1.5s ease-in-out infinite;
+  will-change: opacity;
+}
+
+@keyframes profile-cta-pulse-glow {
   0%,
   100% {
-    box-shadow:
-      0 0 16px color-mix(in srgb, var(--ps-accent) 35%, transparent),
-      inset 0 0 24px color-mix(in srgb, var(--ps-accent) 10%, transparent);
+    opacity: 0;
   }
 
   50% {
-    box-shadow:
-      0 0 26px color-mix(in srgb, var(--ps-accent) 62%, transparent),
-      inset 0 0 30px color-mix(in srgb, var(--ps-accent) 18%, transparent);
+    opacity: 1;
   }
 }
 
 @media (hover: hover) and (pointer: fine) {
   .profile-cta:hover {
-    animation: none;
     background: rgba(255, 255, 255, 0.08);
     background: color-mix(in srgb, var(--ps-accent) 24%, transparent);
     box-shadow:
@@ -1935,6 +1952,11 @@ img[src*="flashlight"] {
       inset 0 0 28px color-mix(in srgb, var(--ps-accent) 14%, transparent);
   }
 
+  .profile-cta:hover::after {
+    animation-play-state: paused;
+    opacity: 0;
+  }
+
   .profile-cta:hover .profile-cta__arrow {
     translate: 4px 0;
     animation-play-state: paused;
@@ -1942,9 +1964,13 @@ img[src*="flashlight"] {
 }
 
 .profile-cta:focus-visible {
-  animation: none;
   background: rgba(255, 255, 255, 0.08);
   background: color-mix(in srgb, var(--ps-accent) 24%, transparent);
+}
+
+.profile-cta:focus-visible::after {
+  animation-play-state: paused;
+  opacity: 0;
 }
 
 .profile-cta:active {

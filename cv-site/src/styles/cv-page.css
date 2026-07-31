@@ -60,10 +60,15 @@
 
 /* Knolling objects in hero — laptop top-right */
 /* rotation is set by GSAP (cv-init.ts) — do not add transform here */
+/* aspect-ratio su ogni modifier: rapporto reale del file (crop diverso per
+   ciascuna knolling photo) — riserva lo spazio corretto prima del load,
+   niente CLS quando l'immagine arriva (audit Lighthouse "width/height
+   espliciti"). width resta la sorgente di verità, height si deriva. */
 .bg-knoll--laptop {
   top: 8rem;
   right: -3rem;
   width: 20rem;
+  aspect-ratio: 524 / 476;
 }
 
 /* Knolling in skills section — multitool right */
@@ -72,6 +77,7 @@
   top: 0;
   right: -2.5rem;
   width: 11.25rem;
+  aspect-ratio: 226 / 293;
 }
 
 /* Knolling in experience section — flashlight right */
@@ -80,6 +86,7 @@
   top: 2rem;
   right: -2rem;
   width: 17.5rem;
+  aspect-ratio: 1187 / 350;
 }
 
 /* Knolling in ai section — chess left */
@@ -88,6 +95,7 @@
   bottom: 2rem;
   left: -3rem;
   width: 16rem;
+  aspect-ratio: 177 / 274;
 }
 
 /* Knolling in soft section — plant right */
@@ -96,6 +104,7 @@
   bottom: 0;
   right: -2rem;
   width: 14rem;
+  aspect-ratio: 226 / 250;
 }
 
 /* Knolling in projects section — compass right */
@@ -104,6 +113,7 @@
   top: 1rem;
   right: -2rem;
   width: 14rem;
+  aspect-ratio: 208 / 341;
 }
 
 /* Mobile: keep the objects visible but smaller so they stay decorative without covering text */

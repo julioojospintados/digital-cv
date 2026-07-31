@@ -22,6 +22,16 @@ const KNOLL_ICON: Record<string, string> = {
   management: "chess.webp",
 };
 
+// Rapporto larghezza/altezza reale dei file — ogni knolling icon ha un
+// crop diverso, serve per riservare lo spazio corretto (CLS) prima che
+// l'immagine carichi. Stessa mappa in work/[slug].astro, en/work/[slug].astro.
+const KNOLL_RATIO: Record<string, string> = {
+  "laptop.webp": "524 / 476",
+  "camera.webp": "327 / 221",
+  "plant.webp": "226 / 250",
+  "chess.webp": "177 / 274",
+};
+
 const {
   name,
   slug,
@@ -31,6 +41,7 @@ const {
   ctaLabel = "Leggi il case study",
   pulse = false,
 } = Astro.props;
+const iconFile = KNOLL_ICON[primaryMode ?? "tech"];
 ---
 
 <a
@@ -39,11 +50,12 @@ const {
 >
   <img
     class="work-index-card__icon"
-    src={`/knolling/${KNOLL_ICON[primaryMode ?? "tech"]}`}
+    src={`/knolling/${iconFile}`}
     alt=""
     aria-hidden="true"
     loading="lazy"
     decoding="async"
+    style={`aspect-ratio: ${KNOLL_RATIO[iconFile]};`}
   />
   <p class="work-index-card__eyebrow">Case Study</p>
   <h2 class="work-index-card__name">{name}</h2>

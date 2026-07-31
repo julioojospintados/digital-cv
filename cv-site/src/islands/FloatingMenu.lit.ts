@@ -197,26 +197,41 @@ class FloatingMenu extends LitElement {
       fill: currentColor;
     }
 
-    /* ── Pulse ring (attrae l'attenzione quando chiuso) ── */
+    /* ── Pulse ring (attrae l'attenzione quando chiuso) ──
+       Il ring "acceso" (colore + glow) è pre-dipinto e statico su ::after;
+       il pulse anima solo transform:scale + opacity, non il box-shadow —
+       stessa motivazione di .profile-cta::after in index-page.css: opacity/
+       transform girano sul compositor thread, box-shadow costringerebbe un
+       repaint ad ogni frame sul main thread (audit Lighthouse "Evita
+       animazioni non composte"). Stesso risultato visivo — anello che si
+       espande e sfuma — ottenuto scalando invece che facendo crescere lo
+       spread del box-shadow. */
+    .fab-trigger::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      pointer-events: none;
+      opacity: 0;
+      box-shadow:
+        0 0 0 2px color-mix(in srgb, var(--color-accent, rgba(0, 255, 200, 1)) 45%, transparent),
+        0 0 18px color-mix(in srgb, var(--color-accent, rgba(0, 255, 200, 1)) 22%, transparent);
+      will-change: transform, opacity;
+    }
+
     @keyframes fab-ring-pulse {
       0% {
-        box-shadow:
-          0 0 0 0 color-mix(in srgb, var(--color-accent, rgba(0, 255, 200, 1)) 45%, transparent),
-          0 0 18px color-mix(in srgb, var(--color-accent, rgba(0, 255, 200, 1)) 22%, transparent);
+        transform: scale(1);
+        opacity: 0.6;
       }
-      70% {
-        box-shadow:
-          0 0 0 14px transparent,
-          0 0 0px transparent;
-      }
+      70%,
       100% {
-        box-shadow:
-          0 0 0 0 transparent,
-          0 0 0px transparent;
+        transform: scale(1.35);
+        opacity: 0;
       }
     }
 
-    :host(:not([open])) .fab-trigger {
+    :host(:not([open])) .fab-trigger::after {
       animation: fab-ring-pulse 3.5s ease-in-out infinite;
       animation-delay: 2s;
     }

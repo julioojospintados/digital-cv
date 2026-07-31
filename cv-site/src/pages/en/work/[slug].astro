@@ -19,6 +19,16 @@ const KNOLL_ICON: Record<string, string> = {
 };
 const mode = project.primaryMode ?? "tech";
 const icon = KNOLL_ICON[mode];
+// Real width/height ratio of each file — reserves the correct space (CLS)
+// before the image loads. Same map in WorkIndexCard.astro.
+const KNOLL_RATIO: Record<string, string> = {
+  "laptop.webp": "524 / 476",
+  "camera.webp": "327 / 221",
+  "plant.webp": "226 / 250",
+  "chess.webp": "177 / 274",
+  "compass.webp": "208 / 341",
+};
+const iconRatio = KNOLL_RATIO[icon];
 const email =
   cvDataEn.social.find((s) => s.platform === "Email")?.url ??
   "mailto:giulio.occhipinti.g@gmail.com";
@@ -65,6 +75,7 @@ const totalSteps = String(processSteps.length).padStart(2, "0");
         aria-hidden="true"
         loading="eager"
         decoding="async"
+        style={`aspect-ratio: ${iconRatio};`}
       />
       <p class="work-hero__eyebrow">Case Study</p>
       <h1 class="work-hero__title">{project.name}</h1>
@@ -118,6 +129,7 @@ const totalSteps = String(processSteps.length).padStart(2, "0");
             aria-hidden="true"
             loading="lazy"
             decoding="async"
+            style="aspect-ratio: 208 / 341;"
           />
 
           <div class="journey__track" data-j-track>
@@ -141,6 +153,7 @@ const totalSteps = String(processSteps.length).padStart(2, "0");
                   aria-hidden="true"
                   loading="lazy"
                   decoding="async"
+                  style={`aspect-ratio: ${iconRatio};`}
                 />
                 <p class="journey__eyebrow">Departure</p>
                 <h2 class="journey__start-title">The problem</h2>

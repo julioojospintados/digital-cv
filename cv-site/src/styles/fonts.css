@@ -1,0 +1,16 @@
+/* Fontsource — pesi 400/500/600/700 (Lexend + JetBrains Mono), self-hosted,
+   no Google CDN, GDPR compliant. font-display: swap (default Fontsource):
+   il testo si dipinge subito col fallback e passa al webfont quando pronto,
+   quindi questo file è sicuro da caricare in modo non render-blocking
+   (vedi Layout.astro <head>: <link media="print" onload>, pattern loadCSS
+   standard). Il peso 800 (preloader/nome hero) resta invece in global.css
+   con font-display: block + il suo <link rel="preload"> dedicato — quello
+   sì deve essere pronto prima del primo paint. */
+@import "@fontsource/lexend/400.css";
+@import "@fontsource/lexend/500.css";
+@import "@fontsource/lexend/600.css";
+@import "@fontsource/lexend/700.css";
+@import "@fontsource/jetbrains-mono/400.css";
+@import "@fontsource/jetbrains-mono/500.css";
+@import "@fontsource/jetbrains-mono/600.css";
+@import "@fontsource/jetbrains-mono/700.css";

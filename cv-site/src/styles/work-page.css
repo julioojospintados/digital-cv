@@ -355,30 +355,44 @@
 
 /* Pulse persistente — RICETTA IDENTICA a .profile-cta ("GO to…",
    index-page.css): bordo 1px accent pieno e costante, il respiro sta solo
-   nel glow box-shadow (0 0 16px 35% + inset 24px 10% → 0 0 26px 62% +
-   inset 30px 18%), 1.5s ease-in-out infinite. Nessun valore proprio: se
-   cambia la CTA, va cambiata anche qui con le stesse cifre. Solo sulla
-   card vetrina (modifier --pulse), non sulla griglia di /work. */
+   nel glow (0 0 16px 35% + inset 24px 10% → 0 0 26px 62% + inset 30px 18%),
+   1.5s ease-in-out infinite. Nessun valore proprio: se cambia la CTA, va
+   cambiata anche qui con le stesse cifre. Solo sulla card vetrina (modifier
+   --pulse), non sulla griglia di /work.
+   Il glow "acceso" è pre-dipinto e statico su ::after (::before è già preso
+   dal glow hover sopra); il pulse anima solo opacity, non box-shadow —
+   stessa motivazione di .profile-cta::after (compositor thread, non main
+   thread, vedi commento lì). ::after eredita lo stesso z-index implicito di
+   ::before, quindi resta dietro al contenuto (già a z-index:1). */
 .work-index-card--pulse {
   border-color: var(--color-accent);
   box-shadow:
     0 0 16px color-mix(in srgb, var(--color-accent) 35%, transparent),
     inset 0 0 24px color-mix(in srgb, var(--color-accent) 10%, transparent);
-  animation: work-index-card-pulse 1.5s ease-in-out infinite;
 }
 
-@keyframes work-index-card-pulse {
+.work-index-card--pulse::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  box-shadow:
+    0 0 26px color-mix(in srgb, var(--color-accent) 62%, transparent),
+    inset 0 0 30px color-mix(in srgb, var(--color-accent) 18%, transparent);
+  animation: work-index-card-pulse-glow 1.5s ease-in-out infinite;
+  will-change: opacity;
+}
+
+@keyframes work-index-card-pulse-glow {
   0%,
   100% {
-    box-shadow:
-      0 0 16px color-mix(in srgb, var(--color-accent) 35%, transparent),
-      inset 0 0 24px color-mix(in srgb, var(--color-accent) 10%, transparent);
+    opacity: 0;
   }
 
   50% {
-    box-shadow:
-      0 0 26px color-mix(in srgb, var(--color-accent) 62%, transparent),
-      inset 0 0 30px color-mix(in srgb, var(--color-accent) 18%, transparent);
+    opacity: 1;
   }
 }
 
@@ -387,18 +401,26 @@
    interagendo, non serve più richiamare l'attenzione. */
 @media (hover: hover) and (pointer: fine) {
   .work-index-card--pulse:hover {
-    animation: none;
     box-shadow:
       0 0 22px color-mix(in srgb, var(--color-accent) 50%, transparent),
       inset 0 0 28px color-mix(in srgb, var(--color-accent) 14%, transparent);
   }
+
+  .work-index-card--pulse:hover::after {
+    animation-play-state: paused;
+    opacity: 0;
+  }
 }
 
 .work-index-card--pulse:focus-visible {
-  animation: none;
   box-shadow:
     0 0 22px color-mix(in srgb, var(--color-accent) 50%, transparent),
     inset 0 0 28px color-mix(in srgb, var(--color-accent) 14%, transparent);
+}
+
+.work-index-card--pulse:focus-visible::after {
+  animation-play-state: paused;
+  opacity: 0;
 }
 
 @media (hover: hover) and (pointer: fine) {

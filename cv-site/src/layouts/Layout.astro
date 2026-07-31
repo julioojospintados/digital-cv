@@ -1,5 +1,7 @@
 ---
 import "../styles/global.css";
+import fontsCssUrl from "../styles/fonts.css?url";
+import cursorCssUrl from "../styles/cursor.css?url";
 import SpeedInsights from "@vercel/speed-insights/astro";
 import Analytics from "@vercel/analytics/astro";
 import ConsentBanner from "../components/ConsentBanner.astro";
@@ -140,6 +142,28 @@ const jsonLd = {
         />
       )
     }
+
+    <!-- Fontsource 400-700 (Lexend + JetBrains Mono) — non render-blocking.
+         font-display:swap in fonts.css means the fallback font paints
+         immediately; loadCSS pattern (media=print -> onload=all) removes
+         these from the critical rendering path instead of serializing 8
+         @import fetches before first paint. -->
+    <link rel="stylesheet" href={fontsCssUrl} media="print" onload="this.media='all'" />
+    <noscript><link rel="stylesheet" href={fontsCssUrl} /></noscript>
+
+    <!-- Cursore custom: richiesto solo su pointer fine (desktop/trackpad).
+         matchMedia gira synchronously prima del primo paint (niente flash),
+         e sui touch device (Moto G Power incluso — l'audit Lighthouse
+         mobile lo segnalava al 100% inutilizzato) il file non viene nemmeno
+         scaricato: zero byte invece di CSS morto. Vedi styles/cursor.css. -->
+    <script is:inline define:vars={{ cursorCssUrl }}>
+      if (matchMedia("(hover: hover) and (pointer: fine)").matches) {
+        const link = document.createElement("link");
+        link.rel = "stylesheet";
+        link.href = cursorCssUrl;
+        document.head.appendChild(link);
+      }
+    </script>
 
     <!-- Preload critical fonts — 400 for body text, 800 for preloader & entry name -->
     <!-- font-display: block in global.css prevents FOUC during the preloader animation -->

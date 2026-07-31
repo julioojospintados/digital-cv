@@ -53,7 +53,13 @@ const t = copy[lang];
   hidden
 >
   <div class="consent-banner__inner">
-    <img src="/knolling/plant.webp" alt="" class="consent-banner__icon" loading="lazy" />
+    <img
+      src="/knolling/plant.webp"
+      alt=""
+      class="consent-banner__icon"
+      loading="lazy"
+      style="aspect-ratio: 226 / 250;"
+    />
     <p class="consent-banner__text">
       <span set:html={t.text} />
       <a href={t.morePath} class="consent-banner__link">{t.more}</a>
