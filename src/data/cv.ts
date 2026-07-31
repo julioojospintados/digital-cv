@@ -493,10 +493,10 @@ export const cvData = {
       location: "Los Angeles, USA",
       remote: true,
       description:
-        "Ho sviluppato frontend full remote in un team distribuito tra Torino e Los Angeles, su un'applicazione web di dati clinici per strutture ospedaliere statunitensi: codebase React consolidata, refactoring CSS su larga scala e integrazione con API cliniche in tempo reale.",
+        "Ho sviluppato frontend full remote in un team distribuito tra Torino e Los Angeles, su un'applicazione web di dati clinici per strutture ospedaliere statunitensi: codebase React consolidata, refactoring SCSS su larga scala e integrazione con API cliniche in tempo reale.",
       highlights: [
         "Ho sviluppato dashboard React per la visualizzazione e il monitoraggio di dati clinici Covid-19 in ospedali USA.",
-        "Ho riscritto il CSS con pattern BEM su una codebase da 20.000 righe: –800 righe duplicate.",
+        "Ho riscritto il SCSS con pattern BEM su una codebase da 20.000 righe: –800 righe duplicate.",
         "Ho integrato API REST e GraphQL per la visualizzazione di dati clinici in tempo reale.",
       ],
       skills: [
