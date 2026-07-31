@@ -45,6 +45,8 @@ Thumbs.db
 # sarebbe finita nel repo pubblico alla prima creazione del file.
 todo.md
 .todo.md
+history.md
+.history.md
 bash.exe.stackdump
 tmp-diff.mjs
 .tmp-lh*
