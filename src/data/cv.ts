@@ -499,14 +499,7 @@ export const cvData = {
         "Digivax | Frontend & UI Developer: sviluppo della piattaforma web per la gestione della conformità vaccinale e sanitaria in ambito aziendale. Presidio del lato UI/UX e sviluppo delle dashboard per i diversi ruoli utente (datori di lavoro, dipendenti e personale sanitario) in React e TypeScript. Refactoring completo dell'architettura SCSS tramite pattern BEM, riducendo il codice da 8.000 a 3.000 righe per migliorare le prestazioni, la manutenibilità e la coerenza visiva delle interfacce. Integrazione con API REST e gestione dei flussi dati in ambiente Agile.",
         "And 1 | Frontend Developer: attività di manutenzione evolutiva, risoluzione bug e sviluppo di nuove funzionalità per il prodotto.",
       ],
-      skills: [
-        "React",
-        "TypeScript",
-        "SCSS / BEM",
-        "REST API",
-        "Trello",
-        "Agile",
-      ],
+      skills: ["React", "TypeScript", "SCSS / BEM", "REST API", "Trello", "Agile"],
     },
     {
       company: "Consoft",
