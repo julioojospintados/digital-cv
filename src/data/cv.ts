@@ -228,7 +228,6 @@ export const cvData = {
     summary:
       "Arrivo al design da un percorso che non assomiglia a nessun manuale: teatro, palco, fotografia, 5 paesi e oltre 6 anni di frontend enterprise (Intesa San Paolo, Aruba, Rai Pubblicità). Oggi progetto interfacce con certificazioni IBM e SkillUp in UX/UI, lavoro in sprint brevi e uso l'AI dentro il flusso di lavoro. So costruire quello che disegno: è la differenza tra un mockup e un prodotto.",
     location: "Torino, Italia",
-    age: 36,
     avatar: "",
     availability: "available" as "available" | "open" | "not-available",
   },

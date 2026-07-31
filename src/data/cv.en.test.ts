@@ -16,10 +16,6 @@ describe("cvDataEn structural parity with cvData", () => {
     expect(cvDataEn.personal.availability).toBe(cvData.personal.availability);
   });
 
-  it("personal.age matches", () => {
-    expect(cvDataEn.personal.age).toBe(cvData.personal.age);
-  });
-
   it("personal.location is non-empty", () => {
     expect(cvDataEn.personal.location.length).toBeGreaterThan(0);
   });

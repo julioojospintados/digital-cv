@@ -83,7 +83,6 @@ export const cvDataEn = {
     summary:
       "I came to design by a route no manual describes: theatre, stages, photography, 5 countries and over 6 years of enterprise frontend (Intesa San Paolo, Aruba, Rai Pubblicità). Today I design interfaces with IBM and SkillUp certifications in UX/UI, work in short sprints and use AI inside the workflow. I can build what I design: that is the difference between a mockup and a product.",
     location: "Turin, Italy",
-    age: 36,
     avatar: "",
     availability: "available" as "available" | "open" | "not-available",
   },

@@ -85,14 +85,22 @@ interface LocaleContent {
   spine: string;
   availability: string;
   location: string;
+  /** Destinazione di QR code e site-link — home IT per il locale IT, home
+   * EN per il locale EN. Il middleware del sito instrada IT/EN in base alla
+   * geolocalizzazione IP del visitatore, non alla lingua del browser: non è
+   * affidabile per chi legge un PDF in inglese da un IP italiano (VPN,
+   * scout europei, diaspora) — il PDF EN deve puntare a /en esplicitamente,
+   * non alla radice. */
+  siteUrl: string;
+  email: string;
+  linkedin: string;
+  github: string;
 }
 
-const socialUrl = (platform: string): string =>
-  cvData.social.find((s) => s.platform === platform)?.url ?? "";
-
-const EMAIL = socialUrl("Email").replace("mailto:", "");
-const LINKEDIN = socialUrl("LinkedIn");
-const GITHUB = socialUrl("GitHub");
+const socialUrl = (
+  data: { social: readonly { platform: string; url: string }[] },
+  platform: string,
+): string => data.social.find((s) => s.platform === platform)?.url ?? "";
 
 const now = new Date();
 const STAMP = `${String(now.getMonth() + 1).padStart(2, "0")}.${now.getFullYear()}`;
@@ -139,6 +147,10 @@ const locales: LocaleContent[] = [
     spine: "QUESTO FOGLIO È SOLO L'INVENTARIO · GLI OGGETTI VERI SI MUOVONO",
     availability: "Disponibile per nuovi progetti",
     location: cvData.personal.location,
+    siteUrl: SITE_URL,
+    email: socialUrl(cvData, "Email").replace("mailto:", ""),
+    linkedin: `${socialUrl(cvData, "LinkedIn")}?locale=it_IT`,
+    github: socialUrl(cvData, "GitHub"),
   },
   {
     lang: "en",
@@ -164,7 +176,7 @@ const locales: LocaleContent[] = [
     ],
     qrCaption: "05 · PORTAL",
     qrMicro: "SCAN · THE FULL CV LIVES HERE",
-    qrUrlLabel: "giulio-occhipinti.com",
+    qrUrlLabel: "giulio-occhipinti.com/en",
     legendLabel: "FOUR READINGS",
     legendChips: [
       "Software Developer",
@@ -173,8 +185,12 @@ const locales: LocaleContent[] = [
       "Project Manager",
     ],
     spine: "THIS SHEET IS ONLY THE INVENTORY · THE REAL OBJECTS MOVE",
-    availability: "Available for new projects",
+    availability: "Remote · B2B / Independent Contractor",
     location: cvDataEn.personal.location,
+    siteUrl: `${SITE_URL}/en`,
+    email: socialUrl(cvDataEn, "Email").replace("mailto:", ""),
+    linkedin: `${socialUrl(cvDataEn, "LinkedIn")}?locale=en_US`,
+    github: socialUrl(cvDataEn, "GitHub"),
   },
 ];
 
@@ -190,7 +206,7 @@ function objectCell(c: Caption, assets: Record<string, string>): string {
 
 function qrCell(c: LocaleContent, qrSvg: string): string {
   return `
-    <a class="cell qr-card" href="${SITE_URL}">
+    <a class="cell qr-card" href="${c.siteUrl}">
       <span class="qr-caption">${c.qrCaption}</span>
       <div class="qr-box">
         ${qrSvg}
@@ -646,13 +662,13 @@ function buildHtml(
 
     <footer class="footer">
       <div class="contacts">
-        <a href="mailto:${EMAIL}">${EMAIL}</a><span class="sep">·</span>
-        <a href="${LINKEDIN}">${LINKEDIN.replace("https://www.", "")}</a><span class="sep">·</span>
-        <a href="${GITHUB}">${GITHUB.replace("https://", "")}</a>
+        <a href="mailto:${c.email}">${c.email}</a><span class="sep">·</span>
+        <a href="${c.linkedin}">${c.linkedin.replace("https://www.", "").split("?")[0]}</a><span class="sep">·</span>
+        <a href="${c.github}">${c.github.replace("https://", "")}</a>
       </div>
       <div class="footer-row">
         <span class="availability"><i></i>${c.availability} · ${c.location}</span>
-        <a class="site-link" href="${SITE_URL}">giulio-occhipinti.com</a>
+        <a class="site-link" href="${c.siteUrl}">${c.qrUrlLabel}</a>
       </div>
     </footer>
   </div>
@@ -665,12 +681,21 @@ function buildHtml(
 async function main(): Promise<void> {
   mkdirSync(OUT_DIR, { recursive: true });
 
-  const qrSvg = await QRCode.toString(SITE_URL, {
-    type: "svg",
-    errorCorrectionLevel: "H",
-    margin: 0,
-    color: { dark: "#084943", light: "#0000" },
-  });
+  // Un QR per locale: il PDF EN deve puntare a /en (vedi commento su
+  // LocaleContent.siteUrl), quindi non può condividere lo stesso codice
+  // con l'IT.
+  const qrSvgByLang = new Map<string, string>();
+  for (const locale of locales) {
+    qrSvgByLang.set(
+      locale.lang,
+      await QRCode.toString(locale.siteUrl, {
+        type: "svg",
+        errorCorrectionLevel: "H",
+        margin: 0,
+        color: { dark: "#084943", light: "#0000" },
+      }),
+    );
+  }
 
   // CV_PDF_CHANNEL: usa un browser di sistema (es. "chrome") invece del
   // Chromium bundled da Playwright, utile quando quest'ultimo non è
@@ -733,7 +758,7 @@ async function main(): Promise<void> {
   }, 160);
 
   for (const locale of locales) {
-    const html = buildHtml(locale, qrSvg, assets, grain);
+    const html = buildHtml(locale, qrSvgByLang.get(locale.lang)!, assets, grain);
     await page.setContent(html, { waitUntil: "networkidle" });
     await page.evaluate(() => document.fonts.ready);
 

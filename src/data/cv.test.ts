@@ -36,11 +36,6 @@ describe("cvData.personal", () => {
   it("has a valid availability value", () => {
     expect(VALID_AVAILABILITY).toContain(cvData.personal.availability);
   });
-
-  it("age is a positive number", () => {
-    expect(typeof cvData.personal.age).toBe("number");
-    expect(cvData.personal.age).toBeGreaterThan(0);
-  });
 });
 
 // ─────────────────────────────────────────────────────────────────────────────
