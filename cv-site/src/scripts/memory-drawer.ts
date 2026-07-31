@@ -6,8 +6,8 @@ gsap.registerPlugin(Flip);
 // ── Memory drawers — bottoni "Fun fact / Cose mie / Viaggio" sotto Chi sono ──
 // <dialog> nativo per ogni categoria: showModal()/close() danno gratis focus
 // trap, ESC e ::backdrop. Qui: wiring bottone→dialog, scatter d'ingresso in
-// stile knolling, lightbox foto (Flip). Lo spread a due pagine di Budapest
-// Drift è puro CSS (index-page.css), nessuna interazione da gestire qui.
+// stile knolling, lightbox foto (Flip). Il racconto di Budapest Drift è puro
+// CSS (index-page.css), nessuna interazione da gestire qui.
 
 const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 const isEN = document.documentElement.lang === "en";
@@ -51,6 +51,25 @@ document.querySelectorAll<HTMLButtonElement>("[data-drawer-open]").forEach((btn)
     if (!img) return;
     btn.addEventListener("click", () => openLightbox(dialog, img));
   });
+
+  // .memory-dialog__header (eyebrow + chiudi) sta fuori da
+  // .memory-dialog__scroll apposta: lo scroll deve restare sul contenuto
+  // (testo/foto), mai su tutta la modale. L'header però non ha overflow
+  // proprio, quindi il wheel nativo non troverebbe nulla da scrollare lì —
+  // lo inoltriamo a mano al contenuto sotto, così scrollare "sulla modale"
+  // funziona comunque (e muove solo testo/foto, mai la pagina dietro).
+  const header = dialog.querySelector<HTMLElement>(".memory-dialog__header");
+  const scrollArea = dialog.querySelector<HTMLElement>(".memory-dialog__scroll");
+  if (header && scrollArea) {
+    header.addEventListener(
+      "wheel",
+      (e) => {
+        scrollArea.scrollTop += e.deltaY;
+        e.preventDefault();
+      },
+      { passive: false },
+    );
+  }
 });
 
 function animateScatterIn(dialog: HTMLDialogElement) {

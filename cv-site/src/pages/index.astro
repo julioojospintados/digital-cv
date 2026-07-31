@@ -42,9 +42,8 @@ const belongingsPhotos = [
   "sunset",
 ];
 
-// Racconto lungo — card "featured" nello scatter, diviso in 2 "pagine" di
-// libro (page-flip 3D, memory-drawer.ts). white-space:pre-line in CSS
-// preserva i ritmi di riga dentro ogni pagina.
+// Racconto lungo — card "featured" nello scatter, diviso in due paragrafi
+// per leggibilità. white-space:pre-line in CSS preserva i ritmi di riga.
 const funFactStoryTitle = "Budapest Drift";
 const funFactPage1 = `Mi sono svegliato alle 10:06 a Budapest.
 Il mio volo per tornare a casa era alle 11:10.
@@ -632,31 +631,28 @@ const scatterAngle = (i: number) => SCATTER_ANGLES[i % SCATTER_ANGLES.length];
        nessun codice a11y custom da mantenere. Scatter in stile knolling
        animato all'apertura da memory-drawer.ts. data-lenis-prevent: senza,
        Lenis intercetta la rotellina e scrolla la pagina sotto invece del
-       contenuto interno del dialog (regola già nota del design system). -->
+       contenuto interno del dialog (regola già nota del design system).
+       .memory-dialog__header sta FUORI da .memory-dialog__scroll apposta:
+       lo scroll deve restare sul contenuto (testo/foto), mai su tutta la
+       modale — memory-drawer.ts inoltra comunque il wheel dall'header al
+       contenuto sotto, così scrollare "sulla modale" funziona lo stesso. -->
   <dialog
-    class="memory-dialog memory-dialog--book"
+    class="memory-dialog memory-dialog--reading"
     id="dialog-funfact"
     aria-labelledby="dialog-funfact-title"
     data-lenis-prevent
   >
-    <button class="memory-dialog__close" type="button" data-drawer-close aria-label="Chiudi"
-      >✕</button
-    >
-    <p class="memory-dialog__eyebrow" id="dialog-funfact-title">Fun fact</p>
-    <div class="memory-scatter memory-scatter--facts">
+    <div class="memory-dialog__header">
+      <p class="memory-dialog__eyebrow" id="dialog-funfact-title">Fun fact</p>
+      <button class="memory-dialog__close" type="button" data-drawer-close aria-label="Chiudi"
+        >✕</button
+      >
+    </div>
+    <div class="memory-dialog__scroll">
       <article class="memory-fact memory-fact--story" style="--mr:0deg">
         <p class="memory-fact__title">{funFactStoryTitle}</p>
-        <div class="story-book" aria-label="Racconto su due pagine, come un libro aperto">
-          <div class="story-book__page story-book__page--left">
-            <p class="memory-fact__body">{funFactPage1}</p>
-            <span class="story-book__pagenum" aria-hidden="true">1</span>
-          </div>
-          <div class="story-book__spine" aria-hidden="true"></div>
-          <div class="story-book__page story-book__page--right">
-            <p class="memory-fact__body">{funFactPage2}</p>
-            <span class="story-book__pagenum" aria-hidden="true">2</span>
-          </div>
-        </div>
+        <p class="memory-fact__body">{funFactPage1}</p>
+        <p class="memory-fact__body">{funFactPage2}</p>
       </article>
     </div>
   </dialog>
@@ -667,25 +663,29 @@ const scatterAngle = (i: number) => SCATTER_ANGLES[i % SCATTER_ANGLES.length];
     aria-labelledby="dialog-belongings-title"
     data-lenis-prevent
   >
-    <button class="memory-dialog__close" type="button" data-drawer-close aria-label="Chiudi"
-      >✕</button
-    >
-    <p class="memory-dialog__eyebrow" id="dialog-belongings-title">Cose mie</p>
-    <div class="memory-scatter">
-      {
-        belongingsPhotos.map((name, i) => (
-          <button type="button" class="memory-photo-btn" aria-label="Espandi la foto">
-            <img
-              class="memory-photo"
-              src={`/photos/belongings/${name}.webp`}
-              alt=""
-              loading="lazy"
-              decoding="async"
-              style={`--mr:${scatterAngle(i)}deg`}
-            />
-          </button>
-        ))
-      }
+    <div class="memory-dialog__header">
+      <p class="memory-dialog__eyebrow" id="dialog-belongings-title">Cose mie</p>
+      <button class="memory-dialog__close" type="button" data-drawer-close aria-label="Chiudi"
+        >✕</button
+      >
+    </div>
+    <div class="memory-dialog__scroll">
+      <div class="memory-scatter">
+        {
+          belongingsPhotos.map((name, i) => (
+            <button type="button" class="memory-photo-btn" aria-label="Espandi la foto">
+              <img
+                class="memory-photo"
+                src={`/photos/belongings/${name}.webp`}
+                alt=""
+                loading="lazy"
+                decoding="async"
+                style={`--mr:${scatterAngle(i)}deg`}
+              />
+            </button>
+          ))
+        }
+      </div>
     </div>
   </dialog>
 
@@ -695,25 +695,29 @@ const scatterAngle = (i: number) => SCATTER_ANGLES[i % SCATTER_ANGLES.length];
     aria-labelledby="dialog-trip-title"
     data-lenis-prevent
   >
-    <button class="memory-dialog__close" type="button" data-drawer-close aria-label="Chiudi"
-      >✕</button
-    >
-    <p class="memory-dialog__eyebrow" id="dialog-trip-title">Viaggio</p>
-    <div class="memory-scatter">
-      {
-        tripPhotos.map((name, i) => (
-          <button type="button" class="memory-photo-btn" aria-label="Espandi la foto">
-            <img
-              class="memory-photo"
-              src={`/photos/trip/${name}.webp`}
-              alt=""
-              loading="lazy"
-              decoding="async"
-              style={`--mr:${scatterAngle(i)}deg`}
-            />
-          </button>
-        ))
-      }
+    <div class="memory-dialog__header">
+      <p class="memory-dialog__eyebrow" id="dialog-trip-title">Viaggio</p>
+      <button class="memory-dialog__close" type="button" data-drawer-close aria-label="Chiudi"
+        >✕</button
+      >
+    </div>
+    <div class="memory-dialog__scroll">
+      <div class="memory-scatter">
+        {
+          tripPhotos.map((name, i) => (
+            <button type="button" class="memory-photo-btn" aria-label="Espandi la foto">
+              <img
+                class="memory-photo"
+                src={`/photos/trip/${name}.webp`}
+                alt=""
+                loading="lazy"
+                decoding="async"
+                style={`--mr:${scatterAngle(i)}deg`}
+              />
+            </button>
+          ))
+        }
+      </div>
     </div>
   </dialog>
 

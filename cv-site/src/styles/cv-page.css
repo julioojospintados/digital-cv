@@ -124,7 +124,7 @@ skill-force-graph {
 }
 
 .skills-sub-title {
-  font-size: var(--fs-12);
+  font-size: var(--fs-14);
   font-weight: 600;
   letter-spacing: 0.15em;
   text-transform: uppercase;
@@ -727,7 +727,7 @@ a.lang-switch__opt:hover {
 }
 
 .section-subtitle {
-  font-size: var(--fs-12);
+  font-size: var(--fs-14);
   font-weight: 400;
   letter-spacing: 0.05em;
   text-transform: none;
@@ -899,7 +899,7 @@ a.lang-switch__opt:hover {
 
 .hero-tshape__label {
   font-family: var(--font-mono);
-  font-size: var(--fs-12);
+  font-size: var(--fs-14);
   font-weight: 600;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -936,9 +936,9 @@ a.lang-switch__opt:hover {
 
 .hero-footer {
   display: flex;
-  flex-wrap: wrap;
-  gap: 1.5rem;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.25rem;
 }
 
 .hero-socials {
@@ -1064,8 +1064,8 @@ a.lang-switch__opt:hover {
 
 .hero-langs {
   display: flex;
+  flex-direction: column;
   gap: 0.5rem;
-  flex-wrap: wrap;
 }
 
 /* Le lingue sono CONTENUTO, non meta decorativa: nome lingua e livello CEFR
@@ -1525,7 +1525,7 @@ a.lang-switch__opt:hover {
 
 .exp-cluster__name {
   flex: 1;
-  font-size: var(--fs-12);
+  font-size: var(--fs-14);
   font-weight: 700;
   letter-spacing: 0.15em;
   text-transform: uppercase;
@@ -1850,7 +1850,7 @@ a.lang-switch__opt:hover {
 }
 
 .growth-card__name {
-  font-size: var(--fs-12);
+  font-size: var(--fs-14);
   font-weight: 700;
   letter-spacing: 0.04em;
   color: var(--color-accent);
@@ -1947,7 +1947,7 @@ a.lang-switch__opt:hover {
 }
 
 .social-impact-card__name {
-  font-size: var(--fs-12);
+  font-size: var(--fs-14);
   font-weight: 700;
   letter-spacing: 0.04em;
   color: var(--color-accent);
@@ -2069,7 +2069,7 @@ a.lang-switch__opt:hover {
 .tl-date {
   grid-column: 1;
   text-align: right;
-  font-size: var(--fs-12);
+  font-size: var(--fs-14);
   font-variant-numeric: tabular-nums;
   color: rgba(192, 220, 215, 0.6);
   padding-top: 0.12rem;
@@ -2139,7 +2139,7 @@ a.lang-switch__opt:hover {
 }
 
 .tl-inst {
-  font-size: var(--fs-12);
+  font-size: var(--fs-14);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -2152,7 +2152,7 @@ a.lang-switch__opt:hover {
 }
 
 .tl-cred {
-  font-size: var(--fs-12);
+  font-size: var(--fs-14);
   color: rgba(192, 220, 215, 0.4);
   margin: 0.1rem 0 0;
   font-variant-numeric: tabular-nums;
@@ -2241,7 +2241,7 @@ a.lang-switch__opt:hover {
 }
 
 .worklife__name {
-  font-size: var(--fs-12);
+  font-size: var(--fs-14);
   font-weight: 700;
   letter-spacing: 0.15em;
   text-transform: uppercase;
@@ -2461,7 +2461,7 @@ a.lang-switch__opt:hover {
   padding-top: 1rem;
   text-align: left;
   font-family: var(--font-mono);
-  font-size: var(--fs-12);
+  font-size: var(--fs-14);
   color: var(--color-text-muted);
 }
 

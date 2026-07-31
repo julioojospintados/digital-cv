@@ -876,8 +876,7 @@ img[src*="flashlight"] {
 /* Su touch la tagline è più piccola per non rubare spazio a card e img */
 @media (--touch) {
   .entry-tagline {
-    font-size: var(--fs-12);
-    /* min leggibile: 12px = 0.75rem, 0.8rem = 12.8px */
+    font-size: var(--fs-14);
     margin-top: 0.25rem;
   }
 }
@@ -886,7 +885,7 @@ img[src*="flashlight"] {
    un'assunzione (recruiter/CTO): concreti, neutri, scansionabili in 3s. */
 .entry-cred {
   font-family: var(--font-mono);
-  font-size: var(--fs-12);
+  font-size: var(--fs-14);
   font-weight: 500;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -897,7 +896,7 @@ img[src*="flashlight"] {
 
 @media (--touch) {
   .entry-cred {
-    font-size: var(--fs-12);
+    font-size: var(--fs-14);
     margin-top: 0.35rem;
   }
 }
@@ -1145,14 +1144,6 @@ img[src*="flashlight"] {
   line-height: 1.4;
 }
 
-/* Card selezionata: la desc resta a --fs-14 anche dove il breakpoint
-   mobile-only qui sotto la comprime a --fs-12 per le celle passive — la
-   card attiva/espansa ha spazio per il testo pieno. Specificità (3 classi)
-   vince sulla regola con media query, niente bisogno di ripeterla lì. */
-.mode-card.is-selected .mode-card__desc {
-  font-size: var(--fs-14);
-}
-
 /* Touch (tablet+): limita la desc a 2 righe — su 320px il testo può espandersi
    a 4-5 righe e sforare l'altezza della card (overflow:hidden la taglia). */
 @media (--touch) {
@@ -1173,7 +1164,7 @@ img[src*="flashlight"] {
     -webkit-line-clamp: 2;
     overflow: hidden;
     line-height: 1.3;
-    font-size: var(--fs-12);
+    font-size: var(--fs-14);
     margin: 0;
   }
 }
@@ -1502,12 +1493,45 @@ img[src*="flashlight"] {
   width: min(90vw, 56rem);
   max-height: min(85vh, 46rem);
   margin: auto;
-  padding: 2rem clamp(1.25rem, 4vw, 2.5rem);
   background: var(--color-bg);
   color: var(--color-text-primary);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-16);
+  /* overflow-y viveva qui prima, sullo stesso elemento del border-radius:
+     la scrollbar nativa (soprattutto quella "classica" di Windows) è un
+     rettangolo che non segue l'angolo curvo e sporge fuori. overflow:hidden
+     qui clippa tutto — inclusa la scrollbar — al bordo arrotondato; lo
+     scroll vero avviene nel figlio .memory-dialog__scroll. */
+  overflow: hidden;
+  /* display:flex vive SOLO su .memory-dialog[open] qui sotto, MAI qui
+     incondizionato: il CSS dell'autore vince sempre sullo user agent (a
+     qualunque specificità) — un display:flex qui avrebbe sovrascritto la
+     regola nativa `dialog:not([open]) { display:none }` che nasconde
+     davvero la modale alla chiusura. Con display:flex incondizionato la
+     modale chiusa restava renderizzata (fuori dal top layer ma visibile,
+     sovrapposta alla pagina sotto) invece di sparire — bug reale,
+     2026-07-31. */
+}
+
+/* Riga fissa eyebrow + chiusura — FUORI da .memory-dialog__scroll apposta:
+   lo scroll deve restare sul contenuto (testo/foto), mai su tutta la
+   modale. Non ha overflow proprio, quindi il wheel nativo non troverebbe
+   nulla da scrollare qui — memory-drawer.ts lo inoltra a mano al
+   contenuto sotto, così scrollare "sulla modale" funziona comunque. */
+.memory-dialog__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem clamp(1.25rem, 4vw, 2.5rem) 1rem;
+}
+
+.memory-dialog__scroll {
+  width: 100%;
+  min-height: 0;
+  padding: 0.5rem clamp(1.25rem, 4vw, 2.5rem) 2rem;
   overflow-y: auto;
+  overscroll-behavior: contain;
 }
 
 .memory-dialog::backdrop {
@@ -1538,8 +1562,12 @@ img[src*="flashlight"] {
    (memory-drawer.ts anima i figli). Il browser applica questa transition
    su open/close di [open] più ::backdrop se supportato (@starting-style
    omesso per compatibilità: degrada a comparsa istantanea, non un problema
-   dato che lo scatter interno è già l'evento visivo principale). */
+   dato che lo scatter interno è già l'evento visivo principale).
+   display:flex vive qui (scoped a [open]) apposta — vedi il commento in
+   .memory-dialog sopra sul perché non può essere incondizionato. */
 .memory-dialog[open] {
+  display: flex;
+  flex-direction: column;
   animation: memory-dialog-in 0.3s var(--ease-standard);
 }
 
@@ -1561,16 +1589,17 @@ img[src*="flashlight"] {
   }
 }
 
+/* Non più sticky: da quando l'header vive fuori da .memory-dialog__scroll
+   (vedi sopra) sta già sempre sullo sfondo scuro del dialog, mai sopra
+   contenuto chiaro che scorre sotto — niente più bisogno del fill opaco
+   "anti-sparizione" che serviva quando era ancorato dentro l'area scroll. */
 .memory-dialog__close {
-  position: sticky;
-  top: 0;
-  float: right;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
   width: 2.25rem;
   height: 2.25rem;
-  margin-left: 1rem;
   font-size: var(--fs-16);
   color: var(--color-text-muted);
   background: rgba(255, 255, 255, 0.06);
@@ -1600,7 +1629,6 @@ img[src*="flashlight"] {
   letter-spacing: 0.24em;
   text-transform: uppercase;
   color: var(--ps-accent, var(--color-accent));
-  margin: 0 0 1.5rem;
 }
 
 .memory-scatter {
@@ -1609,7 +1637,6 @@ img[src*="flashlight"] {
   align-items: flex-start;
   justify-content: center;
   gap: 1.25rem 1.5rem;
-  padding-bottom: 0.5rem;
 }
 
 /* Wrapper nativo <button> intorno a .memory-photo — sostituisce
@@ -1759,12 +1786,25 @@ img[src*="flashlight"] {
   }
 }
 
-/* Racconto lungo — card "featured" nello scatter fun fact: molto più larga
-   delle altre (deve ospitare uno spread a due pagine), testo allineato a
-   sinistra. */
+/* Il dialog del fun fact ospita solo il racconto (niente più scatter di
+   più elementi): niente .memory-scatter a centrarlo, il dialog stesso si
+   restringe alla larghezza di una colonna di lettura invece di ereditare i
+   56rem pensati per lo scatter di foto — altrimenti il titolo "Fun fact"
+   (in alto a sinistra) finisce visivamente scollegato dalla card, centrata
+   in uno spazio molto più largo di lei. */
+.memory-dialog--reading {
+  width: min(92vw, 36rem);
+}
+
+/* Racconto lungo — card "featured": colonna di lettura stretta, testo
+   allineato a sinistra, subito sotto l'eyebrow. Una sola colonna che scorre
+   nello scroll nativo di .memory-dialog__scroll — non più uno spread a due
+   pagine: quello spingeva il dialog a 66rem e, sotto scroll, il bottone di
+   chiusura sticky finiva a sovrapporsi al testo (float + sticky non
+   riserva spazio permanente nel flusso, vedi .memory-dialog__close). */
 .memory-fact--story {
-  width: clamp(34rem, 76vw, 58rem);
-  max-width: 100%;
+  width: 100%;
+  max-width: 32rem;
   text-align: left;
 }
 
@@ -1779,74 +1819,12 @@ img[src*="flashlight"] {
 .memory-fact__body {
   margin: 0;
   white-space: pre-line;
-  font-size: var(--fs-12);
+  font-size: var(--fs-14);
   line-height: 1.55;
 }
 
-/* Il dialog del fun fact ospita lo spread a due pagine: più largo e più
-   alto del dialog "base" (foto/one-liner) per far stare l'intero racconto
-   senza scroll sulla maggior parte degli schermi. */
-.memory-dialog--book {
-  width: min(94vw, 66rem);
-  max-height: min(92vh, 50rem);
-}
-
-/* ── Story book — Budapest Drift, spread a due pagine ──────────────────────
-   Nessuna interazione: le due metà del racconto sono visibili insieme, come
-   un libro aperto sul tavolo — non un flip-card da cliccare. La dorsale al
-   centro (.story-book__spine) e le ombre interne ai bordi di ogni pagina
-   (inset box-shadow) sono l'unico "effetto libro": pura CSS, zero JS. */
-.story-book {
-  display: flex;
-  align-items: stretch;
-  gap: 0;
-  margin-top: 1rem;
-}
-
-.story-book__page {
-  flex: 1 1 50%;
-  min-width: 0;
-  padding: 0.25rem 1.5rem;
-  background: linear-gradient(180deg, rgba(8, 73, 67, 0.02), transparent 8%);
-}
-
-.story-book__page--left {
-  padding-left: 0.1rem;
-  box-shadow: inset -10px 0 14px -12px rgba(0, 0, 0, 0.35);
-}
-
-.story-book__page--right {
-  padding-right: 0.1rem;
-  box-shadow: inset 10px 0 14px -12px rgba(0, 0, 0, 0.35);
-}
-
-.story-book__spine {
-  flex: 0 0 auto;
-  width: 1px;
-  margin: 0 0.5rem;
-  background: linear-gradient(
-    180deg,
-    transparent,
-    rgba(8, 73, 67, 0.25) 12%,
-    rgba(8, 73, 67, 0.25) 88%,
-    transparent
-  );
-}
-
-.story-book__pagenum {
-  display: block;
-  margin-top: 0.75rem;
-  font-family: var(--font-mono);
-  font-size: var(--fs-12);
-  color: rgba(8, 73, 67, 0.45);
-}
-
-.story-book__page--left .story-book__pagenum {
-  text-align: left;
-}
-
-.story-book__page--right .story-book__pagenum {
-  text-align: right;
+.memory-fact--story .memory-fact__body + .memory-fact__body {
+  margin-top: 1.25rem;
 }
 
 @media (max-width: 40rem) {
@@ -1858,43 +1836,9 @@ img[src*="flashlight"] {
     border-radius: 0;
   }
 
-  .memory-dialog--book {
-    width: 100vw;
-    max-height: 100svh;
-  }
-
   .memory-photo,
   .memory-fact {
     transform: none;
-  }
-
-  .memory-fact--story {
-    width: 100%;
-  }
-
-  /* Sotto i 40rem due colonne affiancate sono illeggibili: le pagine si
-     impilano come un libro sfogliato in verticale, dorsale orizzontale. */
-  .story-book {
-    flex-direction: column;
-  }
-
-  .story-book__page--left,
-  .story-book__page--right {
-    box-shadow: none;
-    padding: 0 0.25rem;
-  }
-
-  .story-book__spine {
-    width: auto;
-    height: 1px;
-    margin: 1.25rem 0;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(8, 73, 67, 0.25) 12%,
-      rgba(8, 73, 67, 0.25) 88%,
-      transparent
-    );
   }
 }
 
