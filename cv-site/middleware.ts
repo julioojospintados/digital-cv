@@ -44,12 +44,16 @@ export default function middleware(request: Request) {
 
   if (!target) return;
 
-  const res = Response.redirect(new URL(target, request.url), 307);
-  res.headers.append(
-    "Set-Cookie",
-    `${COOKIE_NAME}=en; Max-Age=${COOKIE_MAX_AGE}; Path=/; SameSite=Lax; Secure`,
-  );
-  return res;
+  // Response.redirect() restituisce headers immutabili per spec Fetch API:
+  // .append() successivo lanciava sempre "TypeError: immutable" (500 in prod,
+  // vedi todo.md #67). Costruendo la Response a mano gli header restano scrivibili.
+  return new Response(null, {
+    status: 307,
+    headers: {
+      Location: new URL(target, request.url).toString(),
+      "Set-Cookie": `${COOKIE_NAME}=en; Max-Age=${COOKIE_MAX_AGE}; Path=/; SameSite=Lax; Secure`,
+    },
+  });
 }
 
 export const config = {
