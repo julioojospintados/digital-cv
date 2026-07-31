@@ -393,7 +393,7 @@ font-size, molti sotto la soglia minima di leggibilità.
 | Token         | rem      | px  | Uso tipico                                          |
 | ------------- | -------- | --- | ---------------------------------------------------- |
 | `--fs-10`     | 0.625rem | 10  | **Eccezione**, vedi sotto — mai testo che si legge   |
-| `--fs-12`     | 0.75rem  | 12  | **Pavimento assoluto** — eyebrow, chip, meta, badge  |
+| `--fs-12`     | 0.75rem  | 12  | **Pavimento assoluto** — solo meta/UI-chrome, mai un dato che l'utente deve leggere (vedi criterio sotto) |
 | `--fs-14`     | 0.875rem | 14  | Label secondarie, sub-title, testo desktop compatto  |
 | `--fs-16`     | 1rem     | 16  | Body — minimo per il testo principale su mobile      |
 | `--fs-18`     | 1.125rem | 18  | Body enfatizzato, sub-heading piccolo                |
@@ -416,6 +416,29 @@ viewport reale, non da un token fisso. Il pavimento dei 12px vale comunque
 anche lì — nessun bound minimo di un clamp può scendere sotto `var(--fs-12)`
 (vedi `SkillSquare.astro`, i due clamp con `cqi` hanno pavimento a
 `--fs-12`/`--fs-10` per lo stesso motivo).
+
+### Il criterio giusto per `--fs-12`: natura del dato, non tipo di componente
+
+Il vecchio criterio ("eyebrow, chip, meta, badge" — un elenco di **nomi di
+classe**) ha causato un bug reale (2026-07-30, feedback esterno): il livello
+CEFR delle lingue (`B2`, `C1`...) era a `--fs-12` perché il blocco si chiamava
+`.lang-chip` — ma non era meta decorativa, era il dato stesso che un recruiter
+cerca. Chiamarsi "chip" non basta a qualificare per il pavimento.
+
+**Il criterio è**: *l'utente deve leggerlo per informarsi su qualcosa*, non
+*che classe/componente lo contiene*. In pratica:
+
+- **Resta a `--fs-12`**: controlli di navigazione (switch mode/lingua, tab,
+  trigger di dropdown), badge di stato brevi, tag/chip di parole singole a
+  basso rischio (interessi, keyword feedback), eyebrow puramente
+  decorativi, meta di sistema (footer credit, page-number, legend).
+- **Sale almeno a `--fs-14`**: nomi propri (istituzioni, cluster, progetti,
+  persone), date/timeline, descrizioni anche brevi, credenziali/ID
+  verificabili, risultati misurabili, qualunque frase che spiega un concetto
+  (es. le label degli assi del T-shape).
+- Nel dubbio: chiedersi se qualcuno con un lieve difetto visivo, leggendo
+  solo quell'elemento isolato, capirebbe l'informazione che porta. Se la
+  risposta è "solo se lo ingrandisce", non è al pavimento giusto.
 
 ### Regole di accessibilità (non negoziabili)
 

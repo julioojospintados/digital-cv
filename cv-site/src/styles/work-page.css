@@ -824,7 +824,7 @@
 
 .journey__outcomes li {
   font-family: var(--font-mono);
-  font-size: var(--fs-12);
+  font-size: var(--fs-14);
   font-weight: 600;
   line-height: 1.55;
   color: var(--color-accent);
