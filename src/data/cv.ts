@@ -392,6 +392,7 @@ export const cvData = {
         "Bootstrap",
         "Material Design",
         "Jest",
+        "Jira",
       ],
       facets: [
         {
@@ -486,26 +487,24 @@ export const cvData = {
       skills: ["Videomaking", "Post-produzione", "Correzione colore", "Sensibilità estetica"],
     },
     {
-      company: "ForgeLab",
+      company: "Forge Lab",
       role: "Frontend Developer",
       startDate: "2021-04",
       endDate: "2022-03",
       location: "Los Angeles, USA",
       remote: true,
       description:
-        "Ho sviluppato frontend full remote in un team distribuito tra Torino e Los Angeles, su un'applicazione web di dati clinici per strutture ospedaliere statunitensi: codebase React consolidata, refactoring SCSS su larga scala e integrazione con API cliniche in tempo reale.",
+        "Sviluppo frontend full-remote all'interno di un team distribuito tra Torino e Los Angeles, curando l'interfaccia utente, la pulizia del codice e l'integrazione di prodotti per il mercato statunitense.",
       highlights: [
-        "Ho sviluppato dashboard React per la visualizzazione e il monitoraggio di dati clinici Covid-19 in ospedali USA.",
-        "Ho riscritto il SCSS con pattern BEM su una codebase da 20.000 righe: –800 righe duplicate.",
-        "Ho integrato API REST e GraphQL per la visualizzazione di dati clinici in tempo reale.",
+        "Digivax | Frontend & UI Developer: sviluppo della piattaforma web per la gestione della conformità vaccinale e sanitaria in ambito aziendale. Presidio del lato UI/UX e sviluppo delle dashboard per i diversi ruoli utente (datori di lavoro, dipendenti e personale sanitario) in React e TypeScript. Refactoring completo dell'architettura SCSS tramite pattern BEM, riducendo il codice da 8.000 a 3.000 righe per migliorare le prestazioni, la manutenibilità e la coerenza visiva delle interfacce. Integrazione con API REST e gestione dei flussi dati in ambiente Agile.",
+        "And 1 | Frontend Developer: attività di manutenzione evolutiva, risoluzione bug e sviluppo di nuove funzionalità per il prodotto.",
       ],
       skills: [
         "React",
         "TypeScript",
-        "CSS / BEM",
-        "GraphQL",
+        "SCSS / BEM",
         "REST API",
-        "Data Visualization",
+        "Trello",
         "Agile",
       ],
     },

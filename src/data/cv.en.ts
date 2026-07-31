@@ -244,6 +244,7 @@ export const cvDataEn = {
         "Bootstrap",
         "Material Design",
         "Jest",
+        "Jira",
       ],
       facets: [
         {
@@ -338,26 +339,24 @@ export const cvDataEn = {
       skills: ["Videography", "Post-production", "Color grading", "Aesthetic sensibility"],
     },
     {
-      company: "ForgeLab",
+      company: "Forge Lab",
       role: "Frontend Developer",
       startDate: "2021-04",
       endDate: "2022-03",
       location: "Los Angeles, USA",
       remote: true,
       description:
-        "I developed frontend full remote in a distributed team between Turin and Los Angeles, on a clinical data web application for US hospital facilities: an established React codebase, large-scale SCSS refactoring and integration with real-time clinical APIs.",
+        "Full-remote frontend development within a team distributed between Turin and Los Angeles, focusing on the user interface, code quality and product integration for the US market.",
       highlights: [
-        "I developed React dashboards for visualising and monitoring Covid-19 clinical data in US hospitals.",
-        "I rewrote the SCSS with the BEM pattern on a 20,000-line codebase: –800 duplicate lines.",
-        "I integrated REST and GraphQL APIs for real-time clinical data visualisation.",
+        "Digivax | Frontend & UI Developer: development of the web platform for managing corporate vaccination and health compliance. Ownership of the UI/UX side and development of dashboards for the different user roles (employers, employees and healthcare staff) in React and TypeScript. Complete refactor of the SCSS architecture using the BEM pattern, cutting the codebase from 8,000 to 3,000 lines to improve performance, maintainability and visual consistency across interfaces. Integration with REST APIs and data flow management in an Agile environment.",
+        "And 1 | Frontend Developer: evolutionary maintenance, bug fixing and development of new features for the product.",
       ],
       skills: [
         "React",
         "TypeScript",
-        "CSS / BEM",
-        "GraphQL",
+        "SCSS / BEM",
         "REST API",
-        "Data Visualization",
+        "Trello",
         "Agile",
       ],
     },
