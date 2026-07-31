@@ -51,7 +51,11 @@ corretto il 2026-07-23 in `WorkDesignSystem.astro` (leggeva `:root` invece del m
 | `tech`       | `rgba(0,255,200,1)`     | `rgba(0,255,200,0.70)` — ~4.8:1 ✅        | `rgba(5,50,45,0.6)`    | `rgba(0,255,200,0.2)`    | `rgba(220,255,245,1)`   | CTO, recruiter tecnico      |
 | `creative`   | `rgba(255,107,53,1)`    | `rgba(255,195,155,0.82)` — ~4.9:1 ✅      | `rgba(40,20,5,0.5)`    | `rgba(255,107,53,0.25)`  | `rgba(255,240,220,1)`   | Art director, agenzia       |
 | `human`      | `rgba(240,200,127,1)`   | `rgba(240,210,148,0.75)` — ~4.6:1 ✅      | `rgba(20,60,30,0.4)`   | `rgba(240,200,127,0.25)` | `rgba(250,240,215,1)`   | HR, fondatore, no-profit    |
-| `management` | `rgba(180,100,255,1)`   | `rgba(200,170,255,0.78)` — ~4.6:1 ✅      | `rgba(30,10,60,0.4)`   | `rgba(180,100,255,0.25)` | `rgba(240,230,255,1)`   | Recruiter, aziende, innovazione |
+| `management` | `rgba(180,100,255,1)`   | `rgba(200,170,255,0.78)` — **3.76:1 ❌**  | `rgba(30,10,60,0.4)`   | `rgba(180,100,255,0.25)` | `rgba(240,230,255,1)`   | Recruiter, aziende, innovazione |
+
+**`management` non passa 1.4.3** (serve 4.5:1) — dichiarato "~4.6:1 ✅" senza
+essere mai ricalcolato, scoperto il 2026-07-31. Serve alpha **0.90** (→
+4.51:1) o cambiare tinta — decisione di design non ancora presa.
 
 ### Token NON esistenti — non usarli mai
 

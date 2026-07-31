@@ -160,8 +160,12 @@ const t = copy[lang];
     font-size: var(--fs-14);
   }
 
+  /* display:flex + min-height: target di tocco WCAG 2.2 SC 2.5.8 (min
+     24×24px) — era testo nudo a 18px (solo line-height del font). */
   .consent-banner__link {
-    display: block;
+    display: flex;
+    align-items: center;
+    min-height: 1.5rem;
     text-align: left;
     margin-top: 0.35rem;
     color: var(--color-accent);

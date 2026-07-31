@@ -20,7 +20,13 @@
   gap: 1rem;
 }
 
+/* display:inline-flex + min-height: target di tocco WCAG 2.2 SC 2.5.8
+   (min 24×24px) — prima era testo nudo a 18px di altezza (line-height del
+   solo font-size 12px, nessun padding). */
 .work-back {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.5rem;
   font-family: var(--font-mono);
   font-size: var(--fs-12);
   font-weight: 600;
@@ -110,7 +116,7 @@
 
 .work-hero__role {
   font-size: var(--fs-16);
-  color: rgba(192, 220, 215, 0.85);
+  color: var(--color-text-muted);
   margin: 0 0 1.25rem;
   max-width: 34rem;
   position: relative;
@@ -129,7 +135,7 @@
   font-size: var(--fs-12);
   font-weight: 500;
   letter-spacing: 0.05em;
-  color: rgba(192, 220, 215, 0.85);
+  color: var(--color-text-muted);
   padding: 0.2rem 0.55rem;
   border: 1px solid var(--color-border);
   border-radius: 1px;
@@ -437,7 +443,7 @@
 .work-index-card__role {
   font-size: var(--fs-14);
   line-height: 1.5;
-  color: rgba(192, 220, 215, 0.85);
+  color: var(--color-text-muted);
   margin: 0;
   position: relative;
   z-index: 1;

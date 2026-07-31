@@ -243,7 +243,7 @@ go-logo:not(:defined) {
   background: transparent;
   border: 1px solid transparent;
   border-radius: 1px;
-  color: rgba(192, 220, 215, 0.85);
+  color: var(--color-text-muted);
   cursor: pointer;
   will-change: width;
   /* Nessuna CSS transition — GSAP gestisce tutto per evitare desincronizzazione */
@@ -340,8 +340,8 @@ go-logo:not(:defined) {
     border-color: color-mix(in srgb, var(--btn-accent, transparent) 30%, transparent);
     color: color-mix(
       in srgb,
-      var(--btn-accent, rgba(192, 220, 215, 0.85)) 55%,
-      rgba(192, 220, 215, 0.85)
+      var(--btn-accent, var(--color-text-muted)) 55%,
+      var(--color-text-muted)
     );
   }
 
@@ -349,8 +349,8 @@ go-logo:not(:defined) {
     border-color: color-mix(in srgb, var(--btn-accent, transparent) 60%, transparent);
     color: color-mix(
       in srgb,
-      var(--btn-accent, rgba(192, 220, 215, 0.85)) 85%,
-      rgba(192, 220, 215, 0.85)
+      var(--btn-accent, var(--color-text-muted)) 85%,
+      var(--color-text-muted)
     );
     background: color-mix(in srgb, var(--btn-accent, transparent) 8%, transparent);
   }
@@ -506,7 +506,7 @@ go-logo:not(:defined) {
   letter-spacing: 0.1em;
   text-transform: uppercase;
   text-align: left;
-  color: rgba(192, 220, 215, 0.85);
+  color: var(--color-text-muted);
   cursor: pointer;
   user-select: none;
   -webkit-user-select: none;
@@ -540,8 +540,12 @@ go-logo:not(:defined) {
   border-color: color-mix(in srgb, var(--color-accent) 40%, var(--color-border));
 }
 
+/* min-height: target di tocco WCAG 2.2 SC 2.5.8 (min 24×24px) — misurato
+   20.9px con solo il padding esistente. Il colore a alpha 0.45 (2.68:1,
+   sotto 1.4.3) resta cosí: è nel Gruppo B, decisione di design non presa. */
 .lang-switch__opt {
   padding: 0.28rem 0.55rem;
+  min-height: 1.5rem;
   font-family: var(--font-mono);
   font-size: var(--fs-12);
   font-weight: 700;
@@ -608,7 +612,7 @@ a.lang-switch__opt:hover {
   padding: 0 0.5rem;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-4);
-  color: rgba(192, 220, 215, 0.85);
+  color: var(--color-text-muted);
   font-family: var(--font-mono);
   font-size: var(--fs-12);
   font-weight: 700;
@@ -667,7 +671,7 @@ a.lang-switch__opt:hover {
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: rgba(192, 220, 215, 0.85);
+  color: var(--color-text-muted);
   white-space: nowrap;
 }
 
@@ -714,7 +718,7 @@ a.lang-switch__opt:hover {
   font-weight: 600;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: rgba(192, 220, 215, 0.85);
+  color: var(--color-text-muted);
   margin: 0 0 1.5rem 0;
 }
 
@@ -727,7 +731,7 @@ a.lang-switch__opt:hover {
   font-weight: 400;
   letter-spacing: 0.05em;
   text-transform: none;
-  color: rgba(192, 220, 215, 0.85);
+  color: var(--color-text-muted);
   opacity: 0.7;
 }
 
@@ -782,7 +786,7 @@ a.lang-switch__opt:hover {
 }
 
 .badge--gray {
-  color: rgba(192, 220, 215, 0.85);
+  color: var(--color-text-muted);
   border-color: var(--color-border);
   background: transparent;
 }
@@ -791,7 +795,7 @@ a.lang-switch__opt:hover {
   font-size: var(--fs-12);
   font-weight: 500;
   letter-spacing: 0.08em;
-  color: rgba(192, 220, 215, 0.85);
+  color: var(--color-text-muted);
   display: flex;
   align-items: center;
   gap: 0.25rem;
@@ -855,7 +859,7 @@ a.lang-switch__opt:hover {
 .hero-summary {
   font-size: var(--fs-16);
   line-height: 1.75;
-  color: rgba(192, 220, 215, 0.85);
+  color: var(--color-text-muted);
   max-width: 72ch;
   margin: 0 0 0.75rem 0;
 }
@@ -948,7 +952,7 @@ a.lang-switch__opt:hover {
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: rgba(192, 220, 215, 0.85);
+  color: var(--color-text-muted);
   text-decoration: none;
   padding: 0.25rem 0.6rem;
   border: 1px solid var(--color-border);
@@ -1064,21 +1068,36 @@ a.lang-switch__opt:hover {
   flex-wrap: wrap;
 }
 
+/* Le lingue sono CONTENUTO, non meta decorativa: nome lingua e livello CEFR
+   sono esattamente ciò che un recruiter cerca. Erano a --fs-12 (il pavimento
+   "chip") perché classificate come chip dal nome della classe — il pavimento
+   vale per eyebrow/badge/timestamp, non per un dato che l'utente deve
+   leggere (feedback esterno 2026-07-30, vedi docs/AUDIT-UX-Accessibilita.md). */
 .lang-chip {
-  font-size: var(--fs-12);
-  color: rgba(192, 220, 215, 0.85);
+  font-size: var(--fs-14);
+  color: var(--color-text-muted);
   display: flex;
   align-items: center;
-  gap: 0.3rem;
+  gap: 0.4rem;
 }
 
+/* Il nome della lingua sale a body-size: è l'informazione primaria della riga */
 .lang-chip b {
+  font-size: var(--fs-16);
   color: var(--color-text-primary);
   font-weight: 600;
 }
 
+/* Il codice CEFR in chiaro accanto ai quadratini (vedi il markup in
+   [mode].astro/en/cv.astro: prima esisteva solo come aria-label sui
+   quadratini, invisibile a chi guarda lo schermo). Niente opacity: riduceva
+   il contrasto effettivo sotto il 4.5:1 di 1.4.3 — la gerarchia la fa già
+   la dimensione rispetto al nome. */
 .lang-level {
-  opacity: 0.6;
+  font-family: var(--font-mono);
+  font-size: var(--fs-14);
+  color: var(--color-text-muted);
+  letter-spacing: 0.02em;
 }
 
 .lang-cefr {
@@ -1087,11 +1106,20 @@ a.lang-switch__opt:hover {
   align-items: center;
 }
 
-/* Square dot — coerente con il sistema SkillSquare (no cerchi) */
+/* Square dot — coerente con il sistema SkillSquare (no cerchi).
+   I quadratini vuoti erano a rgba(192,220,215,0.25) = ~1.75:1 su bg ottanio,
+   sotto il 3:1 di 1.4.11 (Non-text Contrast) per grafica informativa — e
+   questi lo sono, sono la scala del livello. 85% di --color-text-muted è la
+   soglia verificata per tenere ≥3:1 in TUTTI e 5 i mode, non solo nel
+   default: il 70% inizialmente proposto passava tech/human/creative/default
+   ma falliva in management (2.57:1) — verificato ricalcolando i 5 mode, non
+   solo il presunto "più critico". Colore preso dal token invece che
+   hardcoded: il valore fisso era quello del solo mode default e non seguiva
+   gli altri quattro (stesso bug di WorkDesignSystem, DESIGN.md §9). */
 .lang-dot {
-  width: 5px;
-  height: 5px;
-  border: 1px solid rgba(192, 220, 215, 0.25);
+  width: 6px;
+  height: 6px;
+  border: 1px solid color-mix(in srgb, var(--color-text-muted) 85%, transparent);
   background: transparent;
   transition:
     background var(--duration-state, 0.3s) var(--ease-standard, ease),
@@ -1629,7 +1657,9 @@ a.lang-switch__opt:hover {
   transform: translateY(24px);
 }
 
-/* ── GO deeper CTA — plain inline text, no border ───────────────── */
+/* ── GO deeper CTA — plain inline text, no border ─────────────────
+   min-height: target di tocco WCAG 2.2 SC 2.5.8 (min 24×24px) — misurato
+   18px (solo line-height del font, niente padding). */
 .exp-deeper-btn {
   display: inline-flex;
   align-items: center;
@@ -1637,6 +1667,7 @@ a.lang-switch__opt:hover {
   align-self: flex-end;
   margin: 0.5rem;
   padding: 0;
+  min-height: 1.5rem;
   background: transparent;
   border: none;
   cursor: none;
@@ -2171,7 +2202,7 @@ a.lang-switch__opt:hover {
 
 .cv-footer__credit {
   font-size: var(--fs-12);
-  color: rgba(192, 220, 215, 0.85);
+  color: var(--color-text-muted);
   margin: 2.5rem 0 0;
   text-align: center;
 }
