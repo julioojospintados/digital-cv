@@ -140,8 +140,11 @@ behaviour, not the logic that computes them.
   then writes a `Locale`-shaped JSON to `cv-output/targeted/<slug>.json` and
   runs `npm run pdf:targeted -- <path>` (`scripts/generate-targeted-cv.ts`) to
   render it — designed + ATS-draft PDF, always both, no parser-type branching
-  — through the same template as `pdf:ux` (`scripts/generate-ux-cv.ts`, which
-  exports the `Locale` type and the `buildHtml`/`buildHtmlAts` renderers).
+  — through the shared template in `scripts/cv-pdf-template.ts` (`Locale`
+  type, `buildHtml`/`buildHtmlAts`, pure — no `fs`/Playwright, so the same
+  module is safe to import from the serverless renderer below too). Both CLI
+  scripts load font/QR assets via `scripts/load-pdf-assets.ts`
+  (`readFileSync`, Node-only).
 → The subagent also logs each job description's key signals to
   `cv-output/jd-insights/<usa-canada|europa|italia>.md` so later variants for
   the same region get calibrated against real, accumulated patterns.
@@ -151,26 +154,108 @@ behaviour, not the logic that computes them.
 
 → `cv-site/src/pages/tools/cv-recruiter.astro` is a private, unlinked, `noindex`,
   passphrase-gated page (excluded from the sitemap and disallowed in
-  `public/robots.txt`) reachable from any device. It posts to
-  `cv-site/src/pages/api/cv-recruiter.ts` (`export const prerender = false` —
-  the only non-static route on the site, a Vercel serverless function; see
-  `adapter: vercel()` in `cv-site/astro.config.mjs`), which runs the same
-  audit/JD-match logic as the `cv-recruiter` subagent but via the **Gemini
-  API** (`@google/genai`, free tier) instead of Claude, in two calls: one with
-  Google Search grounding for company/salary research, one with
-  `responseSchema` for the structured CV+report JSON (Gemini can't combine
-  search tools and `responseSchema` in the same call — see
-  `cv-site/src/server/cv-recruiter/`).
-→ It cannot write to `cv-output/` — a serverless function has no access to
-  the developer's machine. It returns the report and the `Locale` JSON in the
-  HTTP response for the browser to download; the auto-learning JD-insights
-  log has no server-side equivalent yet (the download includes an
-  `insightEntry` snippet the user can paste into the right
-  `cv-output/jd-insights/*.md` file by hand, or via Claude Code).
+  `public/robots.txt`) reachable from any device. Accepts country (required),
+  company/job title (optional — Gemini identifies them from the JD/screenshots
+  when left blank), job description as text and/or image uploads (screenshots
+  of a posting — compressed client-side to fit Vercel's fixed 4.5MB function
+  body limit), and posts to `cv-site/src/pages/api/cv-recruiter.ts`
+  (`export const prerender = false` — the only non-static route on the site,
+  a Vercel serverless function; see `adapter: vercel()` in
+  `cv-site/astro.config.mjs`), which runs the same audit/JD-match logic as
+  the `cv-recruiter` subagent but via the **Gemini API** (`@google/genai`,
+  free tier) instead of Claude, in two calls: one with Google Search
+  grounding for company/salary research, one with `responseSchema` for the
+  structured CV+report JSON (Gemini can't combine search tools and
+  `responseSchema` in the same call — see `cv-site/src/server/cv-recruiter/`).
+  Both calls are multimodal — images go in as `inlineData` parts alongside
+  text (`prompt.ts`).
+→ After the structured JSON comes back, the route best-effort renders the
+  PDFs server-side too (`cv-site/src/server/cv-recruiter/render-pdf.ts`,
+  `playwright-core` + `@sparticuz/chromium`) and returns them as base64
+  alongside the report — no more manual desktop step when it works. This is
+  the least-verifiable part of the tool (real behavior depends on the Vercel
+  plan's function size/duration limits, not fully testable outside a live
+  deploy): `renderPdfs()` never throws, it returns `null` on any failure, and
+  the route always still returns the report + downloadable JSON either way —
+  the frontend shows PDF download buttons only when `pdf` isn't null, a
+  "generate locally" note otherwise.
+→ Font/QR assets for that renderer are precomputed at
+  `generated/pdf-assets.json` (repo root, **outside** `cv-site/` on purpose —
+  `scripts/gen-pdf-assets.mjs` regenerates it, rerun only if fonts/QR change).
+  Keeping ~200KB of base64 as a `.ts`/`.js` module anywhere under `cv-site/`
+  reliably OOMs `astro check` on a low-RAM machine, and tsconfig `exclude`
+  doesn't stop the language server from scanning it anyway — moving the file
+  fully outside the Astro project directory was the only fix that worked.
+  `render-pdf.ts` reads it via `pdf-assets-loader.ts` with a static
+  `import.meta.url`-relative path (not the per-font-weight template literal
+  path `cv-pdf-template.ts`/`load-pdf-assets.ts` use) so Vercel's Node File
+  Trace can bundle it unambiguously — same reasoning is why
+  `astro.config.mjs`'s `includeFiles` lists each `@sparticuz/chromium` binary
+  file individually instead of a glob (`@vercel/nft` doesn't expand globs,
+  discovered by a real build failure).
+→ It cannot write to the developer's local `cv-output/` — a serverless
+  function has no access to that machine. It returns the report, the
+  `Locale` JSON, and (when rendering succeeded) the PDFs in the HTTP response
+  for the browser to download; the auto-learning JD-insights log has no
+  server-side equivalent from the browser (the response includes an
+  `insightEntry` snippet to paste into `cv-output/jd-insights/*.md` by hand).
+  Calling the `cv-recruiter` MCP tool below instead closes that gap
+  automatically.
 → Requires 3 env vars server-side only (`cv-site/.env.example`):
   `GEMINI_API_KEY`, `CV_TOOL_PASSPHRASE`, optional `GEMINI_MODEL`. The route
   fails closed (503) if either required var is unset — there is no
   "unauthenticated but open" state.
+→ **Read env vars through `readEnv()` (`process.env` first, `import.meta.env`
+  only as fallback), never `import.meta.env` directly.** Vite/Astro replace
+  `import.meta.env.X` *statically at build time*: a var set in the Vercel
+  dashboard after the last build stays `undefined` at runtime, and the
+  endpoint answers 503 "non configurato" even though the dashboard shows it
+  set. This was a real production symptom, not a hypothetical. Consequence
+  for operations: **after changing an env var on Vercel you must redeploy**,
+  and `process.env` is what makes the value visible to the running function.
+
+Three failure modes found by testing this flow end to end — all three are
+now handled, and the handling is the only reason the tool works on a free
+Gemini key:
+
+→ **Google Search grounding has its own quota, separate from the model's,
+  and it can be zero on the free tier.** Verified: the identical request
+  without `googleSearch` succeeds, with it returns 429 RESOURCE_EXHAUSTED.
+  Since the grounding call ran first and was unguarded, *every* request
+  ended in a 502 — the tool was fully unusable for what is only an
+  accessory feature. It is now best-effort: on failure the flow continues
+  with `NO_RESEARCH` (a prompt instruction, so the model does not
+  compensate by inventing figures), `salaryEstimate` comes back null, and
+  the response carries `researchAvailable: false` so the UI can say *why*
+  the estimate is missing instead of implying none exists.
+→ **`renderPdfs()` must never throw** — it returns `null` and the route
+  still returns report + JSON. Proven in practice: local rendering failed
+  (see below) and the request still returned 200 with the full report.
+→ **Locally, `playwright-core` ships no browser** and the revision it looks
+  for rarely matches the one the root `playwright` package installed.
+  Set `PLAYWRIGHT_CHROMIUM_EXECUTABLE` to an existing Chromium to exercise
+  the PDF path in `astro dev` (same convention as
+  `scripts/generate-ux-cv.ts`). On Vercel this is irrelevant: `process.env.VERCEL`
+  selects the `@sparticuz/chromium` binary instead.
+→ The passphrase field is `type="password"`, and the form also carries a
+  **visually hidden `autocomplete="username"` input**. Mobile password
+  managers (iOS Safari, Chrome Android) associate a credential to a
+  username+password *pair*; with a lone password field many never offer to
+  save it — which defeats the whole reason that field is a password. It is
+  hidden via `.visually-hidden` (1×1 clipped) rather than `display:none` or
+  `hidden`, because password managers skip fields removed from layout.
+
+### Calling the same tool from Claude Code — the `cv-recruiter` MCP tool
+
+→ `src/tools/cv-recruiter.ts` lets Claude Code drive the exact same deployed
+  Gemini flow above (`fetch` to `CV_TOOL_BASE_URL` + `/api/cv-recruiter`,
+  `CV_TOOL_BASE_URL`/`CV_TOOL_PASSPHRASE` in root `.env.example`) instead of
+  — or in addition to — the Claude-powered subagent. Unlike the browser, it
+  runs on the developer's machine, so it closes the persistence gap noted
+  above: it writes the JSON (and the PDFs, when the server returned them) to
+  `cv-output/targeted/`, and appends `insightEntry` to
+  `cv-output/jd-insights/<bucket>.md` itself. Takes local image paths
+  (`imagePaths`) rather than base64 and reads/encodes them itself.
 
 ---
 
@@ -192,6 +277,7 @@ src/                      ← MCP server + HTTP API (Node.js / TypeScript)
       qr.ts               ← /api/qr — QR code generation (JSON base64, PNG, SVG)
   tools/index.ts          ← MCP tool registry
   tools/echo.ts           ← Example tool — copy as template
+  tools/cv-recruiter.ts   ← Calls the deployed /api/cv-recruiter, saves JSON/PDF + jd-insights locally
   resources/index.ts      ← MCP resource registry
   prompts/index.ts        ← MCP prompt template registry
   utils/logger.ts         ← stderr-only logger
@@ -217,7 +303,12 @@ cv-site/                  ← Astro site (the actual CV)
       en/work/            ← English case studies (index.astro + [slug].astro)
       tools/cv-recruiter.astro ← Private, unlinked, passphrase-gated CV generator (see AGENTS.md § "from a phone")
       api/cv-recruiter.ts ← The only server route on the site (prerender = false) — Gemini-powered backend for the page above
-    server/cv-recruiter/  ← Prompt building, Gemini responseSchema, and fixed IT/EN copy for api/cv-recruiter.ts
+    server/cv-recruiter/
+      prompt.ts            ← Multimodal prompt building (text + image parts), audit/analysis rules
+      schema.ts             ← Gemini responseSchema (structured JSON output) + matching TS types
+      fixed-copy.ts          ← Fixed IT/EN boilerplate strings + country-bucket helpers, GDPR footer text
+      render-pdf.ts           ← Best-effort server-side PDF render (playwright-core + @sparticuz/chromium), never throws
+      pdf-assets-loader.ts     ← Reads generated/pdf-assets.json at runtime (static path, see below)
     components/           ← Static Astro components
       ContactFooter.astro ← Shared contact footer
       WorkDesignSystem.astro ← Design system section inside /work case studies
@@ -252,8 +343,11 @@ cv-site/                  ← Astro site (the actual CV)
 scripts/                  ← Root utility scripts (Node)
   parse-cv.ts             ← Parse source CV data
   generate-cv-pdf.ts      ← Render the knolling CV to A4 PDFs with QR (npm run pdf:cv)
-  generate-ux-cv.ts       ← UX/UI CV, designed + ATS-draft (npm run pdf:ux) — exports Locale type + buildHtml/buildHtmlAts, reused by generate-targeted-cv.ts
+  cv-pdf-template.ts      ← Pure Locale type + buildHtml/buildHtmlAts (no fs/Playwright) — shared by every PDF renderer, CLI and serverless
+  load-pdf-assets.ts      ← Reads font/QR from disk into a PdfAssets — Node CLI only, do not import from cv-site
+  generate-ux-cv.ts       ← UX/UI CV, designed + ATS-draft (npm run pdf:ux) — owns the IT/EN Locale content, renders via cv-pdf-template.ts
   generate-targeted-cv.ts ← Renders one job-application-specific Locale JSON (npm run pdf:targeted -- <path>) — consumer of .claude/agents/cv-recruiter.md's output
+  gen-pdf-assets.mjs      ← Regenerates generated/pdf-assets.json (rerun only if fonts/QR change — see AGENTS.md § "from a phone")
   gen-og-image.mjs        ← Generate the Open Graph image
   qa-mobile.js            ← Responsive QA via Playwright
   record-demo-playwright.js ← Record the site demo video
@@ -284,6 +378,9 @@ scripts/                  ← Root utility scripts (Node)
 
 .husky/
   pre-push                ← Runs `npm run lint && npm run format:check` before every push — see § Git hooks below
+
+generated/
+  pdf-assets.json         ← Font/QR precomputed base64 for the serverless PDF renderer — committed, regenerate via scripts/gen-pdf-assets.mjs. Deliberately outside cv-site/, see AGENTS.md § "from a phone"
 
 .mcp.json                 ← Project-scoped MCP servers for Claude Code (mcp-base-template, sequential-thinking)
 CLAUDE.md                 ← Claude Code entry point (imports this file, adds skill-loading + MCP notes)

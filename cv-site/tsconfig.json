@@ -1,6 +1,12 @@
 {
   "extends": "astro/tsconfigs/strict",
-  "include": [".astro/types.d.ts", "**/*", "../src/data/cv.ts", "../src/data/cv.en.ts"],
+  "include": [
+    ".astro/types.d.ts",
+    "**/*",
+    "../src/data/cv.ts",
+    "../src/data/cv.en.ts",
+    "../scripts/cv-pdf-template.ts"
+  ],
   "exclude": ["dist"],
   "compilerOptions": {
     // Disabilitato solo per il falso positivo Flip.d.ts/flip.d.ts (todo #42):
@@ -12,7 +18,8 @@
     "forceConsistentCasingInFileNames": false,
     "paths": {
       "@cv-data": ["../src/data/cv.ts"],
-      "@cv-data-en": ["../src/data/cv.en.ts"]
+      "@cv-data-en": ["../src/data/cv.en.ts"],
+      "@cv-pdf-template": ["../scripts/cv-pdf-template.ts"]
     }
   }
 }

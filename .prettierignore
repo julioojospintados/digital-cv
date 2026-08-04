@@ -9,6 +9,16 @@ package-lock.json
 cv-site/public/
 cv-output/
 cv-pdf-preview/
+# ~200KB di stringhe base64 su una riga (scripts/gen-pdf-assets.mjs) — non
+# leggibile da persone, e passarlo a Prettier rischia lo stesso OOM di
+# astro check su questa macchina (vedi il commento in quello script).
+generated/
+
+# File di macchina: gitignorato e riscritto da Claude Code ogni volta che
+# concedi un permesso. Non è sorgente del progetto, ma finiva sotto
+# `prettier --check .` e faceva fallire l'hook pre-push senza alcuna colpa
+# del codice.
+.claude/settings.local.json
 
 # Documentazione e istruzioni per agenti: l'allineamento delle tabelle e i
 # blocchi ASCII sono curati a mano e leggibili così. Prettier li riflow-erebbe
