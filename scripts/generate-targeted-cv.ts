@@ -2,7 +2,7 @@
  * generate-targeted-cv.ts
  * Renderizza in PDF (A4, designed + draft ATS-puro) una variante di CV
  * "targettizzata" — prodotta dal subagent .claude/agents/cv-recruiter.md a
- * partire da un JSON conforme all'interfaccia `Locale` di generate-ux-cv.ts.
+ * partire da un JSON conforme all'interfaccia `Locale` di cv-pdf-template.ts.
  *
  * Non contiene contenuti hardcoded: legge un solo file JSON in input e lo
  * passa agli stessi template (buildHtml / buildHtmlAts) usati da pdf:ux, così
@@ -23,11 +23,13 @@ import { readFileSync, mkdirSync } from "fs";
 import { dirname, resolve } from "path";
 import { fileURLToPath } from "url";
 import { z } from "zod";
-import { buildHtml, buildHtmlAts, type Locale } from "./generate-ux-cv.js";
+import { buildHtml, buildHtmlAts, type Locale } from "./cv-pdf-template.js";
+import { loadPdfAssets } from "./load-pdf-assets.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
 const OUT_DIR = resolve(ROOT, "cv-output/targeted");
+const ASSETS = loadPdfAssets(ROOT);
 
 // ── Schema — mirror esatto dell'interfaccia Locale in generate-ux-cv.ts ─────
 // Convalida il JSON prodotto dall'agent PRIMA di sprecare un avvio di
@@ -136,13 +138,13 @@ async function main(): Promise<void> {
   const browser = await chromium.launch(executablePath ? { executablePath } : {});
   const page = await browser.newPage();
 
-  await page.setContent(buildHtml(locale), { waitUntil: "networkidle" });
+  await page.setContent(buildHtml(locale, ASSETS), { waitUntil: "networkidle" });
   await page.evaluate(() => document.fonts.ready);
   const outPath = resolve(OUT_DIR, locale.file);
   await page.pdf({ path: outPath, format: "A4", printBackground: true, preferCSSPageSize: true });
   console.log(`PDF generato: ${outPath}`);
 
-  await page.setContent(buildHtmlAts(locale), { waitUntil: "networkidle" });
+  await page.setContent(buildHtmlAts(locale, ASSETS), { waitUntil: "networkidle" });
   await page.evaluate(() => document.fonts.ready);
   const atsPath = resolve(OUT_DIR, locale.file.replace(".pdf", "_ATS_DRAFT.pdf"));
   await page.pdf({ path: atsPath, format: "A4", printBackground: true });

@@ -1,0 +1,25 @@
+{
+  // Esiste solo per l'editor. Il tsconfig.json di root ha `include: ["src/**/*"]`
+  // perché è la config di BUILD (emette in dist/), quindi VS Code non trovava
+  // nessun progetto per i file qui dentro e ricadeva su una config di default
+  // senza i tipi di Node: da lì i falsi errori "Cannot find name 'fs'" su
+  // ogni script, pur con `npm run typecheck` pulito.
+  //
+  // L'editor usa il tsconfig più vicino al file, quindi questo basta a
+  // risolverli. Il type-check reale resta tsconfig.test.json (che include già
+  // `scripts/**/*.ts` ed è quello che gira in CI): le opzioni qui sotto sono
+  // allineate a quelle, così editor e CI non possono divergere.
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    // Gli script girano con tsx, non vengono mai compilati: nessun output.
+    "noEmit": true,
+    // Risalgono a ../src/data/cv.ts, quindi la radice è quella del repo.
+    "rootDir": "..",
+    // "dom" serve dentro i page.evaluate() di Playwright (document, Image):
+    // quel codice gira nella pagina, non in Node.
+    "lib": ["esnext", "dom"],
+    "types": ["node"]
+  },
+  "include": ["**/*.ts", "../src/data/cv.ts", "../src/data/cv.en.ts"],
+  "exclude": []
+}
