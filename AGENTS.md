@@ -132,6 +132,46 @@ behaviour, not the logic that computes them.
 
 → Create `src/<module>/<name>.test.ts`. Use `vitest`. See `src/http/app.test.ts` as example.
 
+### Generating a targeted CV variant (job-application specific)
+
+→ The `cv-recruiter` subagent (`.claude/agents/cv-recruiter.md`) takes a target
+  country + a job description + company, audits for anomalies, computes a
+  JD-match report (compatibility %, strengths, pain points, salary estimate),
+  then writes a `Locale`-shaped JSON to `cv-output/targeted/<slug>.json` and
+  runs `npm run pdf:targeted -- <path>` (`scripts/generate-targeted-cv.ts`) to
+  render it — designed + ATS-draft PDF, always both, no parser-type branching
+  — through the same template as `pdf:ux` (`scripts/generate-ux-cv.ts`, which
+  exports the `Locale` type and the `buildHtml`/`buildHtmlAts` renderers).
+→ The subagent also logs each job description's key signals to
+  `cv-output/jd-insights/<usa-canada|europa|italia>.md` so later variants for
+  the same region get calibrated against real, accumulated patterns.
+→ `cv-output/` is gitignored — these are personal application documents, never commit them.
+
+### Same thing, from a phone — the Gemini-powered web tool
+
+→ `cv-site/src/pages/tools/cv-recruiter.astro` is a private, unlinked, `noindex`,
+  passphrase-gated page (excluded from the sitemap and disallowed in
+  `public/robots.txt`) reachable from any device. It posts to
+  `cv-site/src/pages/api/cv-recruiter.ts` (`export const prerender = false` —
+  the only non-static route on the site, a Vercel serverless function; see
+  `adapter: vercel()` in `cv-site/astro.config.mjs`), which runs the same
+  audit/JD-match logic as the `cv-recruiter` subagent but via the **Gemini
+  API** (`@google/genai`, free tier) instead of Claude, in two calls: one with
+  Google Search grounding for company/salary research, one with
+  `responseSchema` for the structured CV+report JSON (Gemini can't combine
+  search tools and `responseSchema` in the same call — see
+  `cv-site/src/server/cv-recruiter/`).
+→ It cannot write to `cv-output/` — a serverless function has no access to
+  the developer's machine. It returns the report and the `Locale` JSON in the
+  HTTP response for the browser to download; the auto-learning JD-insights
+  log has no server-side equivalent yet (the download includes an
+  `insightEntry` snippet the user can paste into the right
+  `cv-output/jd-insights/*.md` file by hand, or via Claude Code).
+→ Requires 3 env vars server-side only (`cv-site/.env.example`):
+  `GEMINI_API_KEY`, `CV_TOOL_PASSPHRASE`, optional `GEMINI_MODEL`. The route
+  fails closed (503) if either required var is unset — there is no
+  "unauthenticated but open" state.
+
 ---
 
 ## Full file reference
@@ -175,6 +215,9 @@ cv-site/                  ← Astro site (the actual CV)
       en/index.astro      ← English entry point
       en/cv.astro         ← English CV (static page — mode is client-side only, no mode in path)
       en/work/            ← English case studies (index.astro + [slug].astro)
+      tools/cv-recruiter.astro ← Private, unlinked, passphrase-gated CV generator (see AGENTS.md § "from a phone")
+      api/cv-recruiter.ts ← The only server route on the site (prerender = false) — Gemini-powered backend for the page above
+    server/cv-recruiter/  ← Prompt building, Gemini responseSchema, and fixed IT/EN copy for api/cv-recruiter.ts
     components/           ← Static Astro components
       ContactFooter.astro ← Shared contact footer
       WorkDesignSystem.astro ← Design system section inside /work case studies
@@ -209,6 +252,8 @@ cv-site/                  ← Astro site (the actual CV)
 scripts/                  ← Root utility scripts (Node)
   parse-cv.ts             ← Parse source CV data
   generate-cv-pdf.ts      ← Render the knolling CV to A4 PDFs with QR (npm run pdf:cv)
+  generate-ux-cv.ts       ← UX/UI CV, designed + ATS-draft (npm run pdf:ux) — exports Locale type + buildHtml/buildHtmlAts, reused by generate-targeted-cv.ts
+  generate-targeted-cv.ts ← Renders one job-application-specific Locale JSON (npm run pdf:targeted -- <path>) — consumer of .claude/agents/cv-recruiter.md's output
   gen-og-image.mjs        ← Generate the Open Graph image
   qa-mobile.js            ← Responsive QA via Playwright
   record-demo-playwright.js ← Record the site demo video
@@ -225,6 +270,8 @@ scripts/                  ← Root utility scripts (Node)
   skills/                 ← Copilot skills (same domains as .claude/skills below)
 
 .claude/
+  agents/
+    cv-recruiter.md       ← Subagent: audits + tailors a CV against a real job description (match %, gaps, salary estimate), generates a targeted CV variant (see scripts/generate-targeted-cv.ts)
   skills/                 ← Claude Code skills — mirrors .github/skills, loaded on demand
     knolling-cv/SKILL.md         ← Global project context — load FIRST for any request
     design-system/SKILL.md       ← UI, animations (Emil Kowalski rules), knolling, GSAP, CSS custom properties
@@ -235,10 +282,30 @@ scripts/                  ← Root utility scripts (Node)
     partnership-strategy/SKILL.md ← Fractional partner, SMB consulting positioning
     caveman/SKILL.md             ← Utility skill — ultra-compressed response mode (/caveman)
 
+.husky/
+  pre-push                ← Runs `npm run lint && npm run format:check` before every push — see § Git hooks below
+
 .mcp.json                 ← Project-scoped MCP servers for Claude Code (mcp-base-template, sequential-thinking)
 CLAUDE.md                 ← Claude Code entry point (imports this file, adds skill-loading + MCP notes)
 AGENTS.md                 ← This file — tool-agnostic project guide
 ```
+
+---
+
+## Git hooks
+
+→ `.husky/pre-push` runs `npm run lint && npm run format:check` (the same
+  checks as the "Lint & format" CI job) before every `git push`, local or
+  from an agent — a push aborts if either fails. Wired automatically by the
+  `prepare` script on `npm install` (Husky manages `core.hooksPath`, nothing
+  under `.git/hooks/` to maintain by hand).
+→ Assumes `cv-site/node_modules` is already installed (root ESLint config
+  covers `cv-site/src/**` too, so the Astro parser needs it resolvable) —
+  normal on a dev machine, not auto-installed by the hook to keep pushes fast.
+→ Scoped to lint/format on purpose, not the full CI matrix (typecheck, tests,
+  `astro build`) — those stay in CI so a push isn't slowed down by a Chromium
+  build on every commit; the hook only catches what's fast and was actually
+  the cause of a real CI failure (an unused var eslint catches in <10s).
 
 ---
 
