@@ -176,7 +176,7 @@ export const cvDataEn = {
     {
       company: "Digital CV — Open Source AI-Augmented Project",
       role: "AI Workflow Designer & Full-Stack Developer",
-      startDate: "2024-11",
+      startDate: "2026-04",
       endDate: "present",
       location: "Turin, Italy",
       remote: true,
@@ -586,7 +586,7 @@ export const cvDataEn = {
       company: "Bambagia Design Lab (collaboration)",
       role: "UX/UI Designer",
       startDate: "2026-04",
-      endDate: "2026-05",
+      endDate: "present",
       location: "Italy",
       remote: true,
       description:
@@ -1542,10 +1542,10 @@ export const cvDataEn = {
     {
       name: "Digital CV — Open Source AI-Augmented Project",
       description:
-        "I built this interactive open source CV with an AI-augmented workflow (GitHub Copilot and Claude). A two-layer system: an Astro and Lit site with GSAP animations and SVG wave effects, plus an MCP server that exposes the CV data as an API for AI agents. It is the live demonstration of the method: on my own I produced in days what a team would need months to deliver.",
+        "I built this interactive open source CV with an AI-augmented workflow (GitHub Copilot and Claude). A two-layer system: an Astro and Lit site with GSAP animations and SVG wave effects, plus an MCP server that exposes the CV data as an API for AI agents. I integrated PostHog to measure how people actually use the site. It is the live demonstration of the method: on my own I produced in days what a team would need months to deliver.",
       url: "https://github.com/julioojospintados/digital-cv",
       repoUrl: "https://github.com/julioojospintados/digital-cv",
-      date: "2024-11",
+      date: "2026-04",
       tags: [
         "Astro",
         "Lit",
@@ -1571,23 +1571,19 @@ export const cvDataEn = {
       decisions: [
         {
           title: "The graph where there's room, cards where there's hurry",
-          body: "The most spectacular skills view is a D3 force graph, but graphs are admired, not scanned. On mobile the default is the card view, readable in 5 seconds, and D3 (~130KB) only loads for those who actually open the graph. On desktop, with the space and a mouse to explore it, the graph welcomes you first: the default follows the context of use, not the effect.",
+          body: "The most spectacular skills view is a D3 force graph, but graphs are admired, not scanned. On mobile the default is the card view, readable in 5 seconds, and D3 (~130KB) only loads for those who actually open the graph. On desktop, with the space and a mouse to explore it, the graph welcomes you first.",
         },
         {
           title: "Whispers, not silences",
-          body: "When you pick a mode, off-topic cards don't disappear: they drop to low opacity. Hiding them would have contradicted the site's thesis. Knolling is radical transparency, and anyone assessing a T-shaped profile must be able to see the breadth even while examining the depth.",
+          body: "When you pick a mode, off-topic cards don't disappear: they drop to low opacity. Hiding them would have contradicted the site's thesis. Knolling is radical transparency.",
         },
         {
           title: "Conventions where the reader is in a hurry",
-          body: 'Extra experiences are revealed with "Read 3 more", the LinkedIn and Medium pattern, instead of the branded CTA I tried first: where readers are in a hurry, convention beats originality. For the same reason the current role sits at the top of the experience cluster: recruiters read reverse-chronologically and look for "where do they work now".',
+          body: 'Extra experiences are revealed with "Read 3 more", the LinkedIn and Medium pattern, instead of the branded CTA I tried first. For the same reason the current role sits at the top of the experience cluster: recruiters read reverse-chronologically and look for "where do they work now".',
         },
         {
           title: "Accessibility as a constraint, not a polish pass",
           body: "Every accent across the 4 modes has a muted variant recalibrated for WCAG AA contrast (≥4.5:1) on the teal background. Visible focus, skip link and prefers-reduced-motion are design-system rules set at the start, not patches added at the end.",
-        },
-        {
-          title: "Iteration: the wrong scroll",
-          body: 'The first version of the home used native "stepped" scroll-snap: in real testing it felt rigid and inconsistent with the fluid scroll of the CV pages. I scrapped it and replaced it with one smooth scroll across the whole site plus per-section reveals: consistency of gesture is worth more than a single effect.',
         },
       ],
       outcomes: [
@@ -1604,13 +1600,17 @@ export const cvDataEn = {
     {
       name: "Product Discovery — UX Research & Product Strategy",
       description:
-        "With a technical partner I flipped the ideation process of a digital product: research into people's real needs first, the idea after. A behavioural map on Miro, interviews, competitor analysis: out of 17 concepts one remains, now in development, to be validated with a high-fidelity prototype before writing any code.",
+        "With a technical partner I flipped the ideation process of a digital product with Design Thinking and Effectuation: research into people's real needs first, the idea after. A behavioural map on Miro through the Four Forces lens, interviews, competitor analysis: out of 17 concepts one remains, now in development, to be validated with the pPoC Engine before writing any code.",
       date: "2026-05",
       tags: [
         "UX Research",
         "Product Strategy",
+        "Design Thinking",
+        "Effectuation",
+        "Four Forces (Jobs to Be Done)",
         "User interviews",
         "Value Proposition Canvas",
+        "pPoC Engine",
         "Miro",
         "Figma",
         "Prototyping",
@@ -1621,11 +1621,11 @@ export const cvDataEn = {
       problem:
         "Most apps fail because they solve problems people don't feel, or try to manufacture needs that don't exist. With a technical partner I flipped the classic ideation process: no starting idea to defend, first the study of the behaviours, anxieties and everyday desires that digital products fail to intercept. The goal: validate real interest in a product before writing a single line of code.",
       process: [
-        "Research — I mapped people's behaviours and deep needs on Miro, organised into macro-areas: identity and status, fear of ageing, need for control, relationships. I classified each need by severity, prevalence and cultural area, grounded in behavioural psychology instead of the usual demographic segmentation.",
+        "Research — I mapped people's behaviours and deep needs on Miro through the Four Forces (Jobs to Be Done) lens: push of the situation, pull of the new solution, anxiety of change, habit of the present. Needs organised into macro-areas — identity and status, fear of ageing, need for control, relationships — and classified by severity, prevalence and cultural area, grounded in behavioural psychology instead of the usual demographic segmentation.",
         "Validation — A theoretical map is an echo chamber: you end up agreeing with yourself. I verified the needs with 7 quick interviews with people in the target, informal fifteen-minute conversations, and with an analysis of the competitors already trying to answer those needs, studying what works and what doesn't in their flows.",
-        "Ideation — From the map, together with my partner, I generated 17 product ideas, each anchored to a precise need. I broke down the most promising ones with the Value Proposition Canvas and stress-tested them with AI in an adversarial role: a sceptical venture capitalist attacking the economics, an analyst hunting for technical and legal blockers.",
+        "Ideation — From the map, together with my partner, I generated 17 product ideas, each anchored to a precise need, with an effectuation logic: start from the means and needs already in hand, not from a fixed goal to defend at all costs. I broke down the most promising ones with the Value Proposition Canvas and stress-tested them with AI in an adversarial role: a sceptical venture capitalist attacking the economics, an analyst hunting for technical and legal blockers.",
         "Prioritisation — With a Value/Effort matrix I crossed user value with design effort: of the 17 ideas 4 survived, and all resources went into a single one, now in development.",
-        "PPoC — The final test is a Probabilistic Proof of Concept: a high-fidelity Figma prototype that looks like a real working app, shown to users to measure behaviours, not opinions. The success thresholds are set before launch: over 8% conversion to onboarding, over 2% clicks on the pre-order.",
+        "pPoC Engine — The final test is our pPoC Engine: a Probabilistic Proof of Concept, a high-fidelity Figma prototype that looks like a real working app, shown to users to measure behaviours, not opinions. The success thresholds are set before launch: over 8% conversion to onboarding, over 2% clicks on the pre-order.",
       ],
       decisions: [
         {
@@ -1657,7 +1657,7 @@ export const cvDataEn = {
       learnings: [
         "UX comes before code: technically perfect software that doesn't solve a real need is just a well-written cost.",
         "AI truly accelerates only when you give it an uncomfortable role: as devil's advocate it found in hours the weak points we would have discovered with the product finished.",
-        "Talking to real people early costs little and cuts a lot: most of the ideas we liked had no market, and knowing it right away saved months of work.",
+        "Talking to real people early costs little and cuts a lot: most of the ideas we liked had no market, and we found out before writing a line of code, not after.",
       ],
     },
     {
@@ -1694,7 +1694,7 @@ export const cvDataEn = {
         },
         {
           title: "Speak to the industry, not to the crowd",
-          body: "Growing in volume would have been easy and useless. I rethought the content for specific professional interlocutors: it's the difference between a shop window and a channel that opens doors, and it's why the +100% follower growth is made of contacts that matter, not numbers.",
+          body: "Growing in volume would have been easy and useless. I rethought the content for specific professional interlocutors, aimed at the industry itself: musicians, producers, labels, promoters.",
         },
       ],
       outcomes: [

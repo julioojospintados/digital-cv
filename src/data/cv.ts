@@ -324,7 +324,7 @@ export const cvData = {
     {
       company: "Digital CV — Progetto Open Source AI-Augmented",
       role: "AI Workflow Designer & Full-Stack Developer",
-      startDate: "2024-11",
+      startDate: "2026-04",
       endDate: "present",
       location: "Torino, Italia",
       remote: true,
@@ -741,7 +741,7 @@ export const cvData = {
       company: "Bambagia Design Lab (collaborazione)",
       role: "UX/UI Designer",
       startDate: "2026-04",
-      endDate: "2026-05",
+      endDate: "present",
       location: "Italia",
       remote: true,
       description:
@@ -1920,10 +1920,10 @@ export const cvData = {
     {
       name: "Digital CV — Progetto Open Source AI-Augmented",
       description:
-        "Ho costruito questo CV interattivo open source con un workflow AI-augmented (GitHub Copilot e Claude). Sistema a due livelli: sito Astro e Lit con animazioni GSAP e wave effect SVG, più un server MCP che espone i dati del CV come API per agenti AI. È la dimostrazione live del metodo: da solo ho prodotto in giorni ciò che un team produrrebbe in mesi.",
+        "Ho costruito questo CV interattivo open source con un workflow AI-augmented (GitHub Copilot e Claude). Sistema a due livelli: sito Astro e Lit con animazioni GSAP e wave effect SVG, più un server MCP che espone i dati del CV come API per agenti AI. Ho integrato PostHog per misurare come le persone usano davvero il sito. È la dimostrazione live del metodo: da solo ho prodotto in giorni ciò che un team produrrebbe in mesi.",
       url: "https://github.com/julioojospintados/digital-cv",
       repoUrl: "https://github.com/julioojospintados/digital-cv",
-      date: "2024-11",
+      date: "2026-04",
       tags: [
         "Astro",
         "Lit",
@@ -1949,23 +1949,19 @@ export const cvData = {
       decisions: [
         {
           title: "Il grafo dove c'è spazio, le card dove c'è fretta",
-          body: "La vista skills più spettacolare è un force graph D3, ma i grafi si guardano, non si scansionano. Su mobile il default è la vista card, leggibile in 5 secondi, e D3 (~130KB) si carica solo per chi apre il grafo davvero. Su desktop, dove ci sono spazio e mouse per esplorarlo, il grafo accoglie per primo: il default segue il contesto d'uso, non l'effetto.",
+          body: "La vista skills più spettacolare è un force graph D3, ma i grafi si guardano, non si scansionano. Su mobile il default è la vista card, leggibile in 5 secondi, e D3 (~130KB) si carica solo per chi apre il grafo davvero. Su desktop, dove ci sono spazio e mouse per esplorarlo, il grafo accoglie per primo.",
         },
         {
           title: "Sussurri, non silenzi",
-          body: "Quando scegli un mode, le card fuori tema non spariscono: scendono a bassa opacità. Nasconderle avrebbe contraddetto la tesi del sito. Il knolling è trasparenza radicale, e chi valuta un profilo T-shaped deve poter vedere l'ampiezza anche mentre esamina la profondità.",
+          body: "Quando scegli un mode, le card fuori tema non spariscono: scendono a bassa opacità. Nasconderle avrebbe contraddetto la tesi del sito. Il knolling è trasparenza radicale.",
         },
         {
           title: "Convenzioni dove l'utente ha fretta",
-          body: 'Le esperienze extra si rivelano con "Leggi altre 3", il pattern di LinkedIn e Medium, al posto di un CTA brandizzato che avevo provato prima: dove chi legge ha fretta, la convenzione batte l\'originalità. Per lo stesso motivo il ruolo attuale sta in cima al cluster esperienze: i recruiter leggono in reverse-chronological e cercano "dove lavora ora".',
+          body: 'Le esperienze extra si rivelano con "Leggi altre 3", il pattern di LinkedIn e Medium, al posto di un CTA brandizzato che avevo provato prima. Per lo stesso motivo il ruolo attuale sta in cima al cluster esperienze: i recruiter leggono in reverse-chronological e cercano "dove lavora ora".',
         },
         {
           title: "Accessibilità come vincolo, non rifinitura",
           body: "Ogni accent dei 4 mode ha una variante muted ricalibrata per contrasto WCAG AA (≥4.5:1) sullo sfondo ottanio. Focus visibile, skip link e prefers-reduced-motion sono regole del design system decise all'inizio, non patch aggiunte a fine progetto.",
-        },
-        {
-          title: "Iterazione: lo scroll sbagliato",
-          body: "La prima versione della home usava scroll-snap nativo \"a step\": al test reale risultava rigido e incoerente con lo scroll fluido delle pagine CV. L'ho scartato e sostituito con smooth scroll unico su tutto il sito e reveal per sezione: la coerenza del gesto vale più dell'effetto singolo.",
         },
       ],
       outcomes: [
@@ -1982,13 +1978,17 @@ export const cvData = {
     {
       name: "Product Discovery — UX Research & Product Strategy",
       description:
-        "Con un socio tecnico ho rovesciato il processo di ideazione di un prodotto digitale: prima la ricerca sui bisogni reali delle persone, poi l'idea. Mappa comportamentale su Miro, interviste, analisi dei competitor: da 17 concept ne è rimasto uno, ora in sviluppo, che valideremo con un prototipo ad alta fedeltà prima di scrivere codice.",
+        "Con un socio tecnico ho rovesciato il processo di ideazione di un prodotto digitale con Design Thinking ed Effectuation: prima la ricerca sui bisogni reali delle persone, poi l'idea. Mappa comportamentale su Miro con la lente delle Four Forces, interviste, analisi dei competitor: da 17 concept ne è rimasto uno, ora in sviluppo, che valideremo con il pPoC Engine prima di scrivere codice.",
       date: "2026-05",
       tags: [
         "UX Research",
         "Product Strategy",
+        "Design Thinking",
+        "Effectuation",
+        "Four Forces (Jobs to Be Done)",
         "Interviste utente",
         "Value Proposition Canvas",
+        "pPoC Engine",
         "Miro",
         "Figma",
         "Prototipazione",
@@ -1999,11 +1999,11 @@ export const cvData = {
       problem:
         "La maggior parte delle app fallisce perché risolve problemi che le persone non sentono, o prova a fabbricare bisogni che non esistono. Con un socio tecnico ho rovesciato il processo classico di ideazione: nessuna idea di partenza da difendere, prima lo studio dei comportamenti, delle ansie e dei desideri quotidiani che i prodotti digitali non intercettano. L'obiettivo: validare l'interesse reale per un prodotto prima di scrivere una riga di codice.",
       process: [
-        "Ricerca — Ho mappato su Miro i comportamenti e i bisogni profondi delle persone, organizzati in macro-aree: identità e status, paura di invecchiare, bisogno di controllo, relazioni. Ho classificato ogni bisogno per gravità, diffusione e area culturale, con basi di psicologia comportamentale al posto della classica segmentazione demografica.",
+        "Ricerca — Ho mappato su Miro i comportamenti e i bisogni profondi delle persone attraverso la lente delle Four Forces (Jobs to Be Done): spinta della situazione, attrattiva della soluzione, ansia del cambiamento, abitudine attuale. Bisogni organizzati in macro-aree — identità e status, paura di invecchiare, bisogno di controllo, relazioni — e classificati per gravità, diffusione e area culturale, con basi di psicologia comportamentale al posto della classica segmentazione demografica.",
         "Validazione — Una mappa teorica è una camera dell'eco: ci si dà ragione da soli. Ho verificato i bisogni con 7 interviste rapide a persone nel target, chiacchierate informali di un quarto d'ora, e con l'analisi dei competitor che già provano a rispondere a quei bisogni, studiando cosa funziona e cosa no nei loro flussi.",
-        "Ideazione — Dalla mappa ho generato con il socio 17 idee di prodotto, ognuna agganciata a un bisogno preciso. Ho destrutturato le più promettenti con il Value Proposition Canvas e le ho stressate con l'AI in ruolo avversariale: un venture capitalist scettico che attacca la sostenibilità economica, un analista che cerca i blocchi tecnici e legali.",
+        "Ideazione — Dalla mappa ho generato con il socio 17 idee di prodotto, ognuna agganciata a un bisogno preciso, con una logica di effectuation: partire dai mezzi e dai bisogni già in mano, non da un obiettivo fisso da difendere a ogni costo. Ho destrutturato le più promettenti con il Value Proposition Canvas e le ho stressate con l'AI in ruolo avversariale: un venture capitalist scettico che attacca la sostenibilità economica, un analista che cerca i blocchi tecnici e legali.",
         "Prioritizzazione — Con una matrice Valore/Sforzo ho incrociato il valore per l'utente con lo sforzo di progettazione: delle 17 idee ne sono rimaste 4, e tutte le risorse sono andate su una sola, ora in sviluppo.",
-        "PPoC — Il test finale è un Probabilistic Proof of Concept: un prototipo Figma ad alta fedeltà che sembra un'app vera e funzionante, mostrato agli utenti per misurare comportamenti, non opinioni. Le soglie di successo sono decise prima del lancio: oltre l'8% di conversione all'onboarding, oltre il 2% di clic sul pre-ordine.",
+        "pPoC Engine — Il test finale è il nostro pPoC Engine: un Probabilistic Proof of Concept, un prototipo Figma ad alta fedeltà che sembra un'app vera e funzionante, mostrato agli utenti per misurare comportamenti, non opinioni. Le soglie di successo sono decise prima del lancio: oltre l'8% di conversione all'onboarding, oltre il 2% di clic sul pre-ordine.",
       ],
       decisions: [
         {
@@ -2035,7 +2035,7 @@ export const cvData = {
       learnings: [
         "La UX viene prima del codice: un software tecnicamente perfetto che non risolve un bisogno reale è solo un costo scritto bene.",
         "L'AI accelera davvero solo se le assegni un ruolo scomodo: da avvocato del diavolo ha trovato in ore i punti deboli che avremmo scoperto a prodotto finito.",
-        "Parlare presto con persone vere costa poco e taglia tanto: la maggior parte delle idee che piacevano a noi non aveva mercato, e saperlo subito ha risparmiato mesi di lavoro.",
+        "Parlare presto con persone vere costa poco e taglia tanto: la maggior parte delle idee che piacevano a noi non aveva mercato, e l'abbiamo scoperto prima di scrivere una riga di codice, non dopo.",
       ],
     },
     {
@@ -2072,7 +2072,7 @@ export const cvData = {
         },
         {
           title: "Parlare alla filiera, non al pubblico",
-          body: "Crescere di volume sarebbe stato facile e inutile. Ho ripensato i contenuti per interlocutori professionali specifici: è la differenza tra una vetrina e un canale che apre porte, ed è il motivo per cui il +100% di follower è fatto di contatti che contano, non di numeri.",
+          body: "Crescere di volume sarebbe stato facile e inutile. Ho ripensato i contenuti per interlocutori professionali specifici, mirati alla filiera del settore: musicisti, produttori, etichette, promoter.",
         },
       ],
       outcomes: [
