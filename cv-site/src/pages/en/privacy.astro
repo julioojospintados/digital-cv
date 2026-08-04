@@ -36,8 +36,9 @@ import Layout from "../../layouts/Layout.astro";
       <h2 class="privacy-section__title">What I collect and with what</h2>
       <ul class="privacy-list">
         <li>
-          <strong>PostHog</strong> — browsing stats (page views, events). It only starts after your explicit
-          consent from the banner.
+          <strong>PostHog</strong> — browsing stats (page views, events) and session recording (session
+          replay, 10 seconds or longer) to understand where the site creates friction. Active from the
+          first page load.
         </li>
         <li>
           <strong>Vercel Analytics &amp; Speed Insights</strong> — aggregated traffic and performance
@@ -75,31 +76,11 @@ import Layout from "../../layouts/Layout.astro";
         >.
       </p>
     </section>
-
-    <section class="privacy-section">
-      <h2 class="privacy-section__title">Change your choice</h2>
-      <p class="privacy-section__text">
-        Already accepted or rejected from the banner? You can reset your choice at any time — the
-        banner will reappear on the next page load.
-      </p>
-      <button type="button" class="privacy-reset" id="privacy-reset-consent">
-        Reset cookie preferences
-      </button>
-    </section>
   </main>
 </Layout>
 
 <script>
   import "../../islands/GoLogo.lit.ts";
-
-  document.getElementById("privacy-reset-consent")?.addEventListener("click", () => {
-    try {
-      localStorage.removeItem("cv-consent");
-    } catch {
-      /* localStorage unavailable — nothing to reset */
-    }
-    location.reload();
-  });
 </script>
 
 <style>
@@ -214,29 +195,5 @@ import Layout from "../../layouts/Layout.astro";
     color: var(--color-accent);
     text-decoration: underline;
     text-underline-offset: 2px;
-  }
-
-  .privacy-reset {
-    align-self: flex-start;
-    font-family: var(--font-mono);
-    font-size: var(--fs-14);
-    font-weight: 600;
-    color: var(--color-accent);
-    padding: 0.6rem 1rem;
-    border: 1px solid var(--color-accent);
-    border-radius: var(--radius-4);
-    transition:
-      transform 160ms var(--ease-standard),
-      opacity var(--duration-micro) var(--ease-standard);
-  }
-
-  .privacy-reset:active {
-    transform: scale(0.97);
-  }
-
-  @media (hover: hover) and (pointer: fine) {
-    .privacy-reset:hover {
-      opacity: 0.85;
-    }
   }
 </style>

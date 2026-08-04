@@ -4,7 +4,12 @@ import fontsCssUrl from "../styles/fonts.css?url";
 import cursorCssUrl from "../styles/cursor.css?url";
 import SpeedInsights from "@vercel/speed-insights/astro";
 import Analytics from "@vercel/analytics/astro";
-import ConsentBanner from "../components/ConsentBanner.astro";
+// ConsentBanner disattivato il 2026-08-04 (richiesta esplicita, responsabilità
+// privacy presa dall'utente) — PostHog parte automaticamente, vedi lo script
+// inline più sotto. Import commentato invece di rimosso: riattivarlo significa
+// scommentare qui, la riga <ConsentBanner ... /> sotto, e il gate di consenso
+// nello script PostHog.
+// import ConsentBanner from "../components/ConsentBanner.astro";
 
 interface Props {
   title?: string;
@@ -112,11 +117,14 @@ const jsonLd = {
          disable_surveys: non usiamo survey — evita di scaricare surveys.js (~33KB) a vuoto.
          init posticipato a dopo 'load' + idle: array.js/recorder.js (~455KB da parsare)
          non devono più competere con il preloader GO per banda e main thread.
-         Gate di consenso (banner ConsentBanner.astro, chiave localStorage
-         "cv-consent"): posthog.init parte da solo al load SOLO se il
-         consenso è già "granted" da una visita precedente. Se non ancora
-         deciso, __phInit resta esposto su window.__cvInitPostHog e viene
-         chiamato dal banner al click su "Accetta" — mai prima. -->
+         Gate di consenso rimosso il 2026-08-04 (richiesta esplicita, banner
+         disattivato — vedi ConsentBanner import/render commentati qui sotto):
+         posthog.init parte da solo al load, senza attendere alcun consenso.
+         session_recording.minimumDurationMilliseconds: 10s minimi di sessione
+         prima che una registrazione venga tenuta, per non salvare rumore su
+         rimbalzi immediati. Per riattivare il gate: decommenta l'import/uso
+         di ConsentBanner sotto e reintroduci il check su
+         localStorage['cv-consent'] prima di chiamare __phIdle(). -->
     {
       import.meta.env.PROD && (
         <script
@@ -130,15 +138,14 @@ const jsonLd = {
                 defaults: '2026-05-30',
                 person_profiles: 'identified_only',
                 enable_heatmaps: true,
+                capture_performance: { web_vitals: true },
                 disable_surveys: true,
+                session_recording: { minimumDurationMilliseconds: 10000 },
             })
           }
         }
         function __phIdle() { (window.requestIdleCallback || function(cb){setTimeout(cb, 1)})(__phInit); }
-        window.__cvInitPostHog = __phIdle;
-        if (localStorage.getItem('cv-consent') === 'granted') {
-          if (document.readyState === 'complete') { __phIdle(); } else { window.addEventListener('load', __phIdle); }
-        }`}
+        if (document.readyState === 'complete') { __phIdle(); } else { window.addEventListener('load', __phIdle); }`}
         />
       )
     }
@@ -209,7 +216,7 @@ const jsonLd = {
          home e /work) -->
     {showFab && <floating-menu />}
 
-    <ConsentBanner lang={lang} waitForWipBadge={consentBannerWaitForWip} />
+    {/* <ConsentBanner lang={lang} waitForWipBadge={consentBannerWaitForWip} /> */}
 
     <SpeedInsights />
     <Analytics />
