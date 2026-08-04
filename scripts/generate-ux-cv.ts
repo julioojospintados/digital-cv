@@ -9,8 +9,10 @@
  * 15mm su ogni pagina, ottenuto con due fogli A4 espliciti (.sheet).
  *
  * Output (cartella gitignorata: sono documenti personali, non vanno pushati):
- *   cv-output/Giulio_Occhipinti_UX_Designer_CV.pdf     (IT)
- *   cv-output/Giulio_Occhipinti_UX_Designer_CV_EN.pdf  (EN)
+ *   cv-output/Giulio_Occhipinti_UX_Designer_CV.pdf                (IT)
+ *   cv-output/Giulio_Occhipinti_UX_Designer_CV_EN.pdf             (EN)
+ *   cv-output/Giulio_Occhipinti_UX_Designer_CV_ATS_DRAFT.pdf      (IT, draft single-column ATS-safe)
+ *   cv-output/Giulio_Occhipinti_UX_Designer_CV_EN_ATS_DRAFT.pdf   (EN, draft single-column ATS-safe)
  *
  * Uso:
  *   npm run pdf:ux
@@ -141,7 +143,7 @@ const EN: Locale = {
   secExperience: "Experience",
   expEyebrow: "selected · most recent first",
   earlier:
-    "Earlier — Frontend Developer at ForgeLab (2021–22) and Consoft (2019–21) · Freelance photographer since 2009.",
+    "Earlier — Frontend Developer at Forge Lab (2021–22) and Consoft (2019–21) · Freelance photographer since 2009.",
   secWork: "Selected Work",
   workEyebrow: "full case studies online",
   secSkills: "Skills",
@@ -152,16 +154,6 @@ const EN: Locale = {
   experiences: [
     {
       yr: "2026 — present",
-      loc: "Turin / Remote",
-      role: "UX Researcher &amp; Product Strategist",
-      org: "Independent product discovery",
-      bullets: [
-        "Flipped ideation to <b>research-first</b>: behavioural needs mapped on Miro, classified by severity, before any idea.",
-        "Validated with <b>7 target-user interviews</b> and competitor analysis; a Value/Effort matrix narrowed <b>17 concepts to 1</b>, now in a high-fidelity Figma prototype.",
-      ],
-    },
-    {
-      yr: "2026",
       loc: "Italy / Remote",
       role: "UX/UI Designer",
       org: "Bambagia Design Lab (freelance)",
@@ -171,7 +163,7 @@ const EN: Locale = {
       ],
     },
     {
-      yr: "2024 — present",
+      yr: "2026 — present",
       loc: "Turin / Remote",
       role: "UX/UI Designer &amp; Developer",
       org: "Digital CV — self-initiated open-source project",
@@ -191,6 +183,27 @@ const EN: Locale = {
       ],
     },
     {
+      yr: "2025 — present",
+      loc: "Turin / Remote",
+      role: "Digital Innovation Consultant &amp; Lead Developer",
+      org: "Internal project — business management platform",
+      bullets: [
+        "Designed and built an internal business platform end-to-end, process analysis to deploy: an <b>MCP architecture</b> (tools/resources/prompts as APIs for AI agents) integrated with VS Code Copilot and Cursor.",
+        "Automated the <b>Cursor → GitLab CI/CD → deploy</b> pipeline (zero manual steps) and designed the flows for non-technical operators, working in <b>1–2 week sprints</b> with impact measured at every release.",
+      ],
+    },
+    {
+      yr: "2026",
+      loc: "Turin / Remote",
+      role: "UX Researcher &amp; Product Strategist",
+      org: "Independent product discovery",
+      bullets: [
+        "With a technical partner, applied <b>Design Thinking</b> and <b>Effectuation</b> to invert classic ideation — research into real behavioural needs first, the idea after — mapped on Miro through the <b>Four Forces</b> (Jobs to Be Done) lens.",
+        "Validated with <b>7 target-user interviews</b> and competitor analysis; broke down the strongest ideas with the <b>Value Proposition Canvas</b>, narrowing <b>17 concepts to 1</b> with a Value/Effort matrix.",
+        "Built the <b>pPoC Engine</b>: a Probabilistic Proof of Concept in a high-fidelity Figma prototype, now validating real behaviour before writing any code.",
+      ],
+    },
+    {
       yr: "2023 — 2024",
       loc: "Italy / Remote",
       role: "Digital Strategist",
@@ -204,7 +217,7 @@ const EN: Locale = {
   works: [
     {
       title: "Product Discovery — UX Research",
-      desc: "A behavioural needs map, user interviews and competitor analysis to validate real demand before a single line of code.",
+      desc: "With a technical partner: a behavioural needs map, user interviews and competitor analysis to validate real demand before a single line of code.",
       outcome: "17 concepts → 1, user-validated",
       url: `${SITE}/work/product-discovery`,
     },
@@ -229,6 +242,10 @@ const EN: Locale = {
         "Design Systems",
         "Accessibility · WCAG AA",
         "Interaction Design",
+        "Design Thinking",
+        "Effectuation",
+        "Value Proposition Canvas",
+        "Four Forces (JTBD)",
       ],
     },
     {
@@ -261,7 +278,7 @@ const EN: Locale = {
     },
     {
       label: "AI workflow",
-      chips: ["MCP Protocol", "Prompt Engineering", "GitHub Copilot", "Claude"],
+      chips: ["MCP", "Prompt Engineering", "GitHub Copilot", "Cursor", "Claude"],
     },
   ],
   certs: [
@@ -315,7 +332,7 @@ const IT: Locale = {
   secExperience: "Esperienza",
   expEyebrow: "selezione · più recenti prima",
   earlier:
-    "Prima — Frontend Developer in ForgeLab (2021–22) e Consoft (2019–21) · Fotografo freelance dal 2009.",
+    "Prima — Frontend Developer in Forge Lab (2021–22) e Consoft (2019–21) · Fotografo freelance dal 2009.",
   secWork: "Lavori selezionati",
   workEyebrow: "case study completi online",
   secSkills: "Competenze",
@@ -326,16 +343,6 @@ const IT: Locale = {
   experiences: [
     {
       yr: "2026 — oggi",
-      loc: "Torino / Remoto",
-      role: "UX Researcher &amp; Product Strategist",
-      org: "Product discovery indipendente",
-      bullets: [
-        "Ho capovolto l'ideazione mettendo la <b>ricerca prima</b>: bisogni comportamentali mappati su Miro, classificati per gravità, prima di ogni idea.",
-        "Validazione con <b>7 interviste a utenti target</b> e analisi dei competitor; una matrice Valore/Sforzo ha ridotto <b>17 concept a 1</b>, ora in un prototipo Figma ad alta fedeltà.",
-      ],
-    },
-    {
-      yr: "2026",
       loc: "Italia / Remoto",
       role: "UX/UI Designer",
       org: "Bambagia Design Lab (freelance)",
@@ -345,7 +352,7 @@ const IT: Locale = {
       ],
     },
     {
-      yr: "2024 — oggi",
+      yr: "2026 — oggi",
       loc: "Torino / Remoto",
       role: "UX/UI Designer &amp; Developer",
       org: "Digital CV, progetto open-source personale",
@@ -365,6 +372,27 @@ const IT: Locale = {
       ],
     },
     {
+      yr: "2025 — oggi",
+      loc: "Torino / Remoto",
+      role: "Consulente per l'Innovazione Digitale &amp; Lead Developer",
+      org: "Progetto interno — gestionale aziendale",
+      bullets: [
+        "Ho progettato e sviluppato un gestionale aziendale interno end-to-end, dall'analisi dei processi al deploy: un'<b>architettura MCP</b> (tool/resource/prompt come API per agenti AI) integrata con VS Code Copilot e Cursor.",
+        "Ho automatizzato la pipeline <b>Cursor → GitLab CI/CD → deploy</b> (zero interventi manuali) e progettato i flussi per operatori non tecnici, in <b>sprint da 1-2 settimane</b> con impactScore misurato a ogni rilascio.",
+      ],
+    },
+    {
+      yr: "2026",
+      loc: "Torino / Remoto",
+      role: "UX Researcher &amp; Product Strategist",
+      org: "Product discovery indipendente",
+      bullets: [
+        "Con un socio tecnico, ho applicato <b>Design Thinking</b> ed <b>Effectuation</b> per invertire l'ideazione classica: prima la ricerca sui bisogni comportamentali reali, poi l'idea — mappati su Miro con la lente delle <b>Four Forces</b> (Jobs to Be Done).",
+        "Validazione con <b>7 interviste a utenti target</b> e analisi dei competitor; ho destrutturato le idee più forti con il <b>Value Proposition Canvas</b>, riducendo <b>17 concept a 1</b> con una matrice Valore/Sforzo.",
+        "Ho costruito il <b>pPoC Engine</b>: un Probabilistic Proof of Concept in un prototipo Figma ad alta fedeltà, oggi al lavoro per validare il comportamento reale prima di scrivere codice.",
+      ],
+    },
+    {
       yr: "2023 — 2024",
       loc: "Italia / Remoto",
       role: "Digital Strategist",
@@ -378,7 +406,7 @@ const IT: Locale = {
   works: [
     {
       title: "Product Discovery — UX Research",
-      desc: "Mappa dei bisogni comportamentali, interviste utente e analisi dei competitor per validare la domanda reale prima di una riga di codice.",
+      desc: "Con un socio tecnico: mappa dei bisogni comportamentali, interviste utente e analisi dei competitor per validare la domanda reale prima di una riga di codice.",
       outcome: "17 concept → 1, validati con gli utenti",
       url: `${SITE}/work/product-discovery`,
     },
@@ -403,6 +431,10 @@ const IT: Locale = {
         "Design system",
         "Accessibilità · WCAG AA",
         "Interaction Design",
+        "Design Thinking",
+        "Effectuation",
+        "Value Proposition Canvas",
+        "Four Forces (JTBD)",
       ],
     },
     {
@@ -435,7 +467,7 @@ const IT: Locale = {
     },
     {
       label: "Flusso AI",
-      chips: ["MCP Protocol", "Prompt Engineering", "GitHub Copilot", "Claude"],
+      chips: ["MCP", "Prompt Engineering", "GitHub Copilot", "Cursor", "Claude"],
     },
   ],
   certs: [
@@ -573,6 +605,7 @@ section{margin-top:4mm;}
 .sec-h h2{font-weight:800;font-size:11pt;letter-spacing:-.01em;}
 .sec-h span{font-family:var(--mono);font-weight:700;font-size:6.6pt;letter-spacing:.16em;
   text-transform:uppercase;color:var(--accent);}
+.sec-h__link{margin-left:auto;font-size:7.8pt;}
 
 .profile-lead{font-weight:700;font-size:11.5pt;letter-spacing:-.01em;color:var(--cream);margin-bottom:1.3mm;}
 .profile{font-size:9.1pt;line-height:1.36;max-width:64em;color:var(--cream);}
@@ -620,7 +653,11 @@ section{margin-top:4mm;}
 .li{display:grid;grid-template-columns:15mm 1fr;gap:3mm;font-size:8.6pt;line-height:1.4;break-inside:avoid;}
 .li .b{font-family:var(--mono);font-weight:700;font-size:7pt;color:var(--accent);white-space:nowrap;padding-top:.4mm;}
 .li .t b{font-weight:700;color:var(--cream);} .li .t span{color:var(--mut);}
-.langs{display:flex;flex-wrap:wrap;gap:2.4mm 5mm;font-size:8.8pt;margin-top:.5mm;}
+/* Riga orizzontale a piena larghezza (sec-langs vive fuori dal .twoup, non
+   più incolonnata sotto Formazione): flex con gap fisso invece di wrap, così
+   le 4 lingue restano allineate su un'unica riga invece di andare storte
+   quando l'ultima capita da sola a capo. */
+.langs{display:flex;flex-wrap:nowrap;gap:8mm;font-size:8.8pt;margin-top:.5mm;}
 .langs .lg b{font-weight:700;} .langs .lg span{font-family:var(--mono);font-size:7.4pt;color:var(--accent);}
 
 /* CTA */
@@ -666,7 +703,7 @@ section{margin-top:4mm;}
 
 <div class="sheet">
 <section>
-  <div class="sec-h"><h2>${L.secWork}</h2><span>${L.workEyebrow}</span></div>
+  <div class="sec-h"><h2>${L.secWork}</h2><span>${L.workEyebrow}</span><a class="lnk sec-h__link" href="${SITE}/work">${L.portfolioBtn}</a></div>
   <div class="work">${L.works.map((w) => workHtml(w, L.workLinkLabel)).join("\n")}</div>
 </section>
 
@@ -684,10 +721,10 @@ section{margin-top:4mm;}
     <div>
       <div class="sec-h"><h2>${L.secEdu}</h2></div>
       <div class="list">${L.edu.map(eduHtml).join("")}</div>
-      <div class="sec-h" style="margin-top:5mm"><h2>${L.secLangs}</h2></div>
-      <div class="langs">${L.langs.map(langHtml).join("")}</div>
     </div>
   </div>
+  <div class="sec-h" style="margin-top:5mm"><h2>${L.secLangs}</h2></div>
+  <div class="langs">${L.langs.map(langHtml).join("")}</div>
 </section>
 
 <div class="cta">
@@ -698,6 +735,86 @@ section{margin-top:4mm;}
   <a class="btn" href="${SITE}/work">${L.portfolioBtn}</a>
 </div>
 </div><!-- /sheet 2 -->
+
+</body></html>`;
+}
+
+// ── DRAFT: single-column, ATS-pure variant ──────────────────────────────────
+// Nessuna colonna (header, certs/edu, work) — solo blocchi impilati verticalmente,
+// nessuna immagine/QR (solo URL testuale), nessun chip/pill decorativo (elenco
+// testuale semplice), header di sezione convenzionali. Riduce il rischio di un
+// parser ATS debole che legge le colonne fuori ordine o scarta il contenuto
+// dentro un'immagine — vedi la ricerca 2026 su ATS parsing (single-column è
+// tornato lo standard raccomandato). È un DRAFT: non sostituisce la versione
+// disegnata, va rivisto prima di usarlo per una candidatura reale.
+export function buildHtmlAts(L: Locale): string {
+  const expAts = (e: Experience): string => `
+    <div class="entry">
+      <div class="entry__head">${e.role} — ${e.org}</div>
+      <div class="meta">${e.yr} · ${e.loc}</div>
+      <ul>${e.bullets.map((b) => `<li>${b}</li>`).join("")}</ul>
+    </div>`;
+
+  const workAts = (w: Work, linkLabel: string): string => `
+    <div class="entry">
+      <div class="entry__head">${w.title}</div>
+      <div>${w.desc}</div>
+      <div class="meta">${w.outcome}</div>
+      <div><a href="${w.url}">${linkLabel}</a></div>
+    </div>`;
+
+  const certAts = (c: Cert): string => `<li>${c.by} — ${c.name}</li>`;
+  const eduAts = (e: Edu): string => `<li>${e.yr} — ${e.title} — ${e.sub}</li>`;
+  const langAts = (l: Lang): string => `${l.name} (${l.level})`;
+
+  return `<!doctype html><html lang="${L.lang}"><head><meta charset="utf-8"><style>
+@font-face{font-family:'Lexend';font-weight:400;src:url(${lex(400)}) format('woff2');}
+@font-face{font-family:'Lexend';font-weight:700;src:url(${lex(700)}) format('woff2');}
+@page{size:A4;margin:18mm 20mm;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Lexend',Arial,sans-serif;font-size:10.5pt;line-height:1.5;color:#141414;background:#fff;}
+a{color:#084943;}
+h1{font-size:19pt;font-weight:700;}
+.posit{font-size:12pt;font-weight:700;margin-top:1mm;}
+.creds{font-size:9.5pt;color:#333;margin-top:2mm;}
+.contacts{font-size:9.5pt;margin-top:2mm;}
+h2{font-size:12pt;font-weight:700;margin:6mm 0 2mm;border-bottom:1px solid #999;padding-bottom:1mm;}
+.meta{font-size:9pt;color:#444;}
+.entry{margin-bottom:4mm;}
+.entry__head{font-weight:700;}
+ul{padding-left:5mm;margin-top:1mm;}
+li{margin-bottom:1mm;}
+.skill-list{margin-bottom:2mm;}
+.skill-list b{display:block;font-size:9.5pt;text-transform:uppercase;margin-bottom:1mm;}
+</style></head><body>
+
+<h1>Giulio Occhipinti</h1>
+<p class="posit">${L.positioning}</p>
+<p class="creds">${L.creds}</p>
+<p class="contacts">Email: giulio.occhipinti.g@gmail.com — LinkedIn: ${L.linkedinUrl} — ${L.siteLabel}: ${SITE} — ${L.location}</p>
+
+<h2>${L.profileLead}</h2>
+<p>${L.profile}</p>
+
+<h2>${L.secExperience}</h2>
+${L.experiences.map(expAts).join("\n")}
+<p class="meta">${L.earlier}</p>
+
+<h2>${L.secWork}</h2>
+${L.works.map((w) => workAts(w, L.workLinkLabel)).join("\n")}
+<p><a href="${SITE}/work">${L.portfolioBtn}</a></p>
+
+<h2>${L.secSkills}</h2>
+${L.skills.map((g) => `<div class="skill-list"><b>${g.label}</b>${g.chips.join(", ")}</div>`).join("\n")}
+
+<h2>${L.secCerts}</h2>
+<ul>${L.certs.map(certAts).join("")}</ul>
+
+<h2>${L.secEdu}</h2>
+<ul>${L.edu.map(eduAts).join("")}</ul>
+
+<h2>${L.secLangs}</h2>
+<p>${L.langs.map(langAts).join(" — ")}</p>
 
 </body></html>`;
 }
@@ -719,6 +836,16 @@ async function main(): Promise<void> {
       preferCSSPageSize: true,
     });
     console.log(`PDF generato: ${outPath}`);
+  }
+
+  // Draft ATS-puro — file separato, non sostituisce quello disegnato sopra.
+  for (const L of locales) {
+    await page.setContent(buildHtmlAts(L), { waitUntil: "networkidle" });
+    await page.evaluate(() => document.fonts.ready);
+    const atsFile = L.file.replace(".pdf", "_ATS_DRAFT.pdf");
+    const outPath = resolve(OUT_DIR, atsFile);
+    await page.pdf({ path: outPath, format: "A4", printBackground: true });
+    console.log(`PDF generato (draft ATS-puro): ${outPath}`);
   }
 
   await browser.close();
