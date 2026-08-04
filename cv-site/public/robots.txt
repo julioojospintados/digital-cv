@@ -48,7 +48,10 @@ User-agent: PerplexityBot
 Allow: /
 
 # 3. Tutto il resto — ricerca organica inclusa (Googlebot, Bingbot, ecc.)
+#    /tools/ è il generatore CV privato dietro passphrase: non è contenuto
+#    del CV, non deve essere indicizzato né suggerito da nessun motore.
 User-agent: *
+Disallow: /tools/
 Allow: /
 
 Sitemap: https://giulio-occhipinti.com/sitemap-index.xml

@@ -7,6 +7,7 @@ import { join } from "node:path";
 
 import lit from "@astrojs/lit";
 import sitemap from "@astrojs/sitemap";
+import vercel from "@astrojs/vercel";
 
 import { stripHtmlComments } from "./src/lib/strip-html-comments.js";
 
@@ -54,7 +55,21 @@ export default defineConfig({
   // Comprime spazi/newline ridondanti in output — i commenti li rimuove
   // stripComments() sotto, in un hook post-build separato.
   compressHTML: true,
-  integrations: [lit(), sitemap(), stripComments()],
+  // Il sito resta statico (prerendered) di default: solo le route con
+  // `export const prerender = false` (oggi solo src/pages/api/cv-recruiter.ts)
+  // diventano funzioni serverless Vercel. Aggiunto per il tool privato
+  // /tools/cv-recruiter — vedi AGENTS.md.
+  output: "static",
+  adapter: vercel(),
+  integrations: [
+    lit(),
+    sitemap({
+      // Il tool privato non deve comparire in sitemap.xml — non è contenuto
+      // del CV, è un'utility interna dietro passphrase.
+      filter: (page) => !page.includes("/tools/"),
+    }),
+    stripComments(),
+  ],
   vite: {
     resolve: {
       alias: {

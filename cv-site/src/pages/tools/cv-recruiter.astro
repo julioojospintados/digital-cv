@@ -1,0 +1,404 @@
+---
+import "../../styles/global.css";
+
+// Pagina privata, non linkata, esclusa da sitemap.xml e robots.txt (vedi
+// astro.config.mjs e public/robots.txt). La pagina resta statica: solo
+// /api/cv-recruiter.ts è una funzione serverless. Nessuna Layout.astro qui
+// di proposito — niente PostHog/JSON-LD/cursor custom, è un tool interno,
+// non una pagina del CV pubblico.
+---
+
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>CV Recruiter — tool privato</title>
+    <style>
+      body {
+        background: var(--color-bg);
+        color: var(--color-text-primary);
+        font-family: var(--font-sans);
+        min-height: 100dvh;
+        padding: 1.5rem 1rem 4rem;
+      }
+      main {
+        max-width: 40rem;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+      }
+      h1 {
+        font-size: var(--fs-24);
+        font-weight: 700;
+      }
+      p.lead {
+        color: var(--color-text-muted);
+        font-size: var(--fs-14);
+        line-height: 1.5;
+      }
+      label {
+        display: block;
+        font-size: var(--fs-12);
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--color-text-muted);
+        margin-bottom: 0.4rem;
+      }
+      .field {
+        display: flex;
+        flex-direction: column;
+      }
+      input,
+      textarea {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-4);
+        color: var(--color-text-primary);
+        padding: 0.75rem 0.9rem;
+        font-size: var(--fs-16);
+        width: 100%;
+      }
+      input:focus,
+      textarea:focus,
+      button:focus-visible {
+        outline: 2px solid var(--color-accent);
+        outline-offset: 2px;
+      }
+      textarea {
+        min-height: 9rem;
+        resize: vertical;
+        line-height: 1.5;
+      }
+      #extraContextField {
+        display: none;
+      }
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+      button[type="submit"] {
+        background: var(--color-accent);
+        color: var(--color-bg);
+        font-weight: 700;
+        font-size: var(--fs-16);
+        padding: 0.85rem 1.2rem;
+        border-radius: var(--radius-4);
+        text-align: center;
+      }
+      button[type="submit"]:disabled {
+        opacity: 0.6;
+      }
+      button.secondary {
+        background: transparent;
+        border: 1px solid var(--color-border);
+        color: var(--color-text-primary);
+        font-weight: 600;
+        font-size: var(--fs-14);
+        padding: 0.65rem 1rem;
+        border-radius: var(--radius-4);
+      }
+      #status {
+        font-size: var(--fs-14);
+        color: var(--color-text-muted);
+      }
+      #result {
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+      }
+      .card {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-16);
+        padding: 1.1rem 1.25rem;
+      }
+      .card h2 {
+        font-size: var(--fs-18);
+        font-weight: 700;
+        margin-bottom: 0.6rem;
+      }
+      .match {
+        font-size: var(--fs-40);
+        font-weight: 800;
+        color: var(--color-accent);
+        line-height: 1;
+      }
+      .anomalies li,
+      .strengths li {
+        font-size: var(--fs-14);
+        line-height: 1.5;
+        padding-left: 1rem;
+        position: relative;
+      }
+      .anomalies li::before,
+      .strengths li::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0.55rem;
+        width: 0.35rem;
+        height: 0.35rem;
+        border-radius: 50%;
+        background: var(--color-accent);
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: var(--fs-12);
+      }
+      th,
+      td {
+        text-align: left;
+        padding: 0.5rem 0.5rem;
+        border-bottom: 1px solid var(--color-border);
+        vertical-align: top;
+      }
+      .severity-high {
+        color: #ff8a80;
+      }
+      .severity-medium {
+        color: #ffc266;
+      }
+      .severity-low {
+        color: var(--color-text-muted);
+      }
+      .actions {
+        display: flex;
+        gap: 0.75rem;
+        flex-wrap: wrap;
+      }
+      .hidden {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div>
+        <h1>Generatore CV mirato</h1>
+        <p class="lead">
+          Rispondi a paese, azienda e job description: ricevi un report di compatibilità e il JSON
+          del CV tarato. Il PDF si genera dopo, da desktop, con
+          <code>npm run pdf:targeted -- &lt;file.json&gt;</code>.
+        </p>
+      </div>
+
+      <form id="cv-form">
+        <div class="field">
+          <label for="passphrase">Passphrase</label>
+          <input type="password" id="passphrase" autocomplete="off" required />
+        </div>
+        <div class="field">
+          <label for="country">Paese</label>
+          <input
+            type="text"
+            id="country"
+            placeholder="USA, Canada, Germania, Italia…"
+            autocomplete="off"
+            required
+          />
+        </div>
+        <div class="field">
+          <label for="company">Azienda</label>
+          <input type="text" id="company" autocomplete="off" required />
+        </div>
+        <div class="field">
+          <label for="jobDescription">Job description</label>
+          <textarea id="jobDescription" required></textarea>
+        </div>
+        <div class="field" id="extraContextField">
+          <label for="extraContext">Contesto aggiuntivo / risposte alle anomalie</label>
+          <textarea id="extraContext"></textarea>
+        </div>
+        <button type="submit" id="submitBtn">Genera</button>
+      </form>
+
+      <p id="status" role="status"></p>
+
+      <div id="result"></div>
+    </main>
+
+    <script>
+      const form = document.getElementById("cv-form") as HTMLFormElement;
+      const passphraseInput = document.getElementById("passphrase") as HTMLInputElement;
+      const countryInput = document.getElementById("country") as HTMLInputElement;
+      const companyInput = document.getElementById("company") as HTMLInputElement;
+      const jdInput = document.getElementById("jobDescription") as HTMLTextAreaElement;
+      const extraContextField = document.getElementById("extraContextField") as HTMLDivElement;
+      const extraContextInput = document.getElementById("extraContext") as HTMLTextAreaElement;
+      const submitBtn = document.getElementById("submitBtn") as HTMLButtonElement;
+      const statusEl = document.getElementById("status") as HTMLParagraphElement;
+      const resultEl = document.getElementById("result") as HTMLDivElement;
+
+      const STORAGE_KEY = "cv-recruiter-passphrase";
+      const savedPassphrase = sessionStorage.getItem(STORAGE_KEY);
+      if (savedPassphrase) passphraseInput.value = savedPassphrase;
+
+      function downloadBlob(filename: string, content: string, mime: string) {
+        const blob = new Blob([content], { type: mime });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = filename;
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+
+      function escapeHtml(s: string): string {
+        return s.replace(
+          /[&<>"']/g,
+          (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!,
+        );
+      }
+
+      function renderAnomalies(anomalies: string[]) {
+        extraContextField.style.display = "flex";
+        extraContextField.style.flexDirection = "column";
+        resultEl.innerHTML = `
+          <div class="card">
+            <h2>Prima di generare, chiarisci questi punti</h2>
+            <ul class="anomalies">
+              ${anomalies.map((a) => `<li>${escapeHtml(a)}</li>`).join("")}
+            </ul>
+          </div>
+        `;
+        extraContextInput.focus();
+      }
+
+      interface ReportView {
+        matchPercentage: number;
+        requirementBreakdown: Array<{
+          requirement: string;
+          weight: string;
+          score: string;
+          note: string;
+        }>;
+        strengths: string[];
+        painPoints: Array<{ issue: string; severity: string; suggestedAction: string }>;
+        salaryEstimate: { text: string; sources: string[] } | null;
+      }
+      interface CvView {
+        file: string;
+        _meta: { countryBucket: string };
+      }
+
+      function renderReport(report: ReportView, cv: CvView, insightEntry: string) {
+        const breakdownRows = report.requirementBreakdown
+          .map(
+            (r) => `
+              <tr>
+                <td>${escapeHtml(r.requirement)}</td>
+                <td>${r.weight}</td>
+                <td>${r.score}</td>
+                <td>${escapeHtml(r.note)}</td>
+              </tr>`,
+          )
+          .join("");
+
+        const painPoints = report.painPoints
+          .map(
+            (p) => `
+              <li class="severity-${p.severity}">
+                <strong>${escapeHtml(p.issue)}</strong> (${p.severity}) — ${escapeHtml(p.suggestedAction)}
+              </li>`,
+          )
+          .join("");
+
+        const salary = report.salaryEstimate
+          ? `${escapeHtml(report.salaryEstimate.text)}${
+              report.salaryEstimate.sources.length
+                ? ` — fonti: ${report.salaryEstimate.sources.map(escapeHtml).join(", ")}`
+                : ""
+            }`
+          : "Non stimabile con fonti pubbliche affidabili.";
+
+        resultEl.innerHTML = `
+          <div class="card">
+            <div class="match">${report.matchPercentage}%</div>
+            <p class="lead">Compatibilità con la job description</p>
+          </div>
+          <div class="card">
+            <h2>Requisiti</h2>
+            <table>
+              <thead><tr><th>Requisito</th><th>Peso</th><th>Score</th><th>Perché</th></tr></thead>
+              <tbody>${breakdownRows}</tbody>
+            </table>
+          </div>
+          <div class="card">
+            <h2>Punti di forza</h2>
+            <ul class="strengths">${report.strengths.map((s: string) => `<li>${escapeHtml(s)}</li>`).join("")}</ul>
+          </div>
+          <div class="card">
+            <h2>Pain point</h2>
+            <ul class="anomalies">${painPoints}</ul>
+          </div>
+          <div class="card">
+            <h2>Stipendio stimato</h2>
+            <p>${salary}</p>
+          </div>
+          <div class="actions">
+            <button type="button" class="secondary" id="downloadJson">Scarica JSON CV</button>
+            <button type="button" class="secondary" id="downloadInsight">Scarica voce memoria</button>
+          </div>
+        `;
+
+        document.getElementById("downloadJson")?.addEventListener("click", () => {
+          downloadBlob(
+            cv.file.replace(".pdf", ".json"),
+            JSON.stringify(cv, null, 2),
+            "application/json",
+          );
+        });
+        document.getElementById("downloadInsight")?.addEventListener("click", () => {
+          downloadBlob(`${cv._meta.countryBucket}-insight.md`, insightEntry, "text/markdown");
+        });
+      }
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        submitBtn.disabled = true;
+        statusEl.textContent = "Analisi in corso — può richiedere una decina di secondi…";
+        resultEl.innerHTML = "";
+
+        sessionStorage.setItem(STORAGE_KEY, passphraseInput.value);
+
+        try {
+          const res = await fetch("/api/cv-recruiter", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              passphrase: passphraseInput.value,
+              country: countryInput.value,
+              company: companyInput.value,
+              jobDescription: jdInput.value,
+              extraContext: extraContextInput.value,
+            }),
+          });
+          const data = await res.json();
+
+          if (!res.ok || !data.ok) {
+            statusEl.textContent = data.error || `Errore (${res.status}).`;
+            return;
+          }
+
+          statusEl.textContent = "";
+          if (data.anomalies?.length) {
+            renderAnomalies(data.anomalies);
+          } else {
+            extraContextField.style.display = "none";
+            renderReport(data.report, data.cv, data.insightEntry);
+          }
+        } catch {
+          statusEl.textContent = "Errore di rete. Riprova.";
+        } finally {
+          submitBtn.disabled = false;
+        }
+      });
+    </script>
+  </body>
+</html>
