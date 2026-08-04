@@ -14,6 +14,13 @@ const envSchema = z.object({
 
   // ── MCP ────────────────────────────────────────────────────────────────
   MCP_DEBUG: z.enum(["0", "1"]).default("0"),
+
+  // ── cv-recruiter tool (src/tools/cv-recruiter.ts) — chiama il tool web
+  // deployato su cv-site (/api/cv-recruiter). Entrambe opzionali: il tool
+  // resta registrato ma risponde con un errore chiaro se mancano, invece di
+  // far fallire il boot dell'intero server MCP.
+  CV_TOOL_BASE_URL: z.string().default("https://giulio-occhipinti.com"),
+  CV_TOOL_PASSPHRASE: z.string().optional(),
 });
 
 export const env = envSchema.parse(process.env);
