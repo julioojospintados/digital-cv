@@ -91,7 +91,7 @@ interface Lang {
   level: string;
 }
 
-interface Locale {
+export interface Locale {
   lang: "it" | "en";
   file: string;
   positioning: string;
@@ -123,7 +123,18 @@ interface Locale {
   ctaTitle: string;
   ctaSub: string;
   portfolioBtn: string;
+  /** Solo mercato ITALIA — testo di consenso GDPR renderizzato in fondo alla pagina 2. */
+  gdprFooter?: string;
 }
+
+export type {
+  Experience as UxCvExperience,
+  Work as UxCvWork,
+  SkillGroup as UxCvSkillGroup,
+  Cert as UxCvCert,
+  Edu as UxCvEdu,
+  Lang as UxCvLang,
+};
 
 const EN: Locale = {
   lang: "en",
@@ -666,6 +677,8 @@ section{margin-top:4mm;}
 .cta__t{font-weight:700;font-size:11pt;letter-spacing:-.01em;color:var(--cream);}
 .cta__s{font-family:var(--mono);font-size:7.6pt;color:var(--mut);margin-top:2mm;line-height:1.4;}
 
+.gdpr{margin-top:3mm;font-family:var(--mono);font-size:6.6pt;line-height:1.4;color:var(--mut);}
+
 </style></head><body>
 
 <div class="sheet">
@@ -734,6 +747,7 @@ section{margin-top:4mm;}
   </div>
   <a class="btn" href="${SITE}/work">${L.portfolioBtn}</a>
 </div>
+${L.gdprFooter ? `<div class="gdpr">${L.gdprFooter}</div>` : ""}
 </div><!-- /sheet 2 -->
 
 </body></html>`;
@@ -815,6 +829,8 @@ ${L.skills.map((g) => `<div class="skill-list"><b>${g.label}</b>${g.chips.join("
 
 <h2>${L.secLangs}</h2>
 <p>${L.langs.map(langAts).join(" — ")}</p>
+
+${L.gdprFooter ? `<p class="meta" style="margin-top:6mm">${L.gdprFooter}</p>` : ""}
 
 </body></html>`;
 }
