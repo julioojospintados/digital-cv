@@ -30,7 +30,10 @@ const {
   mode,
   lang = "it",
   showFab = false,
-  consentBannerWaitForWip = false,
+  // Prop tenuta (i chiamanti la passano ancora) ma non letta finché il
+  // ConsentBanner resta disattivato più sotto — prefisso _ per l'unused-vars
+  // di eslint. Rinominarla in consentBannerWaitForWip quando si riattiva.
+  consentBannerWaitForWip: _consentBannerWaitForWip = false,
 } = Astro.props;
 
 const siteUrl = "https://giulio-occhipinti.com";
