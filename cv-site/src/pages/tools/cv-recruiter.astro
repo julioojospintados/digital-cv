@@ -48,6 +48,11 @@ import "../../styles/global.css";
         color: var(--color-text-muted);
         margin-bottom: 0.4rem;
       }
+      label .optional {
+        text-transform: none;
+        font-weight: 400;
+        opacity: 0.7;
+      }
       .field {
         display: flex;
         flex-direction: column;
@@ -61,6 +66,10 @@ import "../../styles/global.css";
         padding: 0.75rem 0.9rem;
         font-size: var(--fs-16);
         width: 100%;
+      }
+      input[type="file"] {
+        padding: 0.6rem 0.7rem;
+        font-size: var(--fs-14);
       }
       input:focus,
       textarea:focus,
@@ -80,6 +89,33 @@ import "../../styles/global.css";
         display: flex;
         flex-direction: column;
         gap: 1rem;
+      }
+      /* Nasconde il campo username senza usare display:none né hidden: i
+         password manager ignorano i campi realmente rimossi dal layout, e
+         serve invece che restino nel DOM per associare la credenziale. */
+      .visually-hidden {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
+        border: 0;
+      }
+      .thumbs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: 0.5rem;
+      }
+      .thumbs img {
+        width: 4.5rem;
+        height: 4.5rem;
+        object-fit: cover;
+        border-radius: var(--radius-4);
+        border: 1px solid var(--color-border);
       }
       button[type="submit"] {
         background: var(--color-accent);
@@ -172,6 +208,11 @@ import "../../styles/global.css";
         gap: 0.75rem;
         flex-wrap: wrap;
       }
+      .pdf-note {
+        font-size: var(--fs-12);
+        color: var(--color-text-muted);
+        margin-top: 0.6rem;
+      }
       .hidden {
         display: none;
       }
@@ -182,16 +223,42 @@ import "../../styles/global.css";
       <div>
         <h1>Generatore CV mirato</h1>
         <p class="lead">
-          Rispondi a paese, azienda e job description: ricevi un report di compatibilità e il JSON
-          del CV tarato. Il PDF si genera dopo, da desktop, con
+          Paese e job description (testo, screenshot, o entrambi): ricevi un report di compatibilità
+          e il CV tarato, PDF pronti da scaricare quando il rendering server-side va a buon fine —
+          altrimenti solo il JSON, da rendere poi con
           <code>npm run pdf:targeted -- &lt;file.json&gt;</code>.
         </p>
       </div>
 
       <form id="cv-form">
+        {
+          /* I password manager (soprattutto iOS Safari e Chrome Android) associano
+            una credenziale a una coppia username+password: con il solo campo
+            password molti non propongono affatto il salvataggio, ed è proprio il
+            salvataggio su mobile il motivo per cui questo campo è un `password`.
+            Valore fisso e non modificabile: qui l'utente è sempre lo stesso, serve
+            solo a dare un'identità alla credenziale salvata. Fuori dal tab order e
+            nascosto agli screen reader perché non è un campo da compilare. */
+        }
+        <input
+          type="text"
+          name="username"
+          value="cv-recruiter"
+          autocomplete="username"
+          class="visually-hidden"
+          tabindex="-1"
+          aria-hidden="true"
+          readonly
+        />
         <div class="field">
           <label for="passphrase">Passphrase</label>
-          <input type="password" id="passphrase" autocomplete="off" required />
+          <input
+            type="password"
+            id="passphrase"
+            name="password"
+            autocomplete="current-password"
+            required
+          />
         </div>
         <div class="field">
           <label for="country">Paese</label>
@@ -204,12 +271,30 @@ import "../../styles/global.css";
           />
         </div>
         <div class="field">
-          <label for="company">Azienda</label>
-          <input type="text" id="company" autocomplete="off" required />
+          <label for="company"
+            >Azienda <span class="optional">(opzionale — provo a capirlo da JD/screenshot)</span
+            ></label
+          >
+          <input type="text" id="company" autocomplete="off" />
         </div>
         <div class="field">
-          <label for="jobDescription">Job description</label>
-          <textarea id="jobDescription" required></textarea>
+          <label for="jobTitle">Titolo ruolo <span class="optional">(opzionale)</span></label>
+          <input type="text" id="jobTitle" autocomplete="off" />
+        </div>
+        <div class="field">
+          <label for="jobDescription"
+            >Job description <span class="optional"
+              >(testo, o lascia vuoto se alleghi screenshot)</span
+            ></label
+          >
+          <textarea id="jobDescription"></textarea>
+        </div>
+        <div class="field">
+          <label for="images"
+            >Screenshot annuncio <span class="optional">(opzionale, più immagini)</span></label
+          >
+          <input type="file" id="images" accept="image/*" multiple />
+          <div class="thumbs" id="thumbs"></div>
         </div>
         <div class="field" id="extraContextField">
           <label for="extraContext">Contesto aggiuntivo / risposte alle anomalie</label>
@@ -228,7 +313,10 @@ import "../../styles/global.css";
       const passphraseInput = document.getElementById("passphrase") as HTMLInputElement;
       const countryInput = document.getElementById("country") as HTMLInputElement;
       const companyInput = document.getElementById("company") as HTMLInputElement;
+      const jobTitleInput = document.getElementById("jobTitle") as HTMLInputElement;
       const jdInput = document.getElementById("jobDescription") as HTMLTextAreaElement;
+      const imagesInput = document.getElementById("images") as HTMLInputElement;
+      const thumbsEl = document.getElementById("thumbs") as HTMLDivElement;
       const extraContextField = document.getElementById("extraContextField") as HTMLDivElement;
       const extraContextInput = document.getElementById("extraContext") as HTMLTextAreaElement;
       const submitBtn = document.getElementById("submitBtn") as HTMLButtonElement;
@@ -239,7 +327,39 @@ import "../../styles/global.css";
       const savedPassphrase = sessionStorage.getItem(STORAGE_KEY);
       if (savedPassphrase) passphraseInput.value = savedPassphrase;
 
-      function downloadBlob(filename: string, content: string, mime: string) {
+      // Ridimensiona/ricomprime ogni screenshot lato client prima dell'invio:
+      // il body della funzione Vercel ha un limite fisso di 4.5MB non
+      // aggirabile, e uno screenshot da telefono a piena risoluzione può
+      // superarlo da solo. Lato lungo max 1600px, JPEG qualità 0.75.
+      async function compressImage(file: File): Promise<{ mimeType: string; data: string }> {
+        const bitmap = await createImageBitmap(file);
+        const maxSide = 1600;
+        const scale = Math.min(1, maxSide / Math.max(bitmap.width, bitmap.height));
+        const canvas = document.createElement("canvas");
+        canvas.width = Math.round(bitmap.width * scale);
+        canvas.height = Math.round(bitmap.height * scale);
+        const ctx = canvas.getContext("2d")!;
+        ctx.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+        const dataUrl = canvas.toDataURL("image/jpeg", 0.75);
+        return { mimeType: "image/jpeg", data: dataUrl.split(",")[1] };
+      }
+
+      let compressedImages: Array<{ mimeType: string; data: string }> = [];
+
+      imagesInput.addEventListener("change", async () => {
+        const files = Array.from(imagesInput.files ?? []).slice(0, 4);
+        thumbsEl.innerHTML = "";
+        statusEl.textContent = files.length ? "Comprimo gli screenshot…" : "";
+        compressedImages = await Promise.all(files.map(compressImage));
+        statusEl.textContent = "";
+        for (const img of compressedImages) {
+          const el = document.createElement("img");
+          el.src = `data:${img.mimeType};base64,${img.data}`;
+          thumbsEl.appendChild(el);
+        }
+      });
+
+      function downloadBlob(filename: string, content: BlobPart, mime: string) {
         const blob = new Blob([content], { type: mime });
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
@@ -247,6 +367,11 @@ import "../../styles/global.css";
         a.download = filename;
         a.click();
         URL.revokeObjectURL(url);
+      }
+
+      function downloadBase64(filename: string, base64: string, mime: string) {
+        const bytes = Uint8Array.from(atob(base64), (c) => c.charCodeAt(0));
+        downloadBlob(filename, bytes, mime);
       }
 
       function escapeHtml(s: string): string {
@@ -286,8 +411,18 @@ import "../../styles/global.css";
         file: string;
         _meta: { countryBucket: string };
       }
+      interface PdfView {
+        designed: string;
+        atsDraft: string;
+      }
 
-      function renderReport(report: ReportView, cv: CvView, insightEntry: string) {
+      function renderReport(
+        report: ReportView,
+        cv: CvView,
+        insightEntry: string,
+        pdf: PdfView | null,
+        researchAvailable: boolean,
+      ) {
         const breakdownRows = report.requirementBreakdown
           .map(
             (r) => `
@@ -315,7 +450,9 @@ import "../../styles/global.css";
                 ? ` — fonti: ${report.salaryEstimate.sources.map(escapeHtml).join(", ")}`
                 : ""
             }`
-          : "Non stimabile con fonti pubbliche affidabili.";
+          : researchAvailable === false
+            ? "Ricerca web non disponibile (quota Google Search esaurita sulla chiave Gemini): il resto del report è comunque calcolato sulla job description."
+            : "Non stimabile con fonti pubbliche affidabili.";
 
         resultEl.innerHTML = `
           <div class="card">
@@ -342,11 +479,30 @@ import "../../styles/global.css";
             <p>${salary}</p>
           </div>
           <div class="actions">
+            ${
+              pdf
+                ? `<button type="button" class="secondary" id="downloadDesigned">Scarica PDF</button>
+                   <button type="button" class="secondary" id="downloadAts">Scarica PDF ATS-safe</button>`
+                : ""
+            }
             <button type="button" class="secondary" id="downloadJson">Scarica JSON CV</button>
             <button type="button" class="secondary" id="downloadInsight">Scarica voce memoria</button>
           </div>
+          ${!pdf ? `<p class="pdf-note">Il rendering PDF server-side non è andato a buon fine questa volta — scarica il JSON e genera il PDF da desktop con <code>npm run pdf:targeted</code>.</p>` : ""}
         `;
 
+        if (pdf) {
+          document.getElementById("downloadDesigned")?.addEventListener("click", () => {
+            downloadBase64(cv.file, pdf.designed, "application/pdf");
+          });
+          document.getElementById("downloadAts")?.addEventListener("click", () => {
+            downloadBase64(
+              cv.file.replace(".pdf", "_ATS_DRAFT.pdf"),
+              pdf.atsDraft,
+              "application/pdf",
+            );
+          });
+        }
         document.getElementById("downloadJson")?.addEventListener("click", () => {
           downloadBlob(
             cv.file.replace(".pdf", ".json"),
@@ -361,8 +517,15 @@ import "../../styles/global.css";
 
       form.addEventListener("submit", async (e) => {
         e.preventDefault();
+
+        if (!jdInput.value.trim() && compressedImages.length === 0) {
+          statusEl.textContent =
+            "Incolla il testo della job description o allega almeno uno screenshot.";
+          return;
+        }
+
         submitBtn.disabled = true;
-        statusEl.textContent = "Analisi in corso — può richiedere una decina di secondi…";
+        statusEl.textContent = "Analisi in corso — può richiedere fino a un minuto…";
         resultEl.innerHTML = "";
 
         sessionStorage.setItem(STORAGE_KEY, passphraseInput.value);
@@ -375,8 +538,10 @@ import "../../styles/global.css";
               passphrase: passphraseInput.value,
               country: countryInput.value,
               company: companyInput.value,
+              jobTitle: jobTitleInput.value,
               jobDescription: jdInput.value,
               extraContext: extraContextInput.value,
+              images: compressedImages,
             }),
           });
           const data = await res.json();
@@ -391,7 +556,13 @@ import "../../styles/global.css";
             renderAnomalies(data.anomalies);
           } else {
             extraContextField.style.display = "none";
-            renderReport(data.report, data.cv, data.insightEntry);
+            renderReport(
+              data.report,
+              data.cv,
+              data.insightEntry,
+              data.pdf,
+              data.researchAvailable !== false,
+            );
           }
         } catch {
           statusEl.textContent = "Errore di rete. Riprova.";

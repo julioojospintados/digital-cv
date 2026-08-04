@@ -60,7 +60,29 @@ export default defineConfig({
   // diventano funzioni serverless Vercel. Aggiunto per il tool privato
   // /tools/cv-recruiter — vedi AGENTS.md.
   output: "static",
-  adapter: vercel(),
+  adapter: vercel({
+    // Rendering PDF server-side (render-pdf.ts, playwright-core +
+    // @sparticuz/chromium) più le due chiamate Gemini possono avvicinarsi
+    // al default di 10s — vedi AGENTS.md per il fallback se il piano Vercel
+    // attuale non copre 60s.
+    maxDuration: 60,
+    // @sparticuz/chromium risolve il proprio binario con path relativi al
+    // proprio pacchetto: se il tracciamento automatico dei file lo perde, la
+    // funzione fallisce a runtime con "input directory .../bin does not
+    // exist". Forzarlo esplicitamente è la mitigazione raccomandata dal
+    // pacchetto stesso per bundler come questo — vedi AGENTS.md, è comunque
+    // la parte meno verificabile senza un deploy reale (render-pdf.ts ha un
+    // fallback: se questo fallisce, il tool torna al solo JSON scaricabile).
+    // Elencati singolarmente e non con un glob "bin/**": includeFiles li
+    // passa a @vercel/nft così come sono, nessuna espansione — un glob
+    // letterale fallisce con ENOENT in fase di build (provato).
+    includeFiles: [
+      "node_modules/@sparticuz/chromium/bin/al2023.tar.br",
+      "node_modules/@sparticuz/chromium/bin/chromium.br",
+      "node_modules/@sparticuz/chromium/bin/fonts.tar.br",
+      "node_modules/@sparticuz/chromium/bin/swiftshader.tar.br",
+    ],
+  }),
   integrations: [
     lit(),
     sitemap({
@@ -75,7 +97,27 @@ export default defineConfig({
       alias: {
         "@cv-data": resolve(__dirname, "../src/data/cv.ts"),
         "@cv-data-en": resolve(__dirname, "../src/data/cv.en.ts"),
+        "@cv-pdf-template": resolve(__dirname, "../scripts/cv-pdf-template.ts"),
       },
+    },
+    build: {
+      rollupOptions: {
+        // @sparticuz/chromium individua il proprio binario con path relativi
+        // al pacchetto stesso — bundlarlo li rompe. Raccomandazione esplicita
+        // del pacchetto per esbuild/webpack/rollup, vedi il suo README.
+        external: ["@sparticuz/chromium"],
+      },
+    },
+    // Il pre-bundler esbuild di Vite (anche solo per `astro check`) andava in
+    // OOM provando a processare @sparticuz/chromium — il pacchetto include
+    // binari Chromium compressi da decine di MB nella propria cartella bin/,
+    // non codice da pre-ottimizzare. playwright-core esclusa per lo stesso
+    // motivo (nessun bundling di binari nativi).
+    optimizeDeps: {
+      exclude: ["@sparticuz/chromium", "playwright-core"],
+    },
+    ssr: {
+      external: ["@sparticuz/chromium", "playwright-core"],
     },
   },
 });

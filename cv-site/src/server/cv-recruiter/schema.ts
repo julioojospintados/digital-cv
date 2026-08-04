@@ -77,6 +77,11 @@ export const RESPONSE_SCHEMA: Schema = {
           type: Type.STRING,
           description: "kebab-case breve, es. 'acme-frontend', usato per il nome del PDF.",
         },
+        companyResolved: {
+          type: Type.STRING,
+          description:
+            "Nome azienda confermato/identificato — se l'utente l'ha indicato, ripetilo uguale; se l'ha lasciato vuoto, identificalo da JD/screenshot; se proprio non si trova, stringa vuota.",
+        },
         positioning: { type: Type.STRING },
         creds: { type: Type.STRING },
         location: { type: Type.STRING },
@@ -160,6 +165,7 @@ export const RESPONSE_SCHEMA: Schema = {
       },
       required: [
         "fileSlug",
+        "companyResolved",
         "positioning",
         "creds",
         "location",
@@ -208,6 +214,7 @@ export interface MatchReport {
 
 export interface CvContent {
   fileSlug: string;
+  companyResolved: string;
   positioning: string;
   creds: string;
   location: string;

@@ -1,4 +1,11 @@
+import type { Part } from "@google/genai";
 import type { CountryBucket } from "./fixed-copy.js";
+
+export interface ImageInput {
+  mimeType: string;
+  /** Base64, senza il prefisso "data:...;base64,". */
+  data: string;
+}
 
 /** Rileva euristicamente se la job description dichiara già uno stipendio. */
 export function jdHasSalary(jobDescription: string): boolean {
@@ -7,21 +14,29 @@ export function jdHasSalary(jobDescription: string): boolean {
   );
 }
 
+const imageParts = (images: ImageInput[]): Part[] =>
+  images.map((img) => ({ inlineData: { mimeType: img.mimeType, data: img.data } }));
+
 export function buildResearchPrompt(params: {
   company: string;
+  jobTitle: string;
   jobDescription: string;
+  images: ImageInput[];
   bucket: CountryBucket;
-}): string {
-  const { company, jobDescription, bucket } = params;
+}): Part[] {
+  const { company, jobTitle, jobDescription, images, bucket } = params;
   const salaryAlreadyStated = jdHasSalary(jobDescription);
+  const companyLine = company ? `Azienda: ${company}` : "Azienda: non indicata dall'utente.";
+  const roleLine = jobTitle ? `Ruolo: ${jobTitle}` : "";
 
-  return `Sei un ricercatore che raccoglie informazioni pubbliche per preparare una candidatura di lavoro.
+  const text = `Sei un ricercatore che raccoglie informazioni pubbliche per preparare una candidatura di lavoro.
 
-Azienda: ${company}
+${companyLine}
+${roleLine}
 Area geografica target: ${bucket}
 
 Compiti:
-1. Cerca in 1-2 query cosa fa l'azienda, settore, dimensione/stage indicativo (startup early-stage, scale-up, enterprise consolidata), e se emerge qualcosa sulla cultura di lavoro (remote-first, ecc.).
+1. Cerca in 1-2 query cosa fa l'azienda, settore, dimensione/stage indicativo (startup early-stage, scale-up, enterprise consolidata), e se emerge qualcosa sulla cultura di lavoro (remote-first, ecc.). Se l'azienda non è indicata, prova a identificarla dalla job description (testo o eventuali screenshot allegati) prima di rinunciare.
 ${
   salaryAlreadyStated
     ? "2. La job description sembra già dichiarare una fascia di stipendio: NON cercarne una diversa, limitati al punto 1."
@@ -30,15 +45,18 @@ ${
 
 Rispondi in italiano con un riepilogo breve puntato. Per ogni affermazione numerica (stipendio, dimensione azienda) cita la fonte (URL). Se non trovi nulla di affidabile su un punto, scrivilo esplicitamente invece di indovinare.
 
-Job description (per contesto, non serve ricercarne il contenuto):
-"""
-${jobDescription.slice(0, 4000)}
-"""`;
+${jobDescription ? `Job description testuale (per contesto, non serve ricercarne il contenuto):\n"""\n${jobDescription.slice(0, 4000)}\n"""` : "Nessun testo incollato: la job description è solo negli screenshot allegati, se presenti — leggili per capire azienda e ruolo."}`;
+
+  return [{ text }, ...imageParts(images)];
 }
 
 const AUDIT_AND_ANALYSIS_RULES = `Sei un Senior Tech & UX Recruiter e ATS Optimization Specialist con 15+ anni di esperienza internazionale (US, EU, IT), al lavoro sulla candidatura di Giulio Occhipinti.
 
 Non sai e non devi ipotizzare chi leggerà il CV (persona o parser automatico) — non biforcare mai il contenuto su questa base, producine uno solo, chiaro per entrambi.
+
+## Input della job description
+
+La job description può arrivare come testo incollato, come una o più immagini (screenshot di un annuncio), o entrambi. Se sono presenti immagini, leggile per estrarre il testo e i requisiti dell'annuncio — trattale come fonte primaria alla pari del testo, non ignorarle. Se azienda o ruolo non sono stati indicati esplicitamente dall'utente, prova a identificarli dal contenuto (testo o immagini) prima di trattarli come mancanti.
 
 ## Fonti di verità — non inventare esperienza
 
@@ -53,6 +71,7 @@ Verifica questi casi. Se ne trovi anche uno, l'array "anomalies" deve contenere 
 3. Periodi scoperti superiori a 6 mesi tra un'esperienza e l'altra nei dati forniti, o date che si sovrappongono in modo anomalo senza spiegazione nei dati.
 4. La JD chiede risultati misurabili (KPI, metriche, scala) su un'area dove i dati forniti hanno solo mansioni senza numeri — poni una domanda mirata per estrarli, non inventarli.
 5. Seniority incoerente: la JD cerca una seniority molto diversa da quella che emerge dai dati (es. richiede "Junior" con un profilo 5+ anni, o "Senior/Staff" su requisiti che il profilo non copre) — segnalalo esplicitamente.
+6. Né testo né immagini contengono una job description leggibile (es. screenshot illeggibile, campo vuoto) — chiedi di reinviarla, non procedere su un'ipotesi.
 
 ## Analisi della job description (solo se NESSUNA anomalia)
 
@@ -61,7 +80,7 @@ Verifica questi casi. Se ne trovi anche uno, l'array "anomalies" deve contenere 
 3. **strengths**: i must-have coperti pieni, più differenzianti rilevanti anche se non richiesti (es. AI workflow, design system, architetture MCP).
 4. **painPoints**: ogni requisito assente o parziale, severità onesta (un nice-to-have mancante è "low", un must-have mancante è "medium"/"high"), con un'azione concreta suggerita quando ha senso.
 5. **salaryEstimate**: usa il riepilogo di ricerca fornito in "RICERCA AZIENDALE" più sotto. Se la JD dichiara già uno stipendio, usa quello (non stimare sopra un dato reale). Se non c'è né in JD né nella ricerca fonti affidabili, salaryEstimate deve essere null — mai un numero inventato.
-6. **cvContent**: componi il CV tarato sulla JD, nella lingua richiesta, riformulando i dati forniti (non le stringhe di corredo fisse, quelle le aggiunge il sistema dopo). "earlier" è una riga breve con le esperienze meno rilevanti per questa JD, non deve ripetere quelle già in "experiences". "fileSlug" è kebab-case breve (nome azienda + ruolo), userà a costruire il nome del PDF.
+6. **cvContent**: componi il CV tarato sulla JD, nella lingua richiesta, riformulando i dati forniti (non le stringhe di corredo fisse, quelle le aggiunge il sistema dopo). "earlier" è una riga breve con le esperienze meno rilevanti per questa JD, non deve ripetere quelle già in "experiences". "fileSlug" è kebab-case breve (nome azienda + ruolo), userà a costruire il nome del PDF. "companyResolved" è il nome azienda confermato — se l'utente l'ha indicato ripetilo identico, altrimenti identificalo da JD/screenshot, altrimenti stringa vuota.
 
 Il testo generato in bullets/title/sub/earlier può usare tag <b>...</b> inline per il grassetto, coerente col resto del CV.`;
 
@@ -73,22 +92,31 @@ export function buildStructuredUserContent(params: {
   bucket: CountryBucket;
   lang: "it" | "en";
   company: string;
+  jobTitle: string;
   jobDescription: string;
+  images: ImageInput[];
   extraContext: string;
   cvGroundingData: unknown;
   researchFindings: string;
-}): string {
-  const { bucket, lang, company, jobDescription, extraContext, cvGroundingData, researchFindings } =
-    params;
+}): Part[] {
+  const {
+    bucket,
+    lang,
+    company,
+    jobTitle,
+    jobDescription,
+    images,
+    extraContext,
+    cvGroundingData,
+    researchFindings,
+  } = params;
 
-  return `AREA GEOGRAFICA (bucket): ${bucket}
+  const text = `AREA GEOGRAFICA (bucket): ${bucket}
 LINGUA OUTPUT: ${lang}
-AZIENDA: ${company}
+AZIENDA: ${company || "non indicata — identificala da JD/screenshot se possibile, altrimenti ometti dal CV"}
+RUOLO (titolo indicato dall'utente, può differire dal titolo esatto della JD): ${jobTitle || "non indicato — usa quello della job description"}
 
-JOB DESCRIPTION:
-"""
-${jobDescription}
-"""
+${jobDescription ? `JOB DESCRIPTION (testo):\n"""\n${jobDescription}\n"""` : "JOB DESCRIPTION: nessun testo incollato — leggila dagli screenshot allegati a questo messaggio."}
 
 ${extraContext ? `CONTESTO AGGIUNTIVO / RISPOSTE ALLE ANOMALIE PRECEDENTI (fornito dall'utente):\n"""\n${extraContext}\n"""\n` : ""}
 
@@ -99,4 +127,6 @@ ${researchFindings}
 
 DATI CV CANONICI DI GIULIO OCCHIPINTI (fonte di verità, non inventare oltre questo + il contesto aggiuntivo sopra):
 ${JSON.stringify(cvGroundingData)}`;
+
+  return [{ text }, ...imageParts(images)];
 }
