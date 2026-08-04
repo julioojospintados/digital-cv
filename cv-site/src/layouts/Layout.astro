@@ -22,6 +22,9 @@ interface Props {
    * "cv:wip-badge-shown" del preloader invece di comparire subito — vedi
    * ConsentBanner.astro. */
   consentBannerWaitForWip?: boolean;
+  /** Esclude la pagina dall'indicizzazione. Oggi solo 404.astro: viene servita
+   * per qualsiasi URL inesistente, quindi non deve mai finire in un indice. */
+  noindex?: boolean;
 }
 
 const {
@@ -34,6 +37,7 @@ const {
   // ConsentBanner resta disattivato più sotto — prefisso _ per l'unused-vars
   // di eslint. Rinominarla in consentBannerWaitForWip quando si riattiva.
   consentBannerWaitForWip: _consentBannerWaitForWip = false,
+  noindex = false,
 } = Astro.props;
 
 const siteUrl = "https://giulio-occhipinti.com";
@@ -81,7 +85,7 @@ const jsonLd = {
     <meta name="generator" content={Astro.generator} />
     <meta name="description" content={description} />
     <meta name="author" content="Giulio Occhipinti" />
-    <meta name="robots" content="index, follow" />
+    <meta name="robots" content={noindex ? "noindex, follow" : "index, follow"} />
     <!-- Tells browsers this page is already dark — prevents OS dark mode from
          force-inverting colors (lines, overlays) on Chrome/Safari Android/iOS -->
     <meta name="color-scheme" content="dark" />

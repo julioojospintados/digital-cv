@@ -1,0 +1,168 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+// Pagina 404 — prerenderizzata come statica di proposito.
+//
+// Vercel la serve per QUALSIASI URL inesistente: senza questo file la
+// richiesta finiva sulla funzione serverless (vedi il routing in
+// .vercel/output/config.json), che dopo l'aggiunta del rendering PDF pesa
+// ~98MB — un cold start da secondi per un semplice link rotto. Come file
+// statico viene servita dalla CDN, la funzione non parte mai.
+//
+// Astro genera un solo 404 per tutto il sito (non esiste un /en/404 servito
+// da Vercel per gli URL rotti sotto /en/), quindi la lingua non può stare nel
+// path: la sceglie uno script inline leggendo l'URL. È la stessa asimmetria
+// già ammessa per /en/cv in AGENTS.md — la logica è condivisa, cambia solo
+// da dove arriva la lingua.
+---
+
+<Layout
+  title="Pagina non trovata — Giulio Occhipinti"
+  description="La pagina cercata non esiste o è stata spostata."
+  noindex
+  showFab
+>
+  <script is:inline>
+    // Inline e in cima al contenuto: gira mentre il parser è ancora qui,
+    // prima che il blocco IT/EN venga renderizzato — nessun lampo della
+    // lingua sbagliata.
+    (function () {
+      const p = window.location.pathname.toLowerCase();
+      const isEn = p === "/en" || p.indexOf("/en/") === 0;
+      const root = document.documentElement;
+      root.setAttribute("data-nf-lang", isEn ? "en" : "it");
+      if (isEn) root.setAttribute("lang", "en");
+    })();
+  </script>
+
+  <nav class="nf-nav">
+    <go-logo></go-logo>
+  </nav>
+
+  <main class="nf-main" id="main-content">
+    <div class="nf-copy" data-nf="it">
+      <p class="nf-eyebrow">404</p>
+      <h1 class="nf-title">Qui non c'è niente.</h1>
+      <p class="nf-text">
+        Il link è rotto o la pagina si è spostata. Da qui torni dove volevi andare.
+      </p>
+      <div class="nf-links">
+        <a class="nf-link nf-link--primary" href="/">Vai alla home</a>
+        <a class="nf-link" href="/tech">Apri il CV</a>
+        <a class="nf-link" href="/work">Guarda i lavori</a>
+      </div>
+    </div>
+
+    <div class="nf-copy" data-nf="en" lang="en">
+      <p class="nf-eyebrow">404</p>
+      <h1 class="nf-title">There's nothing here.</h1>
+      <p class="nf-text">
+        The link is broken, or the page moved. From here you can get back on track.
+      </p>
+      <div class="nf-links">
+        <a class="nf-link nf-link--primary" href="/en/">Go to the homepage</a>
+        <a class="nf-link" href="/en/cv">Open the CV</a>
+        <a class="nf-link" href="/en/work">See the work</a>
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<script>
+  import "../islands/GoLogo.lit.ts";
+</script>
+
+<style>
+  .nf-nav {
+    display: flex;
+    align-items: center;
+    padding: 1.5rem 1.25rem;
+    max-width: 48rem;
+    margin: 0 auto;
+  }
+
+  .nf-main {
+    max-width: 48rem;
+    margin: 0 auto;
+    padding: 2rem 1.25rem 4rem;
+  }
+
+  /* Italiano è il default del markup: l'inglese resta nascosto finché lo
+     script inline non trova /en/ nell'URL. Se lo script non gira (JS off),
+     resta visibile l'italiano — lingua di default del sito. */
+  .nf-copy[data-nf="en"] {
+    display: none;
+  }
+
+  .nf-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  :global([data-nf-lang="en"]) .nf-copy[data-nf="it"] {
+    display: none;
+  }
+
+  :global([data-nf-lang="en"]) .nf-copy[data-nf="en"] {
+    display: flex;
+  }
+
+  .nf-eyebrow {
+    font-family: var(--font-mono);
+    font-size: var(--fs-12);
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    color: var(--color-accent);
+  }
+
+  .nf-title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 7vw, 3rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    color: var(--color-text-primary);
+    text-wrap: balance;
+  }
+
+  .nf-text {
+    font-size: var(--fs-16);
+    line-height: 1.6;
+    color: var(--color-text-muted);
+    max-width: 34rem;
+  }
+
+  .nf-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+  }
+
+  .nf-link {
+    font-family: var(--font-mono);
+    font-size: var(--fs-14);
+    font-weight: 600;
+    text-decoration: none;
+    padding: 0.7rem 1.1rem;
+    border-radius: var(--radius-4);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-primary);
+    transition:
+      border-color var(--duration-micro) var(--ease-standard),
+      color var(--duration-micro) var(--ease-standard);
+  }
+
+  .nf-link--primary {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .nf-link:hover {
+      border-color: var(--color-accent);
+      color: var(--color-accent);
+    }
+  }
+</style>
