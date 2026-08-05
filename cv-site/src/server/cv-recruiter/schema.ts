@@ -186,6 +186,32 @@ export const RESPONSE_SCHEMA: Schema = {
         "langs",
       ],
     },
+    coverLetter: {
+      type: Type.OBJECT,
+      nullable: true,
+      description:
+        "Null se anomalies non è vuoto. Lettera di presentazione tarata sulla job description, stessa lingua di cvContent.",
+      properties: {
+        date: {
+          type: Type.STRING,
+          description:
+            "Data odierna leggibile nella lingua di output, es. '5 agosto 2026' oppure 'August 5, 2026'.",
+        },
+        salutation: {
+          type: Type.STRING,
+          description:
+            "Es. 'Dear Hiring Team,' o 'Gentile team di selezione,' — usa un nome specifico solo se esplicitamente presente nella job description.",
+        },
+        paragraphs: {
+          type: Type.ARRAY,
+          items: { type: Type.STRING },
+          description:
+            "3-4 paragrafi del corpo, nella lingua di output. Vedi regole nel system prompt.",
+        },
+        closing: { type: Type.STRING, description: "Es. 'Sincerely,' o 'Cordiali saluti,'" },
+      },
+      required: ["date", "salutation", "paragraphs", "closing"],
+    },
   },
   required: ["anomalies"],
 };
@@ -236,8 +262,16 @@ export interface CvContent {
   langs: Array<{ name: string; level: string }>;
 }
 
+export interface CoverLetter {
+  date: string;
+  salutation: string;
+  paragraphs: string[];
+  closing: string;
+}
+
 export interface StructuredResult {
   anomalies: string[];
   report: MatchReport | null;
   cvContent: CvContent | null;
+  coverLetter: CoverLetter | null;
 }

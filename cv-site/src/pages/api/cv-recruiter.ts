@@ -17,6 +17,7 @@ import {
 } from "../../server/cv-recruiter/prompt.js";
 import { renderPdfs } from "../../server/cv-recruiter/render-pdf.js";
 import { readEnv, jsonResponse } from "../../server/cv-recruiter/http-helpers.js";
+import type { CoverLetterMeta } from "@cv-pdf-template";
 
 // Funzione serverless Vercel — chiamata da /tools/cv-recruiter (form privato
 // dietro passphrase). Vedi .claude/agents/cv-recruiter.md per l'equivalente
@@ -173,6 +174,7 @@ export const POST: APIRoute = async ({ request }) => {
         anomalies: result.anomalies,
         report: null,
         cv: null,
+        coverLetter: null,
         insightEntry: null,
       });
     }
@@ -236,15 +238,30 @@ export const POST: APIRoute = async ({ request }) => {
 - Stipendio: ${report.salaryEstimate?.text ?? "non disponibile"}
 `;
 
+    // Dati mittente per la cover letter — dalla stessa fonte di verità del
+    // CV (cvGroundingData), mai inventati: se l'indirizzo Email non c'è nei
+    // dati, il template la omette invece di inventarne una.
+    const senderEmail = cvGroundingData.social.find((s) => s.platform === "Email")?.label ?? "";
+    const coverLetterMeta: CoverLetterMeta = {
+      lang,
+      senderName: cvGroundingData.personal.name,
+      senderEmail,
+      senderLocation: cvContent.location,
+      linkedinUrl: copy.linkedinUrl,
+      company: resolvedCompany,
+      role: cv._meta.jobTitle,
+    };
+
     // Rendering PDF best-effort — non blocca né rompe la risposta se fallisce
     // (vedi il commento in cima a render-pdf.ts).
-    const pdfs = await renderPdfs(cv);
+    const pdfs = await renderPdfs(cv, result.coverLetter, coverLetterMeta);
 
     return jsonResponse({
       ok: true,
       anomalies: [],
       report,
       cv,
+      coverLetter: result.coverLetter,
       insightEntry,
       // false quando il grounding Google Search non era disponibile: senza
       // questo, l'assenza di stima salariale sembrerebbe un dato di fatto
@@ -254,6 +271,7 @@ export const POST: APIRoute = async ({ request }) => {
         ? {
             designed: pdfs.designed.toString("base64"),
             atsDraft: pdfs.atsDraft.toString("base64"),
+            coverLetter: pdfs.coverLetter ? pdfs.coverLetter.toString("base64") : null,
           }
         : null,
     });

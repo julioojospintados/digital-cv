@@ -80,6 +80,23 @@ export interface Locale {
   gdprFooter?: string;
 }
 
+export interface CoverLetterContent {
+  date: string;
+  salutation: string;
+  paragraphs: string[];
+  closing: string;
+}
+
+export interface CoverLetterMeta {
+  lang: "it" | "en";
+  senderName: string;
+  senderEmail: string;
+  senderLocation: string;
+  linkedinUrl: string;
+  company: string;
+  role: string;
+}
+
 /** Font/QR pre-caricati come data: URI — vedi i chiamanti per come li ottengono. */
 export interface PdfAssets {
   qr: string;
@@ -402,6 +419,54 @@ ${L.skills.map((g) => `<div class="skill-list"><b>${g.label}</b>${g.chips.join("
 <p>${L.langs.map(langAts).join(" — ")}</p>
 
 ${L.gdprFooter ? `<p class="meta" style="margin-top:6mm">${L.gdprFooter}</p>` : ""}
+
+</body></html>`;
+}
+
+// Lettera di presentazione — layout da business letter classico, single-column,
+// stessa famiglia tipografica (Lexend) dell'ATS draft ma senza gli elementi
+// decorativi del CV designed: qui il tono deve restare conservativo, è un
+// documento che molti portali richiedono a parte (Word/PDF) accanto al CV.
+export function buildCoverLetterHtml(
+  letter: CoverLetterContent,
+  meta: CoverLetterMeta,
+  assets: PdfAssets,
+): string {
+  const contactLine = [meta.senderEmail, meta.linkedinUrl, meta.senderLocation]
+    .filter(Boolean)
+    .join(" — ");
+  const recipientLine = meta.company ? `${meta.company}` : "";
+
+  return `<!doctype html><html lang="${meta.lang}"><head><meta charset="utf-8"><style>
+@font-face{font-family:'Lexend';font-weight:400;src:url(${assets.lex400}) format('woff2');}
+@font-face{font-family:'Lexend';font-weight:700;src:url(${assets.lex700}) format('woff2');}
+@page{size:A4;margin:22mm 24mm;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Lexend',Arial,sans-serif;font-size:11pt;line-height:1.65;color:#141414;background:#fff;}
+a{color:#084943;}
+h1{font-size:15pt;font-weight:700;}
+.contacts{font-size:9.5pt;color:#333;margin-top:2mm;}
+.date{margin-top:10mm;font-size:10.5pt;}
+.recipient{margin-top:4mm;font-size:10.5pt;font-weight:700;}
+.role{font-size:10.5pt;color:#333;}
+.salutation{margin-top:8mm;}
+p.body{margin-top:5mm;text-align:left;}
+.closing{margin-top:8mm;}
+.signature{margin-top:10mm;font-weight:700;}
+</style></head><body>
+
+<h1>${meta.senderName}</h1>
+<p class="contacts">${contactLine}</p>
+
+<p class="date">${letter.date}</p>
+${recipientLine ? `<p class="recipient">${recipientLine}</p>` : ""}
+${meta.role ? `<p class="role">${meta.role}</p>` : ""}
+
+<p class="salutation">${letter.salutation}</p>
+${letter.paragraphs.map((p) => `<p class="body">${p}</p>`).join("\n")}
+
+<p class="closing">${letter.closing}</p>
+<p class="signature">${meta.senderName}</p>
 
 </body></html>`;
 }

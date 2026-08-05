@@ -234,6 +234,21 @@ behaviour, not the logic that computes them.
   `salaryEstimate`, same rule against inventing beyond what the grounding
   call actually returned, null when research wasn't available. Shown in its
   own report card client-side, and included in every `insightEntry`.
+→ `result.coverLetter`: a cover letter tailored to the job description,
+  generated in the same call-2 structured-output step as `cvContent` (same
+  schema, same grounding-only rule — no invented achievements or metrics
+  beyond what's in the CV data). Rendered as a fourth server-side PDF
+  (`buildCoverLetterHtml` in `scripts/cv-pdf-template.ts` — plain single-column
+  business-letter layout, not the knolling CV design) alongside designed/ATS,
+  using sender contact details pulled from `cvGroundingData.personal`/`.social`
+  (never invented — omitted from the letter if not present in the CV data,
+  e.g. there's no phone number in `cv.ts` today). Shown as its own report card
+  (readable text) plus a PDF download button when rendering succeeds; `null`
+  gracefully skips just the cover letter, same as `companyProfile`, without
+  affecting CV generation. The desktop `cv-recruiter` MCP tool saves it
+  alongside the CV PDFs as `<slug>_Cover_Letter.pdf`; the Claude-powered
+  subagent (`.claude/agents/cv-recruiter.md`) does not generate one today —
+  that's a separate content-generation path this doesn't touch.
 → Requires 3 env vars server-side only for generation (`cv-site/.env.example`):
   `GEMINI_API_KEY`, `CV_TOOL_PASSPHRASE`, optional `GEMINI_MODEL`. The route
   fails closed (503) if either required var is unset — there is no
@@ -312,7 +327,7 @@ src/                      ← MCP server + HTTP API (Node.js / TypeScript)
       qr.ts               ← /api/qr — QR code generation (JSON base64, PNG, SVG)
   tools/index.ts          ← MCP tool registry
   tools/echo.ts           ← Example tool — copy as template
-  tools/cv-recruiter.ts   ← Calls the deployed /api/cv-recruiter, saves JSON/PDF + jd-insights locally
+  tools/cv-recruiter.ts   ← Calls the deployed /api/cv-recruiter, saves JSON/PDF/cover letter + jd-insights locally
   resources/index.ts      ← MCP resource registry
   prompts/index.ts        ← MCP prompt template registry
   utils/logger.ts         ← stderr-only logger
@@ -381,7 +396,7 @@ cv-site/                  ← Astro site (the actual CV)
 scripts/                  ← Root utility scripts (Node)
   parse-cv.ts             ← Parse source CV data
   generate-cv-pdf.ts      ← Render the knolling CV to A4 PDFs with QR (npm run pdf:cv)
-  cv-pdf-template.ts      ← Pure Locale type + buildHtml/buildHtmlAts (no fs/Playwright) — shared by every PDF renderer, CLI and serverless
+  cv-pdf-template.ts      ← Pure Locale type + buildHtml/buildHtmlAts/buildCoverLetterHtml (no fs/Playwright) — shared by every PDF renderer, CLI and serverless
   load-pdf-assets.ts      ← Reads font/QR from disk into a PdfAssets — Node CLI only, do not import from cv-site
   generate-ux-cv.ts       ← UX/UI CV, designed + ATS-draft (npm run pdf:ux) — owns the IT/EN Locale content, renders via cv-pdf-template.ts
   generate-targeted-cv.ts ← Renders one job-application-specific Locale JSON (npm run pdf:targeted -- <path>) — consumer of .claude/agents/cv-recruiter.md's output

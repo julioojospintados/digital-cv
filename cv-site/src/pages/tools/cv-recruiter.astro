@@ -418,6 +418,13 @@ import "../../styles/global.css";
       interface PdfView {
         designed: string;
         atsDraft: string;
+        coverLetter: string | null;
+      }
+      interface CoverLetterView {
+        date: string;
+        salutation: string;
+        paragraphs: string[];
+        closing: string;
       }
 
       function renderReport(
@@ -426,6 +433,7 @@ import "../../styles/global.css";
         insightEntry: string,
         pdf: PdfView | null,
         researchAvailable: boolean,
+        coverLetter: CoverLetterView | null,
       ) {
         const breakdownRows = report.requirementBreakdown
           .map(
@@ -488,11 +496,27 @@ import "../../styles/global.css";
             <h2>Stipendio stimato</h2>
             <p>${salary}</p>
           </div>
+          ${
+            coverLetter
+              ? `<div class="card">
+                   <h2>Lettera di presentazione</h2>
+                   <p>${escapeHtml(coverLetter.date)}</p>
+                   <p style="margin-top:0.75rem">${escapeHtml(coverLetter.salutation)}</p>
+                   ${coverLetter.paragraphs.map((p) => `<p style="margin-top:0.75rem">${escapeHtml(p)}</p>`).join("")}
+                   <p style="margin-top:0.75rem">${escapeHtml(coverLetter.closing)}</p>
+                 </div>`
+              : ""
+          }
           <div class="actions">
             ${
               pdf
                 ? `<button type="button" class="secondary" id="downloadDesigned">Versione ${langLabel} — Grafica</button>
                    <button type="button" class="secondary" id="downloadAts">Versione ${langLabel} — ATS</button>`
+                : ""
+            }
+            ${
+              pdf?.coverLetter
+                ? `<button type="button" class="secondary" id="downloadCoverLetter">Scarica Cover Letter (PDF)</button>`
                 : ""
             }
             <button type="button" class="secondary" id="downloadJson">Scarica JSON CV</button>
@@ -513,6 +537,16 @@ import "../../styles/global.css";
               "application/pdf",
             );
           });
+          if (pdf.coverLetter) {
+            const coverLetterPdf = pdf.coverLetter;
+            document.getElementById("downloadCoverLetter")?.addEventListener("click", () => {
+              downloadBase64(
+                cv.file.replace(".pdf", "_Cover_Letter.pdf"),
+                coverLetterPdf,
+                "application/pdf",
+              );
+            });
+          }
         }
         document.getElementById("downloadJson")?.addEventListener("click", () => {
           downloadBlob(
@@ -599,6 +633,7 @@ import "../../styles/global.css";
               data.insightEntry,
               data.pdf,
               data.researchAvailable !== false,
+              data.coverLetter,
             );
           }
         } catch {

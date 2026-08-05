@@ -107,8 +107,9 @@ export function registerCvRecruiterTool(server: McpServer): void {
           salaryEstimate: { text: string; sources: string[] } | null;
         } | null;
         cv?: (Record<string, unknown> & { file: string; _meta: Record<string, string> }) | null;
+        coverLetter?: unknown;
         insightEntry?: string | null;
-        pdf?: { designed: string; atsDraft: string } | null;
+        pdf?: { designed: string; atsDraft: string; coverLetter: string | null } | null;
       };
 
       if (!res.ok || !data.ok) {
@@ -145,6 +146,14 @@ export function registerCvRecruiterTool(server: McpServer): void {
         writeFileSync(designedPath, Buffer.from(pdf.designed, "base64"));
         writeFileSync(atsPath, Buffer.from(pdf.atsDraft, "base64"));
         savedFiles.push(designedPath, atsPath);
+        if (pdf.coverLetter) {
+          const coverLetterPath = resolve(
+            TARGETED_DIR,
+            cv.file.replace(".pdf", "_Cover_Letter.pdf"),
+          );
+          writeFileSync(coverLetterPath, Buffer.from(pdf.coverLetter, "base64"));
+          savedFiles.push(coverLetterPath);
+        }
       }
 
       if (insightEntry) {

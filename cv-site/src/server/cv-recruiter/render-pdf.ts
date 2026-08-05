@@ -20,12 +20,20 @@
 
 import { chromium as playwright } from "playwright-core";
 import sparticuzChromium from "@sparticuz/chromium";
-import { buildHtml, buildHtmlAts, type Locale } from "@cv-pdf-template";
+import {
+  buildHtml,
+  buildHtmlAts,
+  buildCoverLetterHtml,
+  type Locale,
+  type CoverLetterContent,
+  type CoverLetterMeta,
+} from "@cv-pdf-template";
 import { PDF_ASSETS } from "./pdf-assets-loader.js";
 
 export interface RenderedPdfs {
   designed: Buffer;
   atsDraft: Buffer;
+  coverLetter: Buffer | null;
 }
 
 async function launchBrowser() {
@@ -50,8 +58,17 @@ async function launchBrowser() {
   });
 }
 
-/** Non lancia mai — ritorna null su qualunque fallimento, il chiamante ripiega sul JSON. */
-export async function renderPdfs(locale: Locale): Promise<RenderedPdfs | null> {
+/**
+ * Non lancia mai — ritorna null su qualunque fallimento, il chiamante ripiega
+ * sul JSON. coverLetter è nullable perché il modello può non averla prodotta
+ * (schema nullable, safety valve) senza che questo debba far fallire anche
+ * il rendering di CV designed/ATS, che restano il caso primario.
+ */
+export async function renderPdfs(
+  locale: Locale,
+  coverLetter: CoverLetterContent | null,
+  coverLetterMeta: CoverLetterMeta,
+): Promise<RenderedPdfs | null> {
   let browser: Awaited<ReturnType<typeof launchBrowser>> | undefined;
   try {
     browser = await launchBrowser();
@@ -69,7 +86,16 @@ export async function renderPdfs(locale: Locale): Promise<RenderedPdfs | null> {
     await page.evaluate(() => document.fonts.ready);
     const atsDraft = await page.pdf({ format: "A4", printBackground: true });
 
-    return { designed, atsDraft };
+    let coverLetterPdf: Buffer | null = null;
+    if (coverLetter) {
+      await page.setContent(buildCoverLetterHtml(coverLetter, coverLetterMeta, PDF_ASSETS), {
+        waitUntil: "networkidle",
+      });
+      await page.evaluate(() => document.fonts.ready);
+      coverLetterPdf = await page.pdf({ format: "A4", printBackground: true });
+    }
+
+    return { designed, atsDraft, coverLetter: coverLetterPdf };
   } catch (err) {
     console.error("[render-pdf] fallito, il client riceverà solo il JSON:", err);
     return null;
