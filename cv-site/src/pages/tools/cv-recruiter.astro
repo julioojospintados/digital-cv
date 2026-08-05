@@ -409,6 +409,7 @@ import "../../styles/global.css";
       }
       interface CvView {
         file: string;
+        lang: "it" | "en";
         _meta: { countryBucket: string };
       }
       interface PdfView {
@@ -443,6 +444,8 @@ import "../../styles/global.css";
               </li>`,
           )
           .join("");
+
+        const langLabel = cv.lang === "it" ? "IT" : "EN";
 
         const salary = report.salaryEstimate
           ? `${escapeHtml(report.salaryEstimate.text)}${
@@ -481,8 +484,8 @@ import "../../styles/global.css";
           <div class="actions">
             ${
               pdf
-                ? `<button type="button" class="secondary" id="downloadDesigned">Scarica PDF</button>
-                   <button type="button" class="secondary" id="downloadAts">Scarica PDF ATS-safe</button>`
+                ? `<button type="button" class="secondary" id="downloadDesigned">Versione ${langLabel} — Grafica</button>
+                   <button type="button" class="secondary" id="downloadAts">Versione ${langLabel} — ATS</button>`
                 : ""
             }
             <button type="button" class="secondary" id="downloadJson">Scarica JSON CV</button>
