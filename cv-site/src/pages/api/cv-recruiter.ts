@@ -16,6 +16,7 @@ import {
   type ImageInput,
 } from "../../server/cv-recruiter/prompt.js";
 import { renderPdfs } from "../../server/cv-recruiter/render-pdf.js";
+import { readEnv, jsonResponse } from "../../server/cv-recruiter/http-helpers.js";
 
 // Funzione serverless Vercel — chiamata da /tools/cv-recruiter (form privato
 // dietro passphrase). Vedi .claude/agents/cv-recruiter.md per l'equivalente
@@ -47,28 +48,6 @@ interface RequestBody {
   jobDescription?: string;
   extraContext?: string;
   images?: ImageInput[];
-}
-
-function jsonResponse(body: unknown, status = 200): Response {
-  return new Response(JSON.stringify(body), {
-    status,
-    headers: { "Content-Type": "application/json" },
-  });
-}
-
-/**
- * process.env PRIMA di import.meta.env, non il contrario: Vite/Astro
- * sostituiscono `import.meta.env.X` staticamente al momento della build, col
- * valore presente allora. Su Vercel le variabili impostate nel pannello dopo
- * (o non esposte alla build) restano quindi `undefined` a runtime — l'endpoint
- * in produzione rispondeva 503 "non configurato" proprio per questo, pur con
- * le variabili impostate. In una funzione serverless `process.env` è invece
- * popolato a runtime. import.meta.env resta come fallback per `astro dev`,
- * che carica il .env locale.
- */
-function readEnv(name: string): string | undefined {
-  const fromProcess = typeof process !== "undefined" ? process.env?.[name] : undefined;
-  return fromProcess || (import.meta.env as Record<string, string | undefined>)[name];
 }
 
 export const POST: APIRoute = async ({ request }) => {
@@ -247,6 +226,7 @@ export const POST: APIRoute = async ({ request }) => {
 
     const insightEntry = `## ${new Date().toISOString().slice(0, 10)} — ${resolvedCompany} — ${cvContent.positioning}
 
+- Azienda: ${report.companyProfile ?? "profilo non disponibile (ricerca web non riuscita)"}
 - Must-have ricorrenti: ${report.requirementBreakdown
       .filter((r) => r.weight === "must-have")
       .map((r) => r.requirement)

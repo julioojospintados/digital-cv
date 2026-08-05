@@ -211,15 +211,35 @@ behaviour, not the logic that computes them.
 → It cannot write to the developer's local `cv-output/` — a serverless
   function has no access to that machine. It returns the report, the
   `Locale` JSON, and (when rendering succeeded) the PDFs in the HTTP response
-  for the browser to download; the auto-learning JD-insights log has no
-  server-side equivalent from the browser (the response includes an
-  `insightEntry` snippet to paste into `cv-output/jd-insights/*.md` by hand).
-  Calling the `cv-recruiter` MCP tool below instead closes that gap
-  automatically.
-→ Requires 3 env vars server-side only (`cv-site/.env.example`):
+  for the browser to download. The report also carries a `companyProfile`
+  (§ below) and an `insightEntry` snippet — a "Salva voce in memoria" button
+  posts that snippet to `api/cv-recruiter-insight.ts`, a second, separate
+  serverless route that appends it to a **private Vercel Blob** store instead
+  of the local `cv-output/jd-insights/*.md` (`insights-store.ts` — one blob
+  per country bucket, deterministic pathname via `addRandomSuffix: false` +
+  `allowOverwrite: true`, so each save reads, appends, and rewrites the same
+  file; `access: "private"`, never `"public"`, because the content is
+  personal application data — company names, salary estimates, gaps in
+  Giulio's profile — and the `digital-cv` repo/deploy is public). Split into
+  its own route on purpose: a failed save must never take down the CV/report
+  that already generated successfully, and saving is an explicit user action
+  (button click), not a side effect of every generation. This Blob store and
+  the desktop `cv-output/jd-insights/` files are **not** synced with each
+  other today — mobile-submitted insights land only in Blob, desktop-typed
+  ones only on local disk; unifying them (e.g. the MCP tool below pulling
+  from Blob before it writes) is a possible follow-up, not yet built.
+→ `report.companyProfile`: a 2-4 sentence synthesis of the Google Search
+  grounding findings (what the company does, sector, size/stage, culture,
+  recent news/funding) — same call-2 structured-output step as
+  `salaryEstimate`, same rule against inventing beyond what the grounding
+  call actually returned, null when research wasn't available. Shown in its
+  own report card client-side, and included in every `insightEntry`.
+→ Requires 3 env vars server-side only for generation (`cv-site/.env.example`):
   `GEMINI_API_KEY`, `CV_TOOL_PASSPHRASE`, optional `GEMINI_MODEL`. The route
   fails closed (503) if either required var is unset — there is no
-  "unauthenticated but open" state.
+  "unauthenticated but open" state. `api/cv-recruiter-insight.ts` additionally
+  needs `BLOB_READ_WRITE_TOKEN`, normally auto-injected by connecting a
+  private Blob store to the project from the Vercel dashboard's Storage tab.
 → **Read env vars through `readEnv()` (`process.env` first, `import.meta.env`
   only as fallback), never `import.meta.env` directly.** Vite/Astro replace
   `import.meta.env.X` *statically at build time*: a var set in the Vercel
@@ -317,13 +337,16 @@ cv-site/                  ← Astro site (the actual CV)
       en/cv.astro         ← English CV (static page — mode is client-side only, no mode in path)
       en/work/            ← English case studies (index.astro + [slug].astro)
       tools/cv-recruiter.astro ← Private, unlinked, passphrase-gated CV generator (see AGENTS.md § "from a phone")
-      api/cv-recruiter.ts ← The only server route on the site (prerender = false) — Gemini-powered backend for the page above
+      api/cv-recruiter.ts ← The two server routes on the site (prerender = false) — Gemini-powered backend for the page above
+      api/cv-recruiter-insight.ts ← Persists a JD-insight entry to private Vercel Blob, called by the "Salva voce in memoria" button
     server/cv-recruiter/
       prompt.ts            ← Multimodal prompt building (text + image parts), audit/analysis rules
       schema.ts             ← Gemini responseSchema (structured JSON output) + matching TS types
       fixed-copy.ts          ← Fixed IT/EN boilerplate strings + country-bucket helpers, GDPR footer text
       render-pdf.ts           ← Best-effort server-side PDF render (playwright-core + @sparticuz/chromium), never throws
       pdf-assets-loader.ts     ← Imports generated/pdf-assets.json via the @pdf-assets Vite alias (build-time, see below) — not a runtime fs read
+      insights-store.ts        ← Read-modify-write of a JD-insight blob per country bucket on private Vercel Blob storage
+      http-helpers.ts           ← Shared readEnv (process.env-first)/jsonResponse, used by both api/cv-recruiter.ts and api/cv-recruiter-insight.ts
     components/           ← Static Astro components
       ContactFooter.astro ← Shared contact footer
       WorkDesignSystem.astro ← Design system section inside /work case studies

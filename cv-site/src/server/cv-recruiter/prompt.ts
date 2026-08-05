@@ -36,7 +36,7 @@ ${roleLine}
 Area geografica target: ${bucket}
 
 Compiti:
-1. Cerca in 1-2 query cosa fa l'azienda, settore, dimensione/stage indicativo (startup early-stage, scale-up, enterprise consolidata), e se emerge qualcosa sulla cultura di lavoro (remote-first, ecc.). Se l'azienda non è indicata, prova a identificarla dalla job description (testo o eventuali screenshot allegati) prima di rinunciare.
+1. Cerca in 2-3 query un quadro ampio dell'azienda: cosa fa, settore, dimensione/stage indicativo (startup early-stage, scale-up, enterprise consolidata), cultura di lavoro se emerge (remote-first, ecc.), e sviluppi recenti rilevanti per chi si candida — funding, prodotti/lanci recenti, notizie, eventuali segnali sul processo di assunzione. Se l'azienda non è indicata, prova a identificarla dalla job description (testo o eventuali screenshot allegati) prima di rinunciare.
 ${
   salaryAlreadyStated
     ? "2. La job description sembra già dichiarare una fascia di stipendio: NON cercarne una diversa, limitati al punto 1."
@@ -80,7 +80,8 @@ Verifica questi casi. Se ne trovi anche uno, l'array "anomalies" deve contenere 
 3. **strengths**: i must-have coperti pieni, più differenzianti rilevanti anche se non richiesti (es. AI workflow, design system, architetture MCP).
 4. **painPoints**: ogni requisito assente o parziale, severità onesta (un nice-to-have mancante è "low", un must-have mancante è "medium"/"high"), con un'azione concreta suggerita quando ha senso.
 5. **salaryEstimate**: usa il riepilogo di ricerca fornito in "RICERCA AZIENDALE" più sotto. Se la JD dichiara già uno stipendio, usa quello (non stimare sopra un dato reale). Se non c'è né in JD né nella ricerca fonti affidabili, salaryEstimate deve essere null — mai un numero inventato.
-6. **cvContent**: componi il CV tarato sulla JD, nella lingua richiesta, riformulando i dati forniti (non le stringhe di corredo fisse, quelle le aggiunge il sistema dopo). "earlier" è una riga breve con le esperienze meno rilevanti per questa JD, non deve ripetere quelle già in "experiences". "fileSlug" è kebab-case breve (nome azienda + ruolo), userà a costruire il nome del PDF. "companyResolved" è il nome azienda confermato — se l'utente l'ha indicato ripetilo identico, altrimenti identificalo da JD/screenshot, altrimenti stringa vuota.
+6. **companyProfile**: sintetizza in 2-4 frasi il riepilogo fornito in "RICERCA AZIENDALE" più sotto — cosa fa l'azienda, settore, dimensione/stage, cultura, sviluppi recenti rilevanti. Solo informazioni che trovi lì dentro, niente di inventato. Null se la ricerca non era disponibile o non conteneva nulla di utile sull'azienda.
+7. **cvContent**: componi il CV tarato sulla JD, nella lingua richiesta, riformulando i dati forniti (non le stringhe di corredo fisse, quelle le aggiunge il sistema dopo). "earlier" è una riga breve con le esperienze meno rilevanti per questa JD, non deve ripetere quelle già in "experiences". "fileSlug" è kebab-case breve (nome azienda + ruolo), userà a costruire il nome del PDF. "companyResolved" è il nome azienda confermato — se l'utente l'ha indicato ripetilo identico, altrimenti identificalo da JD/screenshot, altrimenti stringa vuota.
 
 Il testo generato in bullets/title/sub/earlier può usare tag <b>...</b> inline per il grassetto, coerente col resto del CV.`;
 

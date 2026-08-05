@@ -65,6 +65,12 @@ export const RESPONSE_SCHEMA: Schema = {
           },
           required: ["text", "sources"],
         },
+        companyProfile: {
+          type: Type.STRING,
+          nullable: true,
+          description:
+            "Sintesi in 2-4 frasi di cosa fa l'azienda, settore, dimensione/stage, cultura e sviluppi recenti rilevanti (funding, prodotti, notizie), basata SOLO su RICERCA AZIENDALE. Null se la ricerca non era disponibile o non ha prodotto nulla di utile — mai inventato.",
+        },
       },
       required: ["matchPercentage", "requirementBreakdown", "strengths", "painPoints"],
     },
@@ -210,6 +216,7 @@ export interface MatchReport {
   strengths: string[];
   painPoints: PainPoint[];
   salaryEstimate: SalaryEstimate | null;
+  companyProfile: string | null;
 }
 
 export interface CvContent {

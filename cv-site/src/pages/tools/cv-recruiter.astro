@@ -408,6 +408,7 @@ import "../../styles/global.css";
         strengths: string[];
         painPoints: Array<{ issue: string; severity: string; suggestedAction: string }>;
         salaryEstimate: { text: string; sources: string[] } | null;
+        companyProfile: string | null;
       }
       interface CvView {
         file: string;
@@ -480,6 +481,10 @@ import "../../styles/global.css";
             <ul class="anomalies">${painPoints}</ul>
           </div>
           <div class="card">
+            <h2>Azienda</h2>
+            <p>${report.companyProfile ? escapeHtml(report.companyProfile) : "Profilo non disponibile per questa ricerca."}</p>
+          </div>
+          <div class="card">
             <h2>Stipendio stimato</h2>
             <p>${salary}</p>
           </div>
@@ -491,8 +496,9 @@ import "../../styles/global.css";
                 : ""
             }
             <button type="button" class="secondary" id="downloadJson">Scarica JSON CV</button>
-            <button type="button" class="secondary" id="downloadInsight">Scarica voce memoria</button>
+            <button type="button" class="secondary" id="saveInsight">Salva voce in memoria</button>
           </div>
+          <p class="pdf-note hidden" id="insightStatus"></p>
           ${!pdf ? `<p class="pdf-note">Il rendering PDF server-side non è andato a buon fine questa volta — scarica il JSON e genera il PDF da desktop con <code>npm run pdf:targeted</code>.</p>` : ""}
         `;
 
@@ -515,8 +521,34 @@ import "../../styles/global.css";
             "application/json",
           );
         });
-        document.getElementById("downloadInsight")?.addEventListener("click", () => {
-          downloadBlob(`${cv._meta.countryBucket}-insight.md`, insightEntry, "text/markdown");
+        const saveInsightBtn = document.getElementById("saveInsight") as HTMLButtonElement | null;
+        const insightStatusEl = document.getElementById("insightStatus") as HTMLParagraphElement;
+        saveInsightBtn?.addEventListener("click", async () => {
+          saveInsightBtn.disabled = true;
+          insightStatusEl.classList.remove("hidden");
+          insightStatusEl.textContent = "Salvataggio in corso…";
+          try {
+            const res = await fetch("/api/cv-recruiter-insight", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                passphrase: passphraseInput.value,
+                bucket: cv._meta.countryBucket,
+                insightEntry,
+              }),
+            });
+            const data = await res.json();
+            if (!res.ok || !data.ok) {
+              throw new Error(data.error || `Errore (${res.status}).`);
+            }
+            saveInsightBtn.textContent = "Salvato in memoria ✓";
+            insightStatusEl.textContent = "";
+            insightStatusEl.classList.add("hidden");
+          } catch (err) {
+            insightStatusEl.textContent = `Salvataggio non riuscito (${err instanceof Error ? err.message : "errore"}) — scarico il file per salvarlo a mano.`;
+            downloadBlob(`${cv._meta.countryBucket}-insight.md`, insightEntry, "text/markdown");
+            saveInsightBtn.disabled = false;
+          }
         });
       }
 
