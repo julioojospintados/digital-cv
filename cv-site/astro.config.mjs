@@ -56,9 +56,9 @@ export default defineConfig({
   // stripComments() sotto, in un hook post-build separato.
   compressHTML: true,
   // Il sito resta statico (prerendered) di default: solo le route con
-  // `export const prerender = false` (oggi solo src/pages/api/cv-recruiter.ts)
-  // diventano funzioni serverless Vercel. Aggiunto per il tool privato
-  // /tools/cv-recruiter — vedi AGENTS.md.
+  // `export const prerender = false` (oggi le 3 API del tool privato in
+  // src/pages/api/cv-recruiter*.ts) diventano funzioni serverless Vercel.
+  // Aggiunto per il tool privato /tools/cv-recruiter — vedi AGENTS.md.
   output: "static",
   adapter: vercel({
     // Rendering PDF server-side (render-pdf.ts, playwright-core +

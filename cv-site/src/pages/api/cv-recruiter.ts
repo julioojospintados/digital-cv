@@ -16,6 +16,7 @@ import {
   type ImageInput,
 } from "../../server/cv-recruiter/prompt.js";
 import { renderPdfs } from "../../server/cv-recruiter/render-pdf.js";
+import { createApplication } from "../../server/cv-recruiter/applications-store.js";
 import { readEnv, jsonResponse } from "../../server/cv-recruiter/http-helpers.js";
 import type { CoverLetterMeta } from "@cv-pdf-template";
 
@@ -183,6 +184,25 @@ export const POST: APIRoute = async ({ request }) => {
     const copy = FIXED_COPY[lang];
     const resolvedCompany = company || cvContent.companyResolved || "azienda non specificata";
 
+    // Voce ledger candidature creata in automatico ad ogni generazione
+    // riuscita — a differenza di insightEntry (salvato solo su azione
+    // esplicita dell'utente), qui l'obiettivo è che il tracking non dipenda
+    // dal ricordarsi di premere un bottone. Best-effort: un fallimento di
+    // Blob non deve mai rompere la risposta con il CV già generato.
+    let applicationId: string | undefined;
+    try {
+      const created = await createApplication({
+        bucket,
+        company: resolvedCompany,
+        role: cvContent.positioning,
+        matchPercentage: report.matchPercentage,
+        salaryEstimate: report.salaryEstimate?.text ?? "non disponibile",
+      });
+      if (created) applicationId = created.id;
+    } catch (err) {
+      console.error("[cv-recruiter] impossibile creare la voce ledger candidature:", err);
+    }
+
     const cv = {
       _meta: {
         company: resolvedCompany,
@@ -191,6 +211,7 @@ export const POST: APIRoute = async ({ request }) => {
         countryBucket: bucket,
         matchPercentage: String(report.matchPercentage),
         salaryEstimate: report.salaryEstimate?.text ?? "non disponibile",
+        ...(applicationId ? { applicationId } : {}),
       },
       lang,
       file: `Giulio_Occhipinti_CV_${cvContent.fileSlug}.pdf`,

@@ -1,6 +1,8 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { registerEchoTool } from "./echo.js";
 import { registerCvRecruiterTool } from "./cv-recruiter.js";
+import { registerCvApplicationsListTool } from "./cv-applications-list.js";
+import { registerCvApplicationsUpdateTool } from "./cv-applications-update.js";
 
 /**
  * Central registry for all MCP tools.
@@ -13,4 +15,6 @@ import { registerCvRecruiterTool } from "./cv-recruiter.js";
 export function registerAllTools(server: McpServer): void {
   registerEchoTool(server);
   registerCvRecruiterTool(server);
+  registerCvApplicationsListTool(server);
+  registerCvApplicationsUpdateTool(server);
 }

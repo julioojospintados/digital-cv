@@ -1,0 +1,366 @@
+---
+import "../../styles/global.css";
+
+// Pagina privata gemella di cv-recruiter.astro: stesso pattern (statica,
+// noindex, non linkata, esclusa da sitemap.xml/robots.txt, niente
+// Layout.astro — tool interno, non pagina del CV pubblico). Legge/aggiorna
+// il ledger candidature via /api/cv-recruiter-applications.ts.
+---
+
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Le mie candidature — tool privato</title>
+    <style>
+      body {
+        background: var(--color-bg);
+        color: var(--color-text-primary);
+        font-family: var(--font-sans);
+        min-height: 100dvh;
+        padding: 1.5rem 1rem 4rem;
+      }
+      main {
+        max-width: 40rem;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: column;
+        gap: 1.25rem;
+      }
+      h1 {
+        font-size: var(--fs-24);
+        font-weight: 700;
+      }
+      p.lead {
+        color: var(--color-text-muted);
+        font-size: var(--fs-14);
+        line-height: 1.5;
+      }
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+      }
+      label {
+        font-size: var(--fs-12);
+        font-weight: 600;
+        letter-spacing: 0.04em;
+        text-transform: uppercase;
+        color: var(--color-text-muted);
+      }
+      input {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-4);
+        color: var(--color-text-primary);
+        padding: 0.75rem 0.9rem;
+        font-size: var(--fs-16);
+        width: 100%;
+      }
+      input:focus,
+      button:focus-visible {
+        outline: 2px solid var(--color-accent);
+        outline-offset: 2px;
+      }
+      button.primary {
+        background: var(--color-accent);
+        color: var(--color-bg);
+        font-weight: 700;
+        font-size: var(--fs-16);
+        padding: 0.85rem 1.2rem;
+        border-radius: var(--radius-4);
+        text-align: center;
+      }
+      button.primary:disabled {
+        opacity: 0.6;
+      }
+      #status {
+        font-size: var(--fs-14);
+        color: var(--color-text-muted);
+      }
+      #list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+      .card {
+        background: var(--color-surface);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-16);
+        padding: 1.1rem 1.25rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+      .card h2 {
+        font-size: var(--fs-18);
+        font-weight: 700;
+      }
+      .card .meta {
+        font-size: var(--fs-12);
+        color: var(--color-text-muted);
+        line-height: 1.5;
+      }
+      .toggles {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+      }
+      .toggle {
+        background: var(--color-bg);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-4);
+        color: var(--color-text-primary);
+        font-size: var(--fs-12);
+        font-weight: 600;
+        padding: 0.5rem 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+      }
+      .toggle[aria-pressed="true"] {
+        border-color: var(--color-accent);
+        color: var(--color-accent);
+      }
+      .toggle .dot {
+        width: 0.5rem;
+        height: 0.5rem;
+        border-radius: 50%;
+        background: var(--color-border);
+        flex: none;
+      }
+      .toggle[aria-pressed="true"] .dot {
+        background: var(--color-accent);
+      }
+      .toggle:disabled {
+        opacity: 0.6;
+      }
+      .outcome-field {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        font-size: var(--fs-12);
+      }
+      .outcome-field label {
+        text-transform: none;
+        letter-spacing: normal;
+        font-weight: 400;
+        color: var(--color-text-muted);
+      }
+      select {
+        background: var(--color-bg);
+        border: 1px solid var(--color-border);
+        border-radius: var(--radius-4);
+        color: var(--color-text-primary);
+        padding: 0.4rem 0.6rem;
+        font-size: var(--fs-12);
+      }
+      .empty {
+        font-size: var(--fs-14);
+        color: var(--color-text-muted);
+      }
+      .hidden {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div>
+        <h1>Le mie candidature</h1>
+        <p class="lead">
+          Creata in automatico ogni volta che generi un CV con
+          <a href="/tools/cv-recruiter" style="color:var(--color-accent)">il generatore</a>. Segna
+          qui candidato / mail ricevuta / conferma CV / esito.
+        </p>
+      </div>
+
+      <div class="field" id="passphraseField">
+        <label for="passphrase">Passphrase</label>
+        <input type="password" id="passphrase" autocomplete="current-password" />
+        <button type="button" class="primary" id="loadBtn">Carica</button>
+      </div>
+
+      <p id="status" role="status"></p>
+
+      <div id="list"></div>
+    </main>
+
+    <script>
+      const passphraseField = document.getElementById("passphraseField") as HTMLDivElement;
+      const passphraseInput = document.getElementById("passphrase") as HTMLInputElement;
+      const loadBtn = document.getElementById("loadBtn") as HTMLButtonElement;
+      const statusEl = document.getElementById("status") as HTMLParagraphElement;
+      const listEl = document.getElementById("list") as HTMLDivElement;
+
+      const STORAGE_KEY = "cv-recruiter-passphrase";
+
+      interface ApplicationStatus {
+        applied: boolean;
+        appliedAt: string | null;
+        emailReceived: boolean;
+        emailReceivedAt: string | null;
+        cvConfirmationReceived: boolean;
+        cvConfirmationReceivedAt: string | null;
+        outcome: "pending" | "rejected" | "offer" | "ghosted";
+        outcomeAt: string | null;
+      }
+      interface ApplicationRecord {
+        id: string;
+        createdAt: string;
+        bucket: string;
+        company: string;
+        role: string;
+        matchPercentage: number;
+        salaryEstimate: string;
+        status: ApplicationStatus;
+      }
+
+      const OUTCOME_LABELS: Record<ApplicationStatus["outcome"], string> = {
+        pending: "In attesa",
+        rejected: "Rifiutato",
+        offer: "Offerta",
+        ghosted: "Nessuna risposta",
+      };
+
+      function escapeHtml(s: string): string {
+        return s.replace(
+          /[&<>"']/g,
+          (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!,
+        );
+      }
+
+      function formatDate(iso: string): string {
+        return new Date(iso).toLocaleDateString("it-IT", {
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+        });
+      }
+
+      async function callApi(body: Record<string, unknown>) {
+        const res = await fetch("/api/cv-recruiter-applications", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ passphrase: passphraseInput.value, ...body }),
+        });
+        const data = await res.json();
+        if (!res.ok || !data.ok) throw new Error(data.error || `Errore (${res.status}).`);
+        return data;
+      }
+
+      function renderCard(app: ApplicationRecord): HTMLDivElement {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+          <h2>${escapeHtml(app.company)} — ${escapeHtml(app.role)}</h2>
+          <p class="meta">${formatDate(app.createdAt)} · ${app.bucket} · Match ${app.matchPercentage}% · ${escapeHtml(app.salaryEstimate)}</p>
+          <div class="toggles">
+            <button type="button" class="toggle" data-field="applied" aria-pressed="${app.status.applied}">
+              <span class="dot"></span>Candidato
+            </button>
+            <button type="button" class="toggle" data-field="emailReceived" aria-pressed="${app.status.emailReceived}">
+              <span class="dot"></span>Mail ricevuta
+            </button>
+            <button type="button" class="toggle" data-field="cvConfirmationReceived" aria-pressed="${app.status.cvConfirmationReceived}">
+              <span class="dot"></span>Conferma CV
+            </button>
+          </div>
+          <div class="outcome-field">
+            <label for="outcome-${app.id}">Esito</label>
+            <select id="outcome-${app.id}" data-field="outcome">
+              ${Object.entries(OUTCOME_LABELS)
+                .map(
+                  ([value, label]) =>
+                    `<option value="${value}" ${app.status.outcome === value ? "selected" : ""}>${label}</option>`,
+                )
+                .join("")}
+            </select>
+          </div>
+          <p class="meta card-status hidden"></p>
+        `;
+
+        const cardStatus = card.querySelector(".card-status") as HTMLParagraphElement;
+
+        card.querySelectorAll<HTMLButtonElement>(".toggle").forEach((btn) => {
+          btn.addEventListener("click", async () => {
+            const field = btn.dataset.field as
+              "applied" | "emailReceived" | "cvConfirmationReceived";
+            const next = btn.getAttribute("aria-pressed") !== "true";
+            btn.disabled = true;
+            try {
+              const data = await callApi({
+                action: "update",
+                id: app.id,
+                patch: { [field]: next },
+              });
+              app.status = data.application.status;
+              btn.setAttribute("aria-pressed", String(next));
+              cardStatus.classList.add("hidden");
+            } catch (err) {
+              cardStatus.textContent = `Salvataggio non riuscito (${err instanceof Error ? err.message : "errore"}).`;
+              cardStatus.classList.remove("hidden");
+            } finally {
+              btn.disabled = false;
+            }
+          });
+        });
+
+        const outcomeSelect = card.querySelector(
+          "select[data-field='outcome']",
+        ) as HTMLSelectElement;
+        outcomeSelect.addEventListener("change", async () => {
+          const next = outcomeSelect.value as ApplicationStatus["outcome"];
+          outcomeSelect.disabled = true;
+          try {
+            const data = await callApi({ action: "update", id: app.id, patch: { outcome: next } });
+            app.status = data.application.status;
+            cardStatus.classList.add("hidden");
+          } catch (err) {
+            cardStatus.textContent = `Salvataggio non riuscito (${err instanceof Error ? err.message : "errore"}).`;
+            cardStatus.classList.remove("hidden");
+            outcomeSelect.value = app.status.outcome;
+          } finally {
+            outcomeSelect.disabled = false;
+          }
+        });
+
+        return card;
+      }
+
+      async function loadApplications() {
+        statusEl.textContent = "Carico…";
+        listEl.innerHTML = "";
+        try {
+          const data = await callApi({ action: "list" });
+          sessionStorage.setItem(STORAGE_KEY, passphraseInput.value);
+          passphraseField.classList.add("hidden");
+          statusEl.textContent = "";
+          const applications = data.applications as ApplicationRecord[];
+          if (applications.length === 0) {
+            listEl.innerHTML = `<p class="empty">Nessuna candidatura ancora — genera un CV per crearne una.</p>`;
+            return;
+          }
+          for (const app of applications) {
+            listEl.appendChild(renderCard(app));
+          }
+        } catch (err) {
+          statusEl.textContent = err instanceof Error ? err.message : "Errore di rete.";
+        }
+      }
+
+      loadBtn.addEventListener("click", loadApplications);
+      passphraseInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") loadApplications();
+      });
+
+      const savedPassphrase = sessionStorage.getItem(STORAGE_KEY);
+      if (savedPassphrase) {
+        passphraseInput.value = savedPassphrase;
+        loadApplications();
+      }
+    </script>
+  </body>
+</html>

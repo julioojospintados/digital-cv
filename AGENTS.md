@@ -307,6 +307,61 @@ Gemini key:
   `cv-output/jd-insights/<bucket>.md` itself. Takes local image paths
   (`imagePaths`) rather than base64 and reads/encodes them itself.
 
+### Applications tracker — candidato / mail ricevuta / conferma CV / esito
+
+→ `insightEntry` (above) only ever recorded *what was generated*, not what
+  happened to it — and saving it was never automatic (a button on mobile, a
+  tool run on desktop that, in practice, was never actually exercised for a
+  real save). `cv-site/src/server/cv-recruiter/applications-store.ts` adds a
+  second, structured store for exactly that gap: a single JSON ledger on
+  Vercel Blob (`applications/ledger.json`, private, same read-modify-write
+  pattern as `insights-store.ts` but updatable records instead of
+  append-only text) tracking 4 fields per application — `applied`,
+  `emailReceived`, `cvConfirmationReceived`, `outcome`
+  (`pending`/`rejected`/`offer`/`ghosted`), each with a timestamp set
+  automatically the first time it flips.
+→ A ledger entry is created **automatically** by `api/cv-recruiter.ts` right
+  after a CV generates successfully — no button to remember, unlike
+  `insightEntry`. Creation is best-effort (try/catch around
+  `createApplication`, same non-blocking contract as `renderPdfs`): a Blob
+  failure here must never turn an otherwise-successful CV generation into an
+  error response. The returned id is attached to `cv._meta.applicationId`.
+→ Unlike `jd-insights` (deliberately split — Blob for mobile, local disk for
+  desktop, not synced), the ledger uses **Blob as the single source of
+  truth for both sides**: the mobile page and the desktop MCP tools call the
+  same HTTP route, neither writes a local file. That's the point — Giulio
+  needs to see the *same* status regardless of where he updates it.
+→ `cv-site/src/pages/api/cv-recruiter-applications.ts`: one POST route
+  (passphrase in body, never in query string, same as the other 2 routes),
+  branching on `action: "list" | "update"`. `update` only accepts the 4
+  status fields (`sanitizePatch` rejects anything else) and only mutates an
+  existing record by id — it never touches company/role/matchPercentage.
+→ `cv-site/src/pages/tools/applications.astro`: mobile page, same
+  private/`noindex`/passphrase pattern as `cv-recruiter.astro` (and same
+  `sessionStorage` key, so the passphrase doesn't need retyping). Lists every
+  ledger entry with 3 tap toggles + an outcome dropdown, each PATCHing
+  immediately. Linked from the CV generator's result view ("Le mie
+  candidature") so it's reachable without memorizing the URL.
+→ `src/tools/cv-applications-list.ts` / `src/tools/cv-applications-update.ts`:
+  MCP equivalents, same `CV_TOOL_BASE_URL`/`CV_TOOL_PASSPHRASE` as
+  `cv-recruiter.ts`, no new env vars. Two single-purpose tools rather than
+  one with a mode switch, matching the rest of `src/tools/`.
+→ **Gmail-assisted status check — on demand, not a background service.**
+  When Giulio asks Claude Code to check on open applications: run
+  `cv-applications-list`, take the records where `applied` is true and
+  `outcome` is still `pending`, and for each one search Giulio's Gmail via
+  the `claude.ai Gmail` connector (`search_threads`, query built from the
+  company name plus confirmation/interview/rejection keywords, scoped
+  `newer_than:` the application's `appliedAt`) for anything relevant.
+  Summarize what turned up and **only call `cv-applications-update` after
+  Giulio confirms** — never write a status change from an inferred email
+  match without confirmation, a wrong guess writes a false status into data
+  he relies on. This is intentionally session-triggered, not a scheduled
+  job: a real always-on version would mean a server-side Gmail API
+  integration on Vercel (OAuth app registration, refresh-token storage,
+  cron) — a materially bigger and more credential-sensitive project than
+  what "check when I ask" needs, so it wasn't built.
+
 ---
 
 ## Full file reference
@@ -328,6 +383,8 @@ src/                      ← MCP server + HTTP API (Node.js / TypeScript)
   tools/index.ts          ← MCP tool registry
   tools/echo.ts           ← Example tool — copy as template
   tools/cv-recruiter.ts   ← Calls the deployed /api/cv-recruiter, saves JSON/PDF/cover letter + jd-insights locally
+  tools/cv-applications-list.ts   ← Lists the applications ledger (candidato/mail/conferma CV/esito)
+  tools/cv-applications-update.ts ← Updates one ledger entry's status by id
   resources/index.ts      ← MCP resource registry
   prompts/index.ts        ← MCP prompt template registry
   utils/logger.ts         ← stderr-only logger
@@ -352,8 +409,10 @@ cv-site/                  ← Astro site (the actual CV)
       en/cv.astro         ← English CV (static page — mode is client-side only, no mode in path)
       en/work/            ← English case studies (index.astro + [slug].astro)
       tools/cv-recruiter.astro ← Private, unlinked, passphrase-gated CV generator (see AGENTS.md § "from a phone")
-      api/cv-recruiter.ts ← The two server routes on the site (prerender = false) — Gemini-powered backend for the page above
+      tools/applications.astro ← Private, unlinked, passphrase-gated applications ledger view (see AGENTS.md § "Applications tracker")
+      api/cv-recruiter.ts ← The 3 server routes on the site (prerender = false) — Gemini-powered backend for the page above
       api/cv-recruiter-insight.ts ← Persists a JD-insight entry to private Vercel Blob, called by the "Salva voce in memoria" button
+      api/cv-recruiter-applications.ts ← Lists/updates the applications ledger, called by tools/applications.astro and the 2 MCP tools above
     server/cv-recruiter/
       prompt.ts            ← Multimodal prompt building (text + image parts), audit/analysis rules
       schema.ts             ← Gemini responseSchema (structured JSON output) + matching TS types
@@ -361,7 +420,8 @@ cv-site/                  ← Astro site (the actual CV)
       render-pdf.ts           ← Best-effort server-side PDF render (playwright-core + @sparticuz/chromium), never throws
       pdf-assets-loader.ts     ← Imports generated/pdf-assets.json via the @pdf-assets Vite alias (build-time, see below) — not a runtime fs read
       insights-store.ts        ← Read-modify-write of a JD-insight blob per country bucket on private Vercel Blob storage
-      http-helpers.ts           ← Shared readEnv (process.env-first)/jsonResponse, used by both api/cv-recruiter.ts and api/cv-recruiter-insight.ts
+      applications-store.ts    ← Read-modify-write of the applications ledger (single JSON, all buckets) on private Vercel Blob storage
+      http-helpers.ts           ← Shared readEnv (process.env-first)/jsonResponse, used by all 3 api/cv-recruiter*.ts routes
     components/           ← Static Astro components
       ContactFooter.astro ← Shared contact footer
       WorkDesignSystem.astro ← Design system section inside /work case studies

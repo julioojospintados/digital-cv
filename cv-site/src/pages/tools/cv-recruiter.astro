@@ -129,7 +129,8 @@ import "../../styles/global.css";
       button[type="submit"]:disabled {
         opacity: 0.6;
       }
-      button.secondary {
+      button.secondary,
+      a.secondary {
         background: var(--color-surface);
         border: 1px solid var(--color-border);
         color: var(--color-text-primary);
@@ -139,6 +140,9 @@ import "../../styles/global.css";
         border-radius: var(--radius-4);
         width: 100%;
         text-align: center;
+        text-decoration: none;
+        display: block;
+        box-sizing: border-box;
       }
       #status {
         font-size: var(--fs-14);
@@ -521,6 +525,7 @@ import "../../styles/global.css";
             }
             <button type="button" class="secondary" id="downloadJson">Scarica JSON CV</button>
             <button type="button" class="secondary" id="saveInsight">Salva voce in memoria</button>
+            <a class="secondary" href="/tools/applications">Le mie candidature</a>
           </div>
           <p class="pdf-note hidden" id="insightStatus"></p>
           ${!pdf ? `<p class="pdf-note">Il rendering PDF server-side non è andato a buon fine questa volta — scarica il JSON e genera il PDF da desktop con <code>npm run pdf:targeted</code>.</p>` : ""}
