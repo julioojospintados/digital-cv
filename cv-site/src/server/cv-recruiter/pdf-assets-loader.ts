@@ -1,17 +1,19 @@
 /**
- * Legge generated/pdf-assets.json (root del repo, FUORI da cv-site/ — vedi
- * scripts/gen-pdf-assets.mjs per il perché) a runtime, con un path relativo
- * statico (nessuna interpolazione) così Vercel/Node File Trace lo include nel
- * bundle della funzione senza ambiguità — lo stesso problema che il path
- * parametrico per peso font aveva altrove (vedi cv-pdf-template.ts).
+ * Provides generated/pdf-assets.json (root del repo, FUORI da cv-site/ — vedi
+ * scripts/gen-pdf-assets.mjs per il perché) come oggetto JS già pronto.
+ *
+ * Import via l'alias Vite "@pdf-assets" (astro.config.mjs), non
+ * fs.readFileSync con un path relativo a runtime: quel path veniva calcolato
+ * da __dirname/import.meta.url del *chunk bundlato*, non del file sorgente —
+ * dopo che esbuild appiattisce l'albero dei moduli in dist/server/chunks/,
+ * "../../../../generated/..." non punta più da nessuna parte, e
+ * @vercel/nft comunque non tracciava il file per includerlo nel bundle della
+ * function (verificato: assente da .vercel/output dopo una build pulita).
+ * Un import JSON invece viene inlineato da Vite in fase di build, quindi non
+ * resta nessuna lettura da filesystem da rompere a runtime.
  */
 
-import { readFileSync } from "fs";
-import { dirname, resolve } from "path";
-import { fileURLToPath } from "url";
+import pdfAssets from "@pdf-assets";
 import type { PdfAssets } from "@cv-pdf-template";
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const ASSETS_PATH = resolve(__dirname, "../../../../generated/pdf-assets.json");
-
-export const PDF_ASSETS: PdfAssets = JSON.parse(readFileSync(ASSETS_PATH, "utf-8")) as PdfAssets;
+export const PDF_ASSETS: PdfAssets = pdfAssets;

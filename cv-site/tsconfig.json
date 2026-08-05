@@ -5,7 +5,8 @@
     "**/*",
     "../src/data/cv.ts",
     "../src/data/cv.en.ts",
-    "../scripts/cv-pdf-template.ts"
+    "../scripts/cv-pdf-template.ts",
+    "../generated/pdf-assets.json"
   ],
   "exclude": ["dist"],
   "compilerOptions": {
@@ -19,7 +20,8 @@
     "paths": {
       "@cv-data": ["../src/data/cv.ts"],
       "@cv-data-en": ["../src/data/cv.en.ts"],
-      "@cv-pdf-template": ["../scripts/cv-pdf-template.ts"]
+      "@cv-pdf-template": ["../scripts/cv-pdf-template.ts"],
+      "@pdf-assets": ["../generated/pdf-assets.json"]
     }
   }
 }

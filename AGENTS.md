@@ -186,13 +186,28 @@ behaviour, not the logic that computes them.
   reliably OOMs `astro check` on a low-RAM machine, and tsconfig `exclude`
   doesn't stop the language server from scanning it anyway — moving the file
   fully outside the Astro project directory was the only fix that worked.
-  `render-pdf.ts` reads it via `pdf-assets-loader.ts` with a static
-  `import.meta.url`-relative path (not the per-font-weight template literal
-  path `cv-pdf-template.ts`/`load-pdf-assets.ts` use) so Vercel's Node File
-  Trace can bundle it unambiguously — same reasoning is why
-  `astro.config.mjs`'s `includeFiles` lists each `@sparticuz/chromium` binary
-  file individually instead of a glob (`@vercel/nft` doesn't expand globs,
-  discovered by a real build failure).
+  `render-pdf.ts` gets it from `pdf-assets-loader.ts`, which imports it via
+  the `@pdf-assets` Vite alias (`astro.config.mjs`) so the JSON is inlined
+  into the function bundle at build time — **not** `fs.readFileSync` with an
+  `import.meta.url`-relative path, which is what shipped first and broke
+  production outright (real incident, 2026-08-05: every `/api/cv-recruiter`
+  call 500'd). Two independent reasons a runtime read of this file can't
+  work: `@vercel/nft`'s static trace never picked up the dynamically-built
+  path and left the file out of the deployed bundle entirely, and even had
+  it been included, `__dirname` at runtime resolves against the *bundled
+  chunk's* location under `dist/server/chunks/`, several directories off
+  from where the source-tree-relative `"../../../../generated/..."` math
+  assumed it would land — esbuild flattens the module tree, so a path that's
+  correct for the source layout isn't correct for the output layout. A build
+  JSON import sidesteps both problems at once: no runtime file read is left
+  to trace or mis-resolve. Verify by grepping a built function chunk under
+  `.vercel/output/functions/_render.func/dist/server/chunks/` for
+  `readFileSync` or `pdf-assets.json` — neither should appear.
+  `astro.config.mjs`'s `includeFiles` for `@sparticuz/chromium`'s binaries is
+  a separate, still-necessary mechanism (that's a real runtime file the
+  packaged browser launches, not build-time data) — same underlying lesson
+  though, that `@vercel/nft` doesn't expand globs, discovered by a real build
+  failure.
 → It cannot write to the developer's local `cv-output/` — a serverless
   function has no access to that machine. It returns the report, the
   `Locale` JSON, and (when rendering succeeded) the PDFs in the HTTP response
@@ -308,7 +323,7 @@ cv-site/                  ← Astro site (the actual CV)
       schema.ts             ← Gemini responseSchema (structured JSON output) + matching TS types
       fixed-copy.ts          ← Fixed IT/EN boilerplate strings + country-bucket helpers, GDPR footer text
       render-pdf.ts           ← Best-effort server-side PDF render (playwright-core + @sparticuz/chromium), never throws
-      pdf-assets-loader.ts     ← Reads generated/pdf-assets.json at runtime (static path, see below)
+      pdf-assets-loader.ts     ← Imports generated/pdf-assets.json via the @pdf-assets Vite alias (build-time, see below) — not a runtime fs read
     components/           ← Static Astro components
       ContactFooter.astro ← Shared contact footer
       WorkDesignSystem.astro ← Design system section inside /work case studies

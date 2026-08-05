@@ -98,6 +98,16 @@ export default defineConfig({
         "@cv-data": resolve(__dirname, "../src/data/cv.ts"),
         "@cv-data-en": resolve(__dirname, "../src/data/cv.en.ts"),
         "@cv-pdf-template": resolve(__dirname, "../scripts/cv-pdf-template.ts"),
+        // Vite-bundled JSON import (see pdf-assets-loader.ts) instead of a
+        // runtime fs.readFileSync: that path used to be resolved relative to
+        // __dirname at request time, which broke twice over once esbuild
+        // flattened the function bundle — @vercel/nft never traced the file
+        // in, and even if it had, the bundled chunk's __dirname sits nested
+        // under dist/server/chunks/, several directories off from where the
+        // "../../../../generated/..." math assumed it would be. Importing it
+        // here instead makes Vite inline the JSON at build time, so there is
+        // no runtime file read left to break.
+        "@pdf-assets": resolve(__dirname, "../generated/pdf-assets.json"),
       },
     },
     build: {
