@@ -14,6 +14,19 @@
         "GSC_AUTH_MODE": "service_account",
         "GSC_SITE_URL": "sc-domain:giulio-occhipinti.com"
       }
+    },
+    "vercel": {
+      "type": "http",
+      "url": "https://mcp.vercel.com"
+    },
+    "playwright": {
+      "type": "stdio",
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "@playwright/mcp@latest"]
+    },
+    "posthog": {
+      "type": "http",
+      "url": "https://mcp.posthog.com/mcp"
     }
   },
   "_disabledMcpServers": {
@@ -28,10 +41,6 @@
       "type": "stdio",
       "command": "cmd",
       "args": ["/c", "npx", "-y", "@playwright/mcp@latest"]
-    },
-    "vercel": {
-      "type": "http",
-      "url": "https://mcp.vercel.com"
     },
     "posthog": {
       "type": "http",
