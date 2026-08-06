@@ -1598,6 +1598,63 @@ export const cvDataEn = {
       ],
     },
     {
+      name: "trip-runway — Travel Budget Yield App",
+      description:
+        "I turned looking-for-flights, my personal flight price monitoring script, into trip-runway: a web app that crosses the flight cost with the cost of living at the destination to calculate the maximum sustainable trip length on a fixed budget. Next.js, Supabase and Prisma, with an anti-abuse architecture that deduplicates API calls per route instead of per user, and monetization from flight affiliate links.",
+      url: "https://trip-runway.vercel.app",
+      repoUrl: "https://github.com/julioojospintados/trip-runway",
+      date: "2026-08",
+      tags: [
+        "Next.js",
+        "TypeScript",
+        "Tailwind CSS",
+        "Supabase",
+        "Prisma",
+        "Clerk",
+        "Travelpayouts API",
+        "Vercel",
+      ],
+      slug: "trip-runway",
+      primaryMode: "tech",
+      role: "Full-Stack Developer & Product Owner, personal project in development (2026).",
+      problem:
+        "I already had a personal script, looking-for-flights, that searched for flights and messaged me on Telegram when it was worth traveling on a fixed budget. It worked, but it stayed a tool for me. Many travelers ask the same question, how many days can I afford on this budget, not just me. I decided to turn the script into a product: from a personal-use tool to a web app with a freemium model and affiliate monetization, without rewriting the calculation engine that already worked.",
+      process: [
+        "Origin — The calculation engine, sustainable days equals remaining budget divided by daily spend, capped at the maximum trip length, already existed in looking-for-flights. I carried it into trip-runway unchanged: the domain logic was already validated on real trips, the new work was entirely in the product around it.",
+        "Business model — I chose a freemium model with monetization from flight affiliate links (Travelpayouts, Aviasales network) instead of a subscription from day one. It lowers the entry barrier while I validate whether the demand exists beyond my own circle.",
+        "Anti-abuse architecture — The frontend never calls the flight APIs on demand. The user saves a route, a nightly cronjob picks up the unique routes saved by users, makes a single API call per route and updates prices for everyone interested. Free flight API quotas are low: I designed the deduplication before writing the first feature, not after the first block.",
+        "Stack and security — Next.js with the App Router, PostgreSQL on Supabase managed with Prisma, authentication with Clerk. Every Server Action that modifies or deletes data checks that the authenticated user actually owns the record: without that check, a user could modify another user's saved routes.",
+      ],
+      decisions: [
+        {
+          title: "Shared routes, not per-user calls",
+          body: "Every real-time flight API call, multiplied by every user, would have exhausted the free quota in a few hours. I saved routes in the database and deduplicated them: one call per unique route, not one per user viewing it.",
+        },
+        {
+          title: "Amadeus dropped, not by choice",
+          body: "I had evaluated Amadeus for flight prices, but the self-service developer portal shut down in mid-2026: only an Enterprise channel remains, not viable at bootstrap stage. I chose Travelpayouts, free and with affiliate deeplinks already built into the monetization model, with Duffel as a fallback if a live GDS price is ever needed.",
+        },
+        {
+          title: "Freemium before subscription",
+          body: "A subscription from launch would have shut the door on anyone who just wants to try the calculation. Flight affiliate links monetize whoever books, without asking for a credit card from someone who is still just looking.",
+        },
+        {
+          title: "Authorization checks aren't a phase-2 detail",
+          body: "I wrote the authorization rule, verify that the user owns the record, as an architectural constraint from the very first Server Action, not as a security task to add before launch.",
+        },
+      ],
+      outcomes: [
+        "Live app deployed on Vercel (trip-runway.vercel.app), a direct evolution of a personal tool that already worked.",
+        "Calculation engine reused from looking-for-flights without rewriting it: the domain logic was already validated on real trips.",
+        "Anti-abuse architecture (API deduplication per route) and authorization checks on every Server Action decided before writing the first feature.",
+      ],
+      learnings: [
+        "A personal tool that solves a real problem is the cheapest market validation there is: the need already existed, before I even thought about the product.",
+        "External constraints shape the architecture more than technical preferences: the Amadeus portal shutdown decided the provider for me, not a feature comparison.",
+        "Data security has to be an architectural rule from the start: pushing it past launch means rewriting every Server Action already built.",
+      ],
+    },
+    {
       name: "Product Discovery — UX Research & Product Strategy",
       description:
         "With a technical partner I flipped the ideation process of a digital product with Design Thinking and Effectuation: research into people's real needs first, the idea after. A behavioural map on Miro through the Four Forces lens, interviews, competitor analysis: out of 17 concepts one remains, now in development, to be validated with the pPoC Engine before writing any code.",

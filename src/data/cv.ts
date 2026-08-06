@@ -1976,6 +1976,63 @@ export const cvData = {
       ],
     },
     {
+      name: "trip-runway — Travel Budget Yield App",
+      description:
+        "Ho trasformato looking-for-flights, il mio script personale di monitoraggio prezzi voli, in trip-runway: una web app che incrocia il costo del volo con il costo della vita a destinazione per calcolare i giorni massimi di viaggio sostenibili con un budget fisso. Next.js, Supabase e Prisma, con un'architettura anti-abuso che deduplica le chiamate API per rotta invece che per utente, e monetizzazione da affiliazione voli.",
+      url: "https://trip-runway.vercel.app",
+      repoUrl: "https://github.com/julioojospintados/trip-runway",
+      date: "2026-08",
+      tags: [
+        "Next.js",
+        "TypeScript",
+        "Tailwind CSS",
+        "Supabase",
+        "Prisma",
+        "Clerk",
+        "Travelpayouts API",
+        "Vercel",
+      ],
+      slug: "trip-runway",
+      primaryMode: "tech",
+      role: "Full-Stack Developer & Product Owner, progetto personale in sviluppo (2026).",
+      problem:
+        "Avevo già uno script personale, looking-for-flights, che cercava voli e mi scriveva su Telegram quando conveniva partire con un budget fisso. Funzionava, ma restava un tool per me. La stessa domanda, quanti giorni posso permettermi con questo budget, se la fanno molti viaggiatori, non solo io. Ho deciso di trasformare lo script in un prodotto: da tool a uso personale a web app con modello freemium e monetizzazione da affiliazione, senza riscrivere il motore di calcolo che già funzionava.",
+      process: [
+        "Origine — Il motore di calcolo, giorni sostenibili uguale budget residuo diviso spesa giornaliera, tagliato alla durata massima del viaggio, esisteva già in looking-for-flights. L'ho portato in trip-runway invariato: la logica di dominio era già validata su viaggi reali, il lavoro nuovo era tutto nel prodotto attorno.",
+        "Modello di business — Ho scelto un modello freemium con monetizzazione da affiliazione sui voli (Travelpayouts, rete Aviasales) invece di un abbonamento fin da subito. Abbassa la barriera d'ingresso mentre valido se la domanda esiste davvero fuori dalla mia cerchia.",
+        "Architettura anti-abuso — Il frontend non chiama mai le API dei voli on-demand. L'utente salva una rotta, un cronjob notturno prende le rotte uniche salvate dagli utenti, fa una sola chiamata API per rotta e aggiorna i prezzi per tutti gli interessati. Le quote gratuite delle API voli sono basse: ho progettato la deduplicazione prima di scrivere la prima feature, non dopo il primo blocco.",
+        "Stack e sicurezza — Next.js con App Router, PostgreSQL su Supabase gestito con Prisma, autenticazione con Clerk. Ogni Server Action che modifica o cancella dati verifica che l'utente autenticato sia il reale proprietario del record: senza quel controllo, un utente potrebbe modificare le rotte salvate da un altro.",
+      ],
+      decisions: [
+        {
+          title: "Rotte condivise, non chiamate per utente",
+          body: "Ogni chiamata all'API voli in tempo reale, moltiplicata per ogni utente, avrebbe esaurito la quota gratuita in poche ore. Ho salvato le rotte nel database e le ho deduplicate: una chiamata per rotta unica, non una per ogni utente che la guarda.",
+        },
+        {
+          title: "Amadeus escluso, non per scelta",
+          body: "Avevo valutato Amadeus per i prezzi voli, ma il portale self-service per sviluppatori è stato chiuso a metà 2026: resta solo un canale Enterprise, non percorribile in fase di bootstrap. Ho scelto Travelpayouts, gratuito e con deeplink affiliati già integrati nel modello di monetizzazione, con Duffel come piano B se in futuro servirà un prezzo live da GDS.",
+        },
+        {
+          title: "Freemium prima dell'abbonamento",
+          body: "Un abbonamento fin dal lancio avrebbe chiuso la porta a chi vuole solo provare il calcolo. L'affiliazione sui voli monetizza chi prenota, senza chiedere una carta di credito a chi sta ancora guardando.",
+        },
+        {
+          title: "Il controllo di autorizzazione non è un dettaglio da fase 2",
+          body: "Ho scritto la regola di autorizzazione, verificare che l'utente sia il proprietario del record, come vincolo architetturale fin dalla prima Server Action, non come task di sicurezza da aggiungere prima del lancio.",
+        },
+      ],
+      outcomes: [
+        "App live e deployata su Vercel (trip-runway.vercel.app), evoluzione diretta di un tool personale già funzionante.",
+        "Motore di calcolo riutilizzato da looking-for-flights senza riscriverlo: la logica di dominio era già validata su viaggi reali.",
+        "Architettura anti-abuso (deduplicazione API per rotta) e controllo di autorizzazione su ogni Server Action decisi prima di scrivere le prime feature.",
+      ],
+      learnings: [
+        "Un tool personale che risolve un problema vero è la validazione di mercato più economica che esista: il bisogno c'era già, prima ancora di pensare al prodotto.",
+        "I vincoli esterni cambiano l'architettura più delle preferenze tecniche: la chiusura del portale Amadeus ha deciso il provider al posto mio, non un confronto tra feature.",
+        "La sicurezza sui dati va decisa come regola architetturale all'inizio: rimandarla a dopo il lancio significa riscrivere ogni Server Action già fatta.",
+      ],
+    },
+    {
       name: "Product Discovery — UX Research & Product Strategy",
       description:
         "Con un socio tecnico ho rovesciato il processo di ideazione di un prodotto digitale con Design Thinking ed Effectuation: prima la ricerca sui bisogni reali delle persone, poi l'idea. Mappa comportamentale su Miro con la lente delle Four Forces, interviste, analisi dei competitor: da 17 concept ne è rimasto uno, ora in sviluppo, che valideremo con il pPoC Engine prima di scrivere codice.",
