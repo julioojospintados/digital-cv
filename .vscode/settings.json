@@ -31,5 +31,10 @@
   },
   "chat.tools.terminal.autoApprove": {
     "npx astro": true
+  },
+  "chat.mcp.serverSampling": {
+    "digital-cv/.mcp.json: github": {
+      "allowedModels": ["copilotcli/auto", "copilot/auto", "agent-host-copilotcli:auto"]
+    }
   }
 }
