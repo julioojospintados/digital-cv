@@ -109,7 +109,7 @@ const EN: Locale = {
       org: "Internal project — business management platform",
       bullets: [
         "Designed and built an internal business platform end-to-end, process analysis to deploy: an <b>MCP architecture</b> (tools/resources/prompts as APIs for AI agents) integrated with VS Code Copilot and Cursor.",
-        "Automated the <b>Cursor → GitLab CI/CD → deploy</b> pipeline (zero manual steps) and designed the flows for non-technical operators, working in <b>1–2 week sprints</b> with impact measured at every release.",
+        "Automated the <b>Cursor → GitLab CI/CD → deploy</b> pipeline (zero manual steps), working in <b>1–2 week sprints</b> with impact measured at every release.",
       ],
     },
     {
@@ -119,18 +119,7 @@ const EN: Locale = {
       org: "Independent product discovery",
       bullets: [
         "With a technical partner, applied <b>Design Thinking</b> and <b>Effectuation</b> to invert classic ideation — research into real behavioural needs first, the idea after — mapped on Miro through the <b>Four Forces</b> (Jobs to Be Done) lens.",
-        "Validated with <b>7 target-user interviews</b> and competitor analysis; broke down the strongest ideas with the <b>Value Proposition Canvas</b>, narrowing <b>17 concepts to 1</b> with a Value/Effort matrix.",
-        "Built the <b>pPoC Engine</b>: a Probabilistic Proof of Concept in a high-fidelity Figma prototype, now validating real behaviour before writing any code.",
-      ],
-    },
-    {
-      yr: "2023 — 2024",
-      loc: "Italy / Remote",
-      role: "Digital Strategist",
-      org: "Music Agency",
-      bullets: [
-        "Content strategy aimed at the industry, not a generic audience; <b>doubled a targeted following</b> (musicians, labels, promoters) organically.",
-        "Conceived a <b>targeted playlist</b> to involve musicians and industry insiders — more followers, collaborations and industry contacts; organised a live event end-to-end.",
+        "Validated with <b>7 target-user interviews</b>, narrowing <b>17 concepts to 1</b>.",
       ],
     },
   ],
@@ -298,7 +287,7 @@ const IT: Locale = {
       org: "Progetto interno — gestionale aziendale",
       bullets: [
         "Ho progettato e sviluppato un gestionale aziendale interno end-to-end, dall'analisi dei processi al deploy: un'<b>architettura MCP</b> (tool/resource/prompt come API per agenti AI) integrata con VS Code Copilot e Cursor.",
-        "Ho automatizzato la pipeline <b>Cursor → GitLab CI/CD → deploy</b> (zero interventi manuali) e progettato i flussi per operatori non tecnici, in <b>sprint da 1-2 settimane</b> con impactScore misurato a ogni rilascio.",
+        "Ho automatizzato la pipeline <b>Cursor → GitLab CI/CD → deploy</b> (zero interventi manuali), in <b>sprint da 1-2 settimane</b> con impactScore misurato a ogni rilascio.",
       ],
     },
     {
@@ -308,18 +297,7 @@ const IT: Locale = {
       org: "Product discovery indipendente",
       bullets: [
         "Con un socio tecnico, ho applicato <b>Design Thinking</b> ed <b>Effectuation</b> per invertire l'ideazione classica: prima la ricerca sui bisogni comportamentali reali, poi l'idea — mappati su Miro con la lente delle <b>Four Forces</b> (Jobs to Be Done).",
-        "Validazione con <b>7 interviste a utenti target</b> e analisi dei competitor; ho destrutturato le idee più forti con il <b>Value Proposition Canvas</b>, riducendo <b>17 concept a 1</b> con una matrice Valore/Sforzo.",
-        "Ho costruito il <b>pPoC Engine</b>: un Probabilistic Proof of Concept in un prototipo Figma ad alta fedeltà, oggi al lavoro per validare il comportamento reale prima di scrivere codice.",
-      ],
-    },
-    {
-      yr: "2023 — 2024",
-      loc: "Italia / Remoto",
-      role: "Digital Strategist",
-      org: "Music Agency",
-      bullets: [
-        "Content strategy rivolta al settore, non a un pubblico generico; ho <b>raddoppiato un seguito mirato</b> (musicisti, etichette, promoter) in modo organico.",
-        "Ho ideato una <b>playlist mirata</b> per coinvolgere musicisti e addetti ai lavori: più follower, collaborazioni e contatti di settore; ho organizzato un evento live end-to-end.",
+        "Validazione con <b>7 interviste a utenti target</b>, riducendo <b>17 concept a 1</b>.",
       ],
     },
   ],
