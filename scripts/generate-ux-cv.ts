@@ -147,6 +147,12 @@ const EN: Locale = {
       outcome: "Design system · WCAG AA · &gt;80% coverage",
       url: `${SITE}/work/digital-cv`,
     },
+    {
+      title: "trip-runway — Travel Budget Yield App",
+      desc: "Turned a personal flight-price script into a web app that crosses flight cost with cost of living to calculate the maximum sustainable trip length on a fixed budget.",
+      outcome: "Next.js · Supabase · anti-abuse API architecture",
+      url: `${SITE}/work/trip-runway`,
+    },
   ],
   skills: [
     {
@@ -335,6 +341,12 @@ const IT: Locale = {
       desc: "IA guidata dalla ricerca (un profilo, quattro lenti), design system WCAG-AA e build AI-augmented. Il gemello live di questo documento.",
       outcome: "Design system · WCAG AA · &gt;80% copertura",
       url: `${SITE}/work/digital-cv`,
+    },
+    {
+      title: "trip-runway — Travel Budget Yield App",
+      desc: "Ho trasformato uno script personale di ricerca voli in una web app che incrocia il costo del volo con il costo della vita per calcolare i giorni massimi di viaggio sostenibili con un budget fisso.",
+      outcome: "Next.js · Supabase · architettura API anti-abuso",
+      url: `${SITE}/work/trip-runway`,
     },
   ],
   skills: [
