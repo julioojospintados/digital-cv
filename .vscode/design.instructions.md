@@ -126,10 +126,26 @@ Each `AiCard` item has: `tool`, `title`, `desc`, `impact`, `tags`.
 
 ## Accessibility
 
+Target: **WCAG 2.2 level AA** (EU harmonised standard: EN 301 549).
+Full rule set in `design-system/SKILL.md` → "Accessibilità".
+
 - All interactive cards: `role="button"` or `role="article"` with `aria-label`
 - Nav mode buttons: `aria-pressed={isActive}`
-- Focus ring: `outline: 2px solid var(--color-accent); outline-offset: 2px` (in global.css)
-- Minimum contrast 4.5:1 — token values are pre-calibrated, do not increase transparency
+- Focus ring: `outline: 2px solid var(--color-accent); outline-offset: 2px` (in global.css).
+  Must itself reach 3:1 against its surroundings (1.4.11), and must not end up
+  hidden behind sticky nav, FAB or consent banner (2.4.11)
+- Text contrast 4.5:1. The 3:1 exception starts at **24px, or 18.66px bold** —
+  not 18px. Compute the ratio on the **composited** color (alpha counts) and on
+  the **actual** background (any light overlay above the ottanio changes it)
+- **Never use `creative` orange (3.62:1) or `management` purple (3.04:1) as a
+  text color** on the ottanio — fills, borders and rules only. Lighten toward
+  white if the color must carry text (`--accent` vs `--accent-text`)
+- Non-text contrast 3:1 for control borders and informative icons (1.4.11)
+- Tap targets ≥24×24 CSS px (2.5.8)
+- No minimum font size exists in WCAG. What is binding: 200% zoom (1.4.4),
+  reflow at 320px (1.4.10), user text spacing (1.4.12) — hence `rem`, never `px`.
+  The project's 12px floor is our own convention, not the standard
+- Never block paste in the `tools/` passphrase fields (3.3.8)
 
 ## Data import
 

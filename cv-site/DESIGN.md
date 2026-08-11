@@ -380,17 +380,45 @@ Nessun `?mode=` query param in nessuna route.
 
 ---
 
-## 15. Accessibilità (WCAG AA)
+## 15. Accessibilità (WCAG 2.2 AA)
 
-- **Contrasto testo (1.4.3)**: ≥4.5:1 normale, ≥3:1 testo grande (≥18px bold) —
-  vedi tabella §9, tutti i `--color-text-muted` per mode verificati.
+Riferimento: **WCAG 2.2 livello AA**. In Europa la norma armonizzata è
+**EN 301 549** (la v3.2.1, citata dalla Direttiva (UE) 2016/2102, recepisce
+WCAG 2.1 AA; le revisioni successive si allineano a 2.2). L'**European
+Accessibility Act** (Dir. (UE) 2019/882, dal 28 giugno 2025) non copre un CV
+personale: qui lo standard è una scelta, non un obbligo — ma vale per intero.
+
+Regole operative complete → `.claude/skills/design-system/SKILL.md`
+§ Accessibilità. Qui il riassunto:
+
+- **Contrasto testo (1.4.3)**: ≥4.5:1 normale. Il 3:1 vale solo da **24px**,
+  o **18.66px se bold** — non "18px bold", errore corretto il 2026-08-11.
+  Il rapporto va calcolato sul colore **composto** (l'alpha conta) e sul fondo
+  **effettivo** (un velo chiaro sopra l'ottanio lo cambia).
+- **Contrasto non testuale (1.4.11)**: ≥3:1 per bordi di controlli, icone
+  informative e **indicatori di focus**.
+- **Accento come testo**: `creative` (3.62:1) e `management` (3.04:1) **non
+  sono conformi** come colore di un testo su ottanio — solo come riempimento,
+  bordo o linea. Vedi §9.
+- **Dimensione del testo**: WCAG **non impone un minimo**. I vincoli reali
+  sono **1.4.4** (zoom 200%), **1.4.10** (reflow a 320px) e **1.4.12**
+  (spaziatura imposta dall'utente). Il pavimento dei 12px del progetto è una
+  convenzione nostra, e i `rem` sono ciò che rende il testo conforme.
+- **Target tattili (2.5.8)**: ≥24×24 px CSS.
 - **Focus visible (2.4.7)**: `:focus-visible` in `global.css`, mai sovrascritto
-  con `outline:none` senza alternativa.
+  con `outline:none` senza alternativa. E **2.4.11**: il focus non deve finire
+  nascosto sotto navbar sticky, FAB o banner di consenso.
 - **Skip link (2.4.1)**: in `Layout.astro`, ogni `<main>` ha `id="main-content"`.
 - **Uso del colore (1.4.1)**: mai l'unico differenziatore — le mode-card hanno
   anche label testuale, non solo colore.
-- **Riduzione movimento (2.3.3)**: `prefers-reduced-motion: reduce` rispettato
-  ovunque con `!important` sulle durate.
+- **Lingua della pagina (3.1.1)**: `<html lang>` corretto su IT e su `/en`.
+- **Autenticazione (3.3.8)**: le pagine `tools/` non devono mai bloccare
+  l'incolla nel campo passphrase.
+- **Riduzione movimento**: `prefers-reduced-motion: reduce` rispettato ovunque
+  con `!important` sulle durate. Nota: **2.3.3 è AAA**, non AA — resta regola
+  di progetto, ma non è un obbligo AA. I criteri AA sul movimento sono
+  **2.2.2** (fermare ciò che si anima da solo oltre 5s) e **2.3.1** (niente
+  lampeggi >3/s).
 - **Difetti noti aperti** (vedi `todo.md`): dropdown mode mobile non ancora
   navigabile da tastiera (#54); carousel feedback senza indicatore di
   posizione/`aria-live` (#55).

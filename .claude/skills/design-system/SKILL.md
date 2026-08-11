@@ -57,6 +57,42 @@ corretto il 2026-07-23 in `WorkDesignSystem.astro` (leggeva `:root` invece del m
 essere mai ricalcolato, scoperto il 2026-07-31. Serve alpha **0.90** (→
 4.51:1) o cambiare tinta — decisione di design non ancora presa.
 
+### L'accento come TESTO: due dei quattro non si possono usare
+
+Verificato a calcolo il 2026-08-11 (formula ufficiale di luminanza relativa,
+alpha composto sull'ottanio):
+
+| Accento su ottanio | Rapporto | Come testo <24px | Come bordo/icona (3:1) |
+| ------------------ | -------- | ---------------- | ---------------------- |
+| tech ciano         | **7.89:1** | ✅ | ✅ |
+| human oro          | **6.49:1** | ✅ | ✅ |
+| creative arancione | **3.62:1** | ❌ | ✅ |
+| management viola   | **3.04:1** | ❌ | ✅ (di misura) |
+
+→ **Arancione e viola non vanno usati come colore di un testo** su ottanio:
+  occhielli, link, etichette, numeri. Vanno benissimo come **riempimento** di
+  un bottone con sopra l'inchiostro scuro `rgba(10,38,34,1)` (arancione
+  5.64:1, viola 4.73:1 — entrambi conformi), come bordo, come linea.
+→ Se serve quel colore come testo, va **schiarito verso il bianco del minimo
+  necessario**: arancione al 50%, viola al 45% (→ 4.70:1 e 4.75:1 sul fondo
+  di `/lab/home`). Ciano e oro restano interi. Il pattern è in
+  `lab-home.css`: token `--accent` per i riempimenti, `--accent-text` per il
+  testo.
+→ Questo è anche il motivo per cui i bottoni di `/lab/home` sono pieni e non
+  fantasma: con il testo colorato su fondo trasparente due mode su quattro
+  sarebbero fuori norma.
+
+### Chiunque aggiunga un velo sopra l'ottanio rifà i conti
+
+Un gradiente, un bagliore, una luce d'ambiente: qualunque strato chiaro alza
+la luminanza del fondo e **abbassa il contrasto di tutto il testo sopra**.
+Caso reale (2026-08-11, `/lab/home`): un fondale con lampada bianca al 16% +
+velo d'accento al 9% ha portato il testo secondario da 5.32:1 a **3.15:1** —
+sotto soglia, per un effetto puramente decorativo. Corretto scendendo a 8% e
+6% e togliendo l'alpha al testo.
+Regola: il rapporto si calcola **nel punto in cui il velo è più intenso**, non
+al centro e non a occhio.
+
 ### Token NON esistenti — non usarli mai
 
 - ~~`--color-ottanio-dark`~~ — rimosso (era inutilizzato)
@@ -71,13 +107,97 @@ L'oggetto knolling associato al management è `chess.webp` (strategia) e `compas
 
 ---
 
-## Accessibilità — Regole Obbligatorie (WCAG AA)
+## Accessibilità — Regole Obbligatorie
 
-**Contrasto testo (1.4.3):** ratio minimo **4.5:1** per testo normale, **3:1** per testo grande (≥18px bold).
-→ Verificare sempre `--color-text-muted` su `--color-bg` — i valori nei token sono già calibrati.
+### Quale norma vale, e da dove viene
+
+Il riferimento è **WCAG 2.2 livello AA** (W3C). In Europa la norma armonizzata
+è **EN 301 549**: la v3.2.1, quella citata dalla Direttiva (UE) 2016/2102 sul
+settore pubblico, recepisce WCAG 2.1 AA per intero; le revisioni successive si
+allineano a 2.2. Puntare a **2.2 AA** copre entrambe — 2.2 aggiunge criteri
+senza toglierne, con l'unica eccezione di 4.1.1 Parsing, dichiarato obsoleto
+perché i parser moderni lo rendono un non-problema.
+
+L'**European Accessibility Act** (Direttiva (UE) 2019/882, in applicazione dal
+**28 giugno 2025**) riguarda prodotti e servizi come e-commerce, banche,
+trasporti, e-book. **Un CV personale non rientra nel suo campo di
+applicazione**: qui lo standard è una scelta del progetto, non un obbligo di
+legge. Vale comunque per intero — è anche il lavoro che Giulio vende.
+
+### 1.4.3 Contrasto minimo (AA)
+
+| Testo | Rapporto richiesto |
+| ----- | ------------------ |
+| Normale | **4.5:1** |
+| Grande — **≥24px** (18pt), oppure **≥18.66px se bold** (14pt bold) | **3:1** |
+
+⚠️ **La soglia del testo grande è 18.66px in grassetto, non 18px.** Questa
+guida ha detto "≥18px bold" fino al 2026-08-11: era sbagliato, e sbagliato
+dalla parte pericolosa — un titolo a 18px bold cade fra le due soglie e gli
+serve 4.5:1, non 3:1.
+
+→ Verificare sempre `--color-text-muted` su `--color-bg`.
 → Non aumentare la trasparenza di `--color-text-muted` senza ricalcolare il ratio.
+→ **L'alpha conta.** Su fondo scuro un testo chiaro con alpha < 1 si spegne
+  verso lo sfondo: il rapporto va calcolato sul colore **composto**, non su
+  quello dichiarato.
+→ **Anche il fondo conta.** Qualunque velo chiaro sopra l'ottanio (un
+  gradiente, un bagliore, un overlay) alza la luminanza dello sfondo e toglie
+  contrasto a tutto il testo che ci sta sopra. Se si aggiunge un velo, il
+  rapporto va rifatto **nel punto in cui il velo è più intenso**.
 
-**Focus visible (2.4.7):** `focus-visible` è definito in global.css — **non sovrascriverlo mai** con `outline:none`.
+### 1.4.11 Contrasto non testuale (AA) — spesso dimenticato
+
+**3:1** per: bordi di campi e controlli, icone che portano informazione,
+**indicatori di focus**, confini di componenti. Non si applica a decorazioni
+pure (una linea sfumata, un glow) né a loghi.
+
+### Le dimensioni del testo: cosa dice davvero la norma
+
+**WCAG non impone nessuna dimensione minima del carattere.** Non esiste un
+criterio che dica 12px, 14px o 16px. Chi cita "minimo 16px" sta citando il
+default dei browser o le linee guida di Apple/Google, non lo standard.
+
+Quello che la norma richiede davvero sul testo è:
+
+| Criterio | Cosa impone |
+| -------- | ----------- |
+| **1.4.4** Ridimensionamento (AA) | Il testo deve arrivare al **200%** senza perdere contenuto o funzionalità |
+| **1.4.10** Reflow (AA) | Contenuto utilizzabile a **320px** di larghezza equivalente senza scorrimento su due assi |
+| **1.4.12** Spaziatura del testo (AA) | Non deve rompersi con interlinea **1.5×**, spaziatura lettere **0.12em**, parole **0.16em**, paragrafi **2×** |
+
+→ **Il meccanismo che conta è `rem`, non il numero di px.** Un testo di 12px
+  in rem, che a zoom 200% diventa 24px, è conforme; un 16px in px fisso che
+  non scala non lo è. È il motivo per cui in questo progetto i px sono
+  banditi (vedi memoria `feedback-rem-non-px`).
+→ Il pavimento dei 12px più giù è una **convenzione di progetto**, non un
+  requisito di legge. È una buona convenzione — ma non va difesa citando
+  WCAG, e non va anteposta a una scelta di leggibilità migliore.
+→ Fra i due, **1.4.12 è il criterio che questo sito rischia di più**: layout
+  a griglia con altezze fisse e testo in maiuscolo spaziato si rompono
+  esattamente lì.
+
+### 2.5.8 Dimensione del target (AA, nuovo in 2.2)
+
+Ogni bersaglio toccabile almeno **24×24 px CSS**, salvo eccezioni (link
+inline nel testo, spaziatura equivalente). Vale per i toggle delle pagine
+`tools/`, per lo switch di mode e di lingua, per il FAB.
+
+### Focus — tre criteri, non uno
+
+**2.4.7 Focus Visible (AA):** `focus-visible` è definito in global.css — **non sovrascriverlo mai** con `outline:none`.
+**1.4.11 (AA):** l'indicatore di focus deve avere **3:1** rispetto a ciò che lo circonda — non basta che ci sia, deve vedersi.
+
+⚠️ L'anello di focus del sito usa `--color-accent`, e su ottanio i margini
+sono strettissimi: **management 3.04:1** contro una soglia di 3.00:1.
+Conforme, ma senza alcun margine — qualunque schiarita del fondo lo fa
+cadere. È esattamente quello che è successo su `/lab/home`, dove col fondale
+illuminato l'anello arancione è sceso a **2.57:1**: lì è stato portato
+all'inchiostro chiaro (6.4:1 su tutte e quattro le schede). **Un anello di
+focus non è un elemento di marca** — è l'unica cosa che dice a chi naviga da
+tastiera dove si trova. Se serve il colore, va accompagnato da un secondo
+anello di contrasto opposto (`box-shadow: 0 0 0 4px` scuro).
+**2.4.11 Focus Not Obscured, Minimum (AA, nuovo in 2.2):** l'elemento che riceve il focus non può restare **nascosto** dietro barre sticky, FAB o banner di consenso. Su questo sito è un rischio concreto: c'è una navbar sticky, un FAB e un banner.
 
 ```css
 /* NON fare questo */
@@ -99,7 +219,19 @@ L'oggetto knolling associato al management è `chess.webp` (strategia) e `compas
 
 **Uso del colore (1.4.1):** il colore NON può essere l'unico differenziatore — le mode card usano anche label testuale (01/02/03) + descrizione. Non usare solo accent color per comunicare stato attivo.
 
-**Animazioni (2.3.3):** `@media (prefers-reduced-motion: reduce)` è già in global.css — rispettarlo sempre con `!important` su duration.
+**Movimento:** `@media (prefers-reduced-motion: reduce)` è già in global.css — rispettarlo sempre con `!important` su duration.
+Il criterio che lo riguarda, **2.3.3 Animation from Interactions, è AAA**, non AA: questa guida lo ha etichettato AA fino al 2026-08-11. Rispettarlo resta la regola del progetto, ma non va citato come obbligo AA.
+Il criterio AA sul movimento è un altro: **2.2.2 Pause, Stop, Hide** — qualunque animazione automatica che duri più di 5 secondi e parta da sola deve poter essere fermata.
+E **2.3.1 Tre lampeggi (A)**: niente che lampeggi più di 3 volte al secondo.
+
+**3.3.8 Autenticazione accessibile, minimo (AA, nuovo in 2.2):** un campo
+password non può vietare **incolla** né richiedere di trascrivere a memoria.
+Riguarda direttamente le pagine `tools/` con la passphrase: non aggiungere mai
+`onpaste="return false"` o simili.
+
+**3.1.1 Lingua della pagina (A):** `<html lang>` corretto su ogni route — `it`
+sulle pagine IT, `en` su quelle `/en`. Con due alberi di pagine è una
+divergenza facile da introdurre.
 
 ---
 
@@ -440,28 +572,52 @@ cerca. Chiamarsi "chip" non basta a qualificare per il pavimento.
   solo quell'elemento isolato, capirebbe l'informazione che porta. Se la
   risposta è "solo se lo ingrandisce", non è al pavimento giusto.
 
-### Regole di accessibilità (non negoziabili)
+### Regole di dimensione — cosa è norma e cosa è convenzione
 
-- **12px è il minimo assoluto** per qualunque testo che l'utente deve
-  effettivamente leggere: label di form, didascalie, micro-help, note. Mai
-  scendere sotto `var(--fs-12)` per prosa, nomi, descrizioni, dati.
-- **10px (`var(--fs-10)`) è un'eccezione**, non uno step normale: si usa SOLO
-  per badge/timestamp brevissimi (2-4 caratteri) in ALL CAPS + bold + alto
-  contrasto — es. l'abbreviazione di 3 lettere del livello skill
-  (`EXP`/`AVA`/`BAS`). Se il testo è una frase o una parola intera, non
-  qualifica per l'eccezione: va a `--fs-12`.
-- **Body mobile:** minimo 16px (`var(--fs-16)`) — standard iOS/Material.
-- **Body desktop:** 14-16px accettabili (`var(--fs-14)`/`var(--fs-16)`).
-- **Testo secondario (entrambi i device):** minimo 12px (`var(--fs-12)`).
-- **Contrasto:** sotto i 18px bold / 14px normal serve un rapporto WCAG
-  ≥4.5:1 (già verificato per `--color-text-muted` su tutti i mode — vedi
-  tabella colori sopra). Non abbassare l'opacità di un colore già a 12px.
-- **Line-height:** più piccolo è il font, più deve respirare — 140-150% del
-  font-size per qualunque blocco a `--fs-12` o `--fs-14`. Mai line-height
-  <1.3 sotto i 14px.
-- **Font-weight:** mai `font-weight: 300`/`400` sotto i 14px su questo sito —
-  i micro-label usano già 500-700 (JetBrains Mono compensa bene grazie
-  all'x-height alta; Lexend idem).
+Distinzione da tenere ferma, perché la guida le ha confuse fino al 2026-08-11
+e la confusione ha prodotto una scelta peggiore in nome di una regola
+inesistente:
+
+**Norma (WCAG 2.2 AA — non negoziabile):**
+
+- Il testo deve reggere **zoom 200%** (1.4.4) e **reflow a 320px** (1.4.10)
+  → in pratica: sempre `rem`, mai `px`, mai altezze fisse che tagliano.
+- Il testo deve sopravvivere a **interlinea 1.5 / lettere 0.12em / parole
+  0.16em / paragrafi 2×** (1.4.12) applicati dall'esterno.
+- **Contrasto 4.5:1**, o 3:1 solo sopra 24px (18.66px se bold) — vedi
+  § Accessibilità. **Non esiste una soglia di dimensione minima nella norma.**
+
+**Convenzione di progetto (buona, ma è una scelta nostra):**
+
+- **12px come pavimento** per qualunque testo che l'utente deve leggere.
+  Motivo reale: sotto quella soglia la resa di JetBrains Mono e Lexend
+  peggiora e il testo secondario diventa faticoso — non "lo dice WCAG".
+- **10px (`var(--fs-10)`) è un'eccezione**, non uno step normale: SOLO
+  badge/timestamp brevissimi (2-4 caratteri) in ALL CAPS + bold + alto
+  contrasto — es. `EXP`/`AVA`/`BAS`. Una frase o una parola intera non
+  qualifica: va a `--fs-12`.
+- **Body:** 16px su mobile, 14-16px su desktop.
+- **Line-height:** 140-150% per qualunque blocco a `--fs-12`/`--fs-14`. Mai
+  sotto 1.3 ai corpi piccoli. (Questo sì tocca la norma: 1.4.12 chiede che
+  1.5 non rompa il layout.)
+- **Font-weight:** mai 300/400 sotto i 14px.
+
+### Prima del corpo, guarda il trattamento
+
+A parità di pixel, quello che decide la leggibilità è spesso il trattamento,
+non la dimensione — e la guida non lo diceva:
+
+- **ALL CAPS** toglie alla parola il suo profilo (ascendenti e discendenti):
+  si legge compitando invece che riconoscendo. Su una frase è un costo vero;
+  su una parola di etichetta è trascurabile.
+- **Tracking largo** (≥0.15em) scolla le lettere e allarga la riga anche del
+  20%: peggiora la lettura **e** fa andare a capo di più.
+- **Monospaziato in prosa** ha lettere meno differenziate del proporzionale.
+
+Quindi: se una riga è poco leggibile, prima di alzare il corpo, prova a
+togliere il maiuscolo o a stringere il tracking. Alzare il corpo di una riga
+in mono maiuscolo spaziato la rende **più larga** senza renderla molto più
+leggibile — errore commesso il 2026-08-11 su `.lh-cred` in `/lab/home`.
 
 ### DO NOT (typography)
 
