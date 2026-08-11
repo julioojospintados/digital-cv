@@ -1,0 +1,813 @@
+/* ─────────────────────────────────────────────────────────────────────────
+   lab-home.css — prova: home senza le quattro card.
+
+   Due cose da giudicare qui:
+   1. se gli oggetti grandi reggono l'ingresso da soli, senza card;
+   2. l'ombra portata ricostruita — la stessa immagine annerita, sfocata e
+      inclinata sotto all'originale. Segue la sagoma perché eredita l'alpha
+      del webp, quindi non è un rettangolo sfocato ma l'ombra della forma.
+      Non è un'ombra calcolata da una luce vera (per quella serve il 3D):
+      è la tecnica con cui si radicano i ritagli, e costa nulla.
+   ───────────────────────────────────────────────────────────────────────── */
+
+/* --lh-mood — il colore dell'ambiente, uno per scheda (vedi .lh::before).
+   Va dichiarato con @property per due motivi: senza registrazione una custom
+   property non si può animare (il browser la tratta come testo, quindi
+   passerebbe a scatto da un colore all'altro), e `syntax: "<color>"` è quello
+   che la rende interpolabile. `inherits: true` perché il valore lo scrive .lh
+   e a leggerlo è il suo pseudo-elemento. */
+@property --lh-mood {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: transparent;
+}
+
+.lh {
+  /* I quattro accenti, dichiarati una volta sola: da qui li prendono sia le
+     sezioni (--accent, per titoli e bottoni) sia l'ambiente (--lh-mood). */
+  --lh-mode-creative: rgba(255, 107, 53, 1);
+  --lh-mode-tech: rgba(0, 255, 200, 1);
+  --lh-mode-management: rgba(180, 100, 255, 1);
+  --lh-mode-human: rgba(240, 200, 127, 1);
+
+  --lh-ink: rgba(245, 240, 230, 1);
+  /* Opaco, non 0.82: su fondo scuro l'alpha spegne il testo verso lo sfondo,
+     e col fondale acceso (sotto) scendeva a 3,88:1 — sotto il 4,5:1 di
+     1.4.3. Da opaco tiene 5,01:1 nel punto peggiore. */
+  --lh-muted: rgba(192, 220, 215, 1);
+  --lh-line: rgba(245, 240, 230, 0.16);
+  --lh-accent: var(--lh-mode-creative);
+  --lh-gutter: clamp(1.25rem, 4vw, 4.5rem);
+  /* Altezza della barra in cima — misurata: 78px a 375px di larghezza.
+     Serve all'ingresso per non farci passare sotto il contenuto. */
+  --lh-bar-h: 5rem;
+
+  /* ── Il tetto vero di lampada e ambiente non è estetico: è 1.4.3 ──────────
+     Ogni velo chiaro sopra l'ottanio alza la luminanza dello sfondo, e ogni
+     punto di luminanza in più toglie contrasto al testo chiaro che ci sta
+     sopra. Ai valori del primo giro (lampada 16%, ambiente 9%) il testo
+     secondario scendeva a 3,15:1 — molto sotto il 4,5:1 richiesto.
+
+     Verificato a calcolo sul punto peggiore (dove la lampada è più intensa,
+     con l'ambiente di ogni mode). Coi valori qui sotto il peggiore è 5,01:1
+     in tech; il testo primario sta a 6,41:1. Alzarli richiede rifare il
+     conto — non è una preferenza, è la soglia che decide se il testo si
+     legge. Metodo e numeri in .claude/skills/design-system/SKILL.md. */
+
+  /* La lampada: colore della luce e sua intensità. Costante su tutta la
+     pagina — una sola sorgente, come nella referenza knolling. */
+  --lh-light: rgba(255, 244, 226, 1);
+  --lh-light-strength: 8%;
+
+  /* L'ambiente: quanto tinge la scheda attiva. Lo sfondo di questo progetto
+     resta ottanio sempre — questo è un velo di luce, non una ritinteggiatura. */
+  --lh-mood: transparent;
+  --lh-mood-strength: 6%;
+
+  /* 800ms = la durata dell'aggancio in lab-home-scroll.ts (DURATION = 0.8):
+     la luce arriva insieme alla scheda, non dopo. Oltre i 300ms della regola
+     UI perché non è una risposta a un comando, è atmosfera.
+     A movimento ridotto global.css azzera la durata: il colore cambia
+     comunque, di scatto — cambia l'ambiente, non sparisce. */
+  transition: --lh-mood 800ms var(--ease-standard);
+
+  /* Ombra portata — direzione unica per tutta la pagina: una sola sorgente di
+     luce, in alto a sinistra. Se ogni oggetto avesse la sua direzione la
+     scena si sfalderebbe.
+     Più lontana, più larga e più morbida di prima (era 4%/7%, 0.9rem, 0.34):
+     è la distanza fra oggetto e ombra a dire quanto l'oggetto è sollevato,
+     non il fatto che l'ombra ci sia. */
+  --lh-sh-x: 5%;
+  --lh-sh-y: 10%;
+  --lh-sh-blur: 1.5rem;
+  --lh-sh-opacity: 0.5;
+  /* Un'ombra leggermente più grande dell'oggetto legge come "sollevato": la
+     luce è vicina, quindi la sagoma proiettata si allarga. */
+  --lh-sh-scale: 1.06;
+
+  /* La seconda ombra, quella di contatto. Un oggetto appoggiato ne ha sempre
+     due: una lunga e morbida (sopra) e una corta e scura subito sotto il
+     punto d'appoggio. Senza questa il ritaglio galleggia — è la differenza
+     fra un oggetto sul tavolo e un adesivo sul fondale. Va in drop-shadow
+     perché segue anch'essa l'alpha del webp, quindi la sagoma, non il box. */
+  --lh-sh-contact: 0 0.2rem 0.45rem rgba(0, 0, 0, 0.55);
+
+  position: relative;
+  background: var(--color-bg);
+  color: var(--lh-ink);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+}
+
+/* ── Il fondale ───────────────────────────────────────────────────────────
+   Illumina **la finestra, non la sezione**: `fixed`, quindi non ha bordi che
+   possano scorrere via.
+
+   Prima questo stesso disegno stava su .lh-hero::before, ancorato a una
+   scatola che finisce: la vignettatura scendeva a nero sul bordo basso
+   dell'hero e la sezione dopo ripartiva da ottanio pieno, con una cucitura
+   visibile fra le due. Non era il gradiente a sbagliare, era il suo ancoraggio
+   — ed è anche più corretto così, la lampada sta nella stanza, non appiccicata
+   al tavolo che scorre.
+
+   Tre strati, dall'alto:
+   1. la lampada — alto a sinistra, la sorgente che giustifica la direzione
+      delle ombre portate (--lh-sh-x/y). Neutra e costante;
+   2. l'ambiente — l'unico che cambia scheda per scheda (vedi [data-mood]);
+   3. la vignettatura — nera, non tinta: è un'ombra, non una luce. */
+.lh::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      70% 55% at 16% 6%,
+      color-mix(in srgb, var(--lh-light) var(--lh-light-strength), transparent),
+      transparent 60%
+    ),
+    radial-gradient(
+      120% 90% at 50% 45%,
+      color-mix(in srgb, var(--lh-mood) var(--lh-mood-strength), transparent),
+      transparent 70%
+    ),
+    radial-gradient(130% 110% at 50% 118%, rgba(0, 0, 0, 0.45), transparent 56%);
+}
+
+/* La scheda attiva tinge l'ambiente. L'attributo lo scrive initLabHomeMood()
+   in lab-home-scroll.ts, e scrive **solo il nome della modalità**: i colori
+   restano tutti qui. All'ingresso non c'è nessun data-mood — nessuna modalità
+   è ancora stata scelta, quindi la stanza resta neutra. */
+.lh[data-mood="creative"] {
+  --lh-mood: var(--lh-mode-creative);
+}
+.lh[data-mood="tech"] {
+  --lh-mood: var(--lh-mode-tech);
+}
+.lh[data-mood="management"] {
+  --lh-mood: var(--lh-mode-management);
+}
+.lh[data-mood="human"] {
+  --lh-mood: var(--lh-mode-human);
+}
+
+/* Inchiostro e non accento: 1.4.11 chiede 3:1 all'indicatore di focus, e
+   l'arancione su questo fondale illuminato si ferma fra 2,57:1 e 2,82:1 —
+   fuori norma, e peggiora proprio sulle schede più chiare. L'inchiostro tiene
+   6,4:1 su tutte e quattro. Un anello di focus non è un elemento di marca: è
+   l'unica cosa che dice a chi naviga da tastiera dove si trova. */
+.lh :focus-visible {
+  outline: 2px solid var(--lh-ink);
+  outline-offset: 0.25rem;
+}
+
+/* ── Barra ── */
+
+.lh-bar {
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 6;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.5rem var(--lh-gutter);
+}
+
+.lh-mark {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: var(--fs-20);
+  letter-spacing: -0.02em;
+  color: var(--lh-accent);
+  text-decoration: none;
+}
+
+.lh-nav {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.lh-nav a,
+.lh-flag {
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--lh-muted);
+  text-decoration: none;
+}
+
+/* 24px di altezza minima: è la soglia di 2.5.8 (Target Size, AA in WCAG 2.2).
+   Misurato dal vivo, il link della barra stava a 18px — l'unico bersaglio
+   della pagina sotto soglia. Il chip qui sotto ci arriva già col padding. */
+.lh-nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.5rem;
+}
+
+.lh-flag {
+  border: 1px solid var(--lh-line);
+  border-radius: 999rem;
+  padding: 0.25rem 0.6rem;
+}
+
+/* ── Ingresso ── */
+
+.lh-hero {
+  position: relative;
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  padding: var(--lh-gutter);
+  /* La barra è fuori dal flusso (assoluta, in cima a .lh) e quindi non
+     occupa spazio: senza questo il contenuto dell'ingresso le passa sotto —
+     su schermo stretto il nome finiva addosso a "GO" e ai due link. Il
+     padding non è "un po' di aria", è l'altezza reale della barra, e sta in
+     un token perché le due misure devono cambiare insieme. */
+  padding-top: max(var(--lh-gutter), var(--lh-bar-h));
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.lh-stage {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  /* --mx/--my: puntatore normalizzato, scritto da lab-hero.ts. */
+  --mx: 0;
+  --my: 0;
+}
+
+/* Due parallassi sullo stesso elemento, sommate qui invece di contendersi la
+   proprietà `transform`: --mx/--my vengono dal puntatore (lab-hero.ts), --sy
+   dallo scroll (lab-home-scroll.ts). Ognuna scrive la propria variabile, il
+   CSS le mette insieme. */
+/* --lh-par-x/y: quanti rem si sposta un oggetto a depth 1 quando il puntatore
+   va dal centro al bordo. Sono token perché l'ampiezza è la leva che si tocca
+   per calibrare l'effetto: la X è più lunga della Y perché lo schermo è più
+   largo che alto e il movimento orizzontale ha più strada per leggersi. */
+.lh-obj {
+  --lh-par-x: 3rem;
+  --lh-par-y: 2.2rem;
+
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: var(--w);
+  translate: -50% -50%;
+  transform: translate3d(
+      calc(var(--mx) * var(--depth) * var(--lh-par-x) * -1),
+      calc(var(--my) * var(--depth) * var(--lh-par-y) * -1 + var(--sy, 0) * var(--depth) * 1rem),
+      0
+    )
+    rotate(var(--r, 0deg));
+  will-change: transform;
+}
+
+.lh-obj__img {
+  position: relative; /* sopra l'ombra, che è assoluta e viene prima nel DOM */
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(var(--lh-sh-contact));
+}
+
+/* L'ombra: stessa immagine, annerita e sfocata. brightness(0) porta a nero i
+   pixel visibili lasciando intatta la trasparenza — quindi resta la sagoma.
+   Lo scaleY schiaccia l'ombra come se cadesse su un piano, lo skew le dà una
+   direzione invece di lasciarla centrata sotto l'oggetto. */
+.lh-obj__shadow,
+.lh-section__object .lh-obj__shadow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  filter: blur(var(--lh-sh-blur)) brightness(0);
+  opacity: var(--lh-sh-opacity);
+  /* Lo scaleY resta 0.94 dentro l'ingrandimento: l'ombra si allarga perché
+     l'oggetto è sollevato, e insieme resta schiacciata perché cade su un
+     piano invece che stare in piedi. */
+  transform: translate(var(--lh-sh-x), var(--lh-sh-y)) skewX(-8deg)
+    scale(var(--lh-sh-scale), calc(var(--lh-sh-scale) * 0.94));
+  transform-origin: 50% 100%;
+  pointer-events: none;
+}
+
+.lh-copy {
+  position: relative;
+  z-index: 3;
+  display: grid;
+  gap: 1rem;
+  justify-items: center;
+  text-align: center;
+  max-width: 38rem;
+}
+
+.lh-name {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(2.5rem, 8vw, 5rem);
+  line-height: 0.94;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+  /* Alone scuro dietro al testo: gli oggetti passano vicino e senza questo la
+     leggibilità dipenderebbe da cosa c'è sotto. */
+  text-shadow: 0 0.15rem 2.5rem rgba(4, 34, 31, 0.85);
+}
+
+.lh-tagline {
+  font-size: var(--fs-18);
+  font-style: italic;
+  line-height: 1.5;
+  color: var(--lh-muted);
+  max-width: 30rem;
+  text-wrap: pretty;
+  text-shadow: 0 0.1rem 1.5rem rgba(4, 34, 31, 0.9);
+}
+
+/* La riga dei cinque ruoli. In mono spaziato come nella home vera: è una
+   didascalia, non un titolo, e a questo corpo non deve competere col nome.
+   Era clamp(0.6rem, …): 9,6px al minimo. Ma questi cinque ruoli non sono
+   decorazione — sono il dato che un recruiter cerca per primo, e il criterio
+   della scala guarda la natura del dato, non il nome della classe. */
+.lh-cred {
+  font-family: var(--font-mono);
+  font-size: var(--fs-14);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  line-height: 1.9;
+  color: var(--lh-muted);
+  max-width: 44rem;
+  text-wrap: balance;
+  text-shadow: 0 0.1rem 1.5rem rgba(4, 34, 31, 0.9);
+}
+
+.lh-scroll {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  translate: -50% 0;
+  z-index: 4;
+  display: grid;
+  justify-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--lh-muted);
+  text-decoration: none;
+}
+
+.lh-scroll__line {
+  width: 1px;
+  height: 2.5rem;
+  background: linear-gradient(var(--lh-accent), transparent);
+}
+
+/* ── Le quattro sezioni ── */
+
+.lh-section {
+  --accent: var(--lh-accent);
+
+  position: relative;
+  min-height: 100svh;
+  display: grid;
+  align-items: center;
+  gap: clamp(1.5rem, 5vw, 4rem);
+  grid-template-columns: minmax(0, 1fr);
+  max-width: 82rem;
+  margin-inline: auto;
+  padding: clamp(4rem, 10vh, 7rem) var(--lh-gutter);
+  overflow: hidden;
+}
+
+/* Due token per lo stesso colore, e la differenza non è stilistica.
+   `--accent` è l'accento pieno: va bene per riempire un bottone, per un
+   bordo, per una linea — cose a cui basta 3:1 (1.4.11) o niente.
+   `--accent-text` è la variante che regge come **testo** sull'ottanio, dove
+   serve 4,5:1 (1.4.3). Due dei quattro accenti non ci arrivano puri:
+   arancione 3,62:1 e viola 3,04:1 — verificati a calcolo, non a occhio.
+   Ciano e oro passano interi, quindi restano intatti; gli altri due sono
+   schiariti del minimo che serve, non di più. */
+.lh-section[data-mode="creative"] {
+  --accent: var(--lh-mode-creative);
+  --accent-text: color-mix(in srgb, var(--lh-mode-creative) 50%, white);
+}
+.lh-section[data-mode="tech"] {
+  --accent: var(--lh-mode-tech);
+  --accent-text: var(--lh-mode-tech);
+}
+.lh-section[data-mode="management"] {
+  --accent: var(--lh-mode-management);
+  --accent-text: color-mix(in srgb, var(--lh-mode-management) 45%, white);
+}
+.lh-section[data-mode="human"] {
+  --accent: var(--lh-mode-human);
+  --accent-text: var(--lh-mode-human);
+}
+
+/* La sigla enorme e appena accennata: dà scala e ritmo senza rubare lettura,
+   come nella home attuale.
+
+   Ancorata al bordo destro della colonna di testo, non a quello della pagina.
+   Prima stava appesa al margine della finestra e nelle sezioni pari finiva
+   dal lato del testo, entrandogli addosso: la sigla e il titolo partivano
+   dallo stesso punto e si accavallavano. Allineandola a destra del titolo,
+   invece, gli resta dietro e in alto — fondale, non ostacolo. */
+.lh-section__initial {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% - 0.62em);
+  /* -1 e non 0: un elemento posizionato con z-index 0 verrebbe disegnato
+     sopra il testo, che non è posizionato. .lh-section__copy ha già un
+     proprio contesto di impilamento, quindi il negativo resta confinato lì
+     dentro e non finisce dietro allo sfondo della sezione. */
+  z-index: -1;
+  font-family: var(--font-display);
+  font-weight: 800;
+  /* Era clamp(7rem, 26vw, 20rem): a 1440 px la sigla arrivava a 320 px e
+     smetteva di essere un fondale, diventava il protagonista della sezione. */
+  font-size: clamp(4.5rem, 13vw, 11rem);
+  line-height: 0.8;
+  letter-spacing: -0.05em;
+  color: transparent;
+  -webkit-text-stroke: 1px color-mix(in srgb, var(--accent) 32%, transparent);
+  pointer-events: none;
+  user-select: none;
+}
+
+/* --nat = larghezza reale del webp, passata dalla pagina. Non si disegna mai
+   un oggetto più grande dei pixel che ha: oltre quel punto non si ingrandisce,
+   si sgrana. */
+.lh-section__object {
+  position: relative;
+  z-index: 1;
+  width: min(60%, var(--nat, 22rem));
+  justify-self: center;
+}
+
+.lh-section__object img {
+  width: 100%;
+  height: auto;
+}
+
+/* L'immagine vera (l'ombra è la prima delle due): sopra alla sagoma sfocata,
+   e con la stessa ombra di contatto degli oggetti dell'ingresso — senza,
+   a schermo pieno sarebbero gli unici quattro a restare piatti. */
+.lh-section__object img:last-child {
+  position: relative;
+  filter: drop-shadow(var(--lh-sh-contact));
+}
+
+.lh-section__copy {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  gap: 1rem;
+  justify-items: start;
+  max-width: 32rem;
+}
+
+/* Titolo, occhiello e paragrafo: stessa gerarchia della home vera, dove il
+   claim è il titolo e il nome del ruolo sta sotto come etichetta. */
+.lh-section__title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(1.75rem, 5vw, 3rem);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  color: var(--lh-ink);
+  text-wrap: balance;
+}
+
+/* Il nome del ruolo ("Project Manager", "Web & UX Designer"): è un nome
+   proprio, non un'etichetta di sistema — sale a 14, non resta al pavimento. */
+.lh-section__eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--fs-14);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent-text, var(--accent));
+  margin-top: -0.25rem;
+}
+
+.lh-section__text {
+  font-size: var(--fs-16);
+  line-height: 1.6;
+  color: var(--lh-muted);
+  text-wrap: pretty;
+}
+
+/* ── Bottoni ──────────────────────────────────────────────────────────────
+   Rifatti per accessibilità, e non è una questione di gusto: erano mono a
+   0.72rem (≈11,5 px) tutto maiuscolo con le lettere larghe. Tre problemi
+   insieme — corpo sotto la soglia leggibile, il maiuscolo che toglie il
+   profilo alla parola e rallenta la lettura, il monospaziato che ha lettere
+   meno distinguibili.
+
+   Il problema più serio era però il contrasto. Il testo colorato su ottanio
+   dà, secondo il calcolo WCAG: ciano 8,0:1 e oro 6,6:1 (a posto), ma
+   arancione 3,7:1 e viola 3,1:1 — sotto il minimo di 4,5:1 richiesto per il
+   testo piccolo. Riempiendo il bottone e mettendoci sopra l'inchiostro scuro
+   si passa a 5,6:1 (arancione) e 4,7:1 (viola): tutti e quattro promossi.
+   Vale anche per il sito vero, non solo per questa prova: sono i suoi
+   quattro accenti. */
+
+.lh-section__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.lh-cta {
+  font-family: var(--font-sans);
+  font-size: var(--fs-16);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  border-radius: 0.25rem;
+  padding: 0.8rem 1.35rem;
+  background: var(--accent);
+  color: rgba(10, 38, 34, 1);
+  border: 1px solid var(--accent);
+  transition:
+    filter var(--duration-state) var(--ease-standard),
+    transform var(--duration-micro) var(--ease-standard);
+}
+
+/* Secondario: il bordo resta colorato, ma il testo passa all'inchiostro
+   chiaro — che sull'ottanio ha contrasto pieno, a differenza dell'accento. */
+.lh-cta--ghost {
+  background: transparent;
+  color: var(--lh-ink);
+}
+
+.lh-cta:hover {
+  filter: brightness(1.08);
+  transform: translateY(-2px);
+}
+
+.lh-cta--ghost:hover {
+  background: color-mix(in srgb, var(--accent) 16%, transparent);
+  filter: none;
+}
+
+.lh-note {
+  border-top: 1px solid var(--lh-line);
+  max-width: 82rem;
+  margin-inline: auto;
+  padding: 1.25rem var(--lh-gutter) 3rem;
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  line-height: 1.9;
+  letter-spacing: 0.06em;
+  color: var(--lh-muted);
+}
+
+/* ── Desktop: sezioni su due colonne, alternate ── */
+
+@media (min-width: 56rem) {
+  .lh-section {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+
+  .lh-section:nth-child(even) .lh-section__object {
+    order: 2;
+  }
+}
+
+/* ── Mobile ───────────────────────────────────────────────────────────────
+   Qui il layout non si stringe: cambia proprio.
+
+   Su desktop gli otto oggetti stanno **attorno** al nome, e il centro resta
+   libero apposta. Su un telefono quel centro libero non esiste — la
+   composizione e il testo occupano la stessa area e si sovrappongono. Non è
+   un problema di misure, è che la disposizione sparsa presuppone una tela
+   larga.
+
+   Quindi su mobile la still-life diventa un vero knolling: gli oggetti
+   scendono **sotto** il testo, in griglia, allineati.
+
+   **La griglia è quella della home vera** (`index-page.css` § .knolling-mob):
+   15 colonne × 2 righe, e la dimensione di ogni oggetto è il numero di
+   colonne che occupa, non una larghezza in vmin. È il motivo per cui lì la
+   composizione funziona e il primo tentativo qui no: con celle uguali il
+   laptop e gli scacchi ricevono lo stesso spazio, e gli scacchi — che sono
+   due pezzi alti — sembrano enormi accanto a tutto il resto.
+
+   Le colonne, i padding di rifinitura e la torcia a 135° sono copiati da lì
+   uno a uno. L'aggancio è `data-obj`, non `nth-child`: la composizione di
+   questa pagina ha un ordine diverso da quello della home, e legare la
+   posizione all'indice significherebbe rompersi al primo riordino. */
+
+@media (max-width: 55.99rem) {
+  .lh-hero {
+    /* Testo (auto) · oggetti (quello che resta) · invito a scorrere (auto).
+       La riga 1fr è ciò che tiene l'ingresso dentro una schermata: sono gli
+       oggetti a cedere spazio al testo, mai il contrario. */
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    gap: clamp(0.75rem, 3vw, 1.5rem);
+  }
+
+  .lh-copy {
+    order: 1;
+  }
+
+  .lh-stage {
+    order: 2;
+    position: static;
+    display: grid;
+    grid-template-columns: repeat(15, 1fr);
+    grid-template-rows: 1fr 1fr;
+    gap: 3px;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    align-self: stretch;
+  }
+
+  .lh-obj {
+    /* relative e non static: l'ombra è assoluta e ha bisogno di questo come
+       riferimento, altrimenti si aggancia alla sezione e schizza via. */
+    position: relative;
+    left: auto;
+    top: auto;
+    width: auto;
+    translate: none;
+    /* Niente parallasse: qui gli oggetti stanno in griglia, e uno
+       spostamento di qualche rem li farebbe accavallare — cioè esattamente
+       il difetto che questa disposizione risolve. */
+    transform: none;
+    /* Come .knoll-wrap nella home: senza questi reset la cella non può
+       scendere sotto il min-content dell'immagine e le righe sforano. */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 0;
+    min-height: 0;
+    /* Niente trasformazione da animare, niente da promuovere: otto livelli
+       di composizione in meno da tenere in memoria proprio dove serve. */
+    will-change: auto;
+  }
+
+  .lh-obj__img,
+  .lh-obj__shadow {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  /* Riga 1 — 4+7+4 = 15: il laptop domina il centro */
+  .lh-obj[data-obj="megaphone"] {
+    grid-column: 1 / 5;
+    grid-row: 1;
+  }
+  .lh-obj[data-obj="laptop"] {
+    grid-column: 5 / 12;
+    grid-row: 1;
+  }
+  .lh-obj[data-obj="compass"] {
+    grid-column: 12 / 16;
+    grid-row: 1;
+    padding: 0 10%;
+  }
+
+  /* Riga 2 — torcia dominante, scacchi e pianta piccoli.
+     Pianta e torcia condividono la colonna 3: la pianta sta sopra. */
+  .lh-obj[data-obj="plant"] {
+    grid-column: 1 / 4;
+    grid-row: 2;
+    z-index: 2;
+  }
+  .lh-obj[data-obj="flashlight"] {
+    grid-column: 3 / 8;
+    grid-row: 2;
+    z-index: 1;
+    padding-bottom: 5%;
+  }
+  .lh-obj[data-obj="chess"] {
+    grid-column: 7 / 9;
+    grid-row: 2;
+    padding: 4%;
+  }
+  .lh-obj[data-obj="camera"] {
+    grid-column: 9 / 13;
+    grid-row: 2;
+    padding: 0 8%;
+  }
+  .lh-obj[data-obj="multitool"] {
+    grid-column: 13 / 16;
+    grid-row: 2;
+  }
+
+  /* `rotate` come proprietà a sé, non dentro `transform`: così resta
+     composta con l'eventuale transform e non se lo contende. Stessa scelta
+     della home vera. L'ombra ruota insieme, o si stacca dalla sagoma. */
+  .lh-obj[data-obj="flashlight"] .lh-obj__img,
+  .lh-obj[data-obj="flashlight"] .lh-obj__shadow {
+    rotate: 135deg;
+  }
+
+  /* L'invito a scorrere si riduce alla sola parola. La linea verticale è
+     un'indicazione di direzione che su un telefono non serve — lì si scorre
+     comunque — e si mangiava spazio che serve agli oggetti. */
+  .lh-scroll {
+    order: 3;
+    position: static;
+    translate: none;
+    gap: 0;
+  }
+
+  .lh-scroll__line {
+    display: none;
+  }
+
+  /* ── Le sezioni: prima il testo, poi l'immagine ──────────────────────────
+     Su desktop sono due colonne affiancate, quindi l'ordine non conta. Su
+     mobile diventano due righe, e nell'ordine del DOM l'immagine veniva
+     prima: si leggeva l'oggetto e poi il testo, con il bottone spinto fuori
+     dallo schermo (era il caso di Project Manager, il paragrafo più lungo).
+
+     Le due righe fanno il resto: il testo prende quello che gli serve (riga
+     `auto`) e l'immagine si accontenta di quello che resta (riga `1fr`).
+     Così il bottone non può finire sotto la piega qualunque sia la lunghezza
+     del paragrafo — è il testo ad avere la precedenza, non l'immagine.
+
+     Il `min-height: 100svh` di base resta com'è, e non diventa un `height`
+     fisso apposta: se su uno schermo molto basso perfino il solo testo non ci
+     sta, la scheda deve poter crescere. Con un'altezza bloccata + overflow
+     hidden tornerebbe esattamente il difetto di partenza, il bottone
+     tagliato. Così invece a cedere è l'immagine, che si riduce fino a
+     sparire — l'ordine di precedenza giusto. */
+  .lh-section {
+    grid-template-rows: auto minmax(0, 1fr);
+    align-items: stretch;
+    gap: clamp(1rem, 4vw, 1.75rem);
+    padding: clamp(2rem, 7vh, 3rem) var(--lh-gutter);
+  }
+
+  .lh-section__copy {
+    order: 1;
+  }
+
+  .lh-section__object {
+    order: 2;
+    /* Due tetti, non uno. La larghezza da sola non bastava: bussola e
+       scacchi sono oggetti **alti**, e con la sola larghezza limitata
+       occupavano comunque quasi metà schermo in verticale, perché
+       prendevano tutta la riga 1fr. È l'altezza il vincolo che si vede.
+       align-self center e non stretch: dentro la riga l'oggetto sta al
+       centro alla sua misura, invece di gonfiarsi fino a riempirla. */
+    width: min(42vw, var(--nat, 14rem));
+    height: 100%;
+    max-height: 24svh;
+    align-self: center;
+    min-height: 0;
+  }
+
+  .lh-section__object img,
+  .lh-section__object .lh-obj__shadow {
+    height: 100%;
+    object-fit: contain;
+  }
+
+  /* Due aggiustamenti per singola scheda. Non sono capricci di gusto: le
+     quattro schede hanno la stessa struttura ma contenuti di ingombro
+     diverso, e il tetto unico qui sopra le tratta come se fossero uguali. */
+
+  /* Design è l'unica scheda con **due** bottoni (CV + portfolio): su schermo
+     stretto vanno a capo, il testo si alza e lo spazio che resta si stringe.
+     La fotocamera si appoggia in basso invece di restare centrata, così
+     stacca dai bottoni invece di appoggiarcisi contro. */
+  .lh-section[data-mode="creative"] .lh-section__object {
+    align-self: end;
+  }
+
+  /* Il laptop è largo e basso: al tetto di 42vw arriva molto prima degli
+     altri al limite di larghezza, e a parità di regola risulta più piccolo
+     di quanto pesi davvero nella composizione. L'altezza resta sotto il
+     tetto comune, quindi si allarga soltanto. */
+  .lh-section[data-mode="tech"] .lh-section__object {
+    width: min(50vw, var(--nat, 14rem));
+  }
+
+  /* La sigla stava sopra la colonna di testo. Ora che il testo è il primo
+     elemento della scheda, lì sopra non c'è più spazio: passa dietro al
+     titolo, che è il ruolo che ha sempre avuto (fondale, non ostacolo). */
+  .lh-section__initial {
+    top: -0.15em;
+    bottom: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lh-cta {
+    transition: none;
+  }
+}

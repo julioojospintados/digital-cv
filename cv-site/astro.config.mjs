@@ -88,7 +88,8 @@ export default defineConfig({
     sitemap({
       // Il tool privato non deve comparire in sitemap.xml — non è contenuto
       // del CV, è un'utility interna dietro passphrase.
-      filter: (page) => !page.includes("/tools/"),
+      // /lab/ sono prototipi di layout: stessa ragione, non sono il CV.
+      filter: (page) => !page.includes("/tools/") && !page.includes("/lab/"),
     }),
     stripComments(),
   ],
