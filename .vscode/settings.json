@@ -27,8 +27,32 @@
   },
   "search.exclude": {
     "dist/": true,
-    "node_modules/": true
+    "node_modules/": true,
+    "cv-site/node_modules/": true,
+    "cv-site/dist/": true,
+    "cv-site/.astro/": true,
+    ".vercel/": true
   },
+  // Il guardiano dei file è il costo fisso più alto di VS Code su questo
+  // repo: senza esclusioni sorveglia due alberi node_modules (root e
+  // cv-site) più le cartelle di build, tutte cose che non si modificano a
+  // mano. Su una macchina da 4GB questa memoria è la stessa che serve ad
+  // `astro dev` per partire.
+  "files.watcherExclude": {
+    "**/node_modules/**": true,
+    "**/dist/**": true,
+    "**/.astro/**": true,
+    "**/.vercel/**": true,
+    "**/.git/objects/**": true,
+    "**/.git/subtree-cache/**": true,
+    "**/cv-output/**": true,
+    "**/.playwright-mcp/**": true
+  },
+  // Il server TypeScript cresce fino al tetto che gli si dà. Il default
+  // (3GB) su una macchina che ne ha 4 significa che, quando gli serve
+  // davvero, se le prende tutte.
+  "typescript.tsserver.maxTsServerMemory": 1024,
+  "typescript.disableAutomaticTypeAcquisition": true,
   "chat.tools.terminal.autoApprove": {
     "npx astro": true
   },
