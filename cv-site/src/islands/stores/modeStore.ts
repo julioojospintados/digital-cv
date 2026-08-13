@@ -63,6 +63,28 @@ const MODE_AWARE_PATHS = ["/en/cv", "/cv"];
 // dell'utente — initMode non deve né cancellarlo né sovrascriverlo.
 const SSR_MODE_PATHS = ["/work", "/en/work"];
 
+// Route di prova con la lente nel path, ma non nel primo segmento:
+// `/lab/cv/creative`. Il controllo standard qui sotto guarda
+// `pathname.split("/")[0]`, che qui vale "lab" e non è un mode valido — la
+// pagina finiva quindi nel ramo `else`, quello che AZZERA data-mode.
+//
+// Sintomo osservato e misurato con Playwright su tutte e quattro le lenti:
+// colore corretto al readyState "interactive" (è l'SSR), bianco a
+// "complete" (dopo l'idratazione). Sparito data-mode, ogni variabile di mode
+// ripiega su :root, dove `--color-accent` è rgba(255,255,255,0.9).
+//
+// Trattarla come una route di mode a tutti gli effetti — invece di limitarsi
+// a non cancellare l'attributo — allinea anche il `modeStore`, da cui
+// <go-logo> prende il proprio colore: altrimenti il logo resta sull'ultima
+// lente memorizzata mentre il resto della pagina è già cambiato.
+const LENS_ROUTE_PREFIX = "/lab/cv/";
+
+function lensFromPath(pathname: string): Mode | null {
+  if (!pathname.startsWith(LENS_ROUTE_PREFIX)) return null;
+  const seg = pathname.slice(LENS_ROUTE_PREFIX.length).split("/").filter(Boolean)[0] ?? "";
+  return VALID_MODES.includes(seg as Mode) ? (seg as Mode) : null;
+}
+
 export function initMode(): void {
   if (typeof window === "undefined") return;
   // La route è la source of truth: se siamo su /tech, usiamo 'tech'
@@ -70,7 +92,9 @@ export function initMode(): void {
   // Evita il flash di colore sbagliato quando localStorage ha un mode diverso.
   const pathname = window.location.pathname;
   const pathSegment = pathname.split("/").filter(Boolean)[0] ?? "";
-  const routeMode = VALID_MODES.includes(pathSegment as Mode) ? (pathSegment as Mode) : null;
+  const routeMode = VALID_MODES.includes(pathSegment as Mode)
+    ? (pathSegment as Mode)
+    : lensFromPath(pathname);
 
   if (routeMode) {
     // Siamo su una pagina di mode (/tech, /creative, ecc.) — applica

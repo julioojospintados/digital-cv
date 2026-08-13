@@ -175,12 +175,21 @@
   padding: 1.5rem var(--lh-gutter);
 }
 
+/* Inchiostro, non accento — per due motivi che vanno nella stessa direzione.
+   Di contrasto: l'arancione su questo fondo (ottanio + velo della lampada)
+   sta a 2,94:1, sotto il 3:1 che 1.4.3 chiede anche al testo grande; in
+   inchiostro sta a 7,35:1. Di senso: all'ingresso non e' stata scelta
+   nessuna lente — e' la regola dichiarata poche righe sopra, dove
+   l'ambiente resta neutro finche' non si entra in una sezione. Un logo gia'
+   arancione annuncia una scelta che il visitatore non ha ancora fatto.
+   Nemmeno tingerlo col mood funzionerebbe: seguendo la stanza scenderebbe a
+   2,85:1 su creative e 2,38:1 su management. */
 .lh-mark {
   font-family: var(--font-display);
   font-weight: 800;
   font-size: var(--fs-20);
   letter-spacing: -0.02em;
-  color: var(--lh-accent);
+  color: var(--lh-ink);
   text-decoration: none;
 }
 
@@ -394,6 +403,14 @@
    arancione 3,62:1 e viola 3,04:1 — verificati a calcolo, non a occhio.
    Ciano e oro passano interi, quindi restano intatti; gli altri due sono
    schiariti del minimo che serve, non di più. */
+/* Chi sono — non è una lente, quindi non prende un accento di mode: resta
+   sul bianco caldo del testo. È anche l'unica sezione senza data-mode,
+   quindi l'osservatore in lab-home-scroll.ts non le assegna nessun colore
+   d'ambiente e la stanza torna neutra mentre la si attraversa. */
+.lh-section--about {
+  --accent: var(--lh-ink);
+}
+
 .lh-section[data-mode="creative"] {
   --accent: var(--lh-mode-creative);
   --accent-text: color-mix(in srgb, var(--lh-mode-creative) 50%, white);
@@ -577,7 +594,13 @@
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   }
 
-  .lh-section:nth-child(even) .lh-section__object {
+  /* L'oggetto passa a destra nelle sezioni DISPARI, non nelle pari: la
+     prima sezione di <main> e' "Chi sono", e deve avere il testo a
+     sinistra. Da li' l'alternanza scende da sola — chi sono a sinistra,
+     poi destra, sinistra, destra, sinistra.
+     Nota per il futuro: il conteggio e' su nth-child, quindi inserire una
+     sezione in mezzo ribalta tutte quelle dopo. */
+  .lh-section:nth-child(odd) .lh-section__object {
     order: 2;
   }
 }

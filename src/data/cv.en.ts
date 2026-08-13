@@ -223,8 +223,35 @@ export const cvDataEn = {
       endDate: "present",
       location: "Turin, Italy",
       remote: false,
-      description:
-        "I develop enterprise systems for Intesa San Paolo and Aruba: design systems, WebComponent libraries and microfrontend architectures used by millions of people.",
+      description: "Frontend, UX/UI, Agile method and AI augmentation consulting.",
+      // Four client engagements, one job — see ClientEngagement in cv.ts.
+      clients: [
+        {
+          client: "Internal project",
+          role: "AI-Augmented Frontend Developer",
+          ai: true,
+          description:
+            "Development built on advanced AI pair programming, writing agents, dedicated skills and context instructions over the Model Context Protocol (MCP). AI agents and MCP servers reshaped and sped up the workflow, making rapid prototyping and the handover between interface and code far simpler. Agile pipeline automation on GitLab, Playwright tests, and direct ownership of layout and UX/UI design.",
+        },
+        {
+          client: "Aruba",
+          role: "Tech Lead & Design System Developer",
+          description:
+            "Design and development of the Web Components library in Lit (100+ components used to build the company's applications). Continuous alignment with the UX/UI teams on Figma, care for accessibility principles (WCAG) and Storybook integration for documentation. Ownership of code reviews, modular SCSS architecture with BEM, and unit tests with Jest and later Vitest. As Tech Lead I ran the Agile team, bridging design and development to speed up onboarding and component delivery.",
+        },
+        {
+          client: "Intesa Sanpaolo",
+          role: "Frontend Developer",
+          description:
+            "Angular frontend development on complex architectures within a distributed team of 30+ people. Reactive programming with RxJS and close collaboration with backend teams in Agile sprints.",
+        },
+        {
+          client: "Rai Pubblicità",
+          role: "Frontend Developer",
+          description:
+            "Angular frontend development for internal applications. Code implementation in close contact with the backend teams.",
+        },
+      ],
       highlights: [
         "I led the Aruba Design System team as Tech Lead and Scrum Master, over 3 years and more than 30 people: a library of over 100 WebComponents adopted cross-product.",
         "I developed enterprise Angular architecture for Intesa San Paolo in a team of over 50 people, with shared standards and code review.",
@@ -232,18 +259,34 @@ export const cvDataEn = {
       ],
       skills: [
         "Angular",
-        "Lit",
         "TypeScript",
+        "Lit (Web Components)",
+        "Node.js",
+        "RxJS",
         "HTML5",
-        "SCSS",
-        "RXJS",
-        "NGRX",
-        "WebComponents",
-        "GraphQL",
-        "Bootstrap",
-        "Material Design",
+        "CSS3/SCSS",
+        "BEM pattern",
+        "Storybook",
+        "Playwright",
         "Jest",
-        "Jira",
+        "Vitest",
+        "Code Coverage",
+        "Cross-Device Testing",
+        "Usability Testing",
+        "WCAG (Accessibility)",
+        "Model Context Protocol (MCP)",
+        "AI Agents",
+        "AI Workflow Design",
+        "Prompt Engineering",
+        "GitHub Copilot",
+        "Design System",
+        "UX/UI Design",
+        "Rapid Prototyping",
+        "Figma-to-Code",
+        "REST API",
+        "GitLab",
+        "Agile",
+        "Scrum",
       ],
       facets: [
         {

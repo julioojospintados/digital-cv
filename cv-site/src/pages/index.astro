@@ -1,6 +1,5 @@
 ---
 import Layout from "../layouts/Layout.astro";
-import ContactFooter from "../components/ContactFooter.astro";
 // In standby col badge "ciclo di sistemazione" sotto — richiesta 2026-07-29.
 // import { getRecentCommits, formatRecentCommit } from "../lib/recent-commits";
 import "../styles/index-page.css";
@@ -11,90 +10,8 @@ import "../styles/index-page.css";
 // .work-index-card / .work-chevron — stessa identità visiva della card
 // hero-portfolio-card in [mode].astro (vedi sezione Web & UX Designer sotto).
 import "../styles/work-page.css";
-
-// Foto in cv-site/public/photos/{trip,belongings} — caricate dall'utente,
-// elencate qui a mano perché sono in public/ (import.meta.glob non le vede,
-// funziona solo su src/). Usate dai bottoni sotto "Chi sono" (memory-drawer.ts).
-const tripPhotos = [
-  "camp",
-  "cave-light",
-  "cave",
-  "family-party",
-  "ha-giang",
-  "hoi-an",
-  "lantern",
-  "river",
-];
-const belongingsPhotos = [
-  "acting",
-  "cheers",
-  "square-festival",
-  "giulia",
-  "kid",
-  "concerto",
-  "libreria",
-  "salone-del-libro",
-  "opera-lirica",
-  "stampa",
-  "reading",
-  "songwriter",
-  "lettera-natale",
-  "sunset",
-];
-
-// Racconto lungo — card "featured" nello scatter, diviso in due paragrafi
-// per leggibilità. white-space:pre-line in CSS preserva i ritmi di riga.
-const funFactStoryTitle = "Budapest Drift";
-const funFactPage1 = `Mi sono svegliato alle 10:06 a Budapest.
-Il mio volo per tornare a casa era alle 11:10.
-Ho guardato l'orologio, ho guardato il soffitto…
-e la prima cosa che ho fatto è stata bestemmiare in tre lingue.
-Sono balzato fuori dal letto, ho chiamato un Uber,
-e non appena l'autista ha capito la situazione,
-si è trasformato in Fast & Furious: Budapest Drift.
-Eravamo io, lui e la mia ansia — che a quel punto aveva ormai la cittadinanza ungherese.
-Sono arrivato all'aeroporto; il gate chiudeva alle 10:40.
-Sono entrato correndo con lo zaino in spalla che sembravo un bambino delle elementari,
-travolgendo carrelli, valigie e, forse, anche dei bambini.
-Riuscivo solo a dire "Sorry, sorry, sorry..."
-come se fosse una specie di incantesimo magico.
-Ai controlli di sicurezza mi hanno chiesto:
-"Ha qualcosa da dichiarare?"
-E io, nel panico più totale, ho detto: "Sì."
-Mi hanno fissato.
-"No, no, scusi — niente. Solo un trauma."
-Mi hanno fatto togliere le scarpe e la dignità.
-Ero lì scalzo, a pregare Zeus.
-Poi sono corso verso il gate.
-Dagli altoparlanti:
-"Ultimo bando per Giulio Occh..."
-Ho urlato: "Sono io!" tra un polmone che cedeva e un attacco di panico.`;
-const funFactPage2 = `L'assistente di volo, con il suo miglior accento italiano da film, fa:
-"Mamma miaaaa Giulio!"
-con tanto di gesto con le mani.
-Avrei voluto dirle che io non vado in giro a salutare gli ungheresi dicendo
-"Ehi Gulash!",
-ma non c'era tempo.
-Finalmente ho visto la fila al gate e mi sono rilassato —
-per quanto ci si possa rilassare dopo aver fatto uno sprint in aeroporto
-senza essersi fatti la doccia, lavati i denti o aver fatto la pipì.
-Poi, il vuoto:
-avevo lasciato il portafoglio ai controlli di sicurezza.
-Ho ricominciato a correre, bestemmiando in Dolby Surround.
-Per qualche miracolo, ho trovato l'agente che aveva ancora in mano il mio portafoglio.
-L'ho afferrato, sono corso di nuovo al gate —
-mi hanno fatto passare…
-e la porta non si apriva.
-A quel punto volevo urlare dentro un megafono.
-Alla fine sono salito sull'aereo,
-sudato, disidratato, spiritualmente distrutto.
-Mi sono seduto, ho chiuso gli occhi e ho pensato:
-Dio perdona.
-Köszönöm.`;
-
-// Rotazioni fisse (non-modulo, look scatter intenzionale, non casuale ad ogni build)
-const SCATTER_ANGLES = [-6, 4, -3, 7, -8, 2, -5, 6, -4, 8, -7, 3, -2, 5];
-const scatterAngle = (i: number) => SCATTER_ANGLES[i % SCATTER_ANGLES.length];
+import MemoryDrawers from "../components/MemoryDrawers.astro";
+import EntryFooter from "../components/EntryFooter.astro";
 ---
 
 <Layout
@@ -634,105 +551,9 @@ const scatterAngle = (i: number) => SCATTER_ANGLES[i % SCATTER_ANGLES.length];
 
   <!-- Footer contatti — email, LinkedIn e telefono come CTA (ContactFooter),
        stesso blocco delle pagine CV. Prima non c'era nessun contatto in home. -->
-  <footer class="entry-footer">
-    <ContactFooter lang="it" />
-    <p class="entry-footer__credit">Giulio Occhipinti · Digital CV</p>
-  </footer>
+  <EntryFooter lang="it" />
 
-  <!-- Memory drawers — bottoni "Fun fact / Cose mie / Viaggio" sotto Chi sono.
-       <dialog> nativo: focus trap, ESC e backdrop-click gestiti dal browser,
-       nessun codice a11y custom da mantenere. Scatter in stile knolling
-       animato all'apertura da memory-drawer.ts. data-lenis-prevent: senza,
-       Lenis intercetta la rotellina e scrolla la pagina sotto invece del
-       contenuto interno del dialog (regola già nota del design system).
-       .memory-dialog__header sta FUORI da .memory-dialog__scroll apposta:
-       lo scroll deve restare sul contenuto (testo/foto), mai su tutta la
-       modale — memory-drawer.ts inoltra comunque il wheel dall'header al
-       contenuto sotto, così scrollare "sulla modale" funziona lo stesso. -->
-  <dialog
-    class="memory-dialog memory-dialog--reading"
-    id="dialog-funfact"
-    aria-labelledby="dialog-funfact-title"
-    data-lenis-prevent
-  >
-    <div class="memory-dialog__header">
-      <p class="memory-dialog__eyebrow" id="dialog-funfact-title">Fun fact</p>
-      <button class="memory-dialog__close" type="button" data-drawer-close aria-label="Chiudi"
-        >✕</button
-      >
-    </div>
-    <div class="memory-dialog__scroll">
-      <article class="memory-fact memory-fact--story" style="--mr:0deg">
-        <p class="memory-fact__title">{funFactStoryTitle}</p>
-        <p class="memory-fact__body">{funFactPage1}</p>
-        <p class="memory-fact__body">{funFactPage2}</p>
-      </article>
-    </div>
-  </dialog>
-
-  <dialog
-    class="memory-dialog"
-    id="dialog-belongings"
-    aria-labelledby="dialog-belongings-title"
-    data-lenis-prevent
-  >
-    <div class="memory-dialog__header">
-      <p class="memory-dialog__eyebrow" id="dialog-belongings-title">Cose mie</p>
-      <button class="memory-dialog__close" type="button" data-drawer-close aria-label="Chiudi"
-        >✕</button
-      >
-    </div>
-    <div class="memory-dialog__scroll">
-      <div class="memory-scatter">
-        {
-          belongingsPhotos.map((name, i) => (
-            <button type="button" class="memory-photo-btn" aria-label="Espandi la foto">
-              <img
-                class="memory-photo"
-                src={`/photos/belongings/${name}.webp`}
-                alt=""
-                loading="lazy"
-                decoding="async"
-                style={`--mr:${scatterAngle(i)}deg`}
-              />
-            </button>
-          ))
-        }
-      </div>
-    </div>
-  </dialog>
-
-  <dialog
-    class="memory-dialog"
-    id="dialog-trip"
-    aria-labelledby="dialog-trip-title"
-    data-lenis-prevent
-  >
-    <div class="memory-dialog__header">
-      <p class="memory-dialog__eyebrow" id="dialog-trip-title">Viaggio</p>
-      <button class="memory-dialog__close" type="button" data-drawer-close aria-label="Chiudi"
-        >✕</button
-      >
-    </div>
-    <div class="memory-dialog__scroll">
-      <div class="memory-scatter">
-        {
-          tripPhotos.map((name, i) => (
-            <button type="button" class="memory-photo-btn" aria-label="Espandi la foto">
-              <img
-                class="memory-photo"
-                src={`/photos/trip/${name}.webp`}
-                alt=""
-                loading="lazy"
-                decoding="async"
-                style={`--mr:${scatterAngle(i)}deg`}
-              />
-            </button>
-          ))
-        }
-      </div>
-    </div>
-  </dialog>
+  <MemoryDrawers />
 
   <div id="launch-overlay" aria-hidden="true"></div>
 

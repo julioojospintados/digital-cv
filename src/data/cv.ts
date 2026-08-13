@@ -102,6 +102,35 @@ export interface ExperienceFacet {
   highlights?: string[];
 }
 
+/**
+ * Un incarico presso un cliente, dentro un unico rapporto di lavoro.
+ *
+ * Serve alle consulenze: da ALTEN, Giulio è stato su quattro clienti diversi
+ * con ruoli diversi, ma è **un solo impiego** con una sola data d'inizio.
+ * Modellarli come esperienze separate creerebbe quattro periodi sovrapposti
+ * nella cronologia — che è esattamente ciò che fa alzare un sopracciglio a
+ * chi legge un CV. Appiattirli in `highlights` perderebbe invece il nome del
+ * cliente, che per un consulente è il primo dato cercato.
+ *
+ * Campo opzionale: i renderer che non lo conoscono continuano a funzionare
+ * su `description` + `highlights` come prima.
+ */
+export interface ClientEngagement {
+  /** Nome del cliente, o "Progetto interno". */
+  client: string;
+  role: string;
+  description: string;
+  /**
+   * Incarico svolto con l'AI dentro il flusso di lavoro.
+   *
+   * Dichiarato a mano e non dedotto dal testo: cercare "AI" o "MCP" nella
+   * descrizione darebbe falsi positivi (un incarico può nominare l'AI senza
+   * esserne stato toccato) ed è il tipo di euristica che si rompe in
+   * silenzio alla prima riscrittura di una frase.
+   */
+  ai?: boolean;
+}
+
 export interface WorkExperience {
   company: string;
   role: string;
@@ -119,6 +148,8 @@ export interface WorkExperience {
   tags?: string[];
   /** Varianti per cluster — vedi ExperienceFacet */
   facets?: ExperienceFacet[];
+  /** Incarichi presso clienti dentro lo stesso impiego — vedi ClientEngagement */
+  clients?: ClientEngagement[];
 }
 
 export interface Education {
@@ -371,8 +402,35 @@ export const cvData = {
       endDate: "present",
       location: "Torino, Italia",
       remote: false,
-      description:
-        "Sviluppo sistemi enterprise per Intesa San Paolo e Aruba: design system, librerie WebComponents e architetture a microfrontend usate da milioni di persone.",
+      description: "Consulenza Frontend, UX/UI, Metodo Agile e AI Augmentation.",
+      // Quattro incarichi, un solo impiego: vedi ClientEngagement sopra.
+      clients: [
+        {
+          client: "Progetto interno",
+          role: "Frontend Developer AI-Augmented",
+          ai: true,
+          description:
+            "Sviluppo basato su AI pair programming evoluto con stesura di agenti, skills dedicate e istruzioni di contesto via Model Context Protocol (MCP). L'uso di agenti AI e server MCP ha trasformato e velocizzato il flusso di lavoro, semplificando la prototipazione rapida e l'integrazione tra interfaccia e codice. Automazione dei flussi nel ciclo Agile su GitLab, test in Playwright e presidio diretto di layout e UX/UI Design.",
+        },
+        {
+          client: "Aruba",
+          role: "Tech Lead & Design System Developer",
+          description:
+            "Progettazione e sviluppo della libreria di Web Components in Lit (100+ componenti usati per la realizzazione degli applicativi aziendali). Allineamento continuo con i team UX/UI su Figma, cura dei principi di accessibilità (WCAG) e integrazione di Storybook per la documentazione. Gestione delle code review, architettura SCSS modulare con BEM e test unitari con Jest e poi Vitest. Nel ruolo di Tech Lead ho gestito il team Agile facendo da ponte tra design e sviluppo per velocizzare l'onboarding e la consegna dei componenti.",
+        },
+        {
+          client: "Intesa Sanpaolo",
+          role: "Frontend Developer",
+          description:
+            "Sviluppo frontend in Angular su architetture complesse all'interno di un team distribuito di +30 persone. Programmazione reattiva con RxJS e collaborazione stretta con il backend in sprint Agile.",
+        },
+        {
+          client: "Rai Pubblicità",
+          role: "Frontend Developer",
+          description:
+            "Sviluppo frontend in Angular per applicativi interni. Implementazione del codice a stretto contatto con i team backend.",
+        },
+      ],
       highlights: [
         "Ho guidato come Tech Lead e Scrum Master il team Aruba Design System, oltre 3 anni e più di 30 persone: libreria di oltre 100 componenti WebComponents adottata cross-prodotto.",
         "Ho sviluppato architettura Angular enterprise per Intesa San Paolo in un team di oltre 50 persone, con standard condivisi e code review.",
@@ -380,18 +438,34 @@ export const cvData = {
       ],
       skills: [
         "Angular",
-        "Lit",
         "TypeScript",
+        "Lit (Web Components)",
+        "Node.js",
+        "RxJS",
         "HTML5",
-        "SCSS",
-        "RXJS",
-        "NGRX",
-        "WebComponents",
-        "GraphQL",
-        "Bootstrap",
-        "Material Design",
+        "CSS3/SCSS",
+        "Pattern BEM",
+        "Storybook",
+        "Playwright",
         "Jest",
-        "Jira",
+        "Vitest",
+        "Code Coverage",
+        "Testing Cross-Device",
+        "Test di Usabilità",
+        "WCAG (Accessibilità)",
+        "Model Context Protocol (MCP)",
+        "Agenti AI",
+        "AI Workflow Design",
+        "Prompt Engineering",
+        "GitHub Copilot",
+        "Design System",
+        "UX/UI Design",
+        "Prototipazione Rapida",
+        "Figma-to-Code",
+        "REST API",
+        "GitLab",
+        "Agile",
+        "Scrum",
       ],
       facets: [
         {

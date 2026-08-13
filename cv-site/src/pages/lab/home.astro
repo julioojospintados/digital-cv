@@ -6,15 +6,24 @@
 // arrivano una alla volta a schermo intero. Le modalità non spariscono,
 // smettono di essere un bivio all'ingresso e diventano un percorso.
 //
-// Rispetto alla home vera questa prova è volutamente spoglia: niente
-// preloader GO, niente cassetto delle foto, niente scatter dei fun fact.
-// Serve a giudicare una cosa sola — se gli oggetti grandi reggono da soli
-// al posto delle card.
+// Rispetto alla home vera questa prova resta spoglia dove non serve: niente
+// preloader GO. I cassetti delle foto invece ci sono — "Fun fact / Cose mie
+// / Viaggio", gli stessi della home vera, dal componente MemoryDrawers —
+// perché è qui che hanno senso: all'ingresso, dove chi legge sta ancora
+// decidendo chi sei e ha tempo di aprirli.
+//
+// La sezione "Chi sono" sta prima delle quattro lenti: la persona, poi le
+// maschere. Ci è arrivata dalle pagine CV di prova (/lab/cv/<lente>), dove
+// occupava la fascia dei primi sette secondi con 678 caratteri e spingeva
+// sotto la piega ruoli attuali e pulsanti.
 //
 // TESTI: tutti da cv-i18n e @cv-data, nessuna copy scritta qui.
 import Layout from "../../layouts/Layout.astro";
 import { cvData } from "@cv-data";
 import { LOCALES, MODES } from "../../lib/cv-i18n";
+import { ABOUT_COPY } from "../../lib/lab-copy";
+import MemoryDrawers from "../../components/MemoryDrawers.astro";
+import EntryFooter from "../../components/EntryFooter.astro";
 import "../../styles/lab-home.css";
 
 const t = LOCALES.it;
@@ -112,6 +121,9 @@ const copy: Record<string, { title: [string, string]; desc: string }> = {
   },
 };
 
+// La pianta: 226px di larghezza nativa, come gli altri (vedi NATIVE_REM).
+const ABOUT_NATIVE_REM = 226 / 16;
+
 const sections = MODES.map((mode) => ({
   mode,
   initial: initials[mode],
@@ -195,6 +207,55 @@ const sections = MODES.map((mode) => ({
     <!-- ── Le quattro sezioni, una schermata ciascuna ── -->
     <main id="main-content">
       {
+        /* Chi sono — prima delle quattro lenti: la persona, poi le maschere
+           (stesso ordine di index.astro). Non è un quinto profilo: niente
+           data-mode, quindi l'ambiente resta neutro invece di prendere il
+           colore di una lente, e niente CTA, perché non porta da nessuna
+           parte. È il posto in cui questa bio è utile — all'ingresso, dove
+           chi legge sta ancora decidendo chi sei; sulla pagina CV di una
+           lente occupava la fascia dei primi sette secondi con 678 caratteri,
+           spingendo sotto la piega ruoli attuali e pulsanti. */
+      }
+      <section class="lh-section lh-section--about" id="about">
+        <div class="lh-section__object" style={`--nat:${ABOUT_NATIVE_REM}rem`}>
+          <img
+            class="lh-obj__shadow"
+            src={`/knolling/${ABOUT_COPY.object}.webp`}
+            alt=""
+            aria-hidden="true"
+          />
+          <img src={`/knolling/${ABOUT_COPY.object}.webp`} alt="" loading="lazy" decoding="async" />
+        </div>
+        <div class="lh-section__copy">
+          <p class="lh-section__initial" aria-hidden="true">IO</p>
+          <h2 class="lh-section__title">{ABOUT_COPY.title}</h2>
+          <p class="lh-section__eyebrow">{ABOUT_COPY.eyebrow}</p>
+          <p class="lh-section__text">{ABOUT_COPY.desc}</p>
+          {
+            /* I tre cassetti della home vera, non le etichette: qui c'e' spazio
+              e c'e' tempo — chi sta scorrendo l'ingresso puo' aprirli. Le
+              chip dicevano le stesse cose senza mostrarle; questi le
+              mostrano (foto, racconto). Il markup dei <dialog> arriva da
+              <MemoryDrawers />, in fondo alla pagina. */
+          }
+          <div class="about-actions" role="group" aria-label="Scopri di piu' su di me">
+            <button class="about-action" type="button" data-drawer-open="funfact">
+              <span class="about-action__icon" aria-hidden="true">✦</span>
+              Fun fact
+            </button>
+            <button class="about-action" type="button" data-drawer-open="belongings">
+              <span class="about-action__icon" aria-hidden="true">✦</span>
+              Cose mie
+            </button>
+            <button class="about-action" type="button" data-drawer-open="trip">
+              <span class="about-action__icon" aria-hidden="true">✦</span>
+              Viaggio
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {
         sections.map((s) => (
           <section class="lh-section" data-mode={s.mode}>
             <div class="lh-section__object" style={`--nat:${s.nativeRem}rem`}>
@@ -237,6 +298,9 @@ const sections = MODES.map((mode) => ({
       }
     </main>
 
+    {/* Il footer della home vera: stesso componente, stesso stile. */}
+    <EntryFooter lang="it" />
+
     <p class="lh-note">
       Prova /lab/home — l'ingresso perde le 4 card: gli oggetti diventano grandi e occupano una
       schermata intera, le 4 modalità si incontrano scorrendo invece di sceglierle subito. Testi da
@@ -244,6 +308,8 @@ const sections = MODES.map((mode) => ({
       fotografate.
     </p>
   </div>
+
+  <MemoryDrawers />
 </Layout>
 
 <script>
@@ -258,4 +324,9 @@ const sections = MODES.map((mode) => ({
   initLabHomeScroll();
   initLabHomeSnap();
   initLabHomeMood();
+</script>
+
+<script>
+  // Apre/chiude i cassetti, anima lo scatter, gestisce la lightbox.
+  import "../../scripts/memory-drawer.ts";
 </script>

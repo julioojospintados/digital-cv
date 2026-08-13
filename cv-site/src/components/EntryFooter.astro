@@ -1,0 +1,22 @@
+---
+/**
+ * EntryFooter.astro - il footer delle home: blocco contatti + firma.
+ *
+ * Tre regole CSS e cinque righe di markup, ma vivono in due pagine
+ * (index.astro e la prova /lab/home): tenerne due copie significa che la
+ * prima modifica ne aggiorna una sola. Il blocco contatti vero e' in
+ * ContactFooter.astro, che porta con se' il proprio stile scoped.
+ */
+import ContactFooter from "./ContactFooter.astro";
+import "../styles/entry-footer.css";
+
+interface Props {
+  lang?: "it" | "en";
+}
+const { lang = "it" } = Astro.props;
+---
+
+<footer class="entry-footer">
+  <ContactFooter lang={lang} />
+  <p class="entry-footer__credit">Giulio Occhipinti · Digital CV</p>
+</footer>
