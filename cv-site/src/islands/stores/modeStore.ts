@@ -64,7 +64,7 @@ const MODE_AWARE_PATHS = ["/en/cv", "/cv"];
 const SSR_MODE_PATHS = ["/work", "/en/work"];
 
 // Route di prova con la lente nel path, ma non nel primo segmento:
-// `/lab/cv/creative`. Il controllo standard qui sotto guarda
+// `/lab/creative`. Il controllo standard qui sotto guarda
 // `pathname.split("/")[0]`, che qui vale "lab" e non è un mode valido — la
 // pagina finiva quindi nel ramo `else`, quello che AZZERA data-mode.
 //
@@ -77,10 +77,12 @@ const SSR_MODE_PATHS = ["/work", "/en/work"];
 // a non cancellare l'attributo — allinea anche il `modeStore`, da cui
 // <go-logo> prende il proprio colore: altrimenti il logo resta sull'ultima
 // lente memorizzata mentre il resto della pagina è già cambiato.
-const LENS_ROUTE_PREFIX = "/lab/cv/";
+const LENS_ROUTE_PREFIX = "/lab/";
 
 function lensFromPath(pathname: string): Mode | null {
   if (!pathname.startsWith(LENS_ROUTE_PREFIX)) return null;
+  // `/lab/home` e `/lab/hero` passano di qui: il controllo su VALID_MODES
+  // piu' sotto li scarta, e restano quindi pagine senza lente.
   const seg = pathname.slice(LENS_ROUTE_PREFIX.length).split("/").filter(Boolean)[0] ?? "";
   return VALID_MODES.includes(seg as Mode) ? (seg as Mode) : null;
 }

@@ -1,5 +1,5 @@
 ---
-// /lab/cv/<lente> — PROVA: la pagina CV per come legge un recruiter,
+// /lab/<lente> — PROVA: la pagina CV per come legge un recruiter,
 // con la faccia del progetto addosso.
 //
 // ── I due vincoli, che convivono ─────────────────────────────────────────
@@ -39,13 +39,13 @@
 //
 // TESTI: cv.ts, cv-i18n e lab-copy.ts (verbatim da index.astro). Nessuna
 // copy scritta qui.
-import Layout from "../../../layouts/Layout.astro";
+import Layout from "../../layouts/Layout.astro";
 import { cvData } from "@cv-data";
-import { buildCvViewModel } from "../../../lib/cv-view-model";
-import { EXP_CLUSTER_DEFS } from "../../../lib/exp-clusters";
-import { LOCALES, MODES, type Mode } from "../../../lib/cv-i18n";
-import { PROFILE_COPY, TAGLINE } from "../../../lib/lab-copy";
-import "../../../styles/lab-cv.css";
+import { buildCvViewModel } from "../../lib/cv-view-model";
+import { EXP_CLUSTER_DEFS } from "../../lib/exp-clusters";
+import { LOCALES, MODES, type Mode } from "../../lib/cv-i18n";
+import { PROFILE_COPY, TAGLINE } from "../../lib/lab-copy";
+import "../../styles/lab-cv.css";
 
 export function getStaticPaths() {
   return MODES.map((lens) => ({ params: { lens } }));
@@ -71,7 +71,7 @@ const clusterLabel = cluster?.label ?? modeLabel;
 // `experience[i].description`, quella base. Ruolo e highlight restano
 // quelli della lente (scelta esplicita del 2026-08-13).
 //
-// Conseguenza da tenere presente: su /lab/cv/management la card ALTEN si
+// Conseguenza da tenere presente: su /lab/management la card ALTEN si
 // intitola "Tech Lead & Scrum Master — Aruba Design System" e il paragrafo
 // sotto parla di sviluppo enterprise. Le due righe non si contraddicono, ma
 // nemmeno si rispondono. Per tornare indietro basta togliere questo blocco.
@@ -269,7 +269,7 @@ const MAX_CHIPS = 6;
                 MODES.map((m) => (
                   <li>
                     <a
-                      href={`/lab/cv/${m}`}
+                      href={`/lab/${m}`}
                       class:list={["lc-lens__opt", { "is-current": m === lens }]}
                       data-lens={m}
                       aria-current={m === lens ? "page" : undefined}
@@ -365,7 +365,7 @@ const MAX_CHIPS = 6;
                           non si ricalcola. */}
                       {job.aiAugmented && (
                         <span class="lc-ai">
-                          <span aria-hidden="true">⚡</span> AI
+                          AI
                           <span class="lc-sr"> — lavoro svolto con l'AI nel flusso</span>
                         </span>
                       )}
@@ -413,7 +413,7 @@ const MAX_CHIPS = 6;
                               <span class="lc-client__role"> · {c.role}</span>
                               {c.ai && (
                                 <span class="lc-ai lc-ai--sm">
-                                  <span aria-hidden="true">⚡</span> AI
+                                  AI
                                   <span class="lc-sr"> — incarico svolto con l'AI nel flusso</span>
                                 </span>
                               )}
@@ -504,17 +504,18 @@ const MAX_CHIPS = 6;
         <h2 class="lc-sec-title" id="lc-more-title">Se vuoi andare a fondo</h2>
         <ul class="lc-more__list" role="list">
           <li><a href="/work">Case study — processo, decisioni, risultati</a></li>
-          <li><a href={`/${lens}`}>Competenze, metodo e formazione (pagina attuale)</a></li>
+          <li>
+            <a href={`/${lens}`}>Competenze, metodo e formazione — versione attuale del CV</a>
+          </li>
         </ul>
       </section>
 
       <p class="lc-note">
-        Prova <b>/lab/cv/{lens}</b> — la pagina CV rifatta sui tempi di lettura reali: strato 1 (7,4 s)
-        sopra la piega senza dissolvenze, strato 2 (30 s) con le esperienze filtrate per lente invece
-        che dimmate, cronologia completa sempre visibile, e la voce lunga (paragrafo della lente + bio)
-        dopo le prove. Colore, oggetti, ombre e sigle sono statici: ci sono al primo paint. L'unico movimento
-        è la deriva degli oggetti allo scroll, che è decorazione. Cambio lente = navigazione fra quattro
-        pagine statiche.
+        Prova <b>/lab/{lens}</b> — la pagina CV rifatta sui tempi di lettura reali: strato 1 (7,4 s) sopra
+        la piega senza dissolvenze, strato 2 (30 s) con le esperienze filtrate per lente invece che dimmate,
+        cronologia completa sempre visibile, e la voce lunga (paragrafo della lente + bio) dopo le prove.
+        Colore, oggetti, ombre e sigle sono statici: ci sono al primo paint. L'unico movimento è la deriva
+        degli oggetti allo scroll, che è decorazione. Cambio lente = navigazione fra quattro pagine statiche.
       </p>
     </main>
   </div>
@@ -523,5 +524,5 @@ const MAX_CHIPS = 6;
 <script>
   // Solo la firma GO della barra: l'island si autoregistra come <go-logo>
   // e reagisce da sé al mode della pagina.
-  import "../../../islands/GoLogo.lit";
+  import "../../islands/GoLogo.lit";
 </script>

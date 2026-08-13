@@ -13,7 +13,7 @@
 // decidendo chi sei e ha tempo di aprirli.
 //
 // La sezione "Chi sono" sta prima delle quattro lenti: la persona, poi le
-// maschere. Ci è arrivata dalle pagine CV di prova (/lab/cv/<lente>), dove
+// maschere. Ci è arrivata dalle pagine CV di prova (/lab/<lente>), dove
 // occupava la fascia dei primi sette secondi con 678 caratteri e spingeva
 // sotto la piega ruoli attuali e pulsanti.
 //
@@ -283,7 +283,12 @@ const sections = MODES.map((mode) => ({
               <p class="lh-section__eyebrow">{s.eyebrow}</p>
               <p class="lh-section__text">{s.desc}</p>
               <div class="lh-section__actions">
-                <a class="lh-cta" href={`/${s.mode}`}>
+                {/* Le CTA restano dentro il banco di prova: /lab/<lente>,
+                    non /<lente>. Le due versioni del CV sono parallele e non
+                    si mescolano mai — chi entra da /lab/home resta dentro la
+                    versione nuova per tutto il percorso, chi entra da / resta
+                    in quella attuale. */}
+                <a class="lh-cta" href={`/lab/${s.mode}`}>
                   GO to {s.eyebrow}
                 </a>
                 {s.portfolio && (

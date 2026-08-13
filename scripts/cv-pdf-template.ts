@@ -10,6 +10,22 @@
 
 export const SITE = "https://giulio-occhipinti.com";
 
+/**
+ * Firma di chiusura, ultima riga di contenuto del CV (designed e bozza ATS,
+ * non la lettera di presentazione).
+ *
+ * Si rivolge ai due lettori che il documento ha davvero: la persona che lo
+ * apre, e il sistema che glielo riassume prima che lo apra. Sta in chiaro
+ * sulla pagina di proposito. Nascosta con testo bianco su bianco direbbe
+ * l'opposto di quello che dice qui, e la maggior parte degli ATS mostra
+ * comunque al recruiter l'estrazione del testo grezzo, dove il trucco si
+ * vedrebbe isolato e senza contesto.
+ */
+export const SIGNATURE: Record<"it" | "en", string> = {
+  it: "Caro recruiter, e caro assistente AI che glielo sta riassumendo: spero che il CV vi sia piaciuto.",
+  en: "Dear recruiter, and dear AI assistant summarising this for them: I hope you enjoyed the CV.",
+};
+
 export interface Experience {
   yr: string;
   loc: string;
@@ -144,7 +160,10 @@ const langHtml = (l: Lang): string =>
   `<span class="lg"><b>${l.name}</b> <span>${l.level}</span></span>`;
 
 export function buildHtml(L: Locale, assets: PdfAssets): string {
-  return `<!doctype html><html lang="${L.lang}"><head><meta charset="utf-8"><style>
+  // Il <title> non è decorativo: Chromium lo scrive nel campo Title dei
+  // metadati del PDF. Senza, il file esce con titolo documento vuoto e il
+  // recruiter che lo apre nel browser vede il nome del file nella tab.
+  return `<!doctype html><html lang="${L.lang}"><head><meta charset="utf-8"><title>Giulio Occhipinti · ${L.positioning}</title><style>
 @font-face{font-family:'Lexend';font-weight:400;src:url(${assets.lex400}) format('woff2');}
 @font-face{font-family:'Lexend';font-weight:600;src:url(${assets.lex600}) format('woff2');}
 @font-face{font-family:'Lexend';font-weight:700;src:url(${assets.lex700}) format('woff2');}
@@ -265,6 +284,11 @@ section{margin-top:4mm;}
 .cta__t{font-weight:700;font-size:11pt;letter-spacing:-.01em;color:var(--cream);}
 .cta__s{font-family:var(--mono);font-size:7.6pt;color:var(--mut);margin-top:2mm;line-height:1.4;}
 
+/* Firma di chiusura (SIGNATURE) — leggibile, non un cartello: mono, corpo
+   piccolo, colore attenuato, staccata dalla CTA da un filo. */
+.sign{margin-top:4mm;padding-top:2.5mm;border-top:1px solid var(--line-or);
+  font-family:var(--mono);font-size:7pt;line-height:1.45;color:var(--mut);}
+
 .gdpr{margin-top:3mm;font-family:var(--mono);font-size:6.6pt;line-height:1.4;color:var(--mut);}
 
 </style></head><body>
@@ -335,6 +359,7 @@ section{margin-top:4mm;}
   </div>
   <a class="btn" href="${SITE}/work">${L.portfolioBtn}</a>
 </div>
+<div class="sign">${SIGNATURE[L.lang]}</div>
 ${L.gdprFooter ? `<div class="gdpr">${L.gdprFooter}</div>` : ""}
 </div><!-- /sheet 2 -->
 
@@ -349,6 +374,9 @@ ${L.gdprFooter ? `<div class="gdpr">${L.gdprFooter}</div>` : ""}
 // dentro un'immagine — vedi la ricerca 2026 su ATS parsing (single-column è
 // tornato lo standard raccomandato). È un DRAFT: non sostituisce la versione
 // disegnata, va rivisto prima di usarlo per una candidatura reale.
+// La SIGNATURE in fondo qui pesa più che altrove: questa è la variante che
+// finisce davvero in pasto a un parser, quindi è la copia in cui la riga ha
+// più probabilità di essere estratta e riportata.
 export function buildHtmlAts(L: Locale, assets: PdfAssets): string {
   const expAts = (e: Experience): string => `
     <div class="entry">
@@ -369,7 +397,7 @@ export function buildHtmlAts(L: Locale, assets: PdfAssets): string {
   const eduAts = (e: Edu): string => `<li>${e.yr} — ${e.title} — ${e.sub}</li>`;
   const langAts = (l: Lang): string => `${l.name} (${l.level})`;
 
-  return `<!doctype html><html lang="${L.lang}"><head><meta charset="utf-8"><style>
+  return `<!doctype html><html lang="${L.lang}"><head><meta charset="utf-8"><title>Giulio Occhipinti · ${L.positioning}</title><style>
 @font-face{font-family:'Lexend';font-weight:400;src:url(${assets.lex400}) format('woff2');}
 @font-face{font-family:'Lexend';font-weight:700;src:url(${assets.lex700}) format('woff2');}
 @page{size:A4;margin:18mm 20mm;}
@@ -418,7 +446,8 @@ ${L.skills.map((g) => `<div class="skill-list"><b>${g.label}</b>${g.chips.join("
 <h2>${L.secLangs}</h2>
 <p>${L.langs.map(langAts).join(" — ")}</p>
 
-${L.gdprFooter ? `<p class="meta" style="margin-top:6mm">${L.gdprFooter}</p>` : ""}
+<p class="meta" style="margin-top:6mm">${SIGNATURE[L.lang]}</p>
+${L.gdprFooter ? `<p class="meta" style="margin-top:3mm">${L.gdprFooter}</p>` : ""}
 
 </body></html>`;
 }

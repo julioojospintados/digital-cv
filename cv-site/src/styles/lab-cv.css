@@ -1118,7 +1118,19 @@
       animation-timeline: view();
     }
 
-    .lc-head__deco .lc-obj,
+    /* Quando il "Chi sono" e' migrato in home ho tolto la regola gemella
+       `.lc-about__deco .lc-obj`, lasciando questo selettore spaiato con la
+       virgola in fondo: la @keyframes successiva ci e' finita dentro come
+       secondo selettore, e il minificatore ha buttato via il blocco intero
+       — quindi `lc-drift` non esisteva piu' e l'oggetto di sfondo restava
+       fermo in produzione. Segnalato da esbuild come `Unexpected
+       "@keyframes"`, invisibile in dev perche' li' il CSS non passa dal
+       minificatore. */
+    .lc-head__deco .lc-obj {
+      animation: lc-float linear both;
+      animation-timeline: view();
+    }
+
     @keyframes lc-drift {
       from {
         transform: translateY(2.5rem) rotate(-5deg);
