@@ -20,8 +20,8 @@
 // TESTI: tutti da cv-i18n e @cv-data, nessuna copy scritta qui.
 import Layout from "../../layouts/Layout.astro";
 import { cvData } from "@cv-data";
-import { LOCALES, MODES } from "../../lib/cv-i18n";
-import { ABOUT_COPY } from "../../lib/lab-copy";
+import { LOCALES } from "../../lib/cv-i18n";
+import { ABOUT_COPY, LAB_MODES } from "../../lib/lab-copy";
 import MemoryDrawers from "../../components/MemoryDrawers.astro";
 import EntryFooter from "../../components/EntryFooter.astro";
 import "../../styles/lab-home.css";
@@ -64,9 +64,10 @@ const composition = [
 ];
 
 // ── Le quattro sezioni ───────────────────────────────────────────────────
-// Una per modalità, nell'ordine di MODES (creative per primo: il
-// posizionamento è design-first). Sigla, oggetto, etichetta e descrizione
-// sono quelli già scritti in cv-i18n.
+// Una per modalità, nell'ordine di LAB_MODES (lab-copy.ts): design-first in
+// testa, poi AI & Digital Specialist terzo e Project Manager quarto — ordine
+// del banco di prova, diverso da quello del sito in produzione. Sigla,
+// oggetto, etichetta e descrizione sono quelli già scritti in cv-i18n.
 const initials: Record<string, string> = {
   creative: "WD",
   tech: "SD",
@@ -124,7 +125,7 @@ const copy: Record<string, { title: [string, string]; desc: string }> = {
 // La pianta: 226px di larghezza nativa, come gli altri (vedi NATIVE_REM).
 const ABOUT_NATIVE_REM = 226 / 16;
 
-const sections = MODES.map((mode) => ({
+const sections = LAB_MODES.map((mode) => ({
   mode,
   initial: initials[mode],
   object: sectionObject[mode],
@@ -145,6 +146,30 @@ const sections = MODES.map((mode) => ({
   noindex
 >
   <link slot="head" rel="preload" as="image" href="/knolling/laptop.webp" fetchpriority="high" />
+
+  {
+    /* Anti-lampo. Senza questo l'ingresso viene disegnato tutto visibile, resta
+      così finché il bundle non arriva (misurati ~600ms in sviluppo), e solo
+      allora lab-home-intro.ts lo nasconde per farlo entrare: si vede la pagina,
+      sparisce, e ricompare. È lo stesso rimedio della home vera, che nasconde
+      da CSS ciò che poi anima.
+
+      Qui però la classe la mette uno script inline, non il foglio di stile, e
+      la differenza è il motivo per cui questo non viola la regola scritta in
+      lab-home-scroll.ts ("a nascondere è GSAP, non il CSS"): se JavaScript non
+      c'è, questo script non gira, l'attributo non arriva mai e l'ingresso resta
+      visibile e fermo — che è esattamente il comportamento voluto. E se invece
+      lo script inline gira ma il modulo non arriva mai (rete che cade a metà),
+      il timer lo toglie da solo dopo 3 secondi invece di lasciare la pagina
+      bianca per sempre. is:inline = eseguito durante il parse, prima del primo
+      disegno; un modulo partirebbe troppo tardi, cioè a lampo già avvenuto. */
+  }
+  <script slot="head" is:inline>
+    document.documentElement.setAttribute("data-lh-armed", "");
+    setTimeout(function () {
+      document.documentElement.removeAttribute("data-lh-armed");
+    }, 3000);
+  </script>
 
   <div class="lh">
     <header class="lh-bar">
@@ -191,7 +216,25 @@ const sections = MODES.map((mode) => ({
           tagline e riga dei ruoli sono quelli scritti da Giulio. */
       }
       <div class="lh-copy">
-        <h1 class="lh-name">{cvData.personal.name}</h1>
+        {
+          /* Il nome è diviso in parole, e lab-home-intro.ts scende poi al
+            singolo carattere: serve alla comparsa lettera per lettera, con G e
+            O che atterrano prima delle altre. aria-label tiene il nome intero
+            per chi legge con uno screen reader — le parole spezzate sono
+            decorazione, non contenuto. Stesso schema di index.astro. */
+        }
+        <h1 class="lh-name" aria-label={cvData.personal.name}>
+          {
+            cvData.personal.name.split(" ").map((word, i) => (
+              <Fragment>
+                {i > 0 && " "}
+                <span class="name-word" aria-hidden="true">
+                  {word}
+                </span>
+              </Fragment>
+            ))
+          }
+        </h1>
         <p class="lh-tagline">Se esiste una verità assoluta, dev'essere molto annoiata.</p>
         <p class="lh-cred">
           Web Designer · UX/UI · Software Developer · Comunicazione Digitale · AI Workflow
@@ -306,6 +349,49 @@ const sections = MODES.map((mode) => ({
     {/* Il footer della home vera: stesso componente, stesso stile. */}
     <EntryFooter lang="it" />
 
+    {
+      /* Attrezzi da cantiere — solo in sviluppo (import.meta.env.DEV: in build
+        il ramo sparisce dal bundle). Servono a rispondere a una domanda che
+        diventa seria quando questa pagina sarà la home: **com'è il primo
+        arrivo?** — cioè quello di chi non ti ha mai visto.
+
+        Sono due cose diverse, e la differenza conta:
+
+        · "da capo" azzera lo stato di sessione e ricarica su /lab/home pulita.
+          Riproduce il primo arrivo *vero*, quello che decide da solo di
+          giocare l'intro perché non trova il flag. È la prova onesta.
+        · "?intro" (il chip sulla home) invece la **forza**, flag o non flag:
+          comodo per andare a guardarla, ma è un percorso che nessun visitatore
+          farà mai.
+
+        Azzera anche cv-consent, che sta in localStorage. Oggi non si vede
+        niente: il ConsentBanner è disattivato dal 2026-08-04 (commentato in
+        Layout.astro), quindi quella riga è a vuoto. Resta perché il giorno in
+        cui il banner torna, "da capo" deve continuare a significare *primo
+        arrivo* senza che qualcuno si ricordi di aggiungerla.
+
+        Toccare il consenso è esattamente il tipo di scorciatoia che in passato
+        è finita in produzione lasciando il banner sempre visibile: per questo
+        vive dentro il ramo DEV, che sparisce dal bundle da solo, e non dietro
+        un flag da ricordarsi di togliere. */
+    }
+    {
+      import.meta.env.DEV && (
+        <Fragment>
+          <a class="dev-chip" href="/" data-astro-prefetch="false">
+            <span aria-hidden="true">←</span> home attuale
+          </a>
+          {/* Il gestore del click sta nel modulo in fondo alla pagina, non qui:
+              un <script> dentro un ramo condizionale non è sintassi che il
+              formattatore sappia leggere, e nel modulo la stessa guardia
+              `import.meta.env.DEV` fa anche sparire il codice dal bundle. */}
+          <button class="dev-chip dev-chip--next" type="button" id="dev-reset">
+            <span aria-hidden="true">↻</span> da capo
+          </button>
+        </Fragment>
+      )
+    }
+
     <p class="lh-note">
       Prova /lab/home — l'ingresso perde le 4 card: gli oggetti diventano grandi e occupano una
       schermata intera, le 4 modalità si incontrano scorrendo invece di sceglierle subito. Testi da
@@ -319,16 +405,42 @@ const sections = MODES.map((mode) => ({
 
 <script>
   import { initLabHero } from "../../scripts/lab-hero";
+  import { initLabHomeIntro } from "../../scripts/lab-home-intro";
   import {
     initLabHomeScroll,
     initLabHomeSnap,
     initLabHomeMood,
   } from "../../scripts/lab-home-scroll";
 
+  // Per prima: è l'unica che nasconde qualcosa, e deve farlo prima che le
+  // altre inizino a muoverlo.
+  initLabHomeIntro();
   initLabHero();
   initLabHomeScroll();
   initLabHomeSnap();
   initLabHomeMood();
+
+  // "Da capo" — solo in sviluppo. import.meta.env.DEV diventa `false` in
+  // build e questo blocco viene eliminato dal bundle insieme al pulsante.
+  if (import.meta.env.DEV) {
+    document.getElementById("dev-reset")?.addEventListener("click", () => {
+      try {
+        // Tutta la sessione, non solo il flag dell'intro: al primo arrivo
+        // sono azzerati anche badge, tracciamento e suggerimenti.
+        sessionStorage.clear();
+        // Il consenso vive in localStorage. Oggi a vuoto (ConsentBanner
+        // disattivato in Layout.astro), ma il giorno che torna il primo
+        // arrivo deve includere anche il banner.
+        localStorage.removeItem("cv-consent");
+      } catch {
+        // Storage bloccato: si ricarica comunque, semplicemente non azzera.
+      }
+      // replace e non href: il "torna indietro" non deve riportare sulla
+      // stessa pagina con lo stato appena azzerato. Indirizzo pulito, senza
+      // ?intro: si prova il percorso vero, quello che decide da sé.
+      window.location.replace("/lab/home");
+    });
+  }
 </script>
 
 <script>

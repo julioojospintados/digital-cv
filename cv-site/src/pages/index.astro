@@ -560,6 +560,28 @@ import EntryFooter from "../components/EntryFooter.astro";
   <!-- Language switch — fixed top-right, hidden until hero reveal -->
   <a href="/en" class="lang-switch" id="lang-switch" aria-label="Switch to English version">EN</a>
 
+  {
+    /* Scorciatoia al banco di prova — **solo in sviluppo**. import.meta.env.DEV
+      è sostituito con `false` in build: il ramo sparisce dal bundle, non è
+      "nascosto col CSS". Sta in basso a sinistra perché è l'unico angolo
+      libero: in alto a sinistra c'è il badge, in alto a destra EN, in basso a
+      destra il menu flottante. Lo stile è in global.css (.dev-chip).
+
+      Solo sulla home IT: /lab esiste in italiano soltanto, e la regola di
+      parità IT/EN riguarda ciò che va in produzione — questo non ci arriva.
+
+      `?intro` forza la coreografia piena: il chip esiste per andare a guardare
+      la prova, e senza quel parametro atterrerebbe su un'intro già consumata
+      da questa stessa home (il flag viene marcato qui, al caricamento). */
+  }
+  {
+    import.meta.env.DEV && (
+      <a class="dev-chip" href="/lab/home?intro" data-astro-prefetch="false">
+        <span aria-hidden="true">⚗</span> lab/home
+      </a>
+    )
+  }
+
   <!-- Badge "ciclo di sistemazione" — in standby per adesso (richiesta
        2026-07-29), markup commentato sotto insieme a import/const in cima
        al frontmatter. cv-init.ts NON va toccato: window.dispatchEvent(new

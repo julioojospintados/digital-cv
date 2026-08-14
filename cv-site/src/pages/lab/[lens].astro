@@ -43,12 +43,14 @@ import Layout from "../../layouts/Layout.astro";
 import { cvData } from "@cv-data";
 import { buildCvViewModel } from "../../lib/cv-view-model";
 import { EXP_CLUSTER_DEFS } from "../../lib/exp-clusters";
-import { LOCALES, MODES, type Mode } from "../../lib/cv-i18n";
-import { PROFILE_COPY, TAGLINE } from "../../lib/lab-copy";
+import { LOCALES, type Mode } from "../../lib/cv-i18n";
+import { LAB_MODES, PROFILE_COPY, TAGLINE } from "../../lib/lab-copy";
 import "../../styles/lab-cv.css";
 
 export function getStaticPaths() {
-  return MODES.map((lens) => ({ params: { lens } }));
+  // Qui l'ordine non conta (sono quattro route), ma la lista sì: usare
+  // LAB_MODES tiene una sola fonte per "quali lenti esistono nel /lab".
+  return LAB_MODES.map((lens) => ({ params: { lens } }));
 }
 
 const { lens } = Astro.params as { lens: Mode };
@@ -266,7 +268,7 @@ const MAX_CHIPS = 6;
             </summary>
             <ul class="lc-lens__list" role="list">
               {
-                MODES.map((m) => (
+                LAB_MODES.map((m) => (
                   <li>
                     <a
                       href={`/lab/${m}`}

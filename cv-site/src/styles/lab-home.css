@@ -262,12 +262,20 @@
 .lh-obj {
   --lh-par-x: 3rem;
   --lh-par-y: 2.2rem;
+  /* La centratura sta in due variabili, non scritta a mano nel `translate`,
+     perché l'atterraggio dell'ingresso (@keyframes lhLand, più sotto) deve
+     poter partire da "10px più in basso della propria posizione" senza sapere
+     quale sia — e quella posizione cambia fra desktop (-50%, sparsi) e mobile
+     (0, in griglia). Un `translate: none` nella media query cancellerebbe
+     anche il salto; due variabili a 0 no. */
+  --lh-tx: -50%;
+  --lh-ty: -50%;
 
   position: absolute;
   left: var(--x);
   top: var(--y);
   width: var(--w);
-  translate: -50% -50%;
+  translate: var(--lh-tx) var(--lh-ty);
   transform: translate3d(
       calc(var(--mx) * var(--depth) * var(--lh-par-x) * -1),
       calc(var(--my) * var(--depth) * var(--lh-par-y) * -1 + var(--sy, 0) * var(--depth) * 1rem),
@@ -324,8 +332,13 @@
   letter-spacing: -0.035em;
   text-wrap: balance;
   /* Alone scuro dietro al testo: gli oggetti passano vicino e senza questo la
-     leggibilità dipenderebbe da cosa c'è sotto. */
-  text-shadow: 0 0.15rem 2.5rem rgba(4, 34, 31, 0.85);
+     leggibilità dipenderebbe da cosa c'è sotto.
+     In una variabile perché il lampo su G e O (lab-home-intro.ts) lo rilegge e
+     se lo tiene come ultimo strato mentre pulsa: senza, la G e la O finirebbero
+     l'animazione senza alone, cioè illeggibili proprio dove passa il laptop. */
+  --lh-name-halo: 0 0.15rem 2.5rem rgba(4, 34, 31, 0.85);
+
+  text-shadow: var(--lh-name-halo);
 }
 
 .lh-tagline {
@@ -353,6 +366,66 @@
   max-width: 44rem;
   text-wrap: balance;
   text-shadow: 0 0.1rem 1.5rem rgba(4, 34, 31, 0.9);
+}
+
+/* ── La comparsa all'atterraggio ──────────────────────────────────────────
+   Stessa coreografia della home vera: il nome si scrive lettera per lettera
+   con G e O che atterrano dall'alto, poi tagline e ruoli, poi gli oggetti che
+   si posano uno dopo l'altro dall'alto a sinistra. La regia sta in
+   lab-home-intro.ts; qui c'è solo ciò che il CSS sa fare meglio.
+
+   Quello che manca rispetto alla home vera è il preloader GO — questa pagina
+   nasce senza (vedi l'intestazione di home.astro), quindi G e O atterrano
+   direttamente nel nome invece di arrivare dalle due lettere a schermo. */
+
+/* Lo stato di partenza, dal primo disegno fino a quando GSAP prende in mano
+   ognuno di questi elementi (lab-home-intro.ts toglie l'attributo subito dopo
+   averli nascosti lui). L'attributo lo mette uno script inline in home.astro:
+   senza JavaScript non arriva mai e qui non si nasconde niente. */
+html[data-lh-armed] .lh-name,
+html[data-lh-armed] .lh-tagline,
+html[data-lh-armed] .lh-cred,
+html[data-lh-armed] .lh-bar,
+html[data-lh-armed] .lh-scroll,
+html[data-lh-armed] .lh-obj {
+  opacity: 0;
+}
+
+/* Le parole restano in linea, non una per riga come in .entry-name: la
+   composizione di questo ingresso ha il nome su una riga sola. */
+.lh-name .name-word {
+  display: inline-block;
+}
+
+.lh-name .name-char {
+  display: inline-block;
+  will-change: transform;
+}
+
+/* Gemella di @keyframes knollLand (index-page.css): stessa curva, stessa
+   durata, stesso salto. Due sole differenze, entrambe dovute a dove vive.
+   1. Il punto d'arrivo è opacity 1: nella home vera gli oggetti riposano a
+      0.8 perché stanno dietro alle card, qui non c'è niente sopra di loro.
+   2. Il salto è su `translate`, non su `transform`: quest'ultimo è già
+      occupato dalle due parallassi (puntatore e scroll) e riscriverlo qui
+      significherebbe congelarle sull'ultimo fotogramma, per sempre. */
+@keyframes lhLand {
+  0% {
+    opacity: 0;
+    filter: blur(4px) brightness(0.4);
+    translate: var(--lh-tx) calc(var(--lh-ty) + 0.625rem);
+  }
+
+  100% {
+    opacity: 1;
+    filter: none;
+    translate: var(--lh-tx) var(--lh-ty);
+  }
+}
+
+.lh-obj.do-enter {
+  animation: lhLand var(--lh-land-duration, 0.45s) cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-delay: var(--lh-land-delay, 0ms);
 }
 
 .lh-scroll {
@@ -662,7 +735,11 @@
     left: auto;
     top: auto;
     width: auto;
-    translate: none;
+    /* Le variabili a 0 invece di `translate: none`: la griglia posiziona già
+       la cella, ma l'atterraggio dell'ingresso continua a poterci sommare il
+       proprio salto (vedi il commento su --lh-tx sopra). */
+    --lh-tx: 0px;
+    --lh-ty: 0px;
     /* Niente parallasse: qui gli oggetti stanno in griglia, e uno
        spostamento di qualche rem li farebbe accavallare — cioè esattamente
        il difetto che questa disposizione risolve. */

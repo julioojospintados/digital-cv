@@ -754,3 +754,57 @@ floating-menu {
     animation: none;
   }
 }
+
+/* ── Attrezzi da cantiere — esistono SOLO in sviluppo ─────────────────────
+   Il markup che usa questa classe sta sempre dentro un ramo
+   `import.meta.env.DEV` (home e /lab/home): in build quella costante diventa
+   `false`, il ramo sparisce dal bundle e questa regola non ha più niente da
+   colorare. Non è "nascosto col CSS", è proprio assente.
+
+   Sta qui e non nei due fogli di pagina perché i due chip sono lo stesso
+   oggetto in due posti, e devono restare identici: mono, sottotono, bordo
+   tratteggiato: si deve leggere come attrezzo, mai come voce di navigazione
+   del sito. In basso a sinistra perché è l'unico angolo libero su entrambe
+   le pagine — badge in alto a sinistra, EN in alto a destra, menu flottante
+   in basso a destra. */
+.dev-chip {
+  position: fixed;
+  bottom: 1.25rem;
+  left: 1.5rem;
+  z-index: 9000;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  /* 1.5rem di altezza minima: la soglia di 2.5.8 (Target Size, AA in
+     WCAG 2.2). Vale anche per un attrezzo — il padding da solo non ci arriva. */
+  min-height: 1.5rem;
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  letter-spacing: 0.12em;
+  color: var(--color-text-muted);
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(8px);
+  border: 1px dashed rgba(255, 255, 255, 0.25);
+  border-radius: 2rem;
+  padding: 0.3rem 0.75rem;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    color 0.25s ease,
+    border-color 0.25s ease,
+    background 0.25s ease;
+}
+
+/* Il secondo chip della stessa pagina si affianca al primo invece di
+   coprirlo. Oggi capita solo su /lab/home (torna indietro + da capo). */
+.dev-chip--next {
+  left: 11rem;
+}
+
+.dev-chip:hover,
+.dev-chip:focus-visible {
+  color: var(--color-text-primary);
+  border-color: rgba(255, 255, 255, 0.55);
+  background: rgba(0, 0, 0, 0.55);
+  outline: none;
+}

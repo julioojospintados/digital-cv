@@ -19,6 +19,26 @@
 
 import type { Mode } from "./cv-i18n";
 
+/**
+ * L'ordine in cui le quattro lenti si presentano **dentro /lab**, e solo lì.
+ *
+ * Non è `MODES` di `cv-i18n.ts`: quello serve il sito in produzione, dove
+ * l'ordine resta creative → tech → management → human e non va toccato finché
+ * il nuovo layout è ancora una prova. Qui AI & Digital Specialist passa terzo
+ * e Project Manager quarto — è una delle cose che il banco di prova sta
+ * valutando, quindi vive nel banco di prova.
+ *
+ * Stesso insieme di `MODES`, ordine diverso: il tipo `readonly Mode[]` lo
+ * garantisce sui valori, e il test in `lab-copy.test.ts` sul fatto che non ne
+ * manchi né ne avanzi nessuno.
+ *
+ * Quando il layout esce dal /lab, questa costante sparisce e il suo ordine
+ * passa in `MODES` — insieme alle liste scritte a mano che oggi lo ripetono:
+ * card, pallini e sezioni in `pages/index.astro` e `pages/en/index.astro`,
+ * navigazione e tendina in `pages/[mode].astro` e `pages/en/cv.astro`.
+ */
+export const LAB_MODES: readonly Mode[] = ["creative", "tech", "human", "management"] as const;
+
 export interface ProfileCopy {
   /** Titolo su due righe — la frase che porta il carattere della lente. */
   title: [string, string];
