@@ -39,7 +39,7 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "@hono/node-server": "^1.19.13",
+    "@hono/node-server": "^2.0.12",
     "@modelcontextprotocol/sdk": "^1.29.0",
     "hono": "^4.12.12",
     "pdf-parse": "^1.1.1",
