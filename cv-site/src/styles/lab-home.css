@@ -703,6 +703,25 @@ html[data-lh-armed] .lh-obj {
    posizione all'indice significherebbe rompersi al primo riordino. */
 
 @media (max-width: 55.99rem) {
+  /* ── "Chi sono" sospesa da mobile — TEMPORANEA, da rivalutare ────────────
+     Su schermo stretto è l'unico pannello più alto della finestra (925px su
+     667 a 375px di larghezza): è il caso che rendeva ruvido l'aggancio, ed è
+     anche il punto in cui l'attenzione si perde, per quantità di testo e per
+     l'immagine della pianta che non si vede.
+
+     Resta nel DOM e resta servita sopra i 56rem: qui si toglie soltanto dal
+     disegno. Lo script di aggancio salta da sé i pannelli non disegnati
+     (`livePanels` in lab-home-scroll.ts), quindi la sequenza non resta con un
+     buco in mezzo.
+
+     ATTENZIONE: finché questa regola c'è, la bio non esiste per chi arriva da
+     telefono — cioè per la maggioranza. È una sospensione in attesa di
+     riscriverla più corta, non la sistemazione definitiva.
+     Per riattivarla: togliere questo blocco. */
+  .lh-section--about {
+    display: none;
+  }
+
   .lh-hero {
     /* Testo (auto) · oggetti (quello che resta) · invito a scorrere (auto).
        La riga 1fr è ciò che tiene l'ingresso dentro una schermata: sono gli

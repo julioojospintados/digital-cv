@@ -71,6 +71,14 @@ export function initLabHomeScroll(): void {
   const sections = document.querySelectorAll<HTMLElement>(".lh-section");
 
   sections.forEach((section) => {
+    // Sezione non disegnata ("Chi sono" sotto i 56rem): si salta. Non è solo
+    // lavoro sprecato — è il `gsap.set(..., autoAlpha: 0)` qui sotto che non
+    // deve partire, altrimenti resterebbe applicato e, tornando sopra il
+    // breakpoint, la sezione ricomparirebbe vuota. Saltandola il contenuto
+    // resta visibile, che è il verso giusto in cui rompersi (vedi l'intestazione
+    // di questo file).
+    if (!section.getClientRects().length) return;
+
     const initial = section.querySelector<HTMLElement>(".lh-section__initial");
     const object = section.querySelector<HTMLElement>(".lh-section__object");
     const copy = section.querySelector<HTMLElement>(".lh-section__copy");
@@ -214,8 +222,22 @@ export function initLabHomeSnap(): void {
   const sectionEls = Array.from(document.querySelectorAll<HTMLElement>(".lh-section"));
   if (!hero || !sectionEls.length) return;
 
-  const panels = [hero, ...sectionEls];
+  const allPanels = [hero, ...sectionEls];
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  /**
+   * I pannelli **effettivamente disegnati**.
+   *
+   * "Chi sono" è sospesa sotto i 56rem (`display: none` in lab-home.css), e
+   * un elemento non disegnato ha rettangolo nullo: lasciarlo nella lista
+   * falserebbe sia le posizioni di arrivo sia il conteggio dei passi, cioè
+   * produrrebbe di nuovo un aggancio che porta nel posto sbagliato.
+   *
+   * Si ricalcola a ogni gesto invece di fissarla all'avvio: così ruotare il
+   * telefono — che attraversa il breakpoint — non lascia in uso una lista
+   * vecchia.
+   */
+  const livePanels = (): HTMLElement[] => allPanels.filter((el) => el.getClientRects().length > 0);
 
   const DURATION = reduced ? 0.01 : 0.8;
 
@@ -278,11 +300,13 @@ export function initLabHomeSnap(): void {
 
   const maxScroll = () => document.documentElement.scrollHeight - window.innerHeight;
 
-  /** Le posizioni di arrivo: l'inizio di ogni pannello, più il fondo pagina —
-   *  senza quest'ultimo la nota di chiusura resterebbe irraggiungibile. */
-  const stops = (): number[] => {
+  /** Le posizioni di arrivo: l'inizio di ogni pannello disegnato, più il fondo
+   *  pagina — senza quest'ultimo la nota di chiusura resterebbe
+   *  irraggiungibile. Prende la lista in ingresso perché chi la chiama deve
+   *  poter indicizzare gli stessi pannelli a cui le posizioni si riferiscono. */
+  const stops = (list: HTMLElement[]): number[] => {
     const max = maxScroll();
-    const tops = panels.map((el) =>
+    const tops = list.map((el) =>
       Math.max(0, Math.min(Math.round(el.getBoundingClientRect().top + window.scrollY), max)),
     );
     if (max - tops[tops.length - 1] > 4) tops.push(max);
@@ -303,15 +327,43 @@ export function initLabHomeSnap(): void {
 
   const step = (direction: 1 | -1): void => {
     if (busy) return;
-    const list = stops();
+    const live = livePanels();
+    const list = stops(live);
     const from = currentIndex(list);
     const to = from + direction;
     if (to < 0 || to >= list.length) return;
 
-    // Se siamo lontani dall'ancoraggio, il gesto serve prima a rimetterci in
-    // posizione: si torna sul proprio pannello invece di saltarne uno.
-    const drifted = Math.abs(list[from] - window.scrollY) > window.innerHeight * 0.15;
-    const destination = drifted ? list[from] : list[to];
+    // ── Il punto di riposo del pannello corrente, NEL VERSO in cui si va ──
+    // Per un pannello più alto della finestra non coincide col suo inizio:
+    // scendendo è il suo fondo allineato al fondo della finestra, cioè
+    // l'inizio più la parte che eccede.
+    //
+    // Misurare sempre dall'inizio era il bug del "doppio rimbalzo" trovato da
+    // mobile su "Chi sono" (925px in una finestra da 667): arrivati in fondo
+    // alla sezione il gesto veniva catturato — giustamente, siamo al bordo —
+    // ma la distanza dall'inizio (258px) superava la soglia di deriva, quindi
+    // `destination` tornava a essere l'inizio della sezione stessa. Ogni
+    // swipe in giù riportava in cima alla sezione e le successive erano
+    // irraggiungibili.
+    const panel = live[Math.min(from, live.length - 1)];
+    const overflow = Math.max(
+      0,
+      Math.round(panel.getBoundingClientRect().height - window.innerHeight),
+    );
+    const anchor = direction > 0 ? list[from] + overflow : list[from];
+
+    // Quanto siamo avanti (positivo) o indietro (negativo) rispetto al punto
+    // di riposo, misurato nel verso in cui si sta andando.
+    const lead = (window.scrollY - anchor) * direction;
+
+    // Si torna sul punto di riposo solo se lo si deve ancora RAGGIUNGERE.
+    // Averlo superato non è deriva: è aver già letto la sezione, e lì il
+    // gesto deve portare avanti. Senza questa direzionalità la pagina veniva
+    // tirata indietro ogni volta che lo scorrimento libero passava di slancio
+    // oltre il fondo di una sezione lunga — il rimbalzo all'indietro che
+    // restava anche dopo aver corretto l'ancoraggio.
+    const drifted = lead < -window.innerHeight * 0.15;
+    const destination = drifted ? anchor : list[to];
 
     busy = true;
     const lenis = window.__lenis;
@@ -345,8 +397,9 @@ export function initLabHomeSnap(): void {
    *  Senza questo, su schermi bassi il contenuto in eccesso sarebbe
    *  irraggiungibile. */
   const shouldCapture = (direction: 1 | -1): boolean => {
-    const list = stops();
-    const el = panels[Math.min(currentIndex(list), panels.length - 1)];
+    const live = livePanels();
+    const list = stops(live);
+    const el = live[Math.min(currentIndex(list), live.length - 1)];
     const r = el.getBoundingClientRect();
     if (r.height <= window.innerHeight + EDGE) return true;
     return direction > 0 ? r.bottom <= window.innerHeight + EDGE : r.top >= -EDGE;
@@ -425,7 +478,7 @@ export function initLabHomeSnap(): void {
 
   // ── Tastiera: deve restare navigabile senza mouse ──
   window.addEventListener("keydown", (e) => {
-    const list = stops();
+    const list = stops(livePanels());
     if (e.key === "ArrowDown" || e.key === "PageDown" || e.key === " ") {
       e.preventDefault();
       step(1);
