@@ -648,18 +648,6 @@ html[data-lh-armed] .lh-obj {
   filter: none;
 }
 
-.lh-note {
-  border-top: 1px solid var(--lh-line);
-  max-width: 82rem;
-  margin-inline: auto;
-  padding: 1.25rem var(--lh-gutter) 3rem;
-  font-family: var(--font-mono);
-  font-size: var(--fs-12);
-  line-height: 1.9;
-  letter-spacing: 0.06em;
-  color: var(--lh-muted);
-}
-
 /* ── Desktop: sezioni su due colonne, alternate ── */
 
 @media (min-width: 56rem) {

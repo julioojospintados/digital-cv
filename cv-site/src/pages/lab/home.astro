@@ -349,56 +349,6 @@ const sections = LAB_MODES.map((mode) => ({
 
     {/* Il footer della home vera: stesso componente, stesso stile. */}
     <EntryFooter lang="it" />
-
-    {
-      /* Attrezzi da cantiere — solo in sviluppo (import.meta.env.DEV: in build
-        il ramo sparisce dal bundle). Servono a rispondere a una domanda che
-        diventa seria quando questa pagina sarà la home: **com'è il primo
-        arrivo?** — cioè quello di chi non ti ha mai visto.
-
-        Sono due cose diverse, e la differenza conta:
-
-        · "da capo" azzera lo stato di sessione e ricarica su /lab/home pulita.
-          Riproduce il primo arrivo *vero*, quello che decide da solo di
-          giocare l'intro perché non trova il flag. È la prova onesta.
-        · "?intro" (il chip sulla home) invece la **forza**, flag o non flag:
-          comodo per andare a guardarla, ma è un percorso che nessun visitatore
-          farà mai.
-
-        Azzera anche cv-consent, che sta in localStorage. Oggi non si vede
-        niente: il ConsentBanner è disattivato dal 2026-08-04 (commentato in
-        Layout.astro), quindi quella riga è a vuoto. Resta perché il giorno in
-        cui il banner torna, "da capo" deve continuare a significare *primo
-        arrivo* senza che qualcuno si ricordi di aggiungerla.
-
-        Toccare il consenso è esattamente il tipo di scorciatoia che in passato
-        è finita in produzione lasciando il banner sempre visibile: per questo
-        vive dentro il ramo DEV, che sparisce dal bundle da solo, e non dietro
-        un flag da ricordarsi di togliere. */
-    }
-    {
-      import.meta.env.DEV && (
-        <Fragment>
-          <a class="dev-chip" href="/" data-astro-prefetch="false">
-            <span aria-hidden="true">←</span> home attuale
-          </a>
-          {/* Il gestore del click sta nel modulo in fondo alla pagina, non qui:
-              un <script> dentro un ramo condizionale non è sintassi che il
-              formattatore sappia leggere, e nel modulo la stessa guardia
-              `import.meta.env.DEV` fa anche sparire il codice dal bundle. */}
-          <button class="dev-chip dev-chip--next" type="button" id="dev-reset">
-            <span aria-hidden="true">↻</span> da capo
-          </button>
-        </Fragment>
-      )
-    }
-
-    <p class="lh-note">
-      Prova /lab/home — l'ingresso perde le 4 card: gli oggetti diventano grandi e occupano una
-      schermata intera, le 4 modalità si incontrano scorrendo invece di sceglierle subito. Testi da
-      cv-i18n e cv.ts. Le ombre sono ricostruite (silhouette annerita, sfocata e inclinata), non
-      fotografate.
-    </p>
   </div>
 
   <MemoryDrawers />
@@ -420,28 +370,6 @@ const sections = LAB_MODES.map((mode) => ({
   initLabHomeScroll();
   initLabHomeSnap();
   initLabHomeMood();
-
-  // "Da capo" — solo in sviluppo. import.meta.env.DEV diventa `false` in
-  // build e questo blocco viene eliminato dal bundle insieme al pulsante.
-  if (import.meta.env.DEV) {
-    document.getElementById("dev-reset")?.addEventListener("click", () => {
-      try {
-        // Tutta la sessione, non solo il flag dell'intro: al primo arrivo
-        // sono azzerati anche badge, tracciamento e suggerimenti.
-        sessionStorage.clear();
-        // Il consenso vive in localStorage. Oggi a vuoto (ConsentBanner
-        // disattivato in Layout.astro), ma il giorno che torna il primo
-        // arrivo deve includere anche il banner.
-        localStorage.removeItem("cv-consent");
-      } catch {
-        // Storage bloccato: si ricarica comunque, semplicemente non azzera.
-      }
-      // replace e non href: il "torna indietro" non deve riportare sulla
-      // stessa pagina con lo stato appena azzerato. Indirizzo pulito, senza
-      // ?intro: si prova il percorso vero, quello che decide da sé.
-      window.location.replace("/lab/home");
-    });
-  }
 </script>
 
 <script>
