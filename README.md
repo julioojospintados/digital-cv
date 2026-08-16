@@ -70,7 +70,7 @@ Digital_CV/
 │       │   ├── FloatingMenu.lit.ts ← <floating-menu>: FAB contatti / feedback
 │       │   ├── SkillForceGraph.lit.ts ← <skill-force-graph>: grafo D3 force-directed (lazy-loaded)
 │       │   └── stores/
-│       │       ├── modeStore.ts    ← NanoStore globale per il mode attivo (tech/creative/human/management)
+│       │       ├── modeStore.ts    ← NanoStore globale per il mode attivo (tech/creative/human)
 │       │       └── modeStore.test.ts
 │       │
 │       ├── layouts/
@@ -84,7 +84,7 @@ Digital_CV/
 │       │
 │       ├── pages/
 │       │   ├── index.astro         ← Entry IT: preloader GO + knolling + scelta del mode
-│       │   ├── [mode].astro        ← Pagina CV per /tech /creative /human /management
+│       │   ├── [mode].astro        ← Pagina CV per /tech /creative /human
 │       │   ├── privacy.astro       ← Informativa privacy (linkata dal banner di consenso)
 │       │   ├── work/               ← Indice + case study progetti ([slug].astro)
 │       │   ├── en/                 ← Versione inglese (index, cv, privacy, work/)

@@ -7,13 +7,13 @@
 //   così l'indicizzazione non dipende da dove Vercel pensa che giri il bot.
 // - Nessuna route EN per-mode oggi (/en/tech ecc. non esistono — vedi
 //   todo.md #40): chi arriva da fuori Italia su /tech /creative /human
-//   /management atterra su /en/cv, l'unica pagina EN esistente.
+//   atterra su /en/cv, l'unica pagina EN esistente.
 // - Un solo redirect automatico per visitatore: dopo il primo, il cookie
 //   lang-pref lo ricorda e la navigazione successiva (anche manuale, es.
 //   tornare all'IT dal lang-switch) non viene più toccata da qui.
 import { geolocation } from "@vercel/functions";
 
-const IT_ONLY_TO_EN_CV = new Set(["/", "/cv", "/tech", "/creative", "/human", "/management"]);
+const IT_ONLY_TO_EN_CV = new Set(["/", "/cv", "/tech", "/creative", "/human"]);
 
 const COOKIE_NAME = "lang-pref";
 const COOKIE_MAX_AGE = 60 * 60 * 24 * 365; // 1 anno
@@ -57,5 +57,5 @@ export default function middleware(request: Request) {
 }
 
 export const config = {
-  matcher: ["/", "/cv", "/tech", "/creative", "/human", "/management", "/work", "/work/:slug*"],
+  matcher: ["/", "/cv", "/tech", "/creative", "/human", "/work", "/work/:slug*"],
 };

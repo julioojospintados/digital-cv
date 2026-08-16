@@ -96,7 +96,7 @@ export interface TransversalSkill {
  * description e highlights della facet al posto di quelli base.
  */
 export interface ExperienceFacet {
-  mode: "tech" | "creative" | "management" | "human";
+  mode: "tech" | "creative" | "human";
   role?: string;
   description: string;
   highlights?: string[];
@@ -203,7 +203,7 @@ export interface Project {
   /** URL slug: /work/{slug} */
   slug?: string;
   /** Accent/mode primario della pagina case study */
-  primaryMode?: "tech" | "creative" | "human" | "management";
+  primaryMode?: "tech" | "creative" | "human";
   role?: string;
   problem?: string;
   /** 3-5 step del processo, in ordine — struttura da case study UX:
@@ -328,17 +328,6 @@ export const cvData = {
       ],
       tags: ["tech", "human", "ai-orchestration"],
       facets: [
-        {
-          mode: "management",
-          role: "Referente Unico di progetto",
-          description:
-            "Ho gestito il progetto end-to-end come referente unico: sprint da 1 a 2 settimane, backlog costruito sugli obiettivi di business e impactScore misurato a ogni rilascio. Niente report formali: demo funzionanti e numeri.",
-          highlights: [
-            "Ho chiuso ogni sprint con una demo funzionante, non con un avanzamento su slide.",
-            "Ho costruito il backlog sugli obiettivi di business, non sulla lista delle feature richieste a voce.",
-            "Ho reso il team autonomo sui flussi nuovi: la conoscenza resta in azienda, non nel consulente.",
-          ],
-        },
         {
           mode: "human",
           role: "AI Workflow Designer",
@@ -478,17 +467,6 @@ export const cvData = {
             "Ho difeso coerenza tipografica, spacing e stati dei componenti nelle code review, su un team di oltre 30 persone.",
           ],
         },
-        {
-          mode: "management",
-          role: "Tech Lead & Scrum Master — Aruba Design System",
-          description:
-            "Ho guidato il team del design system Aruba per oltre 3 anni: più di 30 persone tra sviluppo e design, cerimonie Agile, priorità di backlog e standard di code review condivisi. Il mio lavoro era togliere attrito: meno dipendenze tra team, rilasci più prevedibili.",
-          highlights: [
-            "Ho coordinato più di 30 persone tra sviluppatori e designer su una libreria adottata cross-prodotto.",
-            "Ho impostato standard di code review e testing con impatto diretto sulla stabilità dei rilasci.",
-            "Ho fatto da ponte tra business, design e sviluppo nella definizione delle priorità di backlog.",
-          ],
-        },
       ],
     },
     {
@@ -518,19 +496,8 @@ export const cvData = {
         "Music business",
         "Project management",
       ],
-      tags: ["creative", "management"],
+      tags: ["creative"],
       facets: [
-        {
-          mode: "management",
-          role: "Tour Manager",
-          description:
-            "Ho gestito booking e tour del roster in autonomia: ricerca venue, trattativa con i promoter, contratti e coordinamento delle date, fino all'evento live all'Arci Bellezza di Milano seguito end-to-end.",
-          highlights: [
-            "Ho coordinato booking e concerti su tutto il roster, in autonomia.",
-            "Ho seguito l'evento all'Arci Bellezza di Milano dal booking alla comunicazione.",
-            "Ho trattato con venue e promoter fino alla firma dei contratti.",
-          ],
-        },
         {
           mode: "human",
           role: "Digital Strategist",
@@ -2016,7 +1983,7 @@ export const cvData = {
       process: [
         "Ricerca — Ho definito i tre lettori reali del CV (recruiter generalista, CTO, art director) e cosa ciascuno deve trovare nei primi 3 secondi: affidabilità e leggibilità, stack e architettura, estetica e storytelling. Ogni scelta successiva risponde a uno di loro: se non è argomentabile in colloquio, non entra.",
         "Concept — Il knolling: ordine e varietà insieme. Le mie competenze sono eterogenee (codice, design, palco, metodo) e il modo più onesto di presentarle è disporle sul tavolo come oggetti in una fotografia knolling: tutto visibile, catalogato, intenzionale, nessun cassetto chiuso.",
-        "Architettura dell'informazione — Un solo profilo, quattro prospettive: le route /tech /creative /human /management cambiano enfasi e accento cromatico, mai struttura o contenuto. Chi legge sceglie il proprio punto di vista; le altre anime restano visibili come sussurri a bassa opacità, mai nascoste.",
+        "Architettura dell'informazione — Un solo profilo, tre prospettive: le route /tech /creative /human cambiano enfasi e accento cromatico, mai struttura o contenuto. Chi legge sceglie il proprio punto di vista; le altre anime restano visibili come sussurri a bassa opacità, mai nascoste.",
         "Design system — Sfondo ottanio fisso con 4 accent per mode, tipografia Lexend + JetBrains Mono, sistema square/glow per i livelli skill al posto delle barre percentuali, animazioni solo su transform/opacity con reduced-motion rispettato. Ho deciso i vincoli prima di scrivere i componenti.",
         "Build AI-augmented — Vibe coding con GitHub Copilot e Claude come pair operativi: architettura, UI, animazioni GSAP, e un server MCP con tool, resource e prompt template che espone il CV come API per agenti AI. Il sito è la controprova del workflow che dichiara.",
       ],
@@ -2305,7 +2272,7 @@ export const cvData = {
       title: "Sviluppo, revisione del codice e testi del sito",
       desc: "Scrivo e revisiono codice su architetture Angular e Astro, analizzo bug e refactoring, e genero i testi del sito nel mio tono di voce.",
       impact: "Coding · Debug · Testi",
-      tags: "tech creative human management",
+      tags: "tech creative human",
     },
     {
       tool: "GitHub Copilot",
@@ -2319,14 +2286,14 @@ export const cvData = {
       title: "Regole di scrittura, stile e vocabolario applicate ovunque",
       desc: "Ho costruito skill dedicate a scrittura, regole sintattiche e tono di voce: ogni testo del sito le rispetta senza revisione manuale ripetuta.",
       impact: "Scrittura · Regole · Stile",
-      tags: "tech management human",
+      tags: "tech human",
     },
     {
       tool: "MCP",
       title: "Server MCP per GitLab, Jira e Playwright",
       desc: "Collego GitLab, Jira e Playwright come tool MCP: apro e chiudo issue, merge request e test end-to-end direttamente dalla chat con l'AI.",
       impact: "GitLab · Jira · Playwright",
-      tags: "tech management",
+      tags: "tech",
     },
     {
       tool: "Figma AI",
@@ -2340,7 +2307,7 @@ export const cvData = {
       title: "Sintesi di workshop e brainstorming",
       desc: "Trasformo sticky notes e mappe di workshop in cluster tematici e prossimi passi, senza riscrivere a mano ogni sessione.",
       impact: "Facilitazione · Workshop",
-      tags: "management human",
+      tags: "human",
     },
     {
       tool: "NotebookLM",

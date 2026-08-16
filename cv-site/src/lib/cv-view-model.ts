@@ -138,7 +138,6 @@ export function skillModeTags(skill: SkillSource): string {
     tags.add("tech");
     tags.add("creative");
     tags.add("human");
-    tags.add("management");
   }
 
   return Array.from(tags).join(" ");
@@ -169,13 +168,13 @@ const SOFT_MODE_TAGS = [
   "human creative", // Comunicazione efficace
   "creative human", // Creatività applicata
   "human", // Adattabilità culturale
-  "human management", // Intelligenza relazionale
-  "tech human management", // Problem solving laterale
-  "tech human management", // Autonomia strategica
-  "human management", // Resilienza e pensiero adattivo
-  "human management", // Ascolto attivo
+  "human", // Intelligenza relazionale
+  "tech human", // Problem solving laterale
+  "tech human", // Autonomia strategica
+  "human", // Resilienza e pensiero adattivo
+  "human", // Ascolto attivo
   "creative", // Sensibilità estetica
-  "tech creative human management", // Pensiero T-shaped
+  "tech creative human", // Pensiero T-shaped
 ];
 
 const CEFR_STEPS: Record<string, number> = {

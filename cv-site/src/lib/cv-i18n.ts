@@ -16,9 +16,9 @@
 
 export type Locale = "it" | "en";
 
-export type Mode = "tech" | "creative" | "human" | "management";
+export type Mode = "tech" | "creative" | "human";
 
-export const MODES: readonly Mode[] = ["creative", "tech", "management", "human"] as const;
+export const MODES: readonly Mode[] = ["creative", "tech", "human"] as const;
 
 /**
  * Mode mostrato quando la route non ne indica uno (`/en/cv`, `/cv`, store
@@ -74,7 +74,6 @@ const IT: LocaleStrings = {
   modeLabels: {
     tech: "Software Developer",
     creative: "Web & UX Designer",
-    management: "Project Manager",
     human: "AI & Digital Specialist",
   },
   modeDescriptions: {
@@ -83,21 +82,18 @@ const IT: LocaleStrings = {
       "UX/UI & Web Designer certificato IBM, Creative Technologist. Progetto interfacce belle da vedere e pensate per essere usate: le due cose insieme, o non escono.",
     human:
       "Consulente per l'Innovazione Digitale. Design, sviluppo, teatro e comunicazione nello stesso percorso: i workflow AI li costruisco e li so raccontare.",
-    management:
-      "Partner Tecnico Agile per piccole e grandi realtà. Sprint da 1 a 2 settimane, backlog costruito sul business, demo funzionanti al posto dei report.",
   },
   fallbackDescription:
     "CV interattivo di Giulio Occhipinti: Consulente per l'Innovazione Digitale & Partner Tecnico per piccole e grandi realtà.",
   // Hero mode-aware: chi arriva su /tech o /creative cercando un profilo
   // specifico non deve leggere il posizionamento generico da partner tecnico
-  // (quello resta su home e /management) — vedi memoria "posizionamento-ux-ui-first":
+  // (quello resta sulla home) — vedi memoria "posizionamento-ux-ui-first":
   // Design/UX-UI sempre prima, Tecnologia come strumento, mai "Senior
   // Frontend Developer" come identità.
   heroTitles: {
     tech: "Sviluppo al servizio del design: Angular, Lit, AI Workflow.",
     creative: "UX/UI & Web Designer certificato IBM, Creative Technologist.",
     human: "Consulente per l'Innovazione Digitale: comunicazione e impatto.",
-    management: "Partner Tecnico Agile: Design, Tecnologia, Metodo.",
   },
   heroSummaries: {
     tech: "Costruisco interfacce con Angular, Lit e TypeScript, e integro strumenti AI per velocizzare senza perdere qualità. In ALTEN Italia ho sviluppato design system e architetture per Aruba e Intesa San Paolo. Questo sito, ad esempio, l'ho realizzato con GitHub Copilot e Claude come assistenti operativi.",
@@ -105,8 +101,6 @@ const IT: LocaleStrings = {
       "Progetto interfacce curate fino al dettaglio, con certificazioni IBM e SkillUp in UX/UI Design e in Generative AI applicata al design. Per Aruba ho sviluppato una libreria di componenti riutilizzabile cross-prodotto; in questo sito ho progettato animazioni GSAP e un sistema knolling documentato passo per passo nel design system.",
     human:
       "Il mio percorso unisce design, sviluppo, teatro e comunicazione. La formazione in improvvisazione teatrale con B-Teatro mi ha insegnato ad ascoltare prima di rispondere, un'attitudine che porto anche nella progettazione dei workflow AI. Ho condotto festival e panel con ospiti internazionali e ho progettato la comunicazione digitale del roster di un'agenzia musicale.",
-    management:
-      "Applico Scrum e Kanban in contesti diversi: team enterprise distribuiti come Intesa San Paolo e Aruba, e collaborazioni più snelle come il tour management per un'agenzia musicale, dove ho seguito booking e strategia digitale in autonomia. Lavoro in sprint brevi, con un backlog costruito sugli obiettivi di business.",
   },
   projectTags: {
     Cinema: "creative",
@@ -116,9 +110,9 @@ const IT: LocaleStrings = {
     "Event management": "human",
     Poesia: "creative human",
     Creatività: "creative",
-    "Tour management": "creative management",
+    "Tour management": "creative",
     "Content Strategy": "creative",
-    "Digital marketing": "creative management",
+    "Digital marketing": "creative",
   },
 };
 
@@ -135,7 +129,6 @@ const EN: LocaleStrings = {
   modeLabels: {
     tech: "Software Developer",
     creative: "Web & UX Designer",
-    management: "Project Manager",
     human: "AI & Digital Specialist",
   },
   modeDescriptions: {
@@ -144,8 +137,6 @@ const EN: LocaleStrings = {
       "IBM-certified UX/UI & Web Designer, Creative Technologist. I design interfaces that look good and are built to be used: both at once, or they don't ship.",
     human:
       "Digital Innovation Consultant. Design, development, theatre and communication in one path: I build AI workflows and I can tell the story behind them.",
-    management:
-      "Agile Technical Partner for businesses large and small. One to two week sprints, a backlog built on the business, working demos instead of reports.",
   },
   fallbackDescription:
     "Interactive CV of Giulio Occhipinti: Digital Innovation Consultant & Technical Partner for businesses large and small.",
@@ -153,7 +144,6 @@ const EN: LocaleStrings = {
     tech: "Development in service of design: Angular, Lit, AI Workflow.",
     creative: "IBM-certified UX/UI & Web Designer, Creative Technologist.",
     human: "Digital Innovation Consultant: communication and impact.",
-    management: "Agile Technical Partner: Design, Technology, Method.",
   },
   heroSummaries: {
     tech: "I build interfaces with Angular, Lit and TypeScript, and I integrate AI tooling to move faster without losing quality. At ALTEN Italia I developed design systems and architecture for Aruba and Intesa San Paolo. This site, for example, I built with GitHub Copilot and Claude as operational assistants.",
@@ -161,8 +151,6 @@ const EN: LocaleStrings = {
       "I design interfaces polished down to the last detail, with IBM and SkillUp certifications in UX/UI Design and in Generative AI applied to design. For Aruba I built a reusable cross-product component library; on this site I designed the GSAP animations and a knolling system documented step by step in the design system.",
     human:
       "My path brings together design, development, theatre and communication. Training in theatrical improvisation with B-Teatro taught me to listen before answering, an attitude I carry into designing AI workflows too. I have hosted festivals and panels with international guests, and designed the digital communication for a music agency's roster.",
-    management:
-      "I apply Scrum and Kanban across very different contexts: distributed enterprise teams like Intesa San Paolo and Aruba, and leaner collaborations such as tour management for a music agency, where I ran booking and digital strategy on my own. I work in short sprints, with a backlog built around business goals.",
   },
   projectTags: {
     Cinema: "creative",
@@ -172,9 +160,9 @@ const EN: LocaleStrings = {
     "Event management": "human",
     Poetry: "creative human",
     Creativity: "creative",
-    "Tour management": "creative management",
+    "Tour management": "creative",
     "Content Strategy": "creative",
-    "Digital marketing": "creative management",
+    "Digital marketing": "creative",
   },
 };
 

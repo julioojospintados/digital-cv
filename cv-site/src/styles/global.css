@@ -170,18 +170,6 @@ button {
   --card-scale-passive: 0.97;
 }
 
-[data-mode="management"] {
-  --color-bg: rgba(8, 73, 67, 1);
-  --color-surface: rgba(30, 10, 60, 0.4);
-  --color-border: rgba(180, 100, 255, 0.25);
-  --color-text-primary: rgba(240, 230, 255, 1);
-  /* WCAG AA — ~4.6:1 su bg ottanio */
-  --color-text-muted: rgba(200, 170, 255, 0.78);
-  --color-accent: rgba(180, 100, 255, 1);
-  --card-opacity-passive: 0.2;
-  --card-scale-passive: 0.97;
-}
-
 /* ─── Base styles ─── */
 
 html {

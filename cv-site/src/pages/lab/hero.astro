@@ -135,7 +135,7 @@ const objectBySlug: Record<string, string> = {
 // pannelli ciano e due arancioni, mentre oro e viola non comparivano mai.
 // L'idea "le modalità diventano il colore dei case study" resta, ma per
 // funzionare come codifica visiva i quattro colori devono esserci tutti.
-const PANELS = ["creative", "tech", "human", "management"] as const;
+const PANELS = ["creative", "tech", "human"] as const;
 
 const cases = cvData.projects
   .filter((p) => !!p.slug)

@@ -1,6 +1,6 @@
 ---
 name: identity
-description: "Chi è Giulio Occhipinti — Consulente per l'Innovazione Digitale & Partner Tecnico per piccole e grandi realtà. Profilo multidisciplinare: Tech (Angular, Lit, MCP, Node.js), Design (UX/UI cert. IBM), Metodo (Agile snello). Carica quando: scrivi bio, testi di presentazione, copy delle card, descrizioni esperienze, tone of voice, storytelling, identità professionale, frasi guida, job hunting, target recruiter/CTO/art director/management, narrativa GO, 4 mode (tech/creative/human/management), preloader."
+description: "Chi è Giulio Occhipinti — Consulente per l'Innovazione Digitale & Partner Tecnico per piccole e grandi realtà. Profilo multidisciplinare: Tech (Angular, Lit, MCP, Node.js), Design (UX/UI cert. IBM), Metodo (Agile snello). Carica quando: scrivi bio, testi di presentazione, copy delle card, descrizioni esperienze, tone of voice, storytelling, identità professionale, frasi guida, job hunting, target recruiter/CTO/art director/management, narrativa GO, 3 mode (tech/creative/human), preloader."
 ---
 
 ## ⛔ BLOCKING — Writing Style di Giulio

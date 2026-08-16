@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from "vitest";
 import { modeStore, setMode, initMode, type Mode } from "./modeStore";
 
-const VALID_MODES: Mode[] = ["tech", "creative", "human", "management"];
+const VALID_MODES: Mode[] = ["tech", "creative", "human"];
 
 beforeEach(() => {
   // Reset to default state before each test
@@ -12,8 +12,8 @@ beforeEach(() => {
 });
 
 describe("modeStore — valid modes", () => {
-  it("exports all four valid modes", () => {
-    // Verified by testing all four transitions work successfully
+  it("exports all three valid modes", () => {
+    // Verified by testing all three transitions work successfully
     for (const mode of VALID_MODES) {
       setMode(mode);
       expect(modeStore.get()).toBe(mode);
@@ -42,19 +42,14 @@ describe("setMode", () => {
     expect(modeStore.get()).toBe("human");
   });
 
-  it("updates the store value for 'management'", () => {
-    setMode("management");
-    expect(modeStore.get()).toBe("management");
-  });
-
   it("sets document.documentElement data-mode attribute", () => {
     setMode("creative");
     expect(document.documentElement.dataset.mode).toBe("creative");
   });
 
-  it("sets data-mode to 'management'", () => {
-    setMode("management");
-    expect(document.documentElement.dataset.mode).toBe("management");
+  it("sets data-mode to 'human'", () => {
+    setMode("human");
+    expect(document.documentElement.dataset.mode).toBe("human");
   });
 
   it("does not change store when given an invalid mode", () => {
@@ -75,10 +70,10 @@ describe("setMode", () => {
     expect(params.get("mode")).toBe("creative");
   });
 
-  it("updates the URL search param for 'management'", () => {
-    setMode("management");
+  it("updates the URL search param for 'human'", () => {
+    setMode("human");
     const params = new URLSearchParams(window.location.search);
-    expect(params.get("mode")).toBe("management");
+    expect(params.get("mode")).toBe("human");
   });
 });
 
@@ -97,7 +92,7 @@ describe("initMode", () => {
     expect(document.documentElement.dataset.mode).toBeUndefined();
   });
 
-  it("works for all four modes when route matches", () => {
+  it("works for all three modes when route matches", () => {
     for (const mode of VALID_MODES) {
       window.history.replaceState({}, "", `/${mode}`);
       initMode();
@@ -120,11 +115,11 @@ describe("initMode", () => {
     expect(document.documentElement.dataset.mode).toBe("creative");
   });
 
-  it("usa il mode della route (/management)", () => {
-    window.history.replaceState({}, "", "/management");
+  it("usa il mode della route (/human)", () => {
+    window.history.replaceState({}, "", "/human");
     modeStore.set("tech");
     initMode();
-    expect(document.documentElement.dataset.mode).toBe("management");
+    expect(document.documentElement.dataset.mode).toBe("human");
   });
 
   it("aggiorna lo store al mode della route (non solo data-mode)", () => {
@@ -154,7 +149,7 @@ describe("initMode", () => {
 
   it("route root (/) → rimuove data-mode (colori neutri)", () => {
     window.history.replaceState({}, "", "/");
-    modeStore.set("management");
+    modeStore.set("human");
     initMode();
     expect(document.documentElement.dataset.mode).toBeUndefined();
   });

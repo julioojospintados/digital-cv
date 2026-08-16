@@ -104,24 +104,22 @@ describe("CLUSTER_OPEN_FOR", () => {
     expect(CLUSTER_OPEN_FOR["human"]).toEqual(["human"]);
   });
 
-  it("management apre solo 'management'", () => {
-    expect(CLUSTER_OPEN_FOR["management"]).toEqual(["management"]);
-  });
-
   it("nessun mode apre 'personal'", () => {
     for (const clusters of Object.values(CLUSTER_OPEN_FOR))
       expect(clusters).not.toContain("personal");
   });
 
-  it("ha esattamente 4 mode definiti", () => {
-    expect(Object.keys(CLUSTER_OPEN_FOR)).toHaveLength(4);
+  it("ha esattamente 3 mode definiti", () => {
+    // Tre dal 2026-08-16: il mode "management" è stato rimosso da tutto il
+    // sito. Se qualcuno lo reintroduce solo qui, questo conteggio lo dice.
+    expect(Object.keys(CLUSTER_OPEN_FOR)).toHaveLength(3);
   });
 });
 
 // ── applyAccordions ───────────────────────────────────────────────────────────
 
 describe("applyAccordions", () => {
-  const ALL_CLUSTERS = ["tech", "creative", "management", "human", "personal"];
+  const ALL_CLUSTERS = ["tech", "creative", "method", "human", "personal"];
 
   function setupClusters(): HTMLElement[] {
     const clusters = ALL_CLUSTERS.map((key) => makeCluster(key));
@@ -139,7 +137,7 @@ describe("applyAccordions", () => {
 
     expect(clusters[0].hasAttribute("data-open")).toBe(true); // tech
     expect(clusters[1].hasAttribute("data-open")).toBe(false); // creative
-    expect(clusters[2].hasAttribute("data-open")).toBe(false); // management
+    expect(clusters[2].hasAttribute("data-open")).toBe(false); // method
     expect(clusters[3].hasAttribute("data-open")).toBe(false); // human
     expect(clusters[4].hasAttribute("data-open")).toBe(false); // personal
   });
@@ -150,7 +148,7 @@ describe("applyAccordions", () => {
 
     expect(clusters[0].hasAttribute("data-open")).toBe(false); // tech
     expect(clusters[1].hasAttribute("data-open")).toBe(true); // creative
-    expect(clusters[2].hasAttribute("data-open")).toBe(false); // management
+    expect(clusters[2].hasAttribute("data-open")).toBe(false); // method
     expect(clusters[3].hasAttribute("data-open")).toBe(false); // human
     expect(clusters[4].hasAttribute("data-open")).toBe(false); // personal
   });
@@ -161,19 +159,8 @@ describe("applyAccordions", () => {
 
     expect(clusters[0].hasAttribute("data-open")).toBe(false); // tech
     expect(clusters[1].hasAttribute("data-open")).toBe(false); // creative
-    expect(clusters[2].hasAttribute("data-open")).toBe(false); // management
+    expect(clusters[2].hasAttribute("data-open")).toBe(false); // method
     expect(clusters[3].hasAttribute("data-open")).toBe(true); // human
-    expect(clusters[4].hasAttribute("data-open")).toBe(false); // personal
-  });
-
-  it("mode=management: apre solo 'management'", () => {
-    const clusters = setupClusters();
-    applyAccordions("management");
-
-    expect(clusters[0].hasAttribute("data-open")).toBe(false); // tech
-    expect(clusters[1].hasAttribute("data-open")).toBe(false); // creative
-    expect(clusters[2].hasAttribute("data-open")).toBe(true); // management
-    expect(clusters[3].hasAttribute("data-open")).toBe(false); // human
     expect(clusters[4].hasAttribute("data-open")).toBe(false); // personal
   });
 
@@ -252,10 +239,10 @@ describe("applyCardStates", () => {
   });
 
   it("gestisce card con tag singolo", () => {
-    const card = makeCard("management");
+    const card = makeCard("human");
     document.body.appendChild(card);
 
-    applyCardStates("management");
+    applyCardStates("human");
     expect(card.dataset.state).toBe("active");
   });
 

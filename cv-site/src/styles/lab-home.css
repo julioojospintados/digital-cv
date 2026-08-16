@@ -23,11 +23,10 @@
 }
 
 .lh {
-  /* I quattro accenti, dichiarati una volta sola: da qui li prendono sia le
+  /* I tre accenti, dichiarati una volta sola: da qui li prendono sia le
      sezioni (--accent, per titoli e bottoni) sia l'ambiente (--lh-mood). */
   --lh-mode-creative: rgba(255, 107, 53, 1);
   --lh-mode-tech: rgba(0, 255, 200, 1);
-  --lh-mode-management: rgba(180, 100, 255, 1);
   --lh-mode-human: rgba(240, 200, 127, 1);
 
   --lh-ink: rgba(245, 240, 230, 1);
@@ -145,9 +144,6 @@
 .lh[data-mood="tech"] {
   --lh-mood: var(--lh-mode-tech);
 }
-.lh[data-mood="management"] {
-  --lh-mood: var(--lh-mode-management);
-}
 .lh[data-mood="human"] {
   --lh-mood: var(--lh-mode-human);
 }
@@ -155,7 +151,7 @@
 /* Inchiostro e non accento: 1.4.11 chiede 3:1 all'indicatore di focus, e
    l'arancione su questo fondale illuminato si ferma fra 2,57:1 e 2,82:1 —
    fuori norma, e peggiora proprio sulle schede più chiare. L'inchiostro tiene
-   6,4:1 su tutte e quattro. Un anello di focus non è un elemento di marca: è
+   6,4:1 su tutte e tre. Un anello di focus non è un elemento di marca: è
    l'unica cosa che dice a chi naviga da tastiera dove si trova. */
 .lh :focus-visible {
   outline: 2px solid var(--lh-ink);
@@ -183,7 +179,7 @@
    l'ambiente resta neutro finche' non si entra in una sezione. Un logo gia'
    arancione annuncia una scelta che il visitatore non ha ancora fatto.
    Nemmeno tingerlo col mood funzionerebbe: seguendo la stanza scenderebbe a
-   2,85:1 su creative e 2,38:1 su management. */
+   2,85:1 su creative. */
 .lh-mark {
   font-family: var(--font-display);
   font-weight: 800;
@@ -491,10 +487,6 @@ html[data-lh-armed] .lh-obj {
 .lh-section[data-mode="tech"] {
   --accent: var(--lh-mode-tech);
   --accent-text: var(--lh-mode-tech);
-}
-.lh-section[data-mode="management"] {
-  --accent: var(--lh-mode-management);
-  --accent-text: color-mix(in srgb, var(--lh-mode-management) 45%, white);
 }
 .lh-section[data-mode="human"] {
   --accent: var(--lh-mode-human);

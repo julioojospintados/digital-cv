@@ -30,7 +30,7 @@ npm run preview  # anteprima del build
 | **Lit**              | 3.x        | Web components interattivi (islands pattern)                   |
 | **CSS custom properties** | —     | Sistema di styling: token per i 4 mode + file CSS per-sezione, zero hardcode colori |
 | **postcss-custom-media** | 12.x   | Named media query (`@custom-media`) condivise in tutto il CSS  |
-| **NanoStores**       | —          | Stato globale mode (`tech/creative/human/management`)          |
+| **NanoStores**       | —          | Stato globale mode (`tech/creative/human`)          |
 | **GSAP**             | 3.x        | Animazioni: timeline, ScrollTrigger, `back.out`, `elastic.out` |
 | **View Transitions** | API nativa | Transizioni tra pagine (disabilitata per click mode)           |
 
@@ -46,8 +46,6 @@ sempre ottanio `rgba(8,73,67,1)` — cambia solo `--color-accent`:
 | `tech`       | `/tech`       | Software Developer      | Cyan `rgba(0,255,200,1)`     |
 | `creative`   | `/creative`   | Web & UX Designer       | Arancione `rgba(255,107,53,1)` |
 | `human`      | `/human`      | AI & Digital Specialist | Oro `rgba(240,200,127,1)`    |
-| `management` | `/management` | Project Manager         | Viola `rgba(180,100,255,1)`  |
-
 Il mode attivo porta le card con tag corrispondente a `opacity: 1`, le altre a `opacity: var(--card-opacity-passive)`.
 Stato sincronizzato via `modeStore.ts` (nanostores/persistent); su `/en/cv` (pagina statica
 senza mode nel path) il mode è un filtro puramente client-side letto da localStorage.
@@ -85,7 +83,7 @@ cv-site/
     │   ├── FloatingMenu.lit.ts  ← <floating-menu>: FAB contatti / feedback
     │   ├── SkillForceGraph.lit.ts ← <skill-force-graph>: grafo D3 force-directed (lazy-loaded)
     │   └── stores/
-    │       ├── modeStore.ts     ← NanoStore globale mode (tech/creative/human/management)
+    │       ├── modeStore.ts     ← NanoStore globale mode (tech/creative/human)
     │       └── modeStore.test.ts
     │
     ├── layouts/
@@ -97,7 +95,7 @@ cv-site/
     ├── pages/
     │   ├── index.astro          ← Entry IT: preloader GO + knolling + scelta del mode
     │   ├── home.astro           ← Landing alternativa con le 4 mode-card
-    │   ├── [mode].astro         ← Pagina CV per /tech /creative /human /management
+    │   ├── [mode].astro         ← Pagina CV per /tech /creative /human
     │   ├── cv.astro             ← Legacy — redirect a /tech
     │   ├── work/                ← index.astro + [slug].astro (case study progetti)
     │   └── en/                  ← Versione inglese (index.astro, cv.astro, work/)

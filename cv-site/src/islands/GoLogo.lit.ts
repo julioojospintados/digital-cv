@@ -97,14 +97,6 @@ class GoLogo extends LitElement {
     }
 
     /* ── MANAGEMENT: G e O entrambe violet ──────────────────── */
-    :host([data-mode="management"]) .go-g,
-    :host([data-mode="management"]) .go-o {
-      color: rgba(180, 100, 255, 1);
-      text-shadow:
-        0 0 6px rgba(180, 100, 255, 1),
-        0 0 18px rgba(180, 100, 255, 0.55),
-        0 0 36px rgba(180, 100, 255, 0.2);
-    }
   `;
 
   private _mode: Mode = modeStore.get();

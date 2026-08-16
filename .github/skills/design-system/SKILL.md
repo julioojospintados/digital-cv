@@ -1,6 +1,6 @@
 ---
 name: design-system
-description: "Regole visual e tecniche del Digital CV. Carica quando: crei componenti UI, animazioni GSAP, layout, card, skill grid, knolling, mode system (4 mode: tech/creative/human/management), colori, tipografia, responsive, mobile, GoLogo, FloatingMenu, SkillForceGraph, Lit islands, Awwwards, cursor custom, smooth scroll, bento grid, preloader, View Transitions, ottanio, accent, viola management."
+description: "Regole visual e tecniche del Digital CV. Carica quando: crei componenti UI, animazioni GSAP, layout, card, skill grid, knolling, mode system (3 mode: tech/creative/human), colori, tipografia, responsive, mobile, GoLogo, FloatingMenu, SkillForceGraph, Lit islands, Awwwards, cursor custom, smooth scroll, bento grid, preloader, View Transitions, ottanio, accent."
 ---
 
 # Design System — Knolling CV
@@ -51,11 +51,10 @@ corretto il 2026-07-23 in `WorkDesignSystem.astro` (leggeva `:root` invece del m
 | `tech`       | `rgba(0,255,200,1)`     | `rgba(0,255,200,0.70)` — ~4.8:1 ✅        | `rgba(5,50,45,0.6)`    | `rgba(0,255,200,0.2)`    | `rgba(220,255,245,1)`   | CTO, recruiter tecnico      |
 | `creative`   | `rgba(255,107,53,1)`    | `rgba(255,195,155,0.82)` — ~4.9:1 ✅      | `rgba(40,20,5,0.5)`    | `rgba(255,107,53,0.25)`  | `rgba(255,240,220,1)`   | Art director, agenzia       |
 | `human`      | `rgba(240,200,127,1)`   | `rgba(240,210,148,0.75)` — ~4.6:1 ✅      | `rgba(20,60,30,0.4)`   | `rgba(240,200,127,0.25)` | `rgba(250,240,215,1)`   | HR, fondatore, no-profit    |
-| `management` | `rgba(180,100,255,1)`   | `rgba(200,170,255,0.78)` — **3.76:1 ❌**  | `rgba(30,10,60,0.4)`   | `rgba(180,100,255,0.25)` | `rgba(240,230,255,1)`   | Recruiter, aziende, innovazione |
-
-**`management` non passa 1.4.3** (serve 4.5:1) — dichiarato "~4.6:1 ✅" senza
-essere mai ricalcolato, scoperto il 2026-07-31. Serve alpha **0.90** (→
-4.51:1) o cambiare tinta — decisione di design non ancora presa.
+Nota storica: il quarto mode `management` (viola) è stato rimosso il
+2026-08-16. Il suo muted era dichiarato "~4.6:1 ✅" senza essere mai
+ricalcolato — in realtà 3.76:1. La lezione resta: un valore in tabella non è
+una misura finché qualcuno non la rifà.
 
 ### L'accento come TESTO: due dei quattro non si possono usare
 
@@ -67,8 +66,6 @@ alpha composto sull'ottanio):
 | tech ciano         | **7.89:1** | ✅ | ✅ |
 | human oro          | **6.49:1** | ✅ | ✅ |
 | creative arancione | **3.62:1** | ❌ | ✅ |
-| management viola   | **3.04:1** | ❌ | ✅ (di misura) |
-
 → **Arancione e viola non vanno usati come colore di un testo** su ottanio:
   occhielli, link, etichette, numeri. Vanno benissimo come **riempimento** di
   un bottone con sopra l'inchiostro scuro `rgba(10,38,34,1)` (arancione
@@ -99,11 +96,6 @@ al centro e non a occhio.
 - ~~`--color-ottanio-light`~~ — rimosso (era inutilizzato)
 - ~~`--color-accent-2`~~ — rimosso (era inutilizzato in tutti i mode)
 
-### Mode `management` — Spec
-
-Accent viola `rgba(180,100,255,1)`. Target: recruiter, aziende, contenuti su metodo e consulenza.
-Le card con `data-tags="management"` sono attive in questo mode.
-L'oggetto knolling associato al management è `chess.webp` (strategia) e `compass.webp` (orientamento).
 
 ---
 
@@ -189,9 +181,8 @@ inline nel testo, spaziatura equivalente). Vale per i toggle delle pagine
 **1.4.11 (AA):** l'indicatore di focus deve avere **3:1** rispetto a ciò che lo circonda — non basta che ci sia, deve vedersi.
 
 ⚠️ L'anello di focus del sito usa `--color-accent`, e su ottanio i margini
-sono strettissimi: **management 3.04:1** contro una soglia di 3.00:1.
-Conforme, ma senza alcun margine — qualunque schiarita del fondo lo fa
-cadere. È esattamente quello che è successo su `/lab/home`, dove col fondale
+sono stretti: **creative 3.62:1** contro una soglia di 3.00:1.
+Conforme, ma con poco margine — una schiarita del fondo lo fa cadere. È esattamente quello che è successo su `/lab/home`, dove col fondale
 illuminato l'anello arancione è sceso a **2.57:1**: lì è stato portato
 all'inchiostro chiaro (6.4:1 su tutte e quattro le schede). **Un anello di
 focus non è un elemento di marca** — è l'unica cosa che dice a chi naviga da
@@ -258,14 +249,14 @@ Il CSS gestisce `opacity` e `transform` in base a `data-state`.
 
 | File              | Mode                    | Significato simbolico         |
 | ----------------- | ----------------------- | ----------------------------- |
-| `laptop.webp`      | tech + management       | Il lavoro digitale, il codice |
-| `flashlight.webp` | tech + management       | Illuminare problemi complessi |
-| `multitool.webp`   | tech + creative + mgmt  | Versatilità, problem solving  |
+| `laptop.webp`      | tech       | Il lavoro digitale, il codice |
+| `flashlight.webp` | tech       | Illuminare problemi complessi |
+| `multitool.webp`   | tech + creative  | Versatilità, problem solving  |
 | `camera.webp`      | creative                | Fotografia, visione estetica  |
-| `megaphone.webp`   | creative + human + mgmt | Comunicazione, palco, voce    |
-| `chess.webp`       | human + management      | Strategia, pensiero laterale  |
-| `plant.webp`       | human + management      | Crescita, cura, impatto       |
-| `compass.webp`     | creative + human + mgmt | Orientamento, esplorazione    |
+| `megaphone.webp`   | creative + human | Comunicazione, palco, voce    |
+| `chess.webp`       | human      | Strategia, pensiero laterale  |
+| `plant.webp`       | human      | Crescita, cura, impatto       |
+| `compass.webp`     | creative + human | Orientamento, esplorazione    |
 
 Posizionamento via CSS custom properties `--kx`, `--ky`, `--kr`, `--ks` (e `--kfx` per flip X).
 GSAP anima ingresso (`.do-enter`) e cambio mode (`.is-hero` / `.is-dim`).
@@ -306,7 +297,7 @@ La sezione mostra il badge `MCP` come firma del metodo.
 / (index.astro)
   → Preloader: GO appare, barra si riempie (1.0s)
   → GSAP: G e O "atterrano" nel nome → iulio/cchipinti appaiono char-by-char
-  → Utente sceglie: Software Developer / Web & UX Designer / Project Manager / AI & Digital Specialist (knolling reagisce, GO button appare)
+  → Utente sceglie: Software Developer / Web & UX Designer / AI & Digital Specialist (knolling reagisce, GO button appare)
   → CTA "GO Software Developer / Web & UX Designer / etc." → launchJourney() → /cv?mode=X
 
 /cv (cv.astro)

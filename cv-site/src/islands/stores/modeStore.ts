@@ -1,8 +1,8 @@
 import { persistentAtom } from "@nanostores/persistent";
 
-export type Mode = "tech" | "creative" | "human" | "management";
+export type Mode = "tech" | "creative" | "human";
 
-const VALID_MODES: Mode[] = ["tech", "creative", "human", "management"];
+const VALID_MODES: Mode[] = ["tech", "creative", "human"];
 
 function getInitialMode(): Mode {
   if (typeof window !== "undefined") {
@@ -10,7 +10,7 @@ function getInitialMode(): Mode {
     if (urlParam && VALID_MODES.includes(urlParam as Mode)) {
       return urlParam as Mode;
     }
-    // Check URL path for /tech, /creative, /human, /management
+    // Check URL path for /tech, /creative, /human
     const pathSegment = window.location.pathname.split("/").filter(Boolean)[0] ?? "";
     if (VALID_MODES.includes(pathSegment as Mode)) {
       return pathSegment as Mode;

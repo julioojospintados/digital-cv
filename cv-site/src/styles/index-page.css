@@ -844,16 +844,6 @@ img[src*="flashlight"] {
     0 0 14px rgba(240, 200, 127, 0.3);
 }
 
-/* MANAGEMENT: G e O entrambe violet */
-#entry-name[data-mode-preview="management"] .name-go-g,
-#entry-name[data-mode-preview="management"] .name-go-o {
-  color: rgba(180, 100, 255, 1);
-  text-shadow:
-    0 0 6px rgba(180, 100, 255, 1),
-    0 0 18px rgba(180, 100, 255, 0.55),
-    0 0 36px rgba(180, 100, 255, 0.2);
-}
-
 @keyframes go-orange-pulse {
   0%,
   100% {
@@ -1056,14 +1046,6 @@ img[src*="flashlight"] {
   --card-desc-color: rgba(240, 210, 148, 0.75);
 }
 
-.mode-card[data-mode="management"] {
-  --card-glow: rgba(180, 100, 255, 0.15);
-  --card-go-color: rgba(180, 100, 255, 1);
-  --card-go-border: rgba(180, 100, 255, 0.45);
-  --card-go-shadow: rgba(180, 100, 255, 0.35);
-  --card-desc-color: rgba(200, 170, 255, 0.78);
-}
-
 .mode-card.is-selected {
   background: rgba(255, 255, 255, 0.09);
 }
@@ -1078,10 +1060,6 @@ img[src*="flashlight"] {
 
 .mode-card[data-mode="human"].is-selected {
   border-color: rgba(240, 200, 127, 0.5);
-}
-
-.mode-card[data-mode="management"].is-selected {
-  border-color: rgba(180, 100, 255, 0.5);
 }
 
 .mode-card.is-passive {
@@ -1259,10 +1237,6 @@ img[src*="flashlight"] {
   --ps-accent: rgba(255, 107, 53, 1);
   --ps-glow: rgba(255, 107, 53, 0.09);
 }
-.profile-section[data-mode="management"] {
-  --ps-accent: rgba(180, 100, 255, 1);
-  --ps-glow: rgba(180, 100, 255, 0.09);
-}
 .profile-section[data-mode="human"] {
   --ps-accent: rgba(240, 200, 127, 1);
   --ps-glow: rgba(240, 200, 127, 0.09);
@@ -1281,9 +1255,6 @@ img[src*="flashlight"] {
 }
 .section-dot[data-mode="creative"] {
   --dot-accent: rgba(255, 107, 53, 1);
-}
-.section-dot[data-mode="management"] {
-  --dot-accent: rgba(180, 100, 255, 1);
 }
 .section-dot[data-mode="human"] {
   --dot-accent: rgba(240, 200, 127, 1);
@@ -1693,10 +1664,6 @@ img[src*="flashlight"] {
 
   .profile-section[data-mode="creative"] .profile-knoll-img {
     width: clamp(9rem, 18vw, 15rem);
-  }
-
-  .profile-section[data-mode="management"] .profile-knoll-img {
-    width: clamp(5rem, 10vw, 9rem);
   }
 
   .profile-section[data-mode="human"] .profile-knoll-img {

@@ -33,7 +33,13 @@ type Localized = Record<Locale, string>;
 export type ClusterRef = { exp: number; facet?: ClusterMode } | { proj: number };
 
 export interface ExpClusterDef {
-  key: ClusterMode | "personal";
+  /**
+   * `method` e `personal` non sono lenti: sono raggruppamenti di contenuto
+   * che restano visibili in tutte. Il primo è nato quando il mode
+   * "management" è stato rimosso (2026-08-16) e le sue esperienze andavano
+   * comunque tenute nel CV.
+   */
+  key: ClusterMode | "personal" | "method";
   labels: Localized;
   /** data-tags delle card del cluster (stato active/passive per mode) */
   tags: string;
@@ -111,14 +117,24 @@ export const EXP_CLUSTER_DEFS: ExpClusterDef[] = [
     ],
   },
   {
-    key: "management",
+    // Il mode "management" non esiste più (2026-08-16): questo cluster però
+    // NON è stato rimosso con lui, perché due esperienze vivono solo qui —
+    // Artiversum (exp 11) e Metamorfosi (exp 20). Cancellarlo avrebbe tolto
+    // due lavori dal CV per rimuovere una lente.
+    //
+    // Sganciato dal mode invece che eliminato, con lo stesso schema già usato
+    // dal cluster "personal" più sotto: attivo in tutte le lenti,
+    // `openForModes` vuoto perché non è più la vista privilegiata di nessuno.
+    // I `facet: "management"` sono caduti insieme al mode, quindi i tre
+    // riferimenti tornano alla descrizione base dell'esperienza.
+    key: "method",
     labels: { it: "Metodo & Gestione", en: "Method & Management" },
-    tags: "management",
-    openForModes: ["management"],
+    tags: "tech creative human",
+    openForModes: [],
     refs: [
-      { exp: 2, facet: "management" }, // ALTEN — Tech Lead & Scrum Master
-      { exp: 0, facet: "management" }, // Progetto Interno — referente unico
-      { exp: 3, facet: "management" }, // Music Agency — tour manager
+      { exp: 2 }, // ALTEN — Tech Lead & Scrum Master
+      { exp: 0 }, // Progetto Interno — referente unico
+      { exp: 3 }, // Music Agency — tour manager
       { exp: 11 }, // Artiversum — Square Festival
       { exp: 20 }, // Metamorfosi — coordinamento team
     ],
@@ -140,7 +156,7 @@ export const EXP_CLUSTER_DEFS: ExpClusterDef[] = [
     key: "personal",
     labels: { it: "Fuori orario", en: "Off the clock" },
     // Sempre attive: è contenuto di persona, non una lente professionale.
-    tags: "tech creative human management",
+    tags: "tech creative human",
     openForModes: [],
     refs: [
       { exp: 8 }, // Presentatore & Live Host

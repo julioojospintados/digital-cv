@@ -40,12 +40,12 @@ Il sito si ispira alla fotografia **Knolling** (oggetti disposti su un piano com
 
 ## 2. Mode System (Stato Globale)
 
-L'interfaccia ha **4 mode**, non 3: `tech`, `creative`, `human`, `management`. Il valore
+L'interfaccia ha **3 mode**: `tech`, `creative`, `human`. Il valore
 è persistito in `localStorage` via NanoStore (`cv-site/src/islands/stores/modeStore.ts`),
 letto/scritto da `mode-helpers.ts` e applicato ad ogni card con classe `.cv-card`.
 
 Il mode **non è un `?mode=` query param**: su `/[mode].astro` è la route stessa
-(`/tech`, `/creative`, `/human`, `/management`) a fissare il mode iniziale via SSR;
+(`/tech`, `/creative`, `/human`) a fissare il mode iniziale via SSR;
 il cambio successivo (dropdown/pillole in navbar) aggiorna solo CSS custom property
 e `data-state` delle card, senza ricaricare la pagina. La pagina inglese (`en/cv.astro`)
 è single-page: il mode è solo client-side, non c'è una route `en/[mode]` per persona
@@ -70,8 +70,6 @@ tabella completa in §9.
 | `tech` | Software Developer | CTO, recruiter tecnico | `laptop.webp`, `flashlight.webp` |
 | `creative` | Web & UX Designer | Art director, agenzia | `camera.webp`, `multitool.webp` |
 | `human` | AI & Digital Specialist | HR, fondatore, no-profit | `plant.webp`, `megaphone.webp` |
-| `management` | Project Manager | Recruiter, aziende, innovazione | `chess.webp`, `compass.webp` |
-
 ---
 
 ## 3. Struttura del sito
@@ -86,7 +84,7 @@ Flusso reale (non "Entry Portal" generico — la home ha un nome e un rituale pr
   → Sezione "Chi sono" + 4 profile-section (una per mode), dot-nav laterale per saltare
   → Ogni profile-section ha una CTA "GO to <persona>" → naviga a /<mode>
 
-/tech /creative /human /management ([mode].astro, stesso template)
+/tech /creative /human ([mode].astro, stesso template)
   → Hero con titolo/summary mode-aware, blocco T-shaped (profondità/ampiezza)
   → Skills — vista Square di default (Grafico D3 come opt-in, non default)
   → Esperienze — cluster/accordion per dominio, featured + "Leggi altre N" incrementale
@@ -252,13 +250,12 @@ default. Bug reale trovato e corretto il 2026-07-23 in `WorkDesignSystem.astro`
 | `tech` | `rgba(0,255,200,1)` | `rgba(0,255,200,0.70)` — ~4.8:1 ✅ | `rgba(5,50,45,0.6)` | `rgba(0,255,200,0.2)` | `rgba(220,255,245,1)` |
 | `creative` | `rgba(255,107,53,1)` | `rgba(255,195,155,0.82)` — ~4.9:1 ✅ | `rgba(40,20,5,0.5)` | `rgba(255,107,53,0.25)` | `rgba(255,240,220,1)` |
 | `human` | `rgba(240,200,127,1)` | `rgba(240,210,148,0.75)` — ~4.6:1 ✅ | `rgba(20,60,30,0.4)` | `rgba(240,200,127,0.25)` | `rgba(250,240,215,1)` |
-| `management` | `rgba(180,100,255,1)` | `rgba(200,170,255,0.78)` — **3.76:1 ❌** | `rgba(30,10,60,0.4)` | `rgba(180,100,255,0.25)` | `rgba(240,230,255,1)` |
-
-> **`management` non passa 1.4.3** (serve 4.5:1): il valore era stato dichiarato
-> "~4.6:1 ✅" per anni senza essere ricalcolato — bug scoperto il 2026-07-31
-> ricontrollando i 5 mode uno per uno invece di fidarsi della tabella. Serve
-> alzare l'alpha a **0.90** (→ 4.51:1) o cambiare tinta — decisione di design
-> non ancora presa, non applicare l'alpha senza conferma.
+> Nota storica: fino al 2026-08-16 esisteva un quarto mode `management` (viola),
+> il cui `--color-text-muted` era dichiarato "~4.6:1 ✅" per anni senza essere mai
+> ricalcolato — in realtà 3.76:1, sotto il 4.5:1 di 1.4.3. Scoperto il 2026-07-31
+> ricontrollando i mode uno per uno invece di fidarsi della tabella. Il mode è
+> stato poi rimosso dal sito; la lezione resta: un valore in tabella non è una
+> misura finché qualcuno non la rifà.
 
 ### Token rimossi — non esistono più, non reintrodurli
 
@@ -370,7 +367,7 @@ unificazione in un `CvPage.astro` condiviso).
 |---|---|---|
 | `/` | `pages/index.astro` | Home, preloader, mode-card, profile-section |
 | `/home` | `pages/home.astro` | — |
-| `/tech` `/creative` `/human` `/management` | `pages/[mode].astro` | Stesso template, mode via SSR |
+| `/tech` `/creative` `/human` | `pages/[mode].astro` | Stesso template, mode via SSR |
 | `/cv` | `pages/cv.astro` | Redirect legacy → `/tech` |
 | `/work` | `pages/work/index.astro` | Indice case study |
 | `/work/[slug]` | `pages/work/[slug].astro` | Case study dedicato |
@@ -397,9 +394,8 @@ Regole operative complete → `.claude/skills/design-system/SKILL.md`
   **effettivo** (un velo chiaro sopra l'ottanio lo cambia).
 - **Contrasto non testuale (1.4.11)**: ≥3:1 per bordi di controlli, icone
   informative e **indicatori di focus**.
-- **Accento come testo**: `creative` (3.62:1) e `management` (3.04:1) **non
-  sono conformi** come colore di un testo su ottanio — solo come riempimento,
-  bordo o linea. Vedi §9.
+- **Accento come testo**: `creative` (3.62:1) **non è conforme** come colore di
+  un testo su ottanio — solo come riempimento, bordo o linea. Vedi §9.
 - **Dimensione del testo**: WCAG **non impone un minimo**. I vincoli reali
   sono **1.4.4** (zoom 200%), **1.4.10** (reflow a 320px) e **1.4.12**
   (spaziatura imposta dall'utente). Il pavimento dei 12px del progetto è una

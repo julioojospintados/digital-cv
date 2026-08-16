@@ -70,15 +70,6 @@ const {
         <span class="mode-btn__label">Software Dev</span>
       </button>
       <button
-        class:list={["mode-btn", { "is-active": mode === "management" }]}
-        data-nav-mode="management"
-        type="button"
-        aria-pressed={mode === "management" ? "true" : "false"}
-      >
-        <span class="mode-btn__abbr" aria-hidden="true">PM</span>
-        <span class="mode-btn__label">Project Mgr</span>
-      </button>
-      <button
         class:list={["mode-btn", { "is-active": mode === "human" }]}
         data-nav-mode="human"
         type="button"
@@ -108,15 +99,7 @@ const {
         aria-label="Scegli modalità di visualizzazione"
       >
         <span class="mode-dropdown__label" id="mode-dropdown-label">
-          {
-            mode === "tech"
-              ? "Software Dev"
-              : mode === "creative"
-                ? "Web & UX"
-                : mode === "management"
-                  ? "Project Manager"
-                  : "AI & Digital"
-          }
+          {mode === "tech" ? "Software Dev" : mode === "creative" ? "Web & UX" : "AI & Digital"}
         </span>
         <span class="mode-dropdown__chevron" aria-hidden="true">›</span>
       </summary>
@@ -139,16 +122,6 @@ const {
             aria-current={mode === "tech" ? "true" : undefined}
           >
             Software Dev
-          </button>
-        </li>
-        <li>
-          <button
-            type="button"
-            class:list={["mode-dropdown__option", { "is-selected": mode === "management" }]}
-            data-dropdown-mode="management"
-            aria-current={mode === "management" ? "true" : undefined}
-          >
-            Project Manager
           </button>
         </li>
         <li>
@@ -553,7 +526,7 @@ const {
                   <SoftItem
                     name={m.name}
                     description={m.description ?? ""}
-                    modeTags="tech creative human management"
+                    modeTags="tech creative human"
                     variant="method"
                   />
                 ))
@@ -580,7 +553,7 @@ const {
           </h2>
           <div class="growth-grid">
             {cvData.growthAreas.map((area) => (
-              <article class="growth-card cv-card" data-tags="tech creative human management">
+              <article class="growth-card cv-card" data-tags="tech creative human">
                 <p class="growth-card__label">Area in evoluzione</p>
                 <p class="growth-card__name">{area.name}</p>
                 <p class="growth-card__reframe">{area.reframe}</p>
@@ -632,7 +605,7 @@ const {
             aria-label="Elenco feedback, scorri per vederne altri"
           >
             {cvData.feedbacks.map((f) => (
-              <figure class="feedback-card cv-card" data-tags="tech creative human management">
+              <figure class="feedback-card cv-card" data-tags="tech creative human">
                 {f.quote && <blockquote class="feedback-quote">{f.quote}</blockquote>}
                 {!f.quote && f.keywords.length > 0 && (
                   <ul

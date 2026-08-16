@@ -255,7 +255,6 @@ function buildHtml(
     --accent-tech: rgba(0, 255, 200, 1);
     --accent-creative: rgba(255, 107, 53, 1);
     --accent-human: rgba(240, 200, 127, 1);
-    --accent-management: rgba(180, 100, 255, 1);
     --color-available: rgba(127, 217, 154, 1);
     --font-display: "Lexend", sans-serif;
     --font-mono: "JetBrains Mono", monospace;
@@ -397,7 +396,6 @@ function buildHtml(
   .mode-line i:nth-child(1) { background: var(--accent-tech); }
   .mode-line i:nth-child(2) { background: var(--accent-creative); }
   .mode-line i:nth-child(3) { background: var(--accent-human); }
-  .mode-line i:nth-child(4) { background: var(--accent-management); }
 
   /* Bio */
   .bio-row { display: grid; grid-template-columns: 96px 1fr; gap: 16px; margin-top: 18px; }
@@ -560,7 +558,6 @@ function buildHtml(
   .chip-dot--0 { background: var(--accent-tech); }
   .chip-dot--1 { background: var(--accent-creative); }
   .chip-dot--2 { background: var(--accent-human); }
-  .chip-dot--3 { background: var(--accent-management); }
 
   /* Footer */
   .footer {
@@ -635,7 +632,7 @@ function buildHtml(
       </div>
     </header>
 
-    <div class="mode-line"><i></i><i></i><i></i><i></i></div>
+    <div class="mode-line"><i></i><i></i><i></i></div>
 
     <section class="bio-row">
       <span class="bio-label">${c.bioLabel}</span>

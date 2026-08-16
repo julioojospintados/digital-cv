@@ -19,24 +19,6 @@
 
 import type { Mode } from "./cv-i18n";
 
-/**
- * L'ordine (e l'insieme) in cui le lenti si presentano **dentro /lab**, e
- * solo lì.
- *
- * Non è `MODES` di `cv-i18n.ts`: quello serve il sito in produzione, dove
- * restano tutte e quattro le modalità (creative → tech → management →
- * human) e non va toccato finché il nuovo layout è ancora una prova.
- *
- * Qui invece "Project Manager" è stata tolta di proposito (2026-08-16): il
- * banco di prova valuta tre professioni, non quattro. I dati restano intatti
- * — `cv.ts` e `PROFILE_COPY` qui sotto tengono ancora la voce "management" —
- * semplicemente non genera più una rotta `/lab/management` né compare nella
- * tendina o fra le sezioni di `/lab/home`. `LAB_MODES` è quindi un
- * sottoinsieme proprio di `MODES`, non più lo stesso insieme in un altro
- * ordine — vedi il test aggiornato in `lab-copy.test.ts`.
- */
-export const LAB_MODES: readonly Mode[] = ["creative", "tech", "human"] as const;
-
 export interface ProfileCopy {
   /** Titolo su due righe — la frase che porta il carattere della lente. */
   title: [string, string];
@@ -52,7 +34,7 @@ export interface ProfileCopy {
    * arrivi. Attenzione: scacchi e bussola sono **verticali** (177×274,
    * 208×341), quindi a parità di larghezza sono alti il doppio della
    * macchina fotografica — per questo il CSS li dimensiona per altezza e
-   * non per larghezza, altrimenti l'intestazione di /management e /human
+   * non per larghezza, altrimenti l'intestazione di /human
    * si allungherebbe fino a spingere il contenuto sotto la piega.
    */
   ratio: string;
@@ -72,13 +54,6 @@ export const PROFILE_COPY: Record<Mode, ProfileCopy> = {
     initial: "SD",
     object: "laptop",
     ratio: "524 / 476",
-  },
-  management: {
-    title: ["Agile snello", "e sprint brevi."],
-    desc: `Opero come partner tecnico per aziende e progetti digitali. Lavoro con metodo Agile, concentrandomi sul risolvere i problemi reali e nel fare da ponte tra i diversi ruoli del team. Il mio obiettivo è semplice: trovare soluzioni efficaci e rendere le persone autonome, senza creare dipendenze. Quanto è bello facilitare il lavoro alle persone?`,
-    initial: "PM",
-    object: "chess",
-    ratio: "177 / 274",
   },
   human: {
     title: ["Storytelling", "e strategia."],

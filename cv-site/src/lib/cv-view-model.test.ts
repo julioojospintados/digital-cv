@@ -46,11 +46,11 @@ describe("isActiveSkill", () => {
     expect(isActiveSkill("ai", "tech")).toBe(true);
     expect(isActiveSkill("ai", "creative")).toBe(false);
     expect(isActiveSkill("ai", "human")).toBe(false);
-    expect(isActiveSkill("ai", "management")).toBe(false);
+    expect(isActiveSkill("ai", "human")).toBe(false);
   });
 
   it("non confonde un tag che contiene il nome di un altro", () => {
-    expect(isActiveSkill("management", "human")).toBe(false);
+    expect(isActiveSkill("creative", "human")).toBe(false);
   });
 });
 
@@ -61,7 +61,7 @@ describe("skillModeTags", () => {
 
   it("assegna tutti e 4 i mode a una skill senza dominio né appartenenze note", () => {
     const tags = skillModeTags({ name: "Skill Sconosciuta Senza Dominio" }).split(" ");
-    expect(tags.sort()).toEqual(["creative", "human", "management", "tech"]);
+    expect(tags.sort()).toEqual(["creative", "human", "tech"]);
   });
 
   it("non produce mai una stringa vuota", () => {

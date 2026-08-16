@@ -57,10 +57,6 @@ const {
         <span class="mode-btn__abbr" aria-hidden="true">SD</span>
         <span class="mode-btn__label">Software Dev</span>
       </button>
-      <button class="mode-btn" data-nav-mode="management" type="button" aria-pressed="false">
-        <span class="mode-btn__abbr" aria-hidden="true">PM</span>
-        <span class="mode-btn__label">Project Mgr</span>
-      </button>
       <button class="mode-btn" data-nav-mode="human" type="button" aria-pressed="false">
         <span class="mode-btn__abbr" aria-hidden="true">AI</span>
         <span class="mode-btn__label">AI &amp; Digital</span>
@@ -94,11 +90,6 @@ const {
         <li>
           <button type="button" class="mode-dropdown__option" data-dropdown-mode="tech">
             Software Dev
-          </button>
-        </li>
-        <li>
-          <button type="button" class="mode-dropdown__option" data-dropdown-mode="management">
-            Project Manager
           </button>
         </li>
         <li>
@@ -482,7 +473,7 @@ const {
                   <SoftItem
                     name={m.name}
                     description={m.description ?? ""}
-                    modeTags="tech creative human management"
+                    modeTags="tech creative human"
                     variant="method"
                   />
                 ))
@@ -503,7 +494,7 @@ const {
           </h2>
           <div class="growth-grid">
             {cvDataEn.growthAreas.map((area) => (
-              <article class="growth-card cv-card" data-tags="tech creative human management">
+              <article class="growth-card cv-card" data-tags="tech creative human">
                 <p class="growth-card__label">Growing area</p>
                 <p class="growth-card__name">{area.name}</p>
                 <p class="growth-card__reframe">{area.reframe}</p>
@@ -556,7 +547,7 @@ const {
             aria-label="Feedback list, scroll for more"
           >
             {cvDataEn.feedbacks.map((f) => (
-              <figure class="feedback-card cv-card" data-tags="tech creative human management">
+              <figure class="feedback-card cv-card" data-tags="tech creative human">
                 {f.quote && <blockquote class="feedback-quote">{f.quote}</blockquote>}
                 {!f.quote && f.keywords.length > 0 && (
                   <ul

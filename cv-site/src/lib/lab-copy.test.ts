@@ -1,28 +1,33 @@
 import { describe, it, expect } from "vitest";
-import { LAB_MODES, PROFILE_COPY } from "./lab-copy";
+import { PROFILE_COPY } from "./lab-copy";
 import { MODES } from "./cv-i18n";
 
-// LAB_MODES è un sottoinsieme scelto di MODES: tre professioni su quattro,
-// "management" esclusa di proposito (2026-08-16). Non deve tornare a essere
-// un riordino delle stesse quattro per errore, e non deve perdere o
-// duplicare le tre che restano: da qui in poi lo dice un test invece di una
-// route 404 o di una lente doppia nella tendina.
-describe("LAB_MODES", () => {
-  it("è un sottoinsieme proprio di MODES: le stesse lenti meno 'management'", () => {
-    expect([...LAB_MODES].sort()).toEqual([...MODES].filter((m) => m !== "management").sort());
-  });
-
-  it("esclude 'management' di proposito", () => {
-    expect(LAB_MODES).not.toContain("management");
-  });
-
-  it("non contiene duplicati", () => {
-    expect(new Set(LAB_MODES).size).toBe(LAB_MODES.length);
-  });
-
-  it("ha una copia scritta per ogni lente, 'management' compresa (i dati restano)", () => {
+// Fino al 2026-08-16 qui si controllava anche `LAB_MODES`, una seconda lista
+// delle stesse lenti con un ordine suo. È stata rimossa insieme al mode
+// "management": con tre lenti il suo ordine coincideva con quello di `MODES`,
+// e il test che lo verificava diceva già cosa fare in quel caso — «se un
+// giorno i due ordini coincidono, LAB_MODES non serve più e va tolta invece
+// di restare lì a duplicare MODES».
+//
+// Resta il controllo che conta: /lab non può nascere con una lente priva di
+// testi. Senza, la lente mancante si scopre come pagina vuota in produzione.
+describe("PROFILE_COPY", () => {
+  it("ha una copia scritta per ogni lente di MODES", () => {
     for (const mode of MODES) {
       expect(PROFILE_COPY[mode], `manca la copy per "${mode}"`).toBeDefined();
+    }
+  });
+
+  it("non ha voci che non corrispondono a nessuna lente", () => {
+    expect(Object.keys(PROFILE_COPY).sort()).toEqual([...MODES].sort());
+  });
+
+  it("ogni voce porta titolo su due righe, sigla e oggetto", () => {
+    for (const mode of MODES) {
+      const c = PROFILE_COPY[mode];
+      expect(c.title, `titolo malformato per "${mode}"`).toHaveLength(2);
+      expect(c.initial.length, `sigla vuota per "${mode}"`).toBeGreaterThan(0);
+      expect(c.object.length, `oggetto mancante per "${mode}"`).toBeGreaterThan(0);
     }
   });
 });

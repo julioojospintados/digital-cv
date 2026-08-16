@@ -57,15 +57,13 @@ ma la regola base è questa — non ripeterla, solo estenderla se serve un termi
 
 ### Mode System — Core
 
-4 mode globali (URL `/<mode>` — route statica Astro):
+3 mode globali (URL `/<mode>` — route statica Astro):
 
 | Mode | Accent | Focus |
 |---|---|---|
 | tech (Software Developer) | Cyan `rgba(0,255,200,1)` | Architetture, codice, AI |
 | creative (Web & UX Designer) | Arancione `rgba(255,107,53,1)` | Storytelling, estetica, fotografia |
 | human (AI & Digital Specialist) | Oro `rgba(240,200,127,1)` | Impatto, relazione, autonomia strategica |
-| management (Project Manager) | Viola `rgba(180,100,255,1)` | Metodo, Agile, aziende, consulenza strategica |
-
 Il mode cambia **solo l'enfasi visiva** — mai il template, mai la struttura.
 Lo sfondo è **sempre ottanio** rgba(8,73,67,1). Mai hardcodare colori.
 
@@ -74,7 +72,7 @@ Lo sfondo è **sempre ottanio** rgba(8,73,67,1). Mai hardcodare colori.
 | URL | File | Ruolo |
 |---|---|---|
 | `/` | `index.astro` | Entry: preloader GO + le 4 mode-card (knolling) |
-| `/tech` `/creative` `/human` `/management` | `[mode].astro` | Pagina CV filtrata per mode |
+| `/tech` `/creative` `/human` | `[mode].astro` | Pagina CV filtrata per mode |
 | `/work` · `/work/<slug>` | `work/index.astro` · `work/[slug].astro` | Indice e case study |
 | `/privacy` | `privacy.astro` | Informativa (linkata dal banner di consenso) |
 | `/en` | `en/index.astro` | Entry inglese |

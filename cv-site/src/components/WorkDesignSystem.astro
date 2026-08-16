@@ -149,13 +149,6 @@ const modes = [
     muted: "rgba(240, 210, 148, 0.75)",
     ratio: "4.6:1",
   },
-  {
-    key: "management",
-    label: "Project Manager",
-    accent: "rgba(180, 100, 255, 1)",
-    muted: "rgba(200, 170, 255, 0.78)",
-    ratio: "4.6:1",
-  },
 ];
 
 // Niente valore hardcodato: solo --color-bg è davvero invariante, gli altri
@@ -192,7 +185,6 @@ const baseTokens = [
 const demoCards = [
   { mode: "tech", label: "MCP Server" },
   { mode: "creative", label: "Knolling" },
-  { mode: "management", label: "Sprint 1–2w" },
   { mode: "human", label: isEN ? "Theatre" : "Teatro" },
 ];
 
@@ -1446,7 +1438,6 @@ const radii = [
   /* Card attiva per il mode scelto */
   [data-ds-demo="tech"] [data-demo-mode="tech"],
   [data-ds-demo="creative"] [data-demo-mode="creative"],
-  [data-ds-demo="management"] [data-demo-mode="management"],
   [data-ds-demo="human"] [data-demo-mode="human"] {
     opacity: 1;
     transform: translateY(0);

@@ -40,7 +40,6 @@ const MODES = [
   { key: "creative", label: "Web & UX Designer", hex: "rgba(255,107,53,1)", ratio: "3.62:1" },
   { key: "tech", label: "Software Developer", hex: "rgba(0,255,200,1)", ratio: "7.89:1" },
   { key: "human", label: "AI & Digital Specialist", hex: "rgba(240,200,127,1)", ratio: "6.49:1" },
-  { key: "management", label: "Project Manager", hex: "rgba(180,100,255,1)", ratio: "3.04:1" },
 ] as const;
 
 /* ── Token di base, condivisi da tutto il sistema (global.css). ─────────── */
@@ -985,7 +984,7 @@ const toc = [
               </summary>
               <ul class="lc-lens__list" role="list">
                 {
-                  MODES.filter((m) => m.key !== "management").map((m, i) => (
+                  MODES.map((m, i) => (
                     <li>
                       <a
                         href="#lente"

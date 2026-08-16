@@ -156,7 +156,7 @@ let _lockedW = 0; // larghezza totale del container (meno il gap)
  * Converti la griglia da fr a px (no-op visivo), poi anima la distribuzione
  * in modo che la cella selezionata ottenga il 60% dello spazio disponibile.
  * Chiamate successive tweenano direttamente px→px senza reset.
- * Ordine auto-placement: creative(0)=r0c0, tech(1)=r0c1, management(2)=r1c0, human(3)=r1c1
+ * Ordine auto-placement: creative(0)=r0c0, tech(1)=r0c1, human(2)=r1c0
  */
 function expandMobileGrid(cardIndex: number) {
   const EXPAND = 0.6;
@@ -354,7 +354,7 @@ gsap.delayedCall(introAlreadySeen ? 0 : 0.9, () => {
     "-=0.25",
   );
 
-  // 9. Mode cards — ordine spaziale TL→BR (ordine DOM = creative→tech→management→human)
+  // 9. Mode cards — ordine spaziale TL→BR (ordine DOM = creative→tech→human)
   // Segue la diagonale naturale di lettura: l'occhio è guidato senza sorprese.
   // Partono mentre tagline/label stanno ancora completandosi (overlap, non
   // sequenza) — stesso motivo dello step 8: prima interazione possibile prima.
@@ -670,7 +670,7 @@ function scrollToProfile(mode: string) {
 // ── Seleziona mode: aggiorna card UI, knolling, modeStore ───────────────
 function selectMode(targetCard: HTMLButtonElement, mode: string) {
   selectedMode = mode;
-  setMode(mode as "tech" | "creative" | "human" | "management");
+  setMode(mode as "tech" | "creative" | "human");
   nameEl.setAttribute("data-mode-preview", mode);
   const isMobile = !window.matchMedia("(min-width: 56.25rem)").matches;
   // Ferma il pulse sulle card e rimuove il boxShadow residuo

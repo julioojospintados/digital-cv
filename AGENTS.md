@@ -45,8 +45,6 @@ like items in a knolling photograph.
 | `/tech`       | Software Developer       | Cyan `rgba(0,255,200,1)`      |
 | `/creative`   | Web & UX Designer        | Orange `rgba(255,107,53,1)`   |
 | `/human`      | AI & Digital Specialist  | Gold `rgba(240,200,127,1)`    |
-| `/management` | Project Manager          | Purple `rgba(180,100,255,1)`  |
-
 All 4 modes share the ottanio background `rgba(8,73,67,1)` — only `--color-accent` changes.
 The mode changes visual emphasis only, never the template or structure.
 
@@ -401,7 +399,7 @@ cv-site/                  ← Astro site (the actual CV)
     pages/
       index.astro         ← Entry point: GO preloader + the 4 mode-cards (knolling)
       home.astro          ← Legacy — 301 redirect to /
-      [mode].astro        ← CV page for /tech /creative /human /management
+      [mode].astro        ← CV page for /tech /creative /human
       cv.astro            ← Legacy — redirects to /tech
       work/index.astro    ← Case study index
       work/[slug].astro   ← Project case studies
@@ -436,7 +434,7 @@ cv-site/                  ← Astro site (the actual CV)
       GoLogo.lit.ts       ← <go-logo>: animated logo, click = reset to /, mode-reactive color
       FloatingMenu.lit.ts ← <floating-menu>: FAB with contact/feedback links
       SkillForceGraph.lit.ts ← <skill-force-graph>: D3 force-directed skill network (lazy-loaded)
-      stores/modeStore.ts ← NanoStore for global mode state (tech/creative/human/management)
+      stores/modeStore.ts ← NanoStore for global mode state (tech/creative/human)
     lib/
       exp-clusters.ts     ← Shared experience-cluster definitions (IT/EN labels, exp+proj refs)
     scripts/              ← Shared client-side logic (vanilla TS + GSAP)

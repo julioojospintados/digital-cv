@@ -17,13 +17,12 @@ applyTo: "cv-site/src/**"
 
 ## Mode system
 
-The site has **4 modes**: `tech | creative | human | management`.
+The site has **3 modes**: `tech | creative | human`.
 
 Mode = Astro route, not URL param. Each mode is a static page at `/<mode>`:
 - `/tech` → `[mode].astro` with `mode = 'tech'`
 - `/creative` → `[mode].astro` with `mode = 'creative'`
 - `/human` → `[mode].astro` with `mode = 'human'`
-- `/management` → `[mode].astro` with `mode = 'management'`
 
 Mode state is also stored in `modeStore.ts` (NanoStores) and `localStorage`.
 Navigation from home uses a GSAP warp animation then `window.location.href`.
@@ -38,8 +37,6 @@ The `data-mode` attribute is set on `<html>` — CSS custom properties handle al
 | `tech` | `rgba(0,255,200,1)` | `rgba(0,255,200,0.70)` |
 | `creative` | `rgba(255,107,53,1)` | `rgba(255,195,155,0.82)` |
 | `human` | `rgba(240,200,127,1)` | `rgba(240,210,148,0.75)` |
-| `management` | `rgba(180,100,255,1)` | `rgba(200,170,255,0.78)` |
-
 Background is always ottanio `rgba(8,73,67,1)` in every mode.
 
 ## CSS tokens — never hardcode colors
@@ -58,7 +55,7 @@ Never write `bg-black`, `text-white` etc. directly.
 |---|---|---|
 | `/` | `index.astro` | Preloader GO — navigates to `/home` |
 | `/home` | `home.astro` | 4-card mode selector (knolling layout) |
-| `/tech` `/creative` `/human` `/management` | `[mode].astro` | Full CV page filtered by mode |
+| `/tech` `/creative` `/human` | `[mode].astro` | Full CV page filtered by mode |
 | `/en/cv` | `en/cv.astro` | English version of the CV |
 | `/cv` | redirect | → `/tech` |
 
@@ -92,7 +89,7 @@ Cards have `data-tags="tech creative"` (space-separated). `cv-init.ts` sets `dat
 - `data-state="active"` → `opacity: 1`
 - `data-state="passive"` → `opacity: var(--card-opacity-passive)` (0.2) — NEVER `display:none`
 
-Valid tags: `tech` `creative` `human` `management` (align with mode names).
+Valid tags: `tech` `creative` `human` (align with mode names).
 
 ## Skill grid — no progress bars
 
@@ -137,7 +134,7 @@ Full rule set in `design-system/SKILL.md` → "Accessibilità".
 - Text contrast 4.5:1. The 3:1 exception starts at **24px, or 18.66px bold** —
   not 18px. Compute the ratio on the **composited** color (alpha counts) and on
   the **actual** background (any light overlay above the ottanio changes it)
-- **Never use `creative` orange (3.62:1) or `management` purple (3.04:1) as a
+- **Never use `creative` orange (3.62:1) as a
   text color** on the ottanio — fills, borders and rules only. Lighten toward
   white if the color must carry text (`--accent` vs `--accent-text`)
 - Non-text contrast 3:1 for control borders and informative icons (1.4.11)

@@ -150,17 +150,6 @@ export const cvDataEn = {
       tags: ["tech", "human", "ai-orchestration"],
       facets: [
         {
-          mode: "management",
-          role: "Single Point of Contact",
-          description:
-            "I managed the project end-to-end as the single point of contact: 1-to-2-week sprints, a backlog built on business goals and impactScore measured at every release. No formal reports: working demos and numbers.",
-          highlights: [
-            "I closed every sprint with a working demo, not a progress slide.",
-            "I built the backlog on business goals, not on the list of features requested out loud.",
-            "I made the team autonomous on the new workflows: the knowledge stays in the company, not with the consultant.",
-          ],
-        },
-        {
           mode: "human",
           role: "AI Workflow Designer",
           description:
@@ -299,17 +288,6 @@ export const cvDataEn = {
             "I defended typographic consistency, spacing and component states in code reviews, on a team of over 30 people.",
           ],
         },
-        {
-          mode: "management",
-          role: "Tech Lead & Scrum Master — Aruba Design System",
-          description:
-            "I led the Aruba design system team for over 3 years: more than 30 people across development and design, Agile ceremonies, backlog priorities and shared code review standards. My job was removing friction: fewer dependencies between teams, more predictable releases.",
-          highlights: [
-            "I coordinated more than 30 people across developers and designers on a library adopted cross-product.",
-            "I set code review and testing standards with a direct impact on release stability.",
-            "I bridged business, design and development in setting backlog priorities.",
-          ],
-        },
       ],
     },
     {
@@ -339,19 +317,8 @@ export const cvDataEn = {
         "Music business",
         "Project management",
       ],
-      tags: ["creative", "management"],
+      tags: ["creative"],
       facets: [
-        {
-          mode: "management",
-          role: "Tour Manager",
-          description:
-            "I managed the roster's booking and tours independently: venue research, promoter negotiations, contracts and date coordination, all the way to the live event at Arci Bellezza in Milan followed end-to-end.",
-          highlights: [
-            "I coordinated booking and concerts across the whole roster, independently.",
-            "I followed the Arci Bellezza event in Milan from booking to communications.",
-            "I negotiated with venues and promoters through to signed contracts.",
-          ],
-        },
         {
           mode: "human",
           role: "Digital Strategist",
@@ -1607,7 +1574,7 @@ export const cvDataEn = {
       process: [
         "Research — I defined the CV's three real readers (generalist recruiter, CTO, art director) and what each must find within the first 3 seconds: reliability and readability, stack and architecture, aesthetics and storytelling. Every later decision answers to one of them: if it can't be defended in an interview, it doesn't ship.",
         "Concept — Knolling: order and variety at once. My skills are heterogeneous (code, design, stage, method) and the most honest way to present them is to lay them on the table like objects in a knolling photograph: everything visible, catalogued, intentional, no closed drawers.",
-        "Information architecture — One profile, four perspectives: the /tech /creative /human /management routes change emphasis and accent colour, never structure or content. Readers choose their own point of view; the other sides stay visible as low-opacity whispers, never hidden.",
+        "Information architecture — One profile, three perspectives: the /tech /creative /human routes change emphasis and accent colour, never structure or content. Readers choose their own point of view; the other sides stay visible as low-opacity whispers, never hidden.",
         "Design system — Fixed teal background with 4 per-mode accents, Lexend + JetBrains Mono typography, a square/glow system for skill levels instead of percentage bars, animations on transform/opacity only with reduced-motion respected. I set the constraints before writing the components.",
         "AI-augmented build — Vibe coding with GitHub Copilot and Claude as operational pairs: architecture, UI, GSAP animations, and an MCP server with tools, resources and prompt templates exposing the CV as an API for AI agents. The site is the proof of the workflow it claims.",
       ],
@@ -1896,7 +1863,7 @@ export const cvDataEn = {
       title: "Development, code review and site copy",
       desc: "I write and review code on Angular and Astro architectures, analyse bugs and refactors, and generate the site copy in my own voice.",
       impact: "Coding · Debug · Copy",
-      tags: "tech creative human management",
+      tags: "tech creative human",
     },
     {
       tool: "GitHub Copilot",
@@ -1910,14 +1877,14 @@ export const cvDataEn = {
       title: "Writing, style and vocabulary rules applied everywhere",
       desc: "I built skills dedicated to writing, syntax rules and tone of voice: every text on the site follows them without repeated manual review.",
       impact: "Writing · Rules · Style",
-      tags: "tech management human",
+      tags: "tech human",
     },
     {
       tool: "MCP",
       title: "MCP servers for GitLab, Jira and Playwright",
       desc: "I connect GitLab, Jira and Playwright as MCP tools: I open and close issues, merge requests and end-to-end tests directly from the AI chat.",
       impact: "GitLab · Jira · Playwright",
-      tags: "tech management",
+      tags: "tech",
     },
     {
       tool: "Figma AI",
@@ -1931,7 +1898,7 @@ export const cvDataEn = {
       title: "Workshop and brainstorming synthesis",
       desc: "I turn sticky notes and workshop maps into thematic clusters and next steps, without rewriting every session by hand.",
       impact: "Facilitation · Workshops",
-      tags: "management human",
+      tags: "human",
     },
     {
       tool: "NotebookLM",

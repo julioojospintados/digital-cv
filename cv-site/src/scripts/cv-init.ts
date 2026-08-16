@@ -15,7 +15,7 @@ import "../islands/FloatingMenu.lit.ts";
 gsap.registerPlugin(ScrollTrigger);
 
 // ── Mode route constants — usati per URL-init e nav-navigation ──────────────
-const CV_MODES = ["tech", "creative", "human", "management"] as const;
+const CV_MODES = ["tech", "creative", "human"] as const;
 type CVMode = (typeof CV_MODES)[number];
 
 // Mode mostrato quando la route non ne indica uno (/en/cv, o store vuoto).
@@ -458,7 +458,6 @@ const DESKTOP_W = "7.75rem";
 const MODE_LABELS: Record<string, string> = {
   tech: "Software Dev",
   creative: "Web & UX",
-  management: "Project Manager",
   human: "AI & Digital",
 };
 // Su schermi <= 374px comprimiamo la label del bottone attivo
@@ -1489,9 +1488,8 @@ if (skillsViewButtons.length) {
     tech: "rgba(0,255,200,1)",
     creative: "rgba(255,107,53,1)",
     human: "rgba(240,200,127,1)",
-    management: "rgba(180,100,255,1)",
   };
-  const CV_MODE_KEYS = ["tech", "creative", "human", "management"] as const;
+  const CV_MODE_KEYS = ["tech", "creative", "human"] as const;
   const O = 4; // px fuori dal bordo card
   const CW = 18; // lunghezza ala orizzontale del bracket
 

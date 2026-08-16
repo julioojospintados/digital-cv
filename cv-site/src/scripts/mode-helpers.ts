@@ -7,7 +7,7 @@
 /**
  * Mappa mode → chiavi cluster da aprire (coerente con lib/exp-clusters.ts).
  * Mapping 1:1 dal 2026-07-15: prima "human" apriva il vecchio cluster
- * "Facilitazione & Cultura" e "management" quelli degli altri — chi cliccava
+ * "Facilitazione & Cultura" e la vecchia lente gestionale quelli degli altri — chi cliccava
  * "AI & Digital" atterrava su contenuti fuori tema. Il cluster "personal"
  * non appartiene a nessun mode: si apre dalla voce "Fuori orario" (cv-init).
  */
@@ -15,7 +15,6 @@ export const CLUSTER_OPEN_FOR: Record<string, string[]> = {
   tech: ["tech"],
   creative: ["creative"],
   human: ["human"],
-  management: ["management"],
 };
 
 /**

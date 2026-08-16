@@ -35,9 +35,7 @@
 //
 // Cosa NON c'è, rispetto a /tech e /creative: stamp fullscreen, laser di
 // scansione, scroll automatico, riordino client-side, card dimmate al 20%
-// di opacità. Il cambio lente è navigazione fra tre pagine statiche
-// (management esclusa dal banco di prova dal 2026-08-16, dati intatti in
-// cv.ts — vedi lab-copy.ts).
+// di opacità. Il cambio lente è navigazione fra tre pagine statiche.
 //
 // TESTI: cv.ts, cv-i18n e lab-copy.ts (verbatim da index.astro). Nessuna
 // copy scritta qui.
@@ -45,14 +43,15 @@ import Layout from "../../layouts/Layout.astro";
 import { cvData } from "@cv-data";
 import { buildCvViewModel } from "../../lib/cv-view-model";
 import { EXP_CLUSTER_DEFS } from "../../lib/exp-clusters";
-import { LOCALES, type Mode } from "../../lib/cv-i18n";
-import { LAB_MODES, PROFILE_COPY, TAGLINE } from "../../lib/lab-copy";
+import { LOCALES, MODES, type Mode } from "../../lib/cv-i18n";
+import { PROFILE_COPY, TAGLINE } from "../../lib/lab-copy";
 import "../../styles/lab-cv.css";
 
 export function getStaticPaths() {
-  // Qui l'ordine non conta (sono tre route), ma la lista sì: usare LAB_MODES
-  // tiene una sola fonte per "quali lenti esistono nel /lab".
-  return LAB_MODES.map((lens) => ({ params: { lens } }));
+  // Una sola fonte per "quali lenti esistono": MODES di cv-i18n. Fino al
+  // 2026-08-16 qui c'era LAB_MODES, che teneva un ordine suo; rimossa quando
+  // è diventata un duplicato esatto di MODES.
+  return MODES.map((lens) => ({ params: { lens } }));
 }
 
 const { lens } = Astro.params as { lens: Mode };
@@ -81,10 +80,8 @@ const clusterLabel = cluster?.label ?? modeLabel;
 // togliere questo blocco.
 //
 // L'override sta qui e non in `lib/cv-view-model.ts` di proposito: quel
-// file serve anche /tech, /creative, /management, /human e /en/cv, cioè le
-// pagine vere — incluso /management, che in produzione esiste ancora anche
-// se il banco di prova non lo espone più (vedi lab-copy.ts). Questa è una
-// prova, e non deve cambiarle.
+// file serve anche /tech, /creative, /human e /en/cv, cioè le pagine vere.
+// Questa è una prova, e non deve cambiarle.
 const clusterRefs = EXP_CLUSTER_DEFS.find((c) => c.key === lens)?.refs ?? [];
 const rawItems = cluster?.items ?? [];
 
@@ -117,7 +114,7 @@ const byRecency = [...items].sort((a, b) => Number(b.startYear) - Number(a.start
 const headline = [...current, ...byRecency.filter((i) => !current.includes(i))].slice(0, 2);
 
 // Il portfolio è la prova decisiva per il ruolo di design, e solo per
-// quello: su /tech o /management diventa un'uscita laterale che porta via
+// quello: su /tech o /human diventa un'uscita laterale che porta via
 // dal CV proprio nei secondi in cui si sta decidendo.
 const showPortfolio = lens === "creative";
 
@@ -272,7 +269,7 @@ const MAX_CHIPS = 6;
             </summary>
             <ul class="lc-lens__list" role="list">
               {
-                LAB_MODES.map((m) => (
+                MODES.map((m) => (
                   <li>
                     <a
                       href={`/lab/${m}`}

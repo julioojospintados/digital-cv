@@ -6,10 +6,6 @@
 // una alla volta a schermo intero. Le modalità non spariscono, smettono di
 // essere un bivio all'ingresso e diventano un percorso.
 //
-// Sono tre, non quattro: "Project Manager" è esclusa dal banco di prova dal
-// 2026-08-16 (vedi LAB_MODES in lab-copy.ts). I dati restano in cv.ts, qui
-// semplicemente non compare più una sezione per quella lente.
-//
 // Rispetto alla home vera questa prova resta spoglia dove non serve: niente
 // preloader GO. I cassetti delle foto invece ci sono — "Fun fact / Cose mie
 // / Viaggio", gli stessi della home vera, dal componente MemoryDrawers —
@@ -24,8 +20,8 @@
 // TESTI: tutti da cv-i18n e @cv-data, nessuna copy scritta qui.
 import Layout from "../../layouts/Layout.astro";
 import { cvData } from "@cv-data";
-import { LOCALES } from "../../lib/cv-i18n";
-import { ABOUT_COPY, LAB_MODES } from "../../lib/lab-copy";
+import { LOCALES, MODES } from "../../lib/cv-i18n";
+import { ABOUT_COPY } from "../../lib/lab-copy";
 import MemoryDrawers from "../../components/MemoryDrawers.astro";
 import EntryFooter from "../../components/EntryFooter.astro";
 import "../../styles/lab-home.css";
@@ -68,13 +64,8 @@ const composition = [
 ];
 
 // ── Le sezioni ───────────────────────────────────────────────────────────
-// Una per modalità, nell'ordine di LAB_MODES (lab-copy.ts): design-first in
-// testa, poi AI & Digital Specialist terzo — ordine del banco di prova,
-// diverso da quello del sito in produzione. "Project Manager" non è fra
-// queste chiavi di proposito (vedi commento su LAB_MODES): i suoi dati
-// restano in cv.ts e in PROFILE_COPY, semplicemente questa pagina non li usa
-// più. Sigla, oggetto, etichetta e descrizione sono quelli già scritti in
-// cv-i18n.
+// Una per modalità, nell'ordine di MODES (cv-i18n.ts): design-first in testa.
+// Sigla, oggetto, etichetta e descrizione sono quelli già scritti in cv-i18n.
 const initials: Record<string, string> = {
   creative: "WD",
   tech: "SD",
@@ -126,7 +117,7 @@ const copy: Record<string, { title: [string, string]; desc: string }> = {
 // La pianta: 226px di larghezza nativa, come gli altri (vedi NATIVE_REM).
 const ABOUT_NATIVE_REM = 226 / 16;
 
-const sections = LAB_MODES.map((mode) => ({
+const sections = MODES.map((mode) => ({
   mode,
   initial: initials[mode],
   object: sectionObject[mode],

@@ -228,9 +228,6 @@ go-logo:not(:defined) {
 .mode-btn[data-nav-mode="creative"] {
   --btn-accent: rgba(255, 107, 53, 1);
 }
-.mode-btn[data-nav-mode="management"] {
-  --btn-accent: rgba(180, 100, 255, 1);
-}
 .mode-btn[data-nav-mode="human"] {
   --btn-accent: rgba(240, 200, 127, 1);
 }
