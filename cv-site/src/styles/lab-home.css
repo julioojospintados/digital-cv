@@ -638,14 +638,50 @@ html[data-lh-armed] .lh-obj {
   color: var(--lh-ink);
 }
 
-.lh-cta:hover {
-  filter: brightness(1.08);
-  transform: translateY(-2px);
+/* L'hover dietro (hover: hover), come in lab-cv.css: su touch non esiste un
+   puntatore che se ne vada, quindi dopo il tap lo stato restava appiccicato —
+   il bottone rimaneva sollevato e schiarito finché non se ne toccava un altro. */
+@media (hover: hover) and (pointer: fine) {
+  .lh-cta:hover {
+    filter: brightness(1.08);
+    transform: translateY(-2px);
+  }
+
+  .lh-cta--ghost:hover {
+    background: color-mix(in srgb, var(--accent) 16%, transparent);
+    filter: none;
+  }
 }
 
-.lh-cta--ghost:hover {
-  background: color-mix(in srgb, var(--accent) 16%, transparent);
+/* ── pressed: tattile, non cromatico ──────────────────────────────────────
+   Mancava del tutto: premendo non cambiava niente (misurato — `transform` e
+   `filter` identici a riposo, in hover e con il tasto giù). E siccome la
+   navigazione parte al rilascio, che è il comportamento standard del click,
+   tenere premuto sembrava un bottone rotto: nessuna risposta, nessuna
+   conferma che la pressione fosse arrivata.
+
+   Stessa ricetta di .lc-btn in lab-cv.css, dove la scelta è già motivata:
+   l'affondo è ombra interna + scale, MAI uno scurimento del riempimento.
+   Scurire toglierebbe contrasto all'etichetta proprio mentre la si sta
+   premendo, e il margine buono varia per accento, quindi un valore unico che
+   regga su tutti non esiste. Così invece nessun rapporto di contrasto cambia. */
+.lh-cta:active {
+  transform: scale(0.98);
   filter: none;
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.lh-cta--ghost:active {
+  background: color-mix(in srgb, var(--accent) 22%, transparent);
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* A movimento ridotto resta l'affondo, sparisce lo scatto di scala: il
+   riscontro alla pressione non è decorazione e non va tolto. */
+@media (prefers-reduced-motion: reduce) {
+  .lh-cta:active {
+    transform: none;
+  }
 }
 
 /* ── Il footer d'ingresso, dentro questa pagina ───────────────────────────
