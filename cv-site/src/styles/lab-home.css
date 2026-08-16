@@ -648,6 +648,28 @@ html[data-lh-armed] .lh-obj {
   filter: none;
 }
 
+/* ── Il footer d'ingresso, dentro questa pagina ───────────────────────────
+   entry-footer.css lo serve opaco e posizionato (`background:
+   var(--color-bg)`, `z-index: 1`). Sulla home vera è corretto: là sotto non
+   c'è nessun velo, e il fondo pieno è semplicemente il fondo.
+
+   Qui no. `.lh::before` è un velo FISSO che copre la finestra — lampada,
+   colore d'ambiente e vignettatura. Il footer, stando sopra di esso e
+   essendo opaco, ci ridisegna sopra ottanio pieno: il velo si interrompe di
+   netto sul suo bordo superiore e lo sfondo sembra tagliato in due, con la
+   riga del bordo a marcare il taglio.
+
+   Fondo trasparente: il velo prosegue e la giuntura sparisce. Lo `z-index`
+   resta quello di entry-footer.css — serve al testo per stare sopra la
+   vignettatura, ed è solo il rettangolo di fondo a dover sparire.
+
+   Scoped a `.lh` di proposito: entry-footer.css è condiviso con
+   pages/index.astro, e la home vera non va toccata. */
+.lh .entry-footer {
+  background: transparent;
+  border-top: 0;
+}
+
 /* ── Desktop: sezioni su due colonne, alternate ── */
 
 @media (min-width: 56rem) {
@@ -708,6 +730,36 @@ html[data-lh-armed] .lh-obj {
      Per riattivarla: togliere questo blocco. */
   .lh-section--about {
     display: none;
+  }
+
+  /* ── CTA a tutta larghezza, testo centrato ──────────────────────────────
+     In riga con `flex-wrap` i bottoni si dimensionano sul testo: impilati su
+     schermo stretto venivano 257px e 197px dentro una colonna da 335, cioè
+     allineati a sinistra e con il bordo destro frastagliato.
+
+     In colonna lo `stretch` implicito dei flex item li porta entrambi alla
+     larghezza della colonna: un solo bordo verticale per parte, bersagli più
+     larghi per il pollice, e la lettura non deve più cercare dove finisce
+     ciascun bottone.
+
+     La gerarchia non si perde uguagliando le larghezze: qui la porta il
+     riempimento (primario pieno nell'accento, secondario col solo bordo), che
+     è un segnale più forte della larghezza — e l'unico che regge anche per
+     chi non distingue bene i colori, perché cambia la quantità di superficie
+     colorata, non la tinta. */
+  .lh-section__actions {
+    /* `justify-self` e non `width: 100%`: il genitore .lh-section__copy è una
+       griglia con `justify-items: start`, che restringe ogni figlio al proprio
+       contenuto — in colonna la fascia si fermava a 257px, la misura del
+       bottone più largo, invece dei 335 della colonna. `stretch` annulla
+       quella regola per questa sola riga, che è il modo con cui una griglia
+       esprime "occupa la traccia". */
+    justify-self: stretch;
+    flex-direction: column;
+  }
+
+  .lh-cta {
+    text-align: center;
   }
 
   .lh-hero {
