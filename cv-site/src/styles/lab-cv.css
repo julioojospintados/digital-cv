@@ -730,10 +730,6 @@
     background-color var(--duration-state) var(--ease-standard);
 }
 
-.lc-job:last-child {
-  border-bottom: 1px solid var(--lc-line);
-}
-
 /* La superficie tinta di mode (--color-surface, global.css) al posto di un
    velo nero inventato: ogni lente ha la sua. E' scura, quindi il testo che
    ci sta sopra guadagna contrasto invece di perderne (ink da 9,04 a

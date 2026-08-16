@@ -575,10 +575,12 @@ const MAX_CHIPS = 6;
     piu.addEventListener("click", () => {
       const aperto = lista.classList.toggle("is-collapsed") === false;
       piu.setAttribute("aria-expanded", String(aperto));
-      // Il testo visibile cambia insieme allo stato: "+4" apre, "meno"
-      // richiude. Resta il primo pezzo del nome accessibile (2.5.3), quindi
-      // chi comanda a voce legge sempre una parola che è davvero lì.
-      if (segno) segno.textContent = aperto ? "meno" : `+${quante}`;
+      // Il testo visibile cambia insieme allo stato, restando nello stesso
+      // linguaggio del segno: "+4" apre, "−4" richiude — stesso numero,
+      // segno invertito, non una parola isolata che sembra una chip rotta.
+      // Resta il primo pezzo del nome accessibile (2.5.3), quindi chi
+      // comanda a voce legge sempre un segno che è davvero lì.
+      if (segno) segno.textContent = aperto ? `−${quante}` : `+${quante}`;
       if (voce) {
         voce.textContent = aperto
           ? ` — nascondi le altre ${quante} tecnologie`
