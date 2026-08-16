@@ -35,7 +35,9 @@
 //
 // Cosa NON c'è, rispetto a /tech e /creative: stamp fullscreen, laser di
 // scansione, scroll automatico, riordino client-side, card dimmate al 20%
-// di opacità. Il cambio lente è navigazione fra quattro pagine statiche.
+// di opacità. Il cambio lente è navigazione fra tre pagine statiche
+// (management esclusa dal banco di prova dal 2026-08-16, dati intatti in
+// cv.ts — vedi lab-copy.ts).
 //
 // TESTI: cv.ts, cv-i18n e lab-copy.ts (verbatim da index.astro). Nessuna
 // copy scritta qui.
@@ -48,8 +50,8 @@ import { LAB_MODES, PROFILE_COPY, TAGLINE } from "../../lib/lab-copy";
 import "../../styles/lab-cv.css";
 
 export function getStaticPaths() {
-  // Qui l'ordine non conta (sono quattro route), ma la lista sì: usare
-  // LAB_MODES tiene una sola fonte per "quali lenti esistono nel /lab".
+  // Qui l'ordine non conta (sono tre route), ma la lista sì: usare LAB_MODES
+  // tiene una sola fonte per "quali lenti esistono nel /lab".
   return LAB_MODES.map((lens) => ({ params: { lens } }));
 }
 
@@ -73,14 +75,16 @@ const clusterLabel = cluster?.label ?? modeLabel;
 // `experience[i].description`, quella base. Ruolo e highlight restano
 // quelli della lente (scelta esplicita del 2026-08-13).
 //
-// Conseguenza da tenere presente: su /lab/management la card ALTEN si
-// intitola "Tech Lead & Scrum Master — Aruba Design System" e il paragrafo
-// sotto parla di sviluppo enterprise. Le due righe non si contraddicono, ma
-// nemmeno si rispondono. Per tornare indietro basta togliere questo blocco.
+// Conseguenza da tenere presente: il ruolo di ogni card resta quello della
+// lente anche quando il paragrafo sotto parla d'altro — le due righe non si
+// contraddicono, ma nemmeno si rispondono sempre. Per tornare indietro basta
+// togliere questo blocco.
 //
 // L'override sta qui e non in `lib/cv-view-model.ts` di proposito: quel
 // file serve anche /tech, /creative, /management, /human e /en/cv, cioè le
-// pagine vere. Questa è una prova, e non deve cambiarle.
+// pagine vere — incluso /management, che in produzione esiste ancora anche
+// se il banco di prova non lo espone più (vedi lab-copy.ts). Questa è una
+// prova, e non deve cambiarle.
 const clusterRefs = EXP_CLUSTER_DEFS.find((c) => c.key === lens)?.refs ?? [];
 const rawItems = cluster?.items ?? [];
 
@@ -256,10 +260,10 @@ const MAX_CHIPS = 6;
             }
           </p>
 
-          <!-- Selettore di lente retrocesso: non quattro pulsanti di pari
-               peso in cima. Chi arriva da un annuncio UX non deve leggere
-               "sono anche altre tre cose" nei sette secondi in cui sta
-               decidendo. <details> nativo, opzioni = link veri. -->
+          <!-- Selettore di lente retrocesso: non tre pulsanti di pari peso
+               in cima. Chi arriva da un annuncio UX non deve leggere "sono
+               anche altre due cose" nei sette secondi in cui sta decidendo.
+               <details> nativo, opzioni = link veri. -->
           <details class="lc-lens">
             <summary class="lc-lens__trigger">
               <span class="lc-lens__dot" aria-hidden="true"></span>
@@ -544,7 +548,7 @@ const MAX_CHIPS = 6;
         la piega senza dissolvenze, strato 2 (30 s) con le esperienze filtrate per lente invece che dimmate,
         cronologia completa sempre visibile, e la voce lunga (paragrafo della lente + bio) dopo le prove.
         Colore, oggetti, ombre e sigle sono statici: ci sono al primo paint. L'unico movimento è la deriva
-        degli oggetti allo scroll, che è decorazione. Cambio lente = navigazione fra quattro pagine statiche.
+        degli oggetti allo scroll, che è decorazione. Cambio lente = navigazione fra tre pagine statiche.
       </p>
     </main>
   </div>

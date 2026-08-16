@@ -90,19 +90,6 @@
   font-family: var(--font-sans);
 }
 
-/* ─── L'unica eccezione per lente rimasta ────────────────────────────────
-   Tre lenti su quattro usano l'accento pieno anche per i fili sottili. Il
-   viola no: 3,04 contro i 3,00 richiesti e' un margine dell'1%, e su una
-   linea da 1px non regge. Qui viene alzato — restando acceso, non slavato:
-   la croma scende del 6%, contro il 29% che costava schiarirlo per
-   metterlo sul testo. */
-
-[data-mode="management"] .lc {
-  /* Piu' acceso, non piu' spento: il viola pieno regge come riempimento e
-     come superficie, ma su un filo da 1px il suo 3,04 non lascia margine. */
-  --lc-accent-line: rgba(199, 125, 255, 1);
-}
-
 .lc-main {
   /* 68rem: la colonna di testo resta sotto le ~90 battute anche a schermo
      largo, e avanza spazio per la corsia della decorazione. */
@@ -604,9 +591,6 @@
 }
 .lc-lens__opt[data-lens="tech"] .lc-lens__opt-dot {
   background: rgba(0, 255, 200, 1);
-}
-.lc-lens__opt[data-lens="management"] .lc-lens__opt-dot {
-  background: rgba(180, 100, 255, 1);
 }
 .lc-lens__opt[data-lens="human"] .lc-lens__opt-dot {
   background: rgba(240, 200, 127, 1);

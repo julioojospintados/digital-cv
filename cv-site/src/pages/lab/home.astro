@@ -1,10 +1,14 @@
 ---
-// /lab/home — PROVA: la home senza le quattro card.
+// /lab/home — PROVA: la home senza le card.
 //
 // L'ingresso diventa una sola schermata piena di oggetti grandi, con nome e
-// ruolo al centro. Nessuna scelta da fare: si scorre, e le quattro sezioni
-// arrivano una alla volta a schermo intero. Le modalità non spariscono,
-// smettono di essere un bivio all'ingresso e diventano un percorso.
+// ruolo al centro. Nessuna scelta da fare: si scorre, e le sezioni arrivano
+// una alla volta a schermo intero. Le modalità non spariscono, smettono di
+// essere un bivio all'ingresso e diventano un percorso.
+//
+// Sono tre, non quattro: "Project Manager" è esclusa dal banco di prova dal
+// 2026-08-16 (vedi LAB_MODES in lab-copy.ts). I dati restano in cv.ts, qui
+// semplicemente non compare più una sezione per quella lente.
 //
 // Rispetto alla home vera questa prova resta spoglia dove non serve: niente
 // preloader GO. I cassetti delle foto invece ci sono — "Fun fact / Cose mie
@@ -12,7 +16,7 @@
 // perché è qui che hanno senso: all'ingresso, dove chi legge sta ancora
 // decidendo chi sei e ha tempo di aprirli.
 //
-// La sezione "Chi sono" sta prima delle quattro lenti: la persona, poi le
+// La sezione "Chi sono" sta prima delle lenti: la persona, poi le
 // maschere. Ci è arrivata dalle pagine CV di prova (/lab/<lente>), dove
 // occupava la fascia dei primi sette secondi con 678 caratteri e spingeva
 // sotto la piega ruoli attuali e pulsanti.
@@ -63,22 +67,23 @@ const composition = [
   { src: "camera", x: "80%", y: "85%", w: "20vmin", r: "-7deg", depth: 1.25, blur: 0 },
 ];
 
-// ── Le quattro sezioni ───────────────────────────────────────────────────
+// ── Le sezioni ───────────────────────────────────────────────────────────
 // Una per modalità, nell'ordine di LAB_MODES (lab-copy.ts): design-first in
-// testa, poi AI & Digital Specialist terzo e Project Manager quarto — ordine
-// del banco di prova, diverso da quello del sito in produzione. Sigla,
-// oggetto, etichetta e descrizione sono quelli già scritti in cv-i18n.
+// testa, poi AI & Digital Specialist terzo — ordine del banco di prova,
+// diverso da quello del sito in produzione. "Project Manager" non è fra
+// queste chiavi di proposito (vedi commento su LAB_MODES): i suoi dati
+// restano in cv.ts e in PROFILE_COPY, semplicemente questa pagina non li usa
+// più. Sigla, oggetto, etichetta e descrizione sono quelli già scritti in
+// cv-i18n.
 const initials: Record<string, string> = {
   creative: "WD",
   tech: "SD",
-  management: "PM",
   human: "AI",
 };
 
 const sectionObject: Record<string, string> = {
   creative: "camera",
   tech: "laptop",
-  management: "chess",
   human: "compass",
 };
 
@@ -98,7 +103,7 @@ const NATIVE_REM: Record<string, number> = {
   plant: 226 / 16,
 };
 
-// I testi delle quattro sezioni, copiati **verbatim** da index.astro
+// I testi delle sezioni, copiati **verbatim** da index.astro
 // (§ .profile-section): titolo su due righe, occhiello, paragrafo. Nel giro
 // precedente avevo usato modeLabels/modeDescriptions di cv-i18n, che sono
 // un'altra cosa — servono all'hero delle pagine CV e ai meta, non a questa
@@ -111,10 +116,6 @@ const copy: Record<string, { title: [string, string]; desc: string }> = {
   tech: {
     title: ["Automazione,", "AI e architetture."],
     desc: `Sviluppo da anni per il mondo enterprise, muovendomi tra TypeScript, Angular e React. Sono passato da team di 30 persone a progetti in solitaria potenziati dall'AI, dove creo workflow e integrazioni MCP su misura. Tutta la lista di tecnologie e sigle la trovi cliccando qua sotto.`,
-  },
-  management: {
-    title: ["Agile snello", "e sprint brevi."],
-    desc: `Opero come partner tecnico per aziende e progetti digitali. Lavoro con metodo Agile, concentrandomi sul risolvere i problemi reali e nel fare da ponte tra i diversi ruoli del team. Il mio obiettivo è semplice: trovare soluzioni efficaci e rendere le persone autonome, senza creare dipendenze. Quanto è bello facilitare il lavoro alle persone?`,
   },
   human: {
     title: ["Storytelling", "e strategia."],
@@ -141,7 +142,7 @@ const sections = LAB_MODES.map((mode) => ({
 
 <Layout
   title="Prova home senza card — Giulio Occhipinti"
-  description="Banco di prova: ingresso a schermo pieno con gli oggetti grandi, senza le quattro card."
+  description="Banco di prova: ingresso a schermo pieno con gli oggetti grandi, senza le card."
   mode="creative"
   noindex
 >
@@ -247,11 +248,11 @@ const sections = LAB_MODES.map((mode) => ({
       </a>
     </section>
 
-    <!-- ── Le quattro sezioni, una schermata ciascuna ── -->
+    <!-- ── Le sezioni, una schermata ciascuna ── -->
     <main id="main-content">
       {
-        /* Chi sono — prima delle quattro lenti: la persona, poi le maschere
-           (stesso ordine di index.astro). Non è un quinto profilo: niente
+        /* Chi sono — prima delle lenti: la persona, poi le maschere
+           (stesso ordine di index.astro). Non è un profilo in più: niente
            data-mode, quindi l'ambiente resta neutro invece di prendere il
            colore di una lente, e niente CTA, perché non porta da nessuna
            parte. È il posto in cui questa bio è utile — all'ingresso, dove

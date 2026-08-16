@@ -20,24 +20,22 @@
 import type { Mode } from "./cv-i18n";
 
 /**
- * L'ordine in cui le quattro lenti si presentano **dentro /lab**, e solo lì.
+ * L'ordine (e l'insieme) in cui le lenti si presentano **dentro /lab**, e
+ * solo lì.
  *
  * Non è `MODES` di `cv-i18n.ts`: quello serve il sito in produzione, dove
- * l'ordine resta creative → tech → management → human e non va toccato finché
- * il nuovo layout è ancora una prova. Qui AI & Digital Specialist passa terzo
- * e Project Manager quarto — è una delle cose che il banco di prova sta
- * valutando, quindi vive nel banco di prova.
+ * restano tutte e quattro le modalità (creative → tech → management →
+ * human) e non va toccato finché il nuovo layout è ancora una prova.
  *
- * Stesso insieme di `MODES`, ordine diverso: il tipo `readonly Mode[]` lo
- * garantisce sui valori, e il test in `lab-copy.test.ts` sul fatto che non ne
- * manchi né ne avanzi nessuno.
- *
- * Quando il layout esce dal /lab, questa costante sparisce e il suo ordine
- * passa in `MODES` — insieme alle liste scritte a mano che oggi lo ripetono:
- * card, pallini e sezioni in `pages/index.astro` e `pages/en/index.astro`,
- * navigazione e tendina in `pages/[mode].astro` e `pages/en/cv.astro`.
+ * Qui invece "Project Manager" è stata tolta di proposito (2026-08-16): il
+ * banco di prova valuta tre professioni, non quattro. I dati restano intatti
+ * — `cv.ts` e `PROFILE_COPY` qui sotto tengono ancora la voce "management" —
+ * semplicemente non genera più una rotta `/lab/management` né compare nella
+ * tendina o fra le sezioni di `/lab/home`. `LAB_MODES` è quindi un
+ * sottoinsieme proprio di `MODES`, non più lo stesso insieme in un altro
+ * ordine — vedi il test aggiornato in `lab-copy.test.ts`.
  */
-export const LAB_MODES: readonly Mode[] = ["creative", "tech", "human", "management"] as const;
+export const LAB_MODES: readonly Mode[] = ["creative", "tech", "human"] as const;
 
 export interface ProfileCopy {
   /** Titolo su due righe — la frase che porta il carattere della lente. */

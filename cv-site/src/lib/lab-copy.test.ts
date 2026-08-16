@@ -2,23 +2,26 @@ import { describe, it, expect } from "vitest";
 import { LAB_MODES, PROFILE_COPY } from "./lab-copy";
 import { MODES } from "./cv-i18n";
 
-// LAB_MODES è una seconda lista delle stesse quattro lenti, con un ordine suo
-// (vedi il commento in lab-copy.ts). Due liste che devono contenere le stesse
-// cose sono esattamente ciò che diverge in silenzio: da qui in poi, se una
-// lente sparisce o si scrive storta, lo dice un test invece di una route 404.
+// LAB_MODES è un sottoinsieme scelto di MODES: tre professioni su quattro,
+// "management" esclusa di proposito (2026-08-16). Non deve tornare a essere
+// un riordino delle stesse quattro per errore, e non deve perdere o
+// duplicare le tre che restano: da qui in poi lo dice un test invece di una
+// route 404 o di una lente doppia nella tendina.
 describe("LAB_MODES", () => {
-  it("contiene le stesse lenti di MODES, né una in più né una in meno", () => {
-    expect([...LAB_MODES].sort()).toEqual([...MODES].sort());
+  it("è un sottoinsieme proprio di MODES: le stesse lenti meno 'management'", () => {
+    expect([...LAB_MODES].sort()).toEqual([...MODES].filter((m) => m !== "management").sort());
   });
 
-  it("le ordina in modo diverso dal sito in produzione", () => {
-    // Non è pignoleria: se un giorno i due ordini coincidono, LAB_MODES non
-    // serve più e va tolta invece di restare lì a duplicare MODES.
-    expect([...LAB_MODES]).not.toEqual([...MODES]);
+  it("esclude 'management' di proposito", () => {
+    expect(LAB_MODES).not.toContain("management");
   });
 
-  it("ha una copia scritta per ogni lente", () => {
-    for (const mode of LAB_MODES) {
+  it("non contiene duplicati", () => {
+    expect(new Set(LAB_MODES).size).toBe(LAB_MODES.length);
+  });
+
+  it("ha una copia scritta per ogni lente, 'management' compresa (i dati restano)", () => {
+    for (const mode of MODES) {
       expect(PROFILE_COPY[mode], `manca la copy per "${mode}"`).toBeDefined();
     }
   });
