@@ -272,7 +272,13 @@
 .lc-head__text,
 .lc-head__deco {
   position: relative;
-  z-index: 1;
+  /* 2, non 1: .lc-exp > *:not(.lc-bg-knoll) più sotto assegna z-index:1 anche
+     ai suoi figli diretti (per stare sopra il suo knoll decorativo). Con lo
+     stesso valore vince chi viene dopo nel DOM — il titolo "Esperienza —"
+     passava sopra la tendina .lc-lens__list aperta, anche se questa ha
+     z-index:10: quel numero conta solo dentro allo stacking context di
+     .lc-head__text, non contro quello — indipendente — creato da .lc-exp. */
+  z-index: 2;
 }
 
 .lc-head__deco {
