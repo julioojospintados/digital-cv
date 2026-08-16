@@ -882,6 +882,30 @@ a.lang-switch__opt:hover {
   margin: 0 0 0.75rem 0;
 }
 
+/* Citazione (Confucio), non farina del sacco di Giulio — a differenza di
+   .entry-tagline in home (frase sua, mai tra virgolette), qui le virgolette
+   tipografiche vengono da CSS, non da testo hardcoded nel markup — stessa
+   tecnica di .feedback-quote. */
+.hero-tagline__quote {
+  quotes: "\201C" "\201D";
+}
+
+.hero-tagline__quote::before {
+  content: open-quote;
+}
+
+.hero-tagline__quote::after {
+  content: close-quote;
+}
+
+.hero-tagline__cite {
+  font-style: normal;
+}
+
+.hero-tagline__cite::before {
+  content: "— ";
+}
+
 /* Prova del profilo T-shaped nel fold — prima era sepolta in fondo alla
    sezione Mindset (~60% di scroll). Profondità (frontend, singola colonna
    verticale) vs Ampiezza (design/metodo/AI/palco, riga orizzontale): lo
