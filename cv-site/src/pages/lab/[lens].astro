@@ -327,8 +327,15 @@ const MAX_CHIPS = 6;
         <div class="lc-jobs">
           {
             items.map((job) => {
-              const chips = job.skills.slice(0, MAX_CHIPS);
-              const rest = job.skills.length - chips.length;
+              // Le chip ci sono **tutte** nell'HTML: quelle oltre MAX_CHIPS
+              // portano una classe in più e le nasconde il CSS, ma solo dopo
+              // che lo script ha acceso l'interruttore (.is-collapsed). Senza
+              // JavaScript non si nasconde niente e il pulsante resta
+              // `hidden`: si vedono tutte le tecnologie e non c'è nessun
+              // comando morto. È la stessa regola dell'ingresso di
+              // /lab/home — a nascondere è il codice che sa anche riaprire.
+              const primi = job.skills.slice(0, MAX_CHIPS);
+              const oltre = job.skills.slice(MAX_CHIPS);
 
               // Tre esperienze in cv.ts non hanno highlights (Fotografo,
               // Corriere di Chieri, Satispay): aprire un <details> per
@@ -344,12 +351,32 @@ const MAX_CHIPS = 6;
               const hasBody = job.highlights.length > 0 || job.clients.length > 0;
 
               const chipList =
-                chips.length > 0 ? (
+                primi.length > 0 ? (
                   <ul class="lc-chips" role="list" aria-label="Strumenti e tecnologie">
-                    {chips.map((s) => (
+                    {primi.map((s) => (
                       <li class="lc-chip">{s}</li>
                     ))}
-                    {rest > 0 && <li class="lc-chip lc-chip--more">+{rest}</li>}
+                    {oltre.map((s) => (
+                      <li class="lc-chip lc-chip--extra">{s}</li>
+                    ))}
+                    {oltre.length > 0 && (
+                      <li>
+                        {/* Il segno "+4" resta parte del nome accessibile, non
+                            aria-hidden con un'etichetta al suo posto: il
+                            criterio 2.5.3 (Label in Name) chiede che il nome
+                            contenga il testo che si vede, o chi comanda a voce
+                            dice "+4" e non succede niente. */}
+                        <button
+                          class="lc-chip lc-chip--more"
+                          type="button"
+                          aria-expanded="false"
+                          hidden
+                        >
+                          <span class="lc-more__sign">+{oltre.length}</span>
+                          <span class="lc-sr"> — mostra le altre {oltre.length} tecnologie</span>
+                        </button>
+                      </li>
+                    )}
                   </ul>
                 ) : null;
 
@@ -527,4 +554,36 @@ const MAX_CHIPS = 6;
   // Solo la firma GO della barra: l'island si autoregistra come <go-logo>
   // e reagisce da sé al mode della pagina.
   import "../../islands/GoLogo.lit";
+
+  // ── "+4" — da etichetta morta a comando vero ──────────────────────────
+  // L'HTML servito contiene già tutte le tecnologie. Qui si richiude ciò che
+  // avanza e si accende il pulsante: l'ordine conta, perché è ciò che rende
+  // impossibile il caso "nascoste e nessun modo di riaprirle". Se questo
+  // codice non gira, restano tutte in vista e il pulsante resta `hidden` —
+  // niente da cliccare, niente da cercare.
+  document.querySelectorAll<HTMLUListElement>(".lc-chips").forEach((lista) => {
+    const piu = lista.querySelector<HTMLButtonElement>(".lc-chip--more");
+    const quante = lista.querySelectorAll(".lc-chip--extra").length;
+    if (!piu || quante === 0) return;
+
+    const segno = piu.querySelector<HTMLElement>(".lc-more__sign");
+    const voce = piu.querySelector<HTMLElement>(".lc-sr");
+
+    lista.classList.add("is-collapsed");
+    piu.hidden = false;
+
+    piu.addEventListener("click", () => {
+      const aperto = lista.classList.toggle("is-collapsed") === false;
+      piu.setAttribute("aria-expanded", String(aperto));
+      // Il testo visibile cambia insieme allo stato: "+4" apre, "meno"
+      // richiude. Resta il primo pezzo del nome accessibile (2.5.3), quindi
+      // chi comanda a voce legge sempre una parola che è davvero lì.
+      if (segno) segno.textContent = aperto ? "meno" : `+${quante}`;
+      if (voce) {
+        voce.textContent = aperto
+          ? ` — nascondi le altre ${quante} tecnologie`
+          : ` — mostra le altre ${quante} tecnologie`;
+      }
+    });
+  });
 </script>

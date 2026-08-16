@@ -1002,8 +1002,61 @@
   color: var(--lc-muted);
 }
 
+/* Le tecnologie oltre la soglia. Sono nell'HTML da sempre: sparire è una
+   decisione che prende lo script, aggiungendo .is-collapsed alla lista —
+   senza JavaScript questa regola non si applica mai e si vedono tutte. */
+.lc-chips.is-collapsed .lc-chip--extra {
+  display: none;
+}
+
+/* Il "+4". Prima era un <li>: sembrava una chip come le altre e non faceva
+   niente — un'affordance che mente, lo stesso difetto che il commento sulle
+   righe piatte in [lens].astro dice di evitare. Ora è un <button> vero, e
+   deve sembrarlo: cursore, stato al passaggio, contorno alla messa a fuoco.
+   Il tratteggio resta, perché è ciò che lo distingue dalle chip che sono
+   solo etichette. */
 .lc-chip--more {
   border-style: dashed;
+  /* I <button> non ereditano il font e nascono con un loro allineamento: senza
+     questi tre, il "+4" si stacca dalla riga delle chip accanto. */
+  font: inherit;
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  display: inline-flex;
+  align-items: center;
+  /* 1.5rem: la soglia di 2.5.8 (Target Size, AA in WCAG 2.2). Il padding
+     delle chip da solo si ferma sotto. */
+  min-height: 1.5rem;
+  cursor: pointer;
+  transition:
+    color var(--duration-state) var(--ease-standard),
+    border-color var(--duration-state) var(--ease-standard),
+    background-color var(--duration-state) var(--ease-standard);
+}
+
+/* Deve stare DOPO la regola qui sopra: `display: inline-flex` è una
+   dichiarazione d'autore e batte il `display: none` che il browser dà da sé
+   all'attributo `hidden`. Senza questa riga, senza JavaScript resterebbe a
+   schermo un pulsante che non fa niente — cioè di nuovo un'affordance che
+   mente, il difetto che questo cambiamento serve a togliere. Trovato da un
+   test con javaScriptEnabled: false, non a occhio. */
+.lc-chip--more[hidden] {
+  display: none;
+}
+
+.lc-chip--more:hover,
+.lc-chip--more:focus-visible {
+  /* --lc-ink, non --lc-muted: al passaggio il testo sale al pieno contrasto,
+     ed è il segnale che questo, fra tutte le chip, è l'unico che risponde. */
+  color: var(--lc-ink);
+  border-color: var(--color-accent);
+  background: color-mix(in srgb, var(--color-accent) 24%, transparent);
+}
+
+/* Aperto, il tratteggio non serve più: da lì in poi non c'è più niente di
+   nascosto, e il pulsante dice solo "richiudi". */
+.lc-chip--more[aria-expanded="true"] {
+  border-style: solid;
 }
 
 /* ── 2b. Cronologia completa ──────────────────────────────────────────── */
