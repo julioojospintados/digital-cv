@@ -381,20 +381,79 @@ const t = it
       openState: "open",
     };
 
-const toc = [
-  { id: "fondamenta", label: t.secFoundations },
-  { id: "colore", label: t.secColour },
-  { id: "tipografia", label: t.secType },
-  { id: "forma", label: t.secShape },
-  { id: "movimento-token", label: t.secMotionTok },
-  { id: "ingresso", label: t.secHome },
-  { id: "lente", label: t.secLens },
-  { id: "hero", label: t.secHero },
-  { id: "case-study", label: t.secWork },
-  { id: "stati", label: t.secStates },
-  { id: "mobile", label: t.secMobile },
-  { id: "animazioni", label: t.secMotion },
-  { id: "accessibilita", label: t.secA11y },
+const NAV = [
+  {
+    label: t.secFoundations,
+    items: [
+      { id: "colore", label: t.secColour },
+      { id: "tipografia", label: t.secType },
+      { id: "forma", label: t.secShape },
+      { id: "movimento", label: t.secMotionTok },
+    ],
+  },
+  {
+    label: t.secHome,
+    items: [
+      { id: "ingresso-barra", label: it ? "Barra" : "Bar" },
+      { id: "ingresso-titolo", label: it ? "Titolo d'ingresso" : "Entry heading" },
+      { id: "ingresso-sezione-lente", label: it ? "Sezione-lente" : "Lens section" },
+      {
+        id: "ingresso-cta",
+        label: it
+          ? "CTA — le due varianti e i loro stati"
+          : "CTA — the two variants and their states",
+      },
+      {
+        id: "ingresso-oggetto",
+        label: it
+          ? "Oggetto knolling con ombra ricostruita"
+          : "Knolling object with rebuilt shadow",
+      },
+    ],
+  },
+  {
+    label: t.secLens,
+    items: [
+      { id: "lente-intestazione", label: it ? "Intestazione" : "Header" },
+      { id: "lente-dove-lavora-ora", label: it ? "Dove lavora ora" : "Where he works now" },
+      { id: "lente-bottoni", label: it ? "Bottoni — sistema di stati" : "Buttons — state system" },
+      { id: "lente-tendina", label: it ? "Tendina di lente" : "Lens dropdown" },
+      { id: "lente-sezione", label: it ? "Intestazione di sezione" : "Section header" },
+      {
+        id: "lente-esperienza",
+        label: it ? "Esperienza — riga espandibile" : "Experience — expandable row",
+      },
+      { id: "lente-chip", label: it ? "Chip e il comando +N" : "Chips and the +N control" },
+      { id: "lente-badge-ai", label: it ? "Badge AI" : "AI badge" },
+      { id: "lente-cronologia", label: it ? "Cronologia completa" : "Full timeline" },
+      { id: "lente-contatti", label: it ? "Contatti in chiaro" : "Contacts in the open" },
+    ],
+  },
+  {
+    label: t.secHero,
+    items: [
+      { id: "hero-intestazione", label: it ? "Barra e intestazione" : "Bar and heading" },
+      { id: "hero-bottoni", label: it ? "Bottoni" : "Buttons" },
+      { id: "hero-etichette", label: it ? "Etichette e titoli" : "Labels and headings" },
+    ],
+  },
+  {
+    label: t.secWork,
+    items: [
+      { id: "work-card", label: it ? "Card indice" : "Index card" },
+      { id: "work-nav", label: it ? "Tag e navigazione" : "Tags and navigation" },
+      { id: "work-decisione", label: it ? "Decisione di progetto" : "Project decision" },
+    ],
+  },
+  {
+    label: it ? "Sistema" : "System",
+    items: [
+      { id: "stati", label: t.secStates },
+      { id: "mobile", label: t.secMobile },
+      { id: "animazioni", label: t.secMotion },
+      { id: "accessibilita", label: t.secA11y },
+    ],
+  },
 ];
 ---
 
@@ -409,59 +468,72 @@ const toc = [
     </nav>
   </header>
 
-  <main class="ds-main" id="main-content">
-    <div class="ds-head">
-      <h1 class="ds-head__title">{t.title}</h1>
-      <p class="ds-head__lead">{t.lead}</p>
-      <div class="ds-head__meta">
-        {t.pills.map((p) => <span class="ds-pill">{p}</span>)}
-      </div>
-
-      <div class="ds-modes" role="group" aria-label={t.modeLabel}>
+  <div class="ds-shell">
+    {
+      /* L'indice. <details open> e non un <nav> semplice: sotto i 60rem si
+        richiude in un comando solo, sopra resta una colonna sempre aperta
+        (il CSS nasconde il summary). Le voci sono <a href="#id">, quindi
+        senza JavaScript restano ancore che portano al pannello giusto — e
+        nessun pannello è nascosto, perché a nascondere è lo script. */
+    }
+    <details class="ds-side" id="ds-side" open>
+      <summary class="ds-side__summary">
+        {t.tocTitle}
+        <span class="ds-side__chevron" aria-hidden="true">›</span>
+      </summary>
+      <nav aria-label={t.tocTitle}>
         {
-          MODES.map((m, i) => (
-            <button
-              class="ds-mode-btn"
-              type="button"
-              data-ds-mode={m.key}
-              aria-pressed={i === 0 ? "true" : "false"}
-              style={`--ds-dot:${m.hex}`}
-            >
-              <span class="ds-mode-btn__dot" aria-hidden="true" />
-              {m.label}
-            </button>
+          NAV.map((group) => (
+            <div class="ds-side__group">
+              <p class="ds-side__title">{group.label}</p>
+              <ul class="ds-side__list">
+                {group.items.map((item) => (
+                  <li>
+                    <a class="ds-side__link" href={`#${item.id}`} data-ds-nav={item.id}>
+                      {item.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
           ))
         }
-      </div>
-      <p class="ds-sub__note">{t.modeHint}</p>
+      </nav>
+    </details>
 
-      <nav class="ds-toc" aria-labelledby="ds-toc-title">
-        <p class="ds-toc__title" id="ds-toc-title">{t.tocTitle}</p>
-        <ul class="ds-toc__list">
+    <main class="ds-main" id="main-content">
+      <div class="ds-head">
+        <h1 class="ds-head__title">{t.title}</h1>
+        <p class="ds-head__lead">{t.lead}</p>
+        <div class="ds-head__meta">
+          {t.pills.map((p) => <span class="ds-pill">{p}</span>)}
+        </div>
+
+        <div class="ds-modes" role="group" aria-label={t.modeLabel}>
           {
-            toc.map((s) => (
-              <li>
-                <a href={`#${s.id}`}>{s.label}</a>
-              </li>
+            MODES.map((m, i) => (
+              <button
+                class="ds-mode-btn"
+                type="button"
+                data-ds-mode={m.key}
+                aria-pressed={i === 0 ? "true" : "false"}
+                style={`--ds-dot:${m.hex}`}
+              >
+                <span class="ds-mode-btn__dot" aria-hidden="true" />
+                {m.label}
+              </button>
             ))
           }
-        </ul>
-      </nav>
-    </div>
+        </div>
+        <p class="ds-sub__note">{t.modeHint}</p>
+      </div>
 
-    {/* ══ FONDAMENTA ══════════════════════════════════════════════════════ */}
-    <section class="ds-section" aria-labelledby="fondamenta">
-      <h2 class="ds-section__title" id="fondamenta">{t.secFoundations}</h2>
-      <p class="ds-section__note">
-        {
-          it
-            ? "Lo sfondo ottanio è l'unico valore davvero invariante del sistema: non cambia mai, in nessuna lente e in nessuna pagina. Tutto il resto si muove attorno a quello."
-            : "The teal background is the system's only truly invariant value: it never changes, in any lens or page. Everything else moves around it."
-        }
-      </p>
+      <section class="ds-panel" data-ds-panel="colore" aria-labelledby="colore-t">
+        <div class="ds-panel__head">
+          <span class="ds-panel__group">{t.secFoundations}</span>
+          <h2 class="ds-section__title" id="colore-t">{t.secColour}</h2>
+        </div>
 
-      <div class="ds-sub">
-        <h3 class="ds-sub__title" id="colore">{t.secColour}</h3>
         <p class="ds-sub__note">
           {
             it
@@ -595,11 +667,14 @@ const toc = [
             </table>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* ── Tipografia ── */}
-      <div class="ds-sub">
-        <h3 class="ds-sub__title" id="tipografia">{t.secType}</h3>
+      <section class="ds-panel" data-ds-panel="tipografia" aria-labelledby="tipografia-t">
+        <div class="ds-panel__head">
+          <span class="ds-panel__group">{t.secFoundations}</span>
+          <h2 class="ds-section__title" id="tipografia-t">{t.secType}</h2>
+        </div>
+
         <p class="ds-sub__note">
           {
             it
@@ -645,11 +720,14 @@ const toc = [
             }
           </p>
         </div>
-      </div>
+      </section>
 
-      {/* ── Forma e spazio ── */}
-      <div class="ds-sub">
-        <h3 class="ds-sub__title" id="forma">{t.secShape}</h3>
+      <section class="ds-panel" data-ds-panel="forma" aria-labelledby="forma-t">
+        <div class="ds-panel__head">
+          <span class="ds-panel__group">{t.secFoundations}</span>
+          <h2 class="ds-section__title" id="forma-t">{t.secShape}</h2>
+        </div>
+
         <div class="ds-stage ds-stage__row">
           <div class="ds-case">
             <p class="ds-label">--radius-4</p>
@@ -682,11 +760,14 @@ const toc = [
             }
           </p>
         </div>
-      </div>
+      </section>
 
-      {/* ── Movimento (token) ── */}
-      <div class="ds-sub">
-        <h3 class="ds-sub__title" id="movimento-token">{t.secMotionTok}</h3>
+      <section class="ds-panel" data-ds-panel="movimento" aria-labelledby="movimento-t">
+        <div class="ds-panel__head">
+          <span class="ds-panel__group">{t.secFoundations}</span>
+          <h2 class="ds-section__title" id="movimento-t">{t.secMotionTok}</h2>
+        </div>
+
         <div class="ds-table-wrap">
           <table class="ds-table">
             <thead>
@@ -713,24 +794,14 @@ const toc = [
             </tbody>
           </table>
         </div>
-      </div>
-    </section>
+      </section>
 
-    {/* ══ COMPONENTI — INGRESSO (lh-*) ═══════════════════════════════════ */}
-    <section class="ds-section" aria-labelledby="ingresso">
-      <h2 class="ds-section__title" id="ingresso">
-        {t.secHome}<span class="ds-origin">lh-*</span>
-      </h2>
-      <p class="ds-section__note">
-        {
-          it
-            ? "I componenti di /lab/home: la schermata d'ingresso a tutto schermo e le sezioni-lente che arrivano scorrendo."
-            : "The /lab/home components: the full-screen entry and the lens sections that arrive on scroll."
-        }
-      </p>
+      <section class="ds-panel" data-ds-panel="ingresso-barra" aria-labelledby="ingresso-barra-t">
+        <div class="ds-panel__head">
+          <span class="ds-panel__group">{t.secHome}<span class="ds-origin">lh-*</span></span>
+          <h2 class="ds-section__title" id="ingresso-barra-t">{it ? "Barra" : "Bar"}</h2>
+        </div>
 
-      <div class="ds-sub">
-        <h4 class="ds-sub__title">{it ? "Barra" : "Bar"}</h4>
         <div class="ds-stage">
           <div class="lh">
             <header class="lh-bar" style="position:static;">
@@ -742,10 +813,16 @@ const toc = [
             </header>
           </div>
         </div>
-      </div>
+      </section>
 
-      <div class="ds-sub">
-        <h4 class="ds-sub__title">{it ? "Titolo d'ingresso" : "Entry heading"}</h4>
+      <section class="ds-panel" data-ds-panel="ingresso-titolo" aria-labelledby="ingresso-titolo-t">
+        <div class="ds-panel__head">
+          <span class="ds-panel__group">{t.secHome}<span class="ds-origin">lh-*</span></span>
+          <h2 class="ds-section__title" id="ingresso-titolo-t">
+            {it ? "Titolo d'ingresso" : "Entry heading"}
+          </h2>
+        </div>
+
         <div class="ds-stage">
           <div class="lh">
             <div class="lh-copy">
@@ -761,22 +838,20 @@ const toc = [
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      <div class="ds-sub">
-        <h4 class="ds-sub__title">{it ? "Invito a scorrere" : "Scroll cue"}</h4>
-        <div class="ds-stage">
-          <div class="lh">
-            <a class="lh-scroll" href="#ingresso" style="position:static;">
-              <span>{it ? "Scorri" : "Scroll"}</span>
-              <span class="lh-scroll__line" aria-hidden="true"></span>
-            </a>
-          </div>
+      <section
+        class="ds-panel"
+        data-ds-panel="ingresso-sezione-lente"
+        aria-labelledby="ingresso-sezione-lente-t"
+      >
+        <div class="ds-panel__head">
+          <span class="ds-panel__group">{t.secHome}<span class="ds-origin">lh-*</span></span>
+          <h2 class="ds-section__title" id="ingresso-sezione-lente-t">
+            {it ? "Sezione-lente" : "Lens section"}
+          </h2>
         </div>
-      </div>
 
-      <div class="ds-sub">
-        <h4 class="ds-sub__title">{it ? "Sezione-lente" : "Lens section"}</h4>
         <p class="ds-sub__note">
           {
             it
@@ -812,12 +887,20 @@ const toc = [
             </section>
           </div>
         </div>
-      </div>
+      </section>
 
-      <div class="ds-sub">
-        <h4 class="ds-sub__title">
-          {it ? "CTA — le due varianti e i loro stati" : "CTA — the two variants and their states"}
-        </h4>
+      <section class="ds-panel" data-ds-panel="ingresso-cta" aria-labelledby="ingresso-cta-t">
+        <div class="ds-panel__head">
+          <span class="ds-panel__group">{t.secHome}<span class="ds-origin">lh-*</span></span>
+          <h2 class="ds-section__title" id="ingresso-cta-t">
+            {
+              it
+                ? "CTA — le due varianti e i loro stati"
+                : "CTA — the two variants and their states"
+            }
+          </h2>
+        </div>
+
         <p class="ds-sub__note">
           {
             it
@@ -850,12 +933,20 @@ const toc = [
             }
           </p>
         </div>
-      </div>
+      </section>
 
-      <div class="ds-sub">
-        <h4 class="ds-sub__title">
-          {it ? "Oggetto knolling con ombra ricostruita" : "Knolling object with rebuilt shadow"}
-        </h4>
+      <section
+        class="ds-panel"
+        data-ds-panel="ingresso-oggetto"
+        aria-labelledby="ingresso-oggetto-t"
+      >
+        <div class="ds-panel__head">
+          <span class="ds-panel__group">{t.secHome}<span class="ds-origin">lh-*</span></span>
+          <h2 class="ds-section__title" id="ingresso-oggetto-t">
+            {it ? "Oggetto knolling con ombra ricostruita" : "Knolling object with rebuilt shadow"}
+          </h2>
+        </div>
+
         <p class="ds-sub__note">
           {
             it
@@ -871,24 +962,20 @@ const toc = [
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    {/* ══ COMPONENTI — CV PER LENTE (lc-*) ═══════════════════════════════ */}
-    <section class="ds-section" aria-labelledby="lente">
-      <h2 class="ds-section__title" id="lente">
-        {t.secLens}<span class="ds-origin">lc-*</span>
-      </h2>
-      <p class="ds-section__note">
-        {
-          it
-            ? "La famiglia più grande del sistema: 34 componenti per la pagina CV rifatta sui tempi di lettura reali di un recruiter."
-            : "The system's largest family: 34 components for the CV page rebuilt around a recruiter's real reading times."
-        }
-      </p>
+      <section
+        class="ds-panel"
+        data-ds-panel="lente-intestazione"
+        aria-labelledby="lente-intestazione-t"
+      >
+        <div class="ds-panel__head">
+          <span class="ds-panel__group">{t.secLens}<span class="ds-origin">lc-*</span></span>
+          <h2 class="ds-section__title" id="lente-intestazione-t">
+            {it ? "Intestazione" : "Header"}
+          </h2>
+        </div>
 
-      <div class="ds-sub">
-        <h4 class="ds-sub__title">{it ? "Intestazione" : "Header"}</h4>
         <div class="ds-stage">
           <div class="lc">
             <div class="lc-head__text">
@@ -907,10 +994,20 @@ const toc = [
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      <div class="ds-sub">
-        <h4 class="ds-sub__title">{it ? "Dove lavora ora" : "Where he works now"}</h4>
+      <section
+        class="ds-panel"
+        data-ds-panel="lente-dove-lavora-ora"
+        aria-labelledby="lente-dove-lavora-ora-t"
+      >
+        <div class="ds-panel__head">
+          <span class="ds-panel__group">{t.secLens}<span class="ds-origin">lc-*</span></span>
+          <h2 class="ds-section__title" id="lente-dove-lavora-ora-t">
+            {it ? "Dove lavora ora" : "Where he works now"}
+          </h2>
+        </div>
+
         <div class="ds-stage">
           <div class="lc">
             <div class="lc-now">
@@ -933,12 +1030,16 @@ const toc = [
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      <div class="ds-sub">
-        <h4 class="ds-sub__title">
-          {it ? "Bottoni — sistema di stati" : "Buttons — state system"}
-        </h4>
+      <section class="ds-panel" data-ds-panel="lente-bottoni" aria-labelledby="lente-bottoni-t">
+        <div class="ds-panel__head">
+          <span class="ds-panel__group">{t.secLens}<span class="ds-origin">lc-*</span></span>
+          <h2 class="ds-section__title" id="lente-bottoni-t">
+            {it ? "Bottoni — sistema di stati" : "Buttons — state system"}
+          </h2>
+        </div>
+
         <p class="ds-sub__note">
           {
             it
@@ -960,10 +1061,16 @@ const toc = [
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      <div class="ds-sub">
-        <h4 class="ds-sub__title">{it ? "Tendina di lente" : "Lens dropdown"}</h4>
+      <section class="ds-panel" data-ds-panel="lente-tendina" aria-labelledby="lente-tendina-t">
+        <div class="ds-panel__head">
+          <span class="ds-panel__group">{t.secLens}<span class="ds-origin">lc-*</span></span>
+          <h2 class="ds-section__title" id="lente-tendina-t">
+            {it ? "Tendina di lente" : "Lens dropdown"}
+          </h2>
+        </div>
+
         <p class="ds-sub__note">
           {
             it
@@ -1002,10 +1109,16 @@ const toc = [
             </details>
           </div>
         </div>
-      </div>
+      </section>
 
-      <div class="ds-sub">
-        <h4 class="ds-sub__title">{it ? "Intestazione di sezione" : "Section header"}</h4>
+      <section class="ds-panel" data-ds-panel="lente-sezione" aria-labelledby="lente-sezione-t">
+        <div class="ds-panel__head">
+          <span class="ds-panel__group">{t.secLens}<span class="ds-origin">lc-*</span></span>
+          <h2 class="ds-section__title" id="lente-sezione-t">
+            {it ? "Intestazione di sezione" : "Section header"}
+          </h2>
+        </div>
+
         <div class="ds-stage">
           <div class="lc">
             <div class="lc-sec-head">
@@ -1023,12 +1136,20 @@ const toc = [
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      <div class="ds-sub">
-        <h4 class="ds-sub__title">
-          {it ? "Esperienza — riga espandibile" : "Experience — expandable row"}
-        </h4>
+      <section
+        class="ds-panel"
+        data-ds-panel="lente-esperienza"
+        aria-labelledby="lente-esperienza-t"
+      >
+        <div class="ds-panel__head">
+          <span class="ds-panel__group">{t.secLens}<span class="ds-origin">lc-*</span></span>
+          <h2 class="ds-section__title" id="lente-esperienza-t">
+            {it ? "Esperienza — riga espandibile" : "Experience — expandable row"}
+          </h2>
+        </div>
+
         <p class="ds-sub__note">
           {
             it
@@ -1159,10 +1280,16 @@ const toc = [
             }
           </p>
         </div>
-      </div>
+      </section>
 
-      <div class="ds-sub">
-        <h4 class="ds-sub__title">{it ? "Chip e il comando +N" : "Chips and the +N control"}</h4>
+      <section class="ds-panel" data-ds-panel="lente-chip" aria-labelledby="lente-chip-t">
+        <div class="ds-panel__head">
+          <span class="ds-panel__group">{t.secLens}<span class="ds-origin">lc-*</span></span>
+          <h2 class="ds-section__title" id="lente-chip-t">
+            {it ? "Chip e il comando +N" : "Chips and the +N control"}
+          </h2>
+        </div>
+
         <p class="ds-sub__note">
           {
             it
@@ -1194,10 +1321,14 @@ const toc = [
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      <div class="ds-sub">
-        <h4 class="ds-sub__title">{it ? "Badge AI" : "AI badge"}</h4>
+      <section class="ds-panel" data-ds-panel="lente-badge-ai" aria-labelledby="lente-badge-ai-t">
+        <div class="ds-panel__head">
+          <span class="ds-panel__group">{t.secLens}<span class="ds-origin">lc-*</span></span>
+          <h2 class="ds-section__title" id="lente-badge-ai-t">{it ? "Badge AI" : "AI badge"}</h2>
+        </div>
+
         <div class="ds-stage">
           <div class="lc">
             <div class="ds-stage__row">
@@ -1206,10 +1337,20 @@ const toc = [
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      <div class="ds-sub">
-        <h4 class="ds-sub__title">{it ? "Cronologia completa" : "Full timeline"}</h4>
+      <section
+        class="ds-panel"
+        data-ds-panel="lente-cronologia"
+        aria-labelledby="lente-cronologia-t"
+      >
+        <div class="ds-panel__head">
+          <span class="ds-panel__group">{t.secLens}<span class="ds-origin">lc-*</span></span>
+          <h2 class="ds-section__title" id="lente-cronologia-t">
+            {it ? "Cronologia completa" : "Full timeline"}
+          </h2>
+        </div>
+
         <p class="ds-sub__note">
           {
             it
@@ -1239,10 +1380,16 @@ const toc = [
             </ul>
           </div>
         </div>
-      </div>
+      </section>
 
-      <div class="ds-sub">
-        <h4 class="ds-sub__title">{it ? "Contatti in chiaro" : "Contacts in the open"}</h4>
+      <section class="ds-panel" data-ds-panel="lente-contatti" aria-labelledby="lente-contatti-t">
+        <div class="ds-panel__head">
+          <span class="ds-panel__group">{t.secLens}<span class="ds-origin">lc-*</span></span>
+          <h2 class="ds-section__title" id="lente-contatti-t">
+            {it ? "Contatti in chiaro" : "Contacts in the open"}
+          </h2>
+        </div>
+
         <p class="ds-sub__note">
           {
             it
@@ -1259,24 +1406,20 @@ const toc = [
             </p>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    {/* ══ COMPONENTI — HERO (lab-*) ══════════════════════════════════════ */}
-    <section class="ds-section" aria-labelledby="hero">
-      <h2 class="ds-section__title" id="hero">
-        {t.secHero}<span class="ds-origin">lab-*</span>
-      </h2>
-      <p class="ds-section__note">
-        {
-          it
-            ? "La terza prova: struttura a una riga di ruolo, nessuna scelta all'ingresso, una still-life per progetto. I quattro accenti qui diventano il colore dei pannelli."
-            : "The third prototype: a single role line, no choice at the entry, one still life per project. Here the four accents become the panel colours."
-        }
-      </p>
+      <section
+        class="ds-panel"
+        data-ds-panel="hero-intestazione"
+        aria-labelledby="hero-intestazione-t"
+      >
+        <div class="ds-panel__head">
+          <span class="ds-panel__group">{t.secHero}<span class="ds-origin">lab-*</span></span>
+          <h2 class="ds-section__title" id="hero-intestazione-t">
+            {it ? "Barra e intestazione" : "Bar and heading"}
+          </h2>
+        </div>
 
-      <div class="ds-sub">
-        <h4 class="ds-sub__title">{it ? "Barra e intestazione" : "Bar and heading"}</h4>
         <div class="ds-stage">
           <div class="lab">
             <header class="lab-bar" style="position:static;">
@@ -1297,10 +1440,14 @@ const toc = [
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      <div class="ds-sub">
-        <h4 class="ds-sub__title">{it ? "Bottoni" : "Buttons"}</h4>
+      <section class="ds-panel" data-ds-panel="hero-bottoni" aria-labelledby="hero-bottoni-t">
+        <div class="ds-panel__head">
+          <span class="ds-panel__group">{t.secHero}<span class="ds-origin">lab-*</span></span>
+          <h2 class="ds-section__title" id="hero-bottoni-t">{it ? "Bottoni" : "Buttons"}</h2>
+        </div>
+
         <div class="ds-stage">
           <div class="lab">
             <div class="lab-cta">
@@ -1309,10 +1456,16 @@ const toc = [
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      <div class="ds-sub">
-        <h4 class="ds-sub__title">{it ? "Etichette e titoli" : "Labels and headings"}</h4>
+      <section class="ds-panel" data-ds-panel="hero-etichette" aria-labelledby="hero-etichette-t">
+        <div class="ds-panel__head">
+          <span class="ds-panel__group">{t.secHero}<span class="ds-origin">lab-*</span></span>
+          <h2 class="ds-section__title" id="hero-etichette-t">
+            {it ? "Etichette e titoli" : "Labels and headings"}
+          </h2>
+        </div>
+
         <div class="ds-stage">
           <div class="lab">
             <p class="lab-eyebrow">{it ? "Il percorso" : "The path"}</p>
@@ -1329,24 +1482,14 @@ const toc = [
             </p>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    {/* ══ COMPONENTI — CASE STUDY (work-*) ═══════════════════════════════ */}
-    <section class="ds-section" aria-labelledby="case-study">
-      <h2 class="ds-section__title" id="case-study">
-        {t.secWork}<span class="ds-origin">work-*</span>
-      </h2>
-      <p class="ds-section__note">
-        {
-          it
-            ? "I componenti di /work. La card indice è l'unico componente vero importato in questa pagina: gli altri sono markup riprodotto, perché non sono ancora estratti."
-            : "The /work components. The index card is the only real component imported on this page: the others are reproduced markup, because they are not extracted yet."
-        }
-      </p>
+      <section class="ds-panel" data-ds-panel="work-card" aria-labelledby="work-card-t">
+        <div class="ds-panel__head">
+          <span class="ds-panel__group">{t.secWork}<span class="ds-origin">work-*</span></span>
+          <h2 class="ds-section__title" id="work-card-t">{it ? "Card indice" : "Index card"}</h2>
+        </div>
 
-      <div class="ds-sub">
-        <h4 class="ds-sub__title">{it ? "Card indice" : "Index card"}</h4>
         <div class="ds-stage">
           <div class="work-index-grid" style="margin:0;">
             <WorkIndexCard name="Digital CV" slug="digital-cv" role="AI Workflow Designer" />
@@ -1362,10 +1505,16 @@ const toc = [
             }
           </p>
         </div>
-      </div>
+      </section>
 
-      <div class="ds-sub">
-        <h4 class="ds-sub__title">{it ? "Tag e navigazione" : "Tags and navigation"}</h4>
+      <section class="ds-panel" data-ds-panel="work-nav" aria-labelledby="work-nav-t">
+        <div class="ds-panel__head">
+          <span class="ds-panel__group">{t.secWork}<span class="ds-origin">work-*</span></span>
+          <h2 class="ds-section__title" id="work-nav-t">
+            {it ? "Tag e navigazione" : "Tags and navigation"}
+          </h2>
+        </div>
+
         <div class="ds-stage">
           <div class="ds-stage__row">
             <span class="work-tag">Astro</span>
@@ -1377,10 +1526,16 @@ const toc = [
             </a>
           </div>
         </div>
-      </div>
+      </section>
 
-      <div class="ds-sub">
-        <h4 class="ds-sub__title">{it ? "Decisione di progetto" : "Project decision"}</h4>
+      <section class="ds-panel" data-ds-panel="work-decisione" aria-labelledby="work-decisione-t">
+        <div class="ds-panel__head">
+          <span class="ds-panel__group">{t.secWork}<span class="ds-origin">work-*</span></span>
+          <h2 class="ds-section__title" id="work-decisione-t">
+            {it ? "Decisione di progetto" : "Project decision"}
+          </h2>
+        </div>
+
         <div class="ds-stage">
           <div class="work-decisions">
             <div class="work-decision">
@@ -1401,198 +1556,260 @@ const toc = [
             </div>
           </div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    {/* ══ STATI ══════════════════════════════════════════════════════════ */}
-    <section class="ds-section" aria-labelledby="stati">
-      <h2 class="ds-section__title" id="stati">{t.secStates}</h2>
-      <p class="ds-section__note">
-        {
-          it
-            ? "La stessa ricetta su ogni comando del sistema, dalle CTA alle voci di tendina ai chip."
-            : "The same recipe on every control in the system, from CTAs to dropdown items to chips."
-        }
-      </p>
-      <div class="ds-table-wrap">
-        <table class="ds-table">
-          <thead>
-            <tr>
-              <th>{t.colState}</th>
-              <th>{t.colRule}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {
-              STATES.map((row) => (
-                <tr>
-                  <td>
-                    <code>{row.state}</code>
-                  </td>
-                  <td>{row.rule}</td>
-                </tr>
-              ))
-            }
-          </tbody>
-        </table>
-      </div>
-    </section>
+      <section class="ds-panel" data-ds-panel="stati" aria-labelledby="stati-t">
+        <div class="ds-panel__head">
+          <h2 class="ds-section__title" id="stati-t">{t.secStates}</h2>
+        </div>
 
-    {/* ══ MOBILE ═════════════════════════════════════════════════════════ */}
-    <section class="ds-section" aria-labelledby="mobile">
-      <h2 class="ds-section__title" id="mobile">{t.secMobile}</h2>
-      <p class="ds-section__note">
-        {
-          it
-            ? "Non un adattamento automatico: sotto i 56rem alcuni componenti cambiano forma per ragioni misurate."
-            : "Not an automatic adaptation: below 56rem some components change shape for measured reasons."
-        }
-      </p>
-      <div class="ds-table-wrap">
-        <table class="ds-table">
-          <thead>
-            <tr>
-              <th>{t.colWhat}</th>
-              <th>{t.colDesk}</th>
-              <th>{t.colMob}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {
-              MOBILE.map((row) => (
-                <tr>
-                  <td>{row.what}</td>
-                  <td>{row.desk}</td>
-                  <td>{row.mob}</td>
-                </tr>
-              ))
-            }
-          </tbody>
-        </table>
-      </div>
-      <div class="ds-callout">
-        <p>
+        <p class="ds-section__note">
           {
             it
-              ? "Le CTA in riga si dimensionavano sul testo: impilate su schermo stretto diventavano 257px e 197px dentro una colonna da 335, con il bordo destro frastagliato. In colonna prendono tutte la stessa larghezza."
-              : "Row CTAs sized themselves on their text: stacked on a narrow screen they became 257px and 197px inside a 335px column, with a ragged right edge. In a column they all take the same width."
+              ? "La stessa ricetta su ogni comando del sistema, dalle CTA alle voci di tendina ai chip."
+              : "The same recipe on every control in the system, from CTAs to dropdown items to chips."
           }
         </p>
-      </div>
-    </section>
+        <div class="ds-table-wrap">
+          <table class="ds-table">
+            <thead>
+              <tr>
+                <th>{t.colState}</th>
+                <th>{t.colRule}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                STATES.map((row) => (
+                  <tr>
+                    <td>
+                      <code>{row.state}</code>
+                    </td>
+                    <td>{row.rule}</td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
+      </section>
 
-    {/* ══ ANIMAZIONI ═════════════════════════════════════════════════════ */}
-    <section class="ds-section" aria-labelledby="animazioni">
-      <h2 class="ds-section__title" id="animazioni">{t.secMotion}</h2>
-      <p class="ds-section__note">
-        {
-          it
-            ? "La regola che tiene insieme tutto il movimento del sistema: sta sulla decorazione, mai sulle parole. Nessun testo parte invisibile e nessuno aspetta un trigger di scroll."
-            : "The rule that holds all the system's motion together: it lives on the decoration, never on the words. No text starts invisible and none waits for a scroll trigger."
-        }
-      </p>
-      <div class="ds-table-wrap">
-        <table class="ds-table">
-          <thead>
-            <tr>
-              <th>{t.colWhat}</th>
-              <th>{t.colHow}</th>
-              <th>{t.colRule}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {
-              MOTION.map((row) => (
-                <tr>
-                  <td>{row.name}</td>
-                  <td>
-                    <code>{row.how}</code>
-                  </td>
-                  <td>{row.rule}</td>
-                </tr>
-              ))
-            }
-          </tbody>
-        </table>
-      </div>
-      <div class="ds-callout">
-        <p>
-          <strong>{it ? "Movimento ridotto." : "Reduced motion."}</strong>{" "}
+      <section class="ds-panel" data-ds-panel="mobile" aria-labelledby="mobile-t">
+        <div class="ds-panel__head">
+          <h2 class="ds-section__title" id="mobile-t">{t.secMobile}</h2>
+        </div>
+
+        <p class="ds-section__note">
           {
             it
-              ? "Riduzione non vuol dire eliminazione: restano opacità e colore, spariscono le trasformazioni. L'affondo alla pressione resta anche lì, perché non è decorazione — è l'informazione che il comando ha risposto."
-              : "Reduction is not removal: opacity and colour remain, transforms go. The tactile press survives even there, because it is not decoration — it is the information that the control responded."
+              ? "Non un adattamento automatico: sotto i 56rem alcuni componenti cambiano forma per ragioni misurate."
+              : "Not an automatic adaptation: below 56rem some components change shape for measured reasons."
           }
         </p>
-      </div>
-    </section>
-
-    {/* ══ ACCESSIBILITÀ ══════════════════════════════════════════════════ */}
-    <section class="ds-section" aria-labelledby="accessibilita">
-      <h2 class="ds-section__title" id="accessibilita">{t.secA11y}</h2>
-      <p class="ds-section__note">
-        {
-          it
-            ? "Riferimento: WCAG 2.2 livello AA. I valori qui sotto sono misurati sui pixel realmente resi, veli di luce inclusi, non sui colori dichiarati."
-            : "Reference: WCAG 2.2 level AA. The values below are measured on actually rendered pixels, light veils included, not on declared colours."
-        }
-      </p>
-      <div class="ds-table-wrap">
-        <table class="ds-table">
-          <thead>
-            <tr>
-              <th>{t.colWhat}</th>
-              <th>{t.colNeed}</th>
-              <th>{t.colGot}</th>
-            </tr>
-          </thead>
-          <tbody>
+        <div class="ds-table-wrap">
+          <table class="ds-table">
+            <thead>
+              <tr>
+                <th>{t.colWhat}</th>
+                <th>{t.colDesk}</th>
+                <th>{t.colMob}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                MOBILE.map((row) => (
+                  <tr>
+                    <td>{row.what}</td>
+                    <td>{row.desk}</td>
+                    <td>{row.mob}</td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
+        <div class="ds-callout">
+          <p>
             {
-              A11Y.map((row) => (
-                <tr>
-                  <td>{row.what}</td>
-                  <td class="ds-table__num">{row.need}</td>
-                  <td class="ds-table__num">
-                    <span class={row.ok ? "ds-ok" : "ds-ko"}>{row.ok ? "✓" : "✗"}</span> {row.got}
-                  </td>
-                </tr>
-              ))
-            }
-          </tbody>
-        </table>
-      </div>
-      <div class="ds-callout">
-        <p>
-          <strong
-            >{
               it
-                ? "L'anello di focus non è un elemento di marca."
-                : "The focus ring is not a brand element."
-            }</strong
-          >{" "}
+                ? "Le CTA in riga si dimensionavano sul testo: impilate su schermo stretto diventavano 257px e 197px dentro una colonna da 335, con il bordo destro frastagliato. In colonna prendono tutte la stessa larghezza."
+                : "Row CTAs sized themselves on their text: stacked on a narrow screen they became 257px and 197px inside a 335px column, with a ragged right edge. In a column they all take the same width."
+            }
+          </p>
+        </div>
+      </section>
+
+      <section class="ds-panel" data-ds-panel="animazioni" aria-labelledby="animazioni-t">
+        <div class="ds-panel__head">
+          <h2 class="ds-section__title" id="animazioni-t">{t.secMotion}</h2>
+        </div>
+
+        <p class="ds-section__note">
           {
             it
-              ? "È l'unica cosa che dice a chi naviga da tastiera dove si trova. Colorarlo con l'accento lo rende coerente esteticamente e inutile funzionalmente: sul fondale illuminato l'arancione scende a 2,57:1. Qui è inchiostro, staccato di 4px, e tiene 8,4–9,9:1."
-              : "It is the only thing that tells a keyboard user where they are. Colouring it with the accent makes it aesthetically consistent and functionally useless: on the lit backdrop orange drops to 2.57:1. Here it is ink, offset by 4px, and holds 8.4–9.9:1."
+              ? "La regola che tiene insieme tutto il movimento del sistema: sta sulla decorazione, mai sulle parole. Nessun testo parte invisibile e nessuno aspetta un trigger di scroll."
+              : "The rule that holds all the system's motion together: it lives on the decoration, never on the words. No text starts invisible and none waits for a scroll trigger."
           }
         </p>
-      </div>
-    </section>
-  </main>
+        <div class="ds-table-wrap">
+          <table class="ds-table">
+            <thead>
+              <tr>
+                <th>{t.colWhat}</th>
+                <th>{t.colHow}</th>
+                <th>{t.colRule}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                MOTION.map((row) => (
+                  <tr>
+                    <td>{row.name}</td>
+                    <td>
+                      <code>{row.how}</code>
+                    </td>
+                    <td>{row.rule}</td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
+        <div class="ds-callout">
+          <p>
+            <strong>{it ? "Movimento ridotto." : "Reduced motion."}</strong>{" "}
+            {
+              it
+                ? "Riduzione non vuol dire eliminazione: restano opacità e colore, spariscono le trasformazioni. L'affondo alla pressione resta anche lì, perché non è decorazione — è l'informazione che il comando ha risposto."
+                : "Reduction is not removal: opacity and colour remain, transforms go. The tactile press survives even there, because it is not decoration — it is the information that the control responded."
+            }
+          </p>
+        </div>
+      </section>
+
+      <section class="ds-panel" data-ds-panel="accessibilita" aria-labelledby="accessibilita-t">
+        <div class="ds-panel__head">
+          <h2 class="ds-section__title" id="accessibilita-t">{t.secA11y}</h2>
+        </div>
+
+        <p class="ds-section__note">
+          {
+            it
+              ? "Riferimento: WCAG 2.2 livello AA. I valori qui sotto sono misurati sui pixel realmente resi, veli di luce inclusi, non sui colori dichiarati."
+              : "Reference: WCAG 2.2 level AA. The values below are measured on actually rendered pixels, light veils included, not on declared colours."
+          }
+        </p>
+        <div class="ds-table-wrap">
+          <table class="ds-table">
+            <thead>
+              <tr>
+                <th>{t.colWhat}</th>
+                <th>{t.colNeed}</th>
+                <th>{t.colGot}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                A11Y.map((row) => (
+                  <tr>
+                    <td>{row.what}</td>
+                    <td class="ds-table__num">{row.need}</td>
+                    <td class="ds-table__num">
+                      <span class={row.ok ? "ds-ok" : "ds-ko"}>{row.ok ? "✓" : "✗"}</span> {row.got}
+                    </td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
+        <div class="ds-callout">
+          <p>
+            <strong
+              >{
+                it
+                  ? "L'anello di focus non è un elemento di marca."
+                  : "The focus ring is not a brand element."
+              }</strong
+            >{" "}
+            {
+              it
+                ? "È l'unica cosa che dice a chi naviga da tastiera dove si trova. Colorarlo con l'accento lo rende coerente esteticamente e inutile funzionalmente: sul fondale illuminato l'arancione scende a 2,57:1. Qui è inchiostro, staccato di 4px, e tiene 8,4–9,9:1."
+                : "It is the only thing that tells a keyboard user where they are. Colouring it with the accent makes it aesthetically consistent and functionally useless: on the lit backdrop orange drops to 2.57:1. Here it is ink, offset by 4px, and holds 8.4–9.9:1."
+            }
+          </p>
+        </div>
+      </section>
+    </main>
+  </div>
 </div>
 
 <script>
+  // ── Selezione del pannello ────────────────────────────────────────────
+  // Un componente per volta, come in Storybook. A nascondere è questo
+  // script: il markup servito non ha nessun `hidden`, quindi senza
+  // JavaScript restano visibili tutti i pannelli in sequenza e le voci
+  // dell'indice funzionano come normali ancore. Degrado verboso, non vuoto —
+  // la stessa regola scritta in testa a lab-home-scroll.ts.
+  const panels = Array.from(document.querySelectorAll<HTMLElement>("[data-ds-panel]"));
+  const navLinks = Array.from(document.querySelectorAll<HTMLAnchorElement>("[data-ds-nav]"));
+  const side = document.getElementById("ds-side") as HTMLDetailsElement | null;
+  const wide = window.matchMedia("(min-width: 60rem)");
+
+  if (panels.length && navLinks.length) {
+    const show = (id: string, push: boolean) => {
+      const target = panels.some((p) => p.dataset.dsPanel === id) ? id : panels[0].dataset.dsPanel!;
+      panels.forEach((p) => {
+        p.hidden = p.dataset.dsPanel !== target;
+      });
+      navLinks.forEach((a) => {
+        // aria-current e non una classe: lo stato corrente deve arrivare
+        // anche a chi il filo d'accento non lo vede.
+        if (a.dataset.dsNav === target) a.setAttribute("aria-current", "page");
+        else a.removeAttribute("aria-current");
+      });
+      if (push && location.hash.slice(1) !== target) {
+        history.replaceState(null, "", `#${target}`);
+      }
+      // Su schermo stretto l'indice è un cassetto: scelto il componente si
+      // richiude da solo, altrimenti resterebbe a coprire proprio ciò che si
+      // è appena chiesto di vedere.
+      if (side && !wide.matches) side.open = false;
+    };
+
+    navLinks.forEach((a) => {
+      a.addEventListener("click", (e) => {
+        e.preventDefault();
+        show(a.dataset.dsNav!, true);
+        // Il pannello cambia sotto una barra fissa: senza questo, scegliendo
+        // una voce da metà lista si resta a metà pagina su un pannello che
+        // comincia più in alto.
+        document.querySelector(".ds-main")?.scrollIntoView({ block: "start", behavior: "smooth" });
+      });
+    });
+
+    // Indirizzo condivisibile: /design-system#lente-tendina apre direttamente
+    // quel componente, e il tasto indietro continua a funzionare.
+    window.addEventListener("hashchange", () => show(location.hash.slice(1), false));
+    show(location.hash.slice(1), false);
+
+    // Passando la soglia il cassetto torna aperto: su desktop l'indice è una
+    // colonna, e lasciarlo chiuso lo renderebbe invisibile senza motivo.
+    wide.addEventListener("change", (e) => {
+      if (side && e.matches) side.open = true;
+    });
+  }
+
   // ── Selettore di mode ──────────────────────────────────────────────────
-  // Scrive data-mode sulla radice della vetrina: le custom properties dei
-  // quattro accenti sono ereditate, quindi ogni demo cambia insieme senza
-  // che nessuna sappia del selettore. È lo stesso meccanismo del sito.
+  // Scrive data-mode sulla radice della vetrina: le custom properties dei tre
+  // accenti sono ereditate, quindi ogni demo cambia insieme senza che nessuna
+  // sappia del selettore. È lo stesso meccanismo del sito.
   const root = document.querySelector<HTMLElement>("[data-ds-root]");
   const modeButtons = document.querySelectorAll<HTMLButtonElement>("[data-ds-mode]");
   // Le sezioni di /lab/home non leggono --color-accent: prendono --accent da
   // `.lh-section[data-mode="…"]`, perché nella pagina vera ogni sezione porta
   // la propria lente ed è quello a decidere il colore. Scrivere il mode solo
-  // sulla radice quindi non le raggiungeva, e restavano arancioni qualunque
-  // pulsante si premesse. Trovato dalla verifica, non a occhio.
+  // sulla radice quindi non le raggiunge.
   const labSections = document.querySelectorAll<HTMLElement>(".ds-stage .lh-section[data-mode]");
 
   if (root && modeButtons.length) {
@@ -1602,17 +1819,12 @@ const toc = [
         if (!mode) return;
         root.dataset.mode = mode;
         labSections.forEach((s) => (s.dataset.mode = mode));
-        // aria-pressed e non una classe: lo stato corrente deve arrivare
-        // anche a chi il bordo acceso non lo vede.
         modeButtons.forEach((b) => b.setAttribute("aria-pressed", String(b === btn)));
       });
     });
   }
 
   // ── Il comando +N delle chip, identico a /lab/<lente> ──────────────────
-  // Le chip in eccesso sono nell'HTML: le nasconde lo script, che sa anche
-  // riaprirle. Senza JavaScript restano tutte visibili e il pulsante resta
-  // `hidden`, quindi non esiste un comando morto.
   document.querySelectorAll<HTMLUListElement>(".lc-chips").forEach((lista) => {
     const piu = lista.querySelector<HTMLButtonElement>(".lc-chip--more");
     const quante = lista.querySelectorAll(".lc-chip--extra").length;

@@ -42,11 +42,30 @@
 
 /* ═══ Impianto ════════════════════════════════════════════════════════════ */
 
-.ds-main {
-  max-width: var(--ds-maxw);
+/* ── Guscio a due colonne: indice a sinistra, banco di prova a destra ─────
+   Il modello è quello di Storybook: la scelta del componente sta sempre in
+   vista, e il pannello mostra un componente per volta invece di una pagina
+   lunga da percorrere. La differenza pratica è che si smette di scorrere per
+   cercare, e si confronta uno stato alla volta. */
+.ds-shell {
+  max-width: 92rem;
   margin-inline: auto;
   padding-inline: var(--ds-gutter);
   padding-bottom: 6rem;
+  display: grid;
+  gap: clamp(1.25rem, 3vw, 2.5rem);
+  align-items: start;
+}
+
+@media (min-width: 60rem) {
+  .ds-shell {
+    grid-template-columns: 16rem minmax(0, 1fr);
+  }
+}
+
+.ds-main {
+  min-width: 0;
+  padding-bottom: 2rem;
 }
 
 .ds-bar {
@@ -135,47 +154,167 @@
   color: var(--ds-muted);
 }
 
-/* ── Indice ── */
+/* ── Barra laterale: la scelta del componente ────────────────────────────
+   Sotto i 60rem non è una colonna ma un <details> in cima, chiuso di
+   default: su schermo stretto una lista di 25 voci sopra il contenuto
+   costringerebbe a scorrerla tutta prima di vedere qualsiasi cosa. */
 
-.ds-toc {
-  margin-top: 2rem;
-  padding: 1.25rem;
-  border: 1px solid var(--ds-line);
-  border-radius: var(--radius-16);
-  background: var(--ds-panel);
+.ds-side {
+  position: relative;
+  z-index: 5;
 }
 
-.ds-toc__title {
+@media (min-width: 60rem) {
+  .ds-side {
+    position: sticky;
+    /* 3.5rem = altezza della barra in cima: l'indice si ferma sotto di lei
+       invece di scorrerci dietro. */
+    top: 3.5rem;
+    max-height: calc(100vh - 4.5rem);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding-right: 0.5rem;
+  }
+}
+
+.ds-side__summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-height: 2.75rem;
+  padding: 0 0.9rem;
+  border: 1px solid var(--ds-line-strong);
+  border-radius: var(--radius-4);
+  background: var(--ds-panel);
+  color: var(--ds-ink);
   font-family: var(--font-mono);
   font-size: var(--fs-12);
-  letter-spacing: 0.14em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--ds-muted);
-  margin: 0 0 0.75rem;
+  cursor: pointer;
+  list-style: none;
 }
 
-.ds-toc__list {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
-  gap: 0.4rem 1.5rem;
+.ds-side__summary::-webkit-details-marker {
+  display: none;
+}
+
+.ds-side__chevron {
+  transition: transform var(--duration-micro) var(--ease-standard);
+}
+
+.ds-side[open] .ds-side__chevron {
+  transform: rotate(90deg);
+}
+
+@media (min-width: 60rem) {
+  /* Su desktop l'indice è sempre aperto e il comando sparisce: `open` è
+     forzato dal markup, quindi anche senza JavaScript resta navigabile. */
+  .ds-side__summary {
+    display: none;
+  }
+}
+
+.ds-side__group {
+  margin-top: 1.25rem;
+}
+
+.ds-side__group:first-of-type {
+  margin-top: 0.75rem;
+}
+
+@media (min-width: 60rem) {
+  .ds-side__group:first-of-type {
+    margin-top: 0;
+  }
+}
+
+.ds-side__title {
+  margin: 0 0 0.4rem;
+  font-family: var(--font-mono);
+  font-size: var(--fs-10);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ds-muted);
+}
+
+.ds-side__list {
   list-style: none;
   padding: 0;
   margin: 0;
+  display: grid;
+  gap: 0.1rem;
 }
 
-.ds-toc__list a {
-  color: var(--ds-ink);
-  text-decoration: none;
-  font-size: var(--fs-14);
-  display: inline-flex;
+.ds-side__link {
+  display: flex;
   align-items: center;
-  min-height: 1.5rem;
+  width: 100%;
+  /* 2rem = 32px: sopra i 24px di 2.5.8, e la lista resta compatta abbastanza
+     da vedersi quasi tutta senza scorrere. */
+  min-height: 2rem;
+  padding: 0.3rem 0.6rem;
+  border: 0;
+  border-left: 2px solid transparent;
+  border-radius: 0 var(--radius-4) var(--radius-4) 0;
+  background: transparent;
+  color: var(--ds-muted);
+  font-family: var(--font-sans);
+  font-size: var(--fs-14);
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    color var(--duration-micro) var(--ease-standard),
+    background-color var(--duration-micro) var(--ease-standard),
+    border-color var(--duration-micro) var(--ease-standard);
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .ds-toc__list a:hover {
-    color: var(--color-accent);
+  .ds-side__link:hover {
+    color: var(--ds-ink);
+    background: rgba(255, 255, 255, 0.05);
   }
+}
+
+.ds-side__link:active {
+  background: rgba(255, 255, 255, 0.09);
+}
+
+/* La voce corrente: filo d'accento, fondo acceso E peso del testo. Tre
+   segnali invece di uno, perché il colore da solo non basta (1.4.1). */
+.ds-side__link[aria-current="page"] {
+  border-left-color: var(--color-accent);
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--ds-ink);
+  font-weight: 600;
+}
+
+/* ── Pannelli ────────────────────────────────────────────────────────────
+   Uno per volta. A nascondere è lo script: senza JavaScript nessun pannello
+   riceve `hidden`, quindi si vedono tutti in sequenza e la pagina resta
+   quella lunga di prima — degrado verboso, non vuoto. */
+.ds-panel[hidden] {
+  display: none;
+}
+
+.ds-panel__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem 0.75rem;
+  padding-bottom: 0.75rem;
+  margin-bottom: 1.25rem;
+  border-bottom: 1px solid var(--ds-line);
+}
+
+.ds-panel__group {
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ds-muted);
 }
 
 /* ── Sezioni ── */
