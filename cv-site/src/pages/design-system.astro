@@ -1,0 +1,20 @@
+---
+// /design-system — la vetrina del linguaggio nuovo (IT).
+//
+// La pagina è volutamente sottile: struttura, contenuti e comportamento
+// stanno tutti in components/DesignSystem.astro, che riceve la lingua come
+// parametro. La controparte inglese (/en/design-system) monta lo stesso
+// componente con lang="en", quindi non può divergere per struttura, ordine o
+// stato iniziale — solo per lingua, come chiede AGENTS.md § "IT ↔ EN parity".
+import Layout from "../layouts/Layout.astro";
+import DesignSystem from "../components/DesignSystem.astro";
+---
+
+<Layout
+  title="Design System — Giulio Occhipinti"
+  description="Il sistema di design del CV: token, componenti, stati, comportamento mobile e movimento. Ogni demo usa il CSS reale dei componenti."
+  mode="creative"
+  lang="it"
+>
+  <DesignSystem lang="it" />
+</Layout>

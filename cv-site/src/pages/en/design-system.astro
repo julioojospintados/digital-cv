@@ -1,0 +1,20 @@
+---
+// /en/design-system — the new language's showcase (EN).
+//
+// Deliberately thin: structure, content and behaviour all live in
+// components/DesignSystem.astro, which takes the language as a parameter.
+// The Italian counterpart (/design-system) mounts the same component with
+// lang="it", so the two cannot diverge in structure, order or initial state —
+// only in language, as AGENTS.md § "IT ↔ EN parity" requires.
+import Layout from "../../layouts/Layout.astro";
+import DesignSystem from "../../components/DesignSystem.astro";
+---
+
+<Layout
+  title="Design System — Giulio Occhipinti"
+  description="The CV's design system: tokens, components, states, mobile behaviour and motion. Every demo uses the components' real CSS."
+  mode="creative"
+  lang="en"
+>
+  <DesignSystem lang="en" />
+</Layout>

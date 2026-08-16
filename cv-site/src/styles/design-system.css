@@ -1,0 +1,622 @@
+/* ─────────────────────────────────────────────────────────────────────────
+   design-system.css — la vetrina del sistema di design.
+
+   ── Cosa documenta, e cosa no ────────────────────────────────────────────
+   Documenta il linguaggio **nuovo**: i componenti di /lab (le tre prove:
+   home, hero, <lente>) e quelli di /work. Il sistema del sito storico
+   (index, [mode], en/cv) è deliberatamente fuori: decisione del 2026-08-16.
+
+   ── La regola che tiene in piedi la pagina ───────────────────────────────
+   Le demo NON ricopiano il CSS dei componenti: importano i fogli **veri**
+   (lab-home, lab-cv, lab-hero, work-page). Una vetrina che ridichiara i
+   propri stili è una fotografia, e le fotografie invecchiano in silenzio —
+   è successo davvero qui il 2026-07-23, quando WorkDesignSystem.astro
+   leggeva i token di `:root` invece del mode attivo e mostrava valori
+   sbagliati in tre mode su quattro.
+
+   Il costo di quella scelta è questo file: importando i fogli veri arrivano
+   anche le loro regole di pagina (altezze a schermo intero, veli fissi,
+   sfondi pieni), che dentro una vetrina vanno spente. È il § NEUTRALIZZATORI
+   più sotto: l'unico posto in cui questo file combatte con gli altri, e ogni
+   riga lì è una regola di pagina, mai una regola di componente.
+   ───────────────────────────────────────────────────────────────────────── */
+
+.ds {
+  /* Token della vetrina — il suo cromo, non quello dei componenti mostrati.
+     Prefisso proprio per lo stesso motivo per cui lo hanno .lh/.lc/.lab:
+     così è sempre evidente se una demo sta usando un colore suo o uno del
+     sistema che dovrebbe dimostrare. */
+  --ds-ink: rgba(245, 240, 230, 1);
+  --ds-muted: rgba(192, 220, 215, 1);
+  --ds-line: rgba(245, 240, 230, 0.16);
+  --ds-line-strong: rgba(245, 240, 230, 0.44);
+  --ds-panel: rgba(255, 255, 255, 0.03);
+  --ds-gutter: clamp(1.25rem, 4vw, 3rem);
+  --ds-maxw: 76rem;
+
+  min-height: 100vh;
+  background: var(--color-bg);
+  color: var(--ds-ink);
+  font-family: var(--font-sans);
+}
+
+/* ═══ Impianto ════════════════════════════════════════════════════════════ */
+
+.ds-main {
+  max-width: var(--ds-maxw);
+  margin-inline: auto;
+  padding-inline: var(--ds-gutter);
+  padding-bottom: 6rem;
+}
+
+.ds-bar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem var(--ds-gutter);
+  /* Opaca: sotto ci scorrono le demo, e una barra translucida sopra dei
+     componenti in dimostrazione ne falsa i colori. */
+  background: var(--color-bg);
+  border-bottom: 1px solid var(--ds-line);
+}
+
+.ds-mark {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: var(--fs-20);
+  letter-spacing: -0.02em;
+  color: var(--ds-ink);
+  text-decoration: none;
+}
+
+.ds-bar__links {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: var(--fs-12);
+  font-family: var(--font-mono);
+}
+
+.ds-bar__links a {
+  color: var(--ds-muted);
+  text-decoration: none;
+  /* 2.5.8: bersaglio da 24px anche quando il testo è alto 12. */
+  min-height: 1.5rem;
+  display: inline-flex;
+  align-items: center;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .ds-bar__links a:hover {
+    color: var(--ds-ink);
+  }
+}
+
+/* ── Intestazione ── */
+
+.ds-head {
+  padding-block: clamp(2.5rem, 8vh, 5rem) 2rem;
+}
+
+.ds-head__title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.ds-head__lead {
+  margin: 1rem 0 0;
+  max-width: 54rem;
+  font-size: var(--fs-16);
+  line-height: 1.65;
+  color: var(--ds-muted);
+}
+
+.ds-head__meta {
+  margin-top: 1.25rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.ds-pill {
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  padding: 0.25rem 0.6rem;
+  border: 1px solid var(--ds-line-strong);
+  border-radius: 999rem;
+  color: var(--ds-muted);
+}
+
+/* ── Indice ── */
+
+.ds-toc {
+  margin-top: 2rem;
+  padding: 1.25rem;
+  border: 1px solid var(--ds-line);
+  border-radius: var(--radius-16);
+  background: var(--ds-panel);
+}
+
+.ds-toc__title {
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ds-muted);
+  margin: 0 0 0.75rem;
+}
+
+.ds-toc__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
+  gap: 0.4rem 1.5rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.ds-toc__list a {
+  color: var(--ds-ink);
+  text-decoration: none;
+  font-size: var(--fs-14);
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.5rem;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .ds-toc__list a:hover {
+    color: var(--color-accent);
+  }
+}
+
+/* ── Sezioni ── */
+
+.ds-section {
+  padding-block: clamp(2rem, 6vh, 3.5rem);
+  border-top: 1px solid var(--ds-line);
+}
+
+.ds-section__title {
+  font-family: var(--font-display);
+  font-size: var(--fs-28);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  margin: 0;
+  scroll-margin-top: 5rem;
+}
+
+.ds-section__note {
+  margin: 0.5rem 0 0;
+  max-width: 60rem;
+  font-size: var(--fs-14);
+  line-height: 1.6;
+  color: var(--ds-muted);
+}
+
+.ds-sub {
+  margin-top: 2.25rem;
+}
+
+.ds-sub__title {
+  font-size: var(--fs-20);
+  font-weight: 600;
+  margin: 0 0 0.35rem;
+  scroll-margin-top: 5rem;
+}
+
+.ds-sub__note {
+  margin: 0 0 1rem;
+  max-width: 60rem;
+  font-size: var(--fs-14);
+  line-height: 1.6;
+  color: var(--ds-muted);
+}
+
+/* Origine del componente: da quale prova arriva. Mono e non prosa, perché è
+   un riferimento a un file, non una frase. */
+.ds-origin {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  color: var(--ds-muted);
+  border: 1px solid var(--ds-line);
+  border-radius: var(--radius-4);
+  padding: 0.1rem 0.4rem;
+  margin-left: 0.5rem;
+  vertical-align: middle;
+}
+
+/* ═══ Il palco delle demo ═════════════════════════════════════════════════ */
+
+.ds-stage {
+  position: relative;
+  padding: 1.5rem;
+  border: 1px solid var(--ds-line);
+  border-radius: var(--radius-16);
+  background: var(--ds-panel);
+  /* Le demo larghe scorrono dentro il proprio riquadro: la pagina non deve
+     mai scorrere in orizzontale (1.4.10 Reflow). */
+  overflow-x: auto;
+}
+
+.ds-stage + .ds-stage {
+  margin-top: 0.75rem;
+}
+
+.ds-stage__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+}
+
+.ds-stage__col {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+/* Etichetta di uno stato dentro una demo (riposo / hover / premuto). */
+.ds-label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  color: var(--ds-muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin: 0 0 0.5rem;
+}
+
+.ds-case {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+/* ═══ NEUTRALIZZATORI ═════════════════════════════════════════════════════
+   Le uniche regole di questo file che scavalcano gli altri fogli. Spengono
+   ciò che è **di pagina** (altezza a schermo intero, velo fisso, sfondo
+   pieno) dentro le demo, e non toccano mai una proprietà di componente:
+   colori, spaziature, tipografia e stati restano quelli veri.
+
+   Se un giorno una demo sembra diversa dal sito, il sospetto va qui prima
+   che al componente. */
+
+.ds-stage .lh,
+.ds-stage .lc,
+.ds-stage .lab {
+  min-height: 0;
+  background: transparent;
+  overflow: visible;
+}
+
+/* Il velo fisso di /lab/home copre la finestra intera: dentro una vetrina
+   tingerebbe tutta la pagina, non la demo. */
+.ds-stage .lh::before,
+.ds-stage .lab-hero::before {
+  display: none;
+}
+
+/* Le sezioni a schermo intero diventano blocchi di contenuto. */
+.ds-stage .lh-hero,
+.ds-stage .lh-section,
+.ds-stage .lab-hero,
+.ds-stage .lc-main {
+  min-height: 0;
+  padding: 0;
+  max-width: none;
+}
+
+/* La tendina di /lab/<lente> è `position: absolute` sopra la pagina: dentro
+   la demo va mostrata aperta e in flusso, altrimenti copre il testo sotto. */
+.ds-stage--dropdown {
+  min-height: 15rem;
+}
+
+/* ═══ Token ═══════════════════════════════════════════════════════════════ */
+
+.ds-swatches {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
+  gap: 0.75rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.ds-swatch {
+  border: 1px solid var(--ds-line);
+  border-radius: var(--radius-4);
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.ds-swatch__chip {
+  height: 3.5rem;
+  /* Scacchiera sotto: senza, un token con alpha sembra pieno e si perde
+     l'informazione che conta di più su fondo scuro (vedi § Accessibilità:
+     l'alpha è ciò che spegne il testo verso lo sfondo). */
+  background-image:
+    linear-gradient(var(--ds-swatch, transparent), var(--ds-swatch, transparent)),
+    linear-gradient(45deg, rgba(255, 255, 255, 0.09) 25%, transparent 25%),
+    linear-gradient(-45deg, rgba(255, 255, 255, 0.09) 25%, transparent 25%),
+    linear-gradient(45deg, transparent 75%, rgba(255, 255, 255, 0.09) 75%),
+    linear-gradient(-45deg, transparent 75%, rgba(255, 255, 255, 0.09) 75%);
+  background-size:
+    100% 100%,
+    12px 12px,
+    12px 12px,
+    12px 12px,
+    12px 12px;
+  background-position:
+    0 0,
+    0 0,
+    0 6px,
+    6px -6px,
+    -6px 0;
+}
+
+.ds-swatch__body {
+  padding: 0.5rem 0.6rem 0.6rem;
+}
+
+.ds-swatch__name {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  color: var(--ds-ink);
+  word-break: break-all;
+}
+
+.ds-swatch__value {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--fs-10);
+  color: var(--ds-muted);
+  margin-top: 0.15rem;
+  word-break: break-all;
+}
+
+/* ── Tabelle di specifica ── */
+
+.ds-table-wrap {
+  overflow-x: auto;
+  border: 1px solid var(--ds-line);
+  border-radius: var(--radius-16);
+}
+
+.ds-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--fs-14);
+  /* min-width: la tabella scorre dentro il suo contenitore invece di
+     comprimersi fino a spezzare ogni parola. */
+  min-width: 34rem;
+}
+
+.ds-table th,
+.ds-table td {
+  text-align: left;
+  padding: 0.6rem 0.85rem;
+  border-bottom: 1px solid var(--ds-line);
+  vertical-align: top;
+}
+
+.ds-table thead th {
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ds-muted);
+  font-weight: 600;
+}
+
+.ds-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.ds-table code {
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  color: var(--ds-ink);
+}
+
+.ds-table__num {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* Esito di una verifica: mai il solo colore a dirlo (1.4.1) — accanto c'è
+   sempre il simbolo e il valore misurato. */
+.ds-ok {
+  color: rgba(120, 240, 200, 1);
+}
+
+.ds-ko {
+  color: rgba(255, 160, 140, 1);
+}
+
+/* ── Specimen tipografico ── */
+
+.ds-type {
+  display: grid;
+  gap: 0.85rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.ds-type__row {
+  display: grid;
+  grid-template-columns: 7rem 1fr;
+  gap: 1rem;
+  align-items: baseline;
+  padding-bottom: 0.85rem;
+  border-bottom: 1px solid var(--ds-line);
+}
+
+.ds-type__meta {
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  color: var(--ds-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.ds-type__sample {
+  color: var(--ds-ink);
+  line-height: 1.3;
+  /* Il campione va a capo invece di allargare la riga: a --fs-48 una frase
+     lunga farebbe scorrere la pagina in orizzontale. */
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 39.9375rem) {
+  .ds-type__row {
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
+  }
+}
+
+/* ── Nota / avvertenza dentro una sezione ── */
+
+.ds-callout {
+  margin-top: 1rem;
+  padding: 0.9rem 1.1rem;
+  border-left: 3px solid var(--color-accent);
+  border-radius: 0 var(--radius-4) var(--radius-4) 0;
+  background: rgba(255, 255, 255, 0.04);
+  font-size: var(--fs-14);
+  line-height: 1.6;
+  color: var(--ds-muted);
+}
+
+.ds-callout strong {
+  color: var(--ds-ink);
+  font-weight: 600;
+}
+
+.ds-callout p {
+  margin: 0;
+}
+
+.ds-callout p + p {
+  margin-top: 0.6rem;
+}
+
+/* ── Selettore di mode: la vetrina si guarda in tutti e quattro ── */
+
+.ds-modes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.ds-mode-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  /* 2.75rem = 44px: sopra la soglia di 2.5.8 con margine. */
+  min-height: 2.75rem;
+  padding: 0 0.9rem;
+  border: 1px solid var(--ds-line-strong);
+  border-radius: 999rem;
+  background: transparent;
+  color: var(--ds-ink);
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition:
+    border-color var(--duration-state) var(--ease-standard),
+    background-color var(--duration-state) var(--ease-standard),
+    transform var(--duration-micro) var(--ease-standard);
+}
+
+.ds-mode-btn__dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--ds-dot, var(--color-accent));
+  flex: 0 0 auto;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .ds-mode-btn:hover {
+    border-color: var(--color-accent);
+    background: rgba(255, 255, 255, 0.06);
+  }
+}
+
+.ds-mode-btn:active {
+  transform: scale(0.97);
+}
+
+/* Lo stato corrente non è affidato al solo colore (1.4.1): cambia anche il
+   peso del testo e compare `aria-pressed` per chi non vede il bordo. */
+.ds-mode-btn[aria-pressed="true"] {
+  border-color: var(--color-accent);
+  background: rgba(255, 255, 255, 0.1);
+  font-weight: 700;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-mode-btn:active {
+    transform: none;
+  }
+}
+
+/* ── Solo per screen reader ── */
+
+.ds-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ── Griglia due colonne per i confronti (desktop) ── */
+
+.ds-split {
+  display: grid;
+  gap: 0.75rem;
+}
+
+@media (min-width: 48rem) {
+  .ds-split {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* ── Riquadro che simula il viewport mobile ── */
+
+.ds-phone {
+  width: 100%;
+  max-width: 20rem;
+  border: 1px solid var(--ds-line-strong);
+  border-radius: var(--radius-16);
+  padding: 1rem;
+  background: rgba(0, 0, 0, 0.12);
+}
+
+.ds-phone__cap {
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  color: var(--ds-muted);
+  margin: 0 0 0.75rem;
+}
