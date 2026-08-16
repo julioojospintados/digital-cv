@@ -115,20 +115,45 @@ export function initLabHomeScroll(): void {
       );
     }
 
-    // ── Ingresso con bounce (una volta sola) ──
-    // back.out(1.7) supera la misura e rientra: è lo scatto. Su scale e
-    // opacity, mai su y — y è della parallasse.
-    const enter = gsap.timeline({
+    // ── Ingresso: due timeline, non una ──────────────────────────────────
+    // Stesso punto d'innesco, ma vite diverse: l'oggetto rigioca lo scatto a
+    // ogni passaggio, le parole entrano una volta sola.
+    //
+    // Il motivo della separazione è la regola in testa a questo file — il
+    // movimento sta sulla decorazione, mai sulle parole — ed è misurato, non
+    // di principio: al punto d'innesco il blocco di testo è già dentro la
+    // finestra da mobile (581px su 667, cioè 86px visibili), mentre l'oggetto
+    // è sotto la piega su entrambi i formati (1062px su una finestra da 900,
+    // 1013 su 667). Rigiocare tutto insieme farebbe lampeggiare il titolo a
+    // schermo; rigiocare il solo oggetto lo fa ripartire sempre fuori campo.
+    const OBJECT_START = "top 78%";
+
+    // Le parole: una volta sola, come prima.
+    const enterCopy = gsap.timeline({
+      scrollTrigger: { trigger: section, start: OBJECT_START, once: true },
+    });
+
+    // L'oggetto: lo scatto si ripete. Prima questa timeline era la stessa di
+    // sopra con `once: true`, e l'effetto si vedeva una volta per sezione —
+    // dal secondo passaggio gli oggetti restavano fermi a scala 1 (misurato:
+    // escursione 0,154 al primo ingresso, 0,000 ai successivi).
+    //
+    // "restart none none none" = riparte da capo ogni volta che la sezione
+    // entra scendendo, e non tocca nulla negli altri tre casi. Il `reset` su
+    // onLeaveBack, l'altra scelta idiomatica, qui farebbe danno: riporterebbe
+    // l'oggetto a 0,86 mentre la sezione sta ancora attraversando il bordo
+    // basso della finestra, cioè con un lampo a metà transizione.
+    const enterObject = gsap.timeline({
       scrollTrigger: {
         trigger: section,
-        start: "top 78%",
-        once: true,
+        start: OBJECT_START,
+        toggleActions: "restart none none none",
       },
     });
 
     if (object) {
       gsap.set(object, { autoAlpha: 0, scale: 0.86 });
-      enter.to(object, {
+      enterObject.to(object, {
         autoAlpha: 1,
         scale: 1,
         duration: 0.9,
@@ -138,7 +163,7 @@ export function initLabHomeScroll(): void {
 
     if (copyChildren.length) {
       gsap.set(copyChildren, { autoAlpha: 0, scale: 0.98 });
-      enter.to(
+      enterCopy.to(
         copyChildren,
         {
           autoAlpha: 1,
@@ -153,7 +178,7 @@ export function initLabHomeScroll(): void {
 
     if (initial) {
       gsap.set(initial, { autoAlpha: 0 });
-      enter.to(initial, { autoAlpha: 1, duration: 1.1, ease: "power2.out" }, 0);
+      enterCopy.to(initial, { autoAlpha: 1, duration: 1.1, ease: "power2.out" }, 0);
     }
   });
 
