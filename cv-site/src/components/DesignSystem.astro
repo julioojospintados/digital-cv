@@ -303,8 +303,10 @@ const t = it
   ? {
       title: "Design System",
       lead: "Il linguaggio visivo del CV nuovo: token, componenti, stati, comportamento mobile e movimento. Ogni demo qui sotto usa il CSS vero dei componenti, non una copia — se il sistema cambia, cambia anche questa pagina.",
-      pills: ["/lab/home", "/lab/<lente>", "/lab/hero", "/work"],
       tocTitle: "Indice",
+      introLabel: "Perché questa pagina",
+      why1: "Questo design system nasce da un progetto reale, non da un esercizio: è il linguaggio con cui è costruito il mio CV digitale. Ogni token qui dentro è in produzione, ogni componente è servito da una pagina vera, e ogni numero sul contrasto è stato misurato sui pixel resi invece che dichiarato in una tabella.",
+      why2: "Le demo importano i fogli di stile veri dei componenti, non copie. È una scelta scomoda — obbliga a spegnere caso per caso le regole di pagina — ma è l'unica che impedisce alla vetrina di invecchiare in silenzio mentre il sistema va avanti.",
       modeLabel: "Guarda il sistema in:",
       modeHint:
         "Cambia l'accento di tutte le demo, tranne il prototipo hero: quello ha l'accento fissato su Web & UX Designer nel suo stesso foglio di stile, ed è fedele lasciarlo così.",
@@ -343,8 +345,10 @@ const t = it
   : {
       title: "Design System",
       lead: "The visual language of the new CV: tokens, components, states, mobile behaviour and motion. Every demo below uses the components' real CSS, not a copy — if the system changes, this page changes with it.",
-      pills: ["/lab/home", "/lab/<lens>", "/lab/hero", "/work"],
       tocTitle: "Contents",
+      introLabel: "Why this page",
+      why1: "This design system comes from a real project, not an exercise: it is the language my digital CV is built with. Every token in here ships, every component is served by a real page, and every contrast figure was measured on rendered pixels rather than declared in a table.",
+      why2: "The demos import the components' real stylesheets, not copies. It is the awkward choice — it forces page-level rules to be switched off case by case — but it is the only one that stops the showcase from ageing in silence while the system moves on.",
       modeLabel: "View the system in:",
       modeHint:
         "Switches the accent for every demo except the hero prototype: that one pins its accent to Web & UX Designer in its own stylesheet, and leaving it there is the faithful choice.",
@@ -382,6 +386,10 @@ const t = it
     };
 
 const NAV = [
+  {
+    label: it ? "Introduzione" : "Introduction",
+    items: [{ id: "intro", label: t.introLabel }],
+  },
   {
     label: t.secFoundations,
     items: [
@@ -502,13 +510,16 @@ const NAV = [
     </details>
 
     <main class="ds-main" id="main-content">
-      <div class="ds-head">
-        <h1 class="ds-head__title">{t.title}</h1>
-        <p class="ds-head__lead">{t.lead}</p>
-        <div class="ds-head__meta">
-          {t.pills.map((p) => <span class="ds-pill">{p}</span>)}
-        </div>
-
+      {
+        /* Il selettore d'accento compare solo sui pannelli marcati
+          `data-ds-accent`, cioè quelli che cambiano davvero quando cambia la
+          lente. L'elenco non è stimato: è stato misurato confrontando gli
+          stili calcolati dentro ogni `.ds-stage` fra due mode, pseudo-elementi
+          inclusi. Sugli altri 13 il selettore restava a schermo senza poter
+          fare niente. */
+      }
+      <div class="ds-toolbar" data-ds-toolbar hidden>
+        <span class="ds-toolbar__label">{t.modeLabel}</span>
         <div class="ds-modes" role="group" aria-label={t.modeLabel}>
           {
             MODES.map((m, i) => (
@@ -525,10 +536,24 @@ const NAV = [
             ))
           }
         </div>
-        <p class="ds-sub__note">{t.modeHint}</p>
       </div>
 
-      <section class="ds-panel" data-ds-panel="colore" aria-labelledby="colore-t">
+      {
+        /* Pannello di atterraggio. Non è un componente: è il perché della
+          pagina, ed è ciò che si vede prima di scegliere qualcosa
+          dall'indice. Ha un id come gli altri, quindi ci si torna dall'indice
+          e l'indirizzo resta condivisibile. */
+      }
+      <section class="ds-panel ds-intro" data-ds-panel="intro" aria-labelledby="intro-t">
+        <h1 class="ds-head__title" id="intro-t">{t.title}</h1>
+        <p class="ds-head__lead">{t.lead}</p>
+        <div class="ds-intro__why">
+          <p>{t.why1}</p>
+          <p>{t.why2}</p>
+        </div>
+      </section>
+
+      <section class="ds-panel" data-ds-accent data-ds-panel="colore" aria-labelledby="colore-t">
         <div class="ds-panel__head">
           <span class="ds-panel__group">{t.secFoundations}</span>
           <h2 class="ds-section__title" id="colore-t">{t.secColour}</h2>
@@ -564,7 +589,12 @@ const NAV = [
             {
               BASE_TOKENS.map((tok) => (
                 <li class="ds-swatch">
-                  <div class="ds-swatch__chip" style={`--ds-swatch:${tok.value}`} />
+                  {/* var() e non il valore fisso: quattro di questi cinque token
+                      sono ridefiniti da ogni lente, e stampare la stringa di
+                      `:root` mostrerebbe il colore sbagliato appena si cambia
+                      accento. È lo stesso difetto corretto il 2026-07-23 in
+                      WorkDesignSystem.astro. */}
+                  <div class="ds-swatch__chip" style={`--ds-swatch:var(${tok.name})`} />
                   <div class="ds-swatch__body">
                     <span class="ds-swatch__name">{tok.name}</span>
                     <span class="ds-swatch__value">{tok.value}</span>
@@ -722,7 +752,7 @@ const NAV = [
         </div>
       </section>
 
-      <section class="ds-panel" data-ds-panel="forma" aria-labelledby="forma-t">
+      <section class="ds-panel" data-ds-accent data-ds-panel="forma" aria-labelledby="forma-t">
         <div class="ds-panel__head">
           <span class="ds-panel__group">{t.secFoundations}</span>
           <h2 class="ds-section__title" id="forma-t">{t.secShape}</h2>
@@ -842,6 +872,7 @@ const NAV = [
 
       <section
         class="ds-panel"
+        data-ds-accent
         data-ds-panel="ingresso-sezione-lente"
         aria-labelledby="ingresso-sezione-lente-t"
       >
@@ -889,7 +920,12 @@ const NAV = [
         </div>
       </section>
 
-      <section class="ds-panel" data-ds-panel="ingresso-cta" aria-labelledby="ingresso-cta-t">
+      <section
+        class="ds-panel"
+        data-ds-accent
+        data-ds-panel="ingresso-cta"
+        aria-labelledby="ingresso-cta-t"
+      >
         <div class="ds-panel__head">
           <span class="ds-panel__group">{t.secHome}<span class="ds-origin">lh-*</span></span>
           <h2 class="ds-section__title" id="ingresso-cta-t">
@@ -909,17 +945,25 @@ const NAV = [
           }
         </p>
         <div class="ds-stage">
+          {
+            /* `.lh-section[data-mode]` e non il solo `.lh`: --accent è definito
+              dalla sezione, non dalla radice, perché nella pagina vera ogni
+              sezione porta la propria lente. Senza questo involucro il
+              bottone resta arancione qualunque accento si scelga. */
+          }
           <div class="lh">
-            <div class="ds-stage__row">
-              <div class="ds-case">
-                <p class="ds-label">{it ? "primaria — riposo" : "primary — resting"}</p>
-                <a class="lh-cta" href="#ingresso">GO to Web & UX Designer</a>
-              </div>
-              <div class="ds-case">
-                <p class="ds-label">{it ? "secondaria — riposo" : "secondary — resting"}</p>
-                <a class="lh-cta lh-cta--ghost" href="#ingresso">
-                  {it ? "Esplora il portfolio" : "Explore the portfolio"}
-                </a>
+            <div class="lh-section" data-mode="creative" style="min-height:0;padding:0;">
+              <div class="ds-stage__row">
+                <div class="ds-case">
+                  <p class="ds-label">{it ? "primaria — riposo" : "primary — resting"}</p>
+                  <a class="lh-cta" href="#ingresso">GO to Web & UX Designer</a>
+                </div>
+                <div class="ds-case">
+                  <p class="ds-label">{it ? "secondaria — riposo" : "secondary — resting"}</p>
+                  <a class="lh-cta lh-cta--ghost" href="#ingresso">
+                    {it ? "Esplora il portfolio" : "Explore the portfolio"}
+                  </a>
+                </div>
               </div>
             </div>
           </div>
@@ -966,6 +1010,7 @@ const NAV = [
 
       <section
         class="ds-panel"
+        data-ds-accent
         data-ds-panel="lente-intestazione"
         aria-labelledby="lente-intestazione-t"
       >
@@ -998,6 +1043,7 @@ const NAV = [
 
       <section
         class="ds-panel"
+        data-ds-accent
         data-ds-panel="lente-dove-lavora-ora"
         aria-labelledby="lente-dove-lavora-ora-t"
       >
@@ -1032,7 +1078,12 @@ const NAV = [
         </div>
       </section>
 
-      <section class="ds-panel" data-ds-panel="lente-bottoni" aria-labelledby="lente-bottoni-t">
+      <section
+        class="ds-panel"
+        data-ds-accent
+        data-ds-panel="lente-bottoni"
+        aria-labelledby="lente-bottoni-t"
+      >
         <div class="ds-panel__head">
           <span class="ds-panel__group">{t.secLens}<span class="ds-origin">lc-*</span></span>
           <h2 class="ds-section__title" id="lente-bottoni-t">
@@ -1063,7 +1114,12 @@ const NAV = [
         </div>
       </section>
 
-      <section class="ds-panel" data-ds-panel="lente-tendina" aria-labelledby="lente-tendina-t">
+      <section
+        class="ds-panel"
+        data-ds-accent
+        data-ds-panel="lente-tendina"
+        aria-labelledby="lente-tendina-t"
+      >
         <div class="ds-panel__head">
           <span class="ds-panel__group">{t.secLens}<span class="ds-origin">lc-*</span></span>
           <h2 class="ds-section__title" id="lente-tendina-t">
@@ -1111,7 +1167,12 @@ const NAV = [
         </div>
       </section>
 
-      <section class="ds-panel" data-ds-panel="lente-sezione" aria-labelledby="lente-sezione-t">
+      <section
+        class="ds-panel"
+        data-ds-accent
+        data-ds-panel="lente-sezione"
+        aria-labelledby="lente-sezione-t"
+      >
         <div class="ds-panel__head">
           <span class="ds-panel__group">{t.secLens}<span class="ds-origin">lc-*</span></span>
           <h2 class="ds-section__title" id="lente-sezione-t">
@@ -1140,6 +1201,7 @@ const NAV = [
 
       <section
         class="ds-panel"
+        data-ds-accent
         data-ds-panel="lente-esperienza"
         aria-labelledby="lente-esperienza-t"
       >
@@ -1282,7 +1344,12 @@ const NAV = [
         </div>
       </section>
 
-      <section class="ds-panel" data-ds-panel="lente-chip" aria-labelledby="lente-chip-t">
+      <section
+        class="ds-panel"
+        data-ds-accent
+        data-ds-panel="lente-chip"
+        aria-labelledby="lente-chip-t"
+      >
         <div class="ds-panel__head">
           <span class="ds-panel__group">{t.secLens}<span class="ds-origin">lc-*</span></span>
           <h2 class="ds-section__title" id="lente-chip-t">
@@ -1323,7 +1390,12 @@ const NAV = [
         </div>
       </section>
 
-      <section class="ds-panel" data-ds-panel="lente-badge-ai" aria-labelledby="lente-badge-ai-t">
+      <section
+        class="ds-panel"
+        data-ds-accent
+        data-ds-panel="lente-badge-ai"
+        aria-labelledby="lente-badge-ai-t"
+      >
         <div class="ds-panel__head">
           <span class="ds-panel__group">{t.secLens}<span class="ds-origin">lc-*</span></span>
           <h2 class="ds-section__title" id="lente-badge-ai-t">{it ? "Badge AI" : "AI badge"}</h2>
@@ -1341,6 +1413,7 @@ const NAV = [
 
       <section
         class="ds-panel"
+        data-ds-accent
         data-ds-panel="lente-cronologia"
         aria-labelledby="lente-cronologia-t"
       >
@@ -1484,7 +1557,12 @@ const NAV = [
         </div>
       </section>
 
-      <section class="ds-panel" data-ds-panel="work-card" aria-labelledby="work-card-t">
+      <section
+        class="ds-panel"
+        data-ds-accent
+        data-ds-panel="work-card"
+        aria-labelledby="work-card-t"
+      >
         <div class="ds-panel__head">
           <span class="ds-panel__group">{t.secWork}<span class="ds-origin">work-*</span></span>
           <h2 class="ds-section__title" id="work-card-t">{it ? "Card indice" : "Index card"}</h2>
@@ -1507,7 +1585,12 @@ const NAV = [
         </div>
       </section>
 
-      <section class="ds-panel" data-ds-panel="work-nav" aria-labelledby="work-nav-t">
+      <section
+        class="ds-panel"
+        data-ds-accent
+        data-ds-panel="work-nav"
+        aria-labelledby="work-nav-t"
+      >
         <div class="ds-panel__head">
           <span class="ds-panel__group">{t.secWork}<span class="ds-origin">work-*</span></span>
           <h2 class="ds-section__title" id="work-nav-t">
@@ -1528,7 +1611,12 @@ const NAV = [
         </div>
       </section>
 
-      <section class="ds-panel" data-ds-panel="work-decisione" aria-labelledby="work-decisione-t">
+      <section
+        class="ds-panel"
+        data-ds-accent
+        data-ds-panel="work-decisione"
+        aria-labelledby="work-decisione-t"
+      >
         <div class="ds-panel__head">
           <span class="ds-panel__group">{t.secWork}<span class="ds-origin">work-*</span></span>
           <h2 class="ds-section__title" id="work-decisione-t">
@@ -1757,11 +1845,22 @@ const NAV = [
   const wide = window.matchMedia("(min-width: 60rem)");
 
   if (panels.length && navLinks.length) {
+    const toolbar = document.querySelector<HTMLElement>("[data-ds-toolbar]");
+
     const show = (id: string, push: boolean) => {
-      const target = panels.some((p) => p.dataset.dsPanel === id) ? id : panels[0].dataset.dsPanel!;
+      // Senza hash si atterra sull'introduzione, non sul primo componente:
+      // chi arriva deve prima sapere cos'è questa pagina.
+      const target = panels.some((p) => p.dataset.dsPanel === id) ? id : "intro";
       panels.forEach((p) => {
         p.hidden = p.dataset.dsPanel !== target;
       });
+      // Il selettore d'accento esiste solo dove cambia qualcosa: sugli altri
+      // pannelli sarebbe un comando che non fa niente, e un comando inerte è
+      // peggio di un comando assente.
+      if (toolbar) {
+        const active = panels.find((p) => p.dataset.dsPanel === target);
+        toolbar.hidden = !active?.hasAttribute("data-ds-accent");
+      }
       navLinks.forEach((a) => {
         // aria-current e non una classe: lo stato corrente deve arrivare
         // anche a chi il filo d'accento non lo vede.

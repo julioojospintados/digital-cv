@@ -168,12 +168,16 @@
   .ds-side {
     position: sticky;
     /* 3.5rem = altezza della barra in cima: l'indice si ferma sotto di lei
-       invece di scorrerci dietro. */
+       invece di scorrerci dietro. Il padding sopra gli dà lo stesso respiro
+       che ha il pannello accanto, che parte più in basso. */
     top: 3.5rem;
-    max-height: calc(100vh - 4.5rem);
+    max-height: calc(100vh - 5.5rem);
     overflow-y: auto;
     overscroll-behavior: contain;
-    padding-right: 0.5rem;
+    padding-top: 2rem;
+    padding-right: 1rem;
+    padding-bottom: 2rem;
+    border-right: 1px solid var(--ds-line);
   }
 }
 
@@ -217,26 +221,33 @@
 }
 
 .ds-side__group {
-  margin-top: 1.25rem;
+  /* 2rem fra un gruppo e l'altro: sotto quella misura i titoli di gruppo si
+     leggevano come voci della lista precedente invece che come intestazioni.
+     Il divisore sopra fa il resto del lavoro. */
+  margin-top: 2rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--ds-line);
 }
 
 .ds-side__group:first-of-type {
-  margin-top: 0.75rem;
-}
-
-@media (min-width: 60rem) {
-  .ds-side__group:first-of-type {
-    margin-top: 0;
-  }
+  margin-top: 0;
+  padding-top: 0;
+  border-top: 0;
 }
 
 .ds-side__title {
-  margin: 0 0 0.4rem;
+  margin: 0 0 0.6rem;
+  padding-left: 0.6rem;
   font-family: var(--font-mono);
-  font-size: var(--fs-10);
-  letter-spacing: 0.16em;
+  /* --fs-12 e non --fs-10: è un'intestazione di sezione, non un badge di due
+     lettere. Il pavimento a 10px vale per sigle brevissime, e "COMPONENTI —
+     CV PER LENTE" non lo è. Peso e inchiostro pieno completano lo stacco:
+     senza, restava più piccolo delle voci che deve sovrastare. */
+  font-size: var(--fs-12);
+  font-weight: 700;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--ds-muted);
+  color: var(--ds-ink);
 }
 
 .ds-side__list {
@@ -244,7 +255,7 @@
   padding: 0;
   margin: 0;
   display: grid;
-  gap: 0.1rem;
+  gap: 0.15rem;
 }
 
 .ds-side__link {
@@ -253,8 +264,8 @@
   width: 100%;
   /* 2rem = 32px: sopra i 24px di 2.5.8, e la lista resta compatta abbastanza
      da vedersi quasi tutta senza scorrere. */
-  min-height: 2rem;
-  padding: 0.3rem 0.6rem;
+  min-height: 2.25rem;
+  padding: 0.4rem 0.7rem;
   border: 0;
   border-left: 2px solid transparent;
   border-radius: 0 var(--radius-4) var(--radius-4) 0;
@@ -758,4 +769,59 @@
   font-size: var(--fs-12);
   color: var(--ds-muted);
   margin: 0 0 0.75rem;
+}
+
+/* ── Barra del pannello: il selettore d'accento ──────────────────────────
+   Compare solo sui pannelli marcati `data-ds-accent`. `hidden` è messo dallo
+   script, quindi senza JavaScript resta visibile: è un comando che funziona
+   comunque, solo mostrato dove non serve. */
+.ds-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  margin-bottom: 2rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--ds-line);
+}
+
+.ds-toolbar[hidden] {
+  display: none;
+}
+
+.ds-toolbar__label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ds-muted);
+}
+
+.ds-toolbar .ds-modes {
+  margin-top: 0;
+}
+
+/* ── Pannello di atterraggio ─────────────────────────────────────────── */
+
+.ds-intro__why {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--ds-line);
+  max-width: 60rem;
+}
+
+.ds-intro__why p {
+  margin: 0;
+  font-size: var(--fs-16);
+  line-height: 1.7;
+  color: var(--ds-muted);
+}
+
+.ds-intro__why p + p {
+  margin-top: 1rem;
+}
+
+/* Il pannello parte sotto la barra fissa con lo stesso respiro dell'indice. */
+.ds-main {
+  padding-top: 2rem;
 }
