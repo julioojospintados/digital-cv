@@ -1105,3 +1105,177 @@
   font: inherit;
   white-space: pre;
 }
+
+/* ── Anatomia ────────────────────────────────────────────────────────────
+   La scheda dice quando usare un componente, l'anatomia dice di cosa è
+   fatto. Serve solo dove il componente è composto: su un badge di due
+   lettere sarebbe una riga sola e un comando inutile.
+
+   L'elenco è sempre leggibile — classe più ruolo, nell'ordine del markup.
+   I numeri sulla demo sono un aiuto in più, non il contenuto: nascono da un
+   comando, e senza JavaScript resta l'elenco. */
+
+.ds-anatomy {
+  margin-top: 1.25rem;
+  padding: 1rem 1.15rem;
+  border: 1px solid var(--ds-line);
+  border-radius: var(--radius-16);
+  background: rgba(0, 0, 0, 0.12);
+}
+
+.ds-anatomy__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.ds-anatomy__label {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-10);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ds-muted);
+}
+
+/* Stesso comando del pulsante Copia: due comandi con lo stesso peso nella
+   stessa colonna devono avere anche la stessa forma. */
+.ds-anatomy__toggle {
+  flex: none;
+  padding: 0.35rem 0.8rem;
+  border: 1px solid var(--ds-line-strong);
+  border-radius: var(--radius-4);
+  background: transparent;
+  color: var(--ds-ink);
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  cursor: pointer;
+  transition:
+    border-color 0.18s ease,
+    background-color 0.18s ease,
+    transform 0.08s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .ds-anatomy__toggle:hover {
+    border-color: var(--ds-ink);
+    background: rgba(255, 255, 255, 0.06);
+  }
+}
+
+.ds-anatomy__toggle:active {
+  transform: translateY(1px);
+}
+
+/* Premuto non è solo colore (1.4.1): cambia anche il riempimento, e
+   aria-pressed lo dice a chi non lo vede. */
+.ds-anatomy__toggle[aria-pressed="true"] {
+  border-color: var(--ds-ink);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-anatomy__toggle {
+    transition: none;
+  }
+
+  .ds-anatomy__toggle:active {
+    transform: none;
+  }
+}
+
+.ds-anatomy__hint {
+  margin: 0.5rem 0 0.9rem;
+  font-size: var(--fs-12);
+  line-height: 1.55;
+  color: var(--ds-muted);
+}
+
+.ds-anatomy__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.75rem;
+  counter-reset: none;
+}
+
+@media (min-width: 56rem) {
+  .ds-anatomy__list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem 2rem;
+  }
+}
+
+.ds-anatomy__item {
+  display: grid;
+  grid-template-columns: 1.5rem minmax(0, 1fr);
+  gap: 0.2rem 0.6rem;
+  align-items: start;
+}
+
+.ds-anatomy__n {
+  grid-row: span 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border: 1px solid var(--ds-line-strong);
+  border-radius: 999rem;
+  font-family: var(--font-mono);
+  font-size: var(--fs-10);
+  font-variant-numeric: tabular-nums;
+  color: var(--ds-ink);
+}
+
+.ds-anatomy__cls {
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  color: var(--ds-ink);
+  word-break: break-word;
+}
+
+.ds-anatomy__role {
+  font-size: var(--fs-12);
+  line-height: 1.55;
+  color: var(--ds-muted);
+}
+
+/* ── I numeri sulla demo, quando il comando è premuto ──────────────────
+   `position: relative` è l'unica proprietà che questa modalità aggiunge al
+   componente, e serve solo a dare al numero un angolo cui agganciarsi: non
+   sposta niente, perché un elemento statico che diventa relativo resta
+   dov'era. Il contorno è tratteggiato e non pieno per non essere scambiato
+   per un bordo del componente. */
+.ds-panel[data-anatomy] .ds-stage [data-ds-part] {
+  position: relative;
+  outline: 1px dashed var(--ds-line-strong);
+  outline-offset: 3px;
+}
+
+.ds-anatomy__badge {
+  position: absolute;
+  top: 0;
+  left: 0;
+  translate: -50% -50%;
+  z-index: 6;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 999rem;
+  /* Inchiostro su fondo pieno e non accento: il numero deve leggersi uguale
+     sopra qualunque componente, compresi quelli che l'accento ce l'hanno
+     già addosso. */
+  background: rgba(8, 40, 36, 1);
+  border: 1px solid var(--ds-line-strong);
+  color: var(--ds-ink);
+  font-family: var(--font-mono);
+  font-size: var(--fs-10);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  pointer-events: none;
+}

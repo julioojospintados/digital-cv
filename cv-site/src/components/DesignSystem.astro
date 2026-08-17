@@ -364,6 +364,10 @@ const t = it
       specUse: "Quando usarlo",
       specDont: "Da non fare",
       specA11y: "Accessibilità",
+      anatomy: "Anatomia",
+      anatomyShow: "Mostra i numeri",
+      anatomyHint:
+        "Le parti nell'ordine in cui stanno nel markup. Premi il comando per vederle numerate sulla demo qui sopra.",
       introLabel: "Perché questa pagina",
       why1: "Questo design system nasce da un progetto reale, non da un esercizio: è il linguaggio con cui è costruito il mio CV digitale. Ogni token qui dentro è in produzione, ogni componente è servito da una pagina vera, e ogni numero sul contrasto è stato misurato sui pixel resi invece che dichiarato in una tabella.",
       why3: "Cosa cercare, se stai valutando: i token hanno un ruolo dichiarato e non un valore a caso, gli stati sono gli stessi su ogni comando, le decisioni sui colori riportano il numero misurato e non un aggettivo, e dove il sistema ha sbagliato è scritto invece che nascosto — la sezione Accessibilità ne conserva un caso reale.",
@@ -411,6 +415,10 @@ const t = it
       specUse: "When to use it",
       specDont: "Do not",
       specA11y: "Accessibility",
+      anatomy: "Anatomy",
+      anatomyShow: "Show the numbers",
+      anatomyHint:
+        "The parts in the order they appear in the markup. Press the control to see them numbered on the demo above.",
       introLabel: "Why this page",
       why1: "This design system comes from a real project, not an exercise: it is the language my digital CV is built with. Every token in here ships, every component is served by a real page, and every contrast figure was measured on rendered pixels rather than declared in a table.",
       why3: "What to look for, if you are assessing this: tokens carry a declared role rather than an arbitrary value, states are identical across every control, colour decisions cite the measured figure rather than an adjective, and where the system got it wrong it is written down instead of hidden — the Accessibility section keeps one real case.",
@@ -1030,21 +1038,21 @@ const NAV = [
               data-ds-drop="style"
             >
               <div class="lh-section__copy">
-                <p class="lh-section__initial" aria-hidden="true">WD</p>
-                <h2 class="lh-section__title">
+                <p class="lh-section__initial" aria-hidden="true" data-ds-part="1">WD</p>
+                <h2 class="lh-section__title" data-ds-part="2">
                   {it ? "Brand," : "Brand,"}
                   <br />
                   {it ? "estetica e interfacce." : "aesthetics and interfaces."}
                 </h2>
-                <p class="lh-section__eyebrow">Web & UX Designer</p>
-                <p class="lh-section__text">
+                <p class="lh-section__eyebrow" data-ds-part="3">Web & UX Designer</p>
+                <p class="lh-section__text" data-ds-part="4">
                   {
                     it
                       ? "Di natura cerco di risolvere problemi. Questa deformazione professionale mi ha portato ad appassionarmi alla UX/UI e a unirla all'estetica."
                       : "By nature I try to solve problems. That professional bias led me to UX/UI and to pairing it with aesthetics."
                   }
                 </p>
-                <div class="lh-section__actions">
+                <div class="lh-section__actions" data-ds-part="5">
                   <a class="lh-cta" href="#ingresso">GO to Web & UX Designer</a>
                   <a class="lh-cta lh-cta--ghost" href="#ingresso">
                     {it ? "Esplora il portfolio" : "Explore the portfolio"}
@@ -1053,6 +1061,72 @@ const NAV = [
               </div>
             </section>
           </div>
+        </div>
+        <div class="ds-anatomy" data-ds-anatomy>
+          <div class="ds-anatomy__head">
+            <p class="ds-anatomy__label">{t.anatomy}</p>
+            <button class="ds-anatomy__toggle" type="button" aria-pressed="false" hidden>
+              {t.anatomyShow}
+            </button>
+          </div>
+          <p class="ds-anatomy__hint">{t.anatomyHint}</p>
+          <ol class="ds-anatomy__list">
+            <li class="ds-anatomy__item">
+              <span class="ds-anatomy__n" aria-hidden="true">1</span>
+              <code class="ds-anatomy__cls">lh-section__initial</code>
+              <span class="ds-anatomy__role"
+                >{
+                  it
+                    ? "La sigla in filigrana. Decorativa, aria-hidden."
+                    : "The watermark initials. Decorative, aria-hidden."
+                }</span
+              >
+            </li>
+            <li class="ds-anatomy__item">
+              <span class="ds-anatomy__n" aria-hidden="true">2</span>
+              <code class="ds-anatomy__cls">lh-section__title</code>
+              <span class="ds-anatomy__role"
+                >{
+                  it
+                    ? "Il titolo, spezzato a mano su due righe."
+                    : "The title, hand-broken across two lines."
+                }</span
+              >
+            </li>
+            <li class="ds-anatomy__item">
+              <span class="ds-anatomy__n" aria-hidden="true">3</span>
+              <code class="ds-anatomy__cls">lh-section__eyebrow</code>
+              <span class="ds-anatomy__role"
+                >{
+                  it
+                    ? "Il ruolo che dà il nome alla lente."
+                    : "The role that gives the lens its name."
+                }</span
+              >
+            </li>
+            <li class="ds-anatomy__item">
+              <span class="ds-anatomy__n" aria-hidden="true">4</span>
+              <code class="ds-anatomy__cls">lh-section__text</code>
+              <span class="ds-anatomy__role"
+                >{
+                  it
+                    ? "Il paragrafo: una idea, non un riassunto."
+                    : "The paragraph: one idea, not a summary."
+                }</span
+              >
+            </li>
+            <li class="ds-anatomy__item">
+              <span class="ds-anatomy__n" aria-hidden="true">5</span>
+              <code class="ds-anatomy__cls">lh-section__actions</code>
+              <span class="ds-anatomy__role"
+                >{
+                  it
+                    ? "Le due CTA — primaria e secondaria, mai due primarie."
+                    : "The two CTAs — primary and secondary, never two primaries."
+                }</span
+              >
+            </li>
+          </ol>
         </div>
         <div class="ds-spec">
           <div class="ds-spec__row ds-spec__row--wide">
@@ -1576,15 +1650,15 @@ const NAV = [
         <div class="ds-stage ds-stage--dropdown">
           <div class="lc">
             <details class="lc-lens" open data-ds-snippet data-ds-drop="open">
-              <summary class="lc-lens__trigger">
-                <span class="lc-lens__dot" aria-hidden="true"></span>
-                <span class="lc-lens__label">
+              <summary class="lc-lens__trigger" data-ds-part="1">
+                <span class="lc-lens__dot" aria-hidden="true" data-ds-part="2"></span>
+                <span class="lc-lens__label" data-ds-part="3">
                   {it ? "Stai vedendo:" : "You are viewing:"}
                   <b>Web & UX Designer</b>
                 </span>
-                <span class="lc-lens__chevron" aria-hidden="true">›</span>
+                <span class="lc-lens__chevron" aria-hidden="true" data-ds-part="4">›</span>
               </summary>
-              <ul class="lc-lens__list" role="list">
+              <ul class="lc-lens__list" role="list" data-ds-part="5">
                 {
                   MODES.map((m, i) => (
                     <li>
@@ -1603,6 +1677,72 @@ const NAV = [
               </ul>
             </details>
           </div>
+        </div>
+        <div class="ds-anatomy" data-ds-anatomy>
+          <div class="ds-anatomy__head">
+            <p class="ds-anatomy__label">{t.anatomy}</p>
+            <button class="ds-anatomy__toggle" type="button" aria-pressed="false" hidden>
+              {t.anatomyShow}
+            </button>
+          </div>
+          <p class="ds-anatomy__hint">{t.anatomyHint}</p>
+          <ol class="ds-anatomy__list">
+            <li class="ds-anatomy__item">
+              <span class="ds-anatomy__n" aria-hidden="true">1</span>
+              <code class="ds-anatomy__cls">lc-lens__trigger</code>
+              <span class="ds-anatomy__role"
+                >{
+                  it
+                    ? "Il summary: è lui a ricevere il click e il tasto Invio, senza handler."
+                    : "The summary: it receives the click and the Enter key, with no handler."
+                }</span
+              >
+            </li>
+            <li class="ds-anatomy__item">
+              <span class="ds-anatomy__n" aria-hidden="true">2</span>
+              <code class="ds-anatomy__cls">lc-lens__dot</code>
+              <span class="ds-anatomy__role"
+                >{
+                  it
+                    ? "Il pallino della lente corrente. Decorativo — la lente è già scritta accanto."
+                    : "The current lens's dot. Decorative — the lens is already written beside it."
+                }</span
+              >
+            </li>
+            <li class="ds-anatomy__item">
+              <span class="ds-anatomy__n" aria-hidden="true">3</span>
+              <code class="ds-anatomy__cls">lc-lens__label</code>
+              <span class="ds-anatomy__role"
+                >{
+                  it
+                    ? "«Stai vedendo: X». Dice lo stato prima di offrire il cambio."
+                    : "«You are viewing: X». It states the state before offering the change."
+                }</span
+              >
+            </li>
+            <li class="ds-anatomy__item">
+              <span class="ds-anatomy__n" aria-hidden="true">4</span>
+              <code class="ds-anatomy__cls">lc-lens__chevron</code>
+              <span class="ds-anatomy__role"
+                >{
+                  it
+                    ? "Ruota all'apertura. aria-hidden: lo stato lo porta già details."
+                    : "It rotates on open. aria-hidden: details already carries the state."
+                }</span
+              >
+            </li>
+            <li class="ds-anatomy__item">
+              <span class="ds-anatomy__n" aria-hidden="true">5</span>
+              <code class="ds-anatomy__cls">lc-lens__list</code>
+              <span class="ds-anatomy__role"
+                >{
+                  it
+                    ? "Le opzioni, che sono link veri: funzionano anche senza JavaScript."
+                    : "The options, which are real links: they work without JavaScript too."
+                }</span
+              >
+            </li>
+          </ol>
         </div>
         <div class="ds-spec">
           <div class="ds-spec__row ds-spec__row--wide">
@@ -1737,12 +1877,12 @@ const NAV = [
             <div class="lc-jobs" data-ds-snippet>
               <details class="lc-job" open>
                 <summary class="lc-job__summary">
-                  <span class="lc-job__years">2026 — {it ? "oggi" : "today"}</span>
+                  <span class="lc-job__years" data-ds-part="1">2026 — {it ? "oggi" : "today"}</span>
                   <span class="lc-job__main">
-                    <h3 class="lc-job__title">
+                    <h3 class="lc-job__title" data-ds-part="2">
                       <b>Digital CV</b>
                       <span class="lc-job__role"> — AI Workflow Designer</span>
-                      <span class="lc-ai">
+                      <span class="lc-ai" data-ds-part="3">
                         AI
                         <span class="lc-sr">
                           {
@@ -1753,8 +1893,8 @@ const NAV = [
                         </span>
                       </span>
                     </h3>
-                    <span class="lc-job__where">Torino, Italia · Remote</span>
-                    <span class="lc-job__lead">
+                    <span class="lc-job__where" data-ds-part="4">Torino, Italia · Remote</span>
+                    <span class="lc-job__lead" data-ds-part="5">
                       {
                         it
                           ? "Ho costruito questo CV interattivo end-to-end: architettura, UI, animazioni, server MCP e API HTTP."
@@ -1762,10 +1902,10 @@ const NAV = [
                       }
                     </span>
                   </span>
-                  <span class="lc-job__chevron" aria-hidden="true"></span>
+                  <span class="lc-job__chevron" aria-hidden="true" data-ds-part="6"></span>
                 </summary>
                 <div class="lc-job__body">
-                  <ul class="lc-job__points" role="list">
+                  <ul class="lc-job__points" role="list" data-ds-part="7">
                     <li>
                       {
                         it
@@ -1784,6 +1924,7 @@ const NAV = [
                   <ul
                     class="lc-chips"
                     role="list"
+                    data-ds-part="8"
                     aria-label={it ? "Strumenti e tecnologie" : "Tools and technologies"}
                   >
                     <li class="lc-chip">MCP</li>
@@ -1854,6 +1995,101 @@ const NAV = [
                 : "Three entries have no bullet points: opening a panel to reveal two chips is an affordance that lies, and lying about what is behind a click is worse than not offering the click. Those rows stay flat, chips already visible."
             }
           </p>
+        </div>
+        <div class="ds-anatomy" data-ds-anatomy>
+          <div class="ds-anatomy__head">
+            <p class="ds-anatomy__label">{t.anatomy}</p>
+            <button class="ds-anatomy__toggle" type="button" aria-pressed="false" hidden>
+              {t.anatomyShow}
+            </button>
+          </div>
+          <p class="ds-anatomy__hint">{t.anatomyHint}</p>
+          <ol class="ds-anatomy__list">
+            <li class="ds-anatomy__item">
+              <span class="ds-anatomy__n" aria-hidden="true">1</span>
+              <code class="ds-anatomy__cls">lc-job__years</code>
+              <span class="ds-anatomy__role"
+                >{
+                  it
+                    ? "La fascia di anni, in cifre tabulari perché le date si confrontino a colpo d'occhio."
+                    : "The year range, in tabular figures so dates compare at a glance."
+                }</span
+              >
+            </li>
+            <li class="ds-anatomy__item">
+              <span class="ds-anatomy__n" aria-hidden="true">2</span>
+              <code class="ds-anatomy__cls">lc-job__title</code>
+              <span class="ds-anatomy__role"
+                >{
+                  it
+                    ? "Azienda in grassetto, ruolo di seguito: l'azienda è ciò che si cerca per prima."
+                    : "Company in bold, role after it: the company is what gets looked for first."
+                }</span
+              >
+            </li>
+            <li class="ds-anatomy__item">
+              <span class="ds-anatomy__n" aria-hidden="true">3</span>
+              <code class="ds-anatomy__cls">lc-ai</code>
+              <span class="ds-anatomy__role"
+                >{
+                  it
+                    ? "Il badge, solo dove l'AI era davvero nel flusso."
+                    : "The badge, only where AI was actually in the flow."
+                }</span
+              >
+            </li>
+            <li class="ds-anatomy__item">
+              <span class="ds-anatomy__n" aria-hidden="true">4</span>
+              <code class="ds-anatomy__cls">lc-job__where</code>
+              <span class="ds-anatomy__role"
+                >{it ? "Luogo e modalità di lavoro." : "Place and working arrangement."}</span
+              >
+            </li>
+            <li class="ds-anatomy__item">
+              <span class="ds-anatomy__n" aria-hidden="true">5</span>
+              <code class="ds-anatomy__cls">lc-job__lead</code>
+              <span class="ds-anatomy__role"
+                >{
+                  it
+                    ? "La riga di prova. È qui che il sommario smette di essere un titolo."
+                    : "The proof line. This is where the summary stops being a heading."
+                }</span
+              >
+            </li>
+            <li class="ds-anatomy__item">
+              <span class="ds-anatomy__n" aria-hidden="true">6</span>
+              <code class="ds-anatomy__cls">lc-job__chevron</code>
+              <span class="ds-anatomy__role"
+                >{
+                  it
+                    ? "L'unico segnale che c'è dell'altro sotto."
+                    : "The only signal that there is more below."
+                }</span
+              >
+            </li>
+            <li class="ds-anatomy__item">
+              <span class="ds-anatomy__n" aria-hidden="true">7</span>
+              <code class="ds-anatomy__cls">lc-job__points</code>
+              <span class="ds-anatomy__role"
+                >{
+                  it
+                    ? "Gli highlight, visibili da aperto."
+                    : "The bullet points, visible once open."
+                }</span
+              >
+            </li>
+            <li class="ds-anatomy__item">
+              <span class="ds-anatomy__n" aria-hidden="true">8</span>
+              <code class="ds-anatomy__cls">lc-chips</code>
+              <span class="ds-anatomy__role"
+                >{
+                  it
+                    ? "Le tecnologie, col comando +N oltre la sesta."
+                    : "The technologies, with the +N control past the sixth."
+                }</span
+              >
+            </li>
+          </ol>
         </div>
         <div class="ds-spec">
           <div class="ds-spec__row ds-spec__row--wide">
@@ -2430,6 +2666,7 @@ const NAV = [
           <header class="work-hero" data-ds-snippet>
             <img
               class="work-hero__icon"
+              data-ds-part="1"
               src="/knolling/laptop.webp"
               alt=""
               aria-hidden="true"
@@ -2437,19 +2674,94 @@ const NAV = [
               decoding="async"
               style="aspect-ratio: 524 / 476;"
             />
-            <p class="work-hero__eyebrow">Case Study</p>
-            <h1 class="work-hero__title">Digital CV</h1>
-            <p class="work-hero__role">AI Workflow Designer</p>
-            <div class="work-hero__tags">
+            <p class="work-hero__eyebrow" data-ds-part="2">Case Study</p>
+            <h1 class="work-hero__title" data-ds-part="3">Digital CV</h1>
+            <p class="work-hero__role" data-ds-part="4">AI Workflow Designer</p>
+            <div class="work-hero__tags" data-ds-part="5">
               <span class="work-tag">Astro</span>
               <span class="work-tag">Lit</span>
               <span class="work-tag">GSAP</span>
             </div>
-            <a href="#work-testata" class="work-hero__ds-link">
+            <a href="#work-testata" class="work-hero__ds-link" data-ds-part="6">
               {it ? "Esplora il design system" : "Explore the design system"}
               <span class="work-chevron work-chevron--down" aria-hidden="true"></span>
             </a>
           </header>
+        </div>
+        <div class="ds-anatomy" data-ds-anatomy>
+          <div class="ds-anatomy__head">
+            <p class="ds-anatomy__label">{t.anatomy}</p>
+            <button class="ds-anatomy__toggle" type="button" aria-pressed="false" hidden>
+              {t.anatomyShow}
+            </button>
+          </div>
+          <p class="ds-anatomy__hint">{t.anatomyHint}</p>
+          <ol class="ds-anatomy__list">
+            <li class="ds-anatomy__item">
+              <span class="ds-anatomy__n" aria-hidden="true">1</span>
+              <code class="ds-anatomy__cls">work-hero__icon</code>
+              <span class="ds-anatomy__role"
+                >{
+                  it
+                    ? "L'oggetto knolling del progetto, al 14% e fuori dal flusso."
+                    : "The project's knolling object, at 14% and out of the flow."
+                }</span
+              >
+            </li>
+            <li class="ds-anatomy__item">
+              <span class="ds-anatomy__n" aria-hidden="true">2</span>
+              <code class="ds-anatomy__cls">work-hero__eyebrow</code>
+              <span class="ds-anatomy__role"
+                >{
+                  it
+                    ? "L'occhiello che dice di che tipo di pagina si tratta."
+                    : "The eyebrow saying what kind of page this is."
+                }</span
+              >
+            </li>
+            <li class="ds-anatomy__item">
+              <span class="ds-anatomy__n" aria-hidden="true">3</span>
+              <code class="ds-anatomy__cls">work-hero__title</code>
+              <span class="ds-anatomy__role"
+                >{
+                  it
+                    ? "Il nome del progetto — l'unico h1 della pagina."
+                    : "The project name — the page's only h1."
+                }</span
+              >
+            </li>
+            <li class="ds-anatomy__item">
+              <span class="ds-anatomy__n" aria-hidden="true">4</span>
+              <code class="ds-anatomy__cls">work-hero__role</code>
+              <span class="ds-anatomy__role"
+                >{
+                  it ? "Il ruolo ricoperto, sotto al nome." : "The role held, under the name."
+                }</span
+              >
+            </li>
+            <li class="ds-anatomy__item">
+              <span class="ds-anatomy__n" aria-hidden="true">5</span>
+              <code class="ds-anatomy__cls">work-hero__tags</code>
+              <span class="ds-anatomy__role"
+                >{
+                  it
+                    ? "Lo stack, in tag: si scorre, non si legge."
+                    : "The stack, as tags: scanned, not read."
+                }</span
+              >
+            </li>
+            <li class="ds-anatomy__item">
+              <span class="ds-anatomy__n" aria-hidden="true">6</span>
+              <code class="ds-anatomy__cls">work-hero__ds-link</code>
+              <span class="ds-anatomy__role"
+                >{
+                  it
+                    ? "L'unica CTA della testata, e solo su questo case study."
+                    : "The header's only CTA, and only on this case study."
+                }</span
+              >
+            </li>
+          </ol>
         </div>
         <div class="ds-spec">
           <div class="ds-spec__row ds-spec__row--wide">
@@ -3363,6 +3675,56 @@ const NAV = [
       });
     });
   }
+
+  // ── Anatomia ───────────────────────────────────────────────────────────
+  // L'elenco numerato delle parti è servito dall'HTML e si legge da solo:
+  // classe più ruolo, nell'ordine del markup. Il comando aggiunge sopra la
+  // demo i numeri corrispondenti e un contorno tratteggiato su ogni parte —
+  // utile, ma non indispensabile, ed è per questo che nasce `hidden` e lo
+  // scopre lo script: senza JavaScript resta l'elenco, che è la sostanza.
+  //
+  // I numeri sono elementi inseriti qui e non `::before` sul componente: le
+  // parti hanno già i propri pseudo-elementi (la barra del titolo di
+  // sezione, la stanghetta del link, il chevron) e sovrascriverli avrebbe
+  // rotto proprio i pezzi che l'anatomia deve mostrare. Nascono dopo la
+  // generazione degli snippet, quindi non finiscono nel codice da copiare.
+  document.querySelectorAll<HTMLElement>("[data-ds-anatomy]").forEach((block) => {
+    const panel = block.closest<HTMLElement>("[data-ds-panel]");
+    const toggle = block.querySelector<HTMLButtonElement>(".ds-anatomy__toggle");
+    const parts = panel?.querySelectorAll<HTMLElement>(".ds-stage [data-ds-part]");
+    if (!panel || !toggle || !parts || parts.length === 0) return;
+
+    const en = document.documentElement.lang === "en";
+    toggle.hidden = false;
+
+    toggle.addEventListener("click", () => {
+      const on = panel.dataset.anatomy === undefined;
+      if (on) {
+        panel.dataset.anatomy = "";
+        parts.forEach((part) => {
+          const badge = document.createElement("span");
+          badge.className = "ds-anatomy__badge";
+          badge.dataset.dsBadge = "";
+          // aria-hidden: il numero è un rimando visivo all'elenco, e letto
+          // ad alta voce dentro il componente lo spezzerebbe a metà.
+          badge.setAttribute("aria-hidden", "true");
+          badge.textContent = part.dataset.dsPart ?? "";
+          part.append(badge);
+        });
+      } else {
+        delete panel.dataset.anatomy;
+        panel.querySelectorAll("[data-ds-badge]").forEach((b) => b.remove());
+      }
+      toggle.setAttribute("aria-pressed", String(on));
+      toggle.textContent = on
+        ? en
+          ? "Hide the numbers"
+          : "Nascondi i numeri"
+        : en
+          ? "Show the numbers"
+          : "Mostra i numeri";
+    });
+  });
 
   // ── La parallasse della scena knolling ─────────────────────────────────
   // Riscritta qui e non importata da lab-hero.ts: quello lavora sulla
