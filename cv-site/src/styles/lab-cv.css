@@ -1151,6 +1151,13 @@
   font-size: var(--fs-16);
   text-decoration: underline;
   text-underline-offset: 0.2em;
+  /* 20px di altezza, sotto i 24×24 di WCAG 2.2 SC 2.5.8. Qui l'eccezione
+     "inline" non vale: ogni voce è tutta bersaglio, non un link dentro una
+     frase. Stessa correzione già fatta su .work-back e .lh-cta — inline-flex
+     più min-height, senza toccare la tipografia. */
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.5rem;
 }
 
 /* ─── Nota di prova ─────────────────────────────────────────────────────── */

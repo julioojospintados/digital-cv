@@ -114,6 +114,19 @@ const PREFIXES = [
   { p: "ds-*", from: "questa pagina", file: "design-system.css" },
 ];
 
+/* ── La still-life del prototipo hero ────────────────────────────────────
+   Impianto diverso da quello dell'ingresso: là gli oggetti sono sparsi in un
+   livello piatto, qui vivono in una scena con prospettiva e un asse Z. */
+const HERO_SCENE = [
+  { src: "megaphone", x: "79%", y: "19%", w: "17%", z: -6, depth: 0.1, r: "8deg", blur: 2.8 },
+  { src: "plant", x: "17%", y: "25%", w: "13%", z: -5, depth: 0.15, r: "-6deg", blur: 2.2 },
+  { src: "compass", x: "78%", y: "57%", w: "14%", z: -2, depth: 0.35, r: "5deg", blur: 0.6 },
+  { src: "laptop", x: "50%", y: "47%", w: "40%", z: 0, depth: 0.45, r: "-2deg", blur: 0 },
+  { src: "chess", x: "24%", y: "61%", w: "15%", z: 3, depth: 0.7, r: "-4deg", blur: 0 },
+  { src: "camera", x: "63%", y: "81%", w: "21%", z: 5, depth: 0.95, r: "6deg", blur: 0 },
+  { src: "multitool", x: "33%", y: "87%", w: "17%", z: 7, depth: 1.2, r: "-9deg", blur: 1.2 },
+];
+
 /* ── Token di base, condivisi da tutto il sistema (global.css). ─────────── */
 const BASE_TOKENS = [
   { name: "--color-bg", value: "rgba(8, 73, 67, 1)" },
@@ -427,9 +440,26 @@ const t = it
       colHow: "Come",
       colNeed: "Richiesto",
       colGot: "Misurato",
-      restingState: "riposo",
-      pressedState: "premuto",
+      restingState: "default",
+      pressedState: "pressed",
       openState: "aperto",
+      stFilled: "Piena",
+      moLead:
+        "Tre durate e una curva sola. La tabella dice i valori; qui sotto si vedono, perché una durata scritta in millisecondi non dice niente finché non la si guarda accanto alle altre.",
+      moPlay: "Rigioca",
+      moDur: "Le tre durate, sullo stesso tragitto",
+      moDurNote:
+        "Stesso spostamento, stessa curva: cambia solo quanto dura. 150ms è la risposta a un dito — sotto i 100 non si legge come movimento, sopra i 200 come attesa. 500ms è per un cambio di pagina, dove il movimento serve a non far perdere il filo, e sulla pressione di un bottone sarebbe insopportabile.",
+      moEase: "La curva, contro la lineare",
+      moEaseNote:
+        "Sopra la curva del sistema, sotto una lineare della stessa durata. La lineare parte e si ferma di colpo, e per questo sembra meccanica: niente nel mondo fisico si muove così. La curva accelera e frena, e a parità di millisecondi si legge come più rapida.",
+      moReduced: "Con movimento ridotto",
+      moReducedNote:
+        "Ridurre non è eliminare: restano opacità e colore, spariscono le trasformazioni. L'affondo alla pressione resta anche lì, perché non è decorazione — è l'informazione che il comando ha risposto.",
+      moLinear: "lineare, stessa durata",
+      stOutline: "Outline",
+      stateNote:
+        "Tutti gli stati insieme, senza doverli inseguire col puntatore. Hover, pressed e focus qui sono resi da tre classi — is-hover, is-pressed, is-focus — dichiarate nello stesso punto del foglio vero in cui stanno :hover, :active e :focus-visible, con le stesse identiche regole. Non sono una simulazione: sono le stesse righe. L'ultima colonna resta comunque viva — passaci sopra, tieni premuto, raggiungila col tasto Tab.",
     }
   : {
       title: "Design System",
@@ -486,10 +516,39 @@ const t = it
       colHow: "How",
       colNeed: "Required",
       colGot: "Measured",
-      restingState: "resting",
+      restingState: "default",
       pressedState: "pressed",
       openState: "open",
+      stFilled: "Filled",
+      moLead:
+        "Three durations and a single curve. The table gives the values; below you can see them, because a duration written in milliseconds says nothing until you watch it beside the others.",
+      moPlay: "Replay",
+      moDur: "The three durations, over the same distance",
+      moDurNote:
+        "Same travel, same curve: only the length changes. 150ms is the answer to a finger — below 100 it does not read as movement, above 200 it reads as waiting. 500ms is for a page change, where motion keeps you from losing your place, and on a button press it would be unbearable.",
+      moEase: "The curve, against linear",
+      moEaseNote:
+        "Above, the system's curve; below, a linear one of the same length. Linear starts and stops dead, which is why it feels mechanical: nothing in the physical world moves that way. The curve accelerates and brakes, and at identical milliseconds it reads as quicker.",
+      moReduced: "Under reduced motion",
+      moReducedNote:
+        "Reduction is not removal: opacity and colour remain, transforms go. The tactile press survives even there, because it is not decoration — it is the information that the control responded.",
+      moLinear: "linear, same duration",
+      stOutline: "Outline",
+      stateNote:
+        "Every state at once, without chasing them with the pointer. Hover, pressed and focus are rendered here by three classes — is-hover, is-pressed, is-focus — declared at the very same spot in the real stylesheet as :hover, :active and :focus-visible, with the very same rules. They are not a simulation: they are the same lines. The last column stays live all the same — hover it, hold it down, reach it with Tab.",
     };
+
+/* Gli stati che ogni comando del sistema deve saper mostrare, nei loro nomi
+   veri. «Riposo» non è uno stato: il nome è `default`, ed è quello che si
+   trova nel CSS, negli strumenti di sviluppo e in qualunque altro design
+   system — chiamarlo diversamente costringe chi legge a tradurre. */
+const CTA_STATES = [
+  { key: "default", cls: "", label: "default" },
+  { key: "hover", cls: "is-hover", label: "hover" },
+  { key: "pressed", cls: "is-pressed", label: "pressed" },
+  { key: "focus", cls: "is-focus", label: "focus-visible" },
+  { key: "disabled", cls: "", label: "disabled", disabled: true },
+] as const;
 
 const NAV = [
   {
@@ -503,6 +562,7 @@ const NAV = [
       { id: "tipografia", label: t.secType },
       { id: "forma", label: t.secShape },
       { id: "movimento", label: t.secMotionTok },
+      { id: "logo", label: it ? "Il logo" : "The logo" },
     ],
   },
   {
@@ -526,12 +586,19 @@ const NAV = [
         id: "ingresso-scena",
         label: it ? "Scena knolling con parallasse" : "Knolling stage with parallax",
       },
+      { id: "ingresso-barra", label: it ? "Barra d'ingresso" : "Entry bar" },
+      { id: "ingresso-scorri", label: it ? "Indicatore di scorrimento" : "Scroll cue" },
     ],
   },
   {
     label: t.secLens,
     items: [
+      { id: "lente-barra", label: it ? "Barra del CV" : "CV bar" },
       { id: "lente-intestazione", label: it ? "Intestazione" : "Header" },
+      {
+        id: "lente-aureola",
+        label: it ? "Aureola e oggetto dell'intestazione" : "Header halo and object",
+      },
       { id: "lente-dove-lavora-ora", label: it ? "Dove lavora ora" : "Where he works now" },
       { id: "lente-bottoni", label: it ? "Bottoni — sistema di stati" : "Buttons — state system" },
       { id: "lente-tendina", label: it ? "Tendina di lente" : "Lens dropdown" },
@@ -545,6 +612,8 @@ const NAV = [
       { id: "lente-cronologia", label: it ? "Cronologia completa" : "Full timeline" },
       { id: "lente-clienti", label: it ? "Incarichi presso clienti" : "Client engagements" },
       { id: "lente-occhiello", label: it ? "Occhiello e sigla" : "Eyebrow and initials" },
+      { id: "lente-fondale", label: it ? "Fondale di sezione" : "Section backdrop" },
+      { id: "lente-imbocchi", label: it ? "Imbocchi finali" : "Closing exits" },
       { id: "lente-nota", label: it ? "Nota di prova" : "Prototype note" },
       { id: "lente-contatti", label: it ? "Contatti in chiaro" : "Contacts in the open" },
     ],
@@ -558,18 +627,24 @@ const NAV = [
         id: "hero-pannello",
         label: it ? "Caso — pannello ed etichetta" : "Case — panel and label",
       },
+      {
+        id: "hero-scena",
+        label: it ? "Still-life con prospettiva" : "Still life with perspective",
+      },
       { id: "hero-etichette", label: it ? "Etichette e titoli" : "Labels and headings" },
     ],
   },
   {
     label: t.secWork,
     items: [
+      { id: "work-barra", label: it ? "Barra di navigazione" : "Navigation bar" },
       { id: "work-indice-testata", label: it ? "Testata dell'indice" : "Index header" },
       { id: "work-testata", label: it ? "Testata di case study" : "Case-study header" },
       { id: "work-card", label: it ? "Card indice" : "Index card" },
       { id: "work-nav", label: it ? "Tag e navigazione" : "Tags and navigation" },
       { id: "work-cta", label: it ? "CTA di chiusura" : "Closing CTA" },
       { id: "work-learnings", label: it ? "Cosa ho imparato" : "What I learned" },
+      { id: "work-sezione", label: it ? "Sezione di case study" : "Case-study section" },
       { id: "work-decisione", label: it ? "Decisione di progetto" : "Project decision" },
     ],
   },
@@ -647,24 +722,49 @@ const NAV = [
           inclusi. Sugli altri 13 il selettore restava a schermo senza poter
           fare niente. */
       }
-      <div class="ds-toolbar" data-ds-toolbar hidden>
-        <span class="ds-toolbar__label">{t.modeLabel}</span>
-        <div class="ds-modes" role="group" aria-label={t.modeLabel}>
-          {
-            MODES.map((m, i) => (
-              <button
-                class="ds-mode-btn"
-                type="button"
-                data-ds-mode={m.key}
-                aria-pressed={i === 0 ? "true" : "false"}
-                style={`--ds-dot:${m.hex}`}
-              >
-                <span class="ds-mode-btn__dot" aria-hidden="true" />
-                {m.label}
-              </button>
-            ))
-          }
-        </div>
+      {
+        /* Il selettore d'accento È la tendina di lente del CV — stesse classi,
+          stesso foglio di stile, stesso comportamento. Prima erano tre pulsanti
+          di pari peso inventati per questa pagina: un componente in più da
+          mantenere, e per giunta uno che contraddiceva la scheda della tendina,
+          che dice testualmente di non promuovere la scelta a pulsanti affiancati.
+          Una vetrina che per governarsi usa un componente che non documenta ha
+          già smesso di essere il sistema che mostra.
+
+          Unica differenza dal componente vero: lì le voci sono link (portano a
+          un'altra pagina), qui sono bottoni (cambiano lo stato di questa). Il
+          markup di riferimento resta quello del pannello "Tendina di lente". */
+      }
+      <div class="ds-lensbar" data-ds-toolbar hidden>
+        <details class="lc-lens ds-lens" data-ds-lens>
+          <summary class="lc-lens__trigger">
+            <span class="lc-lens__dot" aria-hidden="true"></span>
+            <span class="lc-lens__label">
+              {t.modeLabel}
+              <b data-ds-lens-current>{MODES[0].label}</b>
+            </span>
+            <span class="lc-lens__chevron" aria-hidden="true">›</span>
+          </summary>
+          <ul class="lc-lens__list" role="list">
+            {
+              MODES.map((m, i) => (
+                <li>
+                  <button
+                    type="button"
+                    class:list={["lc-lens__opt", { "is-current": i === 0 }]}
+                    data-lens={m.key}
+                    data-ds-mode={m.key}
+                    aria-pressed={i === 0 ? "true" : "false"}
+                  >
+                    <span class="lc-lens__opt-dot" aria-hidden="true" />
+                    {m.label}
+                  </button>
+                </li>
+              ))
+            }
+          </ul>
+        </details>
+        <p class="ds-lensbar__hint">{t.modeHint}</p>
       </div>
 
       {
@@ -1014,8 +1114,56 @@ const NAV = [
           <span class="ds-panel__group">{t.secFoundations}</span>
         </div>
 
+        <p class="ds-section__note">{t.moLead}</p>
+
+        <div class="ds-stage">
+          <div class="ds-runner__head">
+            <p class="ds-sub__title">{t.moDur}</p>
+            <button class="ds-anatomy__toggle" type="button" data-ds-replay>{t.moPlay}</button>
+          </div>
+          <ul class="ds-runners" role="list" data-ds-motion>
+            {
+              [
+                { token: "--duration-micro", ms: "150ms" },
+                { token: "--duration-state", ms: "300ms" },
+                { token: "--duration-page", ms: "500ms" },
+              ].map((d) => (
+                <li class="ds-runner">
+                  <span class="ds-runner__label">
+                    <code>{d.token}</code> · {d.ms}
+                  </span>
+                  <span class="ds-runner__track">
+                    <span class="ds-runner__dot" style={`--ds-dur:var(${d.token})`} />
+                  </span>
+                </li>
+              ))
+            }
+          </ul>
+          <p class="ds-sub__note">{t.moDurNote}</p>
+        </div>
+
+        <div class="ds-stage">
+          <p class="ds-sub__title">{t.moEase}</p>
+          <ul class="ds-runners" role="list" data-ds-motion>
+            <li class="ds-runner">
+              <span class="ds-runner__label"><code>--ease-standard</code></span>
+              <span class="ds-runner__track">
+                <span class="ds-runner__dot" style="--ds-dur:600ms"></span>
+              </span>
+            </li>
+            <li class="ds-runner">
+              <span class="ds-runner__label">{t.moLinear}</span>
+              <span class="ds-runner__track">
+                <span class="ds-runner__dot" style="--ds-dur:600ms;--ds-ease:linear"></span>
+              </span>
+            </li>
+          </ul>
+          <p class="ds-sub__note">{t.moEaseNote}</p>
+        </div>
+
         <div class="ds-table-wrap">
           <table class="ds-table">
+            <caption class="ds-sr">{t.secMotionTok}</caption>
             <thead>
               <tr>
                 <th>{t.colToken}</th>
@@ -1039,6 +1187,64 @@ const NAV = [
               }
             </tbody>
           </table>
+        </div>
+      </section>
+
+      <section class="ds-panel" data-ds-accent data-ds-panel="logo" aria-labelledby="logo-t">
+        <div class="ds-panel__head">
+          <h2 class="ds-section__title" id="logo-t">{it ? "Il logo" : "The logo"}</h2>
+          <span class="ds-panel__group"
+            >{t.secFoundations}<span class="ds-origin">go-logo</span></span
+          >
+        </div>
+
+        <p class="ds-sub__note">
+          {
+            it
+              ? "L'unico componente del sistema che è un web component e non una classe. Reagisce alla lente attiva e, al click, riporta all'ingresso — anche da qui: è il comportamento vero, non l'ho disinnescato per la vetrina."
+              : "The system's only component that is a web component rather than a class. It reacts to the active lens and, on click, returns to the entry — from here too: that is the real behaviour, not defused for the showcase."
+          }
+        </p>
+        <div class="ds-stage">
+          <div class="lc">
+            <go-logo data-ds-snippet></go-logo>
+          </div>
+        </div>
+        <div class="ds-spec">
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specClass}</span>
+            <p class="ds-spec__v"><code>go-logo</code></p>
+          </div>
+          <div class="ds-spec__row">
+            <span class="ds-spec__k">{t.specUse}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Una volta per pagina, in cima. Nella barra del CV e in quella dei case study."
+                  : "Once per page, at the top. In the CV bar and in the case-study bar."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--dont">
+            <span class="ds-spec__k">{t.specDont}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Non usarlo come decorazione ripetuta: è il comando che riporta all'ingresso, e due comandi identici sulla stessa schermata non si sa più quale premere."
+                  : "Do not use it as repeated decoration: it is the control that returns to the entry, and two identical controls on one screen leave you guessing which to press."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specA11y}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "È un <button> dentro uno shadow root, quindi arriva già con ruolo e nome accessibile propri: non serve — e non va — avvolgerlo in un altro link."
+                  : "It is a <button> inside a shadow root, so it already carries its own role and accessible name: wrapping it in another link is unnecessary, and wrong."
+              }
+            </p>
+          </div>
         </div>
       </section>
 
@@ -1278,28 +1484,75 @@ const NAV = [
         <p class="ds-sub__note">
           {
             it
-              ? "La gerarchia la porta il riempimento, non la larghezza: primaria piena, secondaria col solo bordo. È un segnale che regge anche per chi non distingue bene i colori, perché cambia la quantità di superficie colorata e non la tinta."
-              : "Hierarchy comes from the fill, not the width: primary filled, secondary outlined only. That signal survives colour-vision differences, because it changes the amount of coloured surface rather than the hue."
+              ? "La gerarchia la porta il riempimento, non la larghezza: piena e outline. È un segnale che regge anche per chi non distingue bene i colori, perché cambia la quantità di superficie colorata e non la tinta."
+              : "Hierarchy comes from the fill, not the width: filled and outline. That signal survives colour-vision differences, because it changes the amount of coloured surface rather than the hue."
           }
         </p>
+        <p class="ds-sub__note">{t.stateNote}</p>
+
+        <div class="ds-stage ds-stage--matrix">
+          <div class="lh">
+            <div class="lh-section ds-ctx" data-mode="creative">
+              <table class="ds-matrix">
+                <thead>
+                  <tr>
+                    <th scope="col"><span class="ds-sr">{t.colState}</span></th>
+                    {CTA_STATES.map((st) => <th scope="col">{st.label}</th>)}
+                  </tr>
+                </thead>
+                <tbody>
+                  {
+                    [
+                      { variant: "", label: t.stFilled },
+                      { variant: " lh-cta--ghost", label: t.stOutline },
+                    ].map((row) => (
+                      <tr>
+                        <th scope="row">{row.label}</th>
+                        {CTA_STATES.map((st) => (
+                          <td>
+                            <a
+                              class={`lh-cta${row.variant}${st.cls ? " " + st.cls : ""}`}
+                              href={st.disabled ? undefined : "#ingresso"}
+                              aria-disabled={st.disabled ? "true" : undefined}
+                              role={st.disabled ? "link" : undefined}
+                            >
+                              GO
+                            </a>
+                          </td>
+                        ))}
+                      </tr>
+                    ))
+                  }
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        {
+          /* Le due varianti a grandezza naturale, col testo vero: la matrice
+            qui sopra mostra gli stati, questa mostra il componente. Servono
+            entrambe — una CTA lunga due lettere non dice come si comporta
+            un'etichetta di sei parole. */
+        }
         <div class="ds-stage">
-          {
-            /* `.lh-section[data-mode]` e non il solo `.lh`: --accent è definito
-              dalla sezione, non dalla radice, perché nella pagina vera ogni
-              sezione porta la propria lente. Senza questo involucro il
-              bottone resta arancione qualunque accento si scelga. */
-          }
           <div class="lh">
             <div class="lh-section ds-ctx" data-mode="creative">
               <div class="ds-stage__row">
                 <div class="ds-case">
-                  <p class="ds-label">{it ? "primaria — riposo" : "primary — resting"}</p>
+                  <p class="ds-label">{t.stFilled}</p>
                   <a class="lh-cta" href="#ingresso" data-ds-snippet>GO to Web & UX Designer</a>
                 </div>
                 <div class="ds-case">
-                  <p class="ds-label">{it ? "secondaria — riposo" : "secondary — resting"}</p>
+                  <p class="ds-label">{t.stOutline}</p>
                   <a class="lh-cta lh-cta--ghost" href="#ingresso" data-ds-snippet>
                     {it ? "Esplora il portfolio" : "Explore the portfolio"}
+                  </a>
+                </div>
+                <div class="ds-case">
+                  <p class="ds-label">disabled</p>
+                  <a class="lh-cta" aria-disabled="true" role="link" data-ds-snippet>
+                    {it ? "Non disponibile" : "Unavailable"}
                   </a>
                 </div>
               </div>
@@ -1308,10 +1561,13 @@ const NAV = [
         </div>
         <div class="ds-callout">
           <p>
+            <strong
+              >{it ? "Il pressed non è cromatico." : "The pressed state is not chromatic."}</strong
+            >{" "}
             {
               it
-                ? "Passa il puntatore per vedere l'hover, tieni premuto per l'affondo, raggiungile col tasto Tab per l'anello di focus. Sono gli stati veri, non una simulazione."
-                : "Hover to see the hover state, press and hold for the tactile press, reach them with Tab for the focus ring. These are the real states, not a simulation."
+                ? "È ombra interna più scala, mai uno scurimento del riempimento: scurire toglierebbe contrasto all'etichetta proprio mentre la si preme, e il margine buono varia da un accento all'altro — un valore unico che regga su tutti non esiste. Così invece nessun rapporto di contrasto cambia fra default e pressed."
+                : "It is an inner shadow plus a scale, never a darkening of the fill: darkening would cost the label contrast exactly while it is being pressed, and the safe margin varies from one accent to the next — a single value that holds for all of them does not exist. This way no contrast ratio changes between default and pressed."
             }
           </p>
         </div>
@@ -1325,8 +1581,8 @@ const NAV = [
             <p class="ds-spec__v">
               {
                 it
-                  ? "Massimo due per sezione: una primaria, una secondaria."
-                  : "Two per section at most: one primary, one secondary."
+                  ? "Massimo due per sezione: una piena, una outline. Il disabilitato usa aria-disabled e non l'attributo disabled, che sui link non esiste."
+                  : "Two per section at most: one filled, one outline. The disabled one uses aria-disabled, not the disabled attribute, which does not exist on links."
               }
             </p>
           </div>
@@ -1519,6 +1775,216 @@ const NAV = [
         </div>
       </section>
 
+      <section class="ds-panel" data-ds-panel="ingresso-barra" aria-labelledby="ingresso-barra-t">
+        <div class="ds-panel__head">
+          <h2 class="ds-section__title" id="ingresso-barra-t">
+            {it ? "Barra d'ingresso" : "Entry bar"}
+          </h2>
+          <span class="ds-panel__group">{t.secHome}<span class="ds-origin">lh-*</span></span>
+        </div>
+
+        <p class="ds-sub__note">
+          {
+            it
+              ? "Fuori dal flusso, sopra la scena: non occupa spazio, e l'ingresso le lascia posto con un padding pari alla sua altezza invece che con un margine a occhio."
+              : "Out of the flow, above the scene: it takes no space, and the entry makes room with a padding equal to its height rather than an eyeballed margin."
+          }
+        </p>
+        <div class="ds-stage">
+          <div class="lh">
+            <header class="lh-bar" style="position:static;" data-ds-snippet data-ds-drop="style">
+              <a
+                href="/"
+                class="lh-mark"
+                aria-label={it ? "Torna all'ingresso" : "Back to the entry"}>GO</a
+              >
+              <nav class="lh-nav">
+                <a href="/lab/hero">{it ? "← altra prova" : "← other prototype"}</a>
+                <span class="lh-flag">{it ? "Prova" : "Prototype"}</span>
+              </nav>
+            </header>
+          </div>
+        </div>
+        <div class="ds-spec">
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specClass}</span>
+            <p class="ds-spec__v"><code>lh-bar · lh-mark · lh-nav · lh-flag</code></p>
+          </div>
+          <div class="ds-spec__row">
+            <span class="ds-spec__k">{t.specUse}</span>
+            <p class="ds-spec__v">
+              {it ? "Una per pagina d'ingresso, in cima." : "One per entry page, at the top."}
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--dont">
+            <span class="ds-spec__k">{t.specDont}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Non metterci un selettore di lente: l'ingresso esiste per non chiedere niente prima di aver mostrato qualcosa."
+                  : "Do not put a lens selector in it: the entry exists precisely to ask nothing before it has shown anything."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specA11y}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Il contrassegno «Prova» è testo, non un colore: chi non distingue la sfumatura legge comunque che è un prototipo."
+                  : "The «Prototype» flag is text, not a colour: someone who cannot tell the shade apart still reads that this is a prototype."
+              }
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="ds-panel" data-ds-panel="ingresso-scorri" aria-labelledby="ingresso-scorri-t">
+        <div class="ds-panel__head">
+          <h2 class="ds-section__title" id="ingresso-scorri-t">
+            {it ? "Indicatore di scorrimento" : "Scroll cue"}
+          </h2>
+          <span class="ds-panel__group">{t.secHome}<span class="ds-origin">lh-*</span></span>
+        </div>
+
+        <p class="ds-sub__note">
+          {
+            it
+              ? "L'unico invito a scorrere della pagina. È un link vero a #main-content: chi lo preme ci arriva, e chi naviga da tastiera lo trova nel giro di Tab come salto al contenuto."
+              : "The page's only invitation to scroll. It is a real link to #main-content: pressing it takes you there, and keyboard users find it in the Tab order as a skip to the content."
+          }
+        </p>
+        <div class="ds-stage">
+          <div class="lh">
+            <a
+              class="lh-scroll"
+              href="#ingresso-scorri"
+              style="position:static;transform:none;"
+              data-ds-snippet
+              data-ds-drop="style"
+            >
+              <span>{it ? "Scorri" : "Scroll"}</span>
+              <span class="lh-scroll__line" aria-hidden="true"></span>
+            </a>
+          </div>
+        </div>
+        <div class="ds-spec">
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specClass}</span>
+            <p class="ds-spec__v"><code>lh-scroll · lh-scroll__line</code></p>
+          </div>
+          <div class="ds-spec__row">
+            <span class="ds-spec__k">{t.specUse}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "In fondo alla prima schermata, una volta sola."
+                  : "At the foot of the first screen, once only."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--dont">
+            <span class="ds-spec__k">{t.specDont}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Non renderlo un semplice <div> animato: sarebbe un invito che non si può accettare da tastiera."
+                  : "Do not make it a plain animated <div>: it would be an invitation that cannot be accepted from a keyboard."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specA11y}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "La stanghetta è aria-hidden — la parola accanto porta già tutto il significato."
+                  : "The rule is aria-hidden — the adjacent word already carries all the meaning."
+              }
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="ds-panel"
+        data-ds-accent
+        data-ds-panel="lente-barra"
+        aria-labelledby="lente-barra-t"
+      >
+        <div class="ds-panel__head">
+          <h2 class="ds-section__title" id="lente-barra-t">{it ? "Barra del CV" : "CV bar"}</h2>
+          <span class="ds-panel__group">{t.secLens}<span class="ds-origin">lc-*</span></span>
+        </div>
+
+        <p class="ds-sub__note">
+          {
+            it
+              ? "Logo, frase guida e contrassegno di prova. La frase in mezzo è l'unico testo di marca della pagina: sotto i 48rem sparisce, perché fra il logo e il contrassegno non resta larghezza per leggerla."
+              : "Logo, guiding line and prototype flag. The line in the middle is the page's only brand copy: below 48rem it disappears, because between the logo and the flag there is no width left to read it."
+          }
+        </p>
+        <div class="ds-stage">
+          <div class="lc">
+            <header class="lc-bar" data-ds-snippet>
+              <a
+                href="/lab/home"
+                class="lc-bar__home"
+                aria-label={it ? "Torna alla prova home" : "Back to the home prototype"}
+              >
+                <go-logo></go-logo>
+              </a>
+              <p class="lc-bar__tagline">
+                {
+                  it
+                    ? "Se esiste una verità assoluta, dev'essere molto annoiata."
+                    : "If there is an absolute truth, it must be very bored."
+                }
+              </p>
+              <span class="lc-bar__flag">{it ? "Prova" : "Prototype"}</span>
+            </header>
+          </div>
+        </div>
+        <div class="ds-spec">
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specClass}</span>
+            <p class="ds-spec__v">
+              <code>lc-bar · lc-bar__home · lc-bar__tagline · lc-bar__flag</code>
+            </p>
+          </div>
+          <div class="ds-spec__row">
+            <span class="ds-spec__k">{t.specUse}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "In cima alla pagina CV, una volta sola."
+                  : "At the top of the CV page, once only."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--dont">
+            <span class="ds-spec__k">{t.specDont}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Non aggiungere voci di menu: il CV ha una sola uscita in cima, e il resto delle strade sta in fondo, dove chi ha letto le cerca."
+                  : "Do not add menu items: the CV has a single exit at the top, and every other road is at the foot, where those who have read look for them."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specA11y}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Il logo è avvolto in un <a> con aria-label perché il web component da solo torna all'ingresso del sito, non a questa prova: due destinazioni diverse, due comandi diversi."
+                  : "The logo is wrapped in an <a> with an aria-label because the web component on its own returns to the site entry, not to this prototype: two destinations, two controls."
+              }
+            </p>
+          </div>
+        </div>
+      </section>
+
       <section
         class="ds-panel"
         data-ds-accent
@@ -1545,7 +2011,10 @@ const NAV = [
                 }
               </p>
               <p class="lc-meta">
-                Torino, Italia · {it ? "Disponibile da remoto" : "Available remotely"}
+                Torino, Italia · {it ? "Disponibile da remoto" : "Available remotely"} ·{" "}
+                <span class="lc-meta__langs">
+                  {it ? "Italiano madrelingua · Inglese B2" : "Italian native · English B2"}
+                </span>
               </p>
             </div>
           </div>
@@ -1572,6 +2041,91 @@ const NAV = [
                 it
                   ? "Non scrivere il ruolo in testo colorato: la pillola piena esiste perché l'arancione come testo si ferma a 3,62:1."
                   : "Do not set the role in coloured text: the filled pill exists because orange as text stops at 3.62:1."
+              }
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="ds-panel"
+        data-ds-accent
+        data-ds-panel="lente-aureola"
+        aria-labelledby="lente-aureola-t"
+      >
+        <div class="ds-panel__head">
+          <h2 class="ds-section__title" id="lente-aureola-t">
+            {it ? "Aureola e oggetto dell'intestazione" : "Header halo and object"}
+          </h2>
+          <span class="ds-panel__group">{t.secLens}<span class="ds-origin">lc-*</span></span>
+        </div>
+
+        <p class="ds-sub__note">
+          {
+            it
+              ? "Le due decorazioni dell'intestazione: un alone d'accento che riempie l'angolo senza contendere la lettura, e l'oggetto knolling con la sigla in filigrana. L'ombra è la stessa immagine annerita e sfocata, quindi segue la sagoma."
+              : "The header's two decorations: an accent halo filling the corner without competing with the reading, and the knolling object with the watermark initials. The shadow is the same image blackened and blurred, so it follows the silhouette."
+          }
+        </p>
+        <div class="ds-stage">
+          <div class="lc">
+            <section
+              class="lc-head"
+              style="min-height:0;padding:0;"
+              data-ds-snippet
+              data-ds-drop="style"
+            >
+              <div class="lc-head__glow" aria-hidden="true"></div>
+              <div class="lc-head__deco" aria-hidden="true">
+                <span class="lc-initial">WD</span>
+                <span class="lc-obj" style="--ratio:1">
+                  <img class="lc-obj__shadow" src="/knolling/camera.webp" alt="" />
+                  <img
+                    class="lc-obj__img"
+                    src="/knolling/camera.webp"
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                  />
+                </span>
+              </div>
+            </section>
+          </div>
+        </div>
+        <div class="ds-spec">
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specClass}</span>
+            <p class="ds-spec__v">
+              <code>lc-head__glow · lc-head__deco · lc-obj · lc-obj__img · lc-obj__shadow</code>
+            </p>
+          </div>
+          <div class="ds-spec__row">
+            <span class="ds-spec__k">{t.specUse}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Una sola volta, nell'intestazione della pagina CV."
+                  : "Once only, in the CV page header."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--dont">
+            <span class="ds-spec__k">{t.specDont}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Non alzare l'alone fino a passare dietro al testo: è un riempimento d'angolo, e sotto le parole diventa rumore che costa contrasto."
+                  : "Do not extend the halo behind the text: it is a corner fill, and under the words it becomes noise that costs contrast."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specA11y}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Tutto il blocco è aria-hidden e le immagini hanno alt vuoto: è decorazione, e la sigla ripeterebbe il nome che sta già nel titolo."
+                  : "The whole block is aria-hidden and the images have empty alts: it is decoration, and the initials would repeat the name already in the heading."
               }
             </p>
           </div>
@@ -2590,6 +3144,164 @@ const NAV = [
         </div>
       </section>
 
+      <section
+        class="ds-panel"
+        data-ds-accent
+        data-ds-panel="lente-fondale"
+        aria-labelledby="lente-fondale-t"
+      >
+        <div class="ds-panel__head">
+          <h2 class="ds-section__title" id="lente-fondale-t">
+            {it ? "Fondale di sezione" : "Section backdrop"}
+          </h2>
+          <span class="ds-panel__group">{t.secLens}<span class="ds-origin">lc-*</span></span>
+        </div>
+
+        <p class="ds-sub__note">
+          {
+            it
+              ? "Un oggetto knolling molto attenuato dietro una sezione lunga. Serve a dare un appiglio visivo a un elenco che altrimenti è solo testo, e sta abbastanza indietro da non entrare in competizione con nessuna riga."
+              : "A heavily faded knolling object behind a long section. It gives a visual anchor to a list that would otherwise be plain text, and it sits far enough back to compete with no line of it."
+          }
+        </p>
+        <div class="ds-stage">
+          <div class="lc">
+            <div class="ds-backdrop">
+              <img
+                class="lc-bg-knoll"
+                src="/knolling/multitool.webp"
+                alt=""
+                aria-hidden="true"
+                loading="lazy"
+                decoding="async"
+                data-ds-snippet
+              />
+              <div class="lc-sec-head">
+                <h3 class="lc-sec-title">
+                  {it ? "Esperienza — Metodo & Gestione" : "Experience — Method & Delivery"}
+                </h3>
+                <p class="lc-sec-note">
+                  {it ? "5 esperienze scelte per questa lente." : "5 entries chosen for this lens."}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ds-spec">
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specClass}</span>
+            <p class="ds-spec__v"><code>lc-bg-knoll</code></p>
+          </div>
+          <div class="ds-spec__row">
+            <span class="ds-spec__k">{t.specUse}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Uno per sezione lunga, mai due nella stessa schermata."
+                  : "One per long section, never two on the same screen."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--dont">
+            <span class="ds-spec__k">{t.specDont}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Non aumentarne l'opacità per «farlo vedere meglio»: se si vede bene ha smesso di essere un fondale ed è diventato un elemento da leggere."
+                  : "Do not raise its opacity to «make it more visible»: once it reads clearly it has stopped being a backdrop and become something to read."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specA11y}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "alt vuoto e aria-hidden, con pointer-events disattivati: non deve nemmeno intercettare un tocco diretto al testo che copre."
+                  : "Empty alt and aria-hidden, with pointer events off: it must not even intercept a tap meant for the text it covers."
+              }
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="ds-panel"
+        data-ds-accent
+        data-ds-panel="lente-imbocchi"
+        aria-labelledby="lente-imbocchi-t"
+      >
+        <div class="ds-panel__head">
+          <h2 class="ds-section__title" id="lente-imbocchi-t">
+            {it ? "Imbocchi finali" : "Closing exits"}
+          </h2>
+          <span class="ds-panel__group">{t.secLens}<span class="ds-origin">lc-*</span></span>
+        </div>
+
+        <p class="ds-sub__note">
+          {
+            it
+              ? "Lo strato 3 della pagina CV: chi è arrivato fin qui ha già deciso di approfondire, e qui trova le strade. Sono link nudi in elenco, senza bottoni: a questo punto della lettura una CTA piena sarebbe una spinta di troppo."
+              : "The CV page's layer 3: whoever got here has already decided to dig in, and here are the roads. Bare links in a list, no buttons: at this point in the reading a filled CTA would be one push too many."
+          }
+        </p>
+        <div class="ds-stage">
+          <div class="lc">
+            <section class="lc-more" data-ds-snippet>
+              <h3 class="lc-sec-title">
+                {it ? "Se vuoi andare a fondo" : "If you want to dig in"}
+              </h3>
+              <ul class="lc-more__list" role="list">
+                <li>
+                  <a href="#lente-imbocchi"
+                    >{
+                      it
+                        ? "Case study — processo, decisioni, risultati"
+                        : "Case studies — process, decisions, results"
+                    }</a
+                  >
+                </li>
+                <li>
+                  <a href="#lente-imbocchi"
+                    >{
+                      it
+                        ? "Il design system, componente per componente"
+                        : "The design system, component by component"
+                    }</a
+                  >
+                </li>
+              </ul>
+            </section>
+          </div>
+        </div>
+        <div class="ds-spec">
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specClass}</span>
+            <p class="ds-spec__v"><code>lc-more · lc-more__list</code></p>
+          </div>
+          <div class="ds-spec__row">
+            <span class="ds-spec__k">{t.specUse}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "In fondo alla pagina CV, dopo la cronologia completa."
+                  : "At the foot of the CV page, after the full timeline."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--dont">
+            <span class="ds-spec__k">{t.specDont}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Non trasformarli in bottoni: sono l'uscita per chi ha già letto, non un invito per chi deve ancora decidere."
+                  : "Do not turn them into buttons: they are the exit for someone who has already read, not an invitation for someone still deciding."
+              }
+            </p>
+          </div>
+        </div>
+      </section>
+
       <section class="ds-panel" data-ds-panel="lente-nota" aria-labelledby="lente-nota-t">
         <div class="ds-panel__head">
           <h2 class="ds-section__title" id="lente-nota-t">
@@ -2890,6 +3602,77 @@ const NAV = [
         </div>
       </section>
 
+      <section class="ds-panel" data-ds-panel="hero-scena" aria-labelledby="hero-scena-t">
+        <div class="ds-panel__head">
+          <h2 class="ds-section__title" id="hero-scena-t">
+            {it ? "Still-life con prospettiva" : "Still life with perspective"}
+          </h2>
+          <span class="ds-panel__group">{t.secHero}<span class="ds-origin">lab-*</span></span>
+        </div>
+
+        <p class="ds-sub__note">
+          {
+            it
+              ? "L'altra scena knolling del sistema, e un impianto diverso da quella dell'ingresso: qui c'è una prospettiva vera e un asse Z, e la parallasse inclina l'intero palco invece di spostare i singoli oggetti. Muovi il puntatore dentro il riquadro."
+              : "The system's other knolling scene, and a different mechanism from the entry's: here there is a real perspective and a Z axis, and the parallax tilts the whole stage instead of shifting individual objects. Move the pointer inside the frame."
+          }
+        </p>
+        <div class="ds-stage">
+          <div class="lab">
+            <div class="lab-scene" aria-hidden="true">
+              <div class="lab-stage" data-ds-scena-hero data-ds-snippet>
+                {
+                  HERO_SCENE.map((o) => (
+                    <div
+                      class="lab-obj"
+                      style={`--x:${o.x};--y:${o.y};--w:${o.w};--z:${o.z};--depth:${o.depth};--r:${o.r};--blur:${o.blur};--sh:${1 + o.depth}rem;--shb:${1.5 + o.depth * 1.5}rem`}
+                    >
+                      <img src={`/knolling/${o.src}.webp`} alt="" loading="lazy" decoding="async" />
+                    </div>
+                  ))
+                }
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ds-spec">
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specClass}</span>
+            <p class="ds-spec__v"><code>lab-scene · lab-stage · lab-obj</code></p>
+          </div>
+          <div class="ds-spec__row">
+            <span class="ds-spec__k">{t.specUse}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Una sola volta, accanto al testo d'ingresso del prototipo hero."
+                  : "Once only, beside the hero prototype's entry copy."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--dont">
+            <span class="ds-spec__k">{t.specDont}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Non mettere una transizione sul palco: --mx e --my sono riscritte a ogni fotogramma dallo script, e una transizione sopra un valore che cambia sessanta volte al secondo si limita a ripartire di continuo — la scena resterebbe indietro invece di seguire il puntatore."
+                  : "Do not put a transition on the stage: --mx and --my are rewritten every frame by the script, and a transition over a value changing sixty times a second simply restarts forever — the scene would lag instead of following the pointer."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specA11y}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "L'intera scena è aria-hidden con alt vuoti: il contenuto informativo sta tutto nella colonna di testo accanto."
+                  : "The whole scene is aria-hidden with empty alts: the informative content is entirely in the adjacent text column."
+              }
+            </p>
+          </div>
+        </div>
+      </section>
+
       <section class="ds-panel" data-ds-panel="hero-etichette" aria-labelledby="hero-etichette-t">
         <div class="ds-panel__head">
           <h2 class="ds-section__title" id="hero-etichette-t">
@@ -2935,6 +3718,81 @@ const NAV = [
                 it
                   ? "Non usare lab-label come etichetta di testo: nonostante il nome è il blocco caption del caso, con fondo e ombra — sta nel pannello «Caso», non qui."
                   : "Do not use lab-label as a text label: despite the name it is the case's caption block, with a fill and a shadow — it belongs to the «Case» panel, not here."
+              }
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="ds-panel"
+        data-ds-accent
+        data-ds-panel="work-barra"
+        aria-labelledby="work-barra-t"
+      >
+        <div class="ds-panel__head">
+          <h2 class="ds-section__title" id="work-barra-t">
+            {it ? "Barra di navigazione" : "Navigation bar"}
+          </h2>
+          <span class="ds-panel__group">{t.secWork}<span class="ds-origin">work-*</span></span>
+        </div>
+
+        <p class="ds-sub__note">
+          {
+            it
+              ? "La barra dei case study: logo a sinistra, ritorno e lingua a destra. Ogni comando è alto almeno 24px anche quando il testo è di 12 — è la correzione fatta quando si è misurato che il ritorno, a testo nudo, era un bersaglio da 18px."
+              : "The case-study bar: logo on the left, back link and language on the right. Every control is at least 24px tall even when the text is 12 — the fix made after measuring that the back link, as bare text, was an 18px target."
+          }
+        </p>
+        <div class="ds-stage">
+          <nav class="work-nav" style="position:static;" data-ds-snippet data-ds-drop="style">
+            <go-logo></go-logo>
+            <div class="work-nav__right">
+              <a href="#work-barra" class="work-back">{it ? "← Torna al CV" : "← Back to the CV"}</a
+              >
+              <a
+                href="#work-barra"
+                class="work-lang"
+                lang={it ? "en" : "it"}
+                aria-label={it ? "Switch to English" : "Passa all'italiano"}>{it ? "EN" : "IT"}</a
+              >
+            </div>
+          </nav>
+        </div>
+        <div class="ds-spec">
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specClass}</span>
+            <p class="ds-spec__v">
+              <code>work-nav · work-nav__right · work-back · work-lang</code>
+            </p>
+          </div>
+          <div class="ds-spec__row">
+            <span class="ds-spec__k">{t.specUse}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "In cima a ogni pagina di /work, indice e case study."
+                  : "At the top of every /work page, index and case studies."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--dont">
+            <span class="ds-spec__k">{t.specDont}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Non lasciare i comandi come testo nudo: a 12px senza padding sono alti 18, sotto i 24×24 di 2.5.8."
+                  : "Do not leave the controls as bare text: at 12px with no padding they are 18 tall, below the 24×24 of 2.5.8."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specA11y}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Il comando di lingua porta lang sull'elemento e un aria-label nella lingua di destinazione: chi usa uno screen reader sente «EN» pronunciato in inglese e non in italiano."
+                  : "The language control carries lang on the element and an aria-label in the target language: screen-reader users hear «EN» pronounced in English, not in Italian."
               }
             </p>
           </div>
@@ -3425,6 +4283,66 @@ const NAV = [
       <section
         class="ds-panel"
         data-ds-accent
+        data-ds-panel="work-sezione"
+        aria-labelledby="work-sezione-t"
+      >
+        <div class="ds-panel__head">
+          <h2 class="ds-section__title" id="work-sezione-t">
+            {it ? "Sezione di case study" : "Case-study section"}
+          </h2>
+          <span class="ds-panel__group">{t.secWork}<span class="ds-origin">work-*</span></span>
+        </div>
+
+        <p class="ds-sub__note">
+          {
+            it
+              ? "Il titolo e il paragrafo che aprono ogni sezione di un case study. Il titolo è un h2 con un id, e la sezione lo referenzia con aria-labelledby: è quello che permette di saltare di sezione in sezione con uno screen reader."
+              : "The heading and paragraph that open every case-study section. The heading is an h2 with an id, and the section references it via aria-labelledby: that is what makes section-to-section jumping work with a screen reader."
+          }
+        </p>
+        <div class="ds-stage">
+          <section class="work-section" aria-labelledby="ds-work-sec" data-ds-snippet>
+            <h3 class="work-section__title" id="ds-work-sec">
+              {it ? "Decisioni chiave" : "Key decisions"}
+            </h3>
+            <p class="work-section__text">
+              {
+                it
+                  ? "Le scelte che hanno deciso il progetto, con la ragione accanto — non l'elenco di cosa è stato fatto."
+                  : "The choices that decided the project, each with its reason — not a list of what was done."
+              }
+            </p>
+          </section>
+        </div>
+        <div class="ds-spec">
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specClass}</span>
+            <p class="ds-spec__v">
+              <code>work-section · work-section__title · work-section__text</code>
+            </p>
+          </div>
+          <div class="ds-spec__row">
+            <span class="ds-spec__k">{t.specUse}</span>
+            <p class="ds-spec__v">
+              {it ? "Una per sezione di un case study." : "One per case-study section."}
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--dont">
+            <span class="ds-spec__k">{t.specDont}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Non usare il titolo senza id e senza aria-labelledby sulla sezione: una sezione senza nome, per uno screen reader, è un punto di riferimento in meno."
+                  : "Do not use the heading without an id and without aria-labelledby on the section: an unnamed section is one landmark fewer for a screen reader."
+              }
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="ds-panel"
+        data-ds-accent
         data-ds-panel="work-decisione"
         aria-labelledby="work-decisione-t"
       >
@@ -3699,6 +4617,10 @@ const NAV = [
 </div>
 
 <script>
+  // Il logo è un web component, non una classe: va registrato o la vetrina
+  // mostrerebbe un elemento vuoto dove dovrebbe esserci il componente.
+  import "../islands/GoLogo.lit";
+
   // ── Selezione del pannello ────────────────────────────────────────────
   // Un componente per volta, come in Storybook. A nascondere è questo
   // script: il markup servito non ha nessun `hidden`, quindi senza
@@ -3723,9 +4645,16 @@ const NAV = [
       // Il selettore d'accento esiste solo dove cambia qualcosa: sugli altri
       // pannelli sarebbe un comando che non fa niente, e un comando inerte è
       // peggio di un comando assente.
+      const active = panels.find((p) => p.dataset.dsPanel === target);
       if (toolbar) {
-        const active = panels.find((p) => p.dataset.dsPanel === target);
-        toolbar.hidden = !active?.hasAttribute("data-ds-accent");
+        const wanted = !!active?.hasAttribute("data-ds-accent");
+        toolbar.hidden = !wanted;
+        // Il selettore viene spostato DENTRO il pannello attivo, subito sotto
+        // l'intestazione: prima stava sopra tutto, e il titolo del componente
+        // — "Colore", "Tipografia" — finiva sotto un comando, come se ne
+        // fosse una conseguenza. Il titolo viene prima, sempre; il comando è
+        // uno strumento del pannello, non il suo cappello.
+        if (wanted && active) active.querySelector(".ds-panel__head")?.after(toolbar);
       }
       navLinks.forEach((a) => {
         // aria-current e non una classe: lo stato corrente deve arrivare
@@ -3784,6 +4713,9 @@ const NAV = [
   // sulla radice quindi non le raggiunge.
   const labSections = document.querySelectorAll<HTMLElement>(".ds-stage .lh-section[data-mode]");
 
+  const lens = document.querySelector<HTMLDetailsElement>("[data-ds-lens]");
+  const lensLabel = document.querySelector<HTMLElement>("[data-ds-lens-current]");
+
   if (root && modeButtons.length) {
     modeButtons.forEach((btn) => {
       btn.addEventListener("click", () => {
@@ -3791,10 +4723,42 @@ const NAV = [
         if (!mode) return;
         root.dataset.mode = mode;
         labSections.forEach((s) => (s.dataset.mode = mode));
-        modeButtons.forEach((b) => b.setAttribute("aria-pressed", String(b === btn)));
+        modeButtons.forEach((b) => {
+          b.setAttribute("aria-pressed", String(b === btn));
+          // is-current e non solo aria-pressed: nel componente vero è la
+          // classe a portare il grassetto, e il grassetto è il secondo
+          // segnale oltre al colore (1.4.1).
+          b.classList.toggle("is-current", b === btn);
+        });
+        // L'etichetta del comando dice sempre la lente attiva: una tendina
+        // che dopo la scelta continua a dire quella di prima è un comando
+        // che mente sul proprio stato.
+        if (lensLabel) lensLabel.textContent = btn.textContent?.trim() ?? "";
+        // Scelta fatta, la tendina si chiude: nel CV le voci sono link e la
+        // pagina cambia, qui no — resterebbe aperta a coprire il componente
+        // che si è appena chiesto di vedere.
+        if (lens) lens.open = false;
       });
     });
   }
+
+  // ── Rigioca gli esempi di movimento ────────────────────────────────────
+  // Un'animazione in ciclo non si può "far ripartire": si toglie e si
+  // rimette. Serve perché chi arriva sul pannello a metà ciclo vede tre
+  // punti in posizioni scorrelate, e il confronto fra le durate — che è
+  // tutto il punto di questa demo — si legge solo partendo insieme.
+  document.querySelectorAll<HTMLButtonElement>("[data-ds-replay]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll<HTMLElement>("[data-ds-motion]").forEach((list) => {
+        list.classList.add("is-paused");
+        // Doppio rAF: uno solo non basta a garantire che il browser abbia
+        // davvero ricalcolato lo stile senza animazione prima di rimetterla.
+        requestAnimationFrame(() =>
+          requestAnimationFrame(() => list.classList.remove("is-paused")),
+        );
+      });
+    });
+  });
 
   // ── Anatomia ───────────────────────────────────────────────────────────
   // L'elenco numerato delle parti è servito dall'HTML e si legge da solo:
@@ -3865,6 +4829,23 @@ const NAV = [
     scena.addEventListener("pointerleave", () => {
       scena.style.setProperty("--mx", "0");
       scena.style.setProperty("--my", "0");
+    });
+  }
+
+  // La still-life del prototipo hero ha una parallasse diversa: là gli
+  // oggetti si spostano uno per uno, qui è l'intero palco a inclinarsi in
+  // prospettiva. Due meccanismi diversi che vanno visti diversi.
+  const scenaHero = document.querySelector<HTMLElement>("[data-ds-scena-hero]");
+  if (scenaHero && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const box = () => scenaHero.getBoundingClientRect();
+    scenaHero.addEventListener("pointermove", (e) => {
+      const b = box();
+      scenaHero.style.setProperty("--mx", String(((e.clientX - b.left) / b.width - 0.5) * 2));
+      scenaHero.style.setProperty("--my", String(((e.clientY - b.top) / b.height - 0.5) * 2));
+    });
+    scenaHero.addEventListener("pointerleave", () => {
+      scenaHero.style.setProperty("--mx", "0");
+      scenaHero.style.setProperty("--my", "0");
     });
   }
 

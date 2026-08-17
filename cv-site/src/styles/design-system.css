@@ -823,34 +823,49 @@
   margin: 0 0 0.75rem;
 }
 
-/* ── Barra del pannello: il selettore d'accento ──────────────────────────
-   Compare solo sui pannelli marcati `data-ds-accent`. `hidden` è messo dallo
-   script, quindi senza JavaScript resta visibile: è un comando che funziona
-   comunque, solo mostrato dove non serve. */
-.ds-toolbar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 0.5rem 1rem;
+/* ── Selettore d'accento: la tendina di lente, riusata ───────────────────
+   Non un componente nuovo: è `.lc-lens` di /lab/<lente>, con le sue classi e
+   il suo foglio. La vetrina governa sé stessa con un componente che
+   documenta, invece che con tre pulsanti inventati per l'occasione — che per
+   giunta erano proprio ciò che la scheda della tendina dice di non fare.
+
+   Qui sotto solo ciò che serve perché una <button> si comporti come la <a>
+   del componente vero: i browser danno ai bottoni fondo, bordo, font e
+   allineamento propri, e senza azzerarli la voce si vedrebbe diversa da
+   quella del CV pur avendo la stessa classe. */
+
+.ds-lensbar {
   margin-bottom: 2rem;
   padding-bottom: 1.25rem;
   border-bottom: 1px solid var(--ds-line);
 }
 
-.ds-toolbar[hidden] {
+.ds-lensbar[hidden] {
   display: none;
 }
 
-.ds-toolbar__label {
-  font-family: var(--font-mono);
-  font-size: var(--fs-12);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--ds-muted);
+.ds-lens {
+  /* Nel CV la tendina sta sotto l'intestazione e si porta il proprio margine;
+     qui apre il pannello e non deve staccarsi dal titolo che la precede. */
+  margin-top: 0.75rem;
 }
 
-.ds-toolbar .ds-modes {
-  margin-top: 0;
+.ds-lens .lc-lens__opt {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  font: inherit;
+  font-size: var(--fs-14);
+  text-align: left;
+  cursor: pointer;
+}
+
+.ds-lensbar__hint {
+  margin: 0.75rem 0 0;
+  max-width: 52rem;
+  font-size: var(--fs-12);
+  line-height: 1.55;
+  color: var(--ds-muted);
 }
 
 /* ── Pannello di atterraggio ─────────────────────────────────────────── */
@@ -1336,4 +1351,192 @@
   margin-top: 2rem;
   padding-top: 1.5rem;
   border-top: 1px solid var(--ds-line);
+}
+
+/* ── Matrice degli stati ─────────────────────────────────────────────────
+   Righe = varianti, colonne = stati. Una tabella e non una griglia di div
+   perché è letteralmente una tabella a doppia entrata: con <th scope> chi
+   usa uno screen reader sente «Outline, pressed» su ogni cella, mentre in
+   una griglia di div sentirebbe cinque bottoni identici di fila. */
+
+.ds-stage--matrix {
+  overflow-x: auto;
+}
+
+.ds-matrix {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.ds-matrix th,
+.ds-matrix td {
+  padding: 0.75rem 0.9rem;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.ds-matrix thead th,
+.ds-matrix tbody th {
+  font-family: var(--font-mono);
+  font-size: var(--fs-10);
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ds-muted);
+  white-space: nowrap;
+}
+
+.ds-matrix thead th {
+  border-bottom: 1px solid var(--ds-line);
+}
+
+.ds-matrix tbody th {
+  padding-left: 0;
+}
+
+/* L'anello di focus della colonna focus-visible sta fuori dal bordo della
+   cella: senza questo respiro veniva tagliato dalla cella accanto. */
+.ds-matrix td {
+  padding-block: 1rem;
+}
+
+/* ── Movimento: gli esempi che si vedono ─────────────────────────────────
+   Tre righe, stesso tragitto, sola variabile la durata. È l'unico modo di
+   mostrare che 150ms e 500ms non sono "veloce" e "lento" ma due decisioni
+   diverse: da fermi, una durata scritta in millisecondi non dice niente.
+
+   Il punto parte dalla sinistra e ci torna, in ciclo, così l'esempio non
+   richiede di aver visto l'istante giusto. Sotto i 5 secondi per ciclo
+   (2.2.2) e completamente fermo con prefers-reduced-motion, dove restano le
+   etichette e i valori — che sono l'informazione. */
+
+.ds-runner__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.ds-runners {
+  list-style: none;
+  margin: 1rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.9rem;
+}
+
+.ds-runner {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.ds-runner__label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  color: var(--ds-muted);
+}
+
+.ds-runner__track {
+  position: relative;
+  display: block;
+  height: 1.5rem;
+  border-radius: var(--radius-4);
+  border: 1px solid var(--ds-line);
+  background: rgba(0, 0, 0, 0.14);
+  overflow: hidden;
+}
+
+.ds-runner__dot {
+  position: absolute;
+  top: 50%;
+  left: 0.25rem;
+  width: 0.9rem;
+  height: 0.9rem;
+  margin-top: -0.45rem;
+  border-radius: 50%;
+  background: var(--color-accent);
+  animation: dsRun calc(var(--ds-dur) * 2) var(--ds-ease, var(--ease-standard)) infinite;
+}
+
+@keyframes dsRun {
+  0% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(calc(var(--ds-run, 100%) * 1));
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+/* La corsa è espressa in una variabile perché il tragitto deve essere
+   identico su tutte le righe: se dipendesse dalla larghezza del punto,
+   durate diverse sembrerebbero anche distanze diverse. */
+.ds-runner__track {
+  --ds-run: calc(100cqw - 2rem);
+  container-type: inline-size;
+}
+
+/* Rigioca: le animazioni in ciclo si possono riavviare solo togliendole e
+   rimettendole. Lo fa lo script, con una classe. */
+.ds-runners.is-paused .ds-runner__dot {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-runner__dot {
+    animation: none;
+    /* Fermo a metà corsa: la riga resta leggibile come confronto di
+       posizione, e nessuno perde l'informazione perché non vede il moto. */
+    transform: translateX(calc(var(--ds-run, 100%) * 0.5));
+  }
+}
+
+/* ── Neutralizzatori dei componenti aggiunti ─────────────────────────────
+   Stessa regola del § sopra: qui solo ciò che è di pagina — posizioni fisse,
+   altezze a schermo, larghezze massime — mai una proprietà di componente. */
+
+/* Le barre delle pagine vere sono fuori dal flusso (assolute o sticky):
+   dentro un riquadro devono stare in flusso, o si appiccicherebbero alla
+   finestra della vetrina invece che al proprio palco. */
+.ds-stage .lc-bar,
+.ds-stage .work-nav {
+  position: static;
+}
+
+/* L'intestazione del CV è alta quanto la prima schermata e ha l'alone
+   ancorato al suo angolo: qui serve solo il riquadro che lo contiene. */
+.ds-stage .lc-head {
+  min-height: 14rem;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* L'invito a scorrere vive in fondo alla schermata, centrato con una
+   traslazione: in una demo va messo in flusso. */
+.ds-stage .lh-scroll {
+  position: static;
+  transform: none;
+}
+
+/* La still-life del prototipo hero si dimensiona sulla colonna dell'ingresso;
+   dentro un pannello prende la larghezza del palco. */
+.ds-stage .lab-scene {
+  max-width: 34rem;
+  margin-inline: auto;
+  /* Gli oggetti più bassi stanno all'87% dell'altezza e sono centrati sulla
+     propria posizione: metà sagoma esce dal riquadro della scena. Nella
+     pagina vera sotto c'è la colonna, qui sotto c'è la scheda del componente
+     — senza questo respiro ci finivano sopra. */
+  margin-bottom: 3rem;
+}
+
+/* Il fondale di sezione è `position: absolute` rispetto alla sezione che
+   copre: senza un contenitore posizionato uscirebbe dal palco. */
+.ds-backdrop {
+  position: relative;
+  min-height: 8rem;
+  padding: 1rem 0;
 }

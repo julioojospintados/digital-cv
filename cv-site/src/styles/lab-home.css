@@ -153,7 +153,8 @@
    fuori norma, e peggiora proprio sulle schede più chiare. L'inchiostro tiene
    6,4:1 su tutte e tre. Un anello di focus non è un elemento di marca: è
    l'unica cosa che dice a chi naviga da tastiera dove si trova. */
-.lh :focus-visible {
+.lh :focus-visible,
+.lh .is-focus {
   outline: 2px solid var(--lh-ink);
   outline-offset: 0.25rem;
 }
@@ -645,6 +646,31 @@ html[data-lh-armed] .lh-obj {
   }
 }
 
+/* ── Gli stati, anche senza il dito sopra ────────────────────────────────
+   `.is-hover`, `.is-pressed` e `.is-focus` dichiarano ESATTAMENTE le stesse
+   regole delle pseudo-classi qui accanto, e servono a una cosa sola: far
+   vedere tutti gli stati insieme nella vetrina, dove non si può tenere il
+   puntatore su cinque bottoni contemporaneamente.
+
+   Stanno in questo foglio e non in quello della vetrina apposta. Se ci
+   fossero là sarebbero una copia, e una copia si scollega al primo ritocco:
+   qualcuno cambierebbe l'hover vero e la vetrina continuerebbe a mostrare
+   quello vecchio, senza che nessuno se ne accorga. Qui, invece, sono nella
+   stessa dichiarazione della pseudo-classe — cambiarne una senza l'altra
+   richiede di ignorare una riga che si sta guardando.
+
+   `.is-hover` è fuori dalla media query di `:hover` di proposito: è una
+   dimostrazione, non un puntatore, e deve rendersi visibile anche su touch. */
+.lh-cta.is-hover {
+  filter: brightness(1.08);
+  transform: translateY(-2px);
+}
+
+.lh-cta--ghost.is-hover {
+  background: color-mix(in srgb, var(--accent) 16%, transparent);
+  filter: none;
+}
+
 /* ── pressed: tattile, non cromatico ──────────────────────────────────────
    Mancava del tutto: premendo non cambiava niente (misurato — `transform` e
    `filter` identici a riposo, in hover e con il tasto giù). E siccome la
@@ -657,15 +683,37 @@ html[data-lh-armed] .lh-obj {
    Scurire toglierebbe contrasto all'etichetta proprio mentre la si sta
    premendo, e il margine buono varia per accento, quindi un valore unico che
    regga su tutti non esiste. Così invece nessun rapporto di contrasto cambia. */
-.lh-cta:active {
+.lh-cta:active,
+.lh-cta.is-pressed {
   transform: scale(0.98);
   filter: none;
   box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.4);
 }
 
-.lh-cta--ghost:active {
+.lh-cta--ghost:active,
+.lh-cta--ghost.is-pressed {
   background: color-mix(in srgb, var(--accent) 22%, transparent);
   box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* ── disabilitato ────────────────────────────────────────────────────────
+   Non c'era: la home d'ingresso non ha mai un'azione indisponibile, quindi
+   il caso non si era mai posto. Ma un sistema che non lo dichiara lascia la
+   decisione al prossimo che ne avrà bisogno, e nasceranno tre disabilitati
+   diversi. Ricetta identica a quella già usata da .lc-btn[aria-disabled] in
+   lab-cv.css: opacità e cursore, nessun colore nuovo da mantenere.
+
+   aria-disabled e non l'attributo disabled: questi sono <a>, e un link
+   disabilitato non esiste in HTML. Con aria-disabled il comando resta
+   raggiungibile da tastiera e annunciato come non disponibile — sparire dal
+   giro di Tab sarebbe peggio, perché chi naviga così non saprebbe che c'è. */
+.lh-cta[aria-disabled="true"] {
+  opacity: 0.45;
+  cursor: not-allowed;
+  filter: none;
+  transform: none;
+  box-shadow: none;
+  pointer-events: none;
 }
 
 /* A movimento ridotto resta l'affondo, sparisce lo scatto di scala: il
