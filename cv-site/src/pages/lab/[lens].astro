@@ -534,9 +534,14 @@ const MAX_CHIPS = 6;
         <h2 class="lc-sec-title" id="lc-more-title">Se vuoi andare a fondo</h2>
         <ul class="lc-more__list" role="list">
           <li><a href="/work">Case study — processo, decisioni, risultati</a></li>
-          <li>
-            <a href={`/${lens}`}>Competenze, metodo e formazione — versione attuale del CV</a>
-          </li>
+          {
+            /* Qui c'era il rimando a `/{lens}` — "competenze, metodo e
+              formazione, versione attuale del CV". Quella pagina è sospesa
+              su questo branch, e il suo contenuto non ha ancora un posto nel
+              linguaggio nuovo: lo strato 3 resta con un imbocco solo finché
+              non ne trova uno. Un link a una pagina che non c'è sarebbe
+              peggio di un imbocco in meno. */
+          }
         </ul>
       </section>
 

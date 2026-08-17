@@ -1,4 +1,15 @@
 ---
+// ─────────────────────────────────────────────────────────────────────────
+// PAGINA SOSPESA — non è una rotta.
+//
+// Astro ignora tutto ciò che in src/pages/ comincia per «_»: il file resta
+// nel repo, con la sua storia e i suoi commenti, ma non produce più una
+// pagina. Su questo branch il sito è il linguaggio nuovo — /lab/*, la
+// vetrina /design-system e /work — e le pagine del sito storico restano
+// parcheggiate qui finché non si decide se promuoverle o ritirarle.
+//
+// Per riattivarla: togli l'underscore dal nome del file. Nient'altro.
+// ─────────────────────────────────────────────────────────────────────────
 import Layout from "../layouts/Layout.astro";
 import { cvData } from "@cv-data";
 import "../styles/cv-page.css";

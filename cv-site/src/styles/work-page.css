@@ -514,11 +514,6 @@
 .work-hero__ds-link {
   display: inline-flex;
   align-items: center;
-  /* min-height: stessa correzione già fatta su .work-back, e per lo stesso
-     motivo — a --fs-12 senza padding il link era alto 18px, sotto i 24×24
-     di WCAG 2.2 SC 2.5.8. Non è testo dentro una frase, quindi l'eccezione
-     "inline" non lo copre. */
-  min-height: 1.5rem;
   gap: 0.5rem;
   margin-top: 1.25rem;
   font-family: var(--font-mono);
