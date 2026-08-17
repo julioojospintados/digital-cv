@@ -856,6 +856,34 @@
   margin-inline: auto;
 }
 
+/* La scena knolling è un livello `position: absolute; inset: 0` dentro un
+   ingresso alto quanto la finestra: senza un riquadro proprio in cui stare
+   collasserebbe a zero e gli otto oggetti finirebbero uno sull'altro
+   nell'angolo. L'altezza è l'unica cosa che questa regola decide — posizioni,
+   larghezze, rotazioni e profondità restano quelle vere. */
+.ds-stage--scena {
+  padding: 0;
+  overflow: hidden;
+}
+
+.ds-stage--scena .lh-stage {
+  position: relative;
+  inset: auto;
+  height: clamp(16rem, 42vw, 24rem);
+}
+
+/* Il caso del prototipo hero: l'etichetta sale sul pannello con un margine
+   negativo di -3rem, che dentro un riquadro con padding standard finiva sotto
+   il bordo. Qui il palco gli lascia il respiro che nella pagina vera gli dà
+   la colonna. */
+.ds-stage--caso {
+  padding-bottom: 2rem;
+}
+
+.ds-stage--caso .lab-case {
+  max-width: 26rem;
+}
+
 /* ── Intro: i numeri del sistema ─────────────────────────────────────── */
 
 .ds-facts {
