@@ -328,6 +328,10 @@ const t = it
       title: "Design System",
       lead: "Il linguaggio visivo del CV nuovo: token, componenti, stati, comportamento mobile e movimento. Ogni demo qui sotto usa il CSS vero dei componenti, non una copia — se il sistema cambia, cambia anche questa pagina.",
       tocTitle: "Indice",
+      specClass: "Classe",
+      specUse: "Quando usarlo",
+      specDont: "Da non fare",
+      specA11y: "Accessibilità",
       introLabel: "Perché questa pagina",
       why1: "Questo design system nasce da un progetto reale, non da un esercizio: è il linguaggio con cui è costruito il mio CV digitale. Ogni token qui dentro è in produzione, ogni componente è servito da una pagina vera, e ogni numero sul contrasto è stato misurato sui pixel resi invece che dichiarato in una tabella.",
       why3: "Cosa cercare, se stai valutando: i token hanno un ruolo dichiarato e non un valore a caso, gli stati sono gli stessi su ogni comando, le decisioni sui colori riportano il numero misurato e non un aggettivo, e dove il sistema ha sbagliato è scritto invece che nascosto — la sezione Accessibilità ne conserva un caso reale.",
@@ -371,6 +375,10 @@ const t = it
       title: "Design System",
       lead: "The visual language of the new CV: tokens, components, states, mobile behaviour and motion. Every demo below uses the components' real CSS, not a copy — if the system changes, this page changes with it.",
       tocTitle: "Contents",
+      specClass: "Class",
+      specUse: "When to use it",
+      specDont: "Do not",
+      specA11y: "Accessibility",
       introLabel: "Why this page",
       why1: "This design system comes from a real project, not an exercise: it is the language my digital CV is built with. Every token in here ships, every component is served by a real page, and every contrast figure was measured on rendered pixels rather than declared in a table.",
       why3: "What to look for, if you are assessing this: tokens carry a declared role rather than an arbitrary value, states are identical across every control, colour decisions cite the measured figure rather than an adjective, and where the system got it wrong it is written down instead of hidden — the Accessibility section keeps one real case.",
@@ -927,6 +935,28 @@ const NAV = [
             </div>
           </div>
         </div>
+        <div class="ds-spec">
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specClass}</span>
+            <p class="ds-spec__v"><code>lh-name · lh-tagline · lh-cred</code></p>
+          </div>
+          <div class="ds-spec__row">
+            <span class="ds-spec__k">{t.specUse}</span>
+            <p class="ds-spec__v">
+              {it ? "All'ingresso, una volta sola." : "At the entry, once only."}
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--dont">
+            <span class="ds-spec__k">{t.specDont}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Non usarlo come titolo di sezione: nasce centrato e a piena schermata, altrove si legge come un errore di allineamento."
+                  : "Do not reuse it as a section heading: it is born centred and full-screen, elsewhere it reads as a misalignment."
+              }
+            </p>
+          </div>
+        </div>
       </section>
 
       <section
@@ -975,6 +1005,38 @@ const NAV = [
                 </div>
               </div>
             </section>
+          </div>
+        </div>
+        <div class="ds-spec">
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specClass}</span>
+            <p class="ds-spec__v"><code>lh-section</code></p>
+          </div>
+          <div class="ds-spec__row">
+            <span class="ds-spec__k">{t.specUse}</span>
+            <p class="ds-spec__v">
+              {it ? "Una per lente, a schermo intero." : "One per lens, full screen."}
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--dont">
+            <span class="ds-spec__k">{t.specDont}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Non aggiungere una sezione senza una lente in MODES: il colore verrebbe dal ripiego e non dalla sezione."
+                  : "Do not add a section without a lens in MODES: the colour would come from the fallback, not the section."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specA11y}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "La sigla in filigrana è aria-hidden: è decorazione, il titolo accanto porta già l'informazione."
+                  : "The watermark initials are aria-hidden: decoration, the adjacent title already carries the meaning."
+              }
+            </p>
           </div>
         </div>
       </section>
@@ -1036,6 +1098,42 @@ const NAV = [
             }
           </p>
         </div>
+        <div class="ds-spec">
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specClass}</span>
+            <p class="ds-spec__v"><code>lh-cta · lh-cta--ghost</code></p>
+          </div>
+          <div class="ds-spec__row">
+            <span class="ds-spec__k">{t.specUse}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Massimo due per sezione: una primaria, una secondaria."
+                  : "Two per section at most: one primary, one secondary."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--dont">
+            <span class="ds-spec__k">{t.specDont}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Non due primarie affiancate, e non affidare la gerarchia alla larghezza: la porta il riempimento."
+                  : "Never two primaries side by side, and never let width carry the hierarchy: the fill does."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specA11y}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Testo scuro su riempimento: 5,65:1 su arancione, 12,10:1 su ciano. Con testo colorato su fondo trasparente due lenti su tre sarebbero fuori norma."
+                  : "Dark text on fill: 5.65:1 on orange, 12.10:1 on cyan. With coloured text on a transparent ground two lenses out of three would fail."
+              }
+            </p>
+          </div>
+        </div>
       </section>
 
       <section
@@ -1063,6 +1161,42 @@ const NAV = [
               <img class="lh-obj__shadow" src="/knolling/plant.webp" alt="" aria-hidden="true" />
               <img src="/knolling/plant.webp" alt="" loading="lazy" decoding="async" />
             </div>
+          </div>
+        </div>
+        <div class="ds-spec">
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specClass}</span>
+            <p class="ds-spec__v"><code>lh-section__object · lh-obj__shadow</code></p>
+          </div>
+          <div class="ds-spec__row">
+            <span class="ds-spec__k">{t.specUse}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Un oggetto per sezione, come fondale."
+                  : "One object per section, as a backdrop."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--dont">
+            <span class="ds-spec__k">{t.specDont}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Non ingrandirlo oltre la larghezza nativa del webp: gli scacchi sono 177px e stirati a 352 si sgranano."
+                  : "Do not scale it beyond the webp's native width: the chess piece is 177px and stretched to 352 it breaks up."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specA11y}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "alt vuoto: l'oggetto è decorativo e non aggiunge nulla al testo accanto."
+                  : "Empty alt: the object is decorative and adds nothing to the adjacent text."
+              }
+            </p>
           </div>
         </div>
       </section>
@@ -1096,6 +1230,32 @@ const NAV = [
                 Torino, Italia · {it ? "Disponibile da remoto" : "Available remotely"}
               </p>
             </div>
+          </div>
+        </div>
+        <div class="ds-spec">
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specClass}</span>
+            <p class="ds-spec__v"><code>lc-name · lc-role · lc-claim · lc-meta</code></p>
+          </div>
+          <div class="ds-spec__row">
+            <span class="ds-spec__k">{t.specUse}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "In cima alla pagina CV, sopra la piega."
+                  : "At the top of the CV page, above the fold."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--dont">
+            <span class="ds-spec__k">{t.specDont}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Non scrivere il ruolo in testo colorato: la pillola piena esiste perché l'arancione come testo si ferma a 3,62:1."
+                  : "Do not set the role in coloured text: the filled pill exists because orange as text stops at 3.62:1."
+              }
+            </p>
           </div>
         </div>
       </section>
@@ -1135,6 +1295,42 @@ const NAV = [
             </div>
           </div>
         </div>
+        <div class="ds-spec">
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specClass}</span>
+            <p class="ds-spec__v"><code>lc-now · lc-now__row</code></p>
+          </div>
+          <div class="ds-spec__row">
+            <span class="ds-spec__k">{t.specUse}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Subito sotto l'intestazione: è il dato più cercato da un recruiter."
+                  : "Right below the header: it is what a recruiter looks for first."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--dont">
+            <span class="ds-spec__k">{t.specDont}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Non superare due righe: oltre, smette di essere una risposta e torna a essere una lista."
+                  : "Never more than two rows: beyond that it stops being an answer and becomes a list again."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specA11y}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Cifre in tabular-nums, così le date si confrontano a colpo d'occhio senza leggerle."
+                  : "Digits in tabular-nums, so dates compare at a glance without being read."
+              }
+            </p>
+          </div>
+        </div>
       </section>
 
       <section
@@ -1169,6 +1365,42 @@ const NAV = [
               </a>
               <span class="lc-btn" aria-disabled="true">{it ? "Disabilitato" : "Disabled"}</span>
             </div>
+          </div>
+        </div>
+        <div class="ds-spec">
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specClass}</span>
+            <p class="ds-spec__v"><code>lc-btn · lc-btn--primary</code></p>
+          </div>
+          <div class="ds-spec__row">
+            <span class="ds-spec__k">{t.specUse}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Una azione primaria per schermata, il resto secondario."
+                  : "One primary action per screen, everything else secondary."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--dont">
+            <span class="ds-spec__k">{t.specDont}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Il pressed non scurisce mai il riempimento: toglierebbe contrasto all'etichetta proprio mentre la premi, e il margine buono varia per accento."
+                  : "The pressed state never darkens the fill: it would cost the label contrast exactly while pressed, and the safe margin varies per accent."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specA11y}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Anello di focus inchiostro con offset, mai accento: staccato confina con lo sfondo e tiene 8,4–9,9:1."
+                  : "Ink focus ring with offset, never the accent: offset means it borders the background and holds 8.4–9.9:1."
+              }
+            </p>
           </div>
         </div>
       </section>
@@ -1222,6 +1454,42 @@ const NAV = [
                 }
               </ul>
             </details>
+          </div>
+        </div>
+        <div class="ds-spec">
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specClass}</span>
+            <p class="ds-spec__v"><code>lc-lens · lc-lens__opt</code></p>
+          </div>
+          <div class="ds-spec__row">
+            <span class="ds-spec__k">{t.specUse}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Per cambiare lente da dentro il CV, in posizione retrocessa."
+                  : "To switch lens from inside the CV, in a demoted position."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--dont">
+            <span class="ds-spec__k">{t.specDont}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Non promuoverla a pulsanti di pari peso in cima: chi arriva da un annuncio non deve leggere «sono anche altre due cose» nei sette secondi in cui decide."
+                  : "Do not promote it to equally weighted buttons at the top: someone arriving from a job ad should not read «I am also two other things» in the seven seconds they are deciding."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specA11y}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "details nativo: Tab, Invio e Spazio funzionano senza handler custom. Il colore non è mai l'unico segnale della voce attiva."
+                  : "Native details: Tab, Enter and Space work with no custom handlers. Colour is never the only signal for the active item."
+              }
+            </p>
           </div>
         </div>
       </section>
@@ -1401,6 +1669,32 @@ const NAV = [
             }
           </p>
         </div>
+        <div class="ds-spec">
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specClass}</span>
+            <p class="ds-spec__v"><code>lc-job · lc-job--flat</code></p>
+          </div>
+          <div class="ds-spec__row">
+            <span class="ds-spec__k">{t.specUse}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Una per esperienza. La variante piatta quando non ci sono punti elenco."
+                  : "One per entry. The flat variant when there are no bullet points."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--dont">
+            <span class="ds-spec__k">{t.specDont}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Non chiudere sulla sola intestazione: scoprire due chip dietro un click è un'affordance che mente, ed è il «treasure hunt» che gli hiring manager citano fra i motivi di scarto."
+                  : "Do not collapse to the heading alone: revealing two chips behind a click is an affordance that lies, the «treasure hunt» hiring managers cite among reasons to discard."
+              }
+            </p>
+          </div>
+        </div>
       </section>
 
       <section
@@ -1447,6 +1741,42 @@ const NAV = [
             </div>
           </div>
         </div>
+        <div class="ds-spec">
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specClass}</span>
+            <p class="ds-spec__v"><code>lc-chip · lc-chip--more</code></p>
+          </div>
+          <div class="ds-spec__row">
+            <span class="ds-spec__k">{t.specUse}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Per le tecnologie di un'esperienza, con soglia a sei."
+                  : "For an entry's technologies, with a six-item threshold."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--dont">
+            <span class="ds-spec__k">{t.specDont}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Non nascondere le chip dal markup: ci sono tutte, a nasconderle è lo script che sa anche riaprirle."
+                  : "Do not hide chips from the markup: they are all there, and the script that hides them is the one that can reopen them."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specA11y}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Il segno «+4» resta nel nome accessibile (2.5.3): chi comanda a voce dice quello che vede. Aprendo diventa «−4», non una parola nuova."
+                  : "The «+4» sign stays in the accessible name (2.5.3): voice users say what they see. On expand it becomes «−4», not a new word."
+              }
+            </p>
+          </div>
+        </div>
       </section>
 
       <section
@@ -1466,6 +1796,42 @@ const NAV = [
               <span class="lc-ai">AI</span>
               <span class="lc-ai lc-ai--sm">AI</span>
             </div>
+          </div>
+        </div>
+        <div class="ds-spec">
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specClass}</span>
+            <p class="ds-spec__v"><code>lc-ai · lc-ai--sm</code></p>
+          </div>
+          <div class="ds-spec__row">
+            <span class="ds-spec__k">{t.specUse}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Su esperienze e incarichi svolti con l'AI nel flusso."
+                  : "On entries and engagements done with AI in the flow."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--dont">
+            <span class="ds-spec__k">{t.specDont}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Non usarlo come decorazione: se compare ovunque smette di dire qualcosa."
+                  : "Do not use it as decoration: if it appears everywhere it stops meaning anything."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specA11y}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Porta un testo per screen reader che spiega la sigla; due lettere da sole non bastano."
+                  : "It carries screen-reader text explaining the acronym; two letters alone are not enough."
+              }
+            </p>
           </div>
         </div>
       </section>
@@ -1510,6 +1876,42 @@ const NAV = [
                 </span>
               </li>
             </ul>
+          </div>
+        </div>
+        <div class="ds-spec">
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specClass}</span>
+            <p class="ds-spec__v"><code>lc-all__list · lc-all__row</code></p>
+          </div>
+          <div class="ds-spec__row">
+            <span class="ds-spec__k">{t.specUse}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "In fondo alla pagina, sempre completa."
+                  : "At the foot of the page, always complete."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--dont">
+            <span class="ds-spec__k">{t.specDont}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Non filtrarla per lente: è la garanzia di completezza, e filtrata farebbe sembrare un CV da cinque anni."
+                  : "Do not filter it by lens: it is the completeness guarantee, and filtered it would look like a five-year CV."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specA11y}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Il marcatore delle voci in evidenza ha accanto un testo per screen reader: il pallino da solo non dice niente."
+                  : "The highlight marker carries screen-reader text: the dot alone says nothing."
+              }
+            </p>
           </div>
         </div>
       </section>
@@ -1642,6 +2044,42 @@ const NAV = [
             }
           </p>
         </div>
+        <div class="ds-spec">
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specClass}</span>
+            <p class="ds-spec__v"><code>work-index-card · work-index-card--pulse</code></p>
+          </div>
+          <div class="ds-spec__row">
+            <span class="ds-spec__k">{t.specUse}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Nell'indice dei case study, una per progetto."
+                  : "In the case-study index, one per project."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--dont">
+            <span class="ds-spec__k">{t.specDont}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Non usare pulse su più di una card: segnala la novità, e due novità non sono più una novità."
+                  : "Do not use pulse on more than one card: it flags what is new, and two new things are no longer new."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specA11y}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "L'alone pulsante dura meno di 5 secondi per ciclo (2.2.2) e si ferma con prefers-reduced-motion."
+                  : "The pulsing glow runs under 5 seconds per cycle (2.2.2) and stops under prefers-reduced-motion."
+              }
+            </p>
+          </div>
+        </div>
       </section>
 
       <section
@@ -1757,6 +2195,32 @@ const NAV = [
             </ul>
           </div>
         </div>
+        <div class="ds-spec">
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specClass}</span>
+            <p class="ds-spec__v"><code>lc-clients · lc-client</code></p>
+          </div>
+          <div class="ds-spec__row">
+            <span class="ds-spec__k">{t.specUse}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Dentro un'esperienza di consulenza, al posto degli highlight."
+                  : "Inside a consultancy entry, in place of the bullet points."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--dont">
+            <span class="ds-spec__k">{t.specDont}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Non affiancarli agli highlight: direbbero le stesse cose due volte."
+                  : "Do not show them alongside the bullets: they would say the same things twice."
+              }
+            </p>
+          </div>
+        </div>
       </section>
 
       <section
@@ -1847,6 +2311,32 @@ const NAV = [
             </div>
           </div>
         </div>
+        <div class="ds-spec">
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specClass}</span>
+            <p class="ds-spec__v"><code>work-cta · work-cta__link--primary</code></p>
+          </div>
+          <div class="ds-spec__row">
+            <span class="ds-spec__k">{t.specUse}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "In chiusura di un case study, una sola volta."
+                  : "At the close of a case study, once."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--dont">
+            <span class="ds-spec__k">{t.specDont}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Non due primarie: chiude il racconto con un'azione, non con un bivio."
+                  : "Not two primaries: it closes the story with an action, not a fork."
+              }
+            </p>
+          </div>
+        </div>
       </section>
 
       <section
@@ -1885,6 +2375,28 @@ const NAV = [
               }
             </li>
           </ul>
+        </div>
+        <div class="ds-spec">
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specClass}</span>
+            <p class="ds-spec__v"><code>work-learnings · work-learnings__item</code></p>
+          </div>
+          <div class="ds-spec__row">
+            <span class="ds-spec__k">{t.specUse}</span>
+            <p class="ds-spec__v">
+              {it ? "In fondo a ogni case study." : "At the foot of every case study."}
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--dont">
+            <span class="ds-spec__k">{t.specDont}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Non scriverci solo successi: ammettere cosa non ha funzionato è ciò che distingue un caso studio da una brochure."
+                  : "Do not list only wins: admitting what did not work is what separates a case study from a brochure."
+              }
+            </p>
+          </div>
         </div>
       </section>
 

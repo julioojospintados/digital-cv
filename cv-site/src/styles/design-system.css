@@ -915,3 +915,70 @@
   color: var(--ds-muted);
   max-width: 11rem;
 }
+
+/* ── Scheda del componente ───────────────────────────────────────────────
+   Quello che separa uno style guide da un design system: non "ecco com'è
+   fatto" ma "quando si usa, cosa non fare e perché". I contenuti non sono
+   inventati per la vetrina — vengono dalle motivazioni già scritte nei
+   commenti dei fogli di stile, che sono la fonte più onesta disponibile. */
+
+.ds-spec {
+  display: grid;
+  gap: 0.85rem;
+  margin-top: 1.25rem;
+  padding: 1rem 1.15rem;
+  border: 1px solid var(--ds-line);
+  border-radius: var(--radius-16);
+  background: rgba(0, 0, 0, 0.12);
+}
+
+@media (min-width: 56rem) {
+  .ds-spec {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem 2rem;
+  }
+}
+
+.ds-spec__row {
+  min-width: 0;
+}
+
+/* La riga della classe occupa tutta la larghezza: è la prima cosa che serve
+   a chi apre la pagina per copiare qualcosa. */
+.ds-spec__row--wide {
+  grid-column: 1 / -1;
+}
+
+.ds-spec__k {
+  display: block;
+  margin-bottom: 0.3rem;
+  font-family: var(--font-mono);
+  font-size: var(--fs-10);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ds-muted);
+}
+
+.ds-spec__v {
+  margin: 0;
+  font-size: var(--fs-14);
+  line-height: 1.55;
+  color: var(--ds-ink);
+}
+
+.ds-spec__v code {
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  padding: 0.1rem 0.35rem;
+  border: 1px solid var(--ds-line);
+  border-radius: var(--radius-4);
+  background: rgba(255, 255, 255, 0.04);
+  white-space: nowrap;
+}
+
+/* Il "da non fare" porta un segnale suo: è l'informazione che si ricorda, e
+   non deve leggersi come una nota fra le altre. Il colore non è l'unico
+   segnale — c'è anche l'etichetta scritta (1.4.1). */
+.ds-spec__row--dont .ds-spec__k {
+  color: rgba(255, 160, 140, 1);
+}
