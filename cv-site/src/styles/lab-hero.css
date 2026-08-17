@@ -69,6 +69,14 @@
   letter-spacing: -0.02em;
   color: var(--lab-accent);
   text-decoration: none;
+  /* Due lettere alte 17px erano un bersaglio da 17×17, sotto i 24×24 di
+     WCAG 2.2 SC 2.5.8: è un link di navigazione isolato, non testo dentro
+     una frase, quindi nessuna eccezione lo copre. */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.5rem;
+  min-height: 1.5rem;
 }
 
 .lab-flag {
@@ -385,6 +393,8 @@
   align-items: center;
   gap: 0.5rem;
   margin-top: 0.35rem;
+  /* Stessa ragione di .lab-mark: a 0.72rem il link era alto 17px. */
+  min-height: 1.5rem;
 }
 
 .lab-link::after {

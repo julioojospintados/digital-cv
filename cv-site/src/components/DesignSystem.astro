@@ -98,6 +98,22 @@ const KNOLLING = [
   { src: "camera", x: "80%", y: "85%", w: "20vmin", r: "-7deg", depth: 1.25 },
 ];
 
+/* ── I prefissi delle classi ─────────────────────────────────────────────
+   Ogni componente porta in alto a destra un badge tipo `lh-*`, e finora la
+   pagina non diceva da nessuna parte cosa volesse dire. Vale la pena leggere
+   la colonna "cosa significa davvero": i prefissi non descrivono *che cosa
+   è* un componente, ma *da quale prova viene* — ed è un difetto del sistema,
+   non una convenzione. `lab-` per giunta sembra il prefisso di famiglia di
+   tutto /lab e invece è una prova sola. Scritto qui perché la vetrina
+   documenta anche ciò che nel sistema non torna. */
+const PREFIXES = [
+  { p: "lh-*", from: "/lab/home", file: "lab-home.css" },
+  { p: "lc-*", from: "/lab/<lente>", file: "lab-cv.css" },
+  { p: "lab-*", from: "/lab/hero", file: "lab-hero.css" },
+  { p: "work-*", from: "/work", file: "work-page.css" },
+  { p: "ds-*", from: "questa pagina", file: "design-system.css" },
+];
+
 /* ── Token di base, condivisi da tutto il sistema (global.css). ─────────── */
 const BASE_TOKENS = [
   { name: "--color-bg", value: "rgba(8, 73, 67, 1)" },
@@ -365,6 +381,14 @@ const t = it
       specDont: "Da non fare",
       specA11y: "Accessibilità",
       anatomy: "Anatomia",
+      prefixTitle: "I prefissi, e perché non vanno bene",
+      prefixLead:
+        "Ogni componente porta un badge come lh-* accanto al titolo. Dice da dove viene la classe — e conviene sapere subito che dice solo quello.",
+      prefixCol1: "Prefisso",
+      prefixCol2: "Da dove viene",
+      prefixCol3: "Foglio",
+      prefixNote:
+        "Un prefisso dovrebbe dire cosa fa un componente, non in quale file è nato. Questi dicono la seconda cosa, e uno — lab-* — sembra pure la famiglia di tutto /lab quando invece è una prova sola su tre. Restano così finché /lab non viene promosso: rinominarli adesso significherebbe rinominarli due volte.",
       anatomyShow: "Mostra i numeri",
       anatomyHint:
         "Le parti nell'ordine in cui stanno nel markup. Premi il comando per vederle numerate sulla demo qui sopra.",
@@ -416,6 +440,14 @@ const t = it
       specDont: "Do not",
       specA11y: "Accessibility",
       anatomy: "Anatomy",
+      prefixTitle: "The prefixes, and why they are wrong",
+      prefixLead:
+        "Every component carries a badge like lh-* beside its title. It says where the class comes from — and it is worth knowing up front that this is all it says.",
+      prefixCol1: "Prefix",
+      prefixCol2: "Where it comes from",
+      prefixCol3: "Stylesheet",
+      prefixNote:
+        "A prefix should say what a component does, not which file it was born in. These say the latter, and one — lab-* — even looks like the family prefix for all of /lab when it is one prototype out of three. They stay this way until /lab is promoted: renaming them now would mean renaming them twice.",
       anatomyShow: "Show the numbers",
       anatomyHint:
         "The parts in the order they appear in the markup. Press the control to see them numbered on the demo above.",
@@ -599,6 +631,15 @@ const NAV = [
 
     <main class="ds-main" id="main-content">
       {
+        /* L'h1 della pagina sta qui e non dentro l'introduzione: i pannelli si
+          scambiano con `hidden`, quindi un titolo dentro un pannello sparisce
+          dall'albero di accessibilità appena se ne sceglie un altro — e su 37
+          pannelli su 38 la pagina restava senza h1. Visivamente il titolo è
+          già nell'introduzione, quindi qui serve solo a chi legge la pagina
+          con uno screen reader. */
+      }
+      <h1 class="ds-sr">{t.title}</h1>
+      {
         /* Il selettore d'accento compare solo sui pannelli marcati
           `data-ds-accent`, cioè quelli che cambiano davvero quando cambia la
           lente. L'elenco non è stimato: è stato misurato confrontando gli
@@ -633,7 +674,7 @@ const NAV = [
           e l'indirizzo resta condivisibile. */
       }
       <section class="ds-panel ds-intro" data-ds-panel="intro" aria-labelledby="intro-t">
-        <h1 class="ds-head__title" id="intro-t">{t.title}</h1>
+        <h2 class="ds-head__title" id="intro-t">{t.title}</h2>
         <p class="ds-head__lead">{t.lead}</p>
         <div class="ds-intro__why">
           <p>{t.why1}</p>
@@ -650,6 +691,46 @@ const NAV = [
             ))
           }
         </ul>
+
+        {
+          /* La legenda dei prefissi sta nell'introduzione e non in un pannello
+            suo: il badge `lh-*` compare già sul primo componente, e una
+            legenda che si trova solo cercandola arriva sempre dopo la
+            domanda. */
+        }
+        <section class="ds-prefix" aria-labelledby="prefix-t">
+          <h3 class="ds-sub__title" id="prefix-t">{t.prefixTitle}</h3>
+          <p class="ds-sub__note">{t.prefixLead}</p>
+          <div class="ds-table-wrap">
+            <table class="ds-table">
+              <thead>
+                <tr>
+                  <th>{t.prefixCol1}</th>
+                  <th>{t.prefixCol2}</th>
+                  <th>{t.prefixCol3}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {
+                  PREFIXES.map((row) => (
+                    <tr>
+                      <td>
+                        <code>{row.p}</code>
+                      </td>
+                      <td>{row.from}</td>
+                      <td>
+                        <code>{row.file}</code>
+                      </td>
+                    </tr>
+                  ))
+                }
+              </tbody>
+            </table>
+          </div>
+          <div class="ds-callout">
+            <p>{t.prefixNote}</p>
+          </div>
+        </section>
 
         <div class="ds-callout">
           <p>{t.why3}</p>
@@ -1024,8 +1105,8 @@ const NAV = [
         <p class="ds-sub__note">
           {
             it
-              ? "Sigla in filigrana, titolo su due righe, occhiello, paragrafo e le CTA. L'oggetto knolling sta nell'altra colonna."
-              : "Watermark initials, two-line title, eyebrow, paragraph and the CTAs. The knolling object sits in the other column."
+              ? "Sigla in filigrana, titolo su due righe, occhiello, paragrafo e le CTA in una colonna, l'oggetto knolling nell'altra. È una griglia a due colonne: mostrarne una sola lasciava metà componente fuori dalla demo."
+              : "Watermark initials, two-line title, eyebrow, paragraph and the CTAs in one column, the knolling object in the other. It is a two-column grid: showing one column alone left half the component out of the demo."
           }
         </p>
         <div class="ds-stage ds-stage--watermark">
@@ -1058,6 +1139,10 @@ const NAV = [
                     {it ? "Esplora il portfolio" : "Explore the portfolio"}
                   </a>
                 </div>
+              </div>
+              <div class="lh-section__object" data-ds-part="6" style="--nat:12rem">
+                <img class="lh-obj__shadow" src="/knolling/camera.webp" alt="" aria-hidden="true" />
+                <img src="/knolling/camera.webp" alt="" loading="lazy" decoding="async" />
               </div>
             </section>
           </div>
@@ -1123,6 +1208,17 @@ const NAV = [
                   it
                     ? "Le due CTA — primaria e secondaria, mai due primarie."
                     : "The two CTAs — primary and secondary, never two primaries."
+                }</span
+              >
+            </li>
+            <li class="ds-anatomy__item">
+              <span class="ds-anatomy__n" aria-hidden="true">6</span>
+              <code class="ds-anatomy__cls">lh-section__object</code>
+              <span class="ds-anatomy__role"
+                >{
+                  it
+                    ? "L'oggetto knolling, nella seconda colonna della griglia."
+                    : "The knolling object, in the grid's second column."
                 }</span
               >
             </li>
@@ -1194,7 +1290,7 @@ const NAV = [
               bottone resta arancione qualunque accento si scelga. */
           }
           <div class="lh">
-            <div class="lh-section" data-mode="creative" style="min-height:0;padding:0;">
+            <div class="lh-section ds-ctx" data-mode="creative">
               <div class="ds-stage__row">
                 <div class="ds-case">
                   <p class="ds-label">{it ? "primaria — riposo" : "primary — resting"}</p>
@@ -3564,6 +3660,23 @@ const NAV = [
             </tbody>
           </table>
         </div>
+        {
+          /* Un limite noto, scritto invece che nascosto — come l'anello di
+            focus qui sotto. Toglierlo significherebbe far mentire lo
+            snippet, che è la garanzia su cui questa pagina è costruita. */
+        }
+        <div class="ds-callout">
+          <p>
+            <strong>
+              {it ? "Una demo può contenere il proprio h1." : "A demo may contain its own h1."}
+            </strong>{" "}
+            {
+              it
+                ? "L'intestazione del CV e le due testate di /work nella pagina vera sono h1, e la demo le riproduce tali e quali perché lo snippet dev'essere vero. Dentro la vetrina finiscono quindi sotto l'h2 del pannello. L'h1 della pagina esiste comunque, sempre, fuori dai pannelli: è per screen reader, perché i pannelli si scambiano con hidden e un titolo che vive dentro uno di loro sparisce appena se ne sceglie un altro."
+                : "The CV header and the two /work headers are h1 on the real pages, and the demo reproduces them exactly because the snippet has to be true. Inside the showcase they therefore sit under the panel's h2. The page's own h1 exists regardless, always, outside the panels: it is screen-reader only, because panels are swapped with hidden and a title living inside one disappears the moment another is chosen."
+            }
+          </p>
+        </div>
         <div class="ds-callout">
           <p>
             <strong
@@ -3620,6 +3733,13 @@ const NAV = [
         if (a.dataset.dsNav === target) a.setAttribute("aria-current", "page");
         else a.removeAttribute("aria-current");
       });
+      // L'indice è una colonna alta 2073px dentro un riquadro da 712: aprendo
+      // /design-system#work-decisione la voce attiva restava 1097px sotto il
+      // bordo, con scrollTop a 0. Il pannello giusto c'era, ma l'indice non
+      // diceva più dove ci si trovava. `nearest` perché muova il riquadro solo
+      // se serve — e non è scrollIntoView sulla pagina, che porterebbe via
+      // anche il pannello appena scelto.
+      navLinks.find((a) => a.dataset.dsNav === target)?.scrollIntoView({ block: "nearest" });
       if (push && location.hash.slice(1) !== target) {
         history.replaceState(null, "", `#${target}`);
       }
@@ -3815,7 +3935,18 @@ const NAV = [
     const attrs = (el: Element) => {
       const drop = new Set((el.getAttribute("data-ds-drop") ?? "").split(/\s+/).filter(Boolean));
       return Array.from(el.attributes)
-        .filter((a) => !a.name.startsWith("data-ds-") && !drop.has(a.name))
+        .filter(
+          (a) =>
+            // `data-ds-*`: impalcatura della vetrina.
+            // `data-astro-source-*`: iniettati SOLO in `astro dev` per la
+            // barra degli strumenti, e portano il percorso assoluto del file
+            // sulla macchina di chi sviluppa. Nel build non esistono, quindi
+            // il difetto si vedeva solo in dev — cioè esattamente dove si
+            // guarda la vetrina mentre la si costruisce.
+            !a.name.startsWith("data-ds-") &&
+            !a.name.startsWith("data-astro-") &&
+            !drop.has(a.name),
+        )
         .map((a) =>
           a.value === "" && BOOLEAN.has(a.name) ? ` ${a.name}` : ` ${a.name}="${a.value}"`,
         )

@@ -159,9 +159,11 @@ async function auditPage(browser, { lang, path }) {
         spec: !!el.querySelector(".ds-spec"),
         code: !!codeEl,
         copy: !!el.querySelector(".ds-code__copy"),
-        // Gli attributi di servizio della vetrina non devono finire in ciò
-        // che un frontend si porta via.
-        dirty: codeEl ? /data-ds-/.test(codeEl.textContent) : false,
+        // Gli attributi di servizio non devono finire in ciò che un frontend
+        // si porta via — né quelli della vetrina né quelli che `astro dev`
+        // inietta per la sua barra degli strumenti, che per giunta portano il
+        // percorso assoluto del file sulla macchina di chi sviluppa.
+        dirty: codeEl ? /data-(ds|astro)-/.test(codeEl.textContent) : false,
         visible: Array.from(document.querySelectorAll("[data-ds-panel]")).filter((p) => !p.hidden)
           .length,
       };
@@ -189,7 +191,7 @@ async function auditPage(browser, { lang, path }) {
   check(missing.copy.length === 0, "ogni snippet ha il comando di copia", missing.copy.join(", "));
   check(
     missing.dirty.length === 0,
-    "nessuno snippet porta attributi data-ds-",
+    "nessuno snippet porta attributi di servizio",
     missing.dirty.join(", "),
   );
 
@@ -242,8 +244,104 @@ async function auditPage(browser, { lang, path }) {
   }
   await page.setViewportSize({ width: 1280, height: 900 });
 
-  // ── 6. Console pulita ───────────────────────────────────────────────────
-  console.log("\n  [6] Console");
+  // ── 6. La voce attiva dell'indice resta in vista ────────────────────────
+  // L'indice è più alto del riquadro che lo contiene. Arrivando da un link
+  // profondo la voce attiva finiva anche 1097px sotto il bordo, con lo scroll
+  // a zero: il pannello giusto c'era, ma l'indice non diceva più dove si era.
+  console.log("\n  [6] Voce attiva dell'indice");
+  const outOfView = [];
+  for (const id of panels) {
+    await openPanel(page, id);
+    const off = await page.evaluate(() => {
+      const side = document.getElementById("ds-side");
+      const a = side?.querySelector('[aria-current="page"]');
+      if (!side || !a) return null;
+      const s = side.getBoundingClientRect();
+      const r = a.getBoundingClientRect();
+      return Math.round(Math.max(s.top - r.top, r.bottom - s.bottom, 0));
+    });
+    if (off !== null && off > 0) outOfView.push(`${id} (+${off}px)`);
+  }
+  check(outOfView.length === 0, "la voce attiva è sempre dentro l'indice", outOfView.join(", "));
+
+  // ── 7. Nessun involucro che schiaccia la demo ───────────────────────────
+  // Un involucro tenuto solo per portare `--accent` non deve imporre anche la
+  // propria griglia: la demo delle CTA finiva in 422px su 907, con metà palco
+  // vuoto. Chi ne ha bisogno porta anche `.ds-ctx` (display: contents).
+  console.log("\n  [7] Involucri di contesto");
+  const squashed = [];
+  for (const id of panels) {
+    await openPanel(page, id);
+    const bad = await page.evaluate((panelId) => {
+      const panel = document.querySelector(`[data-ds-panel="${panelId}"]`);
+      const out = [];
+      panel.querySelectorAll(".ds-stage .lh-section, .ds-stage .lc-main").forEach((w) => {
+        if (getComputedStyle(w).display !== "grid" || w.children.length !== 1) return;
+        const own = w.getBoundingClientRect().width;
+        const kid = w.children[0].getBoundingClientRect().width;
+        if (kid < own * 0.75) out.push(`${Math.round(kid)}/${Math.round(own)}px`);
+      });
+      return out;
+    }, id);
+    if (bad.length) squashed.push(`${id}: ${bad.join(", ")}`);
+  }
+  check(
+    squashed.length === 0,
+    "nessuna demo schiacciata dal proprio involucro",
+    squashed.join(" · "),
+  );
+
+  // ── 8. Bersagli di tocco — WCAG 2.2 SC 2.5.8 ───────────────────────────
+  // 24×24 CSS px, con l'eccezione "inline": un link dentro una frase è
+  // vincolato dall'interlinea del testo che lo circonda e non conta. Qui
+  // l'eccezione vale per i contatti in chiaro, che sono una riga di prosa.
+  console.log("\n  [8] Bersagli di tocco");
+  const tiny = [];
+  for (const id of panels) {
+    await openPanel(page, id);
+    const small = await page.evaluate((panelId) => {
+      const panel = document.querySelector(`[data-ds-panel="${panelId}"]`);
+      const out = [];
+      panel.querySelectorAll(".ds-stage a, .ds-stage button, .ds-stage summary").forEach((el) => {
+        const r = el.getBoundingClientRect();
+        if (r.width === 0 && r.height === 0) return;
+        // Eccezione inline: il bersaglio sta dentro un blocco di testo che
+        // non è tutto bersaglio.
+        const parent = el.parentElement;
+        const inSentence =
+          parent &&
+          getComputedStyle(parent).display === "block" &&
+          parent.textContent.trim() !== el.textContent.trim();
+        if (inSentence) return;
+        if (r.width < 24 || r.height < 24)
+          out.push(`${el.className || el.tagName} ${Math.round(r.width)}×${Math.round(r.height)}`);
+      });
+      return out;
+    }, id);
+    if (small.length) tiny.push(`${id}: ${[...new Set(small)].join(", ")}`);
+  }
+  check(tiny.length === 0, "ogni comando è almeno 24×24 (2.5.8)", tiny.join(" · "));
+
+  // ── 9. La pagina ha un h1, su qualunque pannello ────────────────────────
+  // I pannelli si scambiano con `hidden`: un titolo dentro un pannello
+  // sparisce dall'albero appena se ne sceglie un altro, e la pagina restava
+  // senza h1 su 37 pannelli su 38.
+  console.log("\n  [9] Titolo della pagina");
+  const noH1 = [];
+  for (const id of panels) {
+    await openPanel(page, id);
+    const has = await page.evaluate(() => {
+      const h1s = Array.from(document.querySelectorAll("h1")).filter(
+        (h) => h.offsetParent !== null || h.closest(".ds-sr"),
+      );
+      return h1s.some((h) => h.classList.contains("ds-sr"));
+    });
+    if (!has) noH1.push(id);
+  }
+  check(noH1.length === 0, "l'h1 della pagina c'è su ogni pannello", noH1.join(", "));
+
+  // ── 10. Console pulita ──────────────────────────────────────────────────
+  console.log("\n  [10] Console");
   check(problems.length === 0, "nessun errore in console", problems.slice(0, 3).join(" | "));
 
   await context.close();

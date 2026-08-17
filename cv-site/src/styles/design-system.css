@@ -178,6 +178,34 @@
     padding-right: 1rem;
     padding-bottom: 2rem;
     border-right: 1px solid var(--ds-line);
+    /* La colonna è alta il doppio abbondante del riquadro che la contiene, e
+       le barre a sovrapposizione di Chrome su Linux sono invisibili finché
+       non la si tocca: senza queste due righe l'indice sembrava un elenco
+       tagliato a metà invece di un elenco che scorre. `scrollbar-color`
+       forza anche la barra classica, che è il punto — serve l'affordance,
+       non l'eleganza. */
+    scrollbar-width: thin;
+    scrollbar-color: var(--ds-line-strong) transparent;
+    /* La voce attiva viene portata in vista dallo script: senza questo si
+       ferma incollata al bordo, che è proprio la posizione in cui sembra
+       tagliata invece che ultima. */
+    scroll-padding-block: 1rem;
+  }
+
+  /* Il velo in fondo alla colonna. `position: sticky` dentro il contenitore
+     che scorre: resta appeso al bordo inferiore e sfuma ciò che gli passa
+     sotto. Serve perché le barre a sovrapposizione sono invisibili finché
+     non si tocca la colonna, e un elenco che finisce di netto a metà
+     schermo si legge come un errore di render, non come "continua". */
+  .ds-side::after {
+    content: "";
+    position: sticky;
+    bottom: -2rem;
+    display: block;
+    height: 3rem;
+    margin-top: -3rem;
+    background: linear-gradient(to top, var(--color-bg), transparent);
+    pointer-events: none;
   }
 }
 
@@ -477,6 +505,17 @@
   min-height: 0;
   padding: 0;
   max-width: none;
+}
+
+/* Un involucro che esiste solo per portare `--accent` ai discendenti — la
+   sezione di /lab/home definisce l'accento su di sé, non sulla radice, quindi
+   una demo di CTA ha bisogno di stare dentro una `.lh-section` per prendere
+   il colore giusto. Ma `.lh-section` è una griglia a due colonne, e la demo
+   finiva schiacciata in 422px su 907 con metà palco vuoto.
+   `display: contents` toglie l'involucro dal layout senza toglierlo
+   dall'albero: l'ereditarietà delle custom property resta, la griglia no. */
+.ds-stage .ds-ctx {
+  display: contents;
 }
 
 /* La tendina di /lab/<lente> è `position: absolute` sopra la pagina: dentro
@@ -847,6 +886,14 @@
    sopra di sé, qui usciva dal riquadro e l'overflow la tagliava a metà. */
 .ds-stage--watermark {
   padding-top: 5.5rem;
+}
+
+/* La sezione-lente è una griglia a due colonne — testo e oggetto. Nella
+   pagina vera l'oggetto è grande quanto mezza schermata; qui va tenuto a
+   misura di riquadro, altrimenti detta lui l'altezza di tutto il palco. */
+.ds-stage--watermark .lh-section__object {
+  width: min(100%, 12rem);
+  justify-self: center;
 }
 
 /* Il titolo d'ingresso è centrato nella pagina vera (justify-items: center
@@ -1278,4 +1325,15 @@
   font-variant-numeric: tabular-nums;
   line-height: 1;
   pointer-events: none;
+}
+
+/* ── Legenda dei prefissi ────────────────────────────────────────────────
+   Nell'introduzione, non in un pannello suo: il badge `lh-*` si vede già sul
+   primo componente, e una legenda che si trova solo cercandola arriva sempre
+   dopo la domanda. */
+
+.ds-prefix {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--ds-line);
 }
