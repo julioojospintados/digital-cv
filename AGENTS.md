@@ -460,7 +460,8 @@ scripts/                  ← Root utility scripts (Node)
   generate-targeted-cv.ts ← Renders one job-application-specific Locale JSON (npm run pdf:targeted -- <path>) — consumer of .claude/agents/cv-recruiter.md's output
   gen-pdf-assets.mjs      ← Regenerates generated/pdf-assets.json (rerun only if fonts/QR change — see AGENTS.md § "from a phone")
   gen-og-image.mjs        ← Generate the Open Graph image
-  qa-mobile.js            ← Responsive QA via Playwright
+  qa-mobile.js            ← Responsive QA via Playwright (npm run qa:mobile)
+  qa-design-system.mjs    ← Deterministic gauntlet for /design-system, IT+EN (npm run qa:ds) — see § Verification loop
   record-demo-playwright.js ← Record the site demo video
 
 .vscode/
@@ -497,6 +498,36 @@ generated/
 CLAUDE.md                 ← Claude Code entry point (imports this file, adds skill-loading + MCP notes)
 AGENTS.md                 ← This file — tool-agnostic project guide
 ```
+
+---
+
+## Verification loop — what a script decides, and what it cannot
+
+→ `cv-site/` has a structural problem no amount of care fixes on its own: every
+  page exists twice (IT and EN), and `/design-system` alone is 38 panels — 76
+  screens nobody re-checks by hand after a change. Most of what breaks there is
+  **decidable**, though: IT/EN parity, index ↔ panel correspondence, every
+  component carrying its spec card and snippet, a clean console, no horizontal
+  scrollbar at 390px. `scripts/qa-design-system.mjs` (`npm run qa:ds`) asserts
+  exactly those, against a real browser, in both languages, exiting 1 with the
+  name of the invariant that fell. It found a real one on its first run: the
+  panels' DOM order had drifted from the index order, so a no-JS visitor read
+  the page in an order the index did not promise.
+→ It deliberately stops at the boundary of judgement. It cannot tell that a
+  component is documented under the wrong class — the showcase presented
+  `lab-label` as a text label for weeks when it is the case's caption block —
+  nor that a demo is unfaithful to its real context, nor that a sentence does
+  not sound like Giulio. That half needs a critic reading the diff with the bar
+  in hand, ideally a fresh-context sub-agent that has not read the rationale it
+  is supposed to be checking.
+→ Both halves, and the rule that keeps them honest (whoever implements does not
+  grade their own work), live in `.claude/skills/verification-loop/SKILL.md` —
+  the project's adaptation of the Gauntlet Loop technique. Load it before
+  declaring UI or copy work finished.
+→ When a change to the showcase is not covered by the gauntlet, **add the
+  check** rather than testing by hand: a verification script that stops growing
+  with the project ages exactly like the "photograph" design system that
+  `design-system.css` warns about in its header.
 
 ---
 

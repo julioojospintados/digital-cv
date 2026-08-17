@@ -20,8 +20,9 @@ Poi carica la skill specializzata pertinente alla richiesta (i puntatori complet
 | `.claude/skills/mcp-architecture/SKILL.md` | backend, MCP tools, Hono, test, cv.ts |
 | `.claude/skills/partnership-strategy/SKILL.md` | offerta Fractional, bio servizi, tono per le aziende, posizionamento |
 
-Skill di utilità (non di dominio, non caricare di default):
+Skill di utilità (non di dominio):
 
+- `.claude/skills/verification-loop/SKILL.md` — il gauntlet loop del progetto: costruisci, misura, critica, ricomincia. **Caricala prima di dichiarare finito** un lavoro su UI o testi di `cv-site/`, e quando l'utente dice "verifica", "gauntlet", "ricontrolla", "sei sicuro?". Divide ciò che si misura da solo (`npm run qa:ds`) da ciò che richiede un critico a contesto fresco.
 - `.claude/skills/caveman/SKILL.md` — modalità di risposta ultra-compressa. Invocabile con `/caveman` (livelli: lite/full/ultra/wenyan-*) quando l'utente chiede di ridurre i token o "parlare da caveman". Torna a prosa normale con "stop caveman".
 
 ## MCP

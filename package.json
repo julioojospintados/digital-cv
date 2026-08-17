@@ -21,6 +21,8 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
+    "qa:ds": "node scripts/qa-design-system.mjs",
+    "qa:mobile": "node scripts/qa-mobile.js",
     "parse-cv": "node --import tsx/esm scripts/parse-cv.ts",
     "pdf:cv": "node --import tsx/esm scripts/generate-cv-pdf.ts",
     "pdf:ux": "node --import tsx/esm scripts/generate-ux-cv.ts",

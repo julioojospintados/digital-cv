@@ -2343,6 +2343,210 @@ const NAV = [
         </div>
       </section>
 
+      <section
+        class="ds-panel"
+        data-ds-accent
+        data-ds-panel="lente-clienti"
+        aria-labelledby="lente-clienti-t"
+      >
+        <div class="ds-panel__head">
+          <h2 class="ds-section__title" id="lente-clienti-t">
+            {it ? "Incarichi presso clienti" : "Client engagements"}
+          </h2>
+          <span class="ds-panel__group">{t.secLens}<span class="ds-origin">lc-*</span></span>
+        </div>
+        <p class="ds-sub__note">
+          {
+            it
+              ? "Quando un'esperienza ha clienti, questi prendono il posto degli highlight: dicono le stesse cose col nome del cliente davanti, che per una consulenza è il dato più cercato."
+              : "When an entry has clients, they replace the bullet points: same content with the client name first, which for consultancy work is the most sought-after detail."
+          }
+        </p>
+        <div class="ds-stage">
+          <div class="lc">
+            <ul class="lc-clients" role="list" data-ds-snippet>
+              <li class="lc-client">
+                <p class="lc-client__who">
+                  <b>Aruba</b>
+                  <span class="lc-client__role"> · Tech Lead &amp; Design System Developer</span>
+                  <span class="lc-ai lc-ai--sm">AI</span>
+                </p>
+                <p class="lc-client__text">
+                  {
+                    it
+                      ? "Libreria di oltre 100 Web Components in Lit, adottata cross-prodotto."
+                      : "A library of 100+ Lit Web Components, adopted across products."
+                  }
+                </p>
+              </li>
+              <li class="lc-client">
+                <p class="lc-client__who">
+                  <b>Intesa Sanpaolo</b>
+                  <span class="lc-client__role"> · Frontend Developer</span>
+                </p>
+                <p class="lc-client__text">
+                  {
+                    it
+                      ? "Architettura Angular enterprise in un team di oltre 50 persone."
+                      : "Enterprise Angular architecture in a team of 50+."
+                  }
+                </p>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="ds-spec">
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specClass}</span>
+            <p class="ds-spec__v"><code>lc-clients · lc-client</code></p>
+          </div>
+          <div class="ds-spec__row">
+            <span class="ds-spec__k">{t.specUse}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Dentro un'esperienza di consulenza, al posto degli highlight."
+                  : "Inside a consultancy entry, in place of the bullet points."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--dont">
+            <span class="ds-spec__k">{t.specDont}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Non affiancarli agli highlight: direbbero le stesse cose due volte."
+                  : "Do not show them alongside the bullets: they would say the same things twice."
+              }
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="ds-panel"
+        data-ds-accent
+        data-ds-panel="lente-occhiello"
+        aria-labelledby="lente-occhiello-t"
+      >
+        <div class="ds-panel__head">
+          <h2 class="ds-section__title" id="lente-occhiello-t">
+            {it ? "Occhiello e sigla" : "Eyebrow and initials"}
+          </h2>
+          <span class="ds-panel__group">{t.secLens}<span class="ds-origin">lc-*</span></span>
+        </div>
+        <p class="ds-sub__note">
+          {
+            it
+              ? "Due etichette di servizio: l'occhiello apre una sezione, la sigla in filigrana la firma. Nessuna delle due porta informazione indispensabile, per questo possono restare decorative."
+              : "Two service labels: the eyebrow opens a section, the watermark initials sign it. Neither carries essential information, which is why both can stay decorative."
+          }
+        </p>
+        <div class="ds-stage">
+          <div class="lc">
+            <p class="lc-eyebrow" data-ds-snippet>{it ? "Come ci arrivo" : "How I get there"}</p>
+            <p
+              class="lc-initial"
+              aria-hidden="true"
+              style="position:static;font-size:4rem;"
+              data-ds-snippet
+              data-ds-drop="style"
+            >
+              WD
+            </p>
+          </div>
+        </div>
+        <div class="ds-spec">
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specClass}</span>
+            <p class="ds-spec__v"><code>lc-eyebrow · lc-initial</code></p>
+          </div>
+          <div class="ds-spec__row">
+            <span class="ds-spec__k">{t.specUse}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "L'occhiello apre una sezione; la sigla la firma, una per lente."
+                  : "The eyebrow opens a section; the initials sign it, one per lens."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--dont">
+            <span class="ds-spec__k">{t.specDont}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Non colorare d'accento il testo dell'occhiello: l'accento non porta mai testo piccolo. Il segnale di colore sta nel quadratino accanto, che è decorazione e può permetterselo."
+                  : "Do not set the eyebrow text in the accent: the accent never carries small text. The colour signal lives in the little square beside it, which is decoration and can afford it."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specA11y}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "La sigla è aria-hidden e sta bassa di contrasto apposta: se fosse leggibile come contenuto sarebbe contenuto, e direbbe due volte quello che il titolo accanto dice già."
+                  : "The initials are aria-hidden and deliberately low in contrast: if they read as content they would be content, saying twice what the adjacent heading already says."
+              }
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="ds-panel" data-ds-panel="lente-nota" aria-labelledby="lente-nota-t">
+        <div class="ds-panel__head">
+          <h2 class="ds-section__title" id="lente-nota-t">
+            {it ? "Nota di prova" : "Prototype note"}
+          </h2>
+          <span class="ds-panel__group">{t.secLens}<span class="ds-origin">lc-*</span></span>
+        </div>
+        <p class="ds-sub__note">
+          {
+            it
+              ? "Il testo di servizio in fondo alle pagine del banco di prova: mono, attenuato, separato da una riga. Sparisce quando una direzione viene promossa."
+              : "The service text at the foot of prototype pages: mono, muted, separated by a rule. It disappears when a direction is promoted."
+          }
+        </p>
+        <div class="ds-stage">
+          <div class="lc">
+            <p class="lc-note" style="padding-inline:0;" data-ds-snippet data-ds-drop="style">
+              {
+                it
+                  ? "Prova /lab/<lente> — la pagina CV rifatta sui tempi di lettura reali di un recruiter."
+                  : "Prototype /lab/<lens> — the CV page rebuilt around a recruiter's real reading times."
+              }
+            </p>
+          </div>
+        </div>
+        <div class="ds-spec">
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specClass}</span>
+            <p class="ds-spec__v"><code>lc-note</code></p>
+          </div>
+          <div class="ds-spec__row">
+            <span class="ds-spec__k">{t.specUse}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "In fondo alle pagine del banco di prova, finché sono prove."
+                  : "At the foot of prototype pages, for as long as they are prototypes."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--dont">
+            <span class="ds-spec__k">{t.specDont}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Non lasciarla su una pagina promossa a produzione: dice «questo è un prototipo», e su una pagina vera è un'informazione falsa. Il bordo tratteggiato è lì apposta per farsi notare quando è di troppo."
+                  : "Do not leave it on a page promoted to production: it says «this is a prototype», and on a real page that is false. The dashed rule is there precisely so it stands out once it is no longer true."
+              }
+            </p>
+          </div>
+        </div>
+      </section>
+
       <section class="ds-panel" data-ds-panel="lente-contatti" aria-labelledby="lente-contatti-t">
         <div class="ds-panel__head">
           <h2 class="ds-section__title" id="lente-contatti-t">
@@ -2514,6 +2718,76 @@ const NAV = [
                 it
                   ? "Non due piene affiancate. La gerarchia la porta il riempimento — la variante solida mette inchiostro scuro sull'accento, quella normale tiene il testo d'accento su fondo scuro: sono due quantità di superficie colorata, non due tinte."
                   : "Never two filled side by side. Hierarchy comes from the fill — the solid variant puts dark ink on the accent, the plain one keeps accent text on a dark ground: two amounts of coloured surface, not two hues."
+              }
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="ds-panel" data-ds-panel="hero-pannello" aria-labelledby="hero-pannello-t">
+        <div class="ds-panel__head">
+          <h2 class="ds-section__title" id="hero-pannello-t">
+            {it ? "Caso — pannello ed etichetta" : "Case — panel and label"}
+          </h2>
+          <span class="ds-panel__group">{t.secHero}<span class="ds-origin">lab-*</span></span>
+        </div>
+        <p class="ds-sub__note">
+          {
+            it
+              ? "Il blocco che porta un progetto nel prototipo hero. Il pannello è pastello e non scuro: l'accento mescolato all'ottanio dava un cachi fangoso, mescolato a un bianco caldo dà il fondale a tinta piatta su cui si fotografano davvero le still-life. L'etichetta è lo stesso colore ma saturo e profondo, così si stacca invece di appoggiarsi. Passa il puntatore: l'oggetto si alza e la stanghetta del link si allunga."
+              : "The block that carries a project in the hero prototype. The panel is pastel, not dark: the accent mixed with the teal gave a muddy khaki, mixed with a warm white it gives the flat backdrop still lifes are actually shot on. The label is the same colour but saturated and deep, so it detaches instead of resting on it. Hover it: the object lifts and the link's rule extends."
+          }
+        </p>
+        <div class="ds-stage ds-stage--caso">
+          <div class="lab">
+            <article class="lab-case" style="--panel:var(--lab-p-creative)" data-ds-snippet>
+              <div class="lab-panel">
+                <img src="/knolling/laptop.webp" alt="" loading="lazy" decoding="async" />
+              </div>
+              <div class="lab-label">
+                <h3>Digital CV</h3>
+                <p class="lab-q">AI Workflow Designer</p>
+                <a href="#hero-pannello" class="lab-link">
+                  {it ? "Leggi il case study" : "Read the case study"}
+                </a>
+              </div>
+            </article>
+          </div>
+        </div>
+        <div class="ds-spec">
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specClass}</span>
+            <p class="ds-spec__v">
+              <code>lab-case · lab-panel · lab-label · lab-q · lab-link</code>
+            </p>
+          </div>
+          <div class="ds-spec__row">
+            <span class="ds-spec__k">{t.specUse}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Uno per progetto, in colonna. --panel porta il colore della lente del progetto."
+                  : "One per project, in a column. --panel carries that project's lens colour."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--dont">
+            <span class="ds-spec__k">{t.specDont}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Non usare lab-label da sola come etichetta di testo: è il blocco caption del caso, con fondo, ombra e margine negativo che la fanno salire sul pannello. Fuori da lab-case si legge come un riquadro capitato lì — ed è esattamente l'errore che questa vetrina faceva fino al 2026-08-17."
+                  : "Do not use lab-label on its own as a text label: it is the case's caption block, with a fill, a shadow and a negative margin that lift it onto the panel. Outside lab-case it reads as a box that landed there by accident — which is exactly the mistake this showcase was making until 2026-08-17."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specA11y}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "L'oggetto ha alt vuoto: il nome del progetto è scritto nell'h3 accanto. Il sollevamento e la stanghetta rispondono all'hover del caso intero, ma il link resta raggiungibile e leggibile da solo — l'animazione non porta informazione."
+                  : "The object has an empty alt: the project name is written in the adjacent h3. The lift and the rule respond to the whole case's hover, but the link stays reachable and readable on its own — the animation carries no information."
               }
             </p>
           </div>
@@ -2932,283 +3206,6 @@ const NAV = [
       <section
         class="ds-panel"
         data-ds-accent
-        data-ds-panel="work-decisione"
-        aria-labelledby="work-decisione-t"
-      >
-        <div class="ds-panel__head">
-          <h2 class="ds-section__title" id="work-decisione-t">
-            {it ? "Decisione di progetto" : "Project decision"}
-          </h2>
-          <span class="ds-panel__group">{t.secWork}<span class="ds-origin">work-*</span></span>
-        </div>
-
-        <div class="ds-stage">
-          <div class="work-decisions">
-            <div class="work-decision" data-ds-snippet>
-              <h3 class="work-decision__title">
-                {
-                  it
-                    ? "Accessibilità come vincolo, non rifinitura"
-                    : "Accessibility as a constraint, not a finish"
-                }
-              </h3>
-              <p class="work-decision__body">
-                {
-                  it
-                    ? "Ogni accento ha una variante ricalibrata per contrasto. Focus visibile, skip link e reduced-motion sono regole decise all'inizio, non patch aggiunte alla fine."
-                    : "Every accent has a variant recalibrated for contrast. Visible focus, skip link and reduced-motion are rules decided at the start, not patches added at the end."
-                }
-              </p>
-            </div>
-          </div>
-        </div>
-        <div class="ds-spec">
-          <div class="ds-spec__row ds-spec__row--wide">
-            <span class="ds-spec__k">{t.specClass}</span>
-            <p class="ds-spec__v">
-              <code>work-decisions · work-decision · work-decision__title</code>
-            </p>
-          </div>
-          <div class="ds-spec__row">
-            <span class="ds-spec__k">{t.specUse}</span>
-            <p class="ds-spec__v">
-              {
-                it
-                  ? "Nel corpo di un case study, una per decisione presa."
-                  : "In the body of a case study, one per decision taken."
-              }
-            </p>
-          </div>
-          <div class="ds-spec__row ds-spec__row--dont">
-            <span class="ds-spec__k">{t.specDont}</span>
-            <p class="ds-spec__v">
-              {
-                it
-                  ? "Non scriverci cosa è stato fatto: il blocco è «perché X e non Y». Senza la Y è un elenco di funzionalità, ed è la parte che un case study ha in più rispetto a una brochure."
-                  : "Do not write what was done: the block is «why X and not Y». Without the Y it is a feature list, and the Y is what a case study has that a brochure does not."
-              }
-            </p>
-          </div>
-          <div class="ds-spec__row ds-spec__row--wide">
-            <span class="ds-spec__k">{t.specA11y}</span>
-            <p class="ds-spec__v">
-              {
-                it
-                  ? "Il bordo sinistro passa da neutro ad accento sull'hover — segnala che il blocco è esaminabile, ma non porta informazione: chi non vede l'hover non perde niente."
-                  : "The left border goes from neutral to accent on hover — it signals the block is examinable, but carries no information: not seeing the hover costs nothing."
-              }
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section
-        class="ds-panel"
-        data-ds-accent
-        data-ds-panel="lente-clienti"
-        aria-labelledby="lente-clienti-t"
-      >
-        <div class="ds-panel__head">
-          <h2 class="ds-section__title" id="lente-clienti-t">
-            {it ? "Incarichi presso clienti" : "Client engagements"}
-          </h2>
-          <span class="ds-panel__group">{t.secLens}<span class="ds-origin">lc-*</span></span>
-        </div>
-        <p class="ds-sub__note">
-          {
-            it
-              ? "Quando un'esperienza ha clienti, questi prendono il posto degli highlight: dicono le stesse cose col nome del cliente davanti, che per una consulenza è il dato più cercato."
-              : "When an entry has clients, they replace the bullet points: same content with the client name first, which for consultancy work is the most sought-after detail."
-          }
-        </p>
-        <div class="ds-stage">
-          <div class="lc">
-            <ul class="lc-clients" role="list" data-ds-snippet>
-              <li class="lc-client">
-                <p class="lc-client__who">
-                  <b>Aruba</b>
-                  <span class="lc-client__role"> · Tech Lead &amp; Design System Developer</span>
-                  <span class="lc-ai lc-ai--sm">AI</span>
-                </p>
-                <p class="lc-client__text">
-                  {
-                    it
-                      ? "Libreria di oltre 100 Web Components in Lit, adottata cross-prodotto."
-                      : "A library of 100+ Lit Web Components, adopted across products."
-                  }
-                </p>
-              </li>
-              <li class="lc-client">
-                <p class="lc-client__who">
-                  <b>Intesa Sanpaolo</b>
-                  <span class="lc-client__role"> · Frontend Developer</span>
-                </p>
-                <p class="lc-client__text">
-                  {
-                    it
-                      ? "Architettura Angular enterprise in un team di oltre 50 persone."
-                      : "Enterprise Angular architecture in a team of 50+."
-                  }
-                </p>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div class="ds-spec">
-          <div class="ds-spec__row ds-spec__row--wide">
-            <span class="ds-spec__k">{t.specClass}</span>
-            <p class="ds-spec__v"><code>lc-clients · lc-client</code></p>
-          </div>
-          <div class="ds-spec__row">
-            <span class="ds-spec__k">{t.specUse}</span>
-            <p class="ds-spec__v">
-              {
-                it
-                  ? "Dentro un'esperienza di consulenza, al posto degli highlight."
-                  : "Inside a consultancy entry, in place of the bullet points."
-              }
-            </p>
-          </div>
-          <div class="ds-spec__row ds-spec__row--dont">
-            <span class="ds-spec__k">{t.specDont}</span>
-            <p class="ds-spec__v">
-              {
-                it
-                  ? "Non affiancarli agli highlight: direbbero le stesse cose due volte."
-                  : "Do not show them alongside the bullets: they would say the same things twice."
-              }
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section
-        class="ds-panel"
-        data-ds-accent
-        data-ds-panel="lente-occhiello"
-        aria-labelledby="lente-occhiello-t"
-      >
-        <div class="ds-panel__head">
-          <h2 class="ds-section__title" id="lente-occhiello-t">
-            {it ? "Occhiello e sigla" : "Eyebrow and initials"}
-          </h2>
-          <span class="ds-panel__group">{t.secLens}<span class="ds-origin">lc-*</span></span>
-        </div>
-        <p class="ds-sub__note">
-          {
-            it
-              ? "Due etichette di servizio: l'occhiello apre una sezione, la sigla in filigrana la firma. Nessuna delle due porta informazione indispensabile, per questo possono restare decorative."
-              : "Two service labels: the eyebrow opens a section, the watermark initials sign it. Neither carries essential information, which is why both can stay decorative."
-          }
-        </p>
-        <div class="ds-stage">
-          <div class="lc">
-            <p class="lc-eyebrow" data-ds-snippet>{it ? "Come ci arrivo" : "How I get there"}</p>
-            <p
-              class="lc-initial"
-              aria-hidden="true"
-              style="position:static;font-size:4rem;"
-              data-ds-snippet
-              data-ds-drop="style"
-            >
-              WD
-            </p>
-          </div>
-        </div>
-        <div class="ds-spec">
-          <div class="ds-spec__row ds-spec__row--wide">
-            <span class="ds-spec__k">{t.specClass}</span>
-            <p class="ds-spec__v"><code>lc-eyebrow · lc-initial</code></p>
-          </div>
-          <div class="ds-spec__row">
-            <span class="ds-spec__k">{t.specUse}</span>
-            <p class="ds-spec__v">
-              {
-                it
-                  ? "L'occhiello apre una sezione; la sigla la firma, una per lente."
-                  : "The eyebrow opens a section; the initials sign it, one per lens."
-              }
-            </p>
-          </div>
-          <div class="ds-spec__row ds-spec__row--dont">
-            <span class="ds-spec__k">{t.specDont}</span>
-            <p class="ds-spec__v">
-              {
-                it
-                  ? "Non colorare d'accento il testo dell'occhiello: l'accento non porta mai testo piccolo. Il segnale di colore sta nel quadratino accanto, che è decorazione e può permetterselo."
-                  : "Do not set the eyebrow text in the accent: the accent never carries small text. The colour signal lives in the little square beside it, which is decoration and can afford it."
-              }
-            </p>
-          </div>
-          <div class="ds-spec__row ds-spec__row--wide">
-            <span class="ds-spec__k">{t.specA11y}</span>
-            <p class="ds-spec__v">
-              {
-                it
-                  ? "La sigla è aria-hidden e sta bassa di contrasto apposta: se fosse leggibile come contenuto sarebbe contenuto, e direbbe due volte quello che il titolo accanto dice già."
-                  : "The initials are aria-hidden and deliberately low in contrast: if they read as content they would be content, saying twice what the adjacent heading already says."
-              }
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section class="ds-panel" data-ds-panel="lente-nota" aria-labelledby="lente-nota-t">
-        <div class="ds-panel__head">
-          <h2 class="ds-section__title" id="lente-nota-t">
-            {it ? "Nota di prova" : "Prototype note"}
-          </h2>
-          <span class="ds-panel__group">{t.secLens}<span class="ds-origin">lc-*</span></span>
-        </div>
-        <p class="ds-sub__note">
-          {
-            it
-              ? "Il testo di servizio in fondo alle pagine del banco di prova: mono, attenuato, separato da una riga. Sparisce quando una direzione viene promossa."
-              : "The service text at the foot of prototype pages: mono, muted, separated by a rule. It disappears when a direction is promoted."
-          }
-        </p>
-        <div class="ds-stage">
-          <div class="lc">
-            <p class="lc-note" style="padding-inline:0;" data-ds-snippet data-ds-drop="style">
-              {
-                it
-                  ? "Prova /lab/<lente> — la pagina CV rifatta sui tempi di lettura reali di un recruiter."
-                  : "Prototype /lab/<lens> — the CV page rebuilt around a recruiter's real reading times."
-              }
-            </p>
-          </div>
-        </div>
-        <div class="ds-spec">
-          <div class="ds-spec__row ds-spec__row--wide">
-            <span class="ds-spec__k">{t.specClass}</span>
-            <p class="ds-spec__v"><code>lc-note</code></p>
-          </div>
-          <div class="ds-spec__row">
-            <span class="ds-spec__k">{t.specUse}</span>
-            <p class="ds-spec__v">
-              {
-                it
-                  ? "In fondo alle pagine del banco di prova, finché sono prove."
-                  : "At the foot of prototype pages, for as long as they are prototypes."
-              }
-            </p>
-          </div>
-          <div class="ds-spec__row ds-spec__row--dont">
-            <span class="ds-spec__k">{t.specDont}</span>
-            <p class="ds-spec__v">
-              {
-                it
-                  ? "Non lasciarla su una pagina promossa a produzione: dice «questo è un prototipo», e su una pagina vera è un'informazione falsa. Il bordo tratteggiato è lì apposta per farsi notare quando è di troppo."
-                  : "Do not leave it on a page promoted to production: it says «this is a prototype», and on a real page that is false. The dashed rule is there precisely so it stands out once it is no longer true."
-              }
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section
-        class="ds-panel"
-        data-ds-accent
         data-ds-panel="work-cta"
         aria-labelledby="work-cta-t"
       >
@@ -3329,41 +3326,44 @@ const NAV = [
         </div>
       </section>
 
-      <section class="ds-panel" data-ds-panel="hero-pannello" aria-labelledby="hero-pannello-t">
+      <section
+        class="ds-panel"
+        data-ds-accent
+        data-ds-panel="work-decisione"
+        aria-labelledby="work-decisione-t"
+      >
         <div class="ds-panel__head">
-          <h2 class="ds-section__title" id="hero-pannello-t">
-            {it ? "Caso — pannello ed etichetta" : "Case — panel and label"}
+          <h2 class="ds-section__title" id="work-decisione-t">
+            {it ? "Decisione di progetto" : "Project decision"}
           </h2>
-          <span class="ds-panel__group">{t.secHero}<span class="ds-origin">lab-*</span></span>
+          <span class="ds-panel__group">{t.secWork}<span class="ds-origin">work-*</span></span>
         </div>
-        <p class="ds-sub__note">
-          {
-            it
-              ? "Il blocco che porta un progetto nel prototipo hero. Il pannello è pastello e non scuro: l'accento mescolato all'ottanio dava un cachi fangoso, mescolato a un bianco caldo dà il fondale a tinta piatta su cui si fotografano davvero le still-life. L'etichetta è lo stesso colore ma saturo e profondo, così si stacca invece di appoggiarsi. Passa il puntatore: l'oggetto si alza e la stanghetta del link si allunga."
-              : "The block that carries a project in the hero prototype. The panel is pastel, not dark: the accent mixed with the teal gave a muddy khaki, mixed with a warm white it gives the flat backdrop still lifes are actually shot on. The label is the same colour but saturated and deep, so it detaches instead of resting on it. Hover it: the object lifts and the link's rule extends."
-          }
-        </p>
-        <div class="ds-stage ds-stage--caso">
-          <div class="lab">
-            <article class="lab-case" style="--panel:var(--lab-p-creative)" data-ds-snippet>
-              <div class="lab-panel">
-                <img src="/knolling/laptop.webp" alt="" loading="lazy" decoding="async" />
-              </div>
-              <div class="lab-label">
-                <h3>Digital CV</h3>
-                <p class="lab-q">AI Workflow Designer</p>
-                <a href="#hero-pannello" class="lab-link">
-                  {it ? "Leggi il case study" : "Read the case study"}
-                </a>
-              </div>
-            </article>
+
+        <div class="ds-stage">
+          <div class="work-decisions">
+            <div class="work-decision" data-ds-snippet>
+              <h3 class="work-decision__title">
+                {
+                  it
+                    ? "Accessibilità come vincolo, non rifinitura"
+                    : "Accessibility as a constraint, not a finish"
+                }
+              </h3>
+              <p class="work-decision__body">
+                {
+                  it
+                    ? "Ogni accento ha una variante ricalibrata per contrasto. Focus visibile, skip link e reduced-motion sono regole decise all'inizio, non patch aggiunte alla fine."
+                    : "Every accent has a variant recalibrated for contrast. Visible focus, skip link and reduced-motion are rules decided at the start, not patches added at the end."
+                }
+              </p>
+            </div>
           </div>
         </div>
         <div class="ds-spec">
           <div class="ds-spec__row ds-spec__row--wide">
             <span class="ds-spec__k">{t.specClass}</span>
             <p class="ds-spec__v">
-              <code>lab-case · lab-panel · lab-label · lab-q · lab-link</code>
+              <code>work-decisions · work-decision · work-decision__title</code>
             </p>
           </div>
           <div class="ds-spec__row">
@@ -3371,8 +3371,8 @@ const NAV = [
             <p class="ds-spec__v">
               {
                 it
-                  ? "Uno per progetto, in colonna. --panel porta il colore della lente del progetto."
-                  : "One per project, in a column. --panel carries that project's lens colour."
+                  ? "Nel corpo di un case study, una per decisione presa."
+                  : "In the body of a case study, one per decision taken."
               }
             </p>
           </div>
@@ -3381,8 +3381,8 @@ const NAV = [
             <p class="ds-spec__v">
               {
                 it
-                  ? "Non usare lab-label da sola come etichetta di testo: è il blocco caption del caso, con fondo, ombra e margine negativo che la fanno salire sul pannello. Fuori da lab-case si legge come un riquadro capitato lì — ed è esattamente l'errore che questa vetrina faceva fino al 2026-08-17."
-                  : "Do not use lab-label on its own as a text label: it is the case's caption block, with a fill, a shadow and a negative margin that lift it onto the panel. Outside lab-case it reads as a box that landed there by accident — which is exactly the mistake this showcase was making until 2026-08-17."
+                  ? "Non scriverci cosa è stato fatto: il blocco è «perché X e non Y». Senza la Y è un elenco di funzionalità, ed è la parte che un case study ha in più rispetto a una brochure."
+                  : "Do not write what was done: the block is «why X and not Y». Without the Y it is a feature list, and the Y is what a case study has that a brochure does not."
               }
             </p>
           </div>
@@ -3391,8 +3391,8 @@ const NAV = [
             <p class="ds-spec__v">
               {
                 it
-                  ? "L'oggetto ha alt vuoto: il nome del progetto è scritto nell'h3 accanto. Il sollevamento e la stanghetta rispondono all'hover del caso intero, ma il link resta raggiungibile e leggibile da solo — l'animazione non porta informazione."
-                  : "The object has an empty alt: the project name is written in the adjacent h3. The lift and the rule respond to the whole case's hover, but the link stays reachable and readable on its own — the animation carries no information."
+                  ? "Il bordo sinistro passa da neutro ad accento sull'hover — segnala che il blocco è esaminabile, ma non porta informazione: chi non vede l'hover non perde niente."
+                  : "The left border goes from neutral to accent on hover — it signals the block is examinable, but carries no information: not seeing the hover costs nothing."
               }
             </p>
           </div>
