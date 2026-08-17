@@ -36,6 +36,30 @@ const { lang = "it" } = Astro.props;
 const it = lang === "it";
 
 /* ── I quattro accenti. Unica fonte per tutte le tabelle colore. ────────── */
+const FACTS = [
+  { n: "3", l: it ? "lenti, un accento ciascuna" : "lenses, one accent each" },
+  {
+    n: "88",
+    l: it
+      ? "famiglie di componenti nei fogli di /lab e /work"
+      : "component families across the /lab and /work stylesheets",
+  },
+  {
+    n: "72",
+    l: it ? "token dichiarati fra base e prove" : "tokens declared across base and prototypes",
+  },
+  {
+    n: "11",
+    l: it ? "gradini della scala tipografica, tutti in rem" : "steps in the type scale, all in rem",
+  },
+  {
+    n: "AA",
+    l: it
+      ? "WCAG 2.2, contrasti misurati sui pixel resi"
+      : "WCAG 2.2, contrast measured on rendered pixels",
+  },
+];
+
 const MODES = [
   { key: "creative", label: "Web & UX Designer", hex: "rgba(255,107,53,1)", ratio: "3.62:1" },
   { key: "tech", label: "Software Developer", hex: "rgba(0,255,200,1)", ratio: "7.89:1" },
@@ -306,6 +330,7 @@ const t = it
       tocTitle: "Indice",
       introLabel: "Perché questa pagina",
       why1: "Questo design system nasce da un progetto reale, non da un esercizio: è il linguaggio con cui è costruito il mio CV digitale. Ogni token qui dentro è in produzione, ogni componente è servito da una pagina vera, e ogni numero sul contrasto è stato misurato sui pixel resi invece che dichiarato in una tabella.",
+      why3: "Cosa cercare, se stai valutando: i token hanno un ruolo dichiarato e non un valore a caso, gli stati sono gli stessi su ogni comando, le decisioni sui colori riportano il numero misurato e non un aggettivo, e dove il sistema ha sbagliato è scritto invece che nascosto — la sezione Accessibilità ne conserva un caso reale.",
       why2: "Le demo importano i fogli di stile veri dei componenti, non copie. È una scelta scomoda — obbliga a spegnere caso per caso le regole di pagina — ma è l'unica che impedisce alla vetrina di invecchiare in silenzio mentre il sistema va avanti.",
       modeLabel: "Guarda il sistema in:",
       modeHint:
@@ -348,6 +373,7 @@ const t = it
       tocTitle: "Contents",
       introLabel: "Why this page",
       why1: "This design system comes from a real project, not an exercise: it is the language my digital CV is built with. Every token in here ships, every component is served by a real page, and every contrast figure was measured on rendered pixels rather than declared in a table.",
+      why3: "What to look for, if you are assessing this: tokens carry a declared role rather than an arbitrary value, states are identical across every control, colour decisions cite the measured figure rather than an adjective, and where the system got it wrong it is written down instead of hidden — the Accessibility section keeps one real case.",
       why2: "The demos import the components' real stylesheets, not copies. It is the awkward choice — it forces page-level rules to be switched off case by case — but it is the only one that stops the showcase from ageing in silence while the system moves on.",
       modeLabel: "View the system in:",
       modeHint:
@@ -402,7 +428,6 @@ const NAV = [
   {
     label: t.secHome,
     items: [
-      { id: "ingresso-barra", label: it ? "Barra" : "Bar" },
       { id: "ingresso-titolo", label: it ? "Titolo d'ingresso" : "Entry heading" },
       { id: "ingresso-sezione-lente", label: it ? "Sezione-lente" : "Lens section" },
       {
@@ -434,6 +459,9 @@ const NAV = [
       { id: "lente-chip", label: it ? "Chip e il comando +N" : "Chips and the +N control" },
       { id: "lente-badge-ai", label: it ? "Badge AI" : "AI badge" },
       { id: "lente-cronologia", label: it ? "Cronologia completa" : "Full timeline" },
+      { id: "lente-clienti", label: it ? "Incarichi presso clienti" : "Client engagements" },
+      { id: "lente-occhiello", label: it ? "Occhiello e sigla" : "Eyebrow and initials" },
+      { id: "lente-nota", label: it ? "Nota di prova" : "Prototype note" },
       { id: "lente-contatti", label: it ? "Contatti in chiaro" : "Contacts in the open" },
     ],
   },
@@ -442,6 +470,7 @@ const NAV = [
     items: [
       { id: "hero-intestazione", label: it ? "Barra e intestazione" : "Bar and heading" },
       { id: "hero-bottoni", label: it ? "Bottoni" : "Buttons" },
+      { id: "hero-pannello", label: it ? "Pannello e citazione" : "Panel and quote" },
       { id: "hero-etichette", label: it ? "Etichette e titoli" : "Labels and headings" },
     ],
   },
@@ -450,6 +479,8 @@ const NAV = [
     items: [
       { id: "work-card", label: it ? "Card indice" : "Index card" },
       { id: "work-nav", label: it ? "Tag e navigazione" : "Tags and navigation" },
+      { id: "work-cta", label: it ? "CTA di chiusura" : "Closing CTA" },
+      { id: "work-learnings", label: it ? "Cosa ho imparato" : "What I learned" },
       { id: "work-decisione", label: it ? "Decisione di progetto" : "Project decision" },
     ],
   },
@@ -551,12 +582,27 @@ const NAV = [
           <p>{t.why1}</p>
           <p>{t.why2}</p>
         </div>
+
+        <ul class="ds-facts">
+          {
+            FACTS.map((f) => (
+              <li class="ds-fact">
+                <span class="ds-fact__n">{f.n}</span>
+                <span class="ds-fact__l">{f.l}</span>
+              </li>
+            ))
+          }
+        </ul>
+
+        <div class="ds-callout">
+          <p>{t.why3}</p>
+        </div>
       </section>
 
       <section class="ds-panel" data-ds-accent data-ds-panel="colore" aria-labelledby="colore-t">
         <div class="ds-panel__head">
-          <span class="ds-panel__group">{t.secFoundations}</span>
           <h2 class="ds-section__title" id="colore-t">{t.secColour}</h2>
+          <span class="ds-panel__group">{t.secFoundations}</span>
         </div>
 
         <p class="ds-sub__note">
@@ -701,8 +747,8 @@ const NAV = [
 
       <section class="ds-panel" data-ds-panel="tipografia" aria-labelledby="tipografia-t">
         <div class="ds-panel__head">
-          <span class="ds-panel__group">{t.secFoundations}</span>
           <h2 class="ds-section__title" id="tipografia-t">{t.secType}</h2>
+          <span class="ds-panel__group">{t.secFoundations}</span>
         </div>
 
         <p class="ds-sub__note">
@@ -754,39 +800,71 @@ const NAV = [
 
       <section class="ds-panel" data-ds-accent data-ds-panel="forma" aria-labelledby="forma-t">
         <div class="ds-panel__head">
-          <span class="ds-panel__group">{t.secFoundations}</span>
           <h2 class="ds-section__title" id="forma-t">{t.secShape}</h2>
+          <span class="ds-panel__group">{t.secFoundations}</span>
         </div>
 
-        <div class="ds-stage ds-stage__row">
-          <div class="ds-case">
-            <p class="ds-label">--radius-4</p>
-            <div
-              style="width:6rem;height:4rem;border-radius:var(--radius-4);background:var(--color-accent);"
-            >
+        <div class="ds-stage">
+          <div class="ds-shapes">
+            <div class="ds-shape">
+              <div
+                class="ds-shape__box"
+                style="width:7rem;height:3rem;border-radius:var(--radius-4);"
+              >
+              </div>
+              <code>--radius-4</code>
+              <span class="ds-shape__role">
+                {it ? "Bottoni, chip, campi." : "Buttons, chips, fields."}
+              </span>
             </div>
-          </div>
-          <div class="ds-case">
-            <p class="ds-label">--radius-16</p>
-            <div
-              style="width:6rem;height:4rem;border-radius:var(--radius-16);background:var(--color-accent);"
-            >
+            <div class="ds-shape">
+              <div
+                class="ds-shape__box"
+                style="width:7rem;height:5rem;border-radius:var(--radius-16);"
+              >
+              </div>
+              <code>--radius-16</code>
+              <span class="ds-shape__role">{it ? "Card e sezioni." : "Cards and sections."}</span>
             </div>
-          </div>
-          <div class="ds-case">
-            <p class="ds-label">999rem</p>
-            <div
-              style="width:6rem;height:4rem;border-radius:999rem;background:var(--color-accent);"
-            >
+            <div class="ds-shape">
+              <div class="ds-shape__box" style="width:7rem;height:2.5rem;border-radius:999rem;">
+              </div>
+              <code>999rem</code>
+              <span class="ds-shape__role">
+                {
+                  it
+                    ? "Pillola: selettori di mode e lingua. Un valore enorme, non 50%."
+                    : "Pill: mode and language selectors. A huge value, not 50%."
+                }
+              </span>
+            </div>
+            <div class="ds-shape">
+              <div class="ds-shape__box" style="width:2.5rem;height:2.5rem;border-radius:50%;">
+              </div>
+              <code>50%</code>
+              <span class="ds-shape__role">
+                {
+                  it
+                    ? "Cerchio: pallini di lente, marcatori, punti elenco. Solo su elementi quadrati."
+                    : "Circle: lens dots, markers, bullets. Square elements only."
+                }
+              </span>
             </div>
           </div>
         </div>
         <div class="ds-callout">
           <p>
+            <strong
+              >{
+                it
+                  ? "Pillola e cerchio non sono la stessa cosa."
+                  : "Pill and circle are not the same."
+              }</strong
+            >{" "}
             {
               it
-                ? "Un raggio per ruolo: 1rem per card e sezioni, 0.25rem per bottoni e chip, pillola piena per i selettori. Deciso una volta, mai a occhio."
-                : "One radius per role: 1rem for cards and sections, 0.25rem for buttons and chips, a full pill for selectors. Decided once, never by eye."
+                ? "Su un elemento rettangolare 50% produce un'ellisse, che si deforma al variare delle proporzioni; un raggio enorme (999rem) viene troncato alla metà del lato corto e dà uno stadio, che resta corretto a qualunque dimensione. Il 50% è giusto solo dove l'elemento è quadrato — nel sistema lo usano i pallini di lente e i marcatori, 7 volte in tutto; la pillola compare 2 volte."
+                : "On a rectangular element 50% yields an ellipse that deforms as the proportions change; a huge radius (999rem) is clamped to half the short side and yields a stadium, correct at any size. 50% is right only where the element is square — in this system that is lens dots and markers, 7 occurrences; the pill appears twice."
             }
           </p>
         </div>
@@ -794,8 +872,8 @@ const NAV = [
 
       <section class="ds-panel" data-ds-panel="movimento" aria-labelledby="movimento-t">
         <div class="ds-panel__head">
-          <span class="ds-panel__group">{t.secFoundations}</span>
           <h2 class="ds-section__title" id="movimento-t">{t.secMotionTok}</h2>
+          <span class="ds-panel__group">{t.secFoundations}</span>
         </div>
 
         <div class="ds-table-wrap">
@@ -826,34 +904,15 @@ const NAV = [
         </div>
       </section>
 
-      <section class="ds-panel" data-ds-panel="ingresso-barra" aria-labelledby="ingresso-barra-t">
-        <div class="ds-panel__head">
-          <span class="ds-panel__group">{t.secHome}<span class="ds-origin">lh-*</span></span>
-          <h2 class="ds-section__title" id="ingresso-barra-t">{it ? "Barra" : "Bar"}</h2>
-        </div>
-
-        <div class="ds-stage">
-          <div class="lh">
-            <header class="lh-bar" style="position:static;">
-              <a href="#" class="lh-mark">GO</a>
-              <nav class="lh-nav">
-                <a href="#">{it ? "← altra prova" : "← other prototype"}</a>
-                <span class="lh-flag">{it ? "Prova" : "Prototype"}</span>
-              </nav>
-            </header>
-          </div>
-        </div>
-      </section>
-
       <section class="ds-panel" data-ds-panel="ingresso-titolo" aria-labelledby="ingresso-titolo-t">
         <div class="ds-panel__head">
-          <span class="ds-panel__group">{t.secHome}<span class="ds-origin">lh-*</span></span>
           <h2 class="ds-section__title" id="ingresso-titolo-t">
             {it ? "Titolo d'ingresso" : "Entry heading"}
           </h2>
+          <span class="ds-panel__group">{t.secHome}<span class="ds-origin">lh-*</span></span>
         </div>
 
-        <div class="ds-stage">
+        <div class="ds-stage ds-stage--center">
           <div class="lh">
             <div class="lh-copy">
               <p class="lh-name" style="margin:0;">Giulio Occhipinti</p>
@@ -877,10 +936,10 @@ const NAV = [
         aria-labelledby="ingresso-sezione-lente-t"
       >
         <div class="ds-panel__head">
-          <span class="ds-panel__group">{t.secHome}<span class="ds-origin">lh-*</span></span>
           <h2 class="ds-section__title" id="ingresso-sezione-lente-t">
             {it ? "Sezione-lente" : "Lens section"}
           </h2>
+          <span class="ds-panel__group">{t.secHome}<span class="ds-origin">lh-*</span></span>
         </div>
 
         <p class="ds-sub__note">
@@ -890,7 +949,7 @@ const NAV = [
               : "Watermark initials, two-line title, eyebrow, paragraph and the CTAs. The knolling object sits in the other column."
           }
         </p>
-        <div class="ds-stage">
+        <div class="ds-stage ds-stage--watermark">
           <div class="lh">
             <section class="lh-section" data-mode="creative" style="min-height:0;">
               <div class="lh-section__copy">
@@ -927,7 +986,6 @@ const NAV = [
         aria-labelledby="ingresso-cta-t"
       >
         <div class="ds-panel__head">
-          <span class="ds-panel__group">{t.secHome}<span class="ds-origin">lh-*</span></span>
           <h2 class="ds-section__title" id="ingresso-cta-t">
             {
               it
@@ -935,6 +993,7 @@ const NAV = [
                 : "CTA — the two variants and their states"
             }
           </h2>
+          <span class="ds-panel__group">{t.secHome}<span class="ds-origin">lh-*</span></span>
         </div>
 
         <p class="ds-sub__note">
@@ -985,10 +1044,10 @@ const NAV = [
         aria-labelledby="ingresso-oggetto-t"
       >
         <div class="ds-panel__head">
-          <span class="ds-panel__group">{t.secHome}<span class="ds-origin">lh-*</span></span>
           <h2 class="ds-section__title" id="ingresso-oggetto-t">
             {it ? "Oggetto knolling con ombra ricostruita" : "Knolling object with rebuilt shadow"}
           </h2>
+          <span class="ds-panel__group">{t.secHome}<span class="ds-origin">lh-*</span></span>
         </div>
 
         <p class="ds-sub__note">
@@ -1015,10 +1074,10 @@ const NAV = [
         aria-labelledby="lente-intestazione-t"
       >
         <div class="ds-panel__head">
-          <span class="ds-panel__group">{t.secLens}<span class="ds-origin">lc-*</span></span>
           <h2 class="ds-section__title" id="lente-intestazione-t">
             {it ? "Intestazione" : "Header"}
           </h2>
+          <span class="ds-panel__group">{t.secLens}<span class="ds-origin">lc-*</span></span>
         </div>
 
         <div class="ds-stage">
@@ -1048,10 +1107,10 @@ const NAV = [
         aria-labelledby="lente-dove-lavora-ora-t"
       >
         <div class="ds-panel__head">
-          <span class="ds-panel__group">{t.secLens}<span class="ds-origin">lc-*</span></span>
           <h2 class="ds-section__title" id="lente-dove-lavora-ora-t">
             {it ? "Dove lavora ora" : "Where he works now"}
           </h2>
+          <span class="ds-panel__group">{t.secLens}<span class="ds-origin">lc-*</span></span>
         </div>
 
         <div class="ds-stage">
@@ -1085,10 +1144,10 @@ const NAV = [
         aria-labelledby="lente-bottoni-t"
       >
         <div class="ds-panel__head">
-          <span class="ds-panel__group">{t.secLens}<span class="ds-origin">lc-*</span></span>
           <h2 class="ds-section__title" id="lente-bottoni-t">
             {it ? "Bottoni — sistema di stati" : "Buttons — state system"}
           </h2>
+          <span class="ds-panel__group">{t.secLens}<span class="ds-origin">lc-*</span></span>
         </div>
 
         <p class="ds-sub__note">
@@ -1121,10 +1180,10 @@ const NAV = [
         aria-labelledby="lente-tendina-t"
       >
         <div class="ds-panel__head">
-          <span class="ds-panel__group">{t.secLens}<span class="ds-origin">lc-*</span></span>
           <h2 class="ds-section__title" id="lente-tendina-t">
             {it ? "Tendina di lente" : "Lens dropdown"}
           </h2>
+          <span class="ds-panel__group">{t.secLens}<span class="ds-origin">lc-*</span></span>
         </div>
 
         <p class="ds-sub__note">
@@ -1174,10 +1233,10 @@ const NAV = [
         aria-labelledby="lente-sezione-t"
       >
         <div class="ds-panel__head">
-          <span class="ds-panel__group">{t.secLens}<span class="ds-origin">lc-*</span></span>
           <h2 class="ds-section__title" id="lente-sezione-t">
             {it ? "Intestazione di sezione" : "Section header"}
           </h2>
+          <span class="ds-panel__group">{t.secLens}<span class="ds-origin">lc-*</span></span>
         </div>
 
         <div class="ds-stage">
@@ -1206,10 +1265,10 @@ const NAV = [
         aria-labelledby="lente-esperienza-t"
       >
         <div class="ds-panel__head">
-          <span class="ds-panel__group">{t.secLens}<span class="ds-origin">lc-*</span></span>
           <h2 class="ds-section__title" id="lente-esperienza-t">
             {it ? "Esperienza — riga espandibile" : "Experience — expandable row"}
           </h2>
+          <span class="ds-panel__group">{t.secLens}<span class="ds-origin">lc-*</span></span>
         </div>
 
         <p class="ds-sub__note">
@@ -1351,10 +1410,10 @@ const NAV = [
         aria-labelledby="lente-chip-t"
       >
         <div class="ds-panel__head">
-          <span class="ds-panel__group">{t.secLens}<span class="ds-origin">lc-*</span></span>
           <h2 class="ds-section__title" id="lente-chip-t">
             {it ? "Chip e il comando +N" : "Chips and the +N control"}
           </h2>
+          <span class="ds-panel__group">{t.secLens}<span class="ds-origin">lc-*</span></span>
         </div>
 
         <p class="ds-sub__note">
@@ -1397,8 +1456,8 @@ const NAV = [
         aria-labelledby="lente-badge-ai-t"
       >
         <div class="ds-panel__head">
-          <span class="ds-panel__group">{t.secLens}<span class="ds-origin">lc-*</span></span>
           <h2 class="ds-section__title" id="lente-badge-ai-t">{it ? "Badge AI" : "AI badge"}</h2>
+          <span class="ds-panel__group">{t.secLens}<span class="ds-origin">lc-*</span></span>
         </div>
 
         <div class="ds-stage">
@@ -1418,10 +1477,10 @@ const NAV = [
         aria-labelledby="lente-cronologia-t"
       >
         <div class="ds-panel__head">
-          <span class="ds-panel__group">{t.secLens}<span class="ds-origin">lc-*</span></span>
           <h2 class="ds-section__title" id="lente-cronologia-t">
             {it ? "Cronologia completa" : "Full timeline"}
           </h2>
+          <span class="ds-panel__group">{t.secLens}<span class="ds-origin">lc-*</span></span>
         </div>
 
         <p class="ds-sub__note">
@@ -1457,10 +1516,10 @@ const NAV = [
 
       <section class="ds-panel" data-ds-panel="lente-contatti" aria-labelledby="lente-contatti-t">
         <div class="ds-panel__head">
-          <span class="ds-panel__group">{t.secLens}<span class="ds-origin">lc-*</span></span>
           <h2 class="ds-section__title" id="lente-contatti-t">
             {it ? "Contatti in chiaro" : "Contacts in the open"}
           </h2>
+          <span class="ds-panel__group">{t.secLens}<span class="ds-origin">lc-*</span></span>
         </div>
 
         <p class="ds-sub__note">
@@ -1487,10 +1546,10 @@ const NAV = [
         aria-labelledby="hero-intestazione-t"
       >
         <div class="ds-panel__head">
-          <span class="ds-panel__group">{t.secHero}<span class="ds-origin">lab-*</span></span>
           <h2 class="ds-section__title" id="hero-intestazione-t">
             {it ? "Barra e intestazione" : "Bar and heading"}
           </h2>
+          <span class="ds-panel__group">{t.secHero}<span class="ds-origin">lab-*</span></span>
         </div>
 
         <div class="ds-stage">
@@ -1517,8 +1576,8 @@ const NAV = [
 
       <section class="ds-panel" data-ds-panel="hero-bottoni" aria-labelledby="hero-bottoni-t">
         <div class="ds-panel__head">
-          <span class="ds-panel__group">{t.secHero}<span class="ds-origin">lab-*</span></span>
           <h2 class="ds-section__title" id="hero-bottoni-t">{it ? "Bottoni" : "Buttons"}</h2>
+          <span class="ds-panel__group">{t.secHero}<span class="ds-origin">lab-*</span></span>
         </div>
 
         <div class="ds-stage">
@@ -1533,10 +1592,10 @@ const NAV = [
 
       <section class="ds-panel" data-ds-panel="hero-etichette" aria-labelledby="hero-etichette-t">
         <div class="ds-panel__head">
-          <span class="ds-panel__group">{t.secHero}<span class="ds-origin">lab-*</span></span>
           <h2 class="ds-section__title" id="hero-etichette-t">
             {it ? "Etichette e titoli" : "Labels and headings"}
           </h2>
+          <span class="ds-panel__group">{t.secHero}<span class="ds-origin">lab-*</span></span>
         </div>
 
         <div class="ds-stage">
@@ -1564,8 +1623,8 @@ const NAV = [
         aria-labelledby="work-card-t"
       >
         <div class="ds-panel__head">
-          <span class="ds-panel__group">{t.secWork}<span class="ds-origin">work-*</span></span>
           <h2 class="ds-section__title" id="work-card-t">{it ? "Card indice" : "Index card"}</h2>
+          <span class="ds-panel__group">{t.secWork}<span class="ds-origin">work-*</span></span>
         </div>
 
         <div class="ds-stage">
@@ -1592,10 +1651,10 @@ const NAV = [
         aria-labelledby="work-nav-t"
       >
         <div class="ds-panel__head">
-          <span class="ds-panel__group">{t.secWork}<span class="ds-origin">work-*</span></span>
           <h2 class="ds-section__title" id="work-nav-t">
             {it ? "Tag e navigazione" : "Tags and navigation"}
           </h2>
+          <span class="ds-panel__group">{t.secWork}<span class="ds-origin">work-*</span></span>
         </div>
 
         <div class="ds-stage">
@@ -1618,10 +1677,10 @@ const NAV = [
         aria-labelledby="work-decisione-t"
       >
         <div class="ds-panel__head">
-          <span class="ds-panel__group">{t.secWork}<span class="ds-origin">work-*</span></span>
           <h2 class="ds-section__title" id="work-decisione-t">
             {it ? "Decisione di progetto" : "Project decision"}
           </h2>
+          <span class="ds-panel__group">{t.secWork}<span class="ds-origin">work-*</span></span>
         </div>
 
         <div class="ds-stage">
@@ -1642,6 +1701,220 @@ const NAV = [
                 }
               </p>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="ds-panel"
+        data-ds-accent
+        data-ds-panel="lente-clienti"
+        aria-labelledby="lente-clienti-t"
+      >
+        <div class="ds-panel__head">
+          <h2 class="ds-section__title" id="lente-clienti-t">
+            {it ? "Incarichi presso clienti" : "Client engagements"}
+          </h2>
+          <span class="ds-panel__group">{t.secLens}<span class="ds-origin">lc-*</span></span>
+        </div>
+        <p class="ds-sub__note">
+          {
+            it
+              ? "Quando un'esperienza ha clienti, questi prendono il posto degli highlight: dicono le stesse cose col nome del cliente davanti, che per una consulenza è il dato più cercato."
+              : "When an entry has clients, they replace the bullet points: same content with the client name first, which for consultancy work is the most sought-after detail."
+          }
+        </p>
+        <div class="ds-stage">
+          <div class="lc">
+            <ul class="lc-clients" role="list">
+              <li class="lc-client">
+                <p class="lc-client__who">
+                  <b>Aruba</b>
+                  <span class="lc-client__role"> · Tech Lead &amp; Design System Developer</span>
+                  <span class="lc-ai lc-ai--sm">AI</span>
+                </p>
+                <p class="lc-client__text">
+                  {
+                    it
+                      ? "Libreria di oltre 100 Web Components in Lit, adottata cross-prodotto."
+                      : "A library of 100+ Lit Web Components, adopted across products."
+                  }
+                </p>
+              </li>
+              <li class="lc-client">
+                <p class="lc-client__who">
+                  <b>Intesa Sanpaolo</b>
+                  <span class="lc-client__role"> · Frontend Developer</span>
+                </p>
+                <p class="lc-client__text">
+                  {
+                    it
+                      ? "Architettura Angular enterprise in un team di oltre 50 persone."
+                      : "Enterprise Angular architecture in a team of 50+."
+                  }
+                </p>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="ds-panel"
+        data-ds-accent
+        data-ds-panel="lente-occhiello"
+        aria-labelledby="lente-occhiello-t"
+      >
+        <div class="ds-panel__head">
+          <h2 class="ds-section__title" id="lente-occhiello-t">
+            {it ? "Occhiello e sigla" : "Eyebrow and initials"}
+          </h2>
+          <span class="ds-panel__group">{t.secLens}<span class="ds-origin">lc-*</span></span>
+        </div>
+        <p class="ds-sub__note">
+          {
+            it
+              ? "Due etichette di servizio: l'occhiello apre una sezione, la sigla in filigrana la firma. Nessuna delle due porta informazione indispensabile, per questo possono restare decorative."
+              : "Two service labels: the eyebrow opens a section, the watermark initials sign it. Neither carries essential information, which is why both can stay decorative."
+          }
+        </p>
+        <div class="ds-stage">
+          <div class="lc">
+            <p class="lc-eyebrow">{it ? "Come ci arrivo" : "How I get there"}</p>
+            <p class="lc-initial" aria-hidden="true" style="position:static;font-size:4rem;">WD</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="ds-panel" data-ds-panel="lente-nota" aria-labelledby="lente-nota-t">
+        <div class="ds-panel__head">
+          <h2 class="ds-section__title" id="lente-nota-t">
+            {it ? "Nota di prova" : "Prototype note"}
+          </h2>
+          <span class="ds-panel__group">{t.secLens}<span class="ds-origin">lc-*</span></span>
+        </div>
+        <p class="ds-sub__note">
+          {
+            it
+              ? "Il testo di servizio in fondo alle pagine del banco di prova: mono, attenuato, separato da una riga. Sparisce quando una direzione viene promossa."
+              : "The service text at the foot of prototype pages: mono, muted, separated by a rule. It disappears when a direction is promoted."
+          }
+        </p>
+        <div class="ds-stage">
+          <div class="lc">
+            <p class="lc-note" style="padding-inline:0;">
+              {
+                it
+                  ? "Prova /lab/<lente> — la pagina CV rifatta sui tempi di lettura reali di un recruiter."
+                  : "Prototype /lab/<lens> — the CV page rebuilt around a recruiter's real reading times."
+              }
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="ds-panel"
+        data-ds-accent
+        data-ds-panel="work-cta"
+        aria-labelledby="work-cta-t"
+      >
+        <div class="ds-panel__head">
+          <h2 class="ds-section__title" id="work-cta-t">
+            {it ? "CTA di chiusura" : "Closing CTA"}
+          </h2>
+          <span class="ds-panel__group">{t.secWork}<span class="ds-origin">work-*</span></span>
+        </div>
+        <p class="ds-sub__note">
+          {
+            it
+              ? "L'uscita in fondo a un case study: primaria e secondaria affiancate, mai due primarie. Chiude il racconto con un'azione, non con un punto."
+              : "The exit at the foot of a case study: primary and secondary side by side, never two primaries. It closes the story with an action, not a full stop."
+          }
+        </p>
+        <div class="ds-stage">
+          <div class="work-cta">
+            <p class="work-cta__text">
+              {it ? "Ti serve qualcosa di simile?" : "Need something similar?"}
+            </p>
+            <div class="work-cta__actions">
+              <a class="work-cta__link work-cta__link--primary" href="#work-cta"
+                >{it ? "Scrivimi" : "Write to me"}</a
+              >
+              <a class="work-cta__link work-cta__link--secondary" href="#work-cta"
+                >{it ? "Altri case study" : "More case studies"}</a
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="ds-panel"
+        data-ds-accent
+        data-ds-panel="work-learnings"
+        aria-labelledby="work-learnings-t"
+      >
+        <div class="ds-panel__head">
+          <h2 class="ds-section__title" id="work-learnings-t">
+            {it ? "Cosa ho imparato" : "What I learned"}
+          </h2>
+          <span class="ds-panel__group">{t.secWork}<span class="ds-origin">work-*</span></span>
+        </div>
+        <p class="ds-sub__note">
+          {
+            it
+              ? "La sezione che chiude ogni case study. Ammettere cosa non ha funzionato è ciò che distingue un caso studio da una brochure."
+              : "The section that closes every case study. Admitting what did not work is what separates a case study from a brochure."
+          }
+        </p>
+        <div class="ds-stage">
+          <ul class="work-learnings" role="list">
+            <li class="work-learnings__item">
+              {
+                it
+                  ? "L'AI accelera davvero solo dentro vincoli decisi prima: senza regole esplicite produce caos da rifare."
+                  : "AI only really accelerates inside constraints decided up front: without explicit rules it produces rework."
+              }
+            </li>
+            <li class="work-learnings__item">
+              {
+                it
+                  ? "Un valore in tabella non è una misura finché qualcuno non la rifà."
+                  : "A figure in a table is not a measurement until someone redoes it."
+              }
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="ds-panel" data-ds-panel="hero-pannello" aria-labelledby="hero-pannello-t">
+        <div class="ds-panel__head">
+          <h2 class="ds-section__title" id="hero-pannello-t">
+            {it ? "Pannello e citazione" : "Panel and quote"}
+          </h2>
+          <span class="ds-panel__group">{t.secHero}<span class="ds-origin">lab-*</span></span>
+        </div>
+        <p class="ds-sub__note">
+          {
+            it
+              ? "Il blocco che porta un progetto nel prototipo hero, con la citazione come apertura e il link come uscita."
+              : "The block that carries a project in the hero prototype, with the quote as its opening and the link as its exit."
+          }
+        </p>
+        <div class="ds-stage">
+          <div class="lab">
+            <p class="lab-label">01</p>
+            <p class="lab-q">
+              {
+                it
+                  ? "Non è il movimento a dare profondità, è la differenza di velocità."
+                  : "Depth does not come from motion, it comes from difference in speed."
+              }
+            </p>
+            <a class="lab-link" href="#hero-pannello"
+              >{it ? "Leggi il case study" : "Read the case study"}</a
+            >
           </div>
         </div>
       </section>

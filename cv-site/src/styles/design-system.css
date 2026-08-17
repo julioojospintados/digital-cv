@@ -310,14 +310,27 @@
   display: none;
 }
 
+/* Titolo a sinistra, provenienza a destra: su desktop sono i due estremi
+   della stessa riga, così il nome del componente parte sempre dal margine di
+   lettura e l'etichetta tecnica non gli sta davanti. Sotto i 48rem tornano in
+   colonna, perché affiancati si spezzerebbero entrambi su più righe. */
 .ds-panel__head {
   display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 0.5rem 0.75rem;
-  padding-bottom: 0.75rem;
-  margin-bottom: 1.25rem;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.35rem;
+  padding-bottom: 0.85rem;
+  margin-bottom: 1.5rem;
   border-bottom: 1px solid var(--ds-line);
+}
+
+@media (min-width: 48rem) {
+  .ds-panel__head {
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1.5rem;
+  }
 }
 
 .ds-panel__group {
@@ -824,4 +837,81 @@
 /* Il pannello parte sotto la barra fissa con lo stesso respiro dell'indice. */
 .ds-main {
   padding-top: 2rem;
+}
+
+/* ── Varianti del palco ──────────────────────────────────────────────────
+   Due componenti hanno bisogno di spazio che il riquadro standard non dà. */
+
+/* La sigla in filigrana è `position: absolute` sopra il blocco di testo
+   (bottom: calc(100% - 0.62em)): nella pagina vera ha la sezione intera
+   sopra di sé, qui usciva dal riquadro e l'overflow la tagliava a metà. */
+.ds-stage--watermark {
+  padding-top: 5.5rem;
+}
+
+/* Il titolo d'ingresso è centrato nella pagina vera (justify-items: center
+   su .lh-copy). Dentro un pannello allineato a sinistra sembrava storto:
+   qui il blocco viene centrato davvero, com'è nel suo contesto. */
+.ds-stage--center .lh-copy {
+  margin-inline: auto;
+}
+
+/* ── Intro: i numeri del sistema ─────────────────────────────────────── */
+
+.ds-facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+  gap: 0.75rem;
+  margin-top: 2rem;
+  padding: 0;
+  list-style: none;
+}
+
+.ds-fact {
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--ds-line);
+  border-radius: var(--radius-16);
+  background: var(--ds-panel);
+}
+
+.ds-fact__n {
+  display: block;
+  font-family: var(--font-display);
+  font-size: var(--fs-32);
+  font-weight: 800;
+  line-height: 1;
+  color: var(--ds-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.ds-fact__l {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: var(--fs-12);
+  line-height: 1.45;
+  color: var(--ds-muted);
+}
+
+/* ── Forme: ogni raggio col suo ruolo ─────────────────────────────────── */
+
+.ds-shapes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+
+.ds-shape {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.ds-shape__box {
+  background: var(--color-accent);
+}
+
+.ds-shape__role {
+  font-size: var(--fs-12);
+  color: var(--ds-muted);
+  max-width: 11rem;
 }
