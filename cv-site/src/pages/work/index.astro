@@ -28,6 +28,16 @@ const caseStudies = cvData.projects.filter((p) => !!p.slug);
         Racconto ogni progetto dal problema al risultato misurabile: analisi UX/UI, decisioni
         tecniche, workflow AI-augmented. Tutto ciò che sta dietro al "com'è andata".
       </p>
+      {
+        /* L'unica porta d'ingresso alla vetrina: prima ci si arrivava solo
+          digitando l'indirizzo. Sta qui e non in fondo a un case study perché
+          chi guarda il portfolio da valutatore la cerca prima di leggere, non
+          dopo. */
+      }
+      <a href="/design-system" class="work-hero__ds-link">
+        Il design system, componente per componente
+        <span class="work-chevron" aria-hidden="true"></span>
+      </a>
     </header>
 
     <div class="work-index-grid">
