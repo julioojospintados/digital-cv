@@ -21,6 +21,21 @@
  * ancora estratti. È il debito noto di questa vetrina: il CSS non può
  * divergere, il markup sì. L'unico componente importato davvero è
  * WorkIndexCard, che esiste come componente.
+ *
+ * ── Lo snippet da copiare ────────────────────────────────────────────────
+ * Il codice mostrato sotto ogni componente NON è scritto qui: lo genera lo
+ * script in fondo al file serializzando il DOM della demo. Vale quindi la
+ * stessa garanzia che il CSS ha per costruzione — quel che si copia è
+ * esattamente quel che si sta guardando.
+ *
+ * Per aggiungerne uno bastano due attributi, entrambi spariti dallo snippet
+ * perché cominciano per `data-ds-`:
+ *   • `data-ds-snippet` sulla radice del componente (più d'una per pannello
+ *     se ci sono più varianti da mostrare — mai su un discendente di un'altra
+ *     radice marcata, uscirebbe due volte);
+ *   • `data-ds-drop="attr …"` sugli attributi che servono solo alla vetrina:
+ *     lo `style` che spegne un'altezza di pagina, l'`open` che tiene aperta
+ *     una tendina che nella pagina vera nasce chiusa.
  */
 import WorkIndexCard from "./cards/WorkIndexCard.astro";
 import "../styles/lab-home.css";
@@ -922,8 +937,8 @@ const NAV = [
 
         <div class="ds-stage ds-stage--center">
           <div class="lh">
-            <div class="lh-copy">
-              <p class="lh-name" style="margin:0;">Giulio Occhipinti</p>
+            <div class="lh-copy" data-ds-snippet>
+              <p class="lh-name" style="margin:0;" data-ds-drop="style">Giulio Occhipinti</p>
               <p class="lh-tagline">
                 {
                   it
@@ -981,7 +996,13 @@ const NAV = [
         </p>
         <div class="ds-stage ds-stage--watermark">
           <div class="lh">
-            <section class="lh-section" data-mode="creative" style="min-height:0;">
+            <section
+              class="lh-section"
+              data-mode="creative"
+              style="min-height:0;"
+              data-ds-snippet
+              data-ds-drop="style"
+            >
               <div class="lh-section__copy">
                 <p class="lh-section__initial" aria-hidden="true">WD</p>
                 <h2 class="lh-section__title">
@@ -1077,11 +1098,11 @@ const NAV = [
               <div class="ds-stage__row">
                 <div class="ds-case">
                   <p class="ds-label">{it ? "primaria — riposo" : "primary — resting"}</p>
-                  <a class="lh-cta" href="#ingresso">GO to Web & UX Designer</a>
+                  <a class="lh-cta" href="#ingresso" data-ds-snippet>GO to Web & UX Designer</a>
                 </div>
                 <div class="ds-case">
                   <p class="ds-label">{it ? "secondaria — riposo" : "secondary — resting"}</p>
-                  <a class="lh-cta lh-cta--ghost" href="#ingresso">
+                  <a class="lh-cta lh-cta--ghost" href="#ingresso" data-ds-snippet>
                     {it ? "Esplora il portfolio" : "Explore the portfolio"}
                   </a>
                 </div>
@@ -1157,7 +1178,12 @@ const NAV = [
         </p>
         <div class="ds-stage">
           <div class="lh">
-            <div class="lh-section__object" style="--nat:14rem;max-width:14rem;">
+            <div
+              class="lh-section__object"
+              style="--nat:14rem;max-width:14rem;"
+              data-ds-snippet
+              data-ds-drop="style"
+            >
               <img class="lh-obj__shadow" src="/knolling/plant.webp" alt="" aria-hidden="true" />
               <img src="/knolling/plant.webp" alt="" loading="lazy" decoding="async" />
             </div>
@@ -1216,7 +1242,7 @@ const NAV = [
 
         <div class="ds-stage">
           <div class="lc">
-            <div class="lc-head__text">
+            <div class="lc-head__text" data-ds-snippet>
               <h1 class="lc-name">Giulio Occhipinti</h1>
               <p class="lc-role">Web & UX Designer</p>
               <p class="lc-claim">
@@ -1275,7 +1301,7 @@ const NAV = [
 
         <div class="ds-stage">
           <div class="lc">
-            <div class="lc-now">
+            <div class="lc-now" data-ds-snippet>
               <div class="lc-now__row">
                 <span class="lc-now__years">2025 — {it ? "oggi" : "today"}</span>
                 <p class="lc-now__what">
@@ -1355,7 +1381,7 @@ const NAV = [
         </p>
         <div class="ds-stage">
           <div class="lc">
-            <div class="lc-actions">
+            <div class="lc-actions" data-ds-snippet>
               <a class="lc-btn lc-btn--primary" href="#lente">
                 {it ? "Scarica il CV (PDF)" : "Download the CV (PDF)"}
               </a>
@@ -1427,7 +1453,7 @@ const NAV = [
         </p>
         <div class="ds-stage ds-stage--dropdown">
           <div class="lc">
-            <details class="lc-lens" open>
+            <details class="lc-lens" open data-ds-snippet data-ds-drop="open">
               <summary class="lc-lens__trigger">
                 <span class="lc-lens__dot" aria-hidden="true"></span>
                 <span class="lc-lens__label">
@@ -1509,7 +1535,7 @@ const NAV = [
 
         <div class="ds-stage">
           <div class="lc">
-            <div class="lc-sec-head">
+            <div class="lc-sec-head" data-ds-snippet>
               <h2 class="lc-sec-title">
                 {it ? "Tutte le esperienze" : "All experience"}
                 <span class="lc-sec-count">{it ? "24 dal 2008" : "24 since 2008"}</span>
@@ -1548,7 +1574,7 @@ const NAV = [
         </p>
         <div class="ds-stage">
           <div class="lc">
-            <div class="lc-jobs">
+            <div class="lc-jobs" data-ds-snippet>
               <details class="lc-job" open>
                 <summary class="lc-job__summary">
                   <span class="lc-job__years">2026 — {it ? "oggi" : "today"}</span>
@@ -1722,13 +1748,18 @@ const NAV = [
             <div class="ds-stage__row">
               <div class="ds-case">
                 <p class="ds-label">{it ? "chip semplice" : "plain chip"}</p>
-                <ul class="lc-chips" role="list">
+                <ul class="lc-chips" role="list" data-ds-snippet>
                   <li class="lc-chip">Angular</li>
                 </ul>
               </div>
               <div class="ds-case">
                 <p class="ds-label">{it ? "comando chiuso" : "control, collapsed"}</p>
-                <button class="lc-chip lc-chip--more" type="button" aria-expanded="false">
+                <button
+                  class="lc-chip lc-chip--more"
+                  type="button"
+                  aria-expanded="false"
+                  data-ds-snippet
+                >
                   <span class="lc-more__sign">+4</span>
                 </button>
               </div>
@@ -1793,8 +1824,8 @@ const NAV = [
         <div class="ds-stage">
           <div class="lc">
             <div class="ds-stage__row">
-              <span class="lc-ai">AI</span>
-              <span class="lc-ai lc-ai--sm">AI</span>
+              <span class="lc-ai" data-ds-snippet>AI</span>
+              <span class="lc-ai lc-ai--sm" data-ds-snippet>AI</span>
             </div>
           </div>
         </div>
@@ -1858,7 +1889,7 @@ const NAV = [
         </p>
         <div class="ds-stage">
           <div class="lc">
-            <ul class="lc-all__list" role="list">
+            <ul class="lc-all__list" role="list" data-ds-snippet>
               <li class="lc-all__row is-lens">
                 <span class="lc-all__years">2026 — {it ? "oggi" : "today"}</span>
                 <span class="lc-all__what">
@@ -1933,7 +1964,7 @@ const NAV = [
         </p>
         <div class="ds-stage">
           <div class="lc">
-            <p class="lc-contacts">
+            <p class="lc-contacts" data-ds-snippet>
               <a href="#lente">giulio.occhipinti.g@gmail.com</a>
               <span class="lc-contacts__sep" aria-hidden="true">·</span>
               <a href="#lente">LinkedIn</a>
@@ -1956,11 +1987,11 @@ const NAV = [
 
         <div class="ds-stage">
           <div class="lab">
-            <header class="lab-bar" style="position:static;">
+            <header class="lab-bar" style="position:static;" data-ds-snippet data-ds-drop="style">
               <a href="#" class="lab-mark">GO</a>
               <span class="lab-flag">{it ? "Prototipo" : "Prototype"}</span>
             </header>
-            <div class="lab-copy" style="padding-top:1rem;">
+            <div class="lab-copy" style="padding-top:1rem;" data-ds-snippet data-ds-drop="style">
               <p class="lab-role">Web & UX Designer</p>
               <h2 class="lab-name">Giulio Occhipinti</h2>
               <p class="lab-claim">
@@ -1984,7 +2015,7 @@ const NAV = [
 
         <div class="ds-stage">
           <div class="lab">
-            <div class="lab-cta">
+            <div class="lab-cta" data-ds-snippet>
               <a href="#hero" class="lab-btn lab-btn--solid">Case study</a>
               <a href="#hero" class="lab-btn">{it ? "CV in PDF" : "CV as PDF"}</a>
             </div>
@@ -2002,12 +2033,12 @@ const NAV = [
 
         <div class="ds-stage">
           <div class="lab">
-            <p class="lab-eyebrow">{it ? "Il percorso" : "The path"}</p>
-            <h2 class="lab-h2">
+            <p class="lab-eyebrow" data-ds-snippet>{it ? "Il percorso" : "The path"}</p>
+            <h2 class="lab-h2" data-ds-snippet>
               {it ? "Quattro prove, un metodo" : "Four prototypes, one method"}
             </h2>
-            <p class="lab-label">01</p>
-            <p class="lab-note">
+            <p class="lab-label" data-ds-snippet>01</p>
+            <p class="lab-note" data-ds-snippet>
               {
                 it
                   ? "Nota di servizio del banco di prova: sparisce se la direzione viene promossa."
@@ -2030,7 +2061,7 @@ const NAV = [
         </div>
 
         <div class="ds-stage">
-          <div class="work-index-grid" style="margin:0;">
+          <div class="work-index-grid" style="margin:0;" data-ds-snippet data-ds-drop="style">
             <WorkIndexCard name="Digital CV" slug="digital-cv" role="AI Workflow Designer" />
             <WorkIndexCard name="Trip Runway" slug="trip-runway" role="Product Designer" pulse />
           </div>
@@ -2097,10 +2128,10 @@ const NAV = [
 
         <div class="ds-stage">
           <div class="ds-stage__row">
-            <span class="work-tag">Astro</span>
+            <span class="work-tag" data-ds-snippet>Astro</span>
             <span class="work-tag">Lit</span>
             <span class="work-tag">GSAP</span>
-            <a class="work-back" href="#case-study">
+            <a class="work-back" href="#case-study" data-ds-snippet>
               <span class="work-chevron" aria-hidden="true"></span>
               {it ? "Torna all'indice" : "Back to the index"}
             </a>
@@ -2123,7 +2154,7 @@ const NAV = [
 
         <div class="ds-stage">
           <div class="work-decisions">
-            <div class="work-decision">
+            <div class="work-decision" data-ds-snippet>
               <h3 class="work-decision__title">
                 {
                   it
@@ -2164,7 +2195,7 @@ const NAV = [
         </p>
         <div class="ds-stage">
           <div class="lc">
-            <ul class="lc-clients" role="list">
+            <ul class="lc-clients" role="list" data-ds-snippet>
               <li class="lc-client">
                 <p class="lc-client__who">
                   <b>Aruba</b>
@@ -2244,8 +2275,16 @@ const NAV = [
         </p>
         <div class="ds-stage">
           <div class="lc">
-            <p class="lc-eyebrow">{it ? "Come ci arrivo" : "How I get there"}</p>
-            <p class="lc-initial" aria-hidden="true" style="position:static;font-size:4rem;">WD</p>
+            <p class="lc-eyebrow" data-ds-snippet>{it ? "Come ci arrivo" : "How I get there"}</p>
+            <p
+              class="lc-initial"
+              aria-hidden="true"
+              style="position:static;font-size:4rem;"
+              data-ds-snippet
+              data-ds-drop="style"
+            >
+              WD
+            </p>
           </div>
         </div>
       </section>
@@ -2266,7 +2305,7 @@ const NAV = [
         </p>
         <div class="ds-stage">
           <div class="lc">
-            <p class="lc-note" style="padding-inline:0;">
+            <p class="lc-note" style="padding-inline:0;" data-ds-snippet data-ds-drop="style">
               {
                 it
                   ? "Prova /lab/<lente> — la pagina CV rifatta sui tempi di lettura reali di un recruiter."
@@ -2297,7 +2336,7 @@ const NAV = [
           }
         </p>
         <div class="ds-stage">
-          <div class="work-cta">
+          <div class="work-cta" data-ds-snippet>
             <p class="work-cta__text">
               {it ? "Ti serve qualcosa di simile?" : "Need something similar?"}
             </p>
@@ -2359,7 +2398,7 @@ const NAV = [
           }
         </p>
         <div class="ds-stage">
-          <ul class="work-learnings" role="list">
+          <ul class="work-learnings" role="list" data-ds-snippet>
             <li class="work-learnings__item">
               {
                 it
@@ -2417,14 +2456,14 @@ const NAV = [
         <div class="ds-stage">
           <div class="lab">
             <p class="lab-label">01</p>
-            <p class="lab-q">
+            <p class="lab-q" data-ds-snippet>
               {
                 it
                   ? "Non è il movimento a dare profondità, è la differenza di velocità."
                   : "Depth does not come from motion, it comes from difference in speed."
               }
             </p>
-            <a class="lab-link" href="#hero-pannello"
+            <a class="lab-link" href="#hero-pannello" data-ds-snippet
               >{it ? "Leggi il case study" : "Read the case study"}</a
             >
           </div>
@@ -2705,6 +2744,189 @@ const NAV = [
         labSections.forEach((s) => (s.dataset.mode = mode));
         modeButtons.forEach((b) => b.setAttribute("aria-pressed", String(b === btn)));
       });
+    });
+  }
+
+  // ── Snippet HTML ───────────────────────────────────────────────────────
+  // Lo stesso patto che il foglio di stile fa per il CSS, applicato al
+  // markup: lo snippet non è riscritto a mano, è il DOM della demo
+  // serializzato. Se la demo cambia, il codice da copiare cambia con lei —
+  // una copia scritta a parte sarebbe invecchiata al primo ritocco.
+  //
+  // Cosa entra e cosa no:
+  //   • `data-ds-snippet`  marca la radice del componente. Un pannello può
+  //     averne più d'una (le due varianti di CTA, le due misure del badge):
+  //     escono in sequenza, separate da una riga vuota.
+  //   • gli attributi `data-ds-*` spariscono: sono impalcatura della vetrina.
+  //   • `data-ds-drop="…"` toglie dallo snippet attributi che servono solo
+  //     alla demo — la tendina qui è mostrata `open`, nella pagina vera nasce
+  //     chiusa, e uno snippet che dicesse il contrario insegnerebbe l'errore.
+  //
+  // Gira PRIMA del comando +N più sotto: quello aggiunge classi e scopre il
+  // pulsante, e ciò che va copiato è il markup servito, non quello a cui lo
+  // script è già arrivato.
+  {
+    const en = document.documentElement.lang === "en";
+    // I tag che in HTML non hanno chiusura: senza questo elenco lo snippet
+    // stampa `</img>`, che non esiste.
+    const VOID = new Set([
+      "area",
+      "base",
+      "br",
+      "col",
+      "embed",
+      "hr",
+      "img",
+      "input",
+      "link",
+      "meta",
+      "source",
+      "track",
+      "wbr",
+    ]);
+
+    // Gli attributi che in HTML si scrivono senza valore. Fuori da questo
+    // elenco un valore vuoto resta `alt=""`: è la forma che un frontend si
+    // aspetta di copiare, e `alt` nudo sembrerebbe una dimenticanza invece
+    // della scelta esplicita "immagine decorativa".
+    const BOOLEAN = new Set([
+      "open",
+      "hidden",
+      "disabled",
+      "required",
+      "checked",
+      "selected",
+      "readonly",
+      "multiple",
+      "autofocus",
+      "defer",
+      "async",
+      "controls",
+      "loop",
+      "muted",
+      "playsinline",
+      "novalidate",
+      "reversed",
+    ]);
+
+    const flat = (node: Node) => (node.textContent ?? "").replace(/\s+/g, " ").trim();
+
+    const attrs = (el: Element) => {
+      const drop = new Set((el.getAttribute("data-ds-drop") ?? "").split(/\s+/).filter(Boolean));
+      return Array.from(el.attributes)
+        .filter((a) => !a.name.startsWith("data-ds-") && !drop.has(a.name))
+        .map((a) =>
+          a.value === "" && BOOLEAN.has(a.name) ? ` ${a.name}` : ` ${a.name}="${a.value}"`,
+        )
+        .join("");
+    };
+
+    const walk = (node: Node, depth: number, out: string[]) => {
+      const pad = "  ".repeat(depth);
+      if (node.nodeType === Node.TEXT_NODE) {
+        const text = flat(node);
+        if (text) out.push(pad + text);
+        return;
+      }
+      if (node.nodeType !== Node.ELEMENT_NODE) return;
+
+      const el = node as Element;
+      const tag = el.tagName.toLowerCase();
+      const open = `<${tag}${attrs(el)}>`;
+      if (VOID.has(tag)) {
+        out.push(pad + open);
+        return;
+      }
+
+      const kids = Array.from(el.childNodes).filter(
+        (n) => n.nodeType === Node.ELEMENT_NODE || (n.nodeType === Node.TEXT_NODE && flat(n)),
+      );
+      if (kids.length === 0) {
+        out.push(`${pad}${open}</${tag}>`);
+        return;
+      }
+      // Un elemento con solo testo dentro resta su una riga: spezzarlo
+      // renderebbe illeggibile un elenco di chip senza guadagnare nulla.
+      if (kids.length === 1 && kids[0].nodeType === Node.TEXT_NODE) {
+        out.push(`${pad}${open}${flat(kids[0])}</${tag}>`);
+        return;
+      }
+      out.push(pad + open);
+      kids.forEach((k) => walk(k, depth + 1, out));
+      out.push(`${pad}</${tag}>`);
+    };
+
+    document.querySelectorAll<HTMLElement>("[data-ds-panel]").forEach((panel) => {
+      const roots = panel.querySelectorAll<HTMLElement>("[data-ds-snippet]");
+      if (roots.length === 0) return;
+
+      const source = Array.from(roots)
+        .map((root) => {
+          const out: string[] = [];
+          walk(root, 0, out);
+          return out.join("\n");
+        })
+        .join("\n\n");
+
+      const box = document.createElement("div");
+      box.className = "ds-code";
+
+      const head = document.createElement("div");
+      head.className = "ds-code__head";
+      const label = document.createElement("p");
+      label.className = "ds-code__label";
+      label.textContent = en ? "HTML — from the demo above" : "HTML — dalla demo qui sopra";
+      head.append(label);
+
+      // Il pulsante esiste solo dove gli appunti esistono (contesto sicuro).
+      // Senza, resta il codice selezionabile a mano: meglio niente comando
+      // che un comando che non copia.
+      if (navigator.clipboard) {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "ds-code__copy";
+        button.textContent = en ? "Copy" : "Copia";
+
+        // L'etichetta che cambia si vede; chi usa uno screen reader ha
+        // bisogno che qualcuno glielo dica.
+        const status = document.createElement("span");
+        status.className = "ds-sr";
+        status.setAttribute("role", "status");
+
+        let timer = 0;
+        button.addEventListener("click", async () => {
+          try {
+            await navigator.clipboard.writeText(source);
+          } catch {
+            return;
+          }
+          button.textContent = en ? "Copied" : "Copiato";
+          status.textContent = en ? "HTML copied to the clipboard" : "HTML copiato negli appunti";
+          window.clearTimeout(timer);
+          timer = window.setTimeout(() => {
+            button.textContent = en ? "Copy" : "Copia";
+            status.textContent = "";
+          }, 2000);
+        });
+        head.append(button, status);
+      }
+
+      const pre = document.createElement("pre");
+      pre.className = "ds-code__pre";
+      // Il riquadro scorre: senza tabindex il codice lungo è irraggiungibile
+      // da tastiera (2.1.1). Con il tabindex serve un nome, da cui role e
+      // aria-label.
+      pre.tabIndex = 0;
+      pre.setAttribute("role", "region");
+      pre.setAttribute("aria-label", en ? "HTML of the component" : "HTML del componente");
+      const code = document.createElement("code");
+      // textContent e non innerHTML: è il browser a fare l'escape, così un
+      // `<` nello snippet resta un `<` invece di aprire un tag.
+      code.textContent = source;
+      pre.append(code);
+
+      box.append(head, pre);
+      panel.append(box);
     });
   }
 

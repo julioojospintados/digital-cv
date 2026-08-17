@@ -982,3 +982,98 @@
 .ds-spec__row--dont .ds-spec__k {
   color: rgba(255, 160, 140, 1);
 }
+
+/* ── Snippet HTML ────────────────────────────────────────────────────────
+   Il pezzo che un frontend cerca per primo. Non è scritto a mano: lo genera
+   lo script serializzando il DOM della demo qui sopra, quindi vale per il
+   markup la stessa garanzia che il § in testa a questo file dà per il CSS —
+   non può divergere da ciò che si sta guardando.
+
+   Il riquadro scorre da solo invece di allungare il pannello: la riga
+   esperienza da sola sono settanta righe di HTML, e un pannello lungo il
+   doppio del suo componente sposta il codice al centro della pagina. */
+
+.ds-code {
+  margin-top: 1.25rem;
+  border: 1px solid var(--ds-line);
+  border-radius: var(--radius-16);
+  background: rgba(0, 0, 0, 0.22);
+  overflow: hidden;
+}
+
+.ds-code__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.6rem 0.75rem 0.6rem 1.15rem;
+  border-bottom: 1px solid var(--ds-line);
+}
+
+.ds-code__label {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-10);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--ds-muted);
+}
+
+/* Stesso sistema di stati dei comandi del sito: bordo che si accende,
+   affondo alla pressione, anello di focus inchiostro e mai accento. */
+.ds-code__copy {
+  flex: none;
+  padding: 0.35rem 0.8rem;
+  border: 1px solid var(--ds-line-strong);
+  border-radius: var(--radius-4);
+  background: transparent;
+  color: var(--ds-ink);
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  cursor: pointer;
+  transition:
+    border-color 0.18s ease,
+    background-color 0.18s ease,
+    transform 0.08s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .ds-code__copy:hover {
+    border-color: var(--ds-ink);
+    background: rgba(255, 255, 255, 0.06);
+  }
+}
+
+.ds-code__copy:active {
+  transform: translateY(1px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-code__copy {
+    transition: none;
+  }
+  .ds-code__copy:active {
+    transform: none;
+  }
+}
+
+/* tabindex=0 sul <pre>: un riquadro che scorre e non si può raggiungere da
+   tastiera è contenuto irraggiungibile (2.1.1). Con il tabindex arriva
+   l'obbligo del nome accessibile, ed è per questo che porta anche role e
+   aria-label — entrambi messi dallo script insieme al tabindex. */
+.ds-code__pre {
+  margin: 0;
+  padding: 1rem 1.15rem;
+  max-height: 24rem;
+  overflow: auto;
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  line-height: 1.65;
+  color: var(--ds-ink);
+  tab-size: 2;
+}
+
+.ds-code__pre code {
+  font: inherit;
+  white-space: pre;
+}
