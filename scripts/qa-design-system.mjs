@@ -340,8 +340,141 @@ async function auditPage(browser, { lang, path }) {
   }
   check(noH1.length === 0, "l'h1 della pagina c'è su ogni pannello", noH1.join(", "));
 
-  // ── 10. Console pulita ──────────────────────────────────────────────────
-  console.log("\n  [10] Console");
+  // ── 10. Spaziatura: i difetti che si vedono a occhio e non si misurano ──
+  // Cinque difetti segnalati a mano in una sola sessione erano tutti di
+  // questa famiglia, e tutti invisibili a un controllo che guarda solo se
+  // gli elementi ci sono. Da qui in poi li trova lo script.
+  console.log("\n  [10] Spaziatura");
+
+  const barre = [];
+  const sbordi = [];
+  const anelli = [];
+  const gapIncoerenti = [];
+
+  for (const id of panels) {
+    await openPanel(page, id);
+    const r = await page.evaluate((panelId) => {
+      const panel = document.querySelector(`[data-ds-panel="${panelId}"]`);
+      const out = { barre: [], sbordi: [], anelli: [], gap: [] };
+
+      panel.querySelectorAll(".ds-stage").forEach((stage) => {
+        const cs = getComputedStyle(stage);
+        const bx = parseFloat(cs.borderLeftWidth) + parseFloat(cs.borderRightWidth);
+
+        // (a) Una barra di scorrimento VISIBILE ruba spazio al client box.
+        //     `scrollHeight > clientHeight` non basta: con overflow hidden
+        //     il contenuto è tagliato ma nessuna barra compare.
+        const barraV = Math.round(stage.offsetWidth - bx - stage.clientWidth);
+        if (barraV > 0) out.barre.push(`${panelId} barra verticale ${barraV}px`);
+
+        // (b) Un elemento che esce dal proprio palco sui lati.
+        //     Un palco che taglia di proposito è escluso: la scena knolling
+        //     è a pieno vivo e gli oggetti ai bordi escono esattamente come
+        //     nella pagina vera — lì il taglio È il componente, non un
+        //     difetto di spaziatura.
+        const sr = stage.getBoundingClientRect();
+        const tagliaDiProposito = cs.overflow === "hidden" || cs.overflowX === "hidden";
+        if (!tagliaDiProposito) {
+          stage.querySelectorAll("*").forEach((el) => {
+            const er = el.getBoundingClientRect();
+            if (er.width === 0 || er.height === 0) return;
+            const fuoriSx = Math.round(sr.left - er.left);
+            if (fuoriSx > 2)
+              out.sbordi.push(
+                `${panelId} ${el.className || el.tagName} esce a sinistra di ${fuoriSx}px`,
+              );
+          });
+        }
+
+        // (c) L'anello di focus si disegna FUORI dall'elemento: se non ha
+        //     spazio attraversa il bordo del palco o la riga accanto.
+        stage.querySelectorAll(".is-focus, :focus-visible").forEach((el) => {
+          const c = getComputedStyle(el);
+          const ring = parseFloat(c.outlineWidth) + parseFloat(c.outlineOffset);
+          if (!ring) return;
+          const er = el.getBoundingClientRect();
+          const sopra = Math.round(er.top - ring - sr.top);
+          const sotto = Math.round(sr.bottom - (er.bottom + ring));
+          if (sopra < 0 || sotto < 0)
+            out.anelli.push(
+              `${panelId} anello fuori dal palco (sopra ${sopra}px, sotto ${sotto}px)`,
+            );
+        });
+      });
+
+      // (d) Colonne affiancate: l'aria fra etichetta e contenuto dev'essere
+      //     la stessa. È il difetto delle chip — una colonna a 22px e due a
+      //     8 — e a occhio si vede solo se si sa cosa cercare.
+      panel.querySelectorAll(".ds-stage__row").forEach((row) => {
+        const gaps = [...row.querySelectorAll(":scope > .ds-case")]
+          .map((c) => {
+            const label = c.querySelector(".ds-label");
+            const first = [...c.children].find((x) => x !== label);
+            if (!label || !first) return null;
+            return Math.round(
+              first.getBoundingClientRect().top - label.getBoundingClientRect().bottom,
+            );
+          })
+          .filter((g) => g !== null);
+        if (gaps.length > 1 && new Set(gaps).size > 1)
+          out.gap.push(`${panelId} colonne con aria diversa: ${gaps.join(", ")}px`);
+      });
+
+      return out;
+    }, id);
+
+    barre.push(...r.barre);
+    sbordi.push(...[...new Set(r.sbordi)]);
+    anelli.push(...[...new Set(r.anelli)]);
+    gapIncoerenti.push(...r.gap);
+  }
+
+  check(barre.length === 0, "nessun palco mostra una barra di scorrimento", barre.join(" · "));
+  check(
+    sbordi.length === 0,
+    "nessun elemento esce dal proprio palco",
+    sbordi.slice(0, 4).join(" · "),
+  );
+  check(
+    anelli.length === 0,
+    "ogni anello di focus sta dentro il palco",
+    anelli.slice(0, 4).join(" · "),
+  );
+  check(
+    gapIncoerenti.length === 0,
+    "colonne affiancate con la stessa aria fra etichetta e contenuto",
+    gapIncoerenti.join(" · "),
+  );
+
+  // ── 11. L'indice resta fermo quando la pagina scorre ────────────────────
+  // `position: sticky` si aggancia al contenitore di scorrimento più vicino:
+  // basta un antenato con overflow diverso da visible perché smetta di
+  // funzionare senza che nessuna regola sembri sbagliata. È successo con
+  // `body { overflow-x: hidden }`.
+  console.log("\n  [11] Indice fermo allo scorrimento");
+  // Su un pannello corto la riga della griglia finisce presto e l'indice
+  // scorre via *correttamente*: sticky non tiene oltre la propria area. Il
+  // controllo ha senso solo dove c'è strada da fare, quindi si apre prima
+  // il pannello più alto.
+  await openPanel(page, "lente-esperienza");
+  const sticky = await page.evaluate(async () => {
+    const side = document.getElementById("ds-side");
+    if (!side || getComputedStyle(side).position !== "sticky") return null;
+    const prima = side.getBoundingClientRect().top;
+    window.scrollTo(0, 900);
+    await new Promise((r) => setTimeout(r, 400));
+    const dopo = side.getBoundingClientRect().top;
+    window.scrollTo(0, 0);
+    return { prima: Math.round(prima), dopo: Math.round(dopo) };
+  });
+  check(
+    sticky === null || Math.abs(sticky.dopo - sticky.prima) < 4,
+    "l'indice resta fermo mentre la pagina scorre",
+    sticky ? `da ${sticky.prima}px a ${sticky.dopo}px` : "",
+  );
+
+  // ── 12. Console pulita ──────────────────────────────────────────────────
+  console.log("\n  [12] Console");
   check(problems.length === 0, "nessun errore in console", problems.slice(0, 3).join(" | "));
 
   await context.close();

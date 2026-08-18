@@ -51,7 +51,12 @@
   max-width: 92rem;
   margin-inline: auto;
   padding-inline: var(--ds-gutter);
-  padding-bottom: 6rem;
+  /* Nessun padding-bottom qui: starebbe FUORI dalla riga della griglia, e
+     `position: sticky` può tenere l'indice fermo solo finché ha area sotto
+     di sé. Con 6rem di padding sul guscio la riga finiva 96px prima del
+     fondo pagina, e proprio negli ultimi 96px di scroll l'indice scorreva
+     via — «se scrollo un po' non si vede più». L'aria in fondo la mette la
+     colonna del contenuto, che è dentro la riga. */
   display: grid;
   gap: clamp(var(--size-20), 3vw, var(--size-40));
   align-items: start;
@@ -65,7 +70,9 @@
 
 .ds-main {
   min-width: 0;
-  padding-bottom: var(--size-32);
+  /* 2rem suoi più i 6rem che stavano sul guscio: stessa aria in fondo alla
+     pagina, ma dentro la riga della griglia, dove serve all'indice. */
+  padding-bottom: 8rem;
 }
 
 .ds-bar {
@@ -435,8 +442,18 @@
   border-radius: var(--radius-16);
   background: var(--ds-panel);
   /* Le demo larghe scorrono dentro il proprio riquadro: la pagina non deve
-     mai scorrere in orizzontale (1.4.10 Reflow). */
+     mai scorrere in orizzontale (1.4.10 Reflow).
+
+     `overflow-y: hidden` non è ridondante: dichiarare solo `overflow-x`
+     costringe l'asse verticale ad `auto`, e allora basta un pixel di
+     sforamento — l'ombra dell'oggetto knolling è scalata e inclinata, e
+     contribuisce all'area scorribile — per far comparire una barra
+     verticale sul bordo destro della card. Sembrava un filo colorato di
+     troppo, era una scrollbar. In verticale i palchi crescono con il
+     contenuto, quindi qui non si taglia niente di reale: solo la
+     decorazione trasformata che sborda. */
   overflow-x: auto;
+  overflow-y: hidden;
 }
 
 .ds-stage + .ds-stage {
@@ -910,9 +927,16 @@
 
 /* La sigla in filigrana è `position: absolute` sopra il blocco di testo
    (bottom: calc(100% - 0.62em)): nella pagina vera ha la sezione intera
-   sopra di sé, qui usciva dal riquadro e l'overflow la tagliava a metà. */
-.ds-stage--watermark {
-  padding-top: 5.5rem;
+   sopra di sé, qui usciva dal riquadro e l'overflow la tagliava a metà.
+
+   Lo spazio che le serve sta DENTRO la sezione, non fuori dal palco. Prima
+   era un padding-top di 5.5rem sul riquadro: la filigrana respirava, ma il
+   respiro era aria del contenitore, e il bordo della sezione finiva
+   incollato al testo invece di contenerlo. Ora il palco ha il suo padding
+   normale come tutti gli altri, e la sezione porta il proprio — così il
+   riquadro descrive davvero l'ingombro del componente. */
+.ds-stage--watermark .lh-section {
+  padding: 5rem var(--size-16) var(--size-16);
 }
 
 /* La sezione-lente è una griglia a due colonne — testo e oggetto. Nella
@@ -1406,10 +1430,13 @@
   padding-left: 0;
 }
 
-/* L'anello di focus della colonna focus-visible sta fuori dal bordo della
-   cella: senza questo respiro veniva tagliato dalla cella accanto. */
+/* L'anello di focus si disegna FUORI dall'elemento: 2px di tratto più 4px
+   di stacco, sei in tutto. Con 1rem di respiro ne restavano cinque, e
+   l'anello della prima riga attraversava di un pixel la riga
+   d'intestazione — misurato, non a occhio. 1.25rem porta il margine a nove
+   e lo tiene lontano anche dalla riga sotto. */
 .ds-matrix td {
-  padding-block: var(--size-16);
+  padding-block: var(--size-20);
 }
 
 /* ── Movimento: gli esempi che si vedono ─────────────────────────────────
@@ -1526,11 +1553,17 @@
   overflow: hidden;
 }
 
-/* L'invito a scorrere vive in fondo alla schermata, centrato con una
-   traslazione: in una demo va messo in flusso. */
+/* L'invito a scorrere vive in fondo alla schermata, centrato con
+   `left: 50%` più `translate: -50% 0`. In flusso `left` smette di contare,
+   ma `translate` no: è una proprietà a sé, non una scorciatoia di
+   `transform`, e spegnere solo quest'ultimo lasciava la voce spostata di
+   metà larghezza del contenitore — 395px fuori dal riquadro, misurati.
+   Va spento il nome giusto. */
 .ds-stage .lh-scroll {
   position: static;
   transform: none;
+  translate: none;
+  justify-self: start;
 }
 
 /* La still-life del prototipo hero si dimensiona sulla colonna dell'ingresso;

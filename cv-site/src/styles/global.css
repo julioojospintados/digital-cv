@@ -235,8 +235,15 @@ body {
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  /* Prevent horizontal scrollbar from layout overflow — hidden has wider mobile browser support than clip */
-  overflow-x: hidden;
+  /* Niente barra orizzontale da overflow di layout.
+     `clip` e non `hidden`: `hidden` rende il body un contenitore di
+     scorrimento, e `position: sticky` si aggancia a quello invece che alla
+     finestra — l'indice di /design-system scorreva via con la pagina invece
+     di restare fermo. `clip` taglia allo stesso modo senza creare lo
+     scroll container, quindi lo sticky torna a funzionare. Supportato da
+     Chrome 90, Firefox 81, Safari 16: sopra la base del progetto, che usa
+     già color-mix e container query. */
+  overflow-x: clip;
 }
 
 /* ─── Reduced motion ─── */
