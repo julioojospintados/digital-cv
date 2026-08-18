@@ -40,14 +40,14 @@
 .about-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--sp-12);
-  margin-top: var(--sp-8);
+  gap: var(--size-12);
+  margin-top: var(--size-8);
 }
 
 .about-action {
   display: inline-flex;
   align-items: center;
-  gap: var(--sp-8);
+  gap: var(--size-8);
   padding: 0.6rem 1.1rem;
   font-family: var(--font-mono);
   font-size: var(--fs-12);
@@ -124,14 +124,14 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--sp-16);
-  padding: var(--sp-16) clamp(var(--sp-20), 4vw, var(--sp-40)) var(--sp-16);
+  gap: var(--size-16);
+  padding: var(--size-16) clamp(var(--size-20), 4vw, var(--size-40)) var(--size-16);
 }
 
 .memory-dialog__scroll {
   width: 100%;
   min-height: 0;
-  padding: var(--sp-8) clamp(var(--sp-20), 4vw, var(--sp-40)) var(--sp-32);
+  padding: var(--size-8) clamp(var(--size-20), 4vw, var(--size-40)) var(--size-32);
   overflow-y: auto;
   overscroll-behavior: contain;
 }
@@ -238,7 +238,7 @@
   flex-wrap: wrap;
   align-items: flex-start;
   justify-content: center;
-  gap: var(--sp-20) var(--sp-24);
+  gap: var(--size-20) var(--size-24);
 }
 
 /* Wrapper nativo <button> intorno a .memory-photo — sostituisce
@@ -263,7 +263,7 @@
   width: clamp(7rem, 18vw, 11rem);
   aspect-ratio: 4 / 5;
   object-fit: cover;
-  padding: var(--sp-8) var(--sp-8) var(--sp-20);
+  padding: var(--size-8) var(--size-8) var(--size-20);
   background: rgba(245, 240, 230, 0.96);
   border-radius: 2px;
   box-shadow: 0 0.625rem 1.5rem rgba(0, 0, 0, 0.4);
@@ -323,8 +323,8 @@
 
 .photo-lightbox__close {
   position: absolute;
-  top: var(--sp-20);
-  right: var(--sp-20);
+  top: var(--size-20);
+  right: var(--size-20);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -360,7 +360,7 @@
   max-height: min(85vh, 42rem);
   aspect-ratio: auto;
   object-fit: contain;
-  padding: 0.85rem 0.85rem var(--sp-32);
+  padding: 0.85rem 0.85rem var(--size-32);
   transform: none;
   box-shadow: 0 1.875rem 5rem rgba(0, 0, 0, 0.55);
   cursor: zoom-out;
@@ -368,7 +368,7 @@
 
 .memory-fact {
   width: clamp(11rem, 26vw, 15rem);
-  padding: var(--sp-20) 1.1rem;
+  padding: var(--size-20) 1.1rem;
   margin: 0;
   font-family: var(--font-mono);
   font-size: var(--fs-14);
@@ -426,7 +426,7 @@
 }
 
 .memory-fact--story .memory-fact__body + .memory-fact__body {
-  margin-top: var(--sp-20);
+  margin-top: var(--size-20);
 }
 
 @media (max-width: 40rem) {

@@ -179,10 +179,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--sp-16);
+  gap: var(--size-16);
   max-width: 68rem;
   margin-inline: auto;
-  padding: var(--sp-12) var(--lc-gutter);
+  padding: var(--size-12) var(--lc-gutter);
 }
 
 .lc-bar__home {
@@ -206,7 +206,7 @@
 
 .lc-bar__flag {
   flex: 0 0 auto;
-  padding: var(--sp-2) var(--sp-8);
+  padding: var(--size-2) var(--size-8);
   border: 1px solid var(--color-accent);
   border-radius: var(--radius-4);
   background: var(--color-accent);
@@ -226,9 +226,9 @@
   position: relative;
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 21rem);
-  gap: clamp(var(--sp-24), 4vw, 3.5rem);
+  gap: clamp(var(--size-24), 4vw, 3.5rem);
   align-items: center;
-  padding-block: var(--sp-24) var(--sp-48);
+  padding-block: var(--size-24) var(--size-48);
   border-bottom: 1px solid var(--lc-line);
 }
 
@@ -288,8 +288,8 @@
    scritta in arancione. */
 .lc-role {
   display: inline-block;
-  margin-top: var(--sp-8);
-  padding: 0.1875rem var(--sp-12);
+  margin-top: var(--size-8);
+  padding: 0.1875rem var(--size-12);
   border-radius: var(--radius-4);
   background: var(--color-accent);
   color: var(--lc-on-accent);
@@ -298,7 +298,7 @@
 }
 
 .lc-claim {
-  margin-top: var(--sp-12);
+  margin-top: var(--size-12);
   max-width: 44rem;
   font-size: var(--fs-16);
   color: var(--lc-ink);
@@ -322,9 +322,9 @@
 /* ── "Dove lavora ora, e prima" ────────────────────────────────────────── */
 
 .lc-now {
-  margin-top: var(--sp-20);
+  margin-top: var(--size-20);
   display: grid;
-  gap: var(--sp-8);
+  gap: var(--size-8);
   padding-left: 0.875rem;
   /* Il filo accent che lega le due righe: colore che porta struttura, non
      decorazione sparsa. */
@@ -335,7 +335,7 @@
   display: grid;
   grid-template-columns: var(--lc-rail) 1fr;
   align-items: baseline;
-  gap: var(--sp-12);
+  gap: var(--size-12);
 }
 
 .lc-now__years {
@@ -364,10 +364,10 @@
 /* ── Azioni ───────────────────────────────────────────────────────────── */
 
 .lc-actions {
-  margin-top: var(--sp-24);
+  margin-top: var(--size-24);
   display: flex;
   flex-wrap: wrap;
-  gap: var(--sp-12);
+  gap: var(--size-12);
 }
 
 /* ═══ BOTTONI — sistema di stati ══════════════════════════════════════════
@@ -408,11 +408,11 @@
 .lc-btn {
   display: inline-flex;
   align-items: center;
-  gap: var(--sp-8);
+  gap: var(--size-8);
   /* 2.75rem = 44px, la misura minima di un bersaglio touch. Vale anche su
      desktop, dove non costa niente. */
   min-height: 2.75rem;
-  padding: 0 var(--sp-20);
+  padding: 0 var(--size-20);
   border: 1px solid var(--lc-line-strong);
   border-radius: var(--radius-4);
   color: var(--lc-ink);
@@ -491,7 +491,7 @@
 }
 
 .lc-contacts {
-  margin-top: var(--sp-16);
+  margin-top: var(--size-16);
   font-size: var(--fs-14);
   color: var(--lc-muted);
 }
@@ -503,13 +503,13 @@
 }
 
 .lc-contacts__sep {
-  margin-inline: var(--sp-8);
+  margin-inline: var(--size-8);
 }
 
 /* ── Selettore di lente, retrocesso ───────────────────────────────────── */
 
 .lc-lens {
-  margin-top: var(--sp-24);
+  margin-top: var(--size-24);
   position: relative;
   width: fit-content;
 }
@@ -517,7 +517,7 @@
 .lc-lens__trigger {
   display: inline-flex;
   align-items: center;
-  gap: var(--sp-8);
+  gap: var(--size-8);
   min-height: 2.75rem;
   padding: 0 0.875rem;
   border: 1px solid var(--lc-line);
@@ -561,9 +561,9 @@
 .lc-lens__list {
   position: absolute;
   z-index: 10;
-  margin-top: var(--sp-4);
+  margin-top: var(--size-4);
   min-width: 100%;
-  padding: var(--sp-4);
+  padding: var(--size-4);
   border: 1px solid var(--lc-line-strong);
   border-radius: var(--radius-4);
   /* Opaco: una tendina semitrasparente sopra del testo è illeggibile, e il
@@ -575,8 +575,8 @@
 .lc-lens__opt {
   display: flex;
   align-items: center;
-  gap: var(--sp-8);
-  padding: var(--sp-8) var(--sp-12);
+  gap: var(--size-8);
+  padding: var(--size-8) var(--size-12);
   border-radius: var(--radius-4);
   color: var(--lc-ink);
   font-size: var(--fs-14);
@@ -634,7 +634,7 @@
 /* ═══ Intestazioni di sezione ═════════════════════════════════════════════ */
 
 .lc-sec-head {
-  margin-bottom: var(--sp-20);
+  margin-bottom: var(--size-20);
 }
 
 /* Inchiostro (9,04:1), con una barra d'accento davanti: il colore segna il
@@ -661,7 +661,7 @@
 }
 
 .lc-sec-count {
-  margin-left: var(--sp-8);
+  margin-left: var(--size-8);
   font-family: var(--font-mono);
   font-size: var(--fs-12);
   font-weight: 400;
@@ -671,7 +671,7 @@
 /* La riga che rende sicuro il filtro: dice quante ne stai vedendo e quante
    ce ne sono in tutto. Senza, filtrare sembra nascondere. */
 .lc-sec-note {
-  margin-top: var(--sp-6);
+  margin-top: var(--size-6);
   font-size: var(--fs-14);
   color: var(--lc-muted);
 }
@@ -681,8 +681,8 @@
 .lc-eyebrow {
   display: flex;
   align-items: center;
-  gap: var(--sp-8);
-  margin-bottom: var(--sp-8);
+  gap: var(--size-8);
+  margin-bottom: var(--size-8);
   font-size: var(--fs-12);
   font-weight: 600;
   letter-spacing: 0.1em;
@@ -702,7 +702,7 @@
 
 .lc-exp {
   position: relative;
-  padding-block: var(--sp-48);
+  padding-block: var(--size-48);
 }
 
 /* Oggetto di sfondo. Decorativo, dietro tutto, e l'unica cosa in pagina che
@@ -710,7 +710,7 @@
 .lc-bg-knoll {
   position: absolute;
   z-index: 0;
-  top: var(--sp-64);
+  top: var(--size-64);
   right: -3rem;
   width: clamp(9rem, 22vw, 16rem);
   opacity: 0.14;
@@ -725,7 +725,7 @@
 
 .lc-jobs {
   display: grid;
-  gap: var(--sp-4);
+  gap: var(--size-4);
 }
 
 /* ── Un <details> per lavoro ──────────────────────────────────────────────
@@ -757,9 +757,9 @@
 .lc-job__summary {
   display: grid;
   grid-template-columns: var(--lc-rail) 1fr 1.5rem;
-  gap: var(--sp-12);
+  gap: var(--size-12);
   align-items: start;
-  padding: var(--sp-16) 0.875rem;
+  padding: var(--size-16) 0.875rem;
   cursor: pointer;
   list-style: none;
 }
@@ -795,7 +795,7 @@
   color: var(--lc-muted);
   font-variant-numeric: tabular-nums;
   /* Allinea la cifra alla prima riga del titolo, che è più grande. */
-  padding-top: var(--sp-4);
+  padding-top: var(--size-4);
 }
 
 .lc-job__main {
@@ -823,7 +823,7 @@
 
 .lc-job__where {
   display: block;
-  margin-top: var(--sp-2);
+  margin-top: var(--size-2);
   font-size: var(--fs-12);
   color: var(--lc-muted);
 }
@@ -833,7 +833,7 @@
    paragrafo denso nello screening viene saltato, non letto. */
 .lc-job__lead {
   display: block;
-  margin-top: var(--sp-8);
+  margin-top: var(--size-8);
   max-width: 52rem;
   font-size: var(--fs-14);
   line-height: 1.55;
@@ -853,7 +853,7 @@
   justify-self: end;
   width: 0.5rem;
   height: 0.5rem;
-  margin-top: var(--sp-8);
+  margin-top: var(--size-8);
   border-right: 2px solid var(--lc-muted);
   border-bottom: 2px solid var(--lc-muted);
   transform: rotate(45deg);
@@ -870,7 +870,7 @@
      discorso del titolo, non ne apre uno nuovo. */
   padding-left: calc(var(--lc-rail) + 1.625rem);
   padding-right: 0.875rem;
-  padding-bottom: var(--sp-20);
+  padding-bottom: var(--size-20);
 }
 
 /* Riga piatta: le chip sono già in vista, quindi non c'è lo stacco che
@@ -882,13 +882,13 @@
 
 .lc-job__points {
   display: grid;
-  gap: var(--sp-8);
+  gap: var(--size-8);
   max-width: 52rem;
 }
 
 .lc-job__points li {
   position: relative;
-  padding-left: var(--sp-16);
+  padding-left: var(--size-16);
   font-size: var(--fs-14);
   line-height: 1.6;
 }
@@ -922,8 +922,8 @@
 .lc-ai {
   display: inline-flex;
   align-items: center;
-  gap: var(--sp-4);
-  margin-left: var(--sp-8);
+  gap: var(--size-4);
+  margin-left: var(--size-8);
   padding: 0.0625rem 0.4375rem;
   border-radius: var(--radius-4);
   background: var(--color-accent);
@@ -940,7 +940,7 @@
 }
 
 .lc-ai--sm {
-  padding: 0 var(--sp-6);
+  padding: 0 var(--size-6);
   letter-spacing: 0.08em;
 }
 
@@ -955,7 +955,7 @@
   display: grid;
   gap: 1.125rem;
   max-width: 52rem;
-  padding-left: var(--sp-16);
+  padding-left: var(--size-16);
   border-left: 1px solid var(--lc-line);
 }
 
@@ -989,7 +989,7 @@
 }
 
 .lc-client__text {
-  margin-top: var(--sp-4);
+  margin-top: var(--size-4);
   font-size: var(--fs-14);
   line-height: 1.6;
   color: var(--lc-muted);
@@ -998,12 +998,12 @@
 .lc-chips {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--sp-6);
+  gap: var(--size-6);
   margin-top: 0.875rem;
 }
 
 .lc-chip {
-  padding: 0.1875rem var(--sp-8);
+  padding: 0.1875rem var(--size-8);
   border: 1px solid color-mix(in srgb, var(--color-accent) 35%, var(--lc-line));
   border-radius: var(--radius-4);
   /* muted su tinta 12% = 5,23-6,51:1 a seconda della lente, verificato. */
@@ -1087,21 +1087,21 @@
 /* ── 2b. Cronologia completa ──────────────────────────────────────────── */
 
 .lc-all {
-  padding-block: var(--sp-40);
+  padding-block: var(--size-40);
   border-top: 1px solid var(--lc-line);
 }
 
 .lc-all__list {
   display: grid;
-  gap: var(--sp-2);
+  gap: var(--size-2);
 }
 
 .lc-all__row {
   display: grid;
   grid-template-columns: var(--lc-rail) 1fr auto;
-  gap: var(--sp-12);
+  gap: var(--size-12);
   align-items: baseline;
-  padding-block: var(--sp-6);
+  padding-block: var(--size-6);
   font-size: var(--fs-14);
 }
 
@@ -1136,14 +1136,14 @@
 /* ═══ STRATO 3 — solo gli imbocchi ════════════════════════════════════════ */
 
 .lc-more {
-  padding-block: var(--sp-40);
+  padding-block: var(--size-40);
   border-top: 1px solid var(--lc-line);
 }
 
 .lc-more__list {
   display: grid;
-  gap: var(--sp-8);
-  margin-top: var(--sp-16);
+  gap: var(--size-8);
+  margin-top: var(--size-16);
 }
 
 .lc-more__list a {
@@ -1163,8 +1163,8 @@
 /* ─── Nota di prova ─────────────────────────────────────────────────────── */
 
 .lc-note {
-  margin-top: var(--sp-48);
-  padding-top: var(--sp-20);
+  margin-top: var(--size-48);
+  padding-top: var(--size-20);
   border-top: 1px dashed var(--lc-line);
   font-size: var(--fs-12);
   line-height: 1.6;
@@ -1265,7 +1265,7 @@
     /* Spazio per l'ombra, che e' sfalsata del 5% verso destra: senza, su
        telefono veniva tagliata dal bordo e l'oggetto sembrava appiccicato
        allo schermo invece che appoggiato su un piano. */
-    padding-right: var(--sp-16);
+    padding-right: var(--size-16);
   }
 
   .lc-head__glow {
@@ -1279,20 +1279,20 @@
   .lc-job__summary,
   .lc-all__row {
     grid-template-columns: 1fr;
-    gap: var(--sp-4);
+    gap: var(--size-4);
   }
 
   .lc-job__summary {
     /* Il chevron torna in flusso in alto a destra: su una colonna sola non
        ha una corsia sua. */
     position: relative;
-    padding-right: var(--sp-28);
+    padding-right: var(--size-28);
   }
 
   .lc-job__chevron {
     position: absolute;
-    top: var(--sp-20);
-    right: var(--sp-8);
+    top: var(--size-20);
+    right: var(--size-8);
     margin-top: 0;
   }
 
@@ -1305,7 +1305,7 @@
   }
 
   .lc-all__row {
-    padding-block: var(--sp-8);
+    padding-block: var(--size-8);
     border-bottom: 1px solid rgba(245, 240, 230, 0.07);
   }
 

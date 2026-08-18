@@ -156,7 +156,7 @@
 .lh :focus-visible,
 .lh .is-focus {
   outline: 2px solid var(--lh-ink);
-  outline-offset: var(--sp-4);
+  outline-offset: var(--size-4);
 }
 
 /* ── Barra ── */
@@ -168,8 +168,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--sp-16);
-  padding: var(--sp-24) var(--lh-gutter);
+  gap: var(--size-16);
+  padding: var(--size-24) var(--lh-gutter);
 }
 
 /* Inchiostro, non accento — per due motivi che vanno nella stessa direzione.
@@ -193,7 +193,7 @@
 .lh-nav {
   display: flex;
   align-items: center;
-  gap: var(--sp-16);
+  gap: var(--size-16);
 }
 
 .lh-nav a,
@@ -218,7 +218,7 @@
 .lh-flag {
   border: 1px solid var(--lh-line);
   border-radius: 999rem;
-  padding: var(--sp-4) 0.6rem;
+  padding: var(--size-4) 0.6rem;
 }
 
 /* ── Ingresso ── */
@@ -315,7 +315,7 @@
   position: relative;
   z-index: 3;
   display: grid;
-  gap: var(--sp-16);
+  gap: var(--size-16);
   justify-items: center;
   text-align: center;
   max-width: 38rem;
@@ -427,7 +427,7 @@ html[data-lh-armed] .lh-obj {
 
 .lh-scroll {
   position: absolute;
-  bottom: var(--sp-32);
+  bottom: var(--size-32);
   left: 50%;
   translate: -50% 0;
   z-index: 4;
@@ -457,11 +457,11 @@ html[data-lh-armed] .lh-obj {
   min-height: 100svh;
   display: grid;
   align-items: center;
-  gap: clamp(var(--sp-24), 5vw, var(--sp-64));
+  gap: clamp(var(--size-24), 5vw, var(--size-64));
   grid-template-columns: minmax(0, 1fr);
   max-width: 82rem;
   margin-inline: auto;
-  padding: clamp(var(--sp-64), 10vh, 7rem) var(--lh-gutter);
+  padding: clamp(var(--size-64), 10vh, 7rem) var(--lh-gutter);
   overflow: hidden;
 }
 
@@ -551,7 +551,7 @@ html[data-lh-armed] .lh-obj {
   position: relative;
   z-index: 2;
   display: grid;
-  gap: var(--sp-16);
+  gap: var(--size-16);
   justify-items: start;
   max-width: 32rem;
 }
@@ -604,8 +604,8 @@ html[data-lh-armed] .lh-obj {
 .lh-section__actions {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--sp-12);
-  margin-top: var(--sp-8);
+  gap: var(--size-12);
+  margin-top: var(--size-8);
 }
 
 .lh-cta {
@@ -843,7 +843,7 @@ html[data-lh-armed] .lh-obj {
        La riga 1fr è ciò che tiene l'ingresso dentro una schermata: sono gli
        oggetti a cedere spazio al testo, mai il contrario. */
     grid-template-rows: auto minmax(0, 1fr) auto;
-    gap: clamp(var(--sp-12), 3vw, var(--sp-24));
+    gap: clamp(var(--size-12), 3vw, var(--size-24));
   }
 
   .lh-copy {
@@ -983,8 +983,8 @@ html[data-lh-armed] .lh-obj {
   .lh-section {
     grid-template-rows: auto minmax(0, 1fr);
     align-items: stretch;
-    gap: clamp(var(--sp-16), 4vw, var(--sp-28));
-    padding: clamp(var(--sp-32), 7vh, var(--sp-48)) var(--lh-gutter);
+    gap: clamp(var(--size-16), 4vw, var(--size-28));
+    padding: clamp(var(--size-32), 7vh, var(--size-48)) var(--lh-gutter);
   }
 
   .lh-section__copy {
