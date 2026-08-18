@@ -112,13 +112,13 @@ const classes = ["skill-sq", "cv-card", sizeClass, isGlow ? "skill-sq--glow" : "
 
   .skill-sq--glow {
     box-shadow:
-      0 0 8px rgba(0, 0, 0, 0),
-      0 0 0px var(--color-accent);
+      0 0 0.5rem rgba(0, 0, 0, 0),
+      0 0 0 var(--color-accent);
   }
 
   .skill-sq--glow:hover,
   .skill-sq--glow[data-state="active"] {
-    box-shadow: 0 0 12px color-mix(in srgb, var(--color-accent) 40%, transparent);
+    box-shadow: 0 0 0.75rem color-mix(in srgb, var(--color-accent) 40%, transparent);
   }
 
   .skill-sq__name {

@@ -161,8 +161,8 @@ skill-force-graph {
   padding: 0 3rem;
   height: 3.25rem;
   background: rgba(8, 73, 67, 0.85);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(0.75rem);
+  -webkit-backdrop-filter: blur(0.75rem);
   border-bottom: 1px solid var(--color-border);
   /* overflow: visible allows the mobile mode dropdown list to escape the nav bounds */
   overflow: visible;
@@ -266,12 +266,12 @@ go-logo:not(:defined) {
   border-width: 2px;
   opacity: 1;
   background: rgba(255, 255, 255, 0.12);
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.18);
+  box-shadow: 0 0 0.625rem rgba(255, 255, 255, 0.18);
   /* fallback: Safari < 16.2 / Firefox < 113 non supportano color-mix() */
   background: color-mix(in srgb, var(--color-accent) 18%, transparent);
   box-shadow:
-    0 0 10px color-mix(in srgb, var(--color-accent) 35%, transparent),
-    inset 0 0 8px color-mix(in srgb, var(--color-accent) 10%, transparent);
+    0 0 0.625rem color-mix(in srgb, var(--color-accent) 35%, transparent),
+    inset 0 0 0.5rem color-mix(in srgb, var(--color-accent) 10%, transparent);
 }
 
 .mode-btn[aria-pressed="true"] {
@@ -279,12 +279,12 @@ go-logo:not(:defined) {
   border-color: var(--color-accent);
   border-width: 2px;
   background: rgba(255, 255, 255, 0.12);
-  box-shadow: 0 0 10px rgba(255, 255, 255, 0.18);
+  box-shadow: 0 0 0.625rem rgba(255, 255, 255, 0.18);
   /* fallback: Safari < 16.2 / Firefox < 113 non supportano color-mix() */
   background: color-mix(in srgb, var(--color-accent) 18%, transparent);
   box-shadow:
-    0 0 10px color-mix(in srgb, var(--color-accent) 35%, transparent),
-    inset 0 0 8px color-mix(in srgb, var(--color-accent) 10%, transparent);
+    0 0 0.625rem color-mix(in srgb, var(--color-accent) 35%, transparent),
+    inset 0 0 0.5rem color-mix(in srgb, var(--color-accent) 10%, transparent);
 }
 
 /* abbr: centrata nel bottone stretto — visibile solo su mobile */
@@ -440,7 +440,7 @@ go-logo:not(:defined) {
   height: 1.9rem;
   padding: 0 0.6rem;
   background: color-mix(in srgb, var(--color-accent) 10%, transparent);
-  border: 1.5px solid var(--color-accent);
+  border: 0.09375rem solid var(--color-accent);
   border-radius: var(--radius-4);
   color: var(--color-accent);
   font-family: var(--font-mono);
@@ -452,7 +452,7 @@ go-logo:not(:defined) {
   white-space: nowrap;
   overflow: hidden;
   list-style: none;
-  box-shadow: 0 0 8px color-mix(in srgb, var(--color-accent) 20%, transparent);
+  box-shadow: 0 0 0.5rem color-mix(in srgb, var(--color-accent) 20%, transparent);
 }
 
 .mode-dropdown__trigger::-webkit-details-marker {
@@ -488,9 +488,9 @@ go-logo:not(:defined) {
   left: 0;
   right: 0;
   background: rgba(8, 73, 67, 0.98);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1.5px solid var(--color-accent);
+  backdrop-filter: blur(1rem);
+  -webkit-backdrop-filter: blur(1rem);
+  border: 0.09375rem solid var(--color-accent);
   border-top: none;
   border-radius: 0 0 2px 2px;
   list-style: none;
@@ -577,7 +577,7 @@ go-logo:not(:defined) {
 .lang-switch__opt--active {
   background: color-mix(in srgb, var(--color-accent) 15%, transparent);
   color: var(--color-accent);
-  box-shadow: inset 0 0 6px color-mix(in srgb, var(--color-accent) 10%, transparent);
+  box-shadow: inset 0 0 0.375rem color-mix(in srgb, var(--color-accent) 10%, transparent);
 }
 
 a.lang-switch__opt:hover {
@@ -663,8 +663,8 @@ a.lang-switch__opt:hover {
   padding: 0.2rem 0;
   list-style: none;
   background: rgba(8, 73, 67, 0.98);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(1rem);
+  -webkit-backdrop-filter: blur(1rem);
   border: 1px solid color-mix(in srgb, var(--color-accent) 40%, var(--color-border));
   border-top: none;
   border-radius: 0 0 2px 2px;
@@ -759,7 +759,7 @@ a.lang-switch__opt:hover {
 .hero-footer {
   opacity: 0;
   /* GSAP animates to 1 */
-  transform: translateY(14px);
+  transform: translateY(0.875rem);
 }
 
 .hero-badges {
@@ -824,7 +824,7 @@ a.lang-switch__opt:hover {
   /* white-space: pre removed — spaces are already  , pre caused excess gap between chars */
   opacity: 0;
   /* GSAP animates to 1 */
-  transform: translateY(18px);
+  transform: translateY(1.125rem);
   will-change: transform, opacity;
 }
 
@@ -1013,7 +1013,7 @@ a.lang-switch__opt:hover {
   text-transform: uppercase;
   color: var(--color-text-muted);
   opacity: 0;
-  transform: translateY(14px);
+  transform: translateY(0.875rem);
   /* Stato iniziale coerente con gli altri figli della hero (vedi sopra) —
      GSAP anima a 1 nello stesso stagger di hero-footer, cv-init.ts. */
 }
@@ -1148,8 +1148,8 @@ a.lang-switch__opt:hover {
    hardcoded: il valore fisso era quello del solo mode default e non seguiva
    gli altri quattro (stesso bug di WorkDesignSystem, DESIGN.md §9). */
 .lang-dot {
-  width: 6px;
-  height: 6px;
+  width: 0.375rem;
+  height: 0.375rem;
   border: 1px solid color-mix(in srgb, var(--color-text-muted) 85%, transparent);
   background: transparent;
   transition:
@@ -1236,11 +1236,11 @@ a.lang-switch__opt:hover {
   color: var(--color-text-primary);
   border-color: var(--color-accent);
   background: rgba(255, 255, 255, 0.08);
-  box-shadow: 0 0 12px rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 0.75rem rgba(255, 255, 255, 0.15);
   /* fallback: Safari < 16.2 / Firefox < 113 non supportano color-mix() */
   border-color: color-mix(in srgb, var(--color-accent) 65%, var(--skills-panel-border));
   background: color-mix(in srgb, var(--color-accent) 10%, var(--skills-panel-bg));
-  box-shadow: 0 0 12px color-mix(in srgb, var(--color-accent) 18%, transparent);
+  box-shadow: 0 0 0.75rem color-mix(in srgb, var(--color-accent) 18%, transparent);
 }
 
 .skills-view-btn:active {
@@ -1362,7 +1362,7 @@ a.lang-switch__opt:hover {
 .skills-collapsible[data-skills-expanded="true"] .skills-grid {
   /* Nessun valore reale di "altezza naturale" da animare in CSS puro —
      overshoot ampio, stessa tecnica già usata da .exp-cluster__body. */
-  max-height: 9000px;
+  max-height: 9000rem;
 }
 
 .skills-fade {
@@ -1387,7 +1387,7 @@ a.lang-switch__opt:hover {
   margin: 0.85rem auto 0;
   padding: 0.45rem 1.25rem;
   border: 1px solid var(--color-border);
-  border-radius: 999px;
+  border-radius: 999rem;
   background: transparent;
   color: var(--color-text-muted);
   font-family: var(--font-mono);
@@ -1470,7 +1470,7 @@ a.lang-switch__opt:hover {
   /* -webkit-text-fill-color: transparent; */
   background-clip: text;
   font-weight: 800;
-  text-shadow: 0 0 20px color-mix(in srgb, var(--color-accent) 30%, transparent);
+  text-shadow: 0 0 1.25rem color-mix(in srgb, var(--color-accent) 30%, transparent);
 }
 
 .ai-title__clip {
@@ -1484,13 +1484,13 @@ a.lang-switch__opt:hover {
 }
 
 .ai-title__clip-pin {
-  width: 5px;
-  height: 5px;
+  width: 0.3125rem;
+  height: 0.3125rem;
   border-radius: 50%;
   background: var(--color-accent);
   -webkit-text-fill-color: var(--color-accent) !important;
   opacity: 0.55;
-  box-shadow: 0 0 4px var(--color-accent);
+  box-shadow: 0 0 0.25rem var(--color-accent);
 }
 
 .ai-title__clip-text {
@@ -1511,7 +1511,7 @@ a.lang-switch__opt:hover {
   letter-spacing: 0.2em;
   text-transform: uppercase;
   white-space: nowrap;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 2px 0.5rem rgba(0, 0, 0, 0.5);
 }
 
 /* ── Experience ──────────────────────────────────────────────── */
@@ -1602,7 +1602,7 @@ a.lang-switch__opt:hover {
 
 .exp-cluster[data-open] .exp-cluster__index {
   color: var(--color-accent);
-  -webkit-text-stroke: 0px transparent;
+  -webkit-text-stroke: 0 transparent;
 }
 
 /* Conteggio parlante — etichetta d'inventario, non un badge */
@@ -1627,7 +1627,7 @@ a.lang-switch__opt:hover {
   height: 0.5rem;
   flex-shrink: 0;
   border: solid rgba(192, 220, 215, 0.55);
-  border-width: 0 1.5px 1.5px 0;
+  border-width: 0 0.09375rem 0.09375rem 0;
   rotate: 45deg;
   transition:
     rotate 0.4s var(--ease-standard),
@@ -1656,7 +1656,7 @@ a.lang-switch__opt:hover {
 .exp-cluster[data-open] .exp-cluster__body {
   /* 9000px: sufficiente per cluster molto ampi su mobile a singola colonna.
      3000px era insufficiente per "Design e Comunicazione" con molte schede. */
-  max-height: 9000px;
+  max-height: 9000rem;
 }
 
 /* Inner grid: padding-top 1rem for AI clip badges */
@@ -1679,13 +1679,13 @@ a.lang-switch__opt:hover {
    card spariva del tutto invece di tornare al whisper "passive" corretto. */
 .exp-drawer .exp-card:not(.is-revealed) {
   opacity: 0;
-  transform: translateY(16px);
+  transform: translateY(1rem);
 }
 
 /* Featured cards start invisible — GSAP scroll-reveal handles entrance */
 .exp-grid--featured .exp-card:not(.is-revealed) {
   opacity: 0;
-  transform: translateY(24px);
+  transform: translateY(1.5rem);
 }
 
 /* ── GO deeper CTA — plain inline text, no border ─────────────────
@@ -1742,7 +1742,7 @@ a.lang-switch__opt:hover {
   height: 0.42rem;
   flex-shrink: 0;
   border: solid currentColor;
-  border-width: 0 1.5px 1.5px 0;
+  border-width: 0 0.09375rem 0.09375rem 0;
   rotate: 45deg;
   transition: opacity 0.2s ease;
 }
@@ -1932,7 +1932,7 @@ a.lang-switch__opt:hover {
   color: var(--color-text-muted);
   padding: 0.175rem 0.55rem;
   border: 1px solid rgba(255 255 255 / 0.12);
-  border-radius: 999px;
+  border-radius: 999rem;
   letter-spacing: 0.04em;
   transition:
     border-color var(--duration-state) var(--ease-standard),
@@ -1997,7 +1997,7 @@ a.lang-switch__opt:hover {
   color: var(--color-text-primary);
   padding: 0.1rem 0.4rem;
   border: 1px solid rgba(255 255 255 / 0.1);
-  border-radius: 999px;
+  border-radius: 999rem;
   letter-spacing: 0.04em;
 }
 
@@ -2042,8 +2042,8 @@ a.lang-switch__opt:hover {
 .tl-legend-chip::before {
   content: "";
   display: inline-block;
-  width: 7px;
-  height: 7px;
+  width: 0.4375rem;
+  height: 0.4375rem;
   border-radius: 1px;
   flex-shrink: 0;
 }
@@ -2054,7 +2054,7 @@ a.lang-switch__opt:hover {
 
 .tl-legend-chip--cert::before {
   background: var(--color-accent);
-  box-shadow: 0 0 4px 1px color-mix(in srgb, var(--color-accent) 40%, transparent);
+  box-shadow: 0 0 0.25rem 1px color-mix(in srgb, var(--color-accent) 40%, transparent);
 }
 
 .tl-legend-chip--edu {
@@ -2116,8 +2116,8 @@ a.lang-switch__opt:hover {
 
 /* Quadrato — coerente con SkillSquare e lang-dot */
 .tl-dot {
-  width: 8px;
-  height: 8px;
+  width: 0.5rem;
+  height: 0.5rem;
   border-radius: 1px;
   flex-shrink: 0;
   transition:
@@ -2128,7 +2128,7 @@ a.lang-switch__opt:hover {
 
 .tl-item[data-type="cert"] .tl-dot {
   background: var(--color-accent);
-  box-shadow: 0 0 5px 1px color-mix(in srgb, var(--color-accent) 40%, transparent);
+  box-shadow: 0 0 0.3125rem 1px color-mix(in srgb, var(--color-accent) 40%, transparent);
 }
 
 .tl-item[data-type="edu"] .tl-dot {
@@ -2241,7 +2241,7 @@ a.lang-switch__opt:hover {
 /* ── Reveal animation (scroll-triggered via GSAP) ──────────── */
 .reveal {
   opacity: 0;
-  transform: translateY(32px);
+  transform: translateY(2rem);
 }
 
 .reveal.is-visible {
@@ -2390,7 +2390,7 @@ a.lang-switch__opt:hover {
   width: 0.45rem;
   height: 0.45rem;
   border: solid currentColor;
-  border-width: 0 1.5px 1.5px 0;
+  border-width: 0 0.09375rem 0.09375rem 0;
 }
 
 .feedback-nav__btn--prev .feedback-nav__arrow {
@@ -2479,7 +2479,7 @@ a.lang-switch__opt:hover {
   color: var(--color-text-muted);
   padding: 0.175rem 0.55rem;
   border: 1px solid rgba(255 255 255 / 0.12);
-  border-radius: 999px;
+  border-radius: 999rem;
 }
 
 /* Sempre in fondo a sinistra, quale che sia la lunghezza della citazione:
@@ -2546,7 +2546,7 @@ a.lang-switch__opt:hover {
 
 .tl-collapsible[data-tl-expanded="true"] .timeline {
   /* Overshoot ampio, stessa tecnica di .skills-grid espansa */
-  max-height: 9000px;
+  max-height: 9000rem;
 }
 
 .tl-fade {

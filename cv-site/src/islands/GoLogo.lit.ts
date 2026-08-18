@@ -62,9 +62,9 @@ class GoLogo extends LitElement {
     :host([data-mode="tech"]) .go-o {
       color: rgba(0, 255, 200, 1);
       text-shadow:
-        0 0 6px rgba(0, 255, 200, 1),
-        0 0 18px rgba(0, 255, 200, 0.55),
-        0 0 36px rgba(0, 255, 200, 0.2);
+        0 0 0.375rem rgba(0, 255, 200, 1),
+        0 0 1.125rem rgba(0, 255, 200, 0.55),
+        0 0 2.25rem rgba(0, 255, 200, 0.2);
     }
 
     /* ── CREATIVE: G e O con gradiente orange animato ─────────── */
@@ -80,10 +80,10 @@ class GoLogo extends LitElement {
     @keyframes go-orange-pulse {
       0%,
       100% {
-        filter: brightness(1) drop-shadow(0 0 0px rgba(255, 107, 53, 0));
+        filter: brightness(1) drop-shadow(0 0 0 rgba(255, 107, 53, 0));
       }
       50% {
-        filter: brightness(1.3) drop-shadow(0 0 8px rgba(255, 107, 53, 0.75));
+        filter: brightness(1.3) drop-shadow(0 0 0.5rem rgba(255, 107, 53, 0.75));
       }
     }
 
@@ -92,8 +92,8 @@ class GoLogo extends LitElement {
     :host([data-mode="human"]) .go-o {
       color: rgba(240, 200, 127, 1);
       text-shadow:
-        0 0 5px rgba(240, 200, 127, 0.6),
-        0 0 14px rgba(240, 200, 127, 0.3);
+        0 0 0.3125rem rgba(240, 200, 127, 0.6),
+        0 0 0.875rem rgba(240, 200, 127, 0.3);
     }
 
     /* ── MANAGEMENT: G e O entrambe violet ──────────────────── */

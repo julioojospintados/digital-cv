@@ -409,7 +409,7 @@ html[data-lh-armed] .lh-obj {
 @keyframes lhLand {
   0% {
     opacity: 0;
-    filter: blur(4px) brightness(0.4);
+    filter: blur(0.25rem) brightness(0.4);
     translate: var(--lh-tx) calc(var(--lh-ty) + 0.625rem);
   }
 
@@ -687,13 +687,13 @@ html[data-lh-armed] .lh-obj {
 .lh-cta.is-pressed {
   transform: scale(0.98);
   filter: none;
-  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.4);
+  box-shadow: inset 0 2px 0.5rem rgba(0, 0, 0, 0.4);
 }
 
 .lh-cta--ghost:active,
 .lh-cta--ghost.is-pressed {
   background: color-mix(in srgb, var(--accent) 22%, transparent);
-  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.3);
+  box-shadow: inset 0 2px 0.375rem rgba(0, 0, 0, 0.3);
 }
 
 /* ── disabilitato ────────────────────────────────────────────────────────
@@ -873,8 +873,8 @@ html[data-lh-armed] .lh-obj {
     /* Le variabili a 0 invece di `translate: none`: la griglia posiziona già
        la cella, ma l'atterraggio dell'ingresso continua a poterci sommare il
        proprio salto (vedi il commento su --lh-tx sopra). */
-    --lh-tx: 0px;
-    --lh-ty: 0px;
+    --lh-tx: 0;
+    --lh-ty: 0;
     /* Niente parallasse: qui gli oggetti stanno in griglia, e uno
        spostamento di qualche rem li farebbe accavallare — cioè esattamente
        il difetto che questa disposizione risolve. */

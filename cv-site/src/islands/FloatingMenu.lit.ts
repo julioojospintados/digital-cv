@@ -45,8 +45,8 @@ class FloatingMenu extends LitElement {
       align-items: center;
       justify-content: center;
       box-shadow:
-        0 0 18px color-mix(in srgb, var(--color-accent, rgba(0, 255, 200, 1)) 38%, transparent),
-        0 4px 18px rgba(0, 0, 0, 0.45);
+        0 0 1.125rem color-mix(in srgb, var(--color-accent, rgba(0, 255, 200, 1)) 38%, transparent),
+        0 0.25rem 1.125rem rgba(0, 0, 0, 0.45);
       transition:
         transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
         box-shadow 0.3s ease;
@@ -63,8 +63,8 @@ class FloatingMenu extends LitElement {
         rgba(8, 73, 67, 0.97) 58%
       );
       box-shadow:
-        0 0 32px color-mix(in srgb, var(--color-accent, rgba(0, 255, 200, 1)) 55%, transparent),
-        0 4px 22px rgba(0, 0, 0, 0.5);
+        0 0 2rem color-mix(in srgb, var(--color-accent, rgba(0, 255, 200, 1)) 55%, transparent),
+        0 0.25rem 1.375rem rgba(0, 0, 0, 0.5);
     }
 
     /* ── Icon swap (✦ ↔ ✕) ── */
@@ -129,7 +129,7 @@ class FloatingMenu extends LitElement {
       align-items: center;
       gap: 0.55rem;
       padding: 0.42rem 1.05rem;
-      border-radius: 100px;
+      border-radius: 6.25rem;
       background: rgba(8, 73, 67, 0.96);
       border: 1px solid
         color-mix(in srgb, var(--color-accent, rgba(0, 255, 200, 1)) 40%, transparent);
@@ -141,14 +141,14 @@ class FloatingMenu extends LitElement {
       text-transform: uppercase;
       text-decoration: none;
       cursor: none;
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+      backdrop-filter: blur(0.75rem);
+      -webkit-backdrop-filter: blur(0.75rem);
       white-space: nowrap;
       pointer-events: none;
 
       /* Hidden state */
       opacity: 0;
-      transform: translateY(12px) scale(0.88);
+      transform: translateY(0.75rem) scale(0.88);
       transition:
         opacity 0.24s ease,
         transform 0.24s cubic-bezier(0.34, 1.56, 0.64, 1),
@@ -215,7 +215,7 @@ class FloatingMenu extends LitElement {
       opacity: 0;
       box-shadow:
         0 0 0 2px color-mix(in srgb, var(--color-accent, rgba(0, 255, 200, 1)) 45%, transparent),
-        0 0 18px color-mix(in srgb, var(--color-accent, rgba(0, 255, 200, 1)) 22%, transparent);
+        0 0 1.125rem color-mix(in srgb, var(--color-accent, rgba(0, 255, 200, 1)) 22%, transparent);
       will-change: transform, opacity;
     }
 

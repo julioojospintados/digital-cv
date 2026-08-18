@@ -462,6 +462,7 @@ scripts/                  ← Root utility scripts (Node)
   gen-og-image.mjs        ← Generate the Open Graph image
   qa-mobile.js            ← Responsive QA via Playwright (npm run qa:mobile)
   qa-design-system.mjs    ← Deterministic gauntlet for /design-system, IT+EN (npm run qa:ds) — see § Verification loop
+  qa-units.mjs            ← No px outside 1/2/3 across cv-site/src (npm run qa:units) — see § Units
   record-demo-playwright.js ← Record the site demo video
 
 .vscode/
@@ -498,6 +499,33 @@ generated/
 CLAUDE.md                 ← Claude Code entry point (imports this file, adds skill-loading + MCP notes)
 AGENTS.md                 ← This file — tool-agnostic project guide
 ```
+
+---
+
+## Units — rem everywhere, px only for hairlines
+
+→ Every measurement is in `rem`, anchored to a 16px root (there is no
+  `font-size` on `html`, so 1rem = 16px). The only px allowed are **1, 2 and
+  3**: those are border widths and one-pixel shadows — device pixels, not
+  typographic measures. A border that grows with the text becomes a bar.
+  Everything else in px is a measure that does not grow with the text it sits
+  next to at 200% zoom, which is where the layout breaks.
+→ `scripts/qa-units.mjs` (`npm run qa:units`) enforces it over the whole
+  `cv-site/src` tree in about a second — no browser needed. There is
+  deliberately **no exemption list**: a suspended page's stylesheet is checked
+  too, so that the day it comes back it does not carry a backlog, and because
+  an exemption list is where rules go to die.
+→ Two things it does not look at, both on purpose: **comments** ("it was 18px
+  tall", "the webp is 177px") are documentation of real measurements and must
+  stay in px; and in `.astro`/`.ts` sources only `<style>` blocks, Lit
+  ``css` `` templates and `style` attributes are scanned — a "257px" inside a
+  sentence is prose, not CSS.
+→ Two idioms survive as round numbers rather than converted decimals:
+  `border-radius: 999rem` (the pill) and `max-height: 9000rem` (a "very
+  large" sentinel). `62.4375rem` is arithmetically the same and says nothing.
+→ Note for anyone tempted to reintroduce `1.5px` for a hairline: measured, a
+  `1.5px` border computes to `1px` in Chrome anyway, in either unit. It never
+  rendered at one and a half pixels.
 
 ---
 

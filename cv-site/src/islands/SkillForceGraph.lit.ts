@@ -299,8 +299,8 @@ class SkillForceGraph extends LitElement {
     }
 
     .graph-legend-dot {
-      width: 7px;
-      height: 7px;
+      width: 0.4375rem;
+      height: 0.4375rem;
       border-radius: 50%;
       flex-shrink: 0;
     }
@@ -322,7 +322,7 @@ class SkillForceGraph extends LitElement {
       .force-node-label {
         font-size: var(--fs-14);
         font-weight: 400;
-        stroke-width: 2.5px;
+        stroke-width: 0.15625rem;
       }
       .graph-meta {
         padding: 0.1rem 0.65rem 0.15rem;
@@ -334,20 +334,20 @@ class SkillForceGraph extends LitElement {
     /* Durata totale 6s: il pulse avviene nel primo 20% (~1.2s), poi pausa fino al prossimo ciclo */
     @keyframes expand-btn-hint {
       0% {
-        box-shadow: 0 0 0px transparent;
+        box-shadow: 0 0 0 transparent;
         border-color: rgba(255, 255, 255, 0.18);
       }
       10% {
-        box-shadow: 0 0 14px
+        box-shadow: 0 0 0.875rem
           color-mix(in srgb, var(--color-accent, rgba(0, 255, 200, 1)) 65%, transparent);
         border-color: var(--color-accent, rgba(0, 255, 200, 1));
       }
       20% {
-        box-shadow: 0 0 0px transparent;
+        box-shadow: 0 0 0 transparent;
         border-color: rgba(255, 255, 255, 0.18);
       }
       100% {
-        box-shadow: 0 0 0px transparent;
+        box-shadow: 0 0 0 transparent;
         border-color: rgba(255, 255, 255, 0.18);
       }
     }
@@ -369,8 +369,8 @@ class SkillForceGraph extends LitElement {
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
+      backdrop-filter: blur(0.5rem);
+      -webkit-backdrop-filter: blur(0.5rem);
       transition:
         border-color 0.2s ease,
         color 0.2s ease,

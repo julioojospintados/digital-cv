@@ -215,7 +215,7 @@ body {
 /* ─── Custom scrollbar ─── */
 
 ::-webkit-scrollbar {
-  width: 4px;
+  width: 0.25rem;
 }
 
 ::-webkit-scrollbar-track {
@@ -328,14 +328,14 @@ body {
 .section-dot.is-active {
   background: var(--dot-accent, var(--color-accent));
   border-color: var(--dot-accent, var(--color-accent));
-  box-shadow: 0 0 10px 2px var(--dot-accent, var(--color-accent));
+  box-shadow: 0 0 0.625rem 2px var(--dot-accent, var(--color-accent));
 }
 
 .section-dot__tip {
   position: absolute;
   right: 1.25rem;
   top: 50%;
-  transform: translateY(-50%) translateX(4px);
+  transform: translateY(-50%) translateX(0.25rem);
   white-space: nowrap;
   font-family: var(--font-mono);
   /* 0.68rem (10.88px) sotto il pavimento dei 12px — bump al minimo */
@@ -434,7 +434,7 @@ body::after {
   z-index: 9998;
   opacity: 0.04;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-size: 200px 200px;
+  background-size: 12.5rem 12.5rem;
 }
 
 /* ─── Display typography utilities ─── */
@@ -480,8 +480,8 @@ body::after {
 .cv-card[data-state="passive"] {
   opacity: 0.4;
   transform: scale(var(--card-scale-passive, 0.97));
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(0.25rem);
+  -webkit-backdrop-filter: blur(0.25rem);
   border-color: var(--color-border) !important;
   box-shadow: none !important;
 }
@@ -492,11 +492,11 @@ body::after {
   border-color: var(--color-accent);
   /* fallback: Safari < 16.2 / Firefox < 113 non supportano color-mix() */
   border-color: color-mix(in srgb, var(--color-accent) 55%, transparent);
-  box-shadow: 0 0 16px rgba(255, 255, 255, 0.12);
+  box-shadow: 0 0 1rem rgba(255, 255, 255, 0.12);
   /* fallback: Safari < 16.2 / Firefox < 113 non supportano color-mix() */
   box-shadow:
-    0 0 16px color-mix(in srgb, var(--color-accent) 12%, transparent),
-    inset 0 0 24px color-mix(in srgb, var(--color-accent) 4%, transparent);
+    0 0 1rem color-mix(in srgb, var(--color-accent) 12%, transparent),
+    inset 0 0 1.5rem color-mix(in srgb, var(--color-accent) 4%, transparent);
 }
 
 /* Mobile: bordo sinistro luminoso sulla card attiva */
@@ -504,9 +504,9 @@ body::after {
   .cv-card[data-state="active"] {
     border-left-width: 3px;
     border-left-color: var(--color-accent);
-    box-shadow: -4px 0 20px rgba(255, 255, 255, 0.18);
+    box-shadow: -0.25rem 0 1.25rem rgba(255, 255, 255, 0.18);
     /* fallback: Safari < 16.2 / Firefox < 113 non supportano color-mix() */
-    box-shadow: -4px 0 20px color-mix(in srgb, var(--color-accent) 30%, transparent);
+    box-shadow: -0.25rem 0 1.25rem color-mix(in srgb, var(--color-accent) 30%, transparent);
   }
 
   .cv-card[data-state="passive"] {
@@ -560,7 +560,7 @@ floating-menu {
   /* --fab-lift: alzato da ConsentBanner.astro (script) all'altezza del banner
      quando è visibile, così il FAB non ci si sovrappone mai in scroll — a
      banner chiuso la var è assente e bottom torna al valore base. */
-  bottom: calc(1.5rem + var(--fab-lift, 0px));
+  bottom: calc(1.5rem + var(--fab-lift, 0));
   right: 1.5rem;
   /* z-index sopra preloader (99997), scroll-progress (9997), nav (100) e qualsiasi overlay */
   z-index: 99999;
@@ -580,13 +580,13 @@ floating-menu {
    Layout.astro e viene tolto/rimesso da un listener scroll (Layout). */
 [data-fab-scrollwait] floating-menu {
   opacity: 0;
-  transform: scale(0.6) translateY(16px);
+  transform: scale(0.6) translateY(1rem);
   pointer-events: none !important;
 }
 
 @media (max-width: 40rem) {
   floating-menu {
-    bottom: calc(1.25rem + var(--fab-lift, 0px));
+    bottom: calc(1.25rem + var(--fab-lift, 0));
     right: 1rem;
   }
 }
@@ -595,7 +595,7 @@ floating-menu {
 @supports (bottom: env(safe-area-inset-bottom)) {
   @media (max-width: 40rem) {
     floating-menu {
-      bottom: calc(max(1.25rem, env(safe-area-inset-bottom) + 0.75rem) + var(--fab-lift, 0px));
+      bottom: calc(max(1.25rem, env(safe-area-inset-bottom) + 0.75rem) + var(--fab-lift, 0));
     }
   }
 }
@@ -715,7 +715,7 @@ floating-menu {
   }
 
   50% {
-    translate: 5px 0;
+    translate: 0.3125rem 0;
   }
 }
 
@@ -771,7 +771,7 @@ floating-menu {
   letter-spacing: 0.12em;
   color: var(--color-text-muted);
   background: rgba(0, 0, 0, 0.35);
-  backdrop-filter: blur(8px);
+  backdrop-filter: blur(0.5rem);
   border: 1px dashed rgba(255, 255, 255, 0.25);
   border-radius: 2rem;
   padding: 0.3rem 0.75rem;

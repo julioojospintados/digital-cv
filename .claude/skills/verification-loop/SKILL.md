@@ -71,6 +71,7 @@ Normale. Un pezzo per volta, verificabile separatamente.
 ```bash
 npm run dev --prefix cv-site        # server sulla 4321
 npm run qa:ds                       # vetrina /design-system, IT + EN
+npm run qa:units                    # nessun px fuori da 1/2/3 (senza browser)
 npm run qa:mobile                   # emulazione mobile sul sito
 npm run lint && npm run format:check && npm test
 cd cv-site && npx astro check && npx astro build
