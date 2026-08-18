@@ -204,19 +204,6 @@
   white-space: nowrap;
 }
 
-.lc-bar__flag {
-  flex: 0 0 auto;
-  padding: var(--size-2) var(--size-8);
-  border: 1px solid var(--color-accent);
-  border-radius: var(--radius-4);
-  background: var(--color-accent);
-  color: var(--lc-on-accent);
-  font-size: var(--fs-10);
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
 /* ═══ STRATO 1 — 7,4 secondi ══════════════════════════════════════════════
    Vincolo di progetto: questo blocco sta sopra la piega su un laptop e
    lascia intravedere la prima esperienza. Da qui i margini stretti e
@@ -1158,17 +1145,6 @@
   display: inline-flex;
   align-items: center;
   min-height: 1.5rem;
-}
-
-/* ─── Nota di prova ─────────────────────────────────────────────────────── */
-
-.lc-note {
-  margin-top: var(--size-48);
-  padding-top: var(--size-20);
-  border-top: 1px dashed var(--lc-line);
-  font-size: var(--fs-12);
-  line-height: 1.6;
-  color: var(--lc-muted);
 }
 
 /* ─── Focus visibile ────────────────────────────────────────────────────── */

@@ -52,8 +52,7 @@
   padding: var(--size-24) var(--lab-gutter);
 }
 
-.lab-bar a,
-.lab-flag {
+.lab-bar a {
   font-family: var(--font-mono);
   font-size: 0.7rem;
   letter-spacing: 0.14em;
@@ -77,13 +76,6 @@
   justify-content: center;
   min-width: 1.5rem;
   min-height: 1.5rem;
-}
-
-.lab-flag {
-  border: 1px solid var(--lab-line);
-  border-radius: 999rem;
-  padding: var(--size-4) 0.6rem;
-  color: var(--lab-muted);
 }
 
 /* ── HERO ───────────────────────────────────────────────────────────────── */
@@ -418,21 +410,6 @@
   display: grid;
   gap: var(--size-20);
   justify-items: start;
-}
-
-.lab-note {
-  border-top: 1px solid var(--lab-line);
-  margin-top: clamp(var(--size-48), 8vw, var(--size-80));
-  padding-top: var(--size-20);
-  font-family: var(--font-mono);
-  font-size: 0.7rem;
-  line-height: 1.9;
-  letter-spacing: 0.06em;
-  color: var(--lab-muted);
-  max-width: var(--lab-maxw);
-  margin-inline: auto;
-  padding-inline: var(--lab-gutter);
-  padding-bottom: var(--size-48);
 }
 
 /* ── Desktop ────────────────────────────────────────────────────────────── */

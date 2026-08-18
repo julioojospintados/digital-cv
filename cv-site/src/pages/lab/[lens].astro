@@ -179,11 +179,10 @@ const MAX_CHIPS = 6;
     <!-- Barra. Non sticky: una barra fissa mangia proprio la fascia alta in
          cui si giocano i primi sette secondi. -->
     <header class="lc-bar">
-      <a href="/lab/home" class="lc-bar__home" aria-label="Torna alla prova home">
+      <a href="/lab/home" class="lc-bar__home" aria-label="Torna a /lab/home">
         <go-logo></go-logo>
       </a>
       <p class="lc-bar__tagline">{TAGLINE}</p>
-      <span class="lc-bar__flag">Prova</span>
     </header>
 
     <main id="main-content" class="lc-main">
@@ -544,14 +543,6 @@ const MAX_CHIPS = 6;
           }
         </ul>
       </section>
-
-      <p class="lc-note">
-        Prova <b>/lab/{lens}</b> — la pagina CV rifatta sui tempi di lettura reali: strato 1 (7,4 s) sopra
-        la piega senza dissolvenze, strato 2 (30 s) con le esperienze filtrate per lente invece che dimmate,
-        cronologia completa sempre visibile, e la voce lunga (paragrafo della lente + bio) dopo le prove.
-        Colore, oggetti, ombre e sigle sono statici: ci sono al primo paint. L'unico movimento è la deriva
-        degli oggetti allo scroll, che è decorazione. Cambio lente = navigazione fra tre pagine statiche.
-      </p>
     </main>
   </div>
 </Layout>
@@ -560,6 +551,9 @@ const MAX_CHIPS = 6;
   // Solo la firma GO della barra: l'island si autoregistra come <go-logo>
   // e reagisce da sé al mode della pagina.
   import "../../islands/GoLogo.lit";
+  import { initLensDropdownAutoClose } from "../../scripts/lens-dropdown";
+
+  initLensDropdownAutoClose();
 
   // ── "+4" — da etichetta morta a comando vero ──────────────────────────
   // L'HTML servito contiene già tutte le tecnologie. Qui si richiude ciò che

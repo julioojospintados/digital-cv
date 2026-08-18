@@ -196,8 +196,7 @@
   gap: var(--size-16);
 }
 
-.lh-nav a,
-.lh-flag {
+.lh-nav a {
   font-family: var(--font-mono);
   font-size: var(--fs-12);
   letter-spacing: 0.14em;
@@ -208,17 +207,11 @@
 
 /* 24px di altezza minima: è la soglia di 2.5.8 (Target Size, AA in WCAG 2.2).
    Misurato dal vivo, il link della barra stava a 18px — l'unico bersaglio
-   della pagina sotto soglia. Il chip qui sotto ci arriva già col padding. */
+   della pagina sotto soglia. */
 .lh-nav a {
   display: inline-flex;
   align-items: center;
   min-height: 1.5rem;
-}
-
-.lh-flag {
-  border: 1px solid var(--lh-line);
-  border-radius: 999rem;
-  padding: var(--size-4) 0.6rem;
 }
 
 /* ── Ingresso ── */

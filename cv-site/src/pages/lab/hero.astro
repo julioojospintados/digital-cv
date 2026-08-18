@@ -7,11 +7,9 @@
 // esistenti sono usati come piani a profondità diversa: parallasse, ombra a
 // terra, sfocatura per distanza.
 //
-// TESTI — nessuna copy scritta qui dentro. Tutto viene da @cv-data e da
-// cv-i18n, come nelle pagine vere: il prototipo cambia la struttura, non la
-// voce. Le uniche stringhe locali sono le etichette di servizio del banco di
-// prova (la barra "Prototipo", la nota in fondo), che non sono contenuto del
-// CV e spariscono se la direzione viene promossa.
+// TESTI — quasi nessuna copy scritta qui dentro. Il grosso viene da
+// @cv-data e da cv-i18n, come nelle pagine vere: il prototipo cambia la
+// struttura, non la voce.
 import Layout from "../../layouts/Layout.astro";
 import { cvData } from "@cv-data";
 import { LOCALES } from "../../lib/cv-i18n";
@@ -159,7 +157,6 @@ const cases = cvData.projects
   <div class="lab">
     <header class="lab-bar">
       <a href="/" class="lab-mark" aria-label="Torna all'ingresso">GO</a>
-      <span class="lab-flag">Prototipo</span>
     </header>
 
     <section class="lab-hero">
@@ -233,15 +230,6 @@ const cases = cvData.projects
     <div class="lab-end">
       <a href="/lab/creative" class="lab-btn">Vedi il CV completo</a>
     </div>
-
-    <p class="lab-note">
-      Prototipo /lab/hero — struttura, non contenuti. Tutti i testi vengono da cv.ts e cv-i18n:
-      ruolo dall'hero di /creative, claim dall'ultima riga di personal.summary, progetti da
-      cvData.projects.<br />
-      Confronto con la home attuale: 4 bottoni di modalità → 0 · 5 ruoli nell'occhiello → 1 · 5.824 px
-      di scroll → circa 4 schermate. Le modalità non spariscono: diventano il colore dei quattro case
-      study (primaryMode).
-    </p>
   </div>
 </Layout>
 

@@ -518,6 +518,18 @@
   display: contents;
 }
 
+/* Le chip in "chip semplice" (pannello Chip e il comando +N) affiancano due
+   bottoni senza involucro. `.lc-chips` porta un margin-top pensato per il
+   contesto reale — segue sempre un paragrafo di punti elenco — e qui, senza
+   quel paragrafo, restava un gap doppio rispetto alle due colonne accanto:
+   22px invece di 8, misurato. `.ds-case > .lc-chips` è l'unico punto della
+   pagina in cui la lista è figlia diretta di `.ds-case`, quindi lo spegne
+   solo lì e non tocca la lista come appare nella riga esperienza, dove il
+   contesto — e quindi il margine — è quello vero. */
+.ds-case > .lc-chips {
+  margin-top: 0;
+}
+
 /* La tendina di /lab/<lente> è `position: absolute` sopra la pagina: dentro
    la demo va mostrata aperta e in flusso, altrimenti copre il testo sotto. */
 .ds-stage--dropdown {

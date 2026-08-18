@@ -560,10 +560,10 @@ const t = it
    trova nel CSS, negli strumenti di sviluppo e in qualunque altro design
    system — chiamarlo diversamente costringe chi legge a tradurre. */
 const CTA_STATES = [
-  { key: "default", cls: "", label: "default" },
-  { key: "hover", cls: "is-hover", label: "hover" },
-  { key: "pressed", cls: "is-pressed", label: "pressed" },
-  { key: "focus", cls: "is-focus", label: "focus-visible" },
+  { key: "default", cls: "", label: "default", disabled: false },
+  { key: "hover", cls: "is-hover", label: "hover", disabled: false },
+  { key: "pressed", cls: "is-pressed", label: "pressed", disabled: false },
+  { key: "focus", cls: "is-focus", label: "focus-visible", disabled: false },
   { key: "disabled", cls: "", label: "disabled", disabled: true },
 ] as const;
 
@@ -631,7 +631,6 @@ const NAV = [
       { id: "lente-occhiello", label: it ? "Occhiello e sigla" : "Eyebrow and initials" },
       { id: "lente-fondale", label: it ? "Fondale di sezione" : "Section backdrop" },
       { id: "lente-imbocchi", label: it ? "Imbocchi finali" : "Closing exits" },
-      { id: "lente-nota", label: it ? "Nota di prova" : "Prototype note" },
       { id: "lente-contatti", label: it ? "Contatti in chiaro" : "Contacts in the open" },
     ],
   },
@@ -683,7 +682,6 @@ const NAV = [
     <nav class="ds-bar__links" aria-label={it ? "Collegamenti" : "Links"}>
       <a href={it ? "/" : "/en"}>{t.backHome}</a>
       <a href={it ? "/work" : "/en/work"}>/work</a>
-      <a href="/lab/home">/lab</a>
       <a href={it ? "/en/design-system" : "/design-system"}>{it ? "EN" : "IT"}</a>
     </nav>
   </header>
@@ -696,7 +694,7 @@ const NAV = [
         senza JavaScript restano ancore che portano al pannello giusto — e
         nessun pannello è nascosto, perché a nascondere è lo script. */
     }
-    <details class="ds-side" id="ds-side" open>
+    <details class="ds-side" id="ds-side" data-lenis-prevent open>
       <summary class="ds-side__summary">
         {t.tocTitle}
         <span class="ds-side__chevron" aria-hidden="true">›</span>
@@ -1847,7 +1845,6 @@ const NAV = [
               >
               <nav class="lh-nav">
                 <a href="/lab/hero">{it ? "← altra prova" : "← other prototype"}</a>
-                <span class="lh-flag">{it ? "Prova" : "Prototype"}</span>
               </nav>
             </header>
           </div>
@@ -1855,7 +1852,7 @@ const NAV = [
         <div class="ds-spec">
           <div class="ds-spec__row ds-spec__row--wide">
             <span class="ds-spec__k">{t.specClass}</span>
-            <p class="ds-spec__v"><code>lh-bar · lh-mark · lh-nav · lh-flag</code></p>
+            <p class="ds-spec__v"><code>lh-bar · lh-mark · lh-nav</code></p>
           </div>
           <div class="ds-spec__row">
             <span class="ds-spec__k">{t.specUse}</span>
@@ -1878,8 +1875,8 @@ const NAV = [
             <p class="ds-spec__v">
               {
                 it
-                  ? "Il contrassegno «Prova» è testo, non un colore: chi non distingue la sfumatura legge comunque che è un prototipo."
-                  : "The «Prototype» flag is text, not a colour: someone who cannot tell the shade apart still reads that this is a prototype."
+                  ? "Misurato dal vivo, il link «← altra prova» stava a 18px di bersaglio: sotto la soglia di 24×24 di 2.5.8. min-height: 1.5rem lo porta in norma senza cambiargli l'aspetto."
+                  : "Measured live, the «← other prototype» link sat at an 18px target: below the 24×24 threshold of 2.5.8. min-height: 1.5rem brings it to compliance without changing how it looks."
               }
             </p>
           </div>
@@ -1967,8 +1964,8 @@ const NAV = [
         <p class="ds-sub__note">
           {
             it
-              ? "Logo, frase guida e contrassegno di prova. La frase in mezzo è l'unico testo di marca della pagina: sotto i 48rem sparisce, perché fra il logo e il contrassegno non resta larghezza per leggerla."
-              : "Logo, guiding line and prototype flag. The line in the middle is the page's only brand copy: below 48rem it disappears, because between the logo and the flag there is no width left to read it."
+              ? "Logo e frase guida. È l'unico testo di marca della pagina, e sotto i 40rem sparisce: a 375px non resta larghezza per leggerla accanto al logo, e troncata a due parole non direbbe niente."
+              : "Logo and guiding line. It is the page's only brand copy, and below 40rem it disappears: at 375px there is no width left to read it beside the logo, and truncated to two words it would say nothing."
           }
         </p>
         <div class="ds-stage">
@@ -1977,7 +1974,7 @@ const NAV = [
               <a
                 href="/lab/home"
                 class="lc-bar__home"
-                aria-label={it ? "Torna alla prova home" : "Back to the home prototype"}
+                aria-label={it ? "Torna a /lab/home" : "Back to /lab/home"}
               >
                 <go-logo></go-logo>
               </a>
@@ -1988,7 +1985,6 @@ const NAV = [
                     : "If there is an absolute truth, it must be very bored."
                 }
               </p>
-              <span class="lc-bar__flag">{it ? "Prova" : "Prototype"}</span>
             </header>
           </div>
         </div>
@@ -1996,7 +1992,7 @@ const NAV = [
           <div class="ds-spec__row ds-spec__row--wide">
             <span class="ds-spec__k">{t.specClass}</span>
             <p class="ds-spec__v">
-              <code>lc-bar · lc-bar__home · lc-bar__tagline · lc-bar__flag</code>
+              <code>lc-bar · lc-bar__home · lc-bar__tagline</code>
             </p>
           </div>
           <div class="ds-spec__row">
@@ -2914,11 +2910,52 @@ const NAV = [
           <span class="ds-panel__group">{t.secLens}<span class="ds-origin">lc-*</span></span>
         </div>
 
+        <p class="ds-sub__note">
+          {
+            it
+              ? "Due misure, e isolate si distinguono appena — 29×17 contro 26×15px, misurato. La differenza vera non è la loro, è del testo a cui stanno accanto: lc-ai segue un titolo a 18px, lc-ai--sm un nome cliente a 14. Per questo qui sotto compaiono nel loro contesto reale, non da sole."
+              : "Two sizes, and isolated they barely differ — 29×17 versus 26×15px, measured. The real difference is not theirs, it belongs to the text beside them: lc-ai follows an 18px title, lc-ai--sm a 14px client name. That is why they show here in their real context, not on their own."
+          }
+        </p>
         <div class="ds-stage">
           <div class="lc">
-            <div class="ds-stage__row">
-              <span class="lc-ai" data-ds-snippet>AI</span>
-              <span class="lc-ai lc-ai--sm" data-ds-snippet>AI</span>
+            <div class="ds-stage__col">
+              <div class="ds-case">
+                <p class="ds-label">
+                  {it ? "su un titolo di esperienza, 18px" : "on an entry title, 18px"}
+                </p>
+                <p class="lc-job__title" style="margin:0;">
+                  <b>Digital CV</b>
+                  <span class="lc-ai" data-ds-snippet>
+                    AI
+                    <span class="lc-sr">
+                      {
+                        it
+                          ? " — lavoro svolto con l'AI nel flusso"
+                          : " — work done with AI in the flow"
+                      }
+                    </span>
+                  </span>
+                </p>
+              </div>
+              <div class="ds-case">
+                <p class="ds-label">
+                  {it ? "su un nome cliente, 14px" : "on a client name, 14px"}
+                </p>
+                <p class="lc-client__who" style="margin:0;">
+                  <b>Aruba</b>
+                  <span class="lc-ai lc-ai--sm" data-ds-snippet>
+                    AI
+                    <span class="lc-sr">
+                      {
+                        it
+                          ? " — incarico svolto con l'AI nel flusso"
+                          : " — engagement done with AI in the flow"
+                      }
+                    </span>
+                  </span>
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -2932,8 +2969,8 @@ const NAV = [
             <p class="ds-spec__v">
               {
                 it
-                  ? "Su esperienze e incarichi svolti con l'AI nel flusso."
-                  : "On entries and engagements done with AI in the flow."
+                  ? "lc-ai su un'esperienza, lc-ai--sm su un incarico presso cliente: sempre svolti con l'AI nel flusso."
+                  : "lc-ai on an entry, lc-ai--sm on a client engagement: both done with AI in the flow."
               }
             </p>
           </div>
@@ -2942,8 +2979,8 @@ const NAV = [
             <p class="ds-spec__v">
               {
                 it
-                  ? "Non usarlo come decorazione: se compare ovunque smette di dire qualcosa."
-                  : "Do not use it as decoration: if it appears everywhere it stops meaning anything."
+                  ? "Non usarlo come decorazione: se compare ovunque smette di dire qualcosa. E non scambiare le due misure: --sm è più stretto apposta, per stare accanto a un nome invece che a un titolo."
+                  : "Do not use it as decoration: if it appears everywhere it stops meaning anything. And do not swap the two sizes: --sm is tighter on purpose, to sit beside a name rather than a title."
               }
             </p>
           </div>
@@ -3349,59 +3386,6 @@ const NAV = [
         </div>
       </section>
 
-      <section class="ds-panel" data-ds-panel="lente-nota" aria-labelledby="lente-nota-t">
-        <div class="ds-panel__head">
-          <h2 class="ds-section__title" id="lente-nota-t">
-            {it ? "Nota di prova" : "Prototype note"}
-          </h2>
-          <span class="ds-panel__group">{t.secLens}<span class="ds-origin">lc-*</span></span>
-        </div>
-        <p class="ds-sub__note">
-          {
-            it
-              ? "Il testo di servizio in fondo alle pagine del banco di prova: mono, attenuato, separato da una riga. Sparisce quando una direzione viene promossa."
-              : "The service text at the foot of prototype pages: mono, muted, separated by a rule. It disappears when a direction is promoted."
-          }
-        </p>
-        <div class="ds-stage">
-          <div class="lc">
-            <p class="lc-note" style="padding-inline:0;" data-ds-snippet data-ds-drop="style">
-              {
-                it
-                  ? "Prova /lab/<lente> — la pagina CV rifatta sui tempi di lettura reali di un recruiter."
-                  : "Prototype /lab/<lens> — the CV page rebuilt around a recruiter's real reading times."
-              }
-            </p>
-          </div>
-        </div>
-        <div class="ds-spec">
-          <div class="ds-spec__row ds-spec__row--wide">
-            <span class="ds-spec__k">{t.specClass}</span>
-            <p class="ds-spec__v"><code>lc-note</code></p>
-          </div>
-          <div class="ds-spec__row">
-            <span class="ds-spec__k">{t.specUse}</span>
-            <p class="ds-spec__v">
-              {
-                it
-                  ? "In fondo alle pagine del banco di prova, finché sono prove."
-                  : "At the foot of prototype pages, for as long as they are prototypes."
-              }
-            </p>
-          </div>
-          <div class="ds-spec__row ds-spec__row--dont">
-            <span class="ds-spec__k">{t.specDont}</span>
-            <p class="ds-spec__v">
-              {
-                it
-                  ? "Non lasciarla su una pagina promossa a produzione: dice «questo è un prototipo», e su una pagina vera è un'informazione falsa. Il bordo tratteggiato è lì apposta per farsi notare quando è di troppo."
-                  : "Do not leave it on a page promoted to production: it says «this is a prototype», and on a real page that is false. The dashed rule is there precisely so it stands out once it is no longer true."
-              }
-            </p>
-          </div>
-        </div>
-      </section>
-
       <section class="ds-panel" data-ds-panel="lente-contatti" aria-labelledby="lente-contatti-t">
         <div class="ds-panel__head">
           <h2 class="ds-section__title" id="lente-contatti-t">
@@ -3480,7 +3464,6 @@ const NAV = [
           <div class="lab">
             <header class="lab-bar" style="position:static;" data-ds-snippet data-ds-drop="style">
               <a href="#" class="lab-mark">GO</a>
-              <span class="lab-flag">{it ? "Prototipo" : "Prototype"}</span>
             </header>
             <div class="lab-copy" style="padding-top:1rem;" data-ds-snippet data-ds-drop="style">
               <p class="lab-role">Web & UX Designer</p>
@@ -3500,8 +3483,7 @@ const NAV = [
           <div class="ds-spec__row ds-spec__row--wide">
             <span class="ds-spec__k">{t.specClass}</span>
             <p class="ds-spec__v">
-              <code>lab-bar · lab-mark · lab-flag · lab-copy · lab-role · lab-name · lab-claim</code
-              >
+              <code>lab-bar · lab-mark · lab-copy · lab-role · lab-name · lab-claim</code>
             </p>
           </div>
           <div class="ds-spec__row">
@@ -3734,27 +3716,20 @@ const NAV = [
             <h2 class="lab-h2" data-ds-snippet>
               {it ? "Quattro prove, un metodo" : "Four prototypes, one method"}
             </h2>
-            <p class="lab-note" data-ds-snippet>
-              {
-                it
-                  ? "Nota di servizio del banco di prova: sparisce se la direzione viene promossa."
-                  : "A prototype service note: it disappears if the direction is promoted."
-              }
-            </p>
           </div>
         </div>
         <div class="ds-spec">
           <div class="ds-spec__row ds-spec__row--wide">
             <span class="ds-spec__k">{t.specClass}</span>
-            <p class="ds-spec__v"><code>lab-eyebrow · lab-h2 · lab-note</code></p>
+            <p class="ds-spec__v"><code>lab-eyebrow · lab-h2</code></p>
           </div>
           <div class="ds-spec__row">
             <span class="ds-spec__k">{t.specUse}</span>
             <p class="ds-spec__v">
               {
                 it
-                  ? "L'occhiello e il titolo aprono la sezione portfolio; la nota chiude la pagina."
-                  : "The eyebrow and heading open the portfolio section; the note closes the page."
+                  ? "L'occhiello e il titolo aprono la sezione portfolio, una volta sola."
+                  : "The eyebrow and heading open the portfolio section, once only."
               }
             </p>
           </div>
@@ -4667,6 +4642,14 @@ const NAV = [
   // Il logo è un web component, non una classe: va registrato o la vetrina
   // mostrerebbe un elemento vuoto dove dovrebbe esserci il componente.
   import "../islands/GoLogo.lit";
+  import { initLensDropdownAutoClose } from "../scripts/lens-dropdown";
+
+  // .ds-stage esclude la demo statica del pannello "Tendina di lente":
+  // quella resta aperta apposta per mostrare lo stato, e un click altrove
+  // sulla pagina non deve richiuderla. Il selettore d'accento nella barra
+  // (.ds-lens) non è dentro un .ds-stage: è un comando vero, e va chiuso
+  // come quello della pagina reale.
+  initLensDropdownAutoClose(".ds-stage");
 
   // ── Selezione del pannello ────────────────────────────────────────────
   // Un componente per volta, come in Storybook. A nascondere è questo
@@ -5079,6 +5062,12 @@ const NAV = [
       pre.tabIndex = 0;
       pre.setAttribute("role", "region");
       pre.setAttribute("aria-label", en ? "HTML of the component" : "HTML del componente");
+      // Lenis (Layout.astro) intercetta la rotellina su tutta la pagina per
+      // il suo scroll smussato, e senza questo attributo lo scorrimento di
+      // un riquadro lungo come quello della riga esperienza (61 righe)
+      // finiva sulla pagina invece che sul codice sotto il puntatore —
+      // stesso motivo per cui #ds-side lo porta.
+      pre.setAttribute("data-lenis-prevent", "");
       const code = document.createElement("code");
       // textContent e non innerHTML: è il browser a fare l'escape, così un
       // `<` nello snippet resta un `<` invece di aprire un tag.
