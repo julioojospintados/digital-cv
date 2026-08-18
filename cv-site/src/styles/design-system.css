@@ -53,7 +53,7 @@
   padding-inline: var(--ds-gutter);
   padding-bottom: 6rem;
   display: grid;
-  gap: clamp(1.25rem, 3vw, 2.5rem);
+  gap: clamp(var(--sp-20), 3vw, var(--sp-40));
   align-items: start;
 }
 
@@ -65,7 +65,7 @@
 
 .ds-main {
   min-width: 0;
-  padding-bottom: 2rem;
+  padding-bottom: var(--sp-32);
 }
 
 .ds-bar {
@@ -75,8 +75,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
-  padding: 0.75rem var(--ds-gutter);
+  gap: var(--sp-16);
+  padding: var(--sp-12) var(--ds-gutter);
   /* Opaca: sotto ci scorrono le demo, e una barra translucida sopra dei
      componenti in dimostrazione ne falsa i colori. */
   background: var(--color-bg);
@@ -95,7 +95,7 @@
 .ds-bar__links {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: var(--sp-12);
   font-size: var(--fs-12);
   font-family: var(--font-mono);
 }
@@ -118,7 +118,7 @@
 /* ── Intestazione ── */
 
 .ds-head {
-  padding-block: clamp(2.5rem, 8vh, 5rem) 2rem;
+  padding-block: clamp(var(--sp-40), 8vh, var(--sp-80)) var(--sp-32);
 }
 
 .ds-head__title {
@@ -131,7 +131,7 @@
 }
 
 .ds-head__lead {
-  margin: 1rem 0 0;
+  margin: var(--sp-16) 0 0;
   max-width: 54rem;
   font-size: var(--fs-16);
   line-height: 1.65;
@@ -139,16 +139,16 @@
 }
 
 .ds-head__meta {
-  margin-top: 1.25rem;
+  margin-top: var(--sp-20);
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: var(--sp-8);
 }
 
 .ds-pill {
   font-family: var(--font-mono);
   font-size: var(--fs-12);
-  padding: 0.25rem 0.6rem;
+  padding: var(--sp-4) 0.6rem;
   border: 1px solid var(--ds-line-strong);
   border-radius: 999rem;
   color: var(--ds-muted);
@@ -174,9 +174,9 @@
     max-height: calc(100vh - 5.5rem);
     overflow-y: auto;
     overscroll-behavior: contain;
-    padding-top: 2rem;
-    padding-right: 1rem;
-    padding-bottom: 2rem;
+    padding-top: var(--sp-32);
+    padding-right: var(--sp-16);
+    padding-bottom: var(--sp-32);
     border-right: 1px solid var(--ds-line);
     /* La colonna è alta il doppio abbondante del riquadro che la contiene, e
        le barre a sovrapposizione di Chrome su Linux sono invisibili finché
@@ -189,7 +189,7 @@
     /* La voce attiva viene portata in vista dallo script: senza questo si
        ferma incollata al bordo, che è proprio la posizione in cui sembra
        tagliata invece che ultima. */
-    scroll-padding-block: 1rem;
+    scroll-padding-block: var(--sp-16);
   }
 
   /* Il velo in fondo alla colonna. `position: sticky` dentro il contenitore
@@ -213,7 +213,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.75rem;
+  gap: var(--sp-12);
   min-height: 2.75rem;
   padding: 0 0.9rem;
   border: 1px solid var(--ds-line-strong);
@@ -252,8 +252,8 @@
   /* 2rem fra un gruppo e l'altro: sotto quella misura i titoli di gruppo si
      leggevano come voci della lista precedente invece che come intestazioni.
      Il divisore sopra fa il resto del lavoro. */
-  margin-top: 2rem;
-  padding-top: 1.25rem;
+  margin-top: var(--sp-32);
+  padding-top: var(--sp-20);
   border-top: 1px solid var(--ds-line);
 }
 
@@ -348,7 +348,7 @@
   align-items: flex-start;
   gap: 0.35rem;
   padding-bottom: 0.85rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: var(--sp-24);
   border-bottom: 1px solid var(--ds-line);
 }
 
@@ -357,7 +357,7 @@
     flex-direction: row;
     align-items: baseline;
     justify-content: space-between;
-    gap: 1.5rem;
+    gap: var(--sp-24);
   }
 }
 
@@ -372,7 +372,7 @@
 /* ── Sezioni ── */
 
 .ds-section {
-  padding-block: clamp(2rem, 6vh, 3.5rem);
+  padding-block: clamp(var(--sp-32), 6vh, 3.5rem);
   border-top: 1px solid var(--ds-line);
 }
 
@@ -386,7 +386,7 @@
 }
 
 .ds-section__note {
-  margin: 0.5rem 0 0;
+  margin: var(--sp-8) 0 0;
   max-width: 60rem;
   font-size: var(--fs-14);
   line-height: 1.6;
@@ -405,7 +405,7 @@
 }
 
 .ds-sub__note {
-  margin: 0 0 1rem;
+  margin: 0 0 var(--sp-16);
   max-width: 60rem;
   font-size: var(--fs-14);
   line-height: 1.6;
@@ -422,7 +422,7 @@
   border: 1px solid var(--ds-line);
   border-radius: var(--radius-4);
   padding: 0.1rem 0.4rem;
-  margin-left: 0.5rem;
+  margin-left: var(--sp-8);
   vertical-align: middle;
 }
 
@@ -430,7 +430,7 @@
 
 .ds-stage {
   position: relative;
-  padding: 1.5rem;
+  padding: var(--sp-24);
   border: 1px solid var(--ds-line);
   border-radius: var(--radius-16);
   background: var(--ds-panel);
@@ -440,20 +440,20 @@
 }
 
 .ds-stage + .ds-stage {
-  margin-top: 0.75rem;
+  margin-top: var(--sp-12);
 }
 
 .ds-stage__row {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 1rem;
+  gap: var(--sp-16);
 }
 
 .ds-stage__col {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: var(--sp-16);
   align-items: flex-start;
 }
 
@@ -464,7 +464,7 @@
   color: var(--ds-muted);
   letter-spacing: 0.06em;
   text-transform: uppercase;
-  margin: 0 0 0.5rem;
+  margin: 0 0 var(--sp-8);
 }
 
 .ds-case {
@@ -529,7 +529,7 @@
 .ds-swatches {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
-  gap: 0.75rem;
+  gap: var(--sp-12);
   list-style: none;
   padding: 0;
   margin: 0;
@@ -568,7 +568,7 @@
 }
 
 .ds-swatch__body {
-  padding: 0.5rem 0.6rem 0.6rem;
+  padding: var(--sp-8) 0.6rem 0.6rem;
 }
 
 .ds-swatch__name {
@@ -660,7 +660,7 @@
 .ds-type__row {
   display: grid;
   grid-template-columns: 7rem 1fr;
-  gap: 1rem;
+  gap: var(--sp-16);
   align-items: baseline;
   padding-bottom: 0.85rem;
   border-bottom: 1px solid var(--ds-line);
@@ -684,14 +684,14 @@
 @media (max-width: 39.9375rem) {
   .ds-type__row {
     grid-template-columns: 1fr;
-    gap: 0.25rem;
+    gap: var(--sp-4);
   }
 }
 
 /* ── Nota / avvertenza dentro una sezione ── */
 
 .ds-callout {
-  margin-top: 1rem;
+  margin-top: var(--sp-16);
   padding: 0.9rem 1.1rem;
   border-left: 3px solid var(--color-accent);
   border-radius: 0 var(--radius-4) var(--radius-4) 0;
@@ -719,8 +719,8 @@
 .ds-modes {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 1rem;
+  gap: var(--sp-8);
+  margin-top: var(--sp-16);
 }
 
 .ds-mode-btn {
@@ -796,7 +796,7 @@
 
 .ds-split {
   display: grid;
-  gap: 0.75rem;
+  gap: var(--sp-12);
 }
 
 @media (min-width: 48rem) {
@@ -812,7 +812,7 @@
   max-width: 20rem;
   border: 1px solid var(--ds-line-strong);
   border-radius: var(--radius-16);
-  padding: 1rem;
+  padding: var(--sp-16);
   background: rgba(0, 0, 0, 0.12);
 }
 
@@ -820,7 +820,7 @@
   font-family: var(--font-mono);
   font-size: var(--fs-12);
   color: var(--ds-muted);
-  margin: 0 0 0.75rem;
+  margin: 0 0 var(--sp-12);
 }
 
 /* ── Selettore d'accento: la tendina di lente, riusata ───────────────────
@@ -835,8 +835,8 @@
    quella del CV pur avendo la stessa classe. */
 
 .ds-lensbar {
-  margin-bottom: 2rem;
-  padding-bottom: 1.25rem;
+  margin-bottom: var(--sp-32);
+  padding-bottom: var(--sp-20);
   border-bottom: 1px solid var(--ds-line);
 }
 
@@ -847,7 +847,7 @@
 .ds-lens {
   /* Nel CV la tendina sta sotto l'intestazione e si porta il proprio margine;
      qui apre il pannello e non deve staccarsi dal titolo che la precede. */
-  margin-top: 0.75rem;
+  margin-top: var(--sp-12);
 }
 
 .ds-lens .lc-lens__opt {
@@ -861,7 +861,7 @@
 }
 
 .ds-lensbar__hint {
-  margin: 0.75rem 0 0;
+  margin: var(--sp-12) 0 0;
   max-width: 52rem;
   font-size: var(--fs-12);
   line-height: 1.55;
@@ -871,8 +871,8 @@
 /* ── Pannello di atterraggio ─────────────────────────────────────────── */
 
 .ds-intro__why {
-  margin-top: 2rem;
-  padding-top: 1.5rem;
+  margin-top: var(--sp-32);
+  padding-top: var(--sp-24);
   border-top: 1px solid var(--ds-line);
   max-width: 60rem;
 }
@@ -885,12 +885,12 @@
 }
 
 .ds-intro__why p + p {
-  margin-top: 1rem;
+  margin-top: var(--sp-16);
 }
 
 /* Il pannello parte sotto la barra fissa con lo stesso respiro dell'indice. */
 .ds-main {
-  padding-top: 2rem;
+  padding-top: var(--sp-32);
 }
 
 /* ── Varianti del palco ──────────────────────────────────────────────────
@@ -939,7 +939,7 @@
    il bordo. Qui il palco gli lascia il respiro che nella pagina vera gli dà
    la colonna. */
 .ds-stage--caso {
-  padding-bottom: 2rem;
+  padding-bottom: var(--sp-32);
 }
 
 .ds-stage--caso .lab-case {
@@ -951,14 +951,14 @@
 .ds-facts {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
-  gap: 0.75rem;
-  margin-top: 2rem;
+  gap: var(--sp-12);
+  margin-top: var(--sp-32);
   padding: 0;
   list-style: none;
 }
 
 .ds-fact {
-  padding: 0.9rem 1rem;
+  padding: 0.9rem var(--sp-16);
   border: 1px solid var(--ds-line);
   border-radius: var(--radius-16);
   background: var(--ds-panel);
@@ -987,13 +987,13 @@
 .ds-shapes {
   display: flex;
   flex-wrap: wrap;
-  gap: 1.5rem;
+  gap: var(--sp-24);
 }
 
 .ds-shape {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: var(--sp-8);
 }
 
 .ds-shape__box {
@@ -1015,8 +1015,8 @@
 .ds-spec {
   display: grid;
   gap: 0.85rem;
-  margin-top: 1.25rem;
-  padding: 1rem 1.15rem;
+  margin-top: var(--sp-20);
+  padding: var(--sp-16) 1.15rem;
   border: 1px solid var(--ds-line);
   border-radius: var(--radius-16);
   background: rgba(0, 0, 0, 0.12);
@@ -1025,7 +1025,7 @@
 @media (min-width: 56rem) {
   .ds-spec {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 1rem 2rem;
+    gap: var(--sp-16) var(--sp-32);
   }
 }
 
@@ -1084,7 +1084,7 @@
    doppio del suo componente sposta il codice al centro della pagina. */
 
 .ds-code {
-  margin-top: 1.25rem;
+  margin-top: var(--sp-20);
   border: 1px solid var(--ds-line);
   border-radius: var(--radius-16);
   background: rgba(0, 0, 0, 0.22);
@@ -1095,8 +1095,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
-  padding: 0.6rem 0.75rem 0.6rem 1.15rem;
+  gap: var(--sp-16);
+  padding: 0.6rem var(--sp-12) 0.6rem 1.15rem;
   border-bottom: 1px solid var(--ds-line);
 }
 
@@ -1153,7 +1153,7 @@
    aria-label — entrambi messi dallo script insieme al tabindex. */
 .ds-code__pre {
   margin: 0;
-  padding: 1rem 1.15rem;
+  padding: var(--sp-16) 1.15rem;
   max-height: 24rem;
   overflow: auto;
   font-family: var(--font-mono);
@@ -1178,8 +1178,8 @@
    comando, e senza JavaScript resta l'elenco. */
 
 .ds-anatomy {
-  margin-top: 1.25rem;
-  padding: 1rem 1.15rem;
+  margin-top: var(--sp-20);
+  padding: var(--sp-16) 1.15rem;
   border: 1px solid var(--ds-line);
   border-radius: var(--radius-16);
   background: rgba(0, 0, 0, 0.12);
@@ -1189,7 +1189,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
+  gap: var(--sp-16);
 }
 
 .ds-anatomy__label {
@@ -1248,7 +1248,7 @@
 }
 
 .ds-anatomy__hint {
-  margin: 0.5rem 0 0.9rem;
+  margin: var(--sp-8) 0 0.9rem;
   font-size: var(--fs-12);
   line-height: 1.55;
   color: var(--ds-muted);
@@ -1259,14 +1259,14 @@
   padding: 0;
   list-style: none;
   display: grid;
-  gap: 0.75rem;
+  gap: var(--sp-12);
   counter-reset: none;
 }
 
 @media (min-width: 56rem) {
   .ds-anatomy__list {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.75rem 2rem;
+    gap: var(--sp-12) var(--sp-32);
   }
 }
 
@@ -1348,8 +1348,8 @@
    dopo la domanda. */
 
 .ds-prefix {
-  margin-top: 2rem;
-  padding-top: 1.5rem;
+  margin-top: var(--sp-32);
+  padding-top: var(--sp-24);
   border-top: 1px solid var(--ds-line);
 }
 
@@ -1370,7 +1370,7 @@
 
 .ds-matrix th,
 .ds-matrix td {
-  padding: 0.75rem 0.9rem;
+  padding: var(--sp-12) 0.9rem;
   text-align: left;
   vertical-align: middle;
 }
@@ -1397,7 +1397,7 @@
 /* L'anello di focus della colonna focus-visible sta fuori dal bordo della
    cella: senza questo respiro veniva tagliato dalla cella accanto. */
 .ds-matrix td {
-  padding-block: 1rem;
+  padding-block: var(--sp-16);
 }
 
 /* ── Movimento: gli esempi che si vedono ─────────────────────────────────
@@ -1414,13 +1414,13 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
+  gap: var(--sp-16);
   flex-wrap: wrap;
 }
 
 .ds-runners {
   list-style: none;
-  margin: 1rem 0 0;
+  margin: var(--sp-16) 0 0;
   padding: 0;
   display: grid;
   gap: 0.9rem;
@@ -1450,7 +1450,7 @@
 .ds-runner__dot {
   position: absolute;
   top: 50%;
-  left: 0.25rem;
+  left: var(--sp-4);
   width: 0.9rem;
   height: 0.9rem;
   margin-top: -0.45rem;
@@ -1530,7 +1530,7 @@
      propria posizione: metà sagoma esce dal riquadro della scena. Nella
      pagina vera sotto c'è la colonna, qui sotto c'è la scheda del componente
      — senza questo respiro ci finivano sopra. */
-  margin-bottom: 3rem;
+  margin-bottom: var(--sp-48);
 }
 
 /* Il fondale di sezione è `position: absolute` rispetto alla sezione che
@@ -1538,5 +1538,5 @@
 .ds-backdrop {
   position: relative;
   min-height: 8rem;
-  padding: 1rem 0;
+  padding: var(--sp-16) 0;
 }

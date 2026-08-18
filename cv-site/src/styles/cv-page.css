@@ -1654,8 +1654,11 @@ a.lang-switch__opt:hover {
 }
 
 .exp-cluster[data-open] .exp-cluster__body {
-  /* 9000px: sufficiente per cluster molto ampi su mobile a singola colonna.
-     3000px era insufficiente per "Design e Comunicazione" con molte schede. */
+  /* Valore sentinella: non un'altezza, un tetto. In CSS puro non si può
+     animare verso `height: auto`, quindi si anima verso un massimo che il
+     contenuto non raggiungerà mai — 9000rem qui, quando 3000px non bastavano
+     per "Design e Comunicazione" con molte schede. Il prezzo è che la durata
+     percepita dipende da quanto il contenuto è più corto del tetto. */
   max-height: 9000rem;
 }
 

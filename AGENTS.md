@@ -502,6 +502,25 @@ AGENTS.md                 ← This file — tool-agnostic project guide
 
 ---
 
+## Spacing scale — `--sp-*`
+
+→ A 4px grid in rem, declared in `global.css` beside the type scale. The
+  number in the name is the px value, exactly as in `--fs-12`: a token is
+  chosen by thinking "how much space", and in px that is known by heart —
+  rem is how it is served, not how it is reasoned about.
+→ `--sp-2 · 4 · 6 · 8 · 12 · 16 · 20 · 24 · 28 · 32 · 40 · 48 · 64 · 80`.
+→ It applies to **spacing only** — padding, margin, gap, inset, offsets.
+  Not to radii (`--radius-4`, `--radius-16`), not to type (`--fs-*`), not to
+  an element's own size: a token that means everything stops meaning
+  anything. Negative offsets stay literal; `calc(var(--sp-32) * -1)` is
+  noisier than `-2rem` and buys nothing.
+→ It covers 275 of the system's 398 spacing measures. The other 123 are rem
+  values picked by eye (0.35 · 0.6 · 0.85 · 1.15…) — the same "noise" the
+  type-scale comment warns about, left literal on purpose: snapping them to
+  the grid changes the design, and that is a decision, not a substitution.
+
+---
+
 ## Units — rem everywhere, px only for hairlines
 
 → Every measurement is in `rem`, anchored to a 16px root (there is no

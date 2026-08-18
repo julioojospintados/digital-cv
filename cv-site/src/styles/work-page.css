@@ -8,8 +8,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
-  padding: 1.25rem 1.5rem;
+  gap: var(--sp-16);
+  padding: var(--sp-20) var(--sp-24);
   max-width: 48rem;
   margin: 0 auto;
 }
@@ -17,7 +17,7 @@
 .work-nav__right {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: var(--sp-16);
 }
 
 /* display:inline-flex + min-height: target di tocco WCAG 2.2 SC 2.5.8
@@ -51,7 +51,7 @@
   text-decoration: none;
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 2rem;
-  padding: 0.25rem 0.65rem;
+  padding: var(--sp-4) 0.65rem;
   transition:
     color var(--duration-micro) ease,
     border-color var(--duration-micro) ease;
@@ -66,7 +66,7 @@
 .work-main {
   max-width: 48rem;
   margin: 0 auto;
-  padding: 1.5rem 1.5rem 6rem;
+  padding: var(--sp-24) var(--sp-24) 6rem;
   display: flex;
   flex-direction: column;
   gap: 3.5rem;
@@ -75,9 +75,9 @@
 /* ── Hero ── */
 .work-hero {
   position: relative;
-  padding-top: 1.5rem;
+  padding-top: var(--sp-24);
   border-bottom: 1px solid var(--color-border);
-  padding-bottom: 2.5rem;
+  padding-bottom: var(--sp-40);
   overflow: hidden;
 }
 
@@ -98,7 +98,7 @@
   letter-spacing: 0.22em;
   text-transform: uppercase;
   color: var(--color-accent);
-  margin: 0 0 0.75rem;
+  margin: 0 0 var(--sp-12);
 }
 
 .work-hero__title {
@@ -108,7 +108,7 @@
   letter-spacing: -0.03em;
   line-height: 1.05;
   color: var(--color-text-primary);
-  margin: 0 0 0.75rem;
+  margin: 0 0 var(--sp-12);
   max-width: 34rem;
   position: relative;
   z-index: 1;
@@ -117,7 +117,7 @@
 .work-hero__role {
   font-size: var(--fs-16);
   color: var(--color-text-muted);
-  margin: 0 0 1.25rem;
+  margin: 0 0 var(--sp-20);
   max-width: 34rem;
   position: relative;
   z-index: 1;
@@ -149,7 +149,7 @@
   letter-spacing: 0.2em;
   text-transform: uppercase;
   color: var(--color-accent);
-  margin: 0 0 1rem;
+  margin: 0 0 var(--sp-16);
 }
 
 .work-section__text {
@@ -166,7 +166,7 @@
 .work-decisions {
   display: flex;
   flex-direction: column;
-  gap: 1.75rem;
+  gap: var(--sp-28);
 }
 
 .work-decision {
@@ -203,7 +203,7 @@
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: var(--sp-16);
 }
 
 .work-learnings__item {
@@ -227,7 +227,7 @@
 /* ── CTA finale — chi finisce il case study è il visitatore più caldo ── */
 .work-cta {
   text-align: center;
-  padding: 2.5rem 1.5rem;
+  padding: var(--sp-40) var(--sp-24);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-16);
   background: rgba(255, 255, 255, 0.02);
@@ -236,14 +236,14 @@
 .work-cta__text {
   font-size: var(--fs-18);
   color: var(--color-text-primary);
-  margin: 0 0 1.25rem;
+  margin: 0 0 var(--sp-20);
 }
 
 .work-cta__actions {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 0.75rem;
+  gap: var(--sp-12);
 }
 
 .work-cta__link {
@@ -253,7 +253,7 @@
   letter-spacing: 0.1em;
   text-transform: uppercase;
   text-decoration: none;
-  padding: 0.65rem 1.25rem;
+  padding: 0.65rem var(--sp-20);
   border-radius: var(--radius-4);
   transition:
     background var(--duration-micro) ease,
@@ -286,9 +286,9 @@
 
 /* ── /work — pagina indice portfolio (griglia case study) ────────────── */
 .work-index-hero {
-  padding-top: 1.5rem;
+  padding-top: var(--sp-24);
   border-bottom: 1px solid var(--color-border);
-  padding-bottom: 2rem;
+  padding-bottom: var(--sp-32);
 }
 
 .work-index-hero__title {
@@ -305,7 +305,7 @@
 .work-index-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 1.25rem;
+  gap: var(--sp-20);
 }
 
 @media (min-width: 36rem) {
@@ -318,8 +318,8 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  padding: 1.5rem;
+  gap: var(--sp-8);
+  padding: var(--sp-24);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-16);
   background: rgba(255, 255, 255, 0.02);
@@ -476,7 +476,7 @@
   align-items: center;
   gap: 0.4rem;
   margin-top: auto;
-  padding-top: 0.75rem;
+  padding-top: var(--sp-12);
   font-family: var(--font-mono);
   font-size: var(--fs-14);
   font-weight: 700;
@@ -514,8 +514,8 @@
 .work-hero__ds-link {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  margin-top: 1.25rem;
+  gap: var(--sp-8);
+  margin-top: var(--sp-20);
   font-family: var(--font-mono);
   font-size: var(--fs-12);
   font-weight: 700;
@@ -530,7 +530,7 @@
 
 .work-hero__ds-link:hover,
 .work-hero__ds-link:focus-visible {
-  gap: 0.75rem;
+  gap: var(--sp-12);
 }
 
 /* ── /work/[slug] — Journey orizzontale del case study ────────────────────
@@ -553,8 +553,8 @@
 .journey__track {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
-  padding: 0 1.5rem;
+  gap: var(--sp-20);
+  padding: 0 var(--sp-24);
   max-width: 48rem;
   margin: 0 auto;
 }
@@ -677,8 +677,8 @@
 /* ── HUD di viaggio — dati in mono, come un cruscotto ── */
 .journey__hud {
   position: absolute;
-  top: 1.25rem;
-  right: 1.5rem;
+  top: var(--sp-20);
+  right: var(--sp-24);
   z-index: 2;
   flex-direction: column;
   align-items: flex-end;
@@ -764,13 +764,13 @@
   letter-spacing: -0.02em;
   line-height: 1.1;
   color: var(--color-text-primary);
-  margin: 0 0 0.75rem;
+  margin: 0 0 var(--sp-12);
 }
 
 .journey__hint {
   align-items: center;
   gap: 0.55rem;
-  margin: 1.5rem 0 0;
+  margin: var(--sp-24) 0 0;
   font-family: var(--font-mono);
   font-size: var(--fs-12);
   font-weight: 700;
@@ -788,8 +788,8 @@
 .journey__stop {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  padding: 1.5rem;
+  gap: var(--sp-8);
+  padding: var(--sp-24);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-16);
   background: rgba(255, 255, 255, 0.02);
@@ -798,7 +798,7 @@
 /* Landmark knolling: l'oggetto del progetto a bordo strada, sulla partenza */
 .journey__stop-icon {
   width: clamp(4.5rem, 9vw, 6.5rem);
-  margin: 0 0 0.25rem;
+  margin: 0 0 var(--sp-4);
   align-self: flex-end;
   user-select: none;
   pointer-events: none;
@@ -808,7 +808,7 @@
 .journey.is-active .journey__stop-icon {
   position: absolute;
   top: calc(clamp(4.5rem, 9vw, 6.5rem) * -0.62);
-  right: 1rem;
+  right: var(--sp-16);
   margin: 0;
   will-change: transform;
 }
@@ -837,7 +837,7 @@
 /* Arrivo: i risultati misurabili — dati in mono, il traguardo della strada */
 .journey__outcomes {
   list-style: none;
-  margin: 0.5rem 0 0;
+  margin: var(--sp-8) 0 0;
   padding: 0;
   display: flex;
   flex-direction: column;
@@ -862,5 +862,5 @@
   letter-spacing: -0.02em;
   line-height: 1.08;
   color: var(--color-text-primary);
-  margin: 0 0 0.5rem;
+  margin: 0 0 var(--sp-8);
 }

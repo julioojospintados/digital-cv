@@ -40,14 +40,14 @@
 .about-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem;
-  margin-top: 0.5rem;
+  gap: var(--sp-12);
+  margin-top: var(--sp-8);
 }
 
 .about-action {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--sp-8);
   padding: 0.6rem 1.1rem;
   font-family: var(--font-mono);
   font-size: var(--fs-12);
@@ -124,14 +124,14 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
-  padding: 1rem clamp(1.25rem, 4vw, 2.5rem) 1rem;
+  gap: var(--sp-16);
+  padding: var(--sp-16) clamp(var(--sp-20), 4vw, var(--sp-40)) var(--sp-16);
 }
 
 .memory-dialog__scroll {
   width: 100%;
   min-height: 0;
-  padding: 0.5rem clamp(1.25rem, 4vw, 2.5rem) 2rem;
+  padding: var(--sp-8) clamp(var(--sp-20), 4vw, var(--sp-40)) var(--sp-32);
   overflow-y: auto;
   overscroll-behavior: contain;
 }
@@ -238,7 +238,7 @@
   flex-wrap: wrap;
   align-items: flex-start;
   justify-content: center;
-  gap: 1.25rem 1.5rem;
+  gap: var(--sp-20) var(--sp-24);
 }
 
 /* Wrapper nativo <button> intorno a .memory-photo — sostituisce
@@ -263,7 +263,7 @@
   width: clamp(7rem, 18vw, 11rem);
   aspect-ratio: 4 / 5;
   object-fit: cover;
-  padding: 0.5rem 0.5rem 1.25rem;
+  padding: var(--sp-8) var(--sp-8) var(--sp-20);
   background: rgba(245, 240, 230, 0.96);
   border-radius: 2px;
   box-shadow: 0 0.625rem 1.5rem rgba(0, 0, 0, 0.4);
@@ -323,8 +323,8 @@
 
 .photo-lightbox__close {
   position: absolute;
-  top: 1.25rem;
-  right: 1.25rem;
+  top: var(--sp-20);
+  right: var(--sp-20);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -360,7 +360,7 @@
   max-height: min(85vh, 42rem);
   aspect-ratio: auto;
   object-fit: contain;
-  padding: 0.85rem 0.85rem 2rem;
+  padding: 0.85rem 0.85rem var(--sp-32);
   transform: none;
   box-shadow: 0 1.875rem 5rem rgba(0, 0, 0, 0.55);
   cursor: zoom-out;
@@ -368,7 +368,7 @@
 
 .memory-fact {
   width: clamp(11rem, 26vw, 15rem);
-  padding: 1.25rem 1.1rem;
+  padding: var(--sp-20) 1.1rem;
   margin: 0;
   font-family: var(--font-mono);
   font-size: var(--fs-14);
@@ -426,7 +426,7 @@
 }
 
 .memory-fact--story .memory-fact__body + .memory-fact__body {
-  margin-top: 1.25rem;
+  margin-top: var(--sp-20);
 }
 
 @media (max-width: 40rem) {
