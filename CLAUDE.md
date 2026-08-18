@@ -22,13 +22,36 @@ Poi carica la skill specializzata pertinente alla richiesta (i puntatori complet
 
 Skill di utilità (non di dominio):
 
-- `.claude/skills/verification-loop/SKILL.md` — il gauntlet loop del progetto: costruisci, misura, critica, ricomincia. **Caricala prima di dichiarare finito** un lavoro su UI o testi di `cv-site/`, e quando l'utente dice "verifica", "gauntlet", "ricontrolla", "sei sicuro?". Divide ciò che si misura da solo (`npm run qa:ds`) da ciò che richiede un critico a contesto fresco.
+- `.claude/skills/verification-loop/SKILL.md` — il gauntlet loop del progetto. **Solo su richiesta esplicita**: caricala quando l'utente la nomina ("gauntlet", "fai il loop", "verifica a fondo", `/verification-loop`), mai di tua iniziativa e mai perché ha detto "verifica" o "controlla". Costa molti token e serve per interventi ampi.
 - `.claude/skills/caveman/SKILL.md` — modalità di risposta ultra-compressa. Invocabile con `/caveman` (livelli: lite/full/ultra/wenyan-*) quando l'utente chiede di ridurre i token o "parlare da caveman". Torna a prosa normale con "stop caveman".
 
 ## MCP
 
 Server MCP di progetto dichiarati in `.mcp.json` (root, letto da Claude Code): `mcp-base-template` (server locale che espone i dati di `cv.ts` come tool/resource) e `sequential-thinking`.
 `.vscode/mcp.json` è l'equivalente per Copilot/VS Code e include un set più ampio di server — non è letto da Claude Code.
+
+## Verifica dopo una modifica — livello base
+
+Dopo una modifica normale, anche non banale, questo è tutto ciò che serve. È
+testo, non immagini, e costa poco:
+
+```bash
+npm run lint && npm run format:check && npm test
+npm run qa:units
+cd cv-site && npx astro check && npx astro build
+```
+
+Se hai toccato `/design-system`, aggiungi `npm run qa:ds` (serve il dev server
+sulla 4321): sono una trentina di righe e nessuna immagine.
+
+**Gli screenshot no.** Una schermata costa più di tutto il resto messo insieme:
+falli solo se servono a decidere qualcosa che dai numeri non si vede, o se
+l'utente li chiede. Vale anche per i dump lunghi — `console.table` su decine di
+righe si riassume in una riga di conteggi.
+
+Se dopo questo resta un dubbio che nessuno script scioglie, **chiedi** invece di
+aprire il ciclo completo: «questo non lo decido da solo, vuoi che passi il
+gauntlet?».
 
 ## Comportamento
 

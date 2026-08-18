@@ -1,15 +1,38 @@
 ---
 name: verification-loop
 description: >
-  Gauntlet loop del Digital CV: costruisci, misura, critica, ricomincia — con la
-  regola che chi implementa non si dà il voto da solo. Carica quando lavori su UI
-  o testi di cv-site/ e vuoi chiudere davvero il lavoro invece di dichiararlo
-  chiuso, quando cambi la vetrina /design-system o le pagine /lab, quando devi
-  scegliere fra due direzioni di layout, o quando l'utente dice "verifica",
-  "controlla in browser", "gauntlet", "loop", "sei sicuro?", "ricontrolla".
+  SOLO SU RICHIESTA ESPLICITA. Gauntlet loop del Digital CV: costruisci, misura,
+  critica, ricomincia. Carica questa skill unicamente quando l'utente la nomina —
+  "gauntlet", "verification loop", "fai il loop", "verifica a fondo", "passa il
+  gauntlet", o /verification-loop. NON caricarla di tua iniziativa dopo una
+  modifica, per quanto grande, e NON perché l'utente ha detto "verifica",
+  "controlla" o "sei sicuro": quelle sono richieste di controllo normale, non del
+  ciclo completo. Costa molti token e serve solo per interventi ampi.
 ---
 
 # Verification Loop — il gauntlet del Digital CV
+
+> ## ⛔ Non caricare questa skill di tua iniziativa
+>
+> Serve per interventi **ampi** e va chiesta per nome. Dopo una modifica
+> normale, anche non banale, la verifica di base è questa — testo, niente
+> browser, niente immagini:
+>
+> ```bash
+> npm run lint && npm run format:check && npm test
+> npm run qa:units
+> cd cv-site && npx astro check && npx astro build
+> ```
+>
+> Sopra c'è `npm run qa:ds`, che vale sempre la pena quando hai toccato la
+> vetrina: sono ~30 righe di output e nessuna immagine. **Gli screenshot no**:
+> quelli si fanno solo se servono a decidere qualcosa che dai numeri non si
+> vede, o se l'utente li chiede. Una schermata costa più di tutto il resto
+> messo insieme.
+>
+> Se dopo la verifica di base resta un dubbio che uno script non scioglie,
+> **dillo** invece di aprire il ciclo: «questo non lo posso decidere da solo,
+> vuoi che passi il gauntlet?».
 
 Adattamento al progetto della tecnica **Gauntlet Loop** (di Matt Shumer;
 implementazioni skill in circolazione:

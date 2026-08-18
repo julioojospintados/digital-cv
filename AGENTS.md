@@ -572,8 +572,12 @@ AGENTS.md                 ← This file — tool-agnostic project guide
   is supposed to be checking.
 → Both halves, and the rule that keeps them honest (whoever implements does not
   grade their own work), live in `.claude/skills/verification-loop/SKILL.md` —
-  the project's adaptation of the Gauntlet Loop technique. Load it before
-  declaring UI or copy work finished.
+  the project's adaptation of the Gauntlet Loop technique. **It is loaded only
+  when explicitly asked for by name.** After an ordinary change the baseline is
+  `lint`, `format:check`, `test`, `qa:units`, `astro check`, `astro build`, plus
+  `qa:ds` when the showcase was touched — all text, no images. Screenshots are
+  the expensive part and are taken only when a decision cannot be read off the
+  numbers, or when asked.
 → When a change to the showcase is not covered by the gauntlet, **add the
   check** rather than testing by hand: a verification script that stops growing
   with the project ages exactly like the "photograph" design system that
