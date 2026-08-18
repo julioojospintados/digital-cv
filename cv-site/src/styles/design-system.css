@@ -1540,3 +1540,55 @@
   min-height: 8rem;
   padding: var(--size-16) 0;
 }
+
+/* ── La scala delle dimensioni ───────────────────────────────────────────
+   Ogni gradino disegnato alla propria misura. La barra prende la larghezza
+   dal token vero (`width: var(--size-N)`), non da una copia del suo valore:
+   se un giorno la scala cambia, cambia anche il disegno — che è l'unica
+   forma di documentazione che non può mentire. */
+
+.ds-sizes {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--size-8);
+}
+
+.ds-size {
+  display: grid;
+  /* La colonna delle barre è larga quanto il gradino più alto (--size-80),
+     non `1fr`: allargandola, il valore finiva a destra e fra il nome e il
+     numero restava un vuoto da attraversare con lo sguardo. Compatta, la
+     riga si legge in un colpo — nome, quanto è grande, quanto vale. */
+  grid-template-columns: 6.5rem var(--size-80) auto;
+  align-items: center;
+  gap: var(--size-12);
+}
+
+.ds-size__name,
+.ds-size__val {
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  color: var(--ds-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.ds-size__bar {
+  display: block;
+  height: var(--size-16);
+  border-radius: var(--radius-4);
+  background: var(--color-accent);
+}
+
+/* Sotto i 48rem le tre colonne non ci stanno: nome sopra, barra e valore
+   sotto. La barra resta la prima cosa che si vede, che è il punto. */
+@media (max-width: 47.9375rem) {
+  .ds-size {
+    grid-template-columns: var(--size-80) auto;
+  }
+
+  .ds-size__name {
+    grid-column: 1 / -1;
+  }
+}

@@ -60,7 +60,7 @@ const FACTS = [
       : "component families across the /lab and /work stylesheets",
   },
   {
-    n: "72",
+    n: "103",
     l: it ? "token dichiarati fra base e prove" : "tokens declared across base and prototypes",
   },
   {
@@ -185,6 +185,9 @@ const NEW_TOKENS = [
       : "The border that identifies a control, at 3.04:1. The normal one sits at 2.06:1, below the 3:1 of 1.4.11.",
   },
 ];
+
+/* ── La scala delle dimensioni. Stessa griglia da 4px del sistema. ─────── */
+const SIZE_SCALE = [2, 4, 6, 8, 12, 16, 20, 24, 28, 32, 40, 48, 64, 80];
 
 /* ── Scala tipografica. I px sono indicativi: la scala vive in rem. ─────── */
 const TYPE_SCALE = [
@@ -394,6 +397,13 @@ const t = it
       specDont: "Da non fare",
       specA11y: "Accessibilità",
       anatomy: "Anatomia",
+      sizeTitle: "La scala delle dimensioni",
+      sizeLead:
+        "Una griglia da 4px in rem, ancorata allo stesso root della scala tipografica. Il numero nel nome è il valore in px: un token si sceglie pensando «quanto spazio», e in px lo si sa a memoria — il rem è come viene servito, non come si ragiona.",
+      sizeNote:
+        "Vale per gli spazi e per le misure insieme: la larghezza di un riquadro e il padding che ci sta dentro cadono sulla stessa griglia, ed è quello che la fa tornare a occhio. I raggi restano fuori, perché hanno i propri token, e così i corpi del testo: un raggio scritto con questa scala sembrerebbe intercambiabile con una spaziatura, e non lo è.",
+      sizeHonest:
+        "Copre 275 delle 398 misure del sistema. Le altre 123 sono rem scelti a occhio — 0,35 · 0,6 · 0,85 · 1,15 — cioè lo stesso rumore che la scala tipografica aveva già eliminato per i corpi del testo e mai per gli spazi. Sono rimaste letterali di proposito: portarle sulla griglia cambia il disegno, ed è una decisione, non una sostituzione.",
       prefixTitle: "I prefissi, e perché non vanno bene",
       prefixLead:
         "Ogni componente porta un badge come lh-* accanto al titolo. Dice da dove viene la classe — e conviene sapere subito che dice solo quello.",
@@ -470,6 +480,13 @@ const t = it
       specDont: "Do not",
       specA11y: "Accessibility",
       anatomy: "Anatomy",
+      sizeTitle: "The size scale",
+      sizeLead:
+        "A 4px grid in rem, anchored to the same root as the type scale. The number in the name is the px value: a token is chosen by thinking «how much space», and in px that is known by heart — rem is how it is served, not how it is reasoned about.",
+      sizeNote:
+        "It covers spacing and dimensions together: the width of a box and the padding inside it fall on the same grid, and that is what makes it read right. Radii stay out, because they have their own tokens, and so does type: a radius written with this scale would look interchangeable with a spacing value, and it is not.",
+      sizeHonest:
+        "It covers 275 of the system's 398 measures. The other 123 are rem values picked by eye — 0.35 · 0.6 · 0.85 · 1.15 — the very noise the type scale had already removed from body text and never from spacing. They were left literal on purpose: snapping them to the grid changes the design, and that is a decision, not a substitution.",
       prefixTitle: "The prefixes, and why they are wrong",
       prefixLead:
         "Every component carries a badge like lh-* beside its title. It says where the class comes from — and it is worth knowing up front that this is all it says.",
@@ -1090,6 +1107,36 @@ const NAV = [
             </div>
           </div>
         </div>
+        <h3 class="ds-sub__title">{t.sizeTitle}</h3>
+        <p class="ds-sub__note">{t.sizeLead}</p>
+
+        {
+          /* Ogni token è disegnato alla propria misura: una scala di
+            dimensioni scritta solo in tabella si legge come una colonna di
+            numeri, e la cosa che serve sapere — quanto è grande davvero, e
+            quanto dista dal gradino accanto — non si vede. La barra USA il
+            token, non una copia del suo valore. */
+        }
+        <div class="ds-stage">
+          <ul class="ds-sizes" role="list">
+            {
+              SIZE_SCALE.map((n) => (
+                <li class="ds-size">
+                  <code class="ds-size__name">--size-{n}</code>
+                  <span class="ds-size__bar" style={`width:var(--size-${n})`} />
+                  <span class="ds-size__val">
+                    {n / 16}rem · {n}px
+                  </span>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+        <p class="ds-sub__note">{t.sizeNote}</p>
+        <div class="ds-callout">
+          <p>{t.sizeHonest}</p>
+        </div>
+
         <div class="ds-callout">
           <p>
             <strong
