@@ -1,5 +1,5 @@
 ---
-// /lab/<lente> — PROVA: la pagina CV per come legge un recruiter,
+// /<lente> — la pagina CV per come legge un recruiter,
 // con la faccia del progetto addosso.
 //
 // ── I due vincoli, che convivono ─────────────────────────────────────────
@@ -11,7 +11,7 @@
 // completa.
 //
 // I testi di voce — il paragrafo per lente ("Come ci arrivo") e la bio
-// "Chi sono" — NON stanno qui: vivono in home (/lab/home), dove servono a
+// "Chi sono" — NON stanno qui: vivono nella home ("/"), dove servono a
 // far scegliere. Su questa pagina la scelta è già fatta, e il visitatore
 // vuole le prove.
 //
@@ -39,26 +39,31 @@
 //
 // TESTI: cv.ts, cv-i18n e lab-copy.ts (verbatim da index.astro). Nessuna
 // copy scritta qui.
-import Layout from "../../layouts/Layout.astro";
+import Layout from "../layouts/Layout.astro";
 import { cvData } from "@cv-data";
-import { buildCvViewModel } from "../../lib/cv-view-model";
-import { EXP_CLUSTER_DEFS } from "../../lib/exp-clusters";
-import { LOCALES, MODES, type Mode } from "../../lib/cv-i18n";
-import { PROFILE_COPY, TAGLINE } from "../../lib/lab-copy";
-import "../../styles/lab-cv.css";
+import { buildCvViewModel } from "../lib/cv-view-model";
+import { EXP_CLUSTER_DEFS } from "../lib/exp-clusters";
+import { LENS_SLUGS, LOCALES, MODE_BY_SLUG, MODES, lensPath, type Mode } from "../lib/cv-i18n";
+import { PROFILE_COPY, TAGLINE } from "../lib/lab-copy";
+import "../styles/lab-cv.css";
 
 export function getStaticPaths() {
   // Una sola fonte per "quali lenti esistono": MODES di cv-i18n. Fino al
   // 2026-08-16 qui c'era LAB_MODES, che teneva un ordine suo; rimossa quando
   // è diventata un duplicato esatto di MODES.
-  return MODES.map((lens) => ({ params: { lens } }));
+  //
+  // Il parametro di rotta è lo **slug**, non la chiave: /design, /tech, /ai.
+  // La chiave interna resta quella dei dati e del CSS — vedi LENS_SLUGS in
+  // cv-i18n.ts per il perché le due cose non coincidono.
+  return MODES.map((mode) => ({ params: { lens: LENS_SLUGS[mode] } }));
 }
 
-const { lens } = Astro.params as { lens: Mode };
+const { lens: slug } = Astro.params as { lens: string };
+const lens = MODE_BY_SLUG[slug];
 const t = LOCALES.it;
 const profile = PROFILE_COPY[lens];
 
-const { modeLabel, heroTitle, expClusters } = buildCvViewModel({
+const { modeLabel, heroTitle, expClusters, timelineItems } = buildCvViewModel({
   data: cvData,
   locale: "it",
   mode: lens,
@@ -80,8 +85,8 @@ const clusterLabel = cluster?.label ?? modeLabel;
 // togliere questo blocco.
 //
 // L'override sta qui e non in `lib/cv-view-model.ts` di proposito: quel
-// file serve anche /tech, /creative, /human e /en/cv, cioè le pagine vere.
-// Questa è una prova, e non deve cambiarle.
+// file serve anche /en/cv e le pagine di /old-version, che devono continuare
+// a mostrare la descrizione della lente. Questa scelta vale solo qui.
 const clusterRefs = EXP_CLUSTER_DEFS.find((c) => c.key === lens)?.refs ?? [];
 const rawItems = cluster?.items ?? [];
 
@@ -156,14 +161,27 @@ const linkedin = cvData.social.find((s) => s.platform === "LinkedIn");
 const NBSP = String.fromCharCode(160);
 const langs = cvData.languages.map((l) => `${l.name}${NBSP}${l.level}`).join(" · ");
 
+// ── Strato 2c: percorso e voci ───────────────────────────────────────────
+// timelineItems arriva già unito e ordinato dal piu recente da
+// buildCvViewModel — lo stesso che serve le pagine vere. Qui si separa per
+// tipo e basta: due elenchi si leggono meglio di uno misto, perché un
+// diploma e un attestato Coursera non si confrontano fra loro, e senza la
+// separazione ogni riga avrebbe avuto bisogno di un'etichetta per dire
+// quale delle due cose è.
+//
+// Nessun filtro per lente, a differenza delle esperienze: la formazione è
+// una garanzia di completezza, e mostrarne una parte diversa a seconda
+// della lente è esattamente il sospetto che la sezione deve togliere.
+const formazione = timelineItems.filter((i) => i.type === "edu");
+const certificazioni = timelineItems.filter((i) => i.type === "cert");
+
 const MAX_CHIPS = 6;
 ---
 
 <Layout
-  title={`Prova CV recruiter-first — ${modeLabel}`}
-  description="Banco di prova: la pagina CV riscritta sui tempi di lettura reali di un recruiter."
+  title={`CV ${modeLabel} — Giulio Occhipinti`}
+  description={t.modeDescriptions[lens] ?? t.fallbackDescription}
   mode={lens}
-  noindex
 >
   <!-- L'oggetto della lente è il pezzo grafico più pesante sopra la piega:
        va chiesto subito, non scoperto a fine parsing. -->
@@ -179,7 +197,7 @@ const MAX_CHIPS = 6;
     <!-- Barra. Non sticky: una barra fissa mangia proprio la fascia alta in
          cui si giocano i primi sette secondi. -->
     <header class="lc-bar">
-      <a href="/lab/home" class="lc-bar__home" aria-label="Torna a /lab/home">
+      <a href="/" class="lc-bar__home" aria-label="Torna alla home">
         <go-logo></go-logo>
       </a>
       <p class="lc-bar__tagline">{TAGLINE}</p>
@@ -271,7 +289,7 @@ const MAX_CHIPS = 6;
                 MODES.map((m) => (
                   <li>
                     <a
-                      href={`/lab/${m}`}
+                      href={lensPath(m)}
                       class:list={["lc-lens__opt", { "is-current": m === lens }]}
                       data-lens={m}
                       aria-current={m === lens ? "page" : undefined}
@@ -333,7 +351,7 @@ const MAX_CHIPS = 6;
               // JavaScript non si nasconde niente e il pulsante resta
               // `hidden`: si vedono tutte le tecnologie e non c'è nessun
               // comando morto. È la stessa regola dell'ingresso di
-              // /lab/home — a nascondere è il codice che sa anche riaprire.
+              // la home — a nascondere è il codice che sa anche riaprire.
               const primi = job.skills.slice(0, MAX_CHIPS);
               const oltre = job.skills.slice(MAX_CHIPS);
 
@@ -527,8 +545,96 @@ const MAX_CHIPS = 6;
         </ul>
       </section>
 
-      <!-- ══ STRATO 3 — 3-5 minuti. Qui solo gli imbocchi: non è quello che
-           stiamo giudicando in questa prova. ═════════════════════════════ -->
+      <!-- ── 2c. Le voci ──────────────────────────────────────────────────
+           Fin qui ha parlato solo lui. Due persone che ci hanno lavorato
+           insieme dicono la stessa cosa da fuori, ed è l'unico pezzo di
+           pagina che un candidato non può scriversi da solo.
+
+           Sta dopo le esperienze e non prima: una testimonianza letta senza
+           sapere che cosa ha fatto è un complimento; letta dopo, è una
+           conferma. Statiche, tutte e due in pagina, nessun carosello —
+           qui non si nasconde metà della prova dietro un gesto. -->
+      <section class="lc-voices" aria-labelledby="lc-voices-title">
+        <div class="lc-sec-head">
+          <h2 class="lc-sec-title" id="lc-voices-title">Chi ci ha lavorato</h2>
+        </div>
+        <ul class="lc-voices__list" role="list">
+          {
+            cvData.feedbacks
+              .filter((f) => f.quote)
+              .map((f) => (
+                <li class="lc-voice">
+                  <blockquote class="lc-voice__quote">{f.quote}</blockquote>
+                  <p class="lc-voice__who">
+                    {f.name}
+                    {f.role && <span class="lc-voice__role"> · {f.role}</span>}
+                  </p>
+                </li>
+              ))
+          }
+        </ul>
+      </section>
+
+      <!-- ── 2d. Il percorso ──────────────────────────────────────────────
+           Formazione e certificazioni per intero, senza filtro di lente:
+           qui il valore è la completezza, non la pertinenza. Stessa griglia
+           di "Tutte le esperienze" — data sul binario mono a sinistra,
+           contenuto a destra — perché sono la stessa cosa per il lettore:
+           un elenco verificabile che si scorre con l'occhio, non si legge. -->
+      <section class="lc-path" aria-labelledby="lc-path-title">
+        <div class="lc-sec-head">
+          <h2 class="lc-sec-title" id="lc-path-title">Formazione e certificazioni</h2>
+        </div>
+
+        <div class="lc-path__group">
+          <h3 class="lc-path__group-title">
+            Formazione <span class="lc-sec-count">{formazione.length}</span>
+          </h3>
+          <ul class="lc-path__list" role="list">
+            {
+              formazione.map((e) => (
+                <li class="lc-path__row">
+                  <span class="lc-path__date">{e.dateLabel}</span>
+                  <span class="lc-path__what">
+                    <b>{e.title}</b>
+                    <span class="lc-path__where"> · {e.institution}</span>
+                  </span>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+
+        <div class="lc-path__group">
+          <h3 class="lc-path__group-title">
+            Certificazioni <span class="lc-sec-count">{certificazioni.length}</span>
+          </h3>
+          <ul class="lc-path__list" role="list">
+            {
+              certificazioni.map((c) => (
+                <li class="lc-path__row">
+                  <span class="lc-path__date">{c.dateLabel}</span>
+                  <span class="lc-path__what">
+                    <b>{c.title}</b>
+                    <span class="lc-path__where"> · {c.institution}</span>
+                    {c.inProgress && <span class="lc-path__wip">in corso</span>}
+                    {c.credentialId && (
+                      <span class="lc-path__id">
+                        <span class="lc-sr">Codice credenziale: </span>
+                        {c.credentialId}
+                      </span>
+                    )}
+                  </span>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </section>
+
+      <!-- ══ STRATO 3 — 3-5 minuti. Qui solo gli imbocchi: chi arriva fin
+           qui ha già deciso di approfondire, e vuole dove, non altro testo.
+           ═══════════════════════════════════════════════════════════════ -->
       <section class="lc-more" aria-labelledby="lc-more-title">
         <h2 class="lc-sec-title" id="lc-more-title">Se vuoi andare a fondo</h2>
         <ul class="lc-more__list" role="list">
@@ -536,10 +642,14 @@ const MAX_CHIPS = 6;
           {
             /* Qui c'era il rimando a `/{lens}` — "competenze, metodo e
               formazione, versione attuale del CV". Quella pagina è sospesa
-              su questo branch, e il suo contenuto non ha ancora un posto nel
-              linguaggio nuovo: lo strato 3 resta con un imbocco solo finché
-              non ne trova uno. Un link a una pagina che non c'è sarebbe
-              peggio di un imbocco in meno. */
+              su questo branch. Della sua roba, formazione e certificazioni
+              adesso stanno in pagina (2d): non erano un approfondimento da
+              rimandare altrove, erano una verifica, e una verifica la si
+              vuole dove si sta già guardando. Restano fuori competenze e
+              metodo, che un posto nel linguaggio nuovo non ce l'hanno
+              ancora: finché non ce l'hanno, lo strato 3 tiene un imbocco
+              solo. Un link a una pagina che non c'è sarebbe peggio di un
+              imbocco in meno. */
           }
         </ul>
       </section>
@@ -550,8 +660,8 @@ const MAX_CHIPS = 6;
 <script>
   // Solo la firma GO della barra: l'island si autoregistra come <go-logo>
   // e reagisce da sé al mode della pagina.
-  import "../../islands/GoLogo.lit";
-  import { initLensDropdownAutoClose } from "../../scripts/lens-dropdown";
+  import "../islands/GoLogo.lit";
+  import { initLensDropdownAutoClose } from "../scripts/lens-dropdown";
 
   initLensDropdownAutoClose();
 

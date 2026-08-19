@@ -4,17 +4,35 @@ export type Mode = "tech" | "creative" | "human";
 
 const VALID_MODES: Mode[] = ["tech", "creative", "human"];
 
+// Slug di URL → chiave interna. Duplica di proposito LENS_SLUGS di
+// `lib/cv-i18n.ts`: questo file è un island Lit che finisce in ogni pagina, e
+// importare il modulo i18n (con dentro tutte le stringhe delle due lingue)
+// solo per tre coppie di parole costerebbe più del bene che fa. Se cambia
+// uno slug, vanno cambiati tutti e due i punti — sono due righe, e questo
+// commento è il promemoria.
+const MODE_BY_SLUG: Record<string, Mode> = {
+  tech: "tech",
+  design: "creative",
+  ai: "human",
+};
+
+/** Risolve la lente dal primo segmento del path, per slug o per chiave. */
+function modeFromSegment(seg: string): Mode | null {
+  if (MODE_BY_SLUG[seg]) return MODE_BY_SLUG[seg];
+  return VALID_MODES.includes(seg as Mode) ? (seg as Mode) : null;
+}
+
 function getInitialMode(): Mode {
   if (typeof window !== "undefined") {
     const urlParam = new URLSearchParams(window.location.search).get("mode");
     if (urlParam && VALID_MODES.includes(urlParam as Mode)) {
       return urlParam as Mode;
     }
-    // Check URL path for /tech, /creative, /human
+    // Il path: /design, /tech, /ai (slug) — e le chiavi, che restano valide
+    // perché /old-version/<chiave> le usa ancora.
     const pathSegment = window.location.pathname.split("/").filter(Boolean)[0] ?? "";
-    if (VALID_MODES.includes(pathSegment as Mode)) {
-      return pathSegment as Mode;
-    }
+    const fromPath = modeFromSegment(pathSegment);
+    if (fromPath) return fromPath;
   }
   // Default 'creative': il posizionamento del CV è Design-first, quindi chi
   // arriva senza un mode esplicito (link diretto, QR del PDF) vede la lente
@@ -63,10 +81,10 @@ const MODE_AWARE_PATHS = ["/en/cv", "/cv"];
 // dell'utente — initMode non deve né cancellarlo né sovrascriverlo.
 const SSR_MODE_PATHS = ["/work", "/en/work"];
 
-// Route di prova con la lente nel path, ma non nel primo segmento:
-// `/lab/creative`. Il controllo standard qui sotto guarda
-// `pathname.split("/")[0]`, che qui vale "lab" e non è un mode valido — la
-// pagina finiva quindi nel ramo `else`, quello che AZZERA data-mode.
+// Route con la lente nel path ma non nel primo segmento: `/old-version/creative`,
+// `/lab/...`. Il controllo standard qui sotto guarda `pathname.split("/")[0]`,
+// che lì vale "old-version" o "lab" e non è una lente — la pagina finiva
+// quindi nel ramo `else`, quello che AZZERA data-mode.
 //
 // Sintomo osservato e misurato con Playwright su tutte e quattro le lenti:
 // colore corretto al readyState "interactive" (è l'SSR), bianco a
@@ -77,14 +95,15 @@ const SSR_MODE_PATHS = ["/work", "/en/work"];
 // a non cancellare l'attributo — allinea anche il `modeStore`, da cui
 // <go-logo> prende il proprio colore: altrimenti il logo resta sull'ultima
 // lente memorizzata mentre il resto della pagina è già cambiato.
-const LENS_ROUTE_PREFIX = "/lab/";
+const LENS_ROUTE_PREFIXES = ["/old-version/", "/lab/"];
 
 function lensFromPath(pathname: string): Mode | null {
-  if (!pathname.startsWith(LENS_ROUTE_PREFIX)) return null;
-  // `/lab/home` e `/lab/hero` passano di qui: il controllo su VALID_MODES
-  // piu' sotto li scarta, e restano quindi pagine senza lente.
-  const seg = pathname.slice(LENS_ROUTE_PREFIX.length).split("/").filter(Boolean)[0] ?? "";
-  return VALID_MODES.includes(seg as Mode) ? (seg as Mode) : null;
+  const prefix = LENS_ROUTE_PREFIXES.find((p) => pathname.startsWith(p));
+  if (!prefix) return null;
+  // `/lab/hero` e `/old-version/home` passano di qui: modeFromSegment li
+  // scarta, e restano quindi pagine senza lente.
+  const seg = pathname.slice(prefix.length).split("/").filter(Boolean)[0] ?? "";
+  return modeFromSegment(seg);
 }
 
 export function initMode(): void {
@@ -94,12 +113,10 @@ export function initMode(): void {
   // Evita il flash di colore sbagliato quando localStorage ha un mode diverso.
   const pathname = window.location.pathname;
   const pathSegment = pathname.split("/").filter(Boolean)[0] ?? "";
-  const routeMode = VALID_MODES.includes(pathSegment as Mode)
-    ? (pathSegment as Mode)
-    : lensFromPath(pathname);
+  const routeMode = modeFromSegment(pathSegment) ?? lensFromPath(pathname);
 
   if (routeMode) {
-    // Siamo su una pagina di mode (/tech, /creative, ecc.) — applica
+    // Siamo su una pagina di lente (/design, /tech, /ai) — applica
     document.documentElement.dataset.mode = routeMode;
     modeStore.set(routeMode);
   } else if (MODE_AWARE_PATHS.some((p) => pathname.startsWith(p))) {

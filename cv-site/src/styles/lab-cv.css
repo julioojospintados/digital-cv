@@ -1120,6 +1120,156 @@
   align-self: center;
 }
 
+/* ═══ 2c — Le voci ════════════════════════════════════════════════════════
+   Stesso telaio di sezione di .lc-all e .lc-more: filo sopra e stessa
+   altezza di respiro. Le citazioni non sono card e non hanno sfondo — un
+   riquadro le avrebbe fatte somigliare alle esperienze, e non sono la
+   stessa cosa: quelle sono fatti, queste sono voci. Le tiene insieme un
+   filo verticale, che è il segno tipografico della citazione da sempre. */
+
+.lc-voices {
+  padding-block: var(--size-40);
+  border-top: 1px solid var(--lc-line);
+}
+
+.lc-voices__list {
+  display: grid;
+  gap: var(--size-32);
+}
+
+/* Due colonne solo dove ci stanno per intero: sotto, una citazione lunga
+   spezzata su una colonna stretta diventa una scala di parole. */
+@media (min-width: 60rem) {
+  .lc-voices__list {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--size-40);
+  }
+}
+
+.lc-voice {
+  padding-left: var(--size-20);
+  border-left: 2px solid var(--lc-accent-line);
+}
+
+/* Nessuna virgoletta disegnata e nessun corsivo: il testo è già marcato
+   come citazione dal filo e dal <blockquote>, e il corsivo su cinque righe
+   costa in leggibilità più di quanto renda in stile. */
+.lc-voice__quote {
+  margin: 0;
+  font-size: var(--fs-16);
+  line-height: 1.65;
+  color: var(--lc-ink);
+}
+
+.lc-voice__who {
+  margin: var(--size-12) 0 0;
+  font-size: var(--fs-14);
+  font-weight: 600;
+  color: var(--lc-ink);
+}
+
+/* Il ruolo di chi parla è ciò che dà peso alla frase: sta a --fs-14 come il
+   nome, non al pavimento dei 12. Colore secondario, non corpo piccolo. */
+.lc-voice__role {
+  font-weight: 400;
+  color: var(--lc-muted);
+}
+
+/* ═══ 2d — Il percorso ════════════════════════════════════════════════════
+   Griglia identica a .lc-all__row (binario mono a sinistra, contenuto a
+   destra): per chi legge sono lo stesso gesto, un elenco verificabile che
+   si scorre. Le due liste non sono fuse in una sola perché un diploma e un
+   attestato non si confrontano fra loro, e da fuse ogni riga avrebbe avuto
+   bisogno di un'etichetta per dire di quale delle due cose si tratta. */
+
+.lc-path {
+  padding-block: var(--size-40);
+  border-top: 1px solid var(--lc-line);
+}
+
+.lc-path__group + .lc-path__group {
+  margin-top: var(--size-32);
+}
+
+.lc-path__group-title {
+  display: flex;
+  align-items: baseline;
+  margin: 0 0 var(--size-12);
+  font-family: var(--font-display);
+  font-size: var(--fs-16);
+  font-weight: 700;
+  color: var(--lc-ink);
+}
+
+.lc-path__list {
+  display: grid;
+  gap: var(--size-2);
+}
+
+.lc-path__row {
+  display: grid;
+  grid-template-columns: var(--lc-rail) 1fr;
+  gap: var(--size-12);
+  align-items: baseline;
+  padding-block: var(--size-6);
+  font-size: var(--fs-14);
+}
+
+.lc-path__date {
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  color: var(--lc-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.lc-path__what {
+  color: var(--lc-muted);
+  min-width: 0;
+}
+
+/* Il titolo del titolo di studio a contrasto pieno, l'ente in secondario:
+   la stessa gerarchia di .lc-all__row, dove l'azienda è in grassetto e il
+   ruolo no. */
+.lc-path__what b {
+  color: var(--lc-ink);
+  font-weight: 600;
+}
+
+.lc-path__where {
+  color: var(--lc-muted);
+}
+
+/* "in corso" è un dato, non una decorazione: riempimento d'accento con
+   sopra l'inchiostro scuro (--lc-on-accent). L'accento come TESTO su questo
+   fondo, in lente creative, farebbe 3,62:1 — sotto la soglia. */
+.lc-path__wip {
+  display: inline-block;
+  margin-left: var(--size-8);
+  padding: 0 var(--size-6);
+  border-radius: 999rem;
+  background: var(--color-accent);
+  color: var(--lc-on-accent);
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* Il codice credenziale è ciò che rende la riga verificabile da un
+   recruiter: va su una riga sua, in mono, e non scende sotto --fs-12 —
+   sopra sta la regola, un ID è un dato che qualcuno deve poter trascrivere.
+   `break-all` perché sono stringhe senza spazi: su 390px, senza, allargano
+   la colonna e spingono fuori la griglia. */
+.lc-path__id {
+  display: block;
+  margin-top: var(--size-2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  color: var(--lc-muted);
+  overflow-wrap: break-word;
+  word-break: break-all;
+}
+
 /* ═══ STRATO 3 — solo gli imbocchi ════════════════════════════════════════ */
 
 .lc-more {

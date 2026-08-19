@@ -30,6 +30,37 @@ export const MODES: readonly Mode[] = ["creative", "tech", "human"] as const;
  */
 export const DEFAULT_MODE: Mode = "creative";
 
+/**
+ * Slug di URL per ogni lente — **separati dalle chiavi interne, di proposito**.
+ *
+ * Le chiavi `tech | creative | human` compaiono 427 volte nel progetto: nei
+ * dati (`cv.ts` e `cv.en.ts`), nelle regole CSS `[data-mode]`, in
+ * `exp-clusters.ts`, nello store, nei test. Rinominarle per cambiare un
+ * indirizzo sarebbe un intervento a quattrocento punti su file di dati, con
+ * la parità IT/EN in mezzo, per ottenere una cosa che l'utente non vede
+ * nemmeno.
+ *
+ * Quindi: l'URL cambia qui e basta, le chiavi restano dove sono. `creative`
+ * si serve su /design perché il nome della disciplina dice più
+ * dell'attitudine, e `human` su /ai perché è il termine con cui quel profilo
+ * viene cercato. Il ruolo per esteso lo dice comunque il titolo della pagina.
+ */
+export const LENS_SLUGS: Record<Mode, string> = {
+  tech: "tech",
+  creative: "design",
+  human: "ai",
+};
+
+/** Slug → chiave interna. Costruita dalla mappa sopra: una sola fonte. */
+export const MODE_BY_SLUG: Record<string, Mode> = Object.fromEntries(
+  (Object.entries(LENS_SLUGS) as [Mode, string][]).map(([mode, slug]) => [slug, mode]),
+) as Record<string, Mode>;
+
+/** Percorso della pagina CV per una lente, nella lingua data. */
+export function lensPath(mode: Mode, locale: Locale = "it"): string {
+  return locale === "en" ? `/en/${LENS_SLUGS[mode]}` : `/${LENS_SLUGS[mode]}`;
+}
+
 export interface LocaleStrings {
   /** Abbreviazioni dei mesi, indice 0 = gennaio. Usate nella timeline. */
   months: readonly string[];

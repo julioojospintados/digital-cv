@@ -1,28 +1,32 @@
 ---
 // ─────────────────────────────────────────────────────────────────────────
-// PAGINA SOSPESA — non è una rotta.
+// VERSIONE STORICA — servita, ma fuori dall'indice.
 //
-// Astro ignora tutto ciò che in src/pages/ comincia per «_»: il file resta
-// nel repo, con la sua storia e i suoi commenti, ma non produce più una
-// pagina. Su questo branch il sito è il linguaggio nuovo — /lab/*, la
-// vetrina /design-system e /work — e le pagine del sito storico restano
-// parcheggiate qui finché non si decide se promuoverle o ritirarle.
+// Dal 2026-08 il sito è il linguaggio nuovo: "/" e /<lente>. Questa è la
+// versione precedente, tenuta viva e raggiungibile su /old-version/ per
+// poterla mostrare a qualcuno senza doverla ricostruire da un commit.
 //
-// Per riattivarla: togli l'underscore dal nome del file. Nient'altro.
+// Tre condizioni la tengono fuori dai risultati di ricerca, e vanno insieme:
+// `noindex` qui sotto, `Disallow: /old-version/` in public/robots.txt e il
+// filtro della sitemap in astro.config.mjs. Toglierne una sola significa
+// mettere in concorrenza due versioni dello stesso CV sulle stesse chiavi.
+//
+// I link interni puntano dentro /old-version: chi entra qui resta qui, e
+// non finisce a metà percorso nella versione nuova.
 // ─────────────────────────────────────────────────────────────────────────
-import Layout from "../layouts/Layout.astro";
+import Layout from "../../layouts/Layout.astro";
 // In standby col badge "ciclo di sistemazione" sotto — richiesta 2026-07-29.
-// import { getRecentCommits, formatRecentCommit } from "../lib/recent-commits";
-import "../styles/index-page.css";
+// import { getRecentCommits, formatRecentCommit } from "../../lib/recent-commits";
+import "../../styles/index-page.css";
 
 // Badge "ciclo di sistemazione" — ultimi 3 commit, letti da git in build
 // (recent-commits.ts). Niente changelog scritto a mano da tenere aggiornato.
 // const recentCommits = getRecentCommits(3);
 // .work-index-card / .work-chevron — stessa identità visiva della card
 // hero-portfolio-card in [mode].astro (vedi sezione Web & UX Designer sotto).
-import "../styles/work-page.css";
-import MemoryDrawers from "../components/MemoryDrawers.astro";
-import EntryFooter from "../components/EntryFooter.astro";
+import "../../styles/work-page.css";
+import MemoryDrawers from "../../components/MemoryDrawers.astro";
+import EntryFooter from "../../components/EntryFooter.astro";
 ---
 
 <Layout
@@ -30,6 +34,7 @@ import EntryFooter from "../components/EntryFooter.astro";
   description="CV interattivo di Giulio Occhipinti: UX/UI & Web Designer certificato IBM, Creative Technologist (Angular, Lit, GSAP), AI & Digital Specialist e Project Manager Agile."
   showFab
   consentBannerWaitForWip
+  noindex
 >
   <!-- Preload LCP image — laptop è l'elemento più largo della knolling-mob (7/15 col) -->
   <link
@@ -405,7 +410,7 @@ import EntryFooter from "../components/EntryFooter.astro";
               ><span>UI Design</span><span>User Testing</span>
             </div>
           </div>
-          <a href="/creative" class="profile-cta">
+          <a href="/old-version/creative" class="profile-cta">
             <span>GO to Web &amp; UX Designer</span>
             <span class="profile-cta__arrow" aria-hidden="true"></span>
           </a>
@@ -445,7 +450,7 @@ import EntryFooter from "../components/EntryFooter.astro";
               ><span>WebSockets</span><span>PWA</span>
             </div>
           </div>
-          <a href="/tech" class="profile-cta">
+          <a href="/old-version/tech" class="profile-cta">
             <span>GO to Software Developer</span>
             <span class="profile-cta__arrow" aria-hidden="true"></span>
           </a>
@@ -488,7 +493,7 @@ import EntryFooter from "../components/EntryFooter.astro";
               ><span>Community Building</span>
             </div>
           </div>
-          <a href="/human" class="profile-cta">
+          <a href="/old-version/human" class="profile-cta">
             <span>GO to AI &amp; Digital Specialist</span>
             <span class="profile-cta__arrow" aria-hidden="true"></span>
           </a>
@@ -534,7 +539,7 @@ import EntryFooter from "../components/EntryFooter.astro";
   }
   {
     import.meta.env.DEV && (
-      <a class="dev-chip" href="/lab/home?intro" data-astro-prefetch="false">
+      <a class="dev-chip" href="/?intro" data-astro-prefetch="false">
         <span aria-hidden="true">⚗</span> lab/home
       </a>
     )
@@ -591,8 +596,8 @@ import EntryFooter from "../components/EntryFooter.astro";
 </Layout>
 
 <script>
-  import "../scripts/index-init.ts";
-  import "../scripts/memory-drawer.ts";
+  import "../../scripts/index-init.ts";
+  import "../../scripts/memory-drawer.ts";
   // FAB contatti — la home ora ha showFab: serve la definizione dell'island
-  import "../islands/FloatingMenu.lit.ts";
+  import "../../islands/FloatingMenu.lit.ts";
 </script>

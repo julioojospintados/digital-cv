@@ -60,6 +60,26 @@ export default defineConfig({
   // src/pages/api/cv-recruiter*.ts) diventano funzioni serverless Vercel.
   // Aggiunto per il tool privato /tools/cv-recruiter — vedi AGENTS.md.
   output: "static",
+
+  /**
+   * Indirizzi storici → indirizzi attuali. Dichiarati qui e non come pagine
+   * `Astro.redirect`: con l'adapter Vercel diventano redirect di rete 301,
+   * mentre una pagina produce un HTML con `<meta http-equiv="refresh">`, che
+   * costa un caricamento in più a chi arriva e finisce dentro sitemap.xml
+   * come URL da scansionare.
+   *
+   * 301 e non 302 perché i nuovi indirizzi sono definitivi: il permanente è
+   * ciò che trasferisce al nuovo URL la reputazione accumulata dal vecchio.
+   *
+   * /cv punta alla lente di default (Design-first, DEFAULT_MODE in
+   * cv-i18n.ts): se quella cambia, questa riga va cambiata con lei.
+   */
+  redirects: {
+    "/home": "/",
+    "/cv": "/design",
+    "/creative": "/design",
+    "/human": "/ai",
+  },
   adapter: vercel({
     // Rendering PDF server-side (render-pdf.ts, playwright-core +
     // @sparticuz/chromium) più le due chiamate Gemini possono avvicinarsi
@@ -89,7 +109,10 @@ export default defineConfig({
       // Il tool privato non deve comparire in sitemap.xml — non è contenuto
       // del CV, è un'utility interna dietro passphrase.
       // /lab/ sono prototipi di layout: stessa ragione, non sono il CV.
-      filter: (page) => !page.includes("/tools/") && !page.includes("/lab/"),
+      // /old-version/ è la versione precedente del sito: raggiungibile per
+      // poterla mostrare, ma non deve competere con quella attuale.
+      filter: (page) =>
+        !page.includes("/tools/") && !page.includes("/lab/") && !page.includes("/old-version/"),
     }),
     stripComments(),
   ],

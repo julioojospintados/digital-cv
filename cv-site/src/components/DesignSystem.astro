@@ -11,7 +11,7 @@
  * divergenza non è improbabile, è impossibile.
  *
  * ── Cosa c'è dentro ──────────────────────────────────────────────────────
- * Il sistema **nuovo**: /lab/home (`lh-*`), /lab/<lente> (`lc-*`),
+ * Il sistema **nuovo**: la home "/" (`lh-*`), /<lente> (`lc-*`),
  * /lab/hero (`lab-*`) e /work (`work-*`). Il sito storico è fuori per
  * decisione esplicita del 2026-08-16.
  *
@@ -82,7 +82,7 @@ const MODES = [
 ] as const;
 
 /* ── La composizione knolling dell'ingresso ──────────────────────────────
-   Gli stessi otto posti di /lab/home, valori compresi: posizione, larghezza,
+   Gli stessi otto posti della home, valori compresi: posizione, larghezza,
    rotazione e profondità. Copiati e non importati perché la pagina li tiene
    inline in un `const` suo — è lo stesso debito di markup dichiarato in testa
    al file, e qui pesa meno che altrove: se cambiano, cambia la disposizione
@@ -107,8 +107,8 @@ const KNOLLING = [
    tutto /lab e invece è una prova sola. Scritto qui perché la vetrina
    documenta anche ciò che nel sistema non torna. */
 const PREFIXES = [
-  { p: "lh-*", from: "/lab/home", file: "lab-home.css" },
-  { p: "lc-*", from: "/lab/<lente>", file: "lab-cv.css" },
+  { p: "lh-*", from: "/", file: "lab-home.css" },
+  { p: "lc-*", from: "/<lente>", file: "lab-cv.css" },
   { p: "lab-*", from: "/lab/hero", file: "lab-hero.css" },
   { p: "work-*", from: "/work", file: "work-page.css" },
   { p: "ds-*", from: "questa pagina", file: "design-system.css" },
@@ -931,8 +931,8 @@ const NAV = [
               <thead>
                 <tr>
                   <th>{t.colConcept}</th>
-                  <th>/lab/home</th>
-                  <th>/lab/{it ? "lente" : "lens"}</th>
+                  <th>/</th>
+                  <th>/{it ? "lente" : "lens"}</th>
                   <th>/lab/hero</th>
                 </tr>
               </thead>
@@ -1972,9 +1972,9 @@ const NAV = [
           <div class="lc">
             <header class="lc-bar" data-ds-snippet>
               <a
-                href="/lab/home"
+                href="/"
                 class="lc-bar__home"
-                aria-label={it ? "Torna a /lab/home" : "Back to /lab/home"}
+                aria-label={it ? "Torna alla home" : "Back to the home page"}
               >
                 <go-logo></go-logo>
               </a>
@@ -4737,7 +4737,7 @@ const NAV = [
   // sappia del selettore. È lo stesso meccanismo del sito.
   const root = document.querySelector<HTMLElement>("[data-ds-root]");
   const modeButtons = document.querySelectorAll<HTMLButtonElement>("[data-ds-mode]");
-  // Le sezioni di /lab/home non leggono --color-accent: prendono --accent da
+  // Le sezioni della home non leggono --color-accent: prendono --accent da
   // `.lh-section[data-mode="…"]`, perché nella pagina vera ogni sezione porta
   // la propria lente ed è quello a decidere il colore. Scrivere il mode solo
   // sulla radice quindi non le raggiunge.
@@ -5079,7 +5079,7 @@ const NAV = [
     });
   }
 
-  // ── Il comando +N delle chip, identico a /lab/<lente> ──────────────────
+  // ── Il comando +N delle chip, identico a /<lente> ─────────────────────
   document.querySelectorAll<HTMLUListElement>(".lc-chips").forEach((lista) => {
     const piu = lista.querySelector<HTMLButtonElement>(".lc-chip--more");
     const quante = lista.querySelectorAll(".lc-chip--extra").length;

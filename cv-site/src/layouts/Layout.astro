@@ -22,8 +22,12 @@ interface Props {
    * "cv:wip-badge-shown" del preloader invece di comparire subito — vedi
    * ConsentBanner.astro. */
   consentBannerWaitForWip?: boolean;
-  /** Esclude la pagina dall'indicizzazione. Oggi solo 404.astro: viene servita
-   * per qualsiasi URL inesistente, quindi non deve mai finire in un indice. */
+  /** Esclude la pagina dall'indicizzazione. Serve a 404.astro (servita per
+   * qualsiasi URL inesistente), ai prototipi sotto /lab/ e alla versione
+   * storica sotto /old-version/, che resta raggiungibile ma non deve
+   * competere con quella attuale sulle stesse chiavi di ricerca. In tutti e
+   * tre i casi va in coppia con la riga corrispondente in robots.txt e col
+   * filtro della sitemap: da solo, `noindex` non impedisce la scansione. */
   noindex?: boolean;
 }
 

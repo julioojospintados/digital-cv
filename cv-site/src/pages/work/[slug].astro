@@ -3,6 +3,7 @@ import Layout from "../../layouts/Layout.astro";
 import WorkDesignSystem from "../../components/WorkDesignSystem.astro";
 import { cvData } from "@cv-data";
 import { workKnollIcon, workKnollRatio } from "../../lib/work-knolling";
+import { lensPath } from "../../lib/cv-i18n";
 import "../../styles/work-page.css";
 
 export function getStaticPaths() {
@@ -44,7 +45,7 @@ const totalSteps = String(processSteps.length).padStart(2, "0");
   <nav class="work-nav">
     <go-logo></go-logo>
     <div class="work-nav__right">
-      <a href={`/lab/${mode}`} class="work-back">← Torna al CV</a>
+      <a href={lensPath(mode)} class="work-back">← Torna al CV</a>
       <a href={`/en/work/${slug}`} class="work-lang" lang="en" aria-label="Switch to English">EN</a>
     </div>
   </nav>
@@ -221,7 +222,7 @@ const totalSteps = String(processSteps.length).padStart(2, "0");
           rel="noopener"
           class="work-cta__link work-cta__link--primary">Scrivimi</a
         >
-        <a href={`/lab/${mode}`} class="work-cta__link work-cta__link--secondary">Torna al CV</a>
+        <a href={lensPath(mode)} class="work-cta__link work-cta__link--secondary">Torna al CV</a>
       </div>
     </footer>
   </main>
