@@ -18,9 +18,13 @@
 // attributi style: un «257px» dentro una frase è prosa, non CSS.
 
 import { readFileSync, readdirSync, statSync } from "node:fs";
-import { join, relative } from "node:path";
+import { basename, join, relative } from "node:path";
+import { fileURLToPath } from "node:url";
 
-const ROOT = new URL("..", import.meta.url).pathname;
+// fileURLToPath e non .pathname: su Windows quest'ultimo restituisce
+// "/C:/Users/..." e il join successivo produce "C:\C:\Users\...", che non
+// esiste — lo script moriva con ENOENT prima di guardare un solo file.
+const ROOT = fileURLToPath(new URL("..", import.meta.url));
 const SRC = join(ROOT, "cv-site/src");
 
 // Nessuna eccezione. La regola vale anche sui fogli delle pagine sospese: il
@@ -64,7 +68,7 @@ const offenders = [];
 let scanned = 0;
 
 for (const file of walk(SRC)) {
-  const name = file.split("/").pop();
+  const name = basename(file);
   if (SKIP.has(name)) continue;
   const isCss = file.endsWith(".css");
   const isSrc = file.endsWith(".astro") || file.endsWith(".ts");

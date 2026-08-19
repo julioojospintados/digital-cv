@@ -302,15 +302,119 @@
   max-width: 32rem;
 }
 
+/* ── Indice portfolio: carosello su mobile, griglia da 36rem in su ───────
+   Su telefono le quattro card impilate erano quattro schermate di scroll
+   verticale dentro una pagina che già scorre: il portfolio finiva sotto il
+   pollice e basta. In orizzontale stanno su una riga sola e si sfogliano.
+
+   L'affordance non è una freccia né una fila di puntini — è la card
+   accanto che sbircia dal bordo (78%, non 100%) e lo scatto dello snap.
+   Due segnali fisici, zero cromo aggiunto. */
 .work-index-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--size-20);
+  display: flex;
+  gap: var(--size-16);
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  /* Niente barra: sotto c'è già quella verticale della pagina, e due barre
+     su un telefono si leggono come un errore di layout. */
+  scrollbar-width: none;
+  padding-block: var(--size-8);
+  /* A pieno vivo: annulla il padding di .work-main e se lo riprende come
+     proprio, così lo sbircio avviene al bordo dello schermo e le card
+     guadagnano larghezza vera. */
+  margin-inline: calc(var(--size-24) * -1);
+  padding-inline: var(--size-24);
 }
 
+.work-index-grid::-webkit-scrollbar {
+  display: none;
+}
+
+.work-index-grid > .work-index-card {
+  /* 85% e non 78%: lo sbircio serve a dire che c'è dell'altro, non a
+     rubare un sesto dello schermo alla card che si sta leggendo. */
+  flex: 0 0 85%;
+  scroll-snap-align: center;
+  /* Le card si dimensionavano sul testo e restavano basse in mezzo a uno
+     schermo vuoto. Qui prendono l'altezza che c'è: min-height, non height,
+     quindi un titolo lungo o un'interlinea maggiorata (1.4.12) le allunga
+     invece di tagliarle. Il CTA sta già in fondo per via del margin-top
+     auto, quindi lo spazio in più va al respiro fra i blocchi.
+     42vh e non di più: a 58vh la card diventava alta ma vuota, con duecento
+     pixel di niente fra il ruolo e il CTA — un vuoto grande si legge come
+     un errore, non come respiro. */
+  min-height: 42vh;
+}
+
+/* Il passaggio da una all'altra: al centro la card è intera, le vicine si
+   ritraggono e si spengono. È un'animazione guidata dallo scorrimento
+   (view timeline), non da JS e non da un timer: il browser la lega alla
+   posizione del dito, quindi il movimento segue il trascinamento e torna
+   indietro se cambi idea a metà. Un carosello a JS, invece, parte quando il
+   gesto è già finito — è lì che si sente "l'animazione" invece
+   dell'oggetto.
+   Dove non è supportata (Safari più vecchi) non resta niente di rotto:
+   restano lo snap e la card che sbircia, che dicono già che si scorre. */
+@supports (animation-timeline: view()) {
+  .work-index-grid > .work-index-card {
+    /* Longhand e non la scorciatoia "animation": la scorciatoia azzera
+       animation-timeline, e l'ordine delle righe diventerebbe una trappola. */
+    animation-name: work-card-focus;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
+    animation-timeline: view(inline);
+  }
+}
+
+/* La prima e l'ultima card non possono centrarsi del tutto (il contenitore
+   non ha mezzo schermo di margine ai lati): a riposo restano a scala 0.99
+   invece di 1. È fuori dalla soglia del percepibile, e la sola alternativa
+   era un full-bleed a vw che si rompe dove la barra di scorrimento occupa
+   spazio. */
+@keyframes work-card-focus {
+  0%,
+  100% {
+    opacity: 0.55;
+    scale: 0.9;
+  }
+
+  50% {
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+/* Riduzione ≠ eliminazione, ma qui l'effetto È il movimento: resta lo
+   snap, che è navigazione, e sparisce il respiro, che è decorazione. */
+@media (prefers-reduced-motion: reduce) {
+  .work-index-grid > .work-index-card {
+    animation: none;
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+/* Da 36rem c'è spazio per vederle tutte insieme: un carosello che nasconde
+   metà portfolio dove lo schermo non lo chiede sarebbe una perdita secca. */
 @media (min-width: 36rem) {
   .work-index-grid {
+    display: grid;
     grid-template-columns: 1fr 1fr;
+    gap: var(--size-20);
+    overflow-x: visible;
+    scroll-snap-type: none;
+    padding-block: 0;
+    margin-inline: 0;
+    padding-inline: 0;
+  }
+
+  .work-index-grid > .work-index-card {
+    flex: initial;
+    min-height: auto;
+    animation: none;
+    opacity: 1;
+    scale: 1;
   }
 }
 
@@ -437,6 +541,28 @@
   opacity: 0.12;
   pointer-events: none;
   user-select: none;
+}
+
+/* La torcia è l'unico oggetto che non regge la posa comune: è largo più del
+   triplo della sua altezza e in alto a destra come gli altri si legge come
+   una barra, non come una torcia. Più grande, ruotata e spinta oltre il
+   bordo entra nell'inquadratura dall'angolo — il taglio lo fa l'overflow
+   hidden della card. Solo da 36rem in su: su telefono la card è troppo
+   stretta perché un oggetto da 14rem non la invada.
+
+   DEVE stare dopo .work-index-card__icon e non prima: i due selettori hanno
+   la stessa specificità (una classe ciascuno), quindi vince l'ultimo che il
+   browser legge. Scritto sopra, passava solo transform — l'unica proprietà
+   che la regola comune non dichiara — e la torcia restava piccola e
+   nell'angolo di sempre, ruotata e basta. Qui stanno solo le differenze:
+   opacità, pointer-events e user-select restano nella regola comune. */
+@media (min-width: 36rem) {
+  .work-index-card__icon--flashlight {
+    top: 1.25rem;
+    right: -3.75rem;
+    width: 14rem;
+    transform: rotate(-45deg);
+  }
 }
 
 .work-index-card__eyebrow {

@@ -2,6 +2,7 @@
 import Layout from "../../layouts/Layout.astro";
 import WorkDesignSystem from "../../components/WorkDesignSystem.astro";
 import { cvData } from "@cv-data";
+import { workKnollIcon, workKnollRatio } from "../../lib/work-knolling";
 import "../../styles/work-page.css";
 
 export function getStaticPaths() {
@@ -11,23 +12,13 @@ export function getStaticPaths() {
 const { slug } = Astro.params;
 const project = cvData.projects.find((p) => p.slug === slug)!;
 
-const KNOLL_ICON: Record<string, string> = {
-  tech: "laptop.webp",
-  creative: "camera.webp",
-  human: "plant.webp",
-};
 const mode = project.primaryMode ?? "tech";
-const icon = KNOLL_ICON[mode];
-// Rapporto larghezza/altezza reale dei file — riserva lo spazio corretto
-// (CLS) prima che l'immagine carichi. Stessa mappa in WorkIndexCard.astro.
-const KNOLL_RATIO: Record<string, string> = {
-  "laptop.webp": "524 / 476",
-  "camera.webp": "327 / 221",
-  "plant.webp": "226 / 250",
-  "chess.webp": "177 / 274",
-  "compass.webp": "208 / 341",
-};
-const iconRatio = KNOLL_RATIO[icon];
+// L'oggetto del case study — per slug, non per mode: le mappe e il perché
+// stanno in lib/work-knolling.ts. Qui resta un watermark d'atmosfera, ma
+// deve essere lo stesso oggetto che il lettore ha appena visto sulla card
+// dell'indice, altrimenti la pagina non è la continuazione di quel clic.
+const icon = workKnollIcon(slug);
+const iconRatio = workKnollRatio(icon);
 const email =
   cvData.social.find((s) => s.platform === "Email")?.url ?? "mailto:giulio.occhipinti.g@gmail.com";
 

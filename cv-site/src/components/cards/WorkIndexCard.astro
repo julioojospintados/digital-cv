@@ -3,11 +3,17 @@
 // Web & UX Designer) come prova visiva. Markup + classi (work-page.css)
 // invariati rispetto all'originale inline in pages/work/index.astro, solo
 // estratti in componente per evitare due copie divergenti.
+//
+// L'unica cosa che è cambiata rispetto a quella versione: l'oggetto knolling
+// è scelto per slug e non per mode — con 3 mode e 4 case study uscivano due
+// sole immagini su quattro card. Le mappe e il perché stanno in
+// lib/work-knolling.ts.
+import { workKnollIcon, workKnollRatio } from "../../lib/work-knolling";
+
 interface Props {
   name: string;
   slug: string;
   role?: string;
-  primaryMode?: string;
   workHref?: string;
   ctaLabel?: string;
   /** Pulse periodico (stesso linguaggio delle mode-card della home) invece
@@ -15,32 +21,19 @@ interface Props {
   pulse?: boolean;
 }
 
-const KNOLL_ICON: Record<string, string> = {
-  tech: "laptop.webp",
-  creative: "camera.webp",
-  human: "plant.webp",
-};
-
-// Rapporto larghezza/altezza reale dei file — ogni knolling icon ha un
-// crop diverso, serve per riservare lo spazio corretto (CLS) prima che
-// l'immagine carichi. Stessa mappa in work/[slug].astro, en/work/[slug].astro.
-const KNOLL_RATIO: Record<string, string> = {
-  "laptop.webp": "524 / 476",
-  "camera.webp": "327 / 221",
-  "plant.webp": "226 / 250",
-  "chess.webp": "177 / 274",
-};
-
 const {
   name,
   slug,
   role,
-  primaryMode,
   workHref = "/work",
   ctaLabel = "Leggi il case study",
   pulse = false,
 } = Astro.props;
-const iconFile = KNOLL_ICON[primaryMode ?? "tech"];
+const iconFile = workKnollIcon(slug);
+// Modificatore per oggetto (…__icon--flashlight): serve perché non tutti
+// stanno bene nella stessa posa. La regola comune vale per default, il
+// modificatore corregge solo chi ne ha bisogno.
+const iconName = iconFile.replace(".webp", "");
 ---
 
 <a
@@ -48,13 +41,13 @@ const iconFile = KNOLL_ICON[primaryMode ?? "tech"];
   href={`${workHref}/${slug}`}
 >
   <img
-    class="work-index-card__icon"
+    class:list={["work-index-card__icon", `work-index-card__icon--${iconName}`]}
     src={`/knolling/${iconFile}`}
     alt=""
     aria-hidden="true"
     loading="lazy"
     decoding="async"
-    style={`aspect-ratio: ${KNOLL_RATIO[iconFile]};`}
+    style={`aspect-ratio: ${workKnollRatio(iconFile)};`}
   />
   <p class="work-index-card__eyebrow">Case Study</p>
   <h2 class="work-index-card__name">{name}</h2>
