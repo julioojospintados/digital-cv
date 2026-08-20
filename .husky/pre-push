@@ -1,9 +1,30 @@
-# Prima di ogni `git push`, la stessa lint/format check che gira in CI
-# ("Lint & format (repo intero)", .github/workflows/ci.yml) — così un errore
-# come consentBannerWaitForWip (unused var sfuggita a un commit locale) lo
-# vedi subito, non dopo un'email di CI fallita 20 minuti dopo.
+# Prima di ogni `git push`, in due tempi.
 #
-# Copre anche cv-site/ (eslint/prettier di root la includono), ma richiede
-# cv-site/node_modules già installato — normale su una macchina di sviluppo,
-# non lo installiamo qui per non rallentare ogni push.
-npm run lint && npm run format:check
+# 1. Lint e format — la stessa coppia che gira in CI ("Lint & format (repo
+#    intero)", .github/workflows/ci.yml): un errore come consentBannerWaitForWip
+#    (unused var sfuggita a un commit locale) lo vedi subito, non dopo
+#    un'email di CI fallita 20 minuti dopo. Sono secondi.
+#
+# 2. I controlli da browser — `npm run qa:prepush`: build vera, server statico
+#    su quella build, poi vetrina (qa:ds), parità IT ↔ EN e link interni.
+#    Costa circa un minuto e mezzo, ed è per questo che sta QUI e non altrove:
+#    regola di progetto (Giulio, 2026-08-20), `qa:ds` si esegue solo prima di
+#    un push. Durante il lavoro bastano lint, format, test, qa:units e la build.
+#
+#    Perché sulla build e non su un dev server: la cache delle dipendenze di un
+#    dev server rimasto aperto ha già prodotto falsi negativi (404 su chunk
+#    Vite invalidati da una build parallela, letti come errori di pagina).
+#
+# Richiede cv-site/node_modules già installato — normale su una macchina di
+# sviluppo, non lo installiamo qui per non rallentare ogni push.
+#
+# Scorciatoia consapevole, per un push urgente su un ramo di lavoro:
+#   SKIP_QA=1 git push        (non usarla su main)
+npm run lint && npm run format:check || exit 1
+
+if [ "$SKIP_QA" = "1" ]; then
+  echo "SKIP_QA=1 — controlli da browser saltati. Non farlo su main."
+  exit 0
+fi
+
+npm run qa:prepush

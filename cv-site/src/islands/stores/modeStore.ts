@@ -74,17 +74,18 @@ export function setMode(mode: Mode): void {
 
 // Pagine che usano il mode system ma non hanno una route di mode nel path
 // (es. /en/cv, /cv) — leggono il mode da localStorage invece di azzerarlo.
-const MODE_AWARE_PATHS = ["/en/cv", "/cv"];
+const MODE_AWARE_PATHS = ["/old-version/en/cv"];
 
 // Pagine che dichiarano il proprio mode lato server (data-mode SSR nel
 // markup): il mode è del contenuto (primaryMode del case study), non
 // dell'utente — initMode non deve né cancellarlo né sovrascriverlo.
 const SSR_MODE_PATHS = ["/work", "/en/work"];
 
-// Route con la lente nel path ma non nel primo segmento: `/old-version/creative`,
-// `/lab/...`. Il controllo standard qui sotto guarda `pathname.split("/")[0]`,
-// che lì vale "old-version" o "lab" e non è una lente — la pagina finiva
-// quindi nel ramo `else`, quello che AZZERA data-mode.
+// Route con la lente nel path ma non nel primo segmento: `/en/design`,
+// `/old-version/creative`, `/lab/...`. Il controllo standard qui sotto guarda
+// `pathname.split("/")[0]`, che lì vale "en", "old-version" o "lab" e non è
+// una lente — la pagina finiva quindi nel ramo `else`, quello che AZZERA
+// data-mode: colore giusto in SSR, pagina bianca dopo l'idratazione.
 //
 // Sintomo osservato e misurato con Playwright su tutte e quattro le lenti:
 // colore corretto al readyState "interactive" (è l'SSR), bianco a
@@ -95,7 +96,10 @@ const SSR_MODE_PATHS = ["/work", "/en/work"];
 // a non cancellare l'attributo — allinea anche il `modeStore`, da cui
 // <go-logo> prende il proprio colore: altrimenti il logo resta sull'ultima
 // lente memorizzata mentre il resto della pagina è già cambiato.
-const LENS_ROUTE_PREFIXES = ["/old-version/", "/lab/"];
+// L'ordine conta: /old-version/en/... deve essere riconosciuto dal prefisso
+// più lungo, non da "/en/" — altrimenti la versione storica passerebbe per
+// una pagina del sito nuovo.
+const LENS_ROUTE_PREFIXES = ["/old-version/", "/lab/", "/en/"];
 
 function lensFromPath(pathname: string): Mode | null {
   const prefix = LENS_ROUTE_PREFIXES.find((p) => pathname.startsWith(p));

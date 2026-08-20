@@ -46,6 +46,18 @@ const {
 
 const siteUrl = "https://giulio-occhipinti.com";
 const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
+
+// Coppia IT/EN della pagina corrente, quando esiste. Le pagine fuori dal
+// sito pubblico (prototipi, versione storica, strumenti privati) non hanno
+// controparte e non devono dichiararne una.
+const path = Astro.url.pathname.replace(/\/$/, "") || "/";
+const senzaControparte = ["/lab", "/old-version", "/tools", "/404"];
+const alternates = senzaControparte.some((p) => path.startsWith(p))
+  ? null
+  : {
+      it: new URL(path.startsWith("/en") ? path.slice(3) || "/" : path, siteUrl).href,
+      en: new URL(path.startsWith("/en") ? path : `/en${path === "/" ? "" : path}`, siteUrl).href,
+    };
 // Screenshot reale della home 1200×630, JPEG ~90KB: WhatsApp scarta le
 // immagini og sopra ~300KB. Nome nuovo (og-cover) = cache busting per le
 // anteprime già condivise con il vecchio og-image.png.
@@ -96,6 +108,27 @@ const jsonLd = {
 
     <!-- Canonical URL -->
     <link rel="canonical" href={canonicalUrl} />
+
+    {
+      /* hreflang — dice ai motori che due indirizzi sono la STESSA pagina in
+         due lingue, invece di due pagine che si fanno concorrenza. Serve da
+         quando l'italiano e l'inglese sono generati dallo stesso componente:
+         prima erano alberi separati e nessuno dei due lo dichiarava.
+
+         Il percorso EN è quello IT con /en davanti — regola vera su tutto il
+         sito nuovo (/design ↔ /en/design, /work ↔ /en/work, / ↔ /en). Le
+         pagine che non hanno controparte (i prototipi, /old-version, /tools)
+         non lo emettono: `alternates` resta null e il blocco non esce.
+
+         x-default punta all'italiano, che è la lingua della home. */
+      alternates && (
+        <>
+          <link rel="alternate" hreflang="it" href={alternates.it} />
+          <link rel="alternate" hreflang="en" href={alternates.en} />
+          <link rel="alternate" hreflang="x-default" href={alternates.it} />
+        </>
+      )
+    }
 
     <!-- Open Graph -->
     <meta property="og:title" content={title} />

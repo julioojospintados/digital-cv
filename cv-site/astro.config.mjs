@@ -71,14 +71,16 @@ export default defineConfig({
    * 301 e non 302 perché i nuovi indirizzi sono definitivi: il permanente è
    * ciò che trasferisce al nuovo URL la reputazione accumulata dal vecchio.
    *
-   * /cv punta alla lente di default (Design-first, DEFAULT_MODE in
-   * cv-i18n.ts): se quella cambia, questa riga va cambiata con lei.
+   * /cv e /en/cv puntano alla lente di default (Design-first, DEFAULT_MODE
+   * in cv-i18n.ts): se quella cambia, vanno cambiate con lei. /en/cv era la
+   * pagina CV inglese prima che anche l'inglese avesse una lente nel path.
    */
   redirects: {
     "/home": "/",
     "/cv": "/design",
     "/creative": "/design",
     "/human": "/ai",
+    "/en/cv": "/en/design",
   },
   adapter: vercel({
     // Rendering PDF server-side (render-pdf.ts, playwright-core +

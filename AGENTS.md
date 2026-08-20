@@ -38,15 +38,27 @@ The `Feedback` interface has: `name`, `role?`, `quote?`, `keywords[]`.
 The site is a **Knolling / Flat Lay CV**: each element is an "object" laid out on a flat surface
 like items in a knolling photograph.
 
-**4 global modes** — each mode is an Astro route (`[mode].astro`), not a URL param:
+**3 lenses** — each is an Astro route (`[lens].astro`), not a URL param:
 
-| Route         | Persona                  | Accent                        |
-| ------------- | ------------------------ | ------------------------------ |
-| `/tech`       | Software Developer       | Cyan `rgba(0,255,200,1)`      |
-| `/creative`   | Web & UX Designer        | Orange `rgba(255,107,53,1)`   |
-| `/human`      | AI & Digital Specialist  | Gold `rgba(240,200,127,1)`    |
-All 4 modes share the ottanio background `rgba(8,73,67,1)` — only `--color-accent` changes.
-The mode changes visual emphasis only, never the template or structure.
+| Route (IT) | Route (EN)    | Internal key | Persona                 | Accent                      |
+| ---------- | ------------- | ------------ | ----------------------- | --------------------------- |
+| `/design`  | `/en/design`  | `creative`   | Web & UX Designer       | Orange `rgba(255,107,53,1)` |
+| `/tech`    | `/en/tech`    | `tech`       | Software Developer      | Cyan `rgba(0,255,200,1)`    |
+| `/ai`      | `/en/ai`      | `human`      | AI & Digital Specialist | Gold `rgba(240,200,127,1)`  |
+
+⚠️ **The URL slug is NOT the internal key, and must never be conflated with it.**
+`creative` is served at `/design` and `human` at `/ai`. The keys appear ~427 times
+across the repo — in `cv.ts`/`cv.en.ts`, in `[data-mode]` CSS rules, in
+`exp-clusters.ts`, in `modeStore.ts`, in the tests. Renaming them to match a URL
+would be a 400-site edit on data files for something no visitor ever sees. The
+mapping lives in `LENS_SLUGS` / `MODE_BY_SLUG` / `lensPath()` in `cv-i18n.ts`, and
+**that is the only place a URL is built**. `modeStore.ts` keeps a deliberate
+2-line copy of the map (it is an island loaded on every page; importing the whole
+i18n module for three word-pairs costs more than it saves) — change one, change
+both.
+
+All 3 lenses share the ottanio background `rgba(8,73,67,1)` — only `--color-accent`
+changes. The lens changes visual emphasis only, never the template or structure.
 
 Full spec → `cv-site/DESIGN.md`
 Operative rules → `.vscode/design.instructions.md` (Copilot, auto-injected on `cv-site/src/**`) or `.claude/skills/design-system/SKILL.md` (Claude Code)
@@ -65,13 +77,27 @@ Operative rules → `.vscode/design.instructions.md` (Copilot, auto-injected on 
 Nothing else: not the order of elements, not the default state, not the
 behaviour, not the logic that computes them.
 
-→ **Copy.** Any Italian text added or changed directly in an Astro page or
-  component (e.g. narrative sections on `cv-site/src/pages/index.astro`) must
-  be mirrored the same session in its EN counterpart
-  (`cv-site/src/pages/en/index.astro`, `en/cv.astro`, `en/work/...`) —
-  translated, not just left out. If the text is personal/voice-heavy (bio,
-  storytelling, wordplay), translate carefully to preserve tone and flag the
-  translation to the user for review rather than treating it as final.
+→ **One component, two languages — this is now structural.** The entry page
+  and the CV page are `components/HomeEntryPage.astro` and
+  `components/CvLensPage.astro`, each taking a `locale` prop; the four routes
+  (`index.astro`, `[lens].astro`, `en/index.astro`, `en/[lens].astro`) are
+  8-line wrappers that pass nothing but the locale. **Do not fork them.** If a
+  page needs to differ by language, the difference belongs in a string table,
+  not in a second file. A condition inside a wrapper is a bug by construction.
+
+→ **Copy lives in string tables, never in markup.** UI strings go in
+  `LocaleStrings.ui` (`cv-i18n.ts`), voice copy in `lab-copy.ts`
+  (`PROFILE_TEXT`, `ABOUT_TEXT`, `TAGLINE`), CV content in `cv.ts` / `cv.en.ts`.
+  They are typed on purpose: a key missing in one language is a **compile
+  error**, not a blank space discovered in production. If the text is
+  personal/voice-heavy (bio, storytelling, wordplay), translate carefully to
+  preserve tone and flag the translation to the user for review rather than
+  treating it as final.
+
+→ **`/work` and `/privacy` are still forked** (`work/` and `en/work/`,
+  `privacy.astro` and `en/privacy.astro`). They predate the shared-component
+  approach and remain the one place where IT/EN parity is held by discipline
+  rather than by construction. Touching one means touching the other.
 
 → **Structure and behaviour.** The same applies to everything that is not
   text: DOM order of modes/cards/nav, which item is active or open by
@@ -79,20 +105,19 @@ behaviour, not the logic that computes them.
   change makes IT and EN behave differently, it is a bug — fix both sides in
   the same session.
 
-→ **Don't hardcode on the EN side what is data-driven on the IT side.**
-  The IT CV page gets its mode from the route (`[mode].astro`); `/en/cv` is a
-  single static page with no mode in its path, so it renders `DEFAULT_MODE`
-  and switches client-side. That is the *only* legitimate asymmetry, and it
-  must be expressed by reusing the IT logic with `DEFAULT_MODE` substituted
-  for `mode` — never by a hardcoded `=== "tech"` condition. Past bugs from
-  this: hero copy frozen on one persona, accordion opened on the wrong
-  cluster, projects and skills scored against the wrong mode.
+→ **There is no longer a "legitimate asymmetry".** Until 2026-08 the EN CV was
+  a single static page with no lens in its path, and that exception was the
+  source of a family of bugs (hero copy frozen on one persona, accordion opened
+  on the wrong cluster, projects scored against the wrong mode). Both languages
+  now have a lens in the URL and render from the same component. If you find
+  yourself writing `=== "tech"` or `locale === "en" ? A : B` around anything
+  other than a **path** or a **string**, stop: that is the old bug coming back.
 
-→ **Changing the default mode touches several files at once.** Keep these in
-  sync: `DEFAULT_MODE` in `cv-site/src/scripts/cv-init.ts`, the fallbacks in
+→ **Changing the default lens touches several files at once.** Keep these in
+  sync: `DEFAULT_MODE` in `cv-site/src/lib/cv-i18n.ts` and in
+  `cv-site/src/scripts/cv-init.ts`, the fallbacks in
   `cv-site/src/islands/stores/modeStore.ts` (`getInitialMode` and `initMode`),
-  the `/cv` redirect in `cv-site/src/pages/cv.astro`, and `DEFAULT_MODE` plus
-  the `mode` prop passed to `Layout` in `cv-site/src/pages/en/cv.astro`.
+  and the `/cv` + `/en/cv` redirects in `cv-site/astro.config.mjs`.
 
 ### Adding a page or component to the site
 
@@ -396,16 +421,26 @@ cv-site/                  ← Astro site (the actual CV)
     knolling/             ← Knolling object images (webp)
     fonts/Lexend/         ← Preloaded 800-weight woff2 (font-display: block)
   src/
-    pages/
-      index.astro         ← Entry point: GO preloader + the 4 mode-cards (knolling)
-      home.astro          ← Legacy — 301 redirect to /
-      [mode].astro        ← CV page for /tech /creative /human
-      cv.astro            ← Legacy — redirects to /tech
+    pages/                ← Routes only. The two big pages live in components/ and
+                            render both languages — see § "IT ↔ EN parity".
+      index.astro         ← "/" — wrapper: <HomeEntryPage locale="it" />
+      [lens].astro        ← /design /tech /ai — wrapper: <CvLensPage locale="it" />
+      en/index.astro      ← "/en" — wrapper: <HomeEntryPage locale="en" />
+      en/[lens].astro     ← /en/design /en/tech /en/ai — <CvLensPage locale="en" />
       work/index.astro    ← Case study index
       work/[slug].astro   ← Project case studies
-      en/index.astro      ← English entry point
-      en/cv.astro         ← English CV (static page — mode is client-side only, no mode in path)
       en/work/            ← English case studies (index.astro + [slug].astro)
+      lab/hero.astro      ← Entry-page prototype still open, noindex. NOT dead code:
+                            the /design-system panel documents its `lab-*` classes
+                            and links to it. Deleting it breaks that panel.
+      old-version/        ← The pre-2026-08 site, served but noindex: home.astro,
+                            [mode].astro, en/home.astro, en/cv.astro. Kept so it can
+                            be shown without rebuilding it from a commit; nothing
+                            links to it from the live site, by design. Its internal
+                            links stay inside /old-version.
+                            Legacy redirects (/home /cv /creative /human /en/cv) are
+                            NOT pages: they are declared in astro.config.mjs so the
+                            adapter emits real 301s instead of meta-refresh pages.
       tools/cv-recruiter.astro ← Private, unlinked, passphrase-gated CV generator (see AGENTS.md § "from a phone")
       tools/applications.astro ← Private, unlinked, passphrase-gated applications ledger view (see AGENTS.md § "Applications tracker")
       api/cv-recruiter.ts ← The 3 server routes on the site (prerender = false) — Gemini-powered backend for the page above
@@ -421,6 +456,9 @@ cv-site/                  ← Astro site (the actual CV)
       applications-store.ts    ← Read-modify-write of the applications ledger (single JSON, all buckets) on private Vercel Blob storage
       http-helpers.ts           ← Shared readEnv (process.env-first)/jsonResponse, used by all 3 api/cv-recruiter*.ts routes
     components/           ← Static Astro components
+      HomeEntryPage.astro ← The entry page ("/" and "/en") — takes `locale`, renders both
+      CvLensPage.astro    ← The CV page (/design /tech /ai + /en/*) — takes `lens` + `locale`
+      MemoryDrawers.astro ← "Fun fact / Belongings / Travel" drawers — takes `lang`
       ContactFooter.astro ← Shared contact footer
       WorkDesignSystem.astro ← Design system section inside /work case studies
       cards/              ← Reusable card components
@@ -436,7 +474,12 @@ cv-site/                  ← Astro site (the actual CV)
       SkillForceGraph.lit.ts ← <skill-force-graph>: D3 force-directed skill network (lazy-loaded)
       stores/modeStore.ts ← NanoStore for global mode state (tech/creative/human)
     lib/
+      cv-i18n.ts          ← Locale + Mode types, LENS_SLUGS/MODE_BY_SLUG/lensPath (URL ↔ key),
+                            DEFAULT_MODE, and LocaleStrings — every UI string, both languages
+      cv-view-model.ts    ← Shared page logic (clusters, skills, timelineItems, projects)
+      lab-copy.ts         ← Voice copy in both languages: PROFILE_TEXT, ABOUT_TEXT, TAGLINE
       exp-clusters.ts     ← Shared experience-cluster definitions (IT/EN labels, exp+proj refs)
+      work-knolling.ts    ← Which knolling object each case study gets, keyed by slug
     scripts/              ← Shared client-side logic (vanilla TS + GSAP)
       cv-init.ts          ← CV page init: mode switch, scroll, accordions, feedback carousel
       index-init.ts       ← Home init: preloader, knolling, mode cards, launch journey
@@ -445,10 +488,13 @@ cv-site/                  ← Astro site (the actual CV)
       memory-drawer.ts    ← "About me" photo/story drawer (3D page-flip)
       intro-seen.ts       ← sessionStorage flag to skip the GO intro on return visits
     styles/
-      global.css          ← CSS custom properties for 4 modes, reset, cursor, focus
-      cv-page.css         ← CV page styles ([mode].astro / en/cv.astro)
-      index-page.css      ← Home/entry styles
-      work-page.css       ← /work page styles
+      global.css          ← CSS custom properties for the 3 lenses, reset, cursor, focus
+      lab-cv.css          ← CV page styles (`lc-*`) — CvLensPage.astro
+      lab-home.css        ← Entry page styles (`lh-*`) — HomeEntryPage.astro
+      lab-hero.css        ← Prototype entry styles (`lab-*`) — lab/hero.astro
+      work-page.css       ← /work page styles (`work-*`)
+      cv-page.css         ← Styles for the old CV page — used only by /old-version
+      index-page.css      ← Styles for the old home — used only by /old-version
     layouts/Layout.astro  ← Base layout (head/SEO/JSON-LD, fonts, Lenis, custom cursor, FAB)
 
 scripts/                  ← Root utility scripts (Node)
@@ -462,6 +508,9 @@ scripts/                  ← Root utility scripts (Node)
   gen-og-image.mjs        ← Generate the Open Graph image
   qa-mobile.js            ← Responsive QA via Playwright (npm run qa:mobile)
   qa-design-system.mjs    ← Deterministic gauntlet for /design-system, IT+EN (npm run qa:ds) — see § Verification loop
+  qa-parity.mjs           ← IT ↔ EN structural parity on the real pages (npm run qa:parity)
+  qa-links.mjs            ← No broken internal links, no page without its counterpart (npm run qa:links)
+  qa-prepush.mjs          ← Builds, serves the build, runs the three above (npm run qa:prepush) — called by .husky/pre-push
   qa-units.mjs            ← No px outside 1/2/3 across cv-site/src (npm run qa:units) — see § Units
   record-demo-playwright.js ← Record the site demo video
 
@@ -573,11 +622,48 @@ AGENTS.md                 ← This file — tool-agnostic project guide
 → Both halves, and the rule that keeps them honest (whoever implements does not
   grade their own work), live in `.claude/skills/verification-loop/SKILL.md` —
   the project's adaptation of the Gauntlet Loop technique. **It is loaded only
-  when explicitly asked for by name.** After an ordinary change the baseline is
-  `lint`, `format:check`, `test`, `qa:units`, `astro check`, `astro build`, plus
-  `qa:ds` when the showcase was touched — all text, no images. Screenshots are
-  the expensive part and are taken only when a decision cannot be read off the
-  numbers, or when asked.
+  when explicitly asked for by name.**
+
+→ **When each check runs — project rule, decided 2026-08-20.** There are two
+  tiers, and the split is deliberate: the cheap tier is text-only and runs
+  constantly, the expensive tier opens a browser and runs **only before a push**.
+
+  | While working, after any change | Before pushing (`.husky/pre-push`) |
+  | ------------------------------- | ---------------------------------- |
+  | `npm run lint`                  | the same lint + format, then:      |
+  | `npm run format:check`          | `npm run qa:prepush`, which builds |
+  | `npm test`                      | the site, serves the **real build**|
+  | `npm run qa:units`              | and runs `qa:ds` + `qa:parity` +   |
+  | `cd cv-site && npx astro build` | `qa:links` against it              |
+
+  **`qa:ds` is not to be run during ordinary work** — not even after touching
+  the showcase. It costs a browser and a server; the pre-push hook is where it
+  belongs, because that is the last moment a defect is still only yours.
+  Escape hatch for an urgent push on a work branch: `SKIP_QA=1 git push`.
+
+→ The three browser checks, and what each one is for:
+  - `qa:ds` (`qa-design-system.mjs`) — the showcase: index ↔ panel, spec cards,
+    snippets, clean console, no horizontal scrollbar at 390px, IT/EN parity of
+    the panels.
+  - `qa:parity` (`qa-parity.mjs`) — IT ↔ EN on the real pages. Compares
+    **counts**, not text: same number of jobs, timeline rows, testimonials,
+    education rows and chips in both languages, plus the lens reaching
+    `data-mode` and hreflang being present. It found `data-mode` missing on
+    every `/en/<lens>` page the first time it ran.
+  - `qa:links` (`qa-links.mjs`) — no broken internal link anywhere in the built
+    output, and no public page without its counterpart in the other language.
+    No browser needed; it reads the HTML. It found five dead `/en/cv` links on
+    a site that built clean.
+
+→ `qa:prepush` serves the build on an **ephemeral port bound to 127.0.0.1**, not
+  a fixed one. With a fixed port a leftover process from an earlier session can
+  hold it — on Windows possibly on `::1` only, so our server still starts on
+  IPv4 without error while `localhost` resolves to the stale one. The symptom is
+  404 on every page of a site that was just built correctly.
+
+→ After an ordinary change the baseline is the left column above — all text, no
+  images. Screenshots are the expensive part and are taken only when a decision
+  cannot be read off the numbers, or when asked.
 → When a change to the showcase is not covered by the gauntlet, **add the
   check** rather than testing by hand: a verification script that stops growing
   with the project ages exactly like the "photograph" design system that
@@ -595,10 +681,46 @@ AGENTS.md                 ← This file — tool-agnostic project guide
 → Assumes `cv-site/node_modules` is already installed (root ESLint config
   covers `cv-site/src/**` too, so the Astro parser needs it resolvable) —
   normal on a dev machine, not auto-installed by the hook to keep pushes fast.
-→ Scoped to lint/format on purpose, not the full CI matrix (typecheck, tests,
-  `astro build`) — those stay in CI so a push isn't slowed down by a Chromium
-  build on every commit; the hook only catches what's fast and was actually
-  the cause of a real CI failure (an unused var eslint catches in <10s).
+→ Since 2026-08-20 the hook also runs `npm run qa:prepush` (build + the three
+  browser checks — see § Verification loop). It adds roughly a minute and a
+  half to a push, and that is the intended trade: those checks exist to catch
+  what lint cannot see, and a check nobody runs is a check that was not
+  written. `SKIP_QA=1 git push` skips them for an urgent push on a work
+  branch — not on `main`.
+→ Typecheck and unit tests stay in CI rather than in the hook: they duplicate
+  what the build already surfaces locally, and the hook is already the slow
+  step.
+
+---
+
+## Decisions already taken — do not re-propose
+
+Closed calls, with the reasoning. They are written down because each of them
+looks like a gap to anyone reading the code for the first time, and each has
+already been raised and answered. Re-opening one costs the reader a round trip
+for nothing.
+
+→ **Skills have no section of their own, and that is deliberate** (2026-08-20).
+  The D3 force graph and the square/glow grid are set aside — not deleted, they
+  still live in `/old-version`. On the new CV, a competence appears as a chip
+  **inside the job where it was used**, which says more than a list of logos
+  detached from any context. Do not propose re-adding a skills section, a graph
+  or a grid unless Giulio asks.
+
+→ **Methodology, growth areas, social impact and value flows stay out**
+  (2026-08-20). Same reasoning and same status: still in `cv.ts`, still rendered
+  by `/old-version`, out of the new pages on purpose.
+
+→ **`/lab/hero` stays where it is.** It is the second entry-page prototype, still
+  open, `noindex` and `Disallow`ed. It is *not* dead code: the `/design-system`
+  showcase documents its `lab-*` classes and links to it, so removing the page
+  breaks a panel. The link to it from the home is wrapped in
+  `import.meta.env.DEV` — it never ships.
+
+→ **`/old-version` is intentionally unlinked.** No page on the live site points
+  to it, and that is the point: it exists so Giulio can show the previous design
+  by typing the URL, not so visitors can wander into it. Do not "fix" it by
+  adding a link.
 
 ---
 

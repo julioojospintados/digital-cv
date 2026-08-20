@@ -90,6 +90,58 @@ export interface LocaleStrings {
    * `cv.en.ts` usa "Poetry"), quindi la mappa non è condivisibile.
    */
   projectTags: Record<string, string>;
+
+  /**
+   * Stringhe dell'ingresso ("/") e della pagina CV per lente (/design,
+   * /tech, /ai). Stanno qui e non dentro le pagine perché le pagine sono
+   * **una sola** per entrambe le lingue: se una di queste chiavi mancasse,
+   * il compilatore lo direbbe prima del deploy.
+   */
+  ui: {
+    /** Ingresso */
+    homeTitle: string;
+    homeDescription: string;
+    drawerBelongings: string;
+    drawerTrip: string;
+    backToEntry: string;
+    otherEntry: string;
+    aboutMore: string;
+    goTo: string;
+    explorePortfolio: string;
+    /** Barra e intestazione della pagina CV */
+    backHome: string;
+    headerAria: string;
+    availableRemote: string;
+    nowAria: string;
+    downloadCv: string;
+    portfolioCta: string;
+    youAreViewing: string;
+    /** Esperienze — {n} scelte, {tot} in totale */
+    lensNote: string;
+    experienceOf: string;
+    toolsAria: string;
+    aiInFlow: string;
+    aiInFlowClient: string;
+    /** Il comando +N delle chip: {n} viene sostituito col numero */
+    showOtherTech: string;
+    hideOtherTech: string;
+    /** Cronologia completa */
+    allRoles: string;
+    sinceCount: string;
+    highlightedFor: string;
+    /** Voci, percorso, imbocchi */
+    voices: string;
+    pathTitle: string;
+    education: string;
+    certifications: string;
+    inProgress: string;
+    credentialId: string;
+    goDeeper: string;
+    caseStudiesLink: string;
+    /** Cambio lingua */
+    switchToEn: string;
+    switchToIt: string;
+  };
 }
 
 const IT: LocaleStrings = {
@@ -145,6 +197,45 @@ const IT: LocaleStrings = {
     "Content Strategy": "creative",
     "Digital marketing": "creative",
   },
+  ui: {
+    homeTitle: "Giulio Occhipinti — Digital CV",
+    homeDescription:
+      "CV interattivo di Giulio Occhipinti: UX/UI & Web Designer certificato IBM, Creative Technologist (Angular, Lit, GSAP), AI & Digital Specialist e Project Manager Agile.",
+    drawerBelongings: "Cose mie",
+    drawerTrip: "Viaggio",
+    backToEntry: "Torna all'ingresso",
+    otherEntry: "← altro ingresso",
+    aboutMore: "Scopri di più su di me",
+    goTo: "GO to",
+    explorePortfolio: "Esplora il portfolio",
+    backHome: "Torna alla home",
+    headerAria: "Intestazione",
+    availableRemote: "Disponibile da remoto",
+    nowAria: "Dove lavora ora, e prima",
+    downloadCv: "Scarica il CV (PDF)",
+    portfolioCta: "Portfolio — case study",
+    youAreViewing: "Stai vedendo:",
+    lensNote: "{n} esperienze scelte per questa lente · {tot} in totale, tutte elencate più sotto.",
+    experienceOf: "Esperienza",
+    toolsAria: "Strumenti e tecnologie",
+    aiInFlow: " — lavoro svolto con l'AI nel flusso",
+    aiInFlowClient: " — incarico svolto con l'AI nel flusso",
+    showOtherTech: " — mostra le altre {n} tecnologie",
+    hideOtherTech: " — nascondi le altre {n} tecnologie",
+    allRoles: "Tutte le esperienze",
+    sinceCount: "{n} dal 2008",
+    highlightedFor: "In evidenza per",
+    voices: "Chi ci ha lavorato",
+    pathTitle: "Formazione e certificazioni",
+    education: "Formazione",
+    certifications: "Certificazioni",
+    inProgress: "in corso",
+    credentialId: "Codice credenziale:",
+    goDeeper: "Se vuoi andare a fondo",
+    caseStudiesLink: "Case study — processo, decisioni, risultati",
+    switchToEn: "Switch to English",
+    switchToIt: "Passa all'italiano",
+  },
 };
 
 const EN: LocaleStrings = {
@@ -194,6 +285,45 @@ const EN: LocaleStrings = {
     "Tour management": "creative",
     "Content Strategy": "creative",
     "Digital marketing": "creative",
+  },
+  ui: {
+    homeTitle: "Giulio Occhipinti — Digital CV",
+    homeDescription:
+      "Interactive CV of Giulio Occhipinti: IBM-certified UX/UI & Web Designer, Creative Technologist (Angular, Lit, GSAP), AI & Digital Specialist and Agile Project Manager.",
+    drawerBelongings: "Belongings",
+    drawerTrip: "Travel",
+    backToEntry: "Back to the entry page",
+    otherEntry: "← other entry",
+    aboutMore: "Find out more about me",
+    goTo: "GO to",
+    explorePortfolio: "Explore the portfolio",
+    backHome: "Back to the home page",
+    headerAria: "Header",
+    availableRemote: "Available remotely",
+    nowAria: "Where he works now, and before",
+    downloadCv: "Download the CV (PDF)",
+    portfolioCta: "Portfolio — case studies",
+    youAreViewing: "You are viewing:",
+    lensNote: "{n} roles picked for this lens · {tot} in total, all listed further down.",
+    experienceOf: "Experience",
+    toolsAria: "Tools and technologies",
+    aiInFlow: " — work done with AI in the flow",
+    aiInFlowClient: " — engagement done with AI in the flow",
+    showOtherTech: " — show the other {n} technologies",
+    hideOtherTech: " — hide the other {n} technologies",
+    allRoles: "Every role",
+    sinceCount: "{n} since 2008",
+    highlightedFor: "Highlighted for",
+    voices: "People who worked with me",
+    pathTitle: "Education and certifications",
+    education: "Education",
+    certifications: "Certifications",
+    inProgress: "in progress",
+    credentialId: "Credential ID:",
+    goDeeper: "If you want to go deeper",
+    caseStudiesLink: "Case studies — process, decisions, results",
+    switchToEn: "Switch to English",
+    switchToIt: "Passa all'italiano",
   },
 };
 

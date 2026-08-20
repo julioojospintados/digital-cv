@@ -1,18 +1,28 @@
 ---
-import Layout from "../../layouts/Layout.astro";
+// ─────────────────────────────────────────────────────────────────────────
+// VERSIONE STORICA (inglese) — servita, ma fuori dall'indice.
+//
+// Gemella di /old-version/home e /old-version/<chiave>. Dal 2026-08 il sito
+// e' il linguaggio nuovo: "/" e /<lente> in italiano, /en e /en/<lente> in
+// inglese. Questa e' la versione precedente, tenuta viva su /old-version/en
+// per poterla mostrare senza ricostruirla da un commit.
+//
+// I link interni restano dentro /old-version: chi entra qui resta qui.
+// ─────────────────────────────────────────────────────────────────────────
+import Layout from "../../../layouts/Layout.astro";
 import { cvDataEn } from "@cv-data-en";
-import "../../styles/cv-page.css";
+import "../../../styles/cv-page.css";
 // .work-index-card / .work-chevron — reused by the hero portfolio CTA, same
 // visual identity as the /work cards (see hero-portfolio-card below).
-import "../../styles/work-page.css";
-import ExpCard from "../../components/cards/ExpCard.astro";
-import AiCard from "../../components/cards/AiCard.astro";
-import ProjectCard from "../../components/cards/ProjectCard.astro";
-import SkillSquare from "../../components/cards/SkillSquare.astro";
-import SoftItem from "../../components/cards/SoftItem.astro";
-import ContactFooter from "../../components/ContactFooter.astro";
-import { buildCvViewModel } from "../../lib/cv-view-model";
-import { DEFAULT_MODE } from "../../lib/cv-i18n";
+import "../../../styles/work-page.css";
+import ExpCard from "../../../components/cards/ExpCard.astro";
+import AiCard from "../../../components/cards/AiCard.astro";
+import ProjectCard from "../../../components/cards/ProjectCard.astro";
+import SkillSquare from "../../../components/cards/SkillSquare.astro";
+import SoftItem from "../../../components/cards/SoftItem.astro";
+import ContactFooter from "../../../components/ContactFooter.astro";
+import { buildCvViewModel } from "../../../lib/cv-view-model";
+import { DEFAULT_MODE } from "../../../lib/cv-i18n";
 
 // Unlike the IT side there is no mode in this page's path: it is a single
 // static page that renders DEFAULT_MODE and switches mode client-side
@@ -44,6 +54,7 @@ const {
   mode={mode}
   lang="en"
   showFab
+  noindex
 >
   <!-- ────────────────────────────────────────────────────────── NAV -->
   <nav class="cv-nav" id="cv-nav" aria-label="Main navigation">
@@ -112,7 +123,12 @@ const {
          Mobile: <details> nativo, zero JS — libera spazio per il mode-dropdown
          accanto, che su schermi stretti competeva con lo switch a 2 chip. -->
     <div class="lang-switch" aria-label="Lingua / Language">
-      <a href="/design" class="lang-switch__opt" lang="it" aria-label="Passa all'italiano">IT</a>
+      <a
+        href="/old-version/creative"
+        class="lang-switch__opt"
+        lang="it"
+        aria-label="Passa all'italiano">IT</a
+      >
       <span class="lang-switch__opt lang-switch__opt--active" aria-current="true">EN</span>
     </div>
     <details class="lang-dropdown">
@@ -122,7 +138,7 @@ const {
       </summary>
       <ul class="lang-dropdown__list" role="list">
         <li class="lang-dropdown__option">
-          <a href="/design" lang="it" aria-label="Passa all'italiano">IT</a>
+          <a href="/old-version/creative" lang="it" aria-label="Passa all'italiano">IT</a>
         </li>
         <li class="lang-dropdown__option is-selected" aria-current="true">EN</li>
       </ul>
@@ -655,5 +671,5 @@ const {
 </Layout>
 
 <script>
-  import "../../scripts/cv-init.ts";
+  import "../../../scripts/cv-init.ts";
 </script>

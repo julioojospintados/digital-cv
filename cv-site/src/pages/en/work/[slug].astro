@@ -2,6 +2,7 @@
 import Layout from "../../../layouts/Layout.astro";
 import WorkDesignSystem from "../../../components/WorkDesignSystem.astro";
 import { cvDataEn } from "@cv-data-en";
+import { lensPath } from "../../../lib/cv-i18n";
 import { workKnollIcon, workKnollRatio } from "../../../lib/work-knolling";
 import "../../../styles/work-page.css";
 
@@ -46,7 +47,7 @@ const totalSteps = String(processSteps.length).padStart(2, "0");
   <nav class="work-nav">
     <go-logo></go-logo>
     <div class="work-nav__right">
-      <a href="/en/cv" class="work-back">← Back to CV</a>
+      <a href={lensPath(mode, "en")} class="work-back">← Back to CV</a>
       <a
         href={`/work/${slug}`}
         class="work-lang"
@@ -227,7 +228,9 @@ const totalSteps = String(processSteps.length).padStart(2, "0");
           rel="noopener"
           class="work-cta__link work-cta__link--primary">Get in touch</a
         >
-        <a href="/en/cv" class="work-cta__link work-cta__link--secondary">Back to CV</a>
+        <a href={lensPath(mode, "en")} class="work-cta__link work-cta__link--secondary">
+          Back to CV
+        </a>
       </div>
     </footer>
   </main>

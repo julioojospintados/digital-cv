@@ -192,6 +192,33 @@
   flex: 0 0 auto;
 }
 
+/* Cambio lingua. Inchiostro e non accento: in lente creative l'accento come
+   TESTO su questo fondo fa 3,62:1, sotto la soglia di 4,5:1 per un corpo
+   sotto i 24px. Bordo e min-height perché è un bersaglio da toccare, e a
+   testo nudo stava sotto i 24×24 di 2.5.8. */
+.lc-bar__lang {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.5rem;
+  padding: var(--size-2) var(--size-8);
+  border: 1px solid var(--lc-line);
+  border-radius: 999rem;
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--lc-ink);
+  text-decoration: none;
+  transition: border-color var(--duration-state, 0.2s) ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .lc-bar__lang:hover {
+    border-color: var(--lc-line-strong);
+  }
+}
+
 .lc-bar__tagline {
   flex: 1 1 auto;
   min-width: 0;

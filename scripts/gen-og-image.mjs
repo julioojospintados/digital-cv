@@ -8,7 +8,7 @@
  *
  * Uso:
  *   1. Assicurati che il sito giri in locale (es. npm run dev --prefix cv-site → http://localhost:4321)
- *   2. node scripts/gen-og-image.mjs [URL]      (default: http://localhost:4321/tech)
+ *   2. node scripts/gen-og-image.mjs [URL]      (default: http://localhost:4321/)
  */
 
 import { chromium } from "playwright";

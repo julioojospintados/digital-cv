@@ -1,0 +1,17 @@
+---
+// /en/design · /en/tech · /en/ai — la stessa pagina, in inglese.
+//
+// Differisce dalla controparte italiana per la sola `locale`: se un giorno
+// qui comparisse una condizione in più, sarebbe un bug — è la regola di
+// parità di AGENTS.md, resa strutturale.
+import CvLensPage from "../../components/CvLensPage.astro";
+import { LENS_SLUGS, MODE_BY_SLUG, MODES } from "../../lib/cv-i18n";
+
+export function getStaticPaths() {
+  return MODES.map((mode) => ({ params: { lens: LENS_SLUGS[mode] } }));
+}
+
+const { lens: slug } = Astro.params as { lens: string };
+---
+
+<CvLensPage lens={MODE_BY_SLUG[slug]} locale="en" />

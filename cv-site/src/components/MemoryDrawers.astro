@@ -53,8 +53,17 @@ const belongingsPhotos = [
 
 // Racconto lungo — card "featured" nello scatter, diviso in due paragrafi
 // per leggibilità. white-space:pre-line in CSS preserva i ritmi di riga.
-const funFactStoryTitle = "Budapest Drift";
-const funFactPage1 = `Mi sono svegliato alle 10:06 a Budapest.
+interface Props {
+  /** Lingua dei cassetti. Il racconto ha due versioni, scritte entrambe a
+   *  mano: non è una traduzione automatica e non va trattata come tale. */
+  lang?: "it" | "en";
+}
+const { lang = "it" } = Astro.props;
+
+const STORY = {
+  it: {
+    title: "Budapest Drift",
+    page1: `Mi sono svegliato alle 10:06 a Budapest.
 Il mio volo per tornare a casa era alle 11:10.
 Ho guardato l'orologio, ho guardato il soffitto…
 e la prima cosa che ho fatto è stata bestemmiare in tre lingue.
@@ -77,8 +86,8 @@ Ero lì scalzo, a pregare Zeus.
 Poi sono corso verso il gate.
 Dagli altoparlanti:
 "Ultimo bando per Giulio Occh..."
-Ho urlato: "Sono io!" tra un polmone che cedeva e un attacco di panico.`;
-const funFactPage2 = `L'assistente di volo, con il suo miglior accento italiano da film, fa:
+Ho urlato: "Sono io!" tra un polmone che cedeva e un attacco di panico.`,
+    page2: `L'assistente di volo, con il suo miglior accento italiano da film, fa:
 "Mamma miaaaa Giulio!"
 con tanto di gesto con le mani.
 Avrei voluto dirle che io non vado in giro a salutare gli ungheresi dicendo
@@ -99,7 +108,78 @@ Alla fine sono salito sull'aereo,
 sudato, disidratato, spiritualmente distrutto.
 Mi sono seduto, ho chiuso gli occhi e ho pensato:
 Dio perdona.
-Köszönöm.`;
+Köszönöm.`,
+  },
+  en: {
+    title: "Budapest Drift",
+    page1: `I woke up at 10:06 in Budapest.
+My flight home was at 11:10.
+I looked at the clock, I looked at the ceiling…
+and the first thing I did was curse in three languages.
+I jumped out of bed, called an Uber,
+and the moment the driver understood the situation,
+he turned into Fast & Furious: Budapest Drift.
+It was me, him, and my anxiety — which by that point had basically gotten Hungarian citizenship.
+I got to the airport; the gate closed at 10:40.
+I ran in with my backpack on, looking like a kid on his first day of school,
+plowing through luggage carts, suitcases, and possibly a few actual children.
+All I could say was "Sorry, sorry, sorry…"
+like it was some kind of magic spell.
+At security they asked me:
+"Anything to declare?"
+And in pure panic, I said: "Yes."
+They stared at me.
+"No, no, sorry — nothing. Just trauma."
+They made me take off my shoes and my dignity.
+There I was, barefoot, praying to Zeus.
+Then I ran for the gate.
+Over the speakers:
+"Final call for Giulio Occh…"
+I shouted "That's me!" somewhere between a collapsing lung and a panic attack.`,
+    page2: `The flight attendant, in her best movie-Italian accent, goes:
+"Mamma miaaaa Giulio!"
+complete with hand gestures.
+I wanted to tell her I don't usually go around greeting Hungarians with
+"Hey Gulash!",
+but there was no time.
+I finally saw the line at the gate and relaxed —
+as much as you can relax after sprinting through an airport
+without a shower, without brushing your teeth, without even peeing.
+Then, the void:
+I'd left my wallet at security.
+I started running again, cursing in Dolby Surround.
+By some miracle, I found the agent still holding my wallet.
+I grabbed it, ran back to the gate again —
+they let me through…
+and the door wouldn't open.
+At that point I wanted to scream into a megaphone.
+I finally boarded the plane,
+sweaty, dehydrated, spiritually destroyed.
+I sat down, closed my eyes, and thought:
+God forgives.
+Köszönöm.`,
+  },
+};
+
+const LABELS = {
+  it: {
+    funfact: "Fun fact",
+    belongings: "Cose mie",
+    trip: "Viaggio",
+    close: "Chiudi",
+    expand: "Espandi la foto",
+  },
+  en: {
+    funfact: "Fun fact",
+    belongings: "Belongings",
+    trip: "Travel",
+    close: "Close",
+    expand: "Expand photo",
+  },
+};
+
+const story = STORY[lang];
+const l = LABELS[lang];
 
 // Rotazioni fisse (non-modulo, look scatter intenzionale, non casuale ad ogni build)
 const SCATTER_ANGLES = [-6, 4, -3, 7, -8, 2, -5, 6, -4, 8, -7, 3, -2, 5];
@@ -123,16 +203,16 @@ const scatterAngle = (i: number) => SCATTER_ANGLES[i % SCATTER_ANGLES.length];
   data-lenis-prevent
 >
   <div class="memory-dialog__header">
-    <p class="memory-dialog__eyebrow" id="dialog-funfact-title">Fun fact</p>
-    <button class="memory-dialog__close" type="button" data-drawer-close aria-label="Chiudi"
+    <p class="memory-dialog__eyebrow" id="dialog-funfact-title">{l.funfact}</p>
+    <button class="memory-dialog__close" type="button" data-drawer-close aria-label={l.close}
       >✕</button
     >
   </div>
   <div class="memory-dialog__scroll">
     <article class="memory-fact memory-fact--story" style="--mr:0deg">
-      <p class="memory-fact__title">{funFactStoryTitle}</p>
-      <p class="memory-fact__body">{funFactPage1}</p>
-      <p class="memory-fact__body">{funFactPage2}</p>
+      <p class="memory-fact__title">{story.title}</p>
+      <p class="memory-fact__body">{story.page1}</p>
+      <p class="memory-fact__body">{story.page2}</p>
     </article>
   </div>
 </dialog>
@@ -144,8 +224,8 @@ const scatterAngle = (i: number) => SCATTER_ANGLES[i % SCATTER_ANGLES.length];
   data-lenis-prevent
 >
   <div class="memory-dialog__header">
-    <p class="memory-dialog__eyebrow" id="dialog-belongings-title">Cose mie</p>
-    <button class="memory-dialog__close" type="button" data-drawer-close aria-label="Chiudi"
+    <p class="memory-dialog__eyebrow" id="dialog-belongings-title">{l.belongings}</p>
+    <button class="memory-dialog__close" type="button" data-drawer-close aria-label={l.close}
       >✕</button
     >
   </div>
@@ -153,7 +233,7 @@ const scatterAngle = (i: number) => SCATTER_ANGLES[i % SCATTER_ANGLES.length];
     <div class="memory-scatter">
       {
         belongingsPhotos.map((name, i) => (
-          <button type="button" class="memory-photo-btn" aria-label="Espandi la foto">
+          <button type="button" class="memory-photo-btn" aria-label={l.expand}>
             <img
               class="memory-photo"
               src={`/photos/belongings/${name}.webp`}
@@ -176,8 +256,8 @@ const scatterAngle = (i: number) => SCATTER_ANGLES[i % SCATTER_ANGLES.length];
   data-lenis-prevent
 >
   <div class="memory-dialog__header">
-    <p class="memory-dialog__eyebrow" id="dialog-trip-title">Viaggio</p>
-    <button class="memory-dialog__close" type="button" data-drawer-close aria-label="Chiudi"
+    <p class="memory-dialog__eyebrow" id="dialog-trip-title">{l.trip}</p>
+    <button class="memory-dialog__close" type="button" data-drawer-close aria-label={l.close}
       >✕</button
     >
   </div>
@@ -185,7 +265,7 @@ const scatterAngle = (i: number) => SCATTER_ANGLES[i % SCATTER_ANGLES.length];
     <div class="memory-scatter">
       {
         tripPhotos.map((name, i) => (
-          <button type="button" class="memory-photo-btn" aria-label="Espandi la foto">
+          <button type="button" class="memory-photo-btn" aria-label={l.expand}>
             <img
               class="memory-photo"
               src={`/photos/trip/${name}.webp`}

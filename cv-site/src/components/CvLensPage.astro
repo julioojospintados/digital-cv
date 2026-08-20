@@ -1,0 +1,736 @@
+---
+// /<lente> — la pagina CV per come legge un recruiter,
+// con la faccia del progetto addosso.
+//
+// ── I due vincoli, che convivono ─────────────────────────────────────────
+//
+// LEGGIBILITÀ. Strato 1 (7,4 secondi): i sei dati che l'eye-tracking dice
+// che vengono cercati — nome, ruolo e azienda attuali, date, ruolo
+// precedente, contatti — stanno sopra la piega, senza scroll. Strato 2
+// (30 secondi): le esperienze della lente, aperte, più la cronologia
+// completa.
+//
+// I testi di voce — il paragrafo per lente ("Come ci arrivo") e la bio
+// "Chi sono" — NON stanno qui: vivono nella home ("/"), dove servono a
+// far scegliere. Su questa pagina la scelta è già fatta, e il visitatore
+// vuole le prove.
+//
+// Il motivo non è dottrinale, è misurato: la bio è di 678 caratteri, e
+// tenerla sopra i ruoli attuali spingeva "dove lavora ora" a 987px e i
+// pulsanti a 1150px dentro una finestra da 844px — su telefono la prima
+// schermata non conteneva più né l'azienda né il pulsante del PDF.
+//
+// CARATTERE. Colore della lente, oggetto knolling con la sua ombra
+// ricostruita, sigla grande in filigrana, luce ambientale, i testi della
+// home. Tutto questo è **statico**: c'è al primo paint e non costa un
+// millisecondo di attesa a chi legge.
+//
+// La regola che tiene insieme le due cose:
+//   IL MOVIMENTO STA SULLA DECORAZIONE, MAI SULLE PAROLE.
+// Gli oggetti derivano allo scroll (animation-timeline CSS, zero JS); il
+// testo non compare mai in dissolvenza, non parte mai invisibile, non
+// aspetta mai un trigger. È il pet peeve numero uno degli hiring manager
+// ("content should load as quickly as possible") ed è anche la ragione per
+// cui, sulla pagina vera, alcune sezioni esistono solo dopo uno scroll.
+//
+// Cosa NON c'è, rispetto a /tech e /creative: stamp fullscreen, laser di
+// scansione, scroll automatico, riordino client-side, card dimmate al 20%
+// di opacità. Il cambio lente è navigazione fra tre pagine statiche.
+//
+// TESTI: cv.ts, cv-i18n e lab-copy.ts (verbatim da index.astro). Nessuna
+// copy scritta qui.
+import Layout from "../layouts/Layout.astro";
+import { cvData } from "@cv-data";
+import { cvDataEn } from "@cv-data-en";
+import { buildCvViewModel } from "../lib/cv-view-model";
+import { EXP_CLUSTER_DEFS } from "../lib/exp-clusters";
+import { LOCALES, MODES, lensPath, type Locale, type Mode } from "../lib/cv-i18n";
+import { TAGLINE, profileCopy } from "../lib/lab-copy";
+import "../styles/lab-cv.css";
+
+interface Props {
+  /** Chiave interna della lente, già risolta dallo slug dalla rotta. */
+  lens: Mode;
+  locale: Locale;
+}
+
+const { lens, locale } = Astro.props;
+const t = LOCALES[locale];
+const data = locale === "en" ? cvDataEn : cvData;
+const profile = profileCopy(lens, locale);
+const tagline = TAGLINE[locale];
+// I percorsi cambiano con la lingua: l'inglese vive sotto /en.
+const homeHref = locale === "en" ? "/en" : "/";
+const workHref = locale === "en" ? "/en/work" : "/work";
+const cvPdf = locale === "en" ? "/cv/Giulio_Occhipinti_CV_EN.pdf" : "/cv/Giulio_Occhipinti_CV.pdf";
+// La stessa lente nell'altra lingua, non la home: chi cambia lingua vuole
+// continuare a leggere quello che stava leggendo.
+const otherLocale = locale === "en" ? "it" : "en";
+const otherHref = lensPath(lens, otherLocale);
+const otherLabel = locale === "en" ? "IT" : "EN";
+const otherTitle = locale === "en" ? LOCALES.it.ui.switchToIt : LOCALES.en.ui.switchToEn;
+
+const { modeLabel, heroTitle, expClusters, timelineItems } = buildCvViewModel({
+  data,
+  locale,
+  mode: lens,
+});
+
+const cluster = expClusters.find((c) => c.key === lens);
+const clusterLabel = cluster?.label ?? modeLabel;
+
+// ── Descrizione: quella base di cv.ts, non la variante per lente ─────────
+// `buildCvViewModel` restituisce, per ogni card, la `facets[<lente>]`
+// dell'esperienza quando esiste: ruolo, descrizione e highlight raccontati
+// da quell'angolo. Qui sostituiamo **solo** la descrizione con
+// `experience[i].description`, quella base. Ruolo e highlight restano
+// quelli della lente (scelta esplicita del 2026-08-13).
+//
+// Conseguenza da tenere presente: il ruolo di ogni card resta quello della
+// lente anche quando il paragrafo sotto parla d'altro — le due righe non si
+// contraddicono, ma nemmeno si rispondono sempre. Per tornare indietro basta
+// togliere questo blocco.
+//
+// L'override sta qui e non in `lib/cv-view-model.ts` di proposito: quel
+// file serve anche /en/cv e le pagine di /old-version, che devono continuare
+// a mostrare la descrizione della lente. Questa scelta vale solo qui.
+const clusterRefs = EXP_CLUSTER_DEFS.find((c) => c.key === lens)?.refs ?? [];
+const rawItems = cluster?.items ?? [];
+
+// L'allineamento posizionale regge solo se nessun ref è caduto durante la
+// costruzione (refToCard può restituire null su un indice inesistente). Se
+// i conti non tornano non indoviniamo: si lasciano i testi come sono.
+const aligned = rawItems.length === clusterRefs.length;
+
+const items = rawItems.map((item, i) => {
+  if (!aligned) return { ...item, clients: [] };
+  const ref = clusterRefs[i];
+  if (!ref || !("exp" in ref)) return { ...item, clients: [] };
+  const src = data.experience[ref.exp];
+  return {
+    ...item,
+    description: src?.description ?? item.description,
+    // Incarichi presso clienti (oggi solo ALTEN). Quando ci sono, prendono
+    // il posto degli highlight: dicono le stesse cose ma con il nome del
+    // cliente davanti, che per una consulenza e' il dato piu' cercato.
+    clients: src?.clients ?? [],
+  };
+});
+
+// ── Strato 1: le due righe di intestazione ───────────────────────────────
+// Prima i ruoli ancora in corso (è il dato più cercato: "dove lavora ora"),
+// nell'ordine curato di exp-clusters.ts; se ce n'è meno di due si completa
+// col più recente. Escono sempre da `items`, mai scritti a mano.
+const current = items.filter((i) => i.endYear === t.present);
+const byRecency = [...items].sort((a, b) => Number(b.startYear) - Number(a.startYear));
+const headline = [...current, ...byRecency.filter((i) => !current.includes(i))].slice(0, 2);
+
+// Il portfolio è la prova decisiva per il ruolo di design, e solo per
+// quello: su /tech o /human diventa un'uscita laterale che porta via
+// dal CV proprio nei secondi in cui si sta decidendo.
+const showPortfolio = lens === "creative";
+
+// ── Strato 2b: la cronologia completa ────────────────────────────────────
+const yearsLabel = (start: string, end: string): string => {
+  const s = start.slice(0, 4);
+  const e = end === "present" ? t.present : end.slice(0, 4);
+  return s === e ? s : `${s} — ${e}`;
+};
+
+const lensExpIdx = new Set(
+  (EXP_CLUSTER_DEFS.find((c) => c.key === lens)?.refs ?? [])
+    .filter((r): r is { exp: number; facet?: Mode } => "exp" in r)
+    .map((r) => r.exp),
+);
+
+const allExperiences = data.experience
+  .map((e, i) => ({
+    company: e.company,
+    role: e.role,
+    years: yearsLabel(e.startDate, e.endDate),
+    sort: e.startDate,
+    inLens: lensExpIdx.has(i),
+  }))
+  .sort((a, b) => b.sort.localeCompare(a.sort));
+
+const email = data.social.find((s) => s.platform === "Email");
+const linkedin = data.social.find((s) => s.platform === "LinkedIn");
+// Spazio unificatore (U+00A0) fra lingua e livello: la riga può andare a capo
+// fra una lingua e l'altra, mai dentro una coppia ("Inglese" da una parte e
+// "B2" dall'altra). Prima lo teneva un `white-space: nowrap` sull'intera
+// riga, e su un telefono da 390px quella riga diventava un blocco
+// indivisibile da 416px: allargava la colonna della griglia e spingeva fuori
+// schermo metà dell'intestazione. Il vincolo è per coppia, non per riga.
+// String.fromCharCode(160) e non un escape unicode scritto a mano:
+// carattere letterale, e a quel punto eslint lo segnala come spazio
+// irregolare. Cosi' nel sorgente non c'e' nessun carattere invisibile e
+// nessuno dei due strumenti ha qualcosa da riscrivere.
+const NBSP = String.fromCharCode(160);
+const langs = data.languages.map((l) => `${l.name}${NBSP}${l.level}`).join(" · ");
+
+// ── Strato 2c: percorso e voci ───────────────────────────────────────────
+// timelineItems arriva già unito e ordinato dal piu recente da
+// buildCvViewModel — lo stesso che serve le pagine vere. Qui si separa per
+// tipo e basta: due elenchi si leggono meglio di uno misto, perché un
+// diploma e un attestato Coursera non si confrontano fra loro, e senza la
+// separazione ogni riga avrebbe avuto bisogno di un'etichetta per dire
+// quale delle due cose è.
+//
+// Nessun filtro per lente, a differenza delle esperienze: la formazione è
+// una garanzia di completezza, e mostrarne una parte diversa a seconda
+// della lente è esattamente il sospetto che la sezione deve togliere.
+const formazione = timelineItems.filter((i) => i.type === "edu");
+const certificazioni = timelineItems.filter((i) => i.type === "cert");
+
+const MAX_CHIPS = 6;
+---
+
+<Layout
+  title={`CV ${modeLabel} — Giulio Occhipinti`}
+  description={t.modeDescriptions[lens] ?? t.fallbackDescription}
+  mode={lens}
+  lang={locale}
+>
+  <!-- L'oggetto della lente è il pezzo grafico più pesante sopra la piega:
+       va chiesto subito, non scoperto a fine parsing. -->
+  <link
+    slot="head"
+    rel="preload"
+    as="image"
+    href={`/knolling/${profile.object}.webp`}
+    fetchpriority="high"
+  />
+
+  <div class="lc">
+    <!-- Barra. Non sticky: una barra fissa mangia proprio la fascia alta in
+         cui si giocano i primi sette secondi. -->
+    <header class="lc-bar">
+      <a href={homeHref} class="lc-bar__home" aria-label={t.ui.backHome}>
+        <go-logo></go-logo>
+      </a>
+      <p class="lc-bar__tagline">{tagline}</p>
+      <a
+        class="lc-bar__lang"
+        href={otherHref}
+        lang={otherLocale}
+        hreflang={otherLocale}
+        aria-label={otherTitle}
+      >
+        {otherLabel}
+      </a>
+    </header>
+
+    <main id="main-content" class="lc-main">
+      <!-- ══ STRATO 1 — 7,4 secondi ═══════════════════════════════════════
+           Colonna del testo a sinistra (l'occhio scende lungo quel margine:
+           pattern a F), oggetto e sigla a destra — la zona a bassa
+           attenzione, che è esattamente il posto giusto per la decorazione:
+           riempie senza contendere. -->
+      <section class="lc-head" aria-label={t.ui.headerAria}>
+        <div class="lc-head__glow" aria-hidden="true"></div>
+
+        <div class="lc-head__text">
+          <h1 class="lc-name">{data.personal.name}</h1>
+          <p class="lc-role">{modeLabel}</p>
+
+          <p class="lc-claim">{heroTitle}</p>
+
+          <p class="lc-meta">
+            {data.personal.location} · {t.ui.availableRemote} · <span class="lc-meta__langs"
+              >{langs}</span
+            >
+          </p>
+
+          <!-- "Dove lavora ora, e prima": il dato più fissato in assoluto
+               nello screening iniziale. -->
+          <dl class="lc-now">
+            {
+              headline.map((h) => (
+                <div class="lc-now__row">
+                  <dt class="lc-now__years">
+                    {h.startYear ? `${h.startYear} — ${h.endYear}` : ""}
+                  </dt>
+                  <dd class="lc-now__what">
+                    <b>{h.company}</b>
+                    <span class="lc-now__sep"> · </span>
+                    {h.role}
+                  </dd>
+                </div>
+              ))
+            }
+          </dl>
+
+          <!-- Il PDF per primo: è l'oggetto che il recruiter inoltra
+               all'hiring manager, e sulla pagina CV attuale non è linkato
+               da nessuna parte pur esistendo in public/cv/. -->
+          <div class="lc-actions">
+            <a class="lc-btn lc-btn--primary" href={cvPdf} download>
+              {t.ui.downloadCv}
+            </a>
+            {
+              showPortfolio && (
+                <a class="lc-btn" href={workHref}>
+                  {t.ui.portfolioCta}
+                  <span class="lc-btn__arrow" aria-hidden="true" />
+                </a>
+              )
+            }
+          </div>
+
+          <!-- Contatti in chiaro, non dentro un FAB: "no treasure hunts for
+               contact information". -->
+          <p class="lc-contacts">
+            {email && <a href={email.url}>{email.label}</a>}
+            <span class="lc-contacts__sep" aria-hidden="true">·</span>
+            {
+              linkedin && (
+                <a href={linkedin.url} target="_blank" rel="noopener noreferrer">
+                  LinkedIn
+                </a>
+              )
+            }
+          </p>
+
+          <!-- Selettore di lente retrocesso: non tre pulsanti di pari peso
+               in cima. Chi arriva da un annuncio UX non deve leggere "sono
+               anche altre due cose" nei sette secondi in cui sta decidendo.
+               <details> nativo, opzioni = link veri. -->
+          <details class="lc-lens">
+            <summary class="lc-lens__trigger">
+              <span class="lc-lens__dot" aria-hidden="true"></span>
+              <span class="lc-lens__label">{t.ui.youAreViewing} <b>{modeLabel}</b></span>
+              <span class="lc-lens__chevron" aria-hidden="true">›</span>
+            </summary>
+            <ul class="lc-lens__list" role="list">
+              {
+                MODES.map((m) => (
+                  <li>
+                    <a
+                      href={lensPath(m, locale)}
+                      class:list={["lc-lens__opt", { "is-current": m === lens }]}
+                      data-lens={m}
+                      aria-current={m === lens ? "page" : undefined}
+                    >
+                      <span class="lc-lens__opt-dot" aria-hidden="true" />
+                      {t.modeLabels[m]}
+                    </a>
+                  </li>
+                ))
+              }
+            </ul>
+          </details>
+        </div>
+
+        <!-- Oggetto + sigla. L'ombra è la stessa immagine annerita, sfocata
+             e inclinata sotto all'originale: eredita l'alpha del webp,
+             quindi segue la sagoma invece di essere un rettangolo sfumato
+             (stessa tecnica di lab-home.css). -->
+        <div class="lc-head__deco" aria-hidden="true">
+          <span class="lc-initial">{profile.initial}</span>
+          <span class="lc-obj" style={`--ratio:${profile.ratio}`}>
+            <img class="lc-obj__shadow" src={`/knolling/${profile.object}.webp`} alt="" />
+            <img
+              class="lc-obj__img"
+              src={`/knolling/${profile.object}.webp`}
+              alt=""
+              fetchpriority="high"
+              decoding="async"
+            />
+          </span>
+        </div>
+      </section>
+
+      <!-- ══ STRATO 2 — 30 secondi ════════════════════════════════════════ -->
+      <section class="lc-exp" aria-labelledby="lc-exp-title">
+        <img
+          class="lc-bg-knoll"
+          src="/knolling/multitool.webp"
+          alt=""
+          aria-hidden="true"
+          loading="lazy"
+          decoding="async"
+        />
+
+        <div class="lc-sec-head">
+          <h2 class="lc-sec-title" id="lc-exp-title">{t.ui.experienceOf} — {clusterLabel}</h2>
+          <p class="lc-sec-note">
+            {
+              t.ui.lensNote
+                .replace("{n}", String(items.length))
+                .replace("{tot}", String(data.experience.length))
+            }
+          </p>
+        </div>
+
+        <div class="lc-jobs">
+          {
+            items.map((job) => {
+              // Le chip ci sono **tutte** nell'HTML: quelle oltre MAX_CHIPS
+              // portano una classe in più e le nasconde il CSS, ma solo dopo
+              // che lo script ha acceso l'interruttore (.is-collapsed). Senza
+              // JavaScript non si nasconde niente e il pulsante resta
+              // `hidden`: si vedono tutte le tecnologie e non c'è nessun
+              // comando morto. È la stessa regola dell'ingresso di
+              // la home — a nascondere è il codice che sa anche riaprire.
+              const primi = job.skills.slice(0, MAX_CHIPS);
+              const oltre = job.skills.slice(MAX_CHIPS);
+
+              // Tre esperienze in cv.ts non hanno highlights (Fotografo,
+              // Corriere di Chieri, Satispay): aprire un <details> per
+              // scoprire tre chip di tecnologie è un'affordance che mente, e
+              // mentire su cosa c'è dietro un click è peggio che non offrire
+              // il click. Quelle righe restano piatte, con le chip già in
+              // vista: nessuna promessa, e niente di nascosto.
+              //
+              // La condizione guarda SOLO gli highlights. La prima versione
+              // diceva `highlights || chips`, e siccome ogni esperienza ha
+              // almeno tre `skills` non era mai falsa: il ramo piatto era
+              // codice morto, scoperto contando i nodi nell'HTML servito.
+              const hasBody = job.highlights.length > 0 || job.clients.length > 0;
+
+              const chipList =
+                primi.length > 0 ? (
+                  <ul
+                    class="lc-chips"
+                    role="list"
+                    aria-label={t.ui.toolsAria}
+                    data-show={t.ui.showOtherTech}
+                    data-hide={t.ui.hideOtherTech}
+                  >
+                    {primi.map((s) => (
+                      <li class="lc-chip">{s}</li>
+                    ))}
+                    {oltre.map((s) => (
+                      <li class="lc-chip lc-chip--extra">{s}</li>
+                    ))}
+                    {oltre.length > 0 && (
+                      <li>
+                        {/* Il segno "+4" resta parte del nome accessibile, non
+                            aria-hidden con un'etichetta al suo posto: il
+                            criterio 2.5.3 (Label in Name) chiede che il nome
+                            contenga il testo che si vede, o chi comanda a voce
+                            dice "+4" e non succede niente. */}
+                        <button
+                          class="lc-chip lc-chip--more"
+                          type="button"
+                          aria-expanded="false"
+                          hidden
+                        >
+                          <span class="lc-more__sign">+{oltre.length}</span>
+                          <span class="lc-sr"> — mostra le altre {oltre.length} tecnologie</span>
+                        </button>
+                      </li>
+                    )}
+                  </ul>
+                ) : null;
+
+              const head = (
+                <>
+                  <span class="lc-job__years">
+                    {job.startYear ? `${job.startYear} — ${job.endYear}` : ""}
+                  </span>
+                  <span class="lc-job__main">
+                    <h3 class="lc-job__title">
+                      <b>{job.company}</b>
+                      <span class="lc-job__role"> — {job.role}</span>
+                      {/* aiAugmented lo calcola gia' cv-view-model.ts dai tag
+                          e dalle tecnologie dell'esperienza: qui si rende,
+                          non si ricalcola. */}
+                      {job.aiAugmented && (
+                        <span class="lc-ai">
+                          AI
+                          <span class="lc-sr">{t.ui.aiInFlow}</span>
+                        </span>
+                      )}
+                    </h3>
+                    {job.location && (
+                      <span class="lc-job__where">
+                        {job.location}
+                        {job.remote ? " · Remote" : ""}
+                      </span>
+                    )}
+                    <span class="lc-job__lead">{job.description}</span>
+                  </span>
+                </>
+              );
+
+              if (!hasBody) {
+                return (
+                  <article class="lc-job lc-job--flat">
+                    <div class="lc-job__summary">{head}</div>
+                    {chipList && <div class="lc-job__body lc-job__body--flat">{chipList}</div>}
+                  </article>
+                );
+              }
+
+              return (
+                <details class="lc-job" open>
+                  {/* Il <summary> è volutamente ricco: azienda, ruolo, anni e
+                      una riga di prova restano leggibili anche da chiuso.
+                      Chiudere sulla sola intestazione sarebbe il "treasure
+                      hunt" che gli hiring manager citano fra i motivi di
+                      scarto. <h3> dentro <summary> è valido (heading
+                      content) e tiene le esperienze navigabili col tasto H. */}
+                  <summary class="lc-job__summary">
+                    {head}
+                    <span class="lc-job__chevron" aria-hidden="true" />
+                  </summary>
+
+                  <div class="lc-job__body">
+                    {job.clients.length > 0 ? (
+                      <ul class="lc-clients" role="list">
+                        {job.clients.map((c) => (
+                          <li class="lc-client">
+                            <p class="lc-client__who">
+                              <b>{c.client}</b>
+                              <span class="lc-client__role"> · {c.role}</span>
+                              {c.ai && (
+                                <span class="lc-ai lc-ai--sm">
+                                  AI
+                                  <span class="lc-sr">{t.ui.aiInFlowClient}</span>
+                                </span>
+                              )}
+                            </p>
+                            <p class="lc-client__text">{c.description}</p>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <ul class="lc-job__points" role="list">
+                        {job.highlights.map((h) => (
+                          <li>{h}</li>
+                        ))}
+                      </ul>
+                    )}
+                    {chipList}
+                  </div>
+                </details>
+              );
+            })
+          }
+        </div>
+      </section>
+
+      <!-- Chiusura dei <details> sotto i 1024px. Inline e sincrono di
+           proposito: gira mentre la pagina è ancora in parsing, quindi su
+           mobile non si vede la lista aprirsi e richiudersi (niente CLS).
+           Il markup nasce `open`: senza JS il degrado è "verboso", non
+           "vuoto" — che è il verso giusto in cui rompersi. -->
+      <script is:inline>
+        (function () {
+          const mq = window.matchMedia("(max-width: 63.9375rem)");
+          // details.lc-job soltanto: le righe piatte (.lc-job--flat) sono
+          // <article> e non hanno stato aperto/chiuso.
+          const jobs = document.querySelectorAll("details.lc-job");
+          function apply(collapse) {
+            for (let i = 0; i < jobs.length; i++) {
+              // Il primo resta sempre aperto: da chiuso, una lista di sole
+              // intestazioni non dice cosa hai fatto.
+              if (collapse && i > 0) jobs[i].removeAttribute("open");
+              else jobs[i].setAttribute("open", "");
+            }
+          }
+          apply(mq.matches);
+          // Solo al cambio di breakpoint, non a ogni resize: non deve
+          // riaprire ciò che l'utente ha chiuso a mano.
+          mq.addEventListener("change", function (e) {
+            apply(e.matches);
+          });
+        })();
+      </script>
+
+      <!-- ── 2b. La cronologia completa ───────────────────────────────────
+           Il costo del filtro: cinque card dal 2019 fanno sembrare il tuo un
+           CV da cinque anni. Questa lista è la garanzia di completezza —
+           date, traiettoria, assenza di buchi — e costa dieci righe di
+           testo, zero interazione, ordine strettamente cronologico. -->
+      <section class="lc-all" aria-labelledby="lc-all-title">
+        <div class="lc-sec-head">
+          <h2 class="lc-sec-title" id="lc-all-title">
+            {t.ui.allRoles}
+            <span class="lc-sec-count"
+              >{t.ui.sinceCount.replace("{n}", String(data.experience.length))}</span
+            >
+          </h2>
+        </div>
+        <ul class="lc-all__list" role="list">
+          {
+            allExperiences.map((e) => (
+              <li class:list={["lc-all__row", { "is-lens": e.inLens }]}>
+                <span class="lc-all__years">{e.years}</span>
+                <span class="lc-all__what">
+                  <b>{e.company}</b> · {e.role}
+                </span>
+                {e.inLens && (
+                  <>
+                    <span class="lc-all__mark" aria-hidden="true" />
+                    <span class="lc-sr">
+                      {t.ui.highlightedFor} {clusterLabel}
+                    </span>
+                  </>
+                )}
+              </li>
+            ))
+          }
+        </ul>
+      </section>
+
+      <!-- ── 2c. Le voci ──────────────────────────────────────────────────
+           Fin qui ha parlato solo lui. Due persone che ci hanno lavorato
+           insieme dicono la stessa cosa da fuori, ed è l'unico pezzo di
+           pagina che un candidato non può scriversi da solo.
+
+           Sta dopo le esperienze e non prima: una testimonianza letta senza
+           sapere che cosa ha fatto è un complimento; letta dopo, è una
+           conferma. Statiche, tutte e due in pagina, nessun carosello —
+           qui non si nasconde metà della prova dietro un gesto. -->
+      <section class="lc-voices" aria-labelledby="lc-voices-title">
+        <div class="lc-sec-head">
+          <h2 class="lc-sec-title" id="lc-voices-title">{t.ui.voices}</h2>
+        </div>
+        <ul class="lc-voices__list" role="list">
+          {
+            data.feedbacks
+              .filter((f) => f.quote)
+              .map((f) => (
+                <li class="lc-voice">
+                  <blockquote class="lc-voice__quote">{f.quote}</blockquote>
+                  <p class="lc-voice__who">
+                    {f.name}
+                    {f.role && <span class="lc-voice__role"> · {f.role}</span>}
+                  </p>
+                </li>
+              ))
+          }
+        </ul>
+      </section>
+
+      <!-- ── 2d. Il percorso ──────────────────────────────────────────────
+           Formazione e certificazioni per intero, senza filtro di lente:
+           qui il valore è la completezza, non la pertinenza. Stessa griglia
+           di "Tutte le esperienze" — data sul binario mono a sinistra,
+           contenuto a destra — perché sono la stessa cosa per il lettore:
+           un elenco verificabile che si scorre con l'occhio, non si legge. -->
+      <section class="lc-path" aria-labelledby="lc-path-title">
+        <div class="lc-sec-head">
+          <h2 class="lc-sec-title" id="lc-path-title">{t.ui.pathTitle}</h2>
+        </div>
+
+        <div class="lc-path__group">
+          <h3 class="lc-path__group-title">
+            {t.ui.education}
+            <span class="lc-sec-count">{formazione.length}</span>
+          </h3>
+          <ul class="lc-path__list" role="list">
+            {
+              formazione.map((e) => (
+                <li class="lc-path__row">
+                  <span class="lc-path__date">{e.dateLabel}</span>
+                  <span class="lc-path__what">
+                    <b>{e.title}</b>
+                    <span class="lc-path__where"> · {e.institution}</span>
+                  </span>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+
+        <div class="lc-path__group">
+          <h3 class="lc-path__group-title">
+            {t.ui.certifications}
+            <span class="lc-sec-count">{certificazioni.length}</span>
+          </h3>
+          <ul class="lc-path__list" role="list">
+            {
+              certificazioni.map((c) => (
+                <li class="lc-path__row">
+                  <span class="lc-path__date">{c.dateLabel}</span>
+                  <span class="lc-path__what">
+                    <b>{c.title}</b>
+                    <span class="lc-path__where"> · {c.institution}</span>
+                    {c.inProgress && <span class="lc-path__wip">{t.ui.inProgress}</span>}
+                    {c.credentialId && (
+                      <span class="lc-path__id">
+                        <span class="lc-sr">{t.ui.credentialId} </span>
+                        {c.credentialId}
+                      </span>
+                    )}
+                  </span>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </section>
+
+      <!-- ══ STRATO 3 — 3-5 minuti. Qui solo gli imbocchi: chi arriva fin
+           qui ha già deciso di approfondire, e vuole dove, non altro testo.
+           ═══════════════════════════════════════════════════════════════ -->
+      <section class="lc-more" aria-labelledby="lc-more-title">
+        <h2 class="lc-sec-title" id="lc-more-title">{t.ui.goDeeper}</h2>
+        <ul class="lc-more__list" role="list">
+          <li>
+            <a href={workHref}>{t.ui.caseStudiesLink}</a>
+          </li>
+          {
+            /* Qui c'era il rimando a `/{lens}` — "competenze, metodo e
+              formazione, versione attuale del CV". Quella pagina è sospesa
+              su questo branch. Della sua roba, formazione e certificazioni
+              adesso stanno in pagina (2d): non erano un approfondimento da
+              rimandare altrove, erano una verifica, e una verifica la si
+              vuole dove si sta già guardando. Restano fuori competenze e
+              metodo, che un posto nel linguaggio nuovo non ce l'hanno
+              ancora: finché non ce l'hanno, lo strato 3 tiene un imbocco
+              solo. Un link a una pagina che non c'è sarebbe peggio di un
+              imbocco in meno. */
+          }
+        </ul>
+      </section>
+    </main>
+  </div>
+</Layout>
+
+<script>
+  // Solo la firma GO della barra: l'island si autoregistra come <go-logo>
+  // e reagisce da sé al mode della pagina.
+  import "../islands/GoLogo.lit";
+  import { initLensDropdownAutoClose } from "../scripts/lens-dropdown";
+
+  initLensDropdownAutoClose();
+
+  // ── "+4" — da etichetta morta a comando vero ──────────────────────────
+  // L'HTML servito contiene già tutte le tecnologie. Qui si richiude ciò che
+  // avanza e si accende il pulsante: l'ordine conta, perché è ciò che rende
+  // impossibile il caso "nascoste e nessun modo di riaprirle". Se questo
+  // codice non gira, restano tutte in vista e il pulsante resta `hidden` —
+  // niente da cliccare, niente da cercare.
+  document.querySelectorAll<HTMLUListElement>(".lc-chips").forEach((lista) => {
+    const piu = lista.querySelector<HTMLButtonElement>(".lc-chip--more");
+    const quante = lista.querySelectorAll(".lc-chip--extra").length;
+    if (!piu || quante === 0) return;
+
+    const segno = piu.querySelector<HTMLElement>(".lc-more__sign");
+    const voce = piu.querySelector<HTMLElement>(".lc-sr");
+
+    lista.classList.add("is-collapsed");
+    piu.hidden = false;
+
+    piu.addEventListener("click", () => {
+      const aperto = lista.classList.toggle("is-collapsed") === false;
+      piu.setAttribute("aria-expanded", String(aperto));
+      // Il testo visibile cambia insieme allo stato, restando nello stesso
+      // linguaggio del segno: "+4" apre, "−4" richiude — stesso numero,
+      // segno invertito, non una parola isolata che sembra una chip rotta.
+      // Resta il primo pezzo del nome accessibile (2.5.3), quindi chi
+      // comanda a voce legge sempre un segno che è davvero lì.
+      if (segno) segno.textContent = aperto ? `−${quante}` : `+${quante}`;
+      if (voce) {
+        // Le due etichette arrivano dal server via data-*: questo script è
+        // condiviso da italiano e inglese e non può conoscere la lingua.
+        const modello = aperto ? lista.dataset.hide : lista.dataset.show;
+        voce.textContent = (modello ?? "").replace("{n}", String(quante));
+      }
+    });
+  });
+</script>
