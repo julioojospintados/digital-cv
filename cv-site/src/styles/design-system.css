@@ -507,7 +507,7 @@
   overflow: visible;
 }
 
-/* Il velo fisso di /lab/home copre la finestra intera: dentro una vetrina
+/* Il velo fisso della home copre la finestra intera: dentro una vetrina
    tingerebbe tutta la pagina, non la demo. */
 .ds-stage .lh::before,
 .ds-stage .lab-hero::before {
@@ -525,7 +525,7 @@
 }
 
 /* Un involucro che esiste solo per portare `--accent` ai discendenti — la
-   sezione di /lab/home definisce l'accento su di sé, non sulla radice, quindi
+   sezione della home definisce l'accento su di sé, non sulla radice, quindi
    una demo di CTA ha bisogno di stare dentro una `.lh-section` per prendere
    il colore giusto. Ma `.lh-section` è una griglia a due colonne, e la demo
    finiva schiacciata in 422px su 907 con metà palco vuoto.
@@ -547,7 +547,7 @@
   margin-top: 0;
 }
 
-/* La tendina di /lab/<lente> è `position: absolute` sopra la pagina: dentro
+/* La tendina di /<lente> è `position: absolute` sopra la pagina: dentro
    la demo va mostrata aperta e in flusso, altrimenti copre il testo sotto. */
 .ds-stage--dropdown {
   min-height: 15rem;
@@ -853,7 +853,7 @@
 }
 
 /* ── Selettore d'accento: la tendina di lente, riusata ───────────────────
-   Non un componente nuovo: è `.lc-lens` di /lab/<lente>, con le sue classi e
+   Non un componente nuovo: è `.lc-lens` di /<lente>, con le sue classi e
    il suo foglio. La vetrina governa sé stessa con un componente che
    documenta, invece che con tre pulsanti inventati per l'occasione — che per
    giunta erano proprio ciò che la scheda della tendina dice di non fare.

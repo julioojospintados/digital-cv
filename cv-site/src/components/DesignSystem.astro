@@ -12,7 +12,7 @@
  *
  * ── Cosa c'è dentro ──────────────────────────────────────────────────────
  * Il sistema **nuovo**: la home "/" (`lh-*`), /<lente> (`lc-*`),
- * /lab/hero (`lab-*`) e /work (`work-*`). Il sito storico è fuori per
+ * /old-version/hero (`lab-*`) e /work (`work-*`). Il sito storico è fuori per
  * decisione esplicita del 2026-08-16.
  *
  * ── La regola delle demo ─────────────────────────────────────────────────
@@ -109,7 +109,7 @@ const KNOLLING = [
 const PREFIXES = [
   { p: "lh-*", from: "/", file: "lab-home.css" },
   { p: "lc-*", from: "/<lente>", file: "lab-cv.css" },
-  { p: "lab-*", from: "/lab/hero", file: "lab-hero.css" },
+  { p: "lab-*", from: "/old-version/hero", file: "lab-hero.css" },
   { p: "work-*", from: "/work", file: "work-page.css" },
   { p: "ds-*", from: "questa pagina", file: "design-system.css" },
 ];
@@ -411,7 +411,7 @@ const t = it
       prefixCol2: "Da dove viene",
       prefixCol3: "Foglio",
       prefixNote:
-        "Un prefisso dovrebbe dire cosa fa un componente, non in quale file è nato. Questi dicono la seconda cosa, e uno — lab-* — sembra pure la famiglia di tutto /lab quando invece è una prova sola su tre. Restano così finché /lab non viene promosso: rinominarli adesso significherebbe rinominarli due volte.",
+        "Un prefisso dovrebbe dire cosa fa un componente, non in quale file è nato. Questi dicono la seconda cosa, e uno — lab-* — sembra la famiglia di tutto /lab, che non esiste più: è il prefisso di una prova d'ingresso sola, oggi archiviata in /old-version/hero. Rinominarli non varrebbe il diff, dato che nessuna pagina viva li usa.",
       anatomyShow: "Mostra i numeri",
       anatomyHint:
         "Le parti nell'ordine in cui stanno nel markup. Premi il comando per vederle numerate sulla demo qui sopra.",
@@ -494,7 +494,7 @@ const t = it
       prefixCol2: "Where it comes from",
       prefixCol3: "Stylesheet",
       prefixNote:
-        "A prefix should say what a component does, not which file it was born in. These say the latter, and one — lab-* — even looks like the family prefix for all of /lab when it is one prototype out of three. They stay this way until /lab is promoted: renaming them now would mean renaming them twice.",
+        "A prefix should say what a component does, not which file it was born in. These say the latter, and one — lab-* — even looks like the family prefix for all of /lab, which no longer exists: it belongs to a single entry prototype, now archived at /old-version/hero. Renaming them would not be worth the diff, since no live page uses them.",
       anatomyShow: "Show the numbers",
       anatomyHint:
         "The parts in the order they appear in the markup. Press the control to see them numbered on the demo above.",
@@ -933,7 +933,7 @@ const NAV = [
                   <th>{t.colConcept}</th>
                   <th>/</th>
                   <th>/{it ? "lente" : "lens"}</th>
-                  <th>/lab/hero</th>
+                  <th>/old-version/hero</th>
                 </tr>
               </thead>
               <tbody>
@@ -1844,7 +1844,7 @@ const NAV = [
                 aria-label={it ? "Torna all'ingresso" : "Back to the entry"}>GO</a
               >
               <nav class="lh-nav">
-                <a href="/lab/hero">{it ? "← altro ingresso" : "← other entry"}</a>
+                <a href="/old-version/hero">{it ? "← altro ingresso" : "← other entry"}</a>
               </nav>
             </header>
           </div>

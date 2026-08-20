@@ -9,12 +9,21 @@ import { cvDataEn } from "@cv-data-en";
 
 interface Props {
   lang?: "it" | "en";
+  emphasis?: boolean;
 }
 const { lang = "it" } = Astro.props;
 const data = lang === "en" ? cvDataEn : cvData;
 
+// `emphasis`: la variante della home nuova — email come azione primaria,
+// LinkedIn come secondaria, piu' il pulsante che copia l'indirizzo. Spento di
+// default perche' lo stesso componente serve anche /old-version, che deve
+// restare com'era.
+const emphasis = Astro.props.emphasis ?? false;
+
 const email = data.social.find((s) => s.platform === "Email");
 const linkedin = data.social.find((s) => s.platform === "LinkedIn");
+
+const emailAddress = email?.url.replace("mailto:", "") ?? "";
 
 const t =
   lang === "en"
@@ -22,7 +31,15 @@ const t =
         eyebrow: "Contacts",
         title: "Let's talk",
         sub: "An email or a LinkedIn message.",
-        email: { label: "Email", action: "Write to me", aria: "Write an email to Giulio" },
+        email: {
+          label: "Email",
+          action: "Write to me",
+          aria: "Write an email to Giulio",
+          subject: "Hello Giulio",
+          copy: "Copy",
+          copied: "Copied",
+          copyAria: "Copy the email address",
+        },
         linkedin: {
           label: "LinkedIn",
           action: "Let's connect",
@@ -33,7 +50,15 @@ const t =
         eyebrow: "Contatti",
         title: "Parliamone",
         sub: "Una mail o un messaggio su LinkedIn.",
-        email: { label: "Email", action: "Scrivimi", aria: "Scrivi una email a Giulio" },
+        email: {
+          label: "Email",
+          action: "Scrivimi",
+          aria: "Scrivi una email a Giulio",
+          subject: "Ciao Giulio",
+          copy: "Copia",
+          copied: "Copiato",
+          copyAria: "Copia l'indirizzo email",
+        },
         linkedin: {
           label: "LinkedIn",
           action: "Connettiamoci",
@@ -49,34 +74,66 @@ const t =
   <p class="contact-cta__eyebrow">{t.eyebrow}</p>
   <p class="contact-cta__sub">{t.sub}</p>
 
-  <div class="contact-cta__grid">
+  <div class:list={["contact-cta__grid", { "contact-cta__grid--emphasis": emphasis }]}>
     <!-- _blank anche sul mailto: se il gestore di posta è webmail (Gmail nel
          browser), _self sostituirebbe il CV con la pagina di composizione.
          Con il client nativo la scheda transitoria si chiude da sola. -->
     {
-      email && (
-        <a
-          class="contact-card"
-          href={email.url}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label={t.email.aria}
-        >
-          <span class="contact-card__label">{t.email.label}</span>
-          <span class="contact-card__value">{email.label ?? email.url.replace("mailto:", "")}</span>
-          <span class="contact-card__action">
-            {t.email.action}
-            <span class="contact-card__arrow" aria-hidden="true">
-              →
+      email &&
+        (emphasis ? (
+          /* Nella variante enfatica la card NON e' piu' un link solo: dentro
+             ci sono due azioni, e un <button> annidato in un <a> non e' HTML
+             valido. Il riquadro resta, il clic si sposta sui due comandi. */
+          <div class="contact-card contact-card--primary">
+            <span class="contact-card__label">{t.email.label}</span>
+            <span class="contact-card__value">{emailAddress}</span>
+            <span class="contact-card__actions">
+              <a
+                class="contact-card__cta"
+                href={`${email.url}?subject=${encodeURIComponent(t.email.subject)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={t.email.aria}
+              >
+                {t.email.action}
+                <span class="contact-card__arrow" aria-hidden="true">
+                  →
+                </span>
+              </a>
+              {/* Il pulsante nasce `hidden` e lo accende lo script: se il
+                  copia-incolla non e' disponibile (contesto non sicuro, API
+                  assente) non resta un comando che non fa niente. */}
+              <button class="contact-card__copy" type="button" data-copy={emailAddress} hidden>
+                <span data-copy-label>{t.email.copy}</span>
+                <span class="contact-card__copied" data-copy-done>
+                  {t.email.copied}
+                </span>
+              </button>
             </span>
-          </span>
-        </a>
-      )
+          </div>
+        ) : (
+          <a
+            class="contact-card"
+            href={email.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label={t.email.aria}
+          >
+            <span class="contact-card__label">{t.email.label}</span>
+            <span class="contact-card__value">{email.label ?? emailAddress}</span>
+            <span class="contact-card__action">
+              {t.email.action}
+              <span class="contact-card__arrow" aria-hidden="true">
+                →
+              </span>
+            </span>
+          </a>
+        ))
     }
     {
       linkedin && (
         <a
-          class="contact-card"
+          class:list={["contact-card", { "contact-card--secondary": emphasis }]}
           href={linkedin.url}
           target="_blank"
           rel="noopener noreferrer"
@@ -221,4 +278,152 @@ const t =
       transition-duration: 0.01ms !important;
     }
   }
+
+  /* ═══ Variante enfatica — la home nuova ═══════════════════════════════
+     Due card identiche dicono "sono la stessa cosa, decidi tu": chi legge
+     deve scegliere senza nessun indizio, e una scelta senza indizi e' un
+     attrito, non una liberta'. Qui la mail prende il peso pieno e LinkedIn
+     resta disponibile, piu' quieto, accanto.
+
+     Le colonne non sono piu' 1fr 1fr: la primaria e' piu' larga. E' la
+     gerarchia detta anche dalla misura, non solo dal colore — che serve a
+     chi il colore non lo distingue (1.4.1). */
+  @media (min-width: 48rem) {
+    .contact-cta__grid--emphasis {
+      grid-template-columns: 1.35fr 1fr;
+      align-items: stretch;
+    }
+  }
+
+  .contact-card--primary {
+    border-color: var(--color-accent);
+    box-shadow: inset 0 0 2rem color-mix(in srgb, var(--color-accent) 8%, transparent);
+  }
+
+  /* La secondaria non e' "spenta": resta a contrasto pieno e leggibile. La
+     differenza sta nel riempimento e nel bordo, non nell'opacita' — un
+     contatto sbiadito sembra un contatto vecchio. */
+  .contact-card--secondary {
+    background: transparent;
+  }
+
+  .contact-card__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--size-8);
+    margin-top: var(--size-4);
+  }
+
+  /* Il bottone pieno: accento come RIEMPIMENTO con sopra l'inchiostro scuro.
+     Come testo l'accento su questo fondo, in lente creative, farebbe 3,62:1
+     — sotto la soglia di 4,5:1. Da riempimento con l'inchiostro sopra sta a
+     5,64:1. Stessa ricetta dei bottoni pieni della home. */
+  .contact-card__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 2.25rem;
+    padding: 0 var(--size-16);
+    border-radius: 999rem;
+    background: var(--color-accent);
+    color: rgba(16, 12, 8, 1);
+    font-family: var(--font-mono);
+    font-size: var(--fs-14);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-decoration: none;
+    transition: filter 0.2s ease;
+  }
+
+  /* Copia negli appunti. Non e' una rifinitura: su un desktop senza client
+     di posta configurato `mailto:` non apre niente e il clic fallisce in
+     silenzio — l'utente resta con l'indirizzo davanti e nessun modo comodo
+     di prenderlo. */
+  .contact-card__copy {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    min-height: 2.25rem;
+    padding: 0 var(--size-12);
+    border: 1px solid var(--color-border);
+    border-radius: 999rem;
+    background: transparent;
+    color: var(--color-text-primary);
+    font-family: var(--font-mono);
+    font-size: var(--fs-14);
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+  }
+
+  .contact-card__copy[hidden] {
+    display: none;
+  }
+
+  /* "Copiato" sta gia' nel DOM sotto quello che sostituisce, non appare da
+     JS: cosi' la larghezza del bottone non salta al clic, e chi legge con
+     uno screen reader trova la conferma senza una regione live. */
+  .contact-card__copied {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    border-radius: inherit;
+    background: var(--color-surface);
+    color: var(--color-text-primary);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease;
+  }
+
+  .contact-card__copy.is-done .contact-card__copied {
+    opacity: 1;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .contact-card__cta:hover {
+      filter: brightness(1.08);
+    }
+
+    .contact-card__copy:hover {
+      border-color: var(--color-accent);
+    }
+
+    /* La primaria non si solleva al passaggio: dentro ha due comandi propri,
+       e un riquadro che si muove sotto il dito mentre punti un bottone e'
+       un bersaglio che scappa. */
+    .contact-card--primary:hover {
+      transform: none;
+      box-shadow: inset 0 0 2rem color-mix(in srgb, var(--color-accent) 8%, transparent);
+    }
+  }
+
+  .contact-card--primary:active {
+    transform: none;
+  }
 </style>
+
+<script>
+  // Copia dell'indirizzo. Il pulsante nasce `hidden` e viene acceso qui: se
+  // l'API non c'e' (contesto non sicuro, browser vecchio) resta nascosto,
+  // invece di restare visibile e non fare niente al clic.
+  const bottoni = document.querySelectorAll<HTMLButtonElement>(".contact-card__copy");
+  if (navigator.clipboard && bottoni.length) {
+    bottoni.forEach((b) => {
+      b.hidden = false;
+      let timer: number | undefined;
+      b.addEventListener("click", async () => {
+        const testo = b.dataset.copy;
+        if (!testo) return;
+        try {
+          await navigator.clipboard.writeText(testo);
+        } catch {
+          return; // permesso negato: nessuna conferma falsa
+        }
+        b.classList.add("is-done");
+        window.clearTimeout(timer);
+        timer = window.setTimeout(() => b.classList.remove("is-done"), 1600);
+      });
+    });
+  }
+</script>

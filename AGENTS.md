@@ -430,13 +430,11 @@ cv-site/                  ← Astro site (the actual CV)
       work/index.astro    ← Case study index
       work/[slug].astro   ← Project case studies
       en/work/            ← English case studies (index.astro + [slug].astro)
-      lab/hero.astro      ← Entry-page prototype still open, noindex. NOT dead code:
-                            the /design-system panel documents its `lab-*` classes
-                            and links to it. Deleting it breaks that panel.
-      old-version/        ← The pre-2026-08 site, served but noindex: home.astro,
-                            [mode].astro, en/home.astro, en/cv.astro. Kept so it can
-                            be shown without rebuilding it from a commit; nothing
-                            links to it from the live site, by design. Its internal
+      old-version/        ← The pre-2026-08 site plus the discarded entry prototype,
+                            served but noindex: home.astro, [mode].astro,
+                            en/home.astro, en/cv.astro, hero.astro. Kept so they can
+                            be shown without rebuilding them from a commit; nothing
+                            links to them from the live site, by design. Internal
                             links stay inside /old-version.
                             Legacy redirects (/home /cv /creative /human /en/cv) are
                             NOT pages: they are declared in astro.config.mjs so the
@@ -491,7 +489,7 @@ cv-site/                  ← Astro site (the actual CV)
       global.css          ← CSS custom properties for the 3 lenses, reset, cursor, focus
       lab-cv.css          ← CV page styles (`lc-*`) — CvLensPage.astro
       lab-home.css        ← Entry page styles (`lh-*`) — HomeEntryPage.astro
-      lab-hero.css        ← Prototype entry styles (`lab-*`) — lab/hero.astro
+      lab-hero.css        ← Prototype entry styles (`lab-*`) — old-version/hero.astro
       work-page.css       ← /work page styles (`work-*`)
       cv-page.css         ← Styles for the old CV page — used only by /old-version
       index-page.css      ← Styles for the old home — used only by /old-version
@@ -711,11 +709,14 @@ for nothing.
   (2026-08-20). Same reasoning and same status: still in `cv.ts`, still rendered
   by `/old-version`, out of the new pages on purpose.
 
-→ **`/lab/hero` stays where it is.** It is the second entry-page prototype, still
-  open, `noindex` and `Disallow`ed. It is *not* dead code: the `/design-system`
-  showcase documents its `lab-*` classes and links to it, so removing the page
-  breaks a panel. The link to it from the home is wrapped in
-  `import.meta.env.DEV` — it never ships.
+→ **The entry prototype is archived, not deleted** (2026-08-20). It was
+  `/lab/hero`, the second entry design compared against the one that became the
+  home; the comparison is over and it now lives at `/old-version/hero`, `noindex`
+  like the rest of that folder. `/lab/` no longer exists as a route at all. The
+  five `lab-*` panels in `/design-system` still document it and point there —
+  they document a real page, just an archived one. `scripts/lab-hero.ts` is
+  **not** part of the archive: the live home imports it for the pointer
+  parallax.
 
 → **`/old-version` is intentionally unlinked.** No page on the live site points
   to it, and that is the point: it exists so Giulio can show the previous design

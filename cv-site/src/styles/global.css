@@ -792,7 +792,7 @@ floating-menu {
 
 /* ── Attrezzi da cantiere — esistono SOLO in sviluppo ─────────────────────
    Il markup che usa questa classe sta sempre dentro un ramo
-   `import.meta.env.DEV` (home e /lab/home): in build quella costante diventa
+   `import.meta.env.DEV` (la home): in build quella costante diventa
    `false`, il ramo sparisce dal bundle e questa regola non ha più niente da
    colorare. Non è "nascosto col CSS", è proprio assente.
 
@@ -831,7 +831,7 @@ floating-menu {
 }
 
 /* Il secondo chip della stessa pagina si affianca al primo invece di
-   coprirlo. Oggi capita solo su /lab/home (torna indietro + da capo). */
+   coprirlo. Oggi capita solo sulla home (torna indietro + da capo). */
 .dev-chip--next {
   left: 11rem;
 }

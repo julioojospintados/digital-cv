@@ -737,6 +737,66 @@ html[data-lh-armed] .lh-obj {
 .lh .entry-footer {
   background: transparent;
   border-top: 0;
+
+  /* E prende la sua schermata, come ogni altra sezione.
+     Ogni .lh-section è alta 100svh col contenuto centrato: sotto il testo
+     resta mezza schermata vuota. Il footer, che era un blocco basso attaccato
+     in fondo, finiva dentro quel vuoto — e "Parliamone." si leggeva con
+     ancora in vista la coda della sezione precedente (l'oggetto e il bottone
+     "GO to…"), come se fossero lo stesso blocco.
+
+     Non è simmetria per gusto: l'invito al contatto è l'ultima cosa che si
+     legge, e una pagina che ha dato una schermata intera a ognuno dei tre
+     profili non può darne mezza, condivisa, alla riga che chiede di scrivere.
+
+     Righe `1fr auto`: i contatti si centrano nello spazio grande, la firma
+     resta in fondo invece di galleggiare a metà. */
+  min-height: 100svh;
+  display: grid;
+  grid-template-rows: 1fr auto;
+  align-items: center;
+  padding-block: clamp(var(--size-64), 10vh, 7rem);
+}
+
+.lh .entry-footer__credit {
+  margin-top: 0;
+}
+
+/* Da 56rem in su prende anche le due colonne delle altre sezioni: oggetto da
+   una parte, testo dall'altra. E' il pezzo che la fa leggere come la quinta
+   sezione invece che come un pie' di pagina cresciuto. Sotto quella soglia
+   resta impilata, e l'oggetto sparisce: su un telefono ruberebbe al
+   contenuto la meta' della schermata senza aggiungere informazione. */
+@media (min-width: 56rem) {
+  .lh .entry-footer--emphasis {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+    grid-template-rows: 1fr auto;
+    column-gap: clamp(var(--size-24), 5vw, var(--size-64));
+    max-width: 82rem;
+    margin-inline: auto;
+    padding-inline: var(--lh-gutter);
+  }
+
+  .lh .entry-footer__object {
+    grid-row: 1;
+  }
+
+  .lh .entry-footer--emphasis .contact-cta {
+    grid-column: 2;
+    grid-row: 1;
+    max-width: none;
+    margin: 0;
+  }
+
+  .lh .entry-footer--emphasis .entry-footer__credit {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 55.9375rem) {
+  .lh .entry-footer__object {
+    display: none;
+  }
 }
 
 /* ── Desktop: sezioni su due colonne, alternate ── */

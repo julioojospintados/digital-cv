@@ -82,8 +82,8 @@ const MODE_AWARE_PATHS = ["/old-version/en/cv"];
 const SSR_MODE_PATHS = ["/work", "/en/work"];
 
 // Route con la lente nel path ma non nel primo segmento: `/en/design`,
-// `/old-version/creative`, `/lab/...`. Il controllo standard qui sotto guarda
-// `pathname.split("/")[0]`, che lì vale "en", "old-version" o "lab" e non è
+// `/old-version/creative`. Il controllo standard qui sotto guarda
+// `pathname.split("/")[0]`, che lì vale "en" o "old-version" e non è
 // una lente — la pagina finiva quindi nel ramo `else`, quello che AZZERA
 // data-mode: colore giusto in SSR, pagina bianca dopo l'idratazione.
 //
@@ -99,12 +99,12 @@ const SSR_MODE_PATHS = ["/work", "/en/work"];
 // L'ordine conta: /old-version/en/... deve essere riconosciuto dal prefisso
 // più lungo, non da "/en/" — altrimenti la versione storica passerebbe per
 // una pagina del sito nuovo.
-const LENS_ROUTE_PREFIXES = ["/old-version/", "/lab/", "/en/"];
+const LENS_ROUTE_PREFIXES = ["/old-version/", "/en/"];
 
 function lensFromPath(pathname: string): Mode | null {
   const prefix = LENS_ROUTE_PREFIXES.find((p) => pathname.startsWith(p));
   if (!prefix) return null;
-  // `/lab/hero` e `/old-version/home` passano di qui: modeFromSegment li
+  // `/old-version/hero` e `/old-version/home` passano di qui: modeFromSegment li
   // scarta, e restano quindi pagine senza lente.
   const seg = pathname.slice(prefix.length).split("/").filter(Boolean)[0] ?? "";
   return modeFromSegment(seg);

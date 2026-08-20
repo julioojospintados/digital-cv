@@ -110,11 +110,10 @@ export default defineConfig({
     sitemap({
       // Il tool privato non deve comparire in sitemap.xml — non è contenuto
       // del CV, è un'utility interna dietro passphrase.
-      // /lab/ sono prototipi di layout: stessa ragione, non sono il CV.
-      // /old-version/ è la versione precedente del sito: raggiungibile per
-      // poterla mostrare, ma non deve competere con quella attuale.
-      filter: (page) =>
-        !page.includes("/tools/") && !page.includes("/lab/") && !page.includes("/old-version/"),
+      // /old-version/ è la versione precedente del sito, più il prototipo
+      // d'ingresso scartato: raggiungibili per poterli mostrare, ma non
+      // devono competere con quella attuale.
+      filter: (page) => !page.includes("/tools/") && !page.includes("/old-version/"),
     }),
     stripComments(),
   ],

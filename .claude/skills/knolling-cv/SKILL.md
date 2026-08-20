@@ -77,7 +77,7 @@ Lo sfondo è **sempre ottanio** rgba(8,73,67,1). Mai hardcodare colori.
 | `/work` · `/work/<slug>` | `work/index.astro` · `work/[slug].astro` | Indice e case study |
 | `/en/work` · `/en/work/<slug>` · `/en/privacy` | `en/…` | Controparti EN (ancora file separati) |
 | `/privacy` | `privacy.astro` | Informativa |
-| `/lab/hero` | `lab/hero.astro` | Prototipo d'ingresso, `noindex` — documentato dalla vetrina |
+| `/old-version/hero` | `old-version/hero.astro` | Prototipo d'ingresso scartato, `noindex` — documentato dalla vetrina |
 | `/old-version/…` | `old-version/` | Sito precedente, servito ma `noindex`, non linkato |
 | `/home` `/cv` `/creative` `/human` `/en/cv` | `astro.config.mjs` | Legacy — 301 di rete, non pagine |
 

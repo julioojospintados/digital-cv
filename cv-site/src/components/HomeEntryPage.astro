@@ -161,17 +161,6 @@ const sections = MODES.map((mode) => ({
   <div class="lh">
     <header class="lh-bar">
       <a href={locale === "en" ? "/en" : "/"} class="lh-mark" aria-label={t.ui.backToEntry}> GO </a>
-      {
-        /* L'altro ingresso in prova (/lab/hero) è un attrezzo da cantiere:
-           esiste solo in sviluppo. In build `import.meta.env.DEV` è false,
-           il ramo sparisce dal bundle e dalla home non parte nessun link a
-           una pagina noindex. Stesso trattamento di .dev-chip. */
-        import.meta.env.DEV && (
-          <nav class="lh-nav">
-            <a href="/lab/hero">{t.ui.otherEntry}</a>
-          </nav>
-        )
-      }
       <nav class="lh-nav lh-nav--lang">
         <a href={otherHomeHref} lang={otherLocale} hreflang={otherLocale} aria-label={otherTitle}>
           {otherLabel}
@@ -349,7 +338,7 @@ const sections = MODES.map((mode) => ({
     </main>
 
     {/* Il footer della home vera: stesso componente, stesso stile. */}
-    <EntryFooter lang={locale} />
+    <EntryFooter lang={locale} emphasis />
   </div>
 
   <MemoryDrawers lang={locale} />

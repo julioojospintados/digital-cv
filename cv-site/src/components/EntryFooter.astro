@@ -12,11 +12,29 @@ import "../styles/entry-footer.css";
 
 interface Props {
   lang?: "it" | "en";
+  /** Variante della home nuova: oggetto knolling accanto ai contatti ed
+   *  email come azione primaria. Spenta di default — le pagine sotto
+   *  /old-version usano lo stesso componente e restano com'erano. */
+  emphasis?: boolean;
 }
-const { lang = "it" } = Astro.props;
+const { lang = "it", emphasis = false } = Astro.props;
+
+// Il megafono: nella tabella degli oggetti e' "comunicazione, palco, voce",
+// ed e' l'unico dei tre rimasti liberi che dica la stessa cosa del titolo.
+// Larghezza nativa 389px — serve a occupare il posto giusto prima che
+// l'immagine arrivi, come per gli oggetti delle altre sezioni.
+const OBJ = { file: "megaphone", nativeRem: 389 / 16 };
 ---
 
-<footer class="entry-footer">
-  <ContactFooter lang={lang} />
+<footer class:list={["entry-footer", { "entry-footer--emphasis": emphasis }]}>
+  {
+    emphasis && (
+      <div class="lh-section__object entry-footer__object" style={`--nat:${OBJ.nativeRem}rem`}>
+        <img class="lh-obj__shadow" src={`/knolling/${OBJ.file}.webp`} alt="" aria-hidden="true" />
+        <img src={`/knolling/${OBJ.file}.webp`} alt="" loading="lazy" decoding="async" />
+      </div>
+    )
+  }
+  <ContactFooter lang={lang} emphasis={emphasis} />
   <p class="entry-footer__credit">Giulio Occhipinti · Digital CV</p>
 </footer>
