@@ -793,9 +793,26 @@ html[data-lh-armed] .lh-obj {
   }
 }
 
+/* Su mobile l'oggetto resta, ma passa SOTTO i contatti.
+   Nelle altre sezioni sta sopra il testo (nel DOM viene prima, e la griglia a
+   una colonna non lo riordina); qui no, di proposito: questa è l'ultima
+   schermata e i contatti sono l'azione. Mettere l'immagine davanti
+   spingerebbe sotto la piega proprio la riga che chiede di scrivere.
+
+   Più piccolo che su desktop: a piena larghezza si mangerebbe la schermata
+   invece di chiuderla. */
 @media (max-width: 55.9375rem) {
   .lh .entry-footer__object {
-    display: none;
+    order: 2;
+    width: min(52%, 12rem);
+    margin-top: var(--size-24);
+  }
+
+  /* La firma deve restare l'ultima riga della pagina. Con il solo `order: 2`
+     sull'oggetto finiva SOPRA di esso: l'ordine si applica a tutti i fratelli,
+     e la firma, rimasta a 0, scavalcava l'immagine. Serve dirlo anche a lei. */
+  .lh .entry-footer__credit {
+    order: 3;
   }
 }
 

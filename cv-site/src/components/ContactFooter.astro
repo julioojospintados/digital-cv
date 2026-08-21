@@ -96,9 +96,7 @@ const t =
                 aria-label={t.email.aria}
               >
                 {t.email.action}
-                <span class="contact-card__arrow" aria-hidden="true">
-                  →
-                </span>
+                <span class="contact-card__arrow" aria-hidden="true" />
               </a>
               {/* Il pulsante nasce `hidden` e lo accende lo script: se il
                   copia-incolla non e' disponibile (contesto non sicuro, API
@@ -123,9 +121,7 @@ const t =
             <span class="contact-card__value">{email.label ?? emailAddress}</span>
             <span class="contact-card__action">
               {t.email.action}
-              <span class="contact-card__arrow" aria-hidden="true">
-                →
-              </span>
+              <span class="contact-card__arrow" aria-hidden="true" />
             </span>
           </a>
         ))
@@ -143,9 +139,7 @@ const t =
           <span class="contact-card__value">{linkedin.label ?? linkedin.url}</span>
           <span class="contact-card__action">
             {t.linkedin.action}
-            <span class="contact-card__arrow" aria-hidden="true">
-              →
-            </span>
+            <span class="contact-card__arrow" aria-hidden="true" />
           </span>
         </a>
       )
@@ -192,7 +186,8 @@ const t =
     max-width: 40rem;
   }
 
-  /* Mobile-first: una colonna, poi 3 colonne da tablet in su. */
+  /* Mobile-first: una colonna, poi due da tablet in su. La variante
+     enfatica piu' sotto resta a una colonna anche li'. */
   .contact-cta__grid {
     display: grid;
     grid-template-columns: 1fr;
@@ -267,8 +262,23 @@ const t =
     transition: color 0.2s ease;
   }
 
+  /* Stanghetta, non un glifo. Il progetto la costruisce ovunque con due bordi
+     di un quadratino ruotato — .work-chevron in work-page.css,
+     .exp-cluster__chevron in cv-page.css — e quel commento lo dice per
+     esteso: "mai un glifo Unicode". La freccia che stava qui (→) era
+     l'eccezione, e si vedeva: dipende dal font, cambia peso da un sistema
+     all'altro e non eredita lo spessore del testo accanto.
+
+     `currentColor` la fa scurire da sé sopra il riempimento del bottone
+     primario e schiarire sul link secondario, senza una seconda regola. */
   .contact-card__arrow {
     display: inline-block;
+    width: 0.4rem;
+    height: 0.4rem;
+    flex-shrink: 0;
+    border: solid currentColor;
+    border-width: 0 0.09375rem 0.09375rem 0;
+    rotate: -45deg;
     transition: transform 0.2s cubic-bezier(0.23, 1, 0.32, 1);
   }
 
@@ -283,15 +293,22 @@ const t =
      Due card identiche dicono "sono la stessa cosa, decidi tu": chi legge
      deve scegliere senza nessun indizio, e una scelta senza indizi e' un
      attrito, non una liberta'. Qui la mail prende il peso pieno e LinkedIn
-     resta disponibile, piu' quieto, accanto.
+     resta disponibile, piu' quieto, sotto.
 
-     Le colonne non sono piu' 1fr 1fr: la primaria e' piu' larga. E' la
-     gerarchia detta anche dalla misura, non solo dal colore — che serve a
-     chi il colore non lo distingue (1.4.1). */
+     **Una colonna sola, anche da desktop.** Prima erano affiancate a
+     1.35fr / 1fr, e la larghezza diversa portava la gerarchia senza
+     affidarla al colore (1.4.1) — serve a chi il colore non lo distingue.
+     Impilandole quel segnale non si perde, cambia portante: lo dice
+     l'ORDINE di lettura, che e' piu' forte della misura ed e' l'unico
+     identico in ogni condizione, mobile compreso. E due card affiancate
+     si leggono come una coppia da confrontare; una sopra l'altra tornano
+     a essere una richiesta e la sua alternativa.
+
+     Niente `align-items: stretch`: pareggiava l'altezza di due card
+     affiancate, e in colonna non pareggia niente. */
   @media (min-width: 48rem) {
     .contact-cta__grid--emphasis {
-      grid-template-columns: 1.35fr 1fr;
-      align-items: stretch;
+      grid-template-columns: 1fr;
     }
   }
 
