@@ -85,6 +85,14 @@ behaviour, not the logic that computes them.
   page needs to differ by language, the difference belongs in a string table,
   not in a second file. A condition inside a wrapper is a bug by construction.
 
+→ **Italian is the source, English is the translation — always in that
+  direction** (project rule, Giulio). A text is written or changed in Italian
+  first, then translated. Never the reverse, and never "improve" the English
+  on its own: an EN string that says something the IT one does not is a
+  divergence, not an upgrade. When a text changes, the EN counterpart is
+  updated in the same session — a translation that lags is the same defect as
+  a missing one, only harder to notice.
+
 → **Copy lives in string tables, never in markup.** UI strings go in
   `LocaleStrings.ui` (`cv-i18n.ts`), voice copy in `lab-copy.ts`
   (`PROFILE_TEXT`, `ABOUT_TEXT`, `TAGLINE`), CV content in `cv.ts` / `cv.en.ts`.
