@@ -92,7 +92,10 @@
    ESC gratis dal browser. ::backdrop sfoca lo sfondo invece di scurirlo e
    basta — coerente col vetro smerigliato già usato in .cv-nav. */
 .memory-dialog {
-  width: min(90vw, 56rem);
+  /* 64rem e non 56: con le foto che ora riempiono la cella, 56rem davano tre
+     colonne da 256px in una finestra da 1440 — una galleria di francobolli in
+     mezzo a uno schermo vuoto. A 64rem le stesse tre colonne stanno a 298px. */
+  width: min(92vw, 64rem);
   max-height: min(85vh, 46rem);
   margin: auto;
   background: var(--color-bg);
@@ -233,11 +236,16 @@
   color: var(--ps-accent, var(--color-accent));
 }
 
+/* Griglia, non piu' flex-wrap. Con `auto-fill` + `minmax` le colonne le
+   decide lo SPAZIO DISPONIBILE e le foto riempiono la riga: e' il punto in
+   cui si e' rotto il vecchio impianto (vedi .memory-photo qui sotto).
+   `min(100%, ...)` protegge il caso stretto: senza, una traccia da 15rem in
+   un contenitore da 14 sfonderebbe di lato. */
 .memory-scatter {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-start;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
+  align-items: start;
+  justify-items: center;
   gap: var(--size-20) var(--size-24);
 }
 
@@ -259,8 +267,18 @@
   cursor: zoom-in;
 }
 
+/* Era `clamp(7rem, 18vw, 11rem)`, e il termine di mezzo non vinceva MAI: su
+   375px di larghezza 18vw fa 67px, sotto il minimo, quindi restava inchiodato
+   a 7rem (112px); a 1440px fa 259px, sopra il massimo, quindi inchiodato a
+   11rem (176px). La foto era sempre a un estremo e non guardava mai lo spazio
+   che aveva davvero — su telefono ne sprecava 87px per riga.
+   Il difetto di fondo: `vw` misura la FINESTRA, e qui quello che conta e' la
+   larghezza della modale. Ora la misura la da' la cella della griglia. */
 .memory-photo {
-  width: clamp(7rem, 18vw, 11rem);
+  width: 100%;
+  /* Tetto per il caso a una colonna: su telefono la cella e' larga quanto la
+     modale, e senza questo la foto diventerebbe piu' alta della schermata. */
+  max-width: 22rem;
   aspect-ratio: 4 / 5;
   object-fit: cover;
   padding: var(--size-8) var(--size-8) var(--size-20);
@@ -356,8 +374,8 @@
 .memory-photo.is-lightbox-active {
   width: auto;
   height: auto;
-  max-width: min(88vw, 48rem);
-  max-height: min(85vh, 42rem);
+  max-width: min(94vw, 60rem);
+  max-height: min(90vh, 48rem);
   aspect-ratio: auto;
   object-fit: contain;
   padding: 0.85rem 0.85rem var(--size-32);
@@ -448,5 +466,79 @@
   .memory-photo:hover,
   .memory-fact:hover {
     transform: scale(1.04);
+  }
+}
+
+/* ── La modale di una card di "Chi sono" ──────────────────────────────────
+   Una foto sola e un paragrafo, dentro la variante stretta (--reading).
+   La foto prende tutta la colonna: e' il motivo per cui queste card hanno
+   smesso di essere un accordion — dentro la scheda la stessa immagine
+   stava a 80px. */
+.about-modal {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--size-20);
+}
+
+.about-modal img {
+  width: 100%;
+  max-height: 50svh;
+  object-fit: cover;
+  border-radius: var(--radius-4);
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.about-modal figcaption {
+  font-size: var(--fs-16);
+  line-height: 1.6;
+  color: var(--color-text-muted);
+  text-wrap: pretty;
+}
+
+/* Da tablet in su le modali di "Chi sono" non hanno scroll interno: dentro
+   c'e' una foto sola e un paragrafo, quindi la modale si dimensiona sul
+   contenuto e finisce li'. Una barra di scorrimento su un blocco che ci sta
+   gia' e' rumore: dice "c'e' altro sotto" quando non c'e' niente.
+
+   Il tetto della foto scende a 42svh apposta: e' la misura che, sommata a
+   intestazione, didascalia e margini, tiene la modale sotto l'85vh oltre il
+   quale verrebbe tagliata (.memory-dialog ha overflow:hidden). Togliere lo
+   scroll senza abbassare questo tetto sposterebbe il difetto invece di
+   risolverlo.
+
+   Su mobile no: li' lo scroll interno serve, perche' la modale e' a schermo
+   pieno e la foto ne prende meta'. */
+@media (min-width: 48rem) {
+  .memory-dialog--about {
+    max-height: min(85vh, 46rem);
+  }
+
+  .memory-dialog--about .memory-dialog__scroll {
+    overflow-y: visible;
+  }
+
+  .memory-dialog--about .about-modal img {
+    max-height: 42svh;
+  }
+}
+
+/* Da desktop queste tre modali non scorrono: dentro c'e' una foto e un
+   paragrafo, e una barra di scorrimento su un contenuto che ci starebbe
+   comodo e' rumore, non funzione.
+
+   Perche' il tetto della foto scende a 42svh proprio qui: tolto lo scroll,
+   quello che sfora viene tagliato dall'`overflow: hidden` del dialog invece
+   di diventare scorrevole. La modale e' alta al massimo `min(85vh, 46rem)`,
+   e fra intestazione, spazi e didascalia restano circa 230px: a 42svh la
+   somma sta sotto il tetto anche su una finestra da 600px, che e' il caso
+   piu' stretto in cui questa regola e' ancora attiva. */
+@media (min-width: 48rem) {
+  .memory-dialog--about .memory-dialog__scroll {
+    overflow: visible;
+  }
+
+  .memory-dialog--about .about-modal img {
+    max-height: 42svh;
   }
 }

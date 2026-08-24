@@ -127,8 +127,42 @@ function ensureLightbox(dialog: HTMLDialogElement): HTMLDivElement {
   return box;
 }
 
+/**
+ * Passa dalla miniatura all'originale.
+ *
+ * Nella griglia le foto sono le miniature da 640px generate da
+ * `scripts/gen-photo-thumbs.mjs`: la sorgente vera e' 1500x2000, e scaricarle
+ * tutte all'apertura del cassetto voleva dire 2,5 MB in parallelo per
+ * "Viaggio". Qui invece si apre una foto sola, e lo spazio che ha e' fino a
+ * 60rem: la miniatura si vedrebbe sgranata.
+ *
+ * Il cambio avviene a scaricamento **finito**, non subito: assegnare `src` e
+ * aspettare significherebbe far ingrandire un riquadro vuoto mentre il Flip
+ * e' gia' in corso. Cosi' invece resta visibile la miniatura — gia' in cache
+ * e gia' decodificata — e l'originale la sostituisce quando e' pronto.
+ *
+ * `data-full` sparisce dopo il primo scambio: e' anche il segnale che questa
+ * foto e' gia' passata all'originale, quindi riaprirla non riscarica niente.
+ */
+function upgradeToFull(img: HTMLImageElement): void {
+  const full = img.dataset.full;
+  if (!full) return;
+  const pre = new Image();
+  pre.decoding = "async";
+  pre.addEventListener("load", () => {
+    img.src = full;
+    delete img.dataset.full;
+  });
+  // Nessun `error`: se l'originale non arriva, la miniatura resta al suo
+  // posto ed e' comunque guardabile. Un fallimento silenzioso qui e' meglio
+  // di un riquadro rotto.
+  pre.src = full;
+}
+
 function openLightbox(dialog: HTMLDialogElement, img: HTMLImageElement) {
   if (lightboxState.has(dialog)) return; // già aperta
+
+  upgradeToFull(img);
 
   const box = ensureLightbox(dialog);
   const parent = img.parentElement!;

@@ -323,6 +323,22 @@ export function initLabHomeSnap(): void {
     e.stopPropagation();
   };
 
+  /**
+   * Con una modale aperta, il gesto non è nostro.
+   *
+   * Questi ascoltatori stanno su `window` in fase di **cattura**, cioè girano
+   * prima di chiunque altro: senza questa guardia la rotella dentro "Cose mie"
+   * o "Viaggio" veniva presa dall'aggancio, che scorreva la PAGINA sotto
+   * invece di lasciar scorrere il contenuto della modale. `data-lenis-prevent`
+   * sui <dialog> non bastava, perché ferma Lenis — che ascolta in risalita —
+   * e non noi, che arriviamo prima.
+   *
+   * La classe la mettono e la tolgono `showModal()`/`close()` in
+   * memory-drawer.ts: leggerla costa molto meno di un querySelector a ogni
+   * evento di rotella.
+   */
+  const modalOpen = (): boolean => document.documentElement.classList.contains("dialog-open");
+
   const maxScroll = () => document.documentElement.scrollHeight - window.innerHeight;
 
   /** Le posizioni di arrivo: l'inizio di ogni pannello disegnato, più il fondo
@@ -440,6 +456,7 @@ export function initLabHomeSnap(): void {
   window.addEventListener(
     "wheel",
     (e) => {
+      if (modalOpen()) return;
       if (Math.abs(e.deltaY) < 2) return;
       // Va segnato **sempre**, anche quando l'evento verrà ignorato: è
       // proprio la scia che si vuole misurare per sapere quando è finita.
@@ -473,7 +490,7 @@ export function initLabHomeSnap(): void {
   window.addEventListener(
     "touchstart",
     (e) => {
-      touchStartY = e.touches[0]?.clientY ?? null;
+      touchStartY = modalOpen() ? null : (e.touches[0]?.clientY ?? null);
     },
     { capture: true, passive: true },
   );
@@ -481,6 +498,7 @@ export function initLabHomeSnap(): void {
   window.addEventListener(
     "touchmove",
     (e) => {
+      if (modalOpen()) return;
       if (touchStartY === null) return;
       lastGestureTs = performance.now();
       if (busy) {
@@ -503,6 +521,9 @@ export function initLabHomeSnap(): void {
 
   // ── Tastiera: deve restare navigabile senza mouse ──
   window.addEventListener("keydown", (e) => {
+    // Stessa ragione della rotella: con una modale aperta le frecce e lo
+    // spazio devono scorrere il suo contenuto, non spostare la pagina sotto.
+    if (modalOpen()) return;
     const list = stops(livePanels());
     if (e.key === "ArrowDown" || e.key === "PageDown" || e.key === " ") {
       e.preventDefault();

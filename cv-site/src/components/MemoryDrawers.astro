@@ -236,7 +236,8 @@ const scatterAngle = (i: number) => SCATTER_ANGLES[i % SCATTER_ANGLES.length];
           <button type="button" class="memory-photo-btn" aria-label={l.expand}>
             <img
               class="memory-photo"
-              src={`/photos/belongings/${name}.webp`}
+              src={`/photos/belongings/thumb/${name}.webp`}
+              data-full={`/photos/belongings/${name}.webp`}
               alt=""
               loading="lazy"
               decoding="async"
@@ -268,7 +269,8 @@ const scatterAngle = (i: number) => SCATTER_ANGLES[i % SCATTER_ANGLES.length];
           <button type="button" class="memory-photo-btn" aria-label={l.expand}>
             <img
               class="memory-photo"
-              src={`/photos/trip/${name}.webp`}
+              src={`/photos/trip/thumb/${name}.webp`}
+              data-full={`/photos/trip/${name}.webp`}
               alt=""
               loading="lazy"
               decoding="async"
