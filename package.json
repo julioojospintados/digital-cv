@@ -23,6 +23,7 @@
     "format:check": "prettier --check .",
     "qa:ds": "node scripts/qa-design-system.mjs",
     "qa:units": "node scripts/qa-units.mjs",
+    "gen:thumbs": "node scripts/gen-photo-thumbs.mjs",
     "qa:parity": "node scripts/qa-parity.mjs",
     "qa:links": "node scripts/qa-links.mjs",
     "qa:prepush": "node scripts/qa-prepush.mjs",
