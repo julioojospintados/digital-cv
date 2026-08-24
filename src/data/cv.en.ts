@@ -740,7 +740,6 @@ export const cvDataEn = {
       name: "UX Design Professional Certificate",
       issuer: "IBM",
       date: "2025-01",
-      inProgress: true,
     },
     {
       name: "Digital Marketing Specialist",
