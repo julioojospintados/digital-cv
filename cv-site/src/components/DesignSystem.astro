@@ -41,6 +41,7 @@ import WorkIndexCard from "./cards/WorkIndexCard.astro";
 import "../styles/lab-home.css";
 import "../styles/lab-cv.css";
 import "../styles/lab-hero.css";
+import "../styles/memory-drawer.css";
 import "../styles/work-page.css";
 import "../styles/design-system.css";
 
@@ -605,6 +606,8 @@ const NAV = [
       },
       { id: "ingresso-barra", label: it ? "Barra d'ingresso" : "Entry bar" },
       { id: "ingresso-scorri", label: it ? "Indicatore di scorrimento" : "Scroll cue" },
+      { id: "ingresso-card-chi-sono", label: it ? "Card di Chi sono" : "About cards" },
+      { id: "ingresso-modale-chi-sono", label: it ? "Modale di Chi sono" : "About modal" },
     ],
   },
   {
@@ -1944,6 +1947,187 @@ const NAV = [
                 it
                   ? "La stanghetta è aria-hidden — la parola accanto porta già tutto il significato."
                   : "The rule is aria-hidden — the adjacent word already carries all the meaning."
+              }
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="ds-panel"
+        data-ds-panel="ingresso-card-chi-sono"
+        aria-labelledby="ingresso-card-chi-sono-t"
+      >
+        <div class="ds-panel__head">
+          <h2 class="ds-section__title" id="ingresso-card-chi-sono-t">
+            {it ? "Card di Chi sono" : "About cards"}
+          </h2>
+          <span class="ds-panel__group"
+            >{t.secHome}<span class="ds-origin">about-card__b</span></span
+          >
+        </div>
+
+        <p class="ds-sub__note">
+          {
+            it
+              ? "La bio non è un paragrafo: è tagliata a fine frase in tre card, e ognuna apre una modale a schermo pieno. Non è una scelta di gusto ma di spazio — il paragrafo intero faceva un pannello da 930px in una finestra da 667, ed è il motivo per cui la sezione era spenta su mobile. Chiuse, le tre card ne misurano 170."
+              : "The bio is not a paragraph: it is cut at sentence boundaries into three cards, each opening a full-screen modal. Not a matter of taste but of space — the whole paragraph made a 930px panel inside a 667px window, which is why the section was switched off on mobile. Closed, the three cards measure 170px."
+          }
+        </p>
+        <div class="ds-stage">
+          <div class="lh">
+            <div class="lh-section--about">
+              <div class="about-cards" data-ds-snippet>
+                <button class="about-card__b" type="button">
+                  <span class="about-card__t">{it ? "Da dove vengo" : "Where I come from"}</span>
+                  <span class="about-card__p" aria-hidden="true"></span>
+                </button>
+                <button class="about-card__b" type="button">
+                  <span class="about-card__t">
+                    {it ? "Cosa mi porto dietro" : "What I carry with me"}
+                  </span>
+                  <span class="about-card__p" aria-hidden="true"></span>
+                </button>
+                <button class="about-card__b" type="button">
+                  <span class="about-card__t">{it ? "Come ragiono" : "How I think"}</span>
+                  <span class="about-card__p" aria-hidden="true"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ds-spec">
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specClass}</span>
+            <p class="ds-spec__v">
+              <code>about-cards · about-card__b · about-card__t · about-card__p</code>
+            </p>
+          </div>
+          <div class="ds-spec__row">
+            <span class="ds-spec__k">{t.specUse}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Solo nella sezione Chi sono dell'ingresso, tre volte. Il testo che aprono è verbatim dalla bio: i tre pezzi riuniti danno il paragrafo intero, e ABOUT_TEXT.desc è calcolato riunendoli — quindi non possono divergere."
+                  : "Only in the entry's About section, three times. The text they open is verbatim from the bio: the three pieces joined give the whole paragraph, and ABOUT_TEXT.desc is computed by joining them — so they cannot drift apart."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--dont">
+            <span class="ds-spec__k">{t.specDont}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Non farne un accordion che si apre sul posto: la foto resterebbe dentro la colonna della scheda, a 80px. Ed è un <button> che apre una modale, non un <a>: non si cambia pagina."
+                  : "Do not turn it into an in-place accordion: the photo would stay inside the card column, at 80px. And it is a <button> that opens a modal, not an <a>: no page change."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specA11y}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Il più è due barre disegnate col CSS, non il carattere +, ed è aria-hidden: l'etichetta accanto porta già tutto il significato. Non ruota, perché non c'è niente che si espande sul posto."
+                  : "The plus is two CSS-drawn bars, not the + character, and it is aria-hidden: the adjacent label already carries all the meaning. It does not rotate, because nothing expands in place."
+              }
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="ds-panel"
+        data-ds-panel="ingresso-modale-chi-sono"
+        aria-labelledby="ingresso-modale-chi-sono-t"
+      >
+        <div class="ds-panel__head">
+          <h2 class="ds-section__title" id="ingresso-modale-chi-sono-t">
+            {it ? "Modale di Chi sono" : "About modal"}
+          </h2>
+          <span class="ds-panel__group"
+            >{t.secHome}<span class="ds-origin">memory-dialog--about</span></span
+          >
+        </div>
+
+        <p class="ds-sub__note">
+          {
+            it
+              ? "Quello che apre una card: una foto grande e il pezzo di bio che le corrisponde. Riusa il guscio dei cassetti Fun fact / Cose mie / Viaggio, quindi non porta né CSS né script propri — memory-drawer.ts la trova da sé, perché per ogni [data-drawer-open] cerca #dialog-<chiave>. Qui è resa con l'attributo open per mostrarla ferma."
+              : "What a card opens: one large photo and the matching piece of the bio. It reuses the shell of the Fun fact / Belongings / Travel drawers, so it brings neither CSS nor script of its own — memory-drawer.ts finds it by itself, because for every [data-drawer-open] it looks up #dialog-<key>. Shown here with the open attribute so it stands still."
+          }
+        </p>
+        <div class="ds-stage">
+          <dialog
+            class="memory-dialog memory-dialog--reading memory-dialog--about"
+            open
+            style="position:static;max-height:none;"
+            data-ds-snippet
+            data-ds-drop="style"
+          >
+            <div class="memory-dialog__header">
+              <p class="memory-dialog__eyebrow">{it ? "Da dove vengo" : "Where I come from"}</p>
+              <button
+                class="memory-dialog__close"
+                type="button"
+                aria-label={it ? "Chiudi" : "Close"}>✕</button
+              >
+            </div>
+            <div class="memory-dialog__scroll">
+              <figure class="about-modal">
+                <img
+                  src="/photos/trip/thumb/cave.webp"
+                  alt={it
+                    ? "L'imbocco di una grotta, con una tenda montata sotto."
+                    : "The mouth of a cave, with a tent pitched under it."}
+                  loading="lazy"
+                  decoding="async"
+                />
+                <figcaption>
+                  {
+                    it
+                      ? "Tantissimi lavori diversi alle spalle, alcune piante in casa e un passaporto ben timbrato."
+                      : "Countless different jobs behind me, a few plants at home, and a well-stamped passport."
+                  }
+                </figcaption>
+              </figure>
+            </div>
+          </dialog>
+        </div>
+        <div class="ds-spec">
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specClass}</span>
+            <p class="ds-spec__v">
+              <code>memory-dialog memory-dialog--reading memory-dialog--about · about-modal</code>
+            </p>
+          </div>
+          <div class="ds-spec__row">
+            <span class="ds-spec__k">{t.specUse}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Tre volte nell'ingresso, una per card. La variante --reading e non lo scatter: dentro c'è una foto sola e un paragrafo, quindi serve la colonna di lettura, non la griglia da 64rem pensata per quattordici foto."
+                  : "Three times on the entry page, one per card. The --reading variant, not the scatter: inside there is a single photo and a paragraph, so it needs the reading column, not the 64rem grid meant for fourteen photos."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--dont">
+            <span class="ds-spec__k">{t.specDont}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Non togliere lo scroll interno anche su mobile: sopra i 48rem è spento apposta, ed è per questo che lì il tetto della foto scende a 42svh — senza scroll, quello che sfora viene tagliato dall'overflow:hidden invece di diventare scorrevole."
+                  : "Do not remove the inner scroll on mobile too: above 48rem it is off on purpose, and that is why the photo cap drops to 42svh there — with no scroll, what overflows gets clipped by overflow:hidden instead of becoming scrollable."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specA11y}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "<dialog> nativo aperto con showModal(): focus trap, ESC e clic sul fondo arrivano dal browser. data-lenis-prevent ferma Lenis, e la guardia dialog-open in lab-home-scroll.ts ferma l'aggancio della home, che altrimenti scorrerebbe la pagina invece del contenuto."
+                  : "Native <dialog> opened with showModal(): focus trap, ESC and backdrop click come from the browser. data-lenis-prevent stops Lenis, and the dialog-open guard in lab-home-scroll.ts stops the home's snap, which would otherwise scroll the page instead of the content."
               }
             </p>
           </div>
