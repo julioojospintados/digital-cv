@@ -579,6 +579,101 @@ html[data-lh-armed] .lh-obj {
   text-wrap: pretty;
 }
 
+/* ── Le tre card di "Chi sono" ──────────────────────────────────
+   Tre bottoni che aprono una modale a schermo pieno, non tre pannelli che si
+   espandono sul posto. Il motivo e' la foto: dentro la colonna della scheda
+   stava a 80px, un francobollo; a schermo pieno ne prende 335 su telefono.
+
+   Il testo della bio vive nella modale, quindi qui la scheda resta bassa
+   (~170px per tre bottoni) e la sezione ci sta in una schermata — che era il
+   problema da cui si e' partiti. */
+
+.about-cards {
+  display: flex;
+  flex-direction: column;
+  gap: var(--size-8);
+  /* .lh-section__copy ha `justify-items: start`, che stringe ogni figlio al
+     proprio contenuto: senza questo le card si fermerebbero alla larghezza
+     dell'etichetta piu' lunga invece di occupare la colonna. */
+  justify-self: stretch;
+  width: 100%;
+}
+
+.about-card__b {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--size-12);
+  width: 100%;
+  padding: var(--size-12) var(--size-16);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-4);
+  background: rgba(255, 255, 255, 0.04);
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    border-color var(--duration-state) var(--ease-standard),
+    transform var(--duration-micro) var(--ease-standard);
+}
+
+.about-card__b:active {
+  transform: scale(0.98);
+}
+
+.about-card__b:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.about-card__t {
+  font-size: var(--fs-16);
+  font-weight: 600;
+  color: var(--lh-ink);
+}
+
+/* Il "piu'" e' due barre, non il carattere "+": stessa ragione della freccia
+   dei contatti, che e' due bordi e non una freccia Unicode — un glifo dipende
+   dal font e non eredita lo spessore del testo accanto.
+   Non ruota piu': non c'e' niente che si espande sul posto, quindi l'icona
+   dice "c'e' dell'altro" e resta ferma. */
+.about-card__p {
+  position: relative;
+  width: var(--size-12);
+  height: var(--size-12);
+  flex-shrink: 0;
+}
+
+.about-card__p::before,
+.about-card__p::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  right: 0;
+  left: 0;
+  height: 2px;
+  margin-top: -1px;
+  background: var(--accent);
+}
+
+.about-card__p::after {
+  rotate: 90deg;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .about-card__b:hover {
+    border-color: var(--accent);
+    background: rgba(255, 255, 255, 0.07);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .about-card__b {
+    transition: none;
+  }
+}
+
 /* ── Bottoni ──────────────────────────────────────────────────────────────
    Rifatti per accessibilità, e non è una questione di gusto: erano mono a
    0.72rem (≈11,5 px) tutto maiuscolo con le lettere larghe. Tre problemi
@@ -755,7 +850,7 @@ html[data-lh-armed] .lh-obj {
   display: grid;
   grid-template-rows: 1fr auto;
   align-items: center;
-  padding-block: clamp(var(--size-64), 10vh, 7rem);
+  padding-block: clamp(var(--size-64), 5vh, 7rem);
 }
 
 .lh .entry-footer__credit {
@@ -769,7 +864,9 @@ html[data-lh-armed] .lh-obj {
    contenuto la meta' della schermata senza aggiungere informazione. */
 @media (min-width: 56rem) {
   .lh .entry-footer--emphasis {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
+    /* 1.2fr al TESTO, che ora sta in prima colonna: la quota grande segue il
+       contenuto, non la posizione. */
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
     grid-template-rows: 1fr auto;
     column-gap: clamp(var(--size-24), 5vw, var(--size-64));
     max-width: 82rem;
@@ -777,12 +874,25 @@ html[data-lh-armed] .lh-obj {
     padding-inline: var(--lh-gutter);
   }
 
+  /* L'oggetto a DESTRA, i contatti a sinistra. Non e' solo gusto: le sezioni
+     alternano il lato dell'oggetto (`.lh-section:nth-child(odd)` qui sotto) e
+     la sequenza reale e' chi sono a destra, design a sinistra, tech a destra,
+     AI a sinistra. Il footer viene dopo "AI", quindi il suo turno e' destra —
+     col megafono a sinistra era l'unico blocco che rompeva il ritmo, due
+     schermate di fila con l'immagine dalla stessa parte. */
   .lh .entry-footer__object {
+    grid-column: 2;
     grid-row: 1;
+    /* -25% rispetto agli altri oggetti (che stanno a `min(60%, --nat)`):
+       45% e' 60 meno un quarto, e il tetto nativo scende della stessa quota.
+       Il megafono e' 389x393, cioe' praticamente quadrato: a parita' di
+       larghezza e' l'oggetto piu' ALTO del set, e in questa schermata
+       l'altezza e' la risorsa scarsa. */
+    width: min(45%, calc(var(--nat, 22rem) * 0.75));
   }
 
   .lh .entry-footer--emphasis .contact-cta {
-    grid-column: 2;
+    grid-column: 1;
     grid-row: 1;
     max-width: none;
     margin: 0;
@@ -790,6 +900,29 @@ html[data-lh-armed] .lh-obj {
 
   .lh .entry-footer--emphasis .entry-footer__credit {
     grid-column: 1 / -1;
+  }
+}
+
+/* ── Finestre basse: il respiro cede, non il titolo ───────────────────────
+   Con le due card impilate il blocco contatti misura circa 438px. Sommati i
+   due margini di respiro da 64px e la firma si arriva a ~582px: sopra i 600px
+   di finestra ci sta, sotto no — e quello che esce dalla schermata e' la
+   prima riga, cioe' "Parliamone.". Un titolo tagliato in alto e' il difetto
+   peggiore possibile qui, perche' e' l'unica parola che dice cosa si fa in
+   questa schermata.
+
+   Quindi su finestre basse si stringe il respiro, che e' decorazione, invece
+   di lasciar cadere il titolo, che e' contenuto. Sopra i 40rem di altezza non
+   cambia niente: la composizione resta quella pensata. */
+@media (max-height: 40rem) {
+  .lh .entry-footer {
+    padding-block: var(--size-32);
+  }
+
+  /* Specificita' sufficiente a superare lo stile scoped di ContactFooter
+     (`.contact-cta[data-astro-cid-*]`, 0-2-0): qui siamo a 0-3-0. */
+  .lh .entry-footer .contact-cta {
+    padding-top: var(--size-16);
   }
 }
 
@@ -810,9 +943,19 @@ html[data-lh-armed] .lh-obj {
 
   /* La firma deve restare l'ultima riga della pagina. Con il solo `order: 2`
      sull'oggetto finiva SOPRA di esso: l'ordine si applica a tutti i fratelli,
-     e la firma, rimasta a 0, scavalcava l'immagine. Serve dirlo anche a lei. */
+     e la firma, rimasta a 0, scavalcava l'immagine. Serve dirlo anche a lei.
+
+     Il margine non e' spazio a occhio: e' quanto l'ombra del megafono
+     DEBORDA dal riquadro. L'ombra e' `position: absolute` (quindi non
+     occupa spazio nel layout) spinta di `translateY(10%)` e sfocata di
+     `blur(1.5rem)` — sotto il bordo inferiore dell'immagine finisce circa
+     un decimo della sua altezza piu' il raggio di sfocatura, e li' dentro
+     ci cadeva la firma. Riservare quello spazio e' la correzione; un
+     `margin` scelto a occhio sarebbe tornato sbagliato al primo cambio di
+     dimensione dell'oggetto. */
   .lh .entry-footer__credit {
     order: 3;
+    margin-top: var(--size-48);
   }
 }
 
@@ -859,23 +1002,26 @@ html[data-lh-armed] .lh-obj {
    posizione all'indice significherebbe rompersi al primo riordino. */
 
 @media (max-width: 55.99rem) {
-  /* ── "Chi sono" sospesa da mobile — TEMPORANEA, da rivalutare ────────────
-     Su schermo stretto è l'unico pannello più alto della finestra (925px su
-     667 a 375px di larghezza): è il caso che rendeva ruvido l'aggancio, ed è
-     anche il punto in cui l'attenzione si perde, per quantità di testo e per
-     l'immagine della pianta che non si vede.
+  /* ── "Chi sono" e' tornata ───────────────────────────────────
+     Qui c'era un `display: none`: il paragrafo intero faceva un pannello da
+     ~930px in una finestra da 667, e la bio semplicemente non esisteva per chi
+     arrivava da telefono. Ora la bio e' tre card richiudibili (~170px chiuse,
+     sotto i 600px con una aperta), quindi la sezione ci sta e resta accesa.
 
-     Resta nel DOM e resta servita sopra i 56rem: qui si toglie soltanto dal
-     disegno. Lo script di aggancio salta da sé i pannelli non disegnati
-     (`livePanels` in lab-home-scroll.ts), quindi la sequenza non resta con un
-     buco in mezzo.
-
-     ATTENZIONE: finché questa regola c'è, la bio non esiste per chi arriva da
-     telefono — cioè per la maggioranza. È una sospensione in attesa di
-     riscriverla più corta, non la sistemazione definitiva.
-     Per riattivarla: togliere questo blocco. */
-  .lh-section--about {
+     Quello che si spegne qui e' solo la pianta. Su desktop e' l'oggetto della
+     sezione e sta nella sua colonna; su mobile prendeva 24svh di altezza per
+     mostrare un'immagine che, a quella misura, non si distingue — 24svh sono
+     circa 160px, cioe' piu' di quanto costi una card intera. Fra un'immagine
+     che non si vede e un pezzo di bio che si legge, in una schermata sola,
+     vince il secondo. */
+  .lh-section--about .lh-section__object {
     display: none;
+  }
+
+  /* Senza l'oggetto la scheda non ha piu' due righe da spartire: il testo si
+     prende tutto invece di lasciare vuota la riga `1fr` dell'immagine. */
+  .lh-section--about {
+    grid-template-rows: auto;
   }
 
   /* ── CTA a tutta larghezza, testo centrato ──────────────────────────────

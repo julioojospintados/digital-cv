@@ -22,7 +22,15 @@ import Layout from "../layouts/Layout.astro";
 import { cvData } from "@cv-data";
 import { cvDataEn } from "@cv-data-en";
 import { LOCALES, MODES, lensPath, type Locale } from "../lib/cv-i18n";
-import { ABOUT_OBJECT, ABOUT_TEXT, PROFILE_TEXT, TAGLINE } from "../lib/lab-copy";
+import {
+  ABOUT_CARDS,
+  ABOUT_CARD_PHOTOS,
+  ABOUT_OBJECT,
+  ABOUT_TEXT,
+  PROFILE_TEXT,
+  TAGLINE,
+  photoThumb,
+} from "../lib/lab-copy";
 import MemoryDrawers from "../components/MemoryDrawers.astro";
 import EntryFooter from "../components/EntryFooter.astro";
 import "../styles/lab-home.css";
@@ -35,6 +43,9 @@ const { locale } = Astro.props;
 const t = LOCALES[locale];
 const data = locale === "en" ? cvDataEn : cvData;
 const about = ABOUT_TEXT[locale];
+// Le tre card di "Chi sono": la bio tagliata a fine frase, un pezzo per card.
+// La foto sta in un array a parte perché non cambia con la lingua.
+const aboutCards = ABOUT_CARDS[locale];
 // I percorsi cambiano con la lingua: l'inglese vive sotto /en.
 const workHref = locale === "en" ? "/en/work" : "/work";
 const otherLocale = locale === "en" ? "it" : "en";
@@ -224,13 +235,11 @@ const sections = MODES.map((mode) => ({
           }
         </h1>
         <p class="lh-tagline">{TAGLINE[locale]}</p>
-        <p class="lh-cred">
-          Web Designer · UX/UI · Software Developer · Comunicazione Digitale · AI Workflow
-        </p>
+        <p class="lh-cred">{t.ui.entryRoles}</p>
       </div>
 
       <a class="lh-scroll" href="#main-content">
-        <span>Scorri</span>
+        <span>{t.ui.scrollHint}</span>
         <span class="lh-scroll__line" aria-hidden="true"></span>
       </a>
     </section>
@@ -266,7 +275,28 @@ const sections = MODES.map((mode) => ({
           <p class="lh-section__initial" aria-hidden="true">IO</p>
           <h2 class="lh-section__title">{about.title}</h2>
           <p class="lh-section__eyebrow">{about.eyebrow}</p>
-          <p class="lh-section__text">{about.desc}</p>
+          {
+            /* La bio non è più un paragrafo: è tagliata a fine frase in tre
+               card, e ognuna apre una modale a schermo pieno. Due problemi
+               risolti insieme — il paragrafo intero faceva un pannello da
+               ~930px in una finestra da 667 (per questo la sezione era spenta
+               su mobile), e la foto dentro la colonna della scheda stava a
+               80px, un francobollo. A schermo pieno ne prende 335.
+
+               Nessuno script nuovo: `data-drawer-open="X"` apre `#dialog-X`,
+               lo stesso meccanismo dei cassetti qui sotto (memory-drawer.ts).
+               Focus trap, ESC e clic sul fondo arrivano dal <dialog> nativo. */
+          }
+          <div class="about-cards">
+            {
+              aboutCards.map((c, i) => (
+                <button class="about-card__b" type="button" data-drawer-open={`about-${i}`}>
+                  <span class="about-card__t">{c.label}</span>
+                  <span class="about-card__p" aria-hidden="true" />
+                </button>
+              ))
+            }
+          </div>
           {
             /* I tre cassetti della home vera, non le etichette: qui c'e' spazio
               e c'e' tempo — chi sta scorrendo l'ingresso puo' aprirli. Le
@@ -277,7 +307,7 @@ const sections = MODES.map((mode) => ({
           <div class="about-actions" role="group" aria-label={t.ui.aboutMore}>
             <button class="about-action" type="button" data-drawer-open="funfact">
               <span class="about-action__icon" aria-hidden="true">✦</span>
-              Fun fact
+              {t.ui.drawerFunFact}
             </button>
             <button class="about-action" type="button" data-drawer-open="belongings">
               <span class="about-action__icon" aria-hidden="true">✦</span>
@@ -340,6 +370,52 @@ const sections = MODES.map((mode) => ({
     {/* Il footer della home vera: stesso componente, stesso stile. */}
     <EntryFooter lang={locale} emphasis />
   </div>
+
+  {
+    /* Le tre modali di "Chi sono" — una per card. Stesse classi dei cassetti
+       (`.memory-dialog`), quindi stesso aspetto, stesso comportamento e niente
+       CSS nuovo: `memory-drawer.ts` le trova da sé, perché per ogni
+       `[data-drawer-open]` cerca `#dialog-<chiave>`.
+
+       `--reading` e non lo scatter: qui dentro c'è una foto sola e un
+       paragrafo, non quattordici foto — la variante stretta è la colonna di
+       lettura giusta per un testo, invece dei 64rem pensati per la griglia. */
+  }
+  {
+    aboutCards.map((c, i) => (
+      <dialog
+        class="memory-dialog memory-dialog--reading memory-dialog--about"
+        id={`dialog-about-${i}`}
+        aria-labelledby={`dialog-about-${i}-title`}
+        data-lenis-prevent
+      >
+        <div class="memory-dialog__header">
+          <p class="memory-dialog__eyebrow" id={`dialog-about-${i}-title`}>
+            {c.label}
+          </p>
+          <button
+            class="memory-dialog__close"
+            type="button"
+            data-drawer-close
+            aria-label={t.ui.closeLabel}
+          >
+            ✕
+          </button>
+        </div>
+        <div class="memory-dialog__scroll">
+          <figure class="about-modal">
+            <img
+              src={photoThumb(ABOUT_CARD_PHOTOS[i])}
+              alt={c.alt}
+              loading="lazy"
+              decoding="async"
+            />
+            <figcaption>{c.text}</figcaption>
+          </figure>
+        </div>
+      </dialog>
+    ))
+  }
 
   <MemoryDrawers lang={locale} />
 </Layout>

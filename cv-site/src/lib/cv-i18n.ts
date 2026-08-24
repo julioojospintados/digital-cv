@@ -105,6 +105,15 @@ export interface LocaleStrings {
     drawerTrip: string;
     backToEntry: string;
     otherEntry: string;
+    /** La riga dei ruoli sotto la tagline, nell'ingresso. */
+    entryRoles: string;
+    /** L'invito a scorrere, in fondo alla prima schermata. */
+    scrollHint: string;
+    /** Etichetta del pulsante che chiude una modale. */
+    closeLabel: string;
+    /** Il cassetto delle curiosita'. In inglese resta "Fun fact": e' la
+     *  stessa espressione, non una svista di traduzione. */
+    drawerFunFact: string;
     aboutMore: string;
     goTo: string;
     explorePortfolio: string;
@@ -205,6 +214,10 @@ const IT: LocaleStrings = {
     drawerTrip: "Viaggio",
     backToEntry: "Torna all'ingresso",
     otherEntry: "← altro ingresso",
+    entryRoles: "UX/UI Designer · Software Developer · Comunicazione Digitale · AI Workflow",
+    scrollHint: "Scorri",
+    closeLabel: "Chiudi",
+    drawerFunFact: "Fun fact",
     aboutMore: "Scopri di più su di me",
     goTo: "GO to",
     explorePortfolio: "Esplora il portfolio",
@@ -294,6 +307,10 @@ const EN: LocaleStrings = {
     drawerTrip: "Travel",
     backToEntry: "Back to the entry page",
     otherEntry: "← other entry",
+    entryRoles: "UX/UI Designer · Software Developer · Digital Communication · AI Workflow",
+    scrollHint: "Scroll",
+    closeLabel: "Close",
+    drawerFunFact: "Fun fact",
     aboutMore: "Find out more about me",
     goTo: "GO to",
     explorePortfolio: "Explore the portfolio",

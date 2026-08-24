@@ -91,6 +91,98 @@ export function profileCopy(mode: Mode, locale: Locale) {
   return { ...PROFILE_OBJECT[mode], ...PROFILE_TEXT[locale][mode] };
 }
 
+/**
+ * Le tre card di "Chi sono".
+ *
+ * La bio non e' piu' un paragrafo: e' tagliata in tre pezzi ai confini di
+ * frase, uno per card. Il taglio e' **senza perdite** — i tre `text` riuniti
+ * danno esattamente il paragrafo di prima, parola per parola. Non e' una
+ * promessa: `ABOUT_TEXT.desc` qui sotto e' *calcolato* riunendoli, quindi non
+ * esiste un modo di farli divergere. Se un domani si riscrive un pezzo, il
+ * paragrafo lungo cambia con lui.
+ *
+ * Perche' tre card e non un blocco: su schermo stretto il paragrafo intero
+ * faceva un pannello da ~930px in una finestra da 667, e per questo la
+ * sezione era spenta sotto i 56rem. Chiuse le card misurano ~170px.
+ *
+ * ⚠️ Testo di VOCE, come il resto di questo file: non riscriverlo senza
+ * chiedere. Qui in piu' c'e' il vincolo del taglio — vale per l'italiano e
+ * per l'inglese insieme, o le due lingue smettono di dire la stessa cosa.
+ */
+
+/**
+ * La foto di ogni card. Fuori dalle tabelle per lingua di proposito, come
+ * PROFILE_OBJECT: cosi' e' strutturalmente impossibile che l'italiano e
+ * l'inglese finiscano con due foto diverse. Percorsi da `public/`.
+ */
+export const ABOUT_CARD_PHOTOS = [
+  "/photos/trip/cave.webp",
+  "/photos/belongings/square-festival.webp",
+  "/photos/belongings/libreria.webp",
+] as const;
+
+/**
+ * La miniatura da 640px al posto della sorgente 1500x2000.
+ *
+ * Qui dentro la foto si vede al massimo a 576px — la modale di lettura e'
+ * larga 36rem — quindi l'originale sarebbe da tre a cinque volte i pixel
+ * necessari: `cave.webp` da solo pesa 599 KB contro i circa 60 della sua
+ * miniatura. Le miniature le genera `scripts/gen-photo-thumbs.mjs`.
+ *
+ * Il percorso pieno resta la fonte in ABOUT_CARD_PHOTOS: e' quello che
+ * identifica la foto, e da li' si ricava la variante — non il contrario.
+ */
+export const photoThumb = (path: string): string => path.replace(/\/([^/]+)$/, "/thumb/$1");
+
+export interface AboutCard {
+  /** L'etichetta sul bottone chiuso. */
+  label: string;
+  /** Un pezzo VERBATIM della bio, tagliato a fine frase. */
+  text: string;
+  /** La foto descritta a chi non la vede. Cambia con la lingua, la foto no. */
+  alt: string;
+}
+
+export const ABOUT_CARDS: Record<Locale, readonly AboutCard[]> = {
+  it: [
+    {
+      label: "Da dove vengo",
+      text: `Tantissimi lavori diversi alle spalle, alcune piante in casa e un passaporto ben timbrato. Ho vissuto in tre Stati diversi prima di tornare in Italia, ma sono riuscito a fare il bagno nei tre oceani balneabili, gli altri due sono troppo freddi.`,
+      alt: "L'imbocco di una grotta, con una tenda montata sotto.",
+    },
+    {
+      label: "Cosa mi porto dietro",
+      text: `Improvvisatore di battute e in viaggio, ho messo radici nel digitale, mantenendo una forte sensibilità, caratteristica che le persone mi fanno notare spesso, verso gli altri e me stesso, strizzando l'occhiolino alla poesia e alla fotografia.`,
+      alt: "Con il microfono in mano davanti a un piccolo pubblico.",
+    },
+    {
+      label: "Come ragiono",
+      text: `Attualmente cerco di unire i puntini nel mondo UX/UI design, sviluppo software e strategie digitali, applicando la stessa logica che serve negli scacchi. Gioco cercando la mossa che anticipa.`,
+      alt: "Una scala a chiocciola vista dall'alto, dentro una libreria.",
+    },
+  ],
+  en: [
+    {
+      label: "Where I come from",
+      text: "Countless different jobs behind me, a few plants at home, and a well-stamped passport. I lived in three different countries before moving back to Italy, but I did manage to swim in all three swimmable oceans — the other two are just too cold.",
+      alt: "The mouth of a cave, with a tent pitched under it.",
+    },
+    {
+      label: "What I carry with me",
+      text: "An improviser of jokes and journeys, I've put down roots in the digital world while keeping a strong sensitivity — people tell me about it often — toward others and myself, with a wink toward poetry and photography.",
+      alt: "Holding a microphone in front of a small audience.",
+    },
+    {
+      label: "How I think",
+      text: "These days I'm trying to connect the dots across UX/UI design, software development, and digital strategy, applying the same logic chess requires. I play looking for the move that sees ahead.",
+      alt: "A spiral staircase seen from above, inside a bookshop.",
+    },
+  ],
+};
+
+/** I pezzi riuniti: il paragrafo intero, senza poterlo far divergere. */
+const joinCards = (l: Locale): string => ABOUT_CARDS[l].map((c) => c.text).join(" ");
+
 /** Oggetto e misure della sezione "Chi sono" — la persona, non la lente. */
 export const ABOUT_OBJECT = { object: "plant", ratio: "226 / 250" } as const;
 
@@ -105,7 +197,7 @@ export const ABOUT_TEXT: Record<Locale, AboutText> = {
   it: {
     eyebrow: "Chi sono",
     title: "Coltivatore di empatia e battute in tasca.",
-    desc: `Tantissimi lavori diversi alle spalle, alcune piante in casa e un passaporto ben timbrato. Ho vissuto in tre Stati diversi prima di tornare in Italia, ma sono riuscito a fare il bagno nei tre oceani balneabili, gli altri due sono troppo freddi. Improvvisatore di battute e in viaggio, ho messo radici nel digitale, mantenendo una forte sensibilità, caratteristica che le persone mi fanno notare spesso, verso gli altri e me stesso, strizzando l'occhiolino alla poesia e alla fotografia. Attualmente cerco di unire i puntini nel mondo UX/UI design, sviluppo software e strategie digitali, applicando la stessa logica che serve negli scacchi. Gioco cercando la mossa che anticipa.`,
+    desc: joinCards("it"),
     chips: [
       "Film a San Francisco",
       "Improvvisazione teatrale",
@@ -118,7 +210,7 @@ export const ABOUT_TEXT: Record<Locale, AboutText> = {
   en: {
     eyebrow: "About me",
     title: "Cultivating empathy, with jokes in my pocket.",
-    desc: "Countless different jobs behind me, a few plants at home, and a well-stamped passport. I lived in three different countries before moving back to Italy, but I did manage to swim in all three swimmable oceans — the other two are just too cold. An improviser of jokes and journeys, I've put down roots in the digital world while keeping a strong sensitivity — people tell me about it often — toward others and myself, with a wink toward poetry and photography. These days I'm trying to connect the dots across UX/UI design, software development, and digital strategy, applying the same logic chess requires. I play looking for the move that sees ahead.",
+    desc: joinCards("en"),
     chips: [
       "Film in San Francisco",
       "Improv theatre",
