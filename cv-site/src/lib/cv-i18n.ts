@@ -238,7 +238,7 @@ const IT: LocaleStrings = {
     allRoles: "Tutte le esperienze",
     sinceCount: "{n} dal 2008",
     highlightedFor: "In evidenza per",
-    voices: "Chi ci ha lavorato",
+    voices: "Chi ha lavorato con me",
     pathTitle: "Formazione e certificazioni",
     education: "Formazione",
     certifications: "Certificazioni",

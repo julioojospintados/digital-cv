@@ -449,6 +449,27 @@ body {
   navigation: auto;
 }
 
+/* La radice deve durare quanto l'elemento condiviso.
+   Misurato: il browser dà alla radice 250ms fissi, mentre l'oggetto che
+   attraversa (portfolio-hero, lens-object) gira su --duration-page, cioè 500.
+   A metà volo lo sfondo e il contenuto erano già scattati alla pagina nuova,
+   e quello scatto in mezzo a un movimento ancora in corso è ciò che si legge
+   come uno sfarfallio — non è un lampo di rendering, sono due tempi diversi
+   sulla stessa transizione. Allineandoli il passaggio diventa un movimento
+   solo.
+   Vale per TUTTE le navigazioni del sito, non solo per quelle con un
+   elemento condiviso: dove non c'è nulla da morphare resta comunque una
+   dissolvenza sola, un po' più distesa. */
+/* Tutti e tre: `old` e `new` sono le due istantanee che si dissolvono,
+   `group` e' quello che le sposta e le ridimensiona. Con i soli primi due il
+   gruppo restava a 250ms e lo scatto in mezzo al volo rimaneva. */
+::view-transition-group(root),
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: var(--duration-page);
+  animation-timing-function: var(--ease-standard);
+}
+
 .work-index-hero {
   view-transition-name: portfolio-hero;
 }

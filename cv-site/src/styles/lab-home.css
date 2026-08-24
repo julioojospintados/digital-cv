@@ -588,6 +588,20 @@ html[data-lh-armed] .lh-obj {
    (~170px per tre bottoni) e la sezione ci sta in una schermata — che era il
    problema da cui si e' partiti. */
 
+/* I cassetti prendono il raggio del resto del sito.
+   `.about-action` nasce a --radius-16, cioe' quattro volte piu' tondo del
+   --radius-4 che il sito usa ovunque per i controlli (31 usi contro 26, e la
+   pagina di lente non usa quasi altro). Finche' quei tre bottoni vivevano da
+   soli non si notava; da quando stanno sotto le card di "Chi sono", che sono
+   a --radius-4, la differenza di forma si legge come un errore.
+
+   Scoped a `.lh` e non corretto alla fonte perche' memory-drawer.css serve
+   anche /old-version, che deve restare com'era. Stessa ragione e stesso
+   schema degli scavalchi del footer piu' sotto. */
+.lh .about-action {
+  border-radius: var(--radius-4);
+}
+
 .about-cards {
   display: flex;
   flex-direction: column;
@@ -633,11 +647,17 @@ html[data-lh-armed] .lh-obj {
   color: var(--lh-ink);
 }
 
-/* Il "piu'" e' due barre, non il carattere "+": stessa ragione della freccia
-   dei contatti, che e' due bordi e non una freccia Unicode — un glifo dipende
-   dal font e non eredita lo spessore del testo accanto.
-   Non ruota piu': non c'e' niente che si espande sul posto, quindi l'icona
-   dice "c'e' dell'altro" e resta ferma. */
+/* Il "piu'" e' due barre disegnate, non il carattere "+": stessa ragione della
+   freccia dei contatti, che e' due bordi e non una freccia Unicode — un glifo
+   dipende dal font e non eredita lo spessore del testo accanto.
+
+   Le due barre sono disegnate ognuna nel suo verso, NON una ruotata di 90°.
+   Con la rotazione la barra verticale nasceva orizzontale e veniva girata: a
+   2px di spessore il risultato dipende da come il browser rasterizza un
+   elemento trasformato, e finche' nessuna interazione forzava un ridisegno la
+   riga usciva sfilacciata — poi si "sistemava" al primo tocco. Due rettangoli
+   dichiarati per quello che sono non hanno trasformazioni da rasterizzare, e
+   restano nitidi a qualunque densita' di schermo. */
 .about-card__p {
   position: relative;
   width: var(--size-12);
@@ -645,8 +665,8 @@ html[data-lh-armed] .lh-obj {
   flex-shrink: 0;
 }
 
-.about-card__p::before,
-.about-card__p::after {
+/* La barra orizzontale: larga quanto il riquadro, alta 2px, centrata. */
+.about-card__p::before {
   content: "";
   position: absolute;
   top: 50%;
@@ -654,6 +674,19 @@ html[data-lh-armed] .lh-obj {
   left: 0;
   height: 2px;
   margin-top: -1px;
+  background: var(--accent);
+}
+
+/* La verticale: la stessa cosa girata di novanta gradi — ma scritta, non
+   ruotata. */
+.about-card__p::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 2px;
+  margin-left: -1px;
   background: var(--accent);
 }
 
@@ -702,7 +735,7 @@ html[data-lh-armed] .lh-obj {
   font-weight: 600;
   letter-spacing: 0.01em;
   text-decoration: none;
-  border-radius: 0.25rem;
+  border-radius: var(--radius-4);
   padding: 0.8rem 1.35rem;
   background: var(--accent);
   color: rgba(10, 38, 34, 1);
@@ -714,9 +747,18 @@ html[data-lh-armed] .lh-obj {
 
 /* Secondario: il bordo resta colorato, ma il testo passa all'inchiostro
    chiaro — che sull'ottanio ha contrasto pieno, a differenza dell'accento. */
+/* Il secondario porta l'accento anche nel testo, non solo nel bordo — ma
+   `--accent-text`, non `--accent`.
+   Non e' pignoleria: l'arancione pieno come TESTO su questo fondo fa 3,62:1,
+   sotto il 4,5:1 che 1.4.3 chiede al testo piccolo. Ciano e oro passano
+   interi, l'arancione no, ed e' esattamente il caso della sezione design —
+   cioe' l'unica scheda dove questo bottone esiste. `--accent-text` e' il
+   token nato per questo: schiarisce l'arancione al 50% verso il bianco
+   (4,70:1) e lascia intatti gli altri due. Il fallback a `--accent` copre la
+   sezione "Chi sono", che non ha lente e quindi non definisce la variante. */
 .lh-cta--ghost {
   background: transparent;
-  color: var(--lh-ink);
+  color: var(--accent-text, var(--accent));
 }
 
 /* L'hover dietro (hover: hover), come in lab-cv.css: su touch non esiste un

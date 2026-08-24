@@ -155,18 +155,12 @@ const allExperiences = data.experience
 
 const email = data.social.find((s) => s.platform === "Email");
 const linkedin = data.social.find((s) => s.platform === "LinkedIn");
-// Spazio unificatore (U+00A0) fra lingua e livello: la riga può andare a capo
-// fra una lingua e l'altra, mai dentro una coppia ("Inglese" da una parte e
-// "B2" dall'altra). Prima lo teneva un `white-space: nowrap` sull'intera
-// riga, e su un telefono da 390px quella riga diventava un blocco
-// indivisibile da 416px: allargava la colonna della griglia e spingeva fuori
-// schermo metà dell'intestazione. Il vincolo è per coppia, non per riga.
-// String.fromCharCode(160) e non un escape unicode scritto a mano:
-// carattere letterale, e a quel punto eslint lo segnala come spazio
-// irregolare. Cosi' nel sorgente non c'e' nessun carattere invisibile e
-// nessuno dei due strumenti ha qualcosa da riscrivere.
-const NBSP = String.fromCharCode(160);
-const langs = data.languages.map((l) => `${l.name}${NBSP}${l.level}`).join(" · ");
+// Le lingue non stanno piu' nella riga dei puntini: sono una fila di
+// pastiglie, una per lingua, col livello staccato dal nome. Prima erano
+// quattro delle sei voci di un unico elenco puntato che mescolava luogo,
+// disponibilita' e lingue con lo stesso separatore e lo stesso peso —
+// niente diceva dove finiva un tipo di dato e cominciava l'altro.
+const langChips = data.languages.map((l) => ({ name: l.name, level: l.level }));
 
 // ── Strato 2c: percorso e voci ───────────────────────────────────────────
 // timelineItems arriva già unito e ordinato dal piu recente da
@@ -235,11 +229,7 @@ const MAX_CHIPS = 6;
 
           <p class="lc-claim">{heroTitle}</p>
 
-          <p class="lc-meta">
-            {data.personal.location} · {t.ui.availableRemote} · <span class="lc-meta__langs"
-              >{langs}</span
-            >
-          </p>
+          <p class="lc-meta">{data.personal.location} · {t.ui.availableRemote}</p>
 
           <!-- "Dove lavora ora, e prima": il dato più fissato in assoluto
                nello screening iniziale. -->
@@ -276,6 +266,32 @@ const MAX_CHIPS = 6;
               )
             }
           </div>
+
+          {
+            /* Le lingue come pastiglie: il livello CEFR resta scritto per
+              esteso perche' e' una credenziale, non un punteggio — tradurlo
+              in "tre pallini su cinque" perderebbe l'unico dato che un
+              recruiter cerca davvero. Il grafico qui separa i tipi di
+              informazione, non misura il livello.
+
+              Stanno DOPO i bottoni e prima dei contatti, non su in alto con
+              luogo e disponibilita': la fascia dei primi secondi porta gia'
+              nome, ruolo, claim e i due incarichi in corso, e le lingue non
+              competono con quelli. Qui invece chiudono il blocco insieme a
+              mail e LinkedIn — sono tutte informazioni di contatto e di
+              contesto, cioe' quello che si guarda dopo aver deciso che il
+              profilo interessa. */
+          }
+          <ul class="lc-langs" role="list">
+            {
+              langChips.map((l) => (
+                <li class="lc-lang">
+                  {l.name}
+                  <b class="lc-lang__lvl">{l.level}</b>
+                </li>
+              ))
+            }
+          </ul>
 
           <!-- Contatti in chiaro, non dentro un FAB: "no treasure hunts for
                contact information". -->
@@ -375,18 +391,25 @@ const MAX_CHIPS = 6;
               const primi = job.skills.slice(0, MAX_CHIPS);
               const oltre = job.skills.slice(MAX_CHIPS);
 
-              // Tre esperienze in cv.ts non hanno highlights (Fotografo,
-              // Corriere di Chieri, Satispay): aprire un <details> per
-              // scoprire tre chip di tecnologie è un'affordance che mente, e
-              // mentire su cosa c'è dietro un click è peggio che non offrire
-              // il click. Quelle righe restano piatte, con le chip già in
-              // vista: nessuna promessa, e niente di nascosto.
+              // Ogni esperienza che ha qualcosa dentro diventa una scheda
+              // apribile — anche quelle senza highlights (Fotografo, Corriere
+              // di Chieri, Satispay), che hanno comunque le chip.
               //
-              // La condizione guarda SOLO gli highlights. La prima versione
-              // diceva `highlights || chips`, e siccome ogni esperienza ha
-              // almeno tre `skills` non era mai falsa: il ramo piatto era
-              // codice morto, scoperto contando i nodi nell'HTML servito.
-              const hasBody = job.highlights.length > 0 || job.clients.length > 0;
+              // Qui c'era la scelta opposta, con un argomento buono: aprire un
+              // <details> per scoprire tre chip di tecnologie e' "un'affordance
+              // che mente". Reggeva finche' le schede nascevano APERTE, perche'
+              // allora una riga piatta era indistinguibile dalle altre. Da
+              // quando sono tutte chiuse il contesto e' cambiato: chi guarda si
+              // aspetta che ogni riga si apra, e due righe che non lo fanno
+              // sembrano rotte, non sobrie. Fra un'affordance dal premio
+              // modesto e un elenco che si comporta in due modi diversi, la
+              // seconda confonde di piu'.
+              //
+              // Se un domani una riga non ha proprio niente — ne' highlights,
+              // ne' clienti, ne' chip — il ramo piatto e' ancora qui e la
+              // prende. Non e' codice morto: e' il caso limite giusto.
+              const hasBody =
+                job.highlights.length > 0 || job.clients.length > 0 || primi.length > 0;
 
               const chipList =
                 primi.length > 0 ? (
@@ -464,13 +487,18 @@ const MAX_CHIPS = 6;
               }
 
               return (
-                <details class="lc-job" open>
-                  {/* Il <summary> è volutamente ricco: azienda, ruolo, anni e
-                      una riga di prova restano leggibili anche da chiuso.
-                      Chiudere sulla sola intestazione sarebbe il "treasure
-                      hunt" che gli hiring manager citano fra i motivi di
-                      scarto. <h3> dentro <summary> è valido (heading
-                      content) e tiene le esperienze navigabili col tasto H. */}
+                <details class="lc-job">
+                  {/* Il <summary> è volutamente ricco, e da quando le schede
+                      nascono chiuse è diventato il pezzo che regge tutto:
+                      azienda, ruolo, anni e una riga di prova restano
+                      leggibili senza aprire niente. È la ragione per cui
+                      chiudere di default non ricade nel "treasure hunt" che
+                      gli hiring manager citano fra i motivi di scarto — da
+                      chiuso non resta un elenco di sole intestazioni, resta
+                      un elenco che si legge. Se un domani il summary si
+                      assottiglia, questa scelta va rivista con lui.
+                      <h3> dentro <summary> è valido (heading content) e tiene
+                      le esperienze navigabili col tasto H. */}
                   <summary class="lc-job__summary">
                     {head}
                     <span class="lc-job__chevron" aria-hidden="true" />
@@ -511,33 +539,18 @@ const MAX_CHIPS = 6;
         </div>
       </section>
 
-      <!-- Chiusura dei <details> sotto i 1024px. Inline e sincrono di
-           proposito: gira mentre la pagina è ancora in parsing, quindi su
-           mobile non si vede la lista aprirsi e richiudersi (niente CLS).
-           Il markup nasce `open`: senza JS il degrado è "verboso", non
-           "vuoto" — che è il verso giusto in cui rompersi. -->
-      <script is:inline>
-        (function () {
-          const mq = window.matchMedia("(max-width: 63.9375rem)");
-          // details.lc-job soltanto: le righe piatte (.lc-job--flat) sono
-          // <article> e non hanno stato aperto/chiuso.
-          const jobs = document.querySelectorAll("details.lc-job");
-          function apply(collapse) {
-            for (let i = 0; i < jobs.length; i++) {
-              // Il primo resta sempre aperto: da chiuso, una lista di sole
-              // intestazioni non dice cosa hai fatto.
-              if (collapse && i > 0) jobs[i].removeAttribute("open");
-              else jobs[i].setAttribute("open", "");
-            }
-          }
-          apply(mq.matches);
-          // Solo al cambio di breakpoint, non a ogni resize: non deve
-          // riaprire ciò che l'utente ha chiuso a mano.
-          mq.addEventListener("change", function (e) {
-            apply(e.matches);
-          });
-        })();
-      </script>
+      <!-- Qui c'era uno script inline che sotto i 1024px chiudeva tutte le
+           schede tranne la prima: serviva perché il markup nasceva `open`, e
+           su mobile una lista tutta aperta era una colonna infinita. Da
+           quando nasce chiusa non ha più niente da fare, e toglierlo è
+           meglio che lasciarlo: era anche l'unico punto che riapriva le
+           schede al cambio di orientamento, sovrascrivendo quelle che
+           l'utente aveva chiuso a mano.
+
+           Senza JavaScript ora il degrado è "tutto chiuso" invece di "tutto
+           aperto". Regge perché il <summary> è ricco (vedi sopra): resta
+           azienda, ruolo, anni e una riga di prova, e <details> si apre da
+           sé anche senza script. -->
 
       <!-- ── 2b. La cronologia completa ───────────────────────────────────
            Il costo del filtro: cinque card dal 2019 fanno sembrare il tuo un

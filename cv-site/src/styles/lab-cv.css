@@ -324,6 +324,58 @@
   color: var(--lc-muted);
 }
 
+/* ── Le lingue ─────────────────────────────────────────────────────
+   Erano quattro delle sei voci di un'unica riga puntata che teneva insieme
+   luogo, disponibilita' e lingue con lo stesso separatore e lo stesso peso:
+   sei cose di tre tipi diversi, e niente che dicesse dove finiva l'uno e
+   cominciava l'altro. Il difetto non era la quantita', era che non fossero
+   distinguibili.
+
+   Il livello resta scritto (B2, A2, Madrelingua) e non diventa una scala di
+   pallini: il CEFR e' una credenziale con un nome, e "tre su cinque" e'
+   un'opinione che perde l'unico dato che un recruiter cerca. Il trattamento
+   grafico serve a separare i tipi di informazione, non a misurare.
+
+   Nessun nowrap sulla riga: e' la pastiglia a essere indivisibile, quindi il
+   ritorno a capo avviene fra una lingua e l'altra. E' lo stesso vincolo che
+   prima teneva uno spazio unificatore invisibile nel sorgente — qui lo porta
+   il layout, che e' il posto giusto. */
+.lc-langs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--size-8);
+  /* --size-16 e non --size-12: il blocco non segue piu' la riga di luogo e
+     disponibilita', segue i bottoni. Da una fila di bottoni serve piu' aria
+     che da una riga di testo, o le pastiglie sembrano una loro appendice. */
+  margin: var(--size-16) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lc-lang {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--size-6);
+  padding: var(--size-4) var(--size-12);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-4);
+  font-size: var(--fs-14);
+  color: var(--lc-muted);
+  white-space: nowrap;
+}
+
+/* Il livello e' il dato, non un'etichetta di sistema: sta a --fs-14 come il
+   nome accanto, non al pavimento dei 12. E' un difetto gia' trovato una
+   volta su questo progetto — il CEFR era finito a --fs-12 perche' il blocco
+   si chiamava "chip", e chiamarsi chip non basta a qualificare per il
+   pavimento (vedi design-system/SKILL.md). */
+.lc-lang__lvl {
+  font-family: var(--font-mono);
+  font-size: var(--fs-14);
+  font-weight: 700;
+  color: var(--color-text-primary);
+}
+
 /* Nessun nowrap qui: lo spazio unificatore nel template tiene insieme
    "Inglese B2" senza rendere indivisibile l'intera riga. Il nowrap sull'intera
    riga costava 416px di larghezza minima dentro un viewport da 390, e siccome
@@ -1493,5 +1545,45 @@
        bersagli stretti, e il primo è l'azione che conta. */
     flex: 1 1 100%;
     justify-content: center;
+  }
+}
+
+/* ── L'oggetto che arriva dalla home ──────────────────────────────────────
+   Stesso `view-transition-name` che lens-transition.ts assegna al clic sulla
+   CTA della home: il browser tratta le due immagini come UN oggetto che
+   cambia posizione e forma, invece di dissolvere due pagine che condividono
+   lo stesso ottanio — dissolvenza che, fra due schermate dello stesso verde,
+   non si vede affatto.
+
+   Qui il nome è statico e va bene che lo sia: non c'è nessun clic da
+   intercettare, e il primo fotogramma della pagina deve già portarlo. Il
+   rischio dei nomi statici (morph su navigazioni scorrelate, vedi il
+   commento in global.css sopra @view-transition) qui non si presenta,
+   perché l'unica altra pagina che porta questo nome è la home, e lì compare
+   solo al clic sulla CTA giusta.
+
+   Conseguenza voluta, non effetto collaterale: passando da una lente
+   all'altra (/design → /tech) le due immagini sono entrambe qui e nella
+   stessa posizione, quindi si scambiano sul posto invece di saltare.
+
+   L'ombra (.lc-obj__shadow) resta fuori di proposito: è la sagoma annerita
+   dello stesso webp, e portarsela dietro come elemento a sé la farebbe
+   viaggiare per conto suo. */
+.lc-obj__img {
+  view-transition-name: lens-object;
+}
+
+::view-transition-group(lens-object) {
+  animation-duration: var(--duration-page);
+  animation-timing-function: var(--ease-standard);
+}
+
+/* Riduzione, non eliminazione: senza nome condiviso resta la transizione di
+   default del browser, la pagina cambia e nessun oggetto attraversa lo
+   schermo. Speculare alla guardia in lens-transition.ts, che dall'altro lato
+   non assegna niente. */
+@media (prefers-reduced-motion: reduce) {
+  .lc-obj__img {
+    view-transition-name: none;
   }
 }
