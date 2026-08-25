@@ -1058,33 +1058,24 @@ html[data-lh-armed] .lh-obj {
      circa 160px, cioe' piu' di quanto costi una card intera. Fra un'immagine
      che non si vede e un pezzo di bio che si legge, in una schermata sola,
      vince il secondo. */
-  /* ── Gli oggetti delle sezioni sbordano dall'angolo ───────────────────
-     Qui c'era un `display: none` sulla sola pianta di "Chi sono": su una
-     schermata dove la bio deve stare intera, un oggetto centrato costava
-     24svh (circa 160px) per un'immagine che a quella misura non si
-     distingue, e veniva spento.
+  /* ── Gli oggetti delle sezioni, anche su "Chi sono" ───────────────────
+     Qui c'era un `display: none` sulla sola pianta: su una schermata dove la
+     bio deve stare intera, un oggetto costava 24svh (circa 160px) per
+     un'immagine che a quella misura non si distingue, e veniva spento.
 
-     Ora la regola e' un'altra e vale per tutte e quattro le sezioni: gli
-     oggetti non stanno piu' centrati in una riga loro, escono dall'angolo
-     in basso a destra e vengono tagliati dal bordo. Il vantaggio non e'
-     estetico: la porzione fuori dal riquadro non costa spazio a nessuno,
-     quindi la pianta torna senza togliere niente alla bio. Ed e' la
-     grammatica giusta per un knolling, dove gli oggetti stanno su un piano
-     che continua oltre l'inquadratura — un oggetto tagliato lo dice, uno
-     centrato in una cella no.
-
-     Il taglio lo fa `.lh-section`, che ha gia' `overflow: hidden`: i
-     margini negativi non producono scroll orizzontale.
+     Ora tutte e quattro le sezioni trattano l'oggetto allo stesso modo:
+     centrato e appoggiato in fondo alla propria riga. La pianta torna, e
+     l'eccezione sparisce — era quella il problema, piu' dell'immagine
+     mancante.
 
      Il testo resta sopra e prende quello che gli serve (`auto`), l'oggetto
-     si accontenta della riga che resta: se la finestra e' bassa cede lui,
-     mai il contenuto. */
+     si accontenta della riga che resta (`minmax(0, 1fr)`): se la finestra e'
+     bassa cede lui, mai il contenuto. Verificato a 390 e 360px che i CTA
+     restano dentro la sezione. */
   .lh-section__object {
-    width: min(82%, var(--nat, 22rem));
-    justify-self: end;
+    width: min(58%, var(--nat, 22rem));
+    justify-self: center;
     align-self: end;
-    margin-right: -16%;
-    margin-bottom: -10%;
   }
 
   .lh-section {
