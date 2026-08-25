@@ -30,7 +30,6 @@ const t =
     ? {
         eyebrow: "Contacts",
         title: "Let's talk",
-        sub: "An email or a LinkedIn message.",
         email: {
           label: "Email",
           action: "Write to me",
@@ -49,7 +48,6 @@ const t =
     : {
         eyebrow: "Contatti",
         title: "Parliamone",
-        sub: "Una mail o un messaggio su LinkedIn.",
         email: {
           label: "Email",
           action: "Scrivimi",
@@ -72,7 +70,6 @@ const t =
     {t.title}<span class="contact-cta__dot">.</span>
   </h2>
   <p class="contact-cta__eyebrow">{t.eyebrow}</p>
-  <p class="contact-cta__sub">{t.sub}</p>
 
   <div class:list={["contact-cta__grid", { "contact-cta__grid--emphasis": emphasis }]}>
     <!-- _blank anche sul mailto: se il gestore di posta è webmail (Gmail nel
@@ -177,13 +174,6 @@ const t =
 
   .contact-cta__dot {
     color: var(--color-accent);
-  }
-
-  .contact-cta__sub {
-    font-size: var(--fs-16);
-    line-height: 1.5;
-    color: var(--color-text-muted);
-    max-width: 40rem;
   }
 
   /* Mobile-first: una colonna, poi due da tablet in su. La variante
