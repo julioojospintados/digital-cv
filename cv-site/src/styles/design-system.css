@@ -239,12 +239,13 @@
   display: none;
 }
 
+/* Anche l'indice della vetrina apre in loco: tacca, non stanghetta. */
 .ds-side__chevron {
-  transition: transform var(--duration-micro) var(--ease-standard);
+  color: var(--color-text-muted);
 }
 
 .ds-side[open] .ds-side__chevron {
-  transform: rotate(90deg);
+  color: var(--color-accent);
 }
 
 @media (min-width: 60rem) {

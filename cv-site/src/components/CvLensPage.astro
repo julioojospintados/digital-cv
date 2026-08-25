@@ -367,7 +367,7 @@ const MAX_CHIPS = 6;
             <summary class="lc-lens__trigger">
               <span class="lc-lens__dot" aria-hidden="true"></span>
               <span class="lc-lens__label">{t.ui.youAreViewing} <b>{modeLabel}</b></span>
-              <span class="lc-lens__chevron" aria-hidden="true">›</span>
+              <span class="lc-lens__chevron tick" aria-hidden="true"></span>
             </summary>
             <ul class="lc-lens__list" role="list">
               {
@@ -553,7 +553,7 @@ const MAX_CHIPS = 6;
                       le esperienze navigabili col tasto H. */}
                   <summary class="lc-job__summary">
                     {head}
-                    <span class="lc-job__chevron" aria-hidden="true" />
+                    <span class="lc-job__chevron tick" aria-hidden="true" />
                   </summary>
 
                   <div class="lc-job__body">
@@ -648,6 +648,7 @@ const MAX_CHIPS = 6;
               <details class="lc-lane">
                 <summary class="lc-lane__head">
                   <span class="lc-lane__name">
+                    <span class="tick" aria-hidden="true" />
                     <span
                       class:list={["lc-lane__key", `lc-lane__key--${lane.key}`]}
                       aria-hidden="true"

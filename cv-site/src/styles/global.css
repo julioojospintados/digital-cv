@@ -171,6 +171,74 @@ button {
   --fs-48: 3rem;
 }
 
+/* ── Tacca di registro — il segno che dice "questo si apre" ──────────────
+   Due trattini che si chiudono ad angolo, come i crocini di registro di una
+   stampa: il vernacolo tipografico e fotografico da cui viene il knolling.
+
+   Sostituisce la stanghetta dove il gesto e' "si apre": schede che si
+   espandono in loco e tendine che scendono. **Non** va sulle frecce che
+   portano altrove (`.work-chevron` delle card di /work, la freccia delle
+   card contatto): quelle puntano a destra perche' la pagina cambia, e una
+   tacca prometterebbe un'espansione che non c'e'.
+
+   Il difetto che risolve e' l'ambiguita': prima la stanghetta faceva tre
+   lavori diversi — si apre, scende un menu, vai altrove — e quindi non ne
+   diceva nessuno. Ora ne dice due e la freccia il terzo.
+
+   `currentColor` perche' il colore lo decide il posto in cui vive: muto a
+   riposo, accento da aperto, senza una regola in piu' per ogni contesto. */
+.tick {
+  position: relative;
+  display: inline-block;
+  width: 0.875rem;
+  height: 0.875rem;
+  flex-shrink: 0;
+}
+
+.tick::before,
+.tick::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 100%;
+  height: 2px;
+  margin-top: -1px;
+  background: currentColor;
+  transition: transform var(--duration-micro, 0.18s) var(--ease-standard, ease);
+}
+
+/* Ognuna ruota attorno al proprio capo esterno: si chiudono a V invece di
+   incrociarsi al centro. */
+.tick::before {
+  transform-origin: 0 50%;
+}
+
+.tick::after {
+  transform-origin: 100% 50%;
+}
+
+/* Aperto: `[open]` per i <details>, `aria-expanded` per i bottoni. Le due
+   forme convivono perche' il sito usa entrambe. */
+[open] > * .tick::before,
+[open] > .tick::before,
+[aria-expanded="true"] .tick::before {
+  transform: rotate(38deg) scaleX(0.62);
+}
+
+[open] > * .tick::after,
+[open] > .tick::after,
+[aria-expanded="true"] .tick::after {
+  transform: rotate(-38deg) scaleX(0.62);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tick::before,
+  .tick::after {
+    transition: none;
+  }
+}
+
 /* I tre accenti, nominati fuori dai blocchi [data-mode].
    Servono a un punto solo del sito: la cronologia a corsie di /<lente>, dove
    ciano e arancio distinguono due mestieri e non due lenti, e sono quindi gli

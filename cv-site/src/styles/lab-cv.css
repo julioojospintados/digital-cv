@@ -614,14 +614,15 @@
   flex: 0 0 auto;
 }
 
+/* Era un glifo "\203A" ruotato: dipendeva dal font e non ereditava lo
+   spessore del testo accanto, oltre a violare il "mai un glifo Unicode" che
+   il progetto si e' dato altrove. Ora e' la tacca, come le schede. */
 .lc-lens__chevron {
-  display: inline-block;
-  transform: rotate(90deg);
-  transition: transform var(--duration-micro) var(--ease-standard);
+  color: var(--lc-muted);
 }
 
 .lc-lens[open] .lc-lens__chevron {
-  transform: rotate(-90deg);
+  color: var(--color-accent);
 }
 
 .lc-lens__list {
@@ -915,20 +916,15 @@
 }
 
 /* Chevron disegnato con i bordi: nessun glyph da caricare. */
+/* La forma la porta .tick (global.css); qui solo dove sta e di che colore. */
 .lc-job__chevron {
   justify-self: end;
-  width: 0.5rem;
-  height: 0.5rem;
   margin-top: var(--size-8);
-  border-right: 2px solid var(--lc-muted);
-  border-bottom: 2px solid var(--lc-muted);
-  transform: rotate(45deg);
-  transition: transform var(--duration-micro) var(--ease-standard);
+  color: var(--lc-muted);
 }
 
 .lc-job[open] .lc-job__chevron {
-  transform: rotate(-135deg);
-  border-color: var(--color-accent);
+  color: var(--color-accent);
 }
 
 .lc-job__body {
@@ -1300,21 +1296,10 @@
   color: var(--lc-ink);
 }
 
-/* Il triangolo e' un ::before e non un carattere nel markup: e' l'unico
-   pezzo che cambia con lo stato, e lo stato lo sa il CSS. */
-.lc-lane__name::before {
-  content: "";
-  flex: 0 0 auto;
-  width: 0;
-  height: 0;
-  border-left: 0.25rem solid currentColor;
-  border-top: 0.1875rem solid transparent;
-  border-bottom: 0.1875rem solid transparent;
-  transition: transform var(--duration-fast, 0.16s) ease;
-}
-
-.lc-lane[open] > .lc-lane__head .lc-lane__name::before {
-  transform: rotate(90deg);
+/* Anche qui la tacca, come le schede: e' lo stesso gesto. Il markup porta
+   un <span class="tick">, cosi' la forma sta in un posto solo. */
+.lc-lane__name .tick {
+  color: currentColor;
 }
 
 .lc-lane__key {

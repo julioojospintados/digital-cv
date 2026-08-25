@@ -1058,14 +1058,37 @@ html[data-lh-armed] .lh-obj {
      circa 160px, cioe' piu' di quanto costi una card intera. Fra un'immagine
      che non si vede e un pezzo di bio che si legge, in una schermata sola,
      vince il secondo. */
-  .lh-section--about .lh-section__object {
-    display: none;
+  /* ── Gli oggetti delle sezioni sbordano dall'angolo ───────────────────
+     Qui c'era un `display: none` sulla sola pianta di "Chi sono": su una
+     schermata dove la bio deve stare intera, un oggetto centrato costava
+     24svh (circa 160px) per un'immagine che a quella misura non si
+     distingue, e veniva spento.
+
+     Ora la regola e' un'altra e vale per tutte e quattro le sezioni: gli
+     oggetti non stanno piu' centrati in una riga loro, escono dall'angolo
+     in basso a sinistra e vengono tagliati dal bordo. Il vantaggio non e'
+     estetico: la porzione fuori dal riquadro non costa spazio a nessuno,
+     quindi la pianta torna senza togliere niente alla bio. Ed e' la
+     grammatica giusta per un knolling, dove gli oggetti stanno su un piano
+     che continua oltre l'inquadratura — un oggetto tagliato lo dice, uno
+     centrato in una cella no.
+
+     Il taglio lo fa `.lh-section`, che ha gia' `overflow: hidden`: i
+     margini negativi non producono scroll orizzontale.
+
+     Il testo resta sopra e prende quello che gli serve (`auto`), l'oggetto
+     si accontenta della riga che resta: se la finestra e' bassa cede lui,
+     mai il contenuto. */
+  .lh-section__object {
+    width: min(82%, var(--nat, 22rem));
+    justify-self: start;
+    align-self: end;
+    margin-left: -16%;
+    margin-bottom: -10%;
   }
 
-  /* Senza l'oggetto la scheda non ha piu' due righe da spartire: il testo si
-     prende tutto invece di lasciare vuota la riga `1fr` dell'immagine. */
-  .lh-section--about {
-    grid-template-rows: auto;
+  .lh-section {
+    grid-template-rows: auto minmax(0, 1fr);
   }
 
   /* ── CTA a tutta larghezza, testo centrato ──────────────────────────────

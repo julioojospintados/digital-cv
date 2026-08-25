@@ -700,7 +700,7 @@ const NAV = [
     <details class="ds-side" id="ds-side" data-lenis-prevent open>
       <summary class="ds-side__summary">
         {t.tocTitle}
-        <span class="ds-side__chevron" aria-hidden="true">›</span>
+        <span class="ds-side__chevron tick" aria-hidden="true"></span>
       </summary>
       <nav aria-label={t.tocTitle}>
         {
@@ -761,7 +761,7 @@ const NAV = [
               {t.modeLabel}
               <b data-ds-lens-current>{MODES[0].label}</b>
             </span>
-            <span class="lc-lens__chevron" aria-hidden="true">›</span>
+            <span class="lc-lens__chevron tick" aria-hidden="true"></span>
           </summary>
           <ul class="lc-lens__list" role="list">
             {
@@ -2533,7 +2533,7 @@ const NAV = [
                   {it ? "Stai vedendo:" : "You are viewing:"}
                   <b>Web & UX Designer</b>
                 </span>
-                <span class="lc-lens__chevron" aria-hidden="true" data-ds-part="4">›</span>
+                <span class="lc-lens__chevron tick" aria-hidden="true" data-ds-part="4"></span>
               </summary>
               <ul class="lc-lens__list" role="list" data-ds-part="5">
                 {
