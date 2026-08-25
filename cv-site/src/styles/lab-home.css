@@ -892,7 +892,7 @@ html[data-lh-armed] .lh-obj {
   display: grid;
   grid-template-rows: 1fr auto;
   align-items: center;
-  padding-block: clamp(var(--size-64), 5vh, 7rem);
+  padding-block: clamp(var(--size-16), 5vh, 7rem);
 }
 
 .lh .entry-footer__credit {
@@ -902,8 +902,10 @@ html[data-lh-armed] .lh-obj {
 /* Da 56rem in su prende anche le due colonne delle altre sezioni: oggetto da
    una parte, testo dall'altra. E' il pezzo che la fa leggere come la quinta
    sezione invece che come un pie' di pagina cresciuto. Sotto quella soglia
-   resta impilata, e l'oggetto sparisce: su un telefono ruberebbe al
-   contenuto la meta' della schermata senza aggiungere informazione. */
+   resta impilata e l'oggetto passa SOTTO i contatti, piu' piccolo: la regola
+   sta in fondo al file, nel blocco max-width 55.9375rem. (Questo commento
+   diceva che su telefono l'oggetto spariva: era vero prima di 991a28f, non
+   lo e' piu' da quando il megafono e' tornato anche da telefono.) */
 @media (min-width: 56rem) {
   .lh .entry-footer--emphasis {
     /* 1.2fr al TESTO, che ora sta in prima colonna: la quota grande segue il

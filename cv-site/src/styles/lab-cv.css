@@ -1521,6 +1521,9 @@
 
 .lc-path__mark {
   align-self: center;
+  /* Una sigla che va a capo distrugge l'allineamento di tutta la colonna.
+     Con nowrap uno sforo deborda e si nota; andando a capo si nasconde. */
+  white-space: nowrap;
   font-family: var(--font-mono);
   font-size: var(--fs-12);
   letter-spacing: 0.04em;
@@ -1768,9 +1771,15 @@
 
   /* Il marchio resta, la data scende sotto il titolo: su una colonna sola
      tre corsie non ci stanno, e il marchio e' quello che rende la lista
-     percorribile. */
+     percorribile.
+
+     La gronda NON si stringe qui. Ci avevo provato con 3rem, e quattro sigle
+     su quindici andavano a capo su due righe (IMM-LAV, B-TEATRO): la colonna
+     che doveva allineare il bordo sinistro era proprio quella che lo rompeva.
+     Otto caratteri in mono a 12px misurano ~58px, cioe' piu' di 3rem: la
+     larghezza la decide la sigla piu' lunga, non lo spazio che avanza. */
   .lc-path__row {
-    grid-template-columns: 3rem minmax(0, 1fr);
+    grid-template-columns: 4rem minmax(0, 1fr);
     align-items: start;
   }
 
