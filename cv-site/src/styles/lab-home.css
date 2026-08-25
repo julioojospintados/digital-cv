@@ -647,51 +647,23 @@ html[data-lh-armed] .lh-obj {
   color: var(--lh-ink);
 }
 
-/* Il "piu'" e' due barre disegnate, non il carattere "+": stessa ragione della
-   freccia dei contatti, che e' due bordi e non una freccia Unicode — un glifo
-   dipende dal font e non eredita lo spessore del testo accanto.
+/* Il segno delle card: la tacca di registro condivisa (.tick in global.css),
+   non piu' un "piu'" disegnato qui.
 
-   Le due barre sono disegnate ognuna nel suo verso, NON una ruotata di 90°.
-   Con la rotazione la barra verticale nasceva orizzontale e veniva girata: a
-   2px di spessore il risultato dipende da come il browser rasterizza un
-   elemento trasformato, e finche' nessuna interazione forzava un ridisegno la
-   riga usciva sfilacciata — poi si "sistemava" al primo tocco. Due rettangoli
-   dichiarati per quello che sono non hanno trasformazioni da rasterizzare, e
-   restano nitidi a qualunque densita' di schermo. */
+   Il "piu'" prometteva un'espansione in loco, e queste card aprono invece una
+   modale a schermo pieno: la tacca dice "si apre" senza dire dove, che e' la
+   verita'. Ed e' lo stesso segno delle schede esperienza e delle corsie,
+   quindi il sito ha un modo solo di dirlo.
+
+   Qui resta il colore: la forma, i 2px e l'animazione stanno in un posto solo.
+   Nota storica, perche' e' un difetto che potrebbe tornare: le due barre del
+   vecchio "piu'" erano disegnate ognuna nel suo verso e NON una ruotata di
+   90°, perche' a 2px il risultato di un elemento trasformato dipende da come
+   il browser lo rasterizza — la riga usciva sfilacciata e si "sistemava" al
+   primo tocco. .tick segue la stessa regola: due rettangoli dichiarati, la
+   rotazione solo sulla transizione di apertura. */
 .about-card__p {
-  position: relative;
-  width: var(--size-12);
-  height: var(--size-12);
-  flex-shrink: 0;
-}
-
-/* La barra orizzontale: larga quanto il riquadro, alta 2px, centrata. */
-.about-card__p::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  right: 0;
-  left: 0;
-  height: 2px;
-  margin-top: -1px;
-  background: var(--accent);
-}
-
-/* La verticale: la stessa cosa girata di novanta gradi — ma scritta, non
-   ruotata. */
-.about-card__p::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 50%;
-  width: 2px;
-  margin-left: -1px;
-  background: var(--accent);
-}
-
-.about-card__p::after {
-  rotate: 90deg;
+  color: var(--accent);
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -1058,6 +1030,39 @@ html[data-lh-armed] .lh-obj {
      circa 160px, cioe' piu' di quanto costi una card intera. Fra un'immagine
      che non si vede e un pezzo di bio che si legge, in una schermata sola,
      vince il secondo. */
+  /* ── I tre cassetti riempiono il rettangolo ───────────────────────────
+     In riga con `flex-wrap` venivano 119 + 119 su una riga e 111 da solo
+     sotto: due righe con il bordo destro frastagliato, che e' lo stesso
+     difetto gia' corretto piu' sotto per i CTA di sezione.
+
+     Griglia a due colonne con l'ultimo che le occupa entrambe. Le righe
+     restano due, quindi **non costa un pixel di altezza** su una schermata
+     che deve stare in 100svh: cambia solo che adesso sono piene.
+
+     Tre colonne in una riga sarebbero state meglio ancora, e sono state
+     misurate: a 360px la colonna e' 314px, meno due gap fa 298, diviso tre
+     fa 99px per bottone contro i 119 che serve il piu' largo. Non ci sta
+     senza accorciare le etichette o togliere la stelletta, e nessuna delle
+     due cose vale una riga guadagnata.
+
+     Il testo si centra perche' i bottoni ora sono piu' larghi del proprio
+     contenuto: stessa scelta e stessa ragione di `.lh-cta` piu' sotto. */
+  .lh .about-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--size-8);
+    justify-self: stretch;
+    width: 100%;
+  }
+
+  .lh .about-actions > :last-child {
+    grid-column: 1 / -1;
+  }
+
+  .lh .about-action {
+    justify-content: center;
+  }
+
   /* ── Gli oggetti delle sezioni, anche su "Chi sono" ───────────────────
      Qui c'era un `display: none` sulla sola pianta: su una schermata dove la
      bio deve stare intera, un oggetto costava 24svh (circa 160px) per
