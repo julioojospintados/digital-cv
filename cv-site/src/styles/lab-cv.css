@@ -959,6 +959,20 @@
   line-height: 1.6;
 }
 
+/* Un filo fra un punto e l'altro. I punti sono bersagli di scansione, non
+   prosa: con il solo gap si leggevano come un paragrafo spezzato, e l'occhio
+   non trovava dove finiva uno e cominciava il successivo. Stessa riga da 1px
+   che separa i clienti qui sotto, stesso motivo. */
+.lc-job__points li + li {
+  border-top: 1px solid var(--lc-line);
+  padding-top: var(--size-8);
+}
+
+/* Il pallino si sposta con il testo: `top` parte dal bordo, non dalla riga. */
+.lc-job__points li + li::before {
+  top: calc(0.6em + var(--size-8));
+}
+
 .lc-job__points li::before {
   content: "";
   position: absolute;
@@ -1017,27 +1031,32 @@
    Il filo verticale li tiene insieme come gruppo dentro la card, senza
    aggiungere un secondo livello da aprire. */
 
+/* I clienti erano quattro paragrafi appesi a un filo verticale, con il nome
+   su una riga e la descrizione sotto: 1.263 caratteri in cui i nomi, che sono
+   il primo dato che si cerca in una consulenza, andavano ripescati quattro
+   volte. Ora sono righe: nomi in una colonna fissa a sinistra, testo nella
+   sua. I testi non sono cambiati di una parola, e infatti non si guadagna
+   altezza: si guadagna che quattro nomi sullo stesso asse si leggono in un
+   colpo d'occhio. Il filo verticale sparisce perche' la colonna dei nomi fa
+   gia' da bordo, e due allineamenti verticali a 1rem di distanza litigano. */
+
 .lc-clients {
   display: grid;
-  gap: 1.125rem;
   max-width: 52rem;
-  padding-left: var(--size-16);
-  border-left: 1px solid var(--lc-line);
 }
 
 .lc-client {
-  position: relative;
+  display: grid;
+  grid-template-columns: 11rem minmax(0, 1fr);
+  gap: var(--size-12);
+  align-items: baseline;
+  padding-block: 0.625rem;
+  border-top: 1px solid var(--lc-line);
 }
 
-.lc-client::before {
-  content: "";
-  position: absolute;
-  left: -1.3125rem;
-  top: 0.5em;
-  width: 0.375rem;
-  height: 0.375rem;
-  border-radius: 50%;
-  background: var(--lc-accent-line);
+.lc-client:first-child {
+  padding-top: 0;
+  border-top: 0;
 }
 
 .lc-client__who {
@@ -1050,12 +1069,15 @@
   color: var(--lc-ink);
 }
 
+/* Il ruolo va sotto il nome, non di fianco: in 11rem competerebbe con lui
+   per la stessa riga e vincerebbe il piu' lungo. */
 .lc-client__role {
+  display: block;
+  margin-top: 0.125rem;
   color: var(--lc-muted);
 }
 
 .lc-client__text {
-  margin-top: var(--size-4);
   font-size: var(--fs-14);
   line-height: 1.6;
   color: var(--lc-muted);
@@ -1157,6 +1179,183 @@
   border-top: 1px solid var(--lc-line);
 }
 
+/* ── La cronologia a corsie ─────────────────────────────────────────────
+   Le stesse ventiquattro righe di prima piu' una colonna: una barra su un
+   asse 2008 → oggi condiviso da tutte. La barra sta in fondo e non in testa
+   perche' il testo resta il dato e la barra il commento; su telefono scende
+   sotto il testo invece di sparire.
+
+   Le corsie sono <details>, non JavaScript: si aprono anche senza script,
+   come le schede delle esperienze, e da chiuse mostrano la copertura unita
+   della corsia invece di nascondere tutto.
+
+   Le barre sono aria-hidden e il --fs-12 dell'asse e' ammesso proprio per
+   questo: il dato leggibile resta il testo di ogni riga, l'asse e' la
+   cornice di una decorazione. Se un giorno le date sparissero dal testo,
+   questa dimensione tornerebbe a essere un errore. */
+
+.lc-tl {
+  /* Una sola dichiarazione della griglia, condivisa da asse, teste di corsia
+     e righe: se non fossero identiche le barre non starebbero sullo stesso
+     asse, che e' tutto il punto. */
+  --lc-tl-w: minmax(9rem, 1fr);
+  display: grid;
+  gap: var(--size-2);
+}
+
+.lc-tl__axisrow,
+.lc-lane__head,
+.lc-all__row {
+  display: grid;
+  grid-template-columns: var(--lc-rail) minmax(0, 1fr) auto var(--lc-tl-w);
+  gap: var(--size-12);
+  align-items: center;
+}
+
+.lc-tl__axisrow {
+  padding-bottom: var(--size-6);
+}
+
+.lc-tl__scale {
+  position: relative;
+  grid-column: 4;
+  height: var(--size-16);
+  border-bottom: 1px solid var(--lc-line);
+}
+
+.lc-tl__tick {
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  color: var(--lc-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.lc-tl__track {
+  position: relative;
+  height: 0.875rem;
+  border-radius: var(--radius-4);
+  background: rgba(245, 240, 230, 0.05);
+}
+
+.lc-tl__bar {
+  position: absolute;
+  top: 0.1875rem;
+  height: var(--size-8);
+  border-radius: var(--radius-4);
+  background: var(--lc-line-strong);
+}
+
+/* I due mestieri prendono il proprio accento, "fuori orario" resta muto:
+   e' il modo di dire che non e' una terza lente. */
+.lc-tl__bar--tech {
+  background: var(--color-lens-tech);
+}
+
+.lc-tl__bar--design {
+  background: var(--color-lens-creative);
+}
+
+.lc-tl__now {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--lc-line-strong);
+}
+
+/* ── Le teste di corsia ──────────────────────────────────────────────── */
+
+.lc-lane {
+  border-top: 1px solid var(--lc-line);
+}
+
+.lc-lane__head {
+  padding-block: var(--size-8);
+  cursor: pointer;
+  list-style: none;
+}
+
+.lc-lane__head::-webkit-details-marker {
+  display: none;
+}
+
+.lc-lane__name {
+  display: flex;
+  align-items: center;
+  gap: var(--size-8);
+  grid-column: 1 / 3;
+  min-width: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--lc-muted);
+}
+
+.lc-lane[open] > .lc-lane__head .lc-lane__name {
+  color: var(--lc-ink);
+}
+
+/* Il triangolo e' un ::before e non un carattere nel markup: e' l'unico
+   pezzo che cambia con lo stato, e lo stato lo sa il CSS. */
+.lc-lane__name::before {
+  content: "";
+  flex: 0 0 auto;
+  width: 0;
+  height: 0;
+  border-left: 0.25rem solid currentColor;
+  border-top: 0.1875rem solid transparent;
+  border-bottom: 0.1875rem solid transparent;
+  transition: transform var(--duration-fast, 0.16s) ease;
+}
+
+.lc-lane[open] > .lc-lane__head .lc-lane__name::before {
+  transform: rotate(90deg);
+}
+
+.lc-lane__key {
+  flex: 0 0 auto;
+  width: 0.625rem;
+  height: var(--size-6);
+  border-radius: var(--radius-4);
+  background: var(--lc-line-strong);
+}
+
+.lc-lane__key--tech {
+  background: var(--color-lens-tech);
+}
+
+.lc-lane__key--design {
+  background: var(--color-lens-creative);
+}
+
+.lc-lane__n {
+  margin-left: auto;
+  font-weight: 400;
+  color: var(--lc-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.lc-lane__head .lc-tl__track {
+  grid-column: 4;
+}
+
+.lc-lane__list {
+  display: grid;
+  gap: var(--size-2);
+  padding-bottom: var(--size-8);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lc-lane__name::before {
+    transition: none;
+  }
+}
+
 .lc-all__list {
   display: grid;
   gap: var(--size-2);
@@ -1181,6 +1380,20 @@
 .lc-all__what {
   color: var(--lc-muted);
   min-width: 0;
+}
+
+/* Il solo anno d'inizio: nascosto sul desktop, e' il ripiego di mobile. */
+.lc-all__from {
+  display: none;
+}
+
+/* La freccia dice "ancora aperto" dove l'intervallo non c'e' piu'. E' una
+   forma, non testo, quindi puo' prendere l'accento pieno: vale la soglia 3:1
+   di 1.4.11 e non quella del testo. Lo screen reader legge l'intervallo
+   completo, che resta nel DOM. */
+.lc-all__on {
+  color: var(--color-accent);
+  font-weight: 700;
 }
 
 /* Le voci della lente restano a contrasto pieno; le altre sono secondarie
@@ -1285,13 +1498,46 @@
   gap: var(--size-2);
 }
 
+/* Il marchio di chi ha rilasciato il titolo apre la riga: e' quello che
+   crea il bordo sinistro scansionabile, e fa emergere da solo il grappolo di
+   certificazioni UX degli ultimi diciotto mesi. La data si sposta in coda,
+   dove smette di competere con il marchio per la stessa corsia.
+
+   La gronda e' larga e bassa, non quadrata: il logo IED e' un lockup in
+   proporzione 2,94:1 e in un quadrato diventerebbe illeggibile. I marchi si
+   allineano sull'altezza, come su un muro di loghi. Il perche' della
+   maschera CSS invece di una <img> sta in lib/issuer-marks.ts. */
 .lc-path__row {
   display: grid;
-  grid-template-columns: var(--lc-rail) 1fr;
+  grid-template-columns: 4rem minmax(0, 1fr) auto;
   gap: var(--size-12);
   align-items: baseline;
   padding-block: var(--size-6);
   font-size: var(--fs-14);
+}
+
+.lc-path__mark {
+  align-self: center;
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  letter-spacing: 0.04em;
+  color: var(--lc-muted);
+}
+
+.lc-path__mark.is-logo {
+  display: block;
+  width: 100%;
+  height: 1.125rem;
+  background: currentColor;
+  color: var(--lc-ink);
+  -webkit-mask-image: var(--lc-mark);
+  mask-image: var(--lc-mark);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: left center;
+  mask-position: left center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
 }
 
 .lc-path__date {
@@ -1481,10 +1727,77 @@
   }
 
   .lc-now__row,
-  .lc-job__summary,
-  .lc-all__row {
+  .lc-job__summary {
     grid-template-columns: 1fr;
     gap: var(--size-4);
+  }
+
+  /* "Tutti i ruoli" non collassa a colonna unica. Prima lo faceva, e la
+     lista piu' lunga della pagina perdeva l'unica cosa che la rendeva
+     percorribile: ventiquattro blocchi allineati tutti a sinistra, senza
+     colonne. Gli 11ch del desktop su 390px rubavano meta' larghezza, ma
+     quattro cifre in mono stanno in 3,75rem, e la freccia dei ruoli aperti
+     pure. */
+  .lc-all__row,
+  .lc-lane__head {
+    grid-template-columns: 3.75rem minmax(0, 1fr);
+    gap: var(--size-8);
+    align-items: start;
+  }
+
+  /* La barra non sparisce su telefono: scende sotto il testo, dove ha tutta
+     la larghezza della colonna. E' anzi qui che serve di piu', perche' una
+     posizione si legge a 390px dove una corsia tipografica non ci sta. */
+  .lc-all__row .lc-tl__track,
+  .lc-lane__head .lc-tl__track {
+    grid-column: 2;
+    margin-top: var(--size-4);
+  }
+
+  .lc-lane__name {
+    grid-column: 1 / -1;
+  }
+
+  /* L'asse resta sopra tutto, allineato alla colonna del testo. */
+  .lc-tl__axisrow {
+    grid-template-columns: 3.75rem minmax(0, 1fr);
+  }
+
+  /* Il marchio resta, la data scende sotto il titolo: su una colonna sola
+     tre corsie non ci stanno, e il marchio e' quello che rende la lista
+     percorribile. */
+  .lc-path__row {
+    grid-template-columns: 3rem minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .lc-path__date {
+    grid-column: 2;
+  }
+
+  .lc-tl__scale {
+    grid-column: 2;
+  }
+
+  /* Sul desktop l'intervallo intero, qui il solo anno d'inizio: "2019 — oggi"
+     non ci sta, e ripetere "oggi" su sei righe non aggiunge niente che la
+     freccia non dica gia'. */
+  .lc-all__span {
+    display: none;
+  }
+
+  .lc-all__from {
+    display: inline;
+  }
+
+  /* Azienda e ruolo su due righe: in una colonna sola il ruolo si mangiava
+     la riga del nome, che e' il dato che si scorre. */
+  .lc-all__sep {
+    display: none;
+  }
+
+  .lc-all__role {
+    display: block;
   }
 
   .lc-job__summary {

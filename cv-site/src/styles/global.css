@@ -171,6 +171,18 @@ button {
   --fs-48: 3rem;
 }
 
+/* I tre accenti, nominati fuori dai blocchi [data-mode].
+   Servono a un punto solo del sito: la cronologia a corsie di /<lente>, dove
+   ciano e arancio distinguono due mestieri e non due lenti, e sono quindi gli
+   unici due accenti che si accendono insieme sulla stessa pagina (vedi
+   lib/exp-lanes.ts e DESIGN.md). Fuori di li' vale la regola normale: la
+   lente accende --color-accent e basta. */
+:root {
+  --color-lens-tech: rgba(0, 255, 200, 1);
+  --color-lens-creative: rgba(255, 107, 53, 1);
+  --color-lens-human: rgba(240, 200, 127, 1);
+}
+
 /* Mode overrides — mantengono sfondo ottanio, cambiano solo accent */
 [data-mode="tech"] {
   --color-bg: rgba(8, 73, 67, 1);

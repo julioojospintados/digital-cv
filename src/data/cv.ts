@@ -479,10 +479,10 @@ export const cvData = {
       description:
         "Ho organizzato booking e tour per gli artisti del roster di un'agenzia musicale italiana e ho progettato la loro comunicazione digitale e content strategy.",
       highlights: [
-        "Strategia B2B e Crescita Targettizzata: Ho impostato la comunicazione dell'agenzia per parlare agli addetti ai lavori (etichette, promoter, artisti) anziché al pubblico generico, raddoppiando i follower con contatti utili per il business.",
-        "Ideazione Playlist & Format Radio/Podcast: Ho ideato il concept di una playlist per artisti emergenti per creare connessioni e fare engagement organico. Ho anche proposto un format radio/podcast mensile per raccontare i brani e i progetti inseriti.",
-        "Outreach e Collaborazioni: Ho cercato e contattato possibili partner creando email custom, senza usare software di generazione automatica o modelli standard.",
-        "Public Speaking e Presentazione Eventi: Ho scritto i testi dei discorsi e presentato sul palco le serate del festival dell'agenzia.",
+        "Ho riscritto la comunicazione dell'agenzia per parlare a etichette, promoter e artisti invece che al pubblico: follower raddoppiati.",
+        "Ho ideato una playlist di artisti emergenti come canale di contatto con la filiera, e un format radio mensile per raccontarne i brani.",
+        "Ho contattato i partner uno per uno, con email scritte a mano invece che generate da un software.",
+        "Ho scritto i discorsi e presentato sul palco le serate del festival dell'agenzia.",
       ],
       skills: [
         "Booking",
@@ -536,8 +536,9 @@ export const cvData = {
       description:
         "Sviluppo frontend full-remote all'interno di un team distribuito tra Torino e Los Angeles, curando l'interfaccia utente, la pulizia del codice e l'integrazione di prodotti per il mercato statunitense.",
       highlights: [
-        "Digivax | Frontend & UI Developer: sviluppo della piattaforma web per la gestione della conformità vaccinale e sanitaria in ambito aziendale. Presidio del lato UI/UX e sviluppo delle dashboard per i diversi ruoli utente (datori di lavoro, dipendenti e personale sanitario) in React e TypeScript. Refactoring completo dell'architettura SCSS tramite pattern BEM, riducendo il codice da 8.000 a 3.000 righe per migliorare le prestazioni, la manutenibilità e la coerenza visiva delle interfacce. Integrazione con API REST e gestione dei flussi dati in ambiente Agile.",
-        "And 1 | Frontend Developer: attività di manutenzione evolutiva, risoluzione bug e sviluppo di nuove funzionalità per il prodotto.",
+        "Digivax: ho sviluppato la piattaforma di conformità sanitaria aziendale, con dashboard distinte per datori di lavoro, dipendenti e medici.",
+        "Digivax: ho riscritto l'architettura SCSS con pattern BEM e ridotto il codice da 8.000 a 3.000 righe.",
+        "And 1: ho fatto manutenzione evolutiva e sviluppato nuove funzionalità del prodotto.",
       ],
       skills: ["React", "TypeScript", "SCSS / BEM", "REST API", "Trello", "Agile"],
     },
@@ -801,7 +802,7 @@ export const cvData = {
           highlights: [
             "Figma-to-Code: ho trasformato prototipi e wireframe in codice HTML e CSS di produzione.",
             "Code-to-Figma: ho riconvertito codice e varianti cromatiche/palette in componenti Figma, per tenere sincronizzato il Design System.",
-            "Ho verificato che MCP Wix genera un frame statico via Astro (valido solo se il cliente non deve modificare il sito) e risolto con il plugin Figma → Wix: il cliente modifica il sito in autonomia dopo la consegna.",
+            "Ho scelto il plugin Figma → Wix al posto di MCP Wix, che genera un frame statico: il cliente modifica il sito da solo dopo la consegna.",
           ],
         },
       ],
@@ -933,7 +934,7 @@ export const cvData = {
       date: "2025-01",
     },
     {
-      name: "Digital Marketing Specialist",
+      name: "Master in Comunicazione Digitale",
       issuer: "Istituto Europeo di Design (IED)",
       date: "2023-05",
     },

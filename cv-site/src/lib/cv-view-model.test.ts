@@ -6,6 +6,7 @@ import {
   deriveSkillLevel,
   skillModeTags,
   isActiveSkill,
+  orderSkillsForMode,
   type CvSource,
 } from "./cv-view-model";
 import { MODES, DEFAULT_MODE, type Mode } from "./cv-i18n";
@@ -166,5 +167,47 @@ describe("DEFAULT_MODE", () => {
     const en = buildCvViewModel({ data: EN, locale: "en", mode: DEFAULT_MODE });
     const it = buildCvViewModel({ data: IT, locale: "it", mode: DEFAULT_MODE });
     expect(en.skillSquares.length).toBe(it.skillSquares.length);
+  });
+});
+
+describe("orderSkillsForMode", () => {
+  // Le 29 chip di ALTEN, nell'ordine in cui stanno in cv.ts.
+  const alten = (IT.experience.find((e) => e.company === "ALTEN Italia")?.skills as string[]) ?? [];
+
+  it("ALTEN ha davvero 29 competenze, e la card ne mostra 6", () => {
+    expect(alten.length).toBe(29);
+  });
+
+  it("su design le prime sei non sono più uno stack frontend", () => {
+    const prime = orderSkillsForMode(alten, "creative").slice(0, 6);
+    // Il difetto era esattamente questo: zero competenze di design fra le
+    // visibili, con UX/UI Design e Figma-to-Code dietro il "+23".
+    expect(prime.some((s) => /design|ux|ui|figma|usabilit|wcag/i.test(s))).toBe(true);
+    expect(prime).not.toContain("Angular");
+    expect(prime).not.toContain("RxJS");
+  });
+
+  it("su tech lo stack frontend resta in cima", () => {
+    const prime = orderSkillsForMode(alten, "tech").slice(0, 6);
+    expect(prime).toContain("Angular");
+    expect(prime).toContain("TypeScript");
+  });
+
+  it("su human vengono prima MCP e gli agenti", () => {
+    const prime = orderSkillsForMode(alten, "human").slice(0, 6);
+    expect(prime.some((s) => /mcp|agent|prompt|copilot/i.test(s))).toBe(true);
+  });
+
+  it("non perde né duplica competenze, in nessuna lente", () => {
+    for (const mode of MODES) {
+      const out = orderSkillsForMode(alten, mode as Mode);
+      expect(out.length).toBe(alten.length);
+      expect([...out].sort()).toEqual([...alten].sort());
+    }
+  });
+
+  it("è stabile: a parità di punteggio resta l'ordine di cv.ts", () => {
+    const neutre = ["Trello", "Scrum", "GitLab"];
+    expect(orderSkillsForMode(neutre, "creative")).toEqual(neutre);
   });
 });

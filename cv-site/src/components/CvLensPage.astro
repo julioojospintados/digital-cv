@@ -44,6 +44,8 @@ import { cvData } from "@cv-data";
 import { cvDataEn } from "@cv-data-en";
 import { buildCvViewModel } from "../lib/cv-view-model";
 import { EXP_CLUSTER_DEFS } from "../lib/exp-clusters";
+import { LANE_DEFS, EXP_LANES, isoToYear, mergeSpans } from "../lib/exp-lanes";
+import { issuerMark } from "../lib/issuer-marks";
 import { LOCALES, MODES, lensPath, type Locale, type Mode } from "../lib/cv-i18n";
 import { TAGLINE, profileCopy } from "../lib/lab-copy";
 import "../styles/lab-cv.css";
@@ -143,15 +145,65 @@ const lensExpIdx = new Set(
     .map((r) => r.exp),
 );
 
-const allExperiences = data.experience
-  .map((e, i) => ({
+// Le date non sono piu' solo una stringa: diventano una barra su un asse
+// condiviso da tutte le righe. Il perche' delle tre corsie, e l'eccezione
+// sui due accenti accesi insieme, stanno in lib/exp-lanes.ts.
+//
+// "Adesso" e' il momento della build, non una data scritta a mano: il sito
+// si ricostruisce a ogni deploy e le barre dei ruoli aperti si allungano da
+// sole. Una costante qui invecchierebbe in silenzio.
+const ora = new Date();
+const annoOra = ora.getFullYear() + (ora.getMonth() + 1) / 12;
+const tlDa = Math.floor(Math.min(...data.experience.map((e) => isoToYear(e.startDate))));
+const tlA = Math.ceil(annoOra);
+const pct = (anno: number): number => ((anno - tlDa) / (tlA - tlDa)) * 100;
+
+const laneRows = data.experience.map((e, i) => {
+  const da = isoToYear(e.startDate);
+  const a = e.endDate === "present" ? annoOra : isoToYear(e.endDate, true);
+  return {
     company: e.company,
     role: e.role,
     years: yearsLabel(e.startDate, e.endDate),
+    // Su telefono la corsia si stringe al solo anno d'inizio: l'intervallo
+    // intero non ci sta, e la freccia dice "ancora aperto" al posto di
+    // ripetere "oggi" su sei righe. Vedi .lc-all__from in lab-cv.css.
+    startYear: e.startDate.substring(0, 4),
+    inProgress: e.endDate === "present",
     sort: e.startDate,
     inLens: lensExpIdx.has(i),
-  }))
-  .sort((a, b) => b.sort.localeCompare(a.sort));
+    lane: EXP_LANES[i] ?? "off",
+    // Una barra sotto lo 0,8% e' un trattino invisibile: i sei mesi da
+    // Starbucks contano quanto gli altri, nel racconto della continuita'.
+    left: pct(da),
+    width: Math.max(pct(a) - pct(da), 0.8),
+    da,
+    a,
+  };
+});
+
+const lanes = LANE_DEFS.map((def) => {
+  const items = laneRows
+    .filter((r) => r.lane === def.key)
+    .sort((x, y) => y.sort.localeCompare(x.sort));
+  return {
+    key: def.key,
+    label: def.labels[locale],
+    count: items.length,
+    items,
+    // La barra della corsia chiusa: gli intervalli uniti, non il primo
+    // giorno attaccato all'ultimo. I buchi veri devono restare buchi.
+    merged: mergeSpans(items.map((r) => [r.da, r.a] as const)).map(([da, a]) => ({
+      left: pct(da),
+      width: Math.max(pct(a) - pct(da), 0.8),
+    })),
+  };
+});
+
+const tlTicks = Array.from({ length: Math.ceil((tlA - tlDa) / 4) }, (_, k) => tlDa + k * 4).map(
+  (anno) => ({ anno, left: pct(anno) }),
+);
+const tlNow = pct(annoOra);
 
 const email = data.social.find((s) => s.platform === "Email");
 const linkedin = data.social.find((s) => s.platform === "LinkedIn");
@@ -511,7 +563,7 @@ const MAX_CHIPS = 6;
                           <li class="lc-client">
                             <p class="lc-client__who">
                               <b>{c.client}</b>
-                              <span class="lc-client__role"> · {c.role}</span>
+                              <span class="lc-client__role">{c.role}</span>
                               {c.ai && (
                                 <span class="lc-ai lc-ai--sm">
                                   AI
@@ -554,9 +606,20 @@ const MAX_CHIPS = 6;
 
       <!-- ── 2b. La cronologia completa ───────────────────────────────────
            Il costo del filtro: cinque card dal 2019 fanno sembrare il tuo un
-           CV da cinque anni. Questa lista è la garanzia di completezza —
-           date, traiettoria, assenza di buchi — e costa dieci righe di
-           testo, zero interazione, ordine strettamente cronologico. -->
+           CV da cinque anni. Questa sezione è la garanzia di completezza:
+           date, traiettoria, assenza di buchi.
+
+           Era un elenco di ventiquattro righe, e la garanzia bisognava
+           calcolarsela leggendo le date una per una. Ora le stesse date sono
+           barre su un asse condiviso, raggruppate in tre corsie: quello che
+           l'elenco non riusciva a dire — dal 2009 mai meno di tre ruoli in
+           parallelo, otto nel 2017 — si vede senza contare niente.
+
+           Le corsie sono <details> e non JavaScript: si aprono da sole anche
+           senza script, come le schede qui sopra, e chiuse mostrano la
+           copertura unita della corsia invece di sparire. Le barre sono
+           aria-hidden: il dato resta nel testo di ogni riga, che è quello che
+           legge uno screen reader. -->
       <section class="lc-all" aria-labelledby="lc-all-title">
         <div class="lc-sec-head">
           <h2 class="lc-sec-title" id="lc-all-title">
@@ -566,26 +629,88 @@ const MAX_CHIPS = 6;
             >
           </h2>
         </div>
-        <ul class="lc-all__list" role="list">
+        <div class="lc-tl">
+          <div class="lc-tl__axisrow" aria-hidden="true">
+            <span class="lc-tl__scale">
+              {
+                tlTicks.map((tk) => (
+                  <span class="lc-tl__tick" style={`left:${tk.left}%`}>
+                    {tk.anno}
+                  </span>
+                ))
+              }
+              <span class="lc-tl__now" style={`left:${tlNow}%`}></span>
+            </span>
+          </div>
+
           {
-            allExperiences.map((e) => (
-              <li class:list={["lc-all__row", { "is-lens": e.inLens }]}>
-                <span class="lc-all__years">{e.years}</span>
-                <span class="lc-all__what">
-                  <b>{e.company}</b> · {e.role}
-                </span>
-                {e.inLens && (
-                  <>
-                    <span class="lc-all__mark" aria-hidden="true" />
-                    <span class="lc-sr">
-                      {t.ui.highlightedFor} {clusterLabel}
-                    </span>
-                  </>
-                )}
-              </li>
+            lanes.map((lane) => (
+              <details class="lc-lane">
+                <summary class="lc-lane__head">
+                  <span class="lc-lane__name">
+                    <span
+                      class:list={["lc-lane__key", `lc-lane__key--${lane.key}`]}
+                      aria-hidden="true"
+                    />
+                    {lane.label}
+                    <span class="lc-lane__n">{lane.count}</span>
+                  </span>
+                  <span class="lc-tl__track" aria-hidden="true">
+                    {lane.merged.map((m) => (
+                      <span
+                        class:list={["lc-tl__bar", `lc-tl__bar--${lane.key}`]}
+                        style={`left:${m.left}%;width:${m.width}%`}
+                      />
+                    ))}
+                    <span class="lc-tl__now" style={`left:${tlNow}%`} />
+                  </span>
+                </summary>
+
+                <ul class="lc-lane__list" role="list">
+                  {lane.items.map((e) => (
+                    <li class:list={["lc-all__row", { "is-lens": e.inLens }]}>
+                      <span class="lc-all__years">
+                        <span class="lc-all__span">{e.years}</span>
+                        <span class="lc-all__from">
+                          {e.startYear}
+                          {e.inProgress && (
+                            <span class="lc-all__on" aria-hidden="true">
+                              →
+                            </span>
+                          )}
+                          <span class="lc-sr">{e.years}</span>
+                        </span>
+                      </span>
+                      <span class="lc-all__what">
+                        <b>{e.company}</b>
+                        <span class="lc-all__sep" aria-hidden="true">
+                          {" "}
+                          ·{" "}
+                        </span>
+                        <span class="lc-all__role">{e.role}</span>
+                      </span>
+                      {e.inLens && (
+                        <>
+                          <span class="lc-all__mark" aria-hidden="true" />
+                          <span class="lc-sr">
+                            {t.ui.highlightedFor} {clusterLabel}
+                          </span>
+                        </>
+                      )}
+                      <span class="lc-tl__track" aria-hidden="true">
+                        <span
+                          class:list={["lc-tl__bar", `lc-tl__bar--${lane.key}`]}
+                          style={`left:${e.left}%;width:${e.width}%`}
+                        />
+                        <span class="lc-tl__now" style={`left:${tlNow}%`} />
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </details>
             ))
           }
-        </ul>
+        </div>
       </section>
 
       <!-- ── 2c. Le voci ──────────────────────────────────────────────────
@@ -638,11 +763,22 @@ const MAX_CHIPS = 6;
             {
               formazione.map((e) => (
                 <li class="lc-path__row">
-                  <span class="lc-path__date">{e.dateLabel}</span>
+                  <span
+                    class:list={["lc-path__mark", { "is-logo": issuerMark(e.institution).logo }]}
+                    style={
+                      issuerMark(e.institution).logo
+                        ? `--lc-mark: url("/logos/${issuerMark(e.institution).logo}.svg")`
+                        : undefined
+                    }
+                    aria-hidden="true"
+                  >
+                    {!issuerMark(e.institution).logo && issuerMark(e.institution).sigla}
+                  </span>
                   <span class="lc-path__what">
                     <b>{e.title}</b>
                     <span class="lc-path__where"> · {e.institution}</span>
                   </span>
+                  <span class="lc-path__date">{e.dateLabel}</span>
                 </li>
               ))
             }
@@ -658,7 +794,17 @@ const MAX_CHIPS = 6;
             {
               certificazioni.map((c) => (
                 <li class="lc-path__row">
-                  <span class="lc-path__date">{c.dateLabel}</span>
+                  <span
+                    class:list={["lc-path__mark", { "is-logo": issuerMark(c.institution).logo }]}
+                    style={
+                      issuerMark(c.institution).logo
+                        ? `--lc-mark: url("/logos/${issuerMark(c.institution).logo}.svg")`
+                        : undefined
+                    }
+                    aria-hidden="true"
+                  >
+                    {!issuerMark(c.institution).logo && issuerMark(c.institution).sigla}
+                  </span>
                   <span class="lc-path__what">
                     <b>{c.title}</b>
                     <span class="lc-path__where"> · {c.institution}</span>
@@ -670,6 +816,7 @@ const MAX_CHIPS = 6;
                       </span>
                     )}
                   </span>
+                  <span class="lc-path__date">{c.dateLabel}</span>
                 </li>
               ))
             }

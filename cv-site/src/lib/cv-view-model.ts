@@ -159,6 +159,61 @@ const AI_SKILL_HINTS = [
   "MCP",
 ];
 
+/**
+ * Ordine delle chip di una card: prima quelle attinenti alla lente.
+ *
+ * `exp.skills` è una lista sola per esperienza, e va bene così: le competenze
+ * usate in un lavoro sono quelle, non cambiano con chi guarda. Cambia però
+ * quali contano per chi guarda, e la card ne mostra sei prima del "+N".
+ * Su ALTEN sono ventinove: senza riordino la lente Design apriva con Angular,
+ * TypeScript, Lit, Node.js, RxJS e HTML5, cioè zero competenze di design,
+ * lasciando "UX/UI Design" e "Figma-to-Code" dietro il pulsante.
+ *
+ * Due fasce per lente: la prima è il mestiere, la seconda ciò che gli sta
+ * intorno. Le chiavi si confrontano a inizio parola (`\bfigma` prende
+ * "Figma-to-Code" ma "prototip" non prende "Cryptography"), e a parità di
+ * fascia vince chi ne soddisfa di più: "UX/UI Design" ne tocca tre, "Design
+ * System" una.
+ */
+const SKILL_FOCUS: Record<Mode, readonly (readonly string[])[]> = {
+  creative: [
+    ["ux", "ui", "design", "figma", "prototip", "wireframe", "usabilit", "wcag", "accessibil"],
+    ["storybook", "css", "scss", "bem", "html", "copywriting", "content", "fotograf", "video"],
+  ],
+  tech: [
+    ["angular", "typescript", "lit", "node", "rxjs", "javascript", "astro", "hono", "zod"],
+    ["jest", "vitest", "playwright", "test", "coverage", "api", "gitlab", "sql", "spring"],
+  ],
+  human: [
+    ["ai", "mcp", "model context", "agent", "prompt", "copilot", "claude", "cursor"],
+    ["agile", "scrum", "project", "comunicazione", "communication", "strategy", "strategia"],
+  ],
+};
+
+/**
+ * Ordinamento stabile: a parità di punteggio resta l'ordine di `cv.ts`, che è
+ * scelto a mano e porta la sua informazione (stesso motivo per cui le skill
+ * non sono ordinate alfabeticamente più sopra).
+ */
+export function orderSkillsForMode(skills: readonly string[], mode: Mode): string[] {
+  const fasce = SKILL_FOCUS[mode];
+  const quante = (skill: string, chiavi: readonly string[]) =>
+    chiavi.filter((k) => new RegExp(`\\b${k}`, "i").test(skill)).length;
+
+  return skills
+    .map((skill, i) => {
+      const fascia = fasce.findIndex((chiavi) => quante(skill, chiavi) > 0);
+      return {
+        skill,
+        i,
+        fascia: fascia === -1 ? fasce.length : fascia,
+        peso: fascia === -1 ? 0 : quante(skill, fasce[fascia]),
+      };
+    })
+    .sort((a, b) => a.fascia - b.fascia || b.peso - a.peso || a.i - b.i)
+    .map((x) => x.skill);
+}
+
 // Una voce per ogni elemento di softSkills, nello stesso ordine. I valori sono
 // mode, non testo: identici in tutte le lingue.
 // Prima erano 9 tag per 11 skill: "Ascolto attivo" e "Assertività" (aggiunte
@@ -305,7 +360,7 @@ export function buildCvViewModel({ data, locale, mode }: BuildOptions) {
         remote: false,
         description: p.description,
         highlights: [] as string[],
-        skills: p.tags ?? [],
+        skills: orderSkillsForMode(p.tags ?? [], mode),
         modeTags: clusterTags,
         aiAugmented: false,
       };
@@ -322,7 +377,7 @@ export function buildCvViewModel({ data, locale, mode }: BuildOptions) {
       remote: exp.remote ?? false,
       description: facet?.description ?? exp.description,
       highlights: facet?.highlights ?? exp.highlights ?? [],
-      skills: exp.skills ?? [],
+      skills: orderSkillsForMode(exp.skills ?? [], mode),
       modeTags: clusterTags,
       aiAugmented: !!(
         exp.tags?.includes("ai-orchestration") ||
