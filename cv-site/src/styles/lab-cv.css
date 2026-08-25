@@ -1387,12 +1387,15 @@
   display: none;
 }
 
-/* La freccia dice "ancora aperto" dove l'intervallo non c'e' piu'. E' una
-   forma, non testo, quindi puo' prendere l'accento pieno: vale la soglia 3:1
-   di 1.4.11 e non quella del testo. Lo screen reader legge l'intervallo
-   completo, che resta nel DOM. */
+/* La freccia dice "ancora aperto" dove l'intervallo non c'e' piu'. Prende
+   l'inchiostro pieno e non l'accento: e' un carattere, e su lente creative
+   l'accento come colore di un testo fa 3,62:1 contro il 4,5:1 di 1.4.3 (la
+   soglia 3:1 di 1.4.11 varrebbe per una forma, non per una glifo). Non e'
+   nemmeno decorativa: su telefono e' l'unico segnale visivo di "in corso",
+   perche' li' l'intervallo intero non si vede. Allo screen reader arriva
+   comunque per intero da .lc-sr. */
 .lc-all__on {
-  color: var(--color-accent);
+  color: var(--lc-ink);
   font-weight: 700;
 }
 
