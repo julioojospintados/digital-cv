@@ -145,7 +145,7 @@
   -webkit-backdrop-filter: blur(0.375rem);
 }
 
-/* Il cursore custom (#cursor-dot/#cursor-ring, global.css) è un div fixed
+/* Il cursore custom (#cursor-core/#cursor-lamp, cursor.css) è un div fixed
    normale: showModal() promuove <dialog> e ::backdrop al "top layer" del
    browser, che dipinge SEMPRE sopra qualunque z-index del DOM regolare —
    il cursore custom resterebbe coperto per specifica, non per un bug di

@@ -94,7 +94,7 @@ const jsonLd = {
 ---
 
 <!doctype html>
-<html lang={lang} class="cursor-idle" data-mode={mode ?? "tech"} data-fab-scrollwait>
+<html lang={lang} data-mode={mode ?? "tech"} data-fab-scrollwait>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -249,9 +249,11 @@ const jsonLd = {
     <!-- Skip to main content — keyboard/screen reader accessibility -->
     <a href="#main-content" class="skip-link">Vai al contenuto principale</a>
 
-    <!-- Custom cursor -->
-    <div id="cursor-dot" aria-hidden="true"></div>
-    <div id="cursor-ring" aria-hidden="true"></div>
+    <!-- Cursore-lampada: nucleo (dove sei) + alone (la luce). aria-hidden e
+         pointer-events:none — non esistono per chi naviga da tastiera o con
+         uno screen reader, che e' esattamente come deve essere. -->
+    <div id="cursor-core" aria-hidden="true"></div>
+    <div id="cursor-lamp" aria-hidden="true"></div>
 
     <slot />
 
@@ -308,66 +310,144 @@ const jsonLd = {
       window.addEventListener("scroll", fabSync, { passive: true });
     </script>
 
-    <!-- Custom cursor script -->
+    <!-- ── Cursore-lampada ──────────────────────────────────────────────
+         Nucleo + alone, e sugli oggetti knolling le ombre portate che si
+         spostano davvero: --lh-sh-x/y esistono gia' in lab-home.css, erano
+         solo costanti. La luce c'era, mancava di dire da dove venisse.
+
+         Un rAF per l'intera scena, come lab-hero.ts: niente GSAP, che qui
+         servirebbe per un lerp da dieci righe. Il loop si spegne da solo
+         quando il puntatore e' fermo.
+
+         Delegation invece di due listener per nodo (todo #51): lo stato lo
+         porta una classe su <html>, quindi funziona anche per gli elementi
+         montati dopo dalle island Lit. -->
     <script>
-      import { gsap } from "gsap";
+      // Un cursore custom cancella il puntatore di sistema, e con lui le
+      // impostazioni di accessibilita' dell'OS (cursore ingrandito, ad alto
+      // contrasto). Dove il sistema le chiede, non si parte proprio: il CSS
+      // fa lo stesso e i due devono restare d'accordo.
+      const ok =
+        window.matchMedia("(hover: hover) and (pointer: fine)").matches &&
+        window.matchMedia("(prefers-reduced-motion: no-preference)").matches &&
+        window.matchMedia("(prefers-contrast: no-preference)").matches;
 
-      const dot = document.getElementById("cursor-dot")!;
-      const ring = document.getElementById("cursor-ring")!;
+      const core = document.getElementById("cursor-core");
+      const lamp = document.getElementById("cursor-lamp");
 
-      // cursor: none è già in global.css con `* { cursor: none !important }` —
-      // nessun loop JS necessario.
+      if (ok && core && lamp) {
+        const root = document.documentElement;
 
-      // quickTo() invece di gsap.to() per-mousemove (todo #51): pre-costruisce
-      // il tween una sola volta e sui frame successivi aggiorna solo il valore
-      // target, senza allocare un nuovo tween/oggetto di config ad ogni evento.
-      const moveDot = gsap.quickTo(dot, "x", { duration: 0.05, ease: "none" });
-      const moveDotY = gsap.quickTo(dot, "y", { duration: 0.05, ease: "none" });
-      const moveRing = gsap.quickTo(ring, "x", { duration: 0.22, ease: "power2.out" });
-      const moveRingY = gsap.quickTo(ring, "y", { duration: 0.22, ease: "power2.out" });
+        let px = 0,
+          py = 0; // dove sta il puntatore
+        let lx = 0,
+          ly = 0; // dove sta l'alone, che insegue
+        let acceso = false,
+          gira = false;
 
-      window.addEventListener("mousemove", (e) => {
-        // Primo movimento: rivela il cursore (era parcheggiato invisibile a 0,0)
-        document.documentElement.classList.remove("cursor-idle");
-        const mx = e.clientX;
-        const my = e.clientY;
-        // Dot: segue immediato il puntatore
-        moveDot(mx - 4);
-        moveDotY(my - 4);
-        // Ring: lerp via GSAP quickTo — aggiorna solo on mousemove, nessun ticker aggiuntivo
-        moveRing(mx - 20);
-        moveRingY(my - 20);
-      });
+        // Gli oggetti che la luce illumina davvero. Le rect si rileggono a
+        // ogni frame ma tutte insieme, PRIMA di scrivere qualsiasi stile:
+        // leggere e scrivere alternati sugli stessi nodi forza il browser a
+        // ricalcolare il layout a ogni giro.
+        const illuminati = Array.from(document.querySelectorAll(".lh-obj, .lh-section__object"));
 
-      // Hover states
-      const interactives = document.querySelectorAll(
-        'a, button, [role="button"], .cv-card, .knoll-item',
-      );
-      interactives.forEach((el) => {
-        el.addEventListener("mouseenter", () => {
-          dot.classList.add("cursor--hover");
-          ring.classList.add("cursor--hover");
-          // Passive card: mostra cursore speciale (freccia su + anello tratteggiato pulsante)
-          if ((el as HTMLElement).dataset?.state === "passive") {
-            dot.classList.add("cursor--passive-card");
-            ring.classList.add("cursor--passive-card");
+        const frame = () => {
+          lx += (px - lx) * 0.16;
+          ly += (py - ly) * 0.16;
+
+          core.style.transform = `translate3d(${px}px,${py}px,0)`;
+          lamp.style.transform = `translate3d(${lx.toFixed(1)}px,${ly.toFixed(1)}px,0)`;
+
+          if (illuminati.length) {
+            const h = window.innerHeight;
+            const diag = Math.hypot(window.innerWidth, h) || 1;
+            const rects = illuminati.map((el) => el.getBoundingClientRect());
+
+            for (let i = 0; i < illuminati.length; i++) {
+              const b = rects[i];
+              // Fuori dalla finestra non si illumina niente: e' il grosso del
+              // risparmio su una pagina lunga.
+              if (b.bottom < -200 || b.top > h + 200 || !b.width) continue;
+
+              const dx = b.left + b.width / 2 - lx;
+              const dy = b.top + b.height / 2 - ly;
+              const d = Math.hypot(dx, dy) || 1;
+              const q = Math.min(d / (diag * 0.55), 1);
+              const lung = 4 + q * 16;
+
+              const st = illuminati[i].style;
+              st.setProperty("--lh-sh-x", `${((dx / d) * lung).toFixed(1)}px`);
+              st.setProperty("--lh-sh-y", `${((dy / d) * lung * 0.75 + 4).toFixed(1)}px`);
+              st.setProperty("--lh-sh-blur", `${(0.55 + q * 1.5).toFixed(2)}rem`);
+              st.setProperty("--lh-sh-opacity", (0.62 - q * 0.28).toFixed(2));
+            }
           }
-        });
-        el.addEventListener("mouseleave", () => {
-          dot.classList.remove("cursor--hover");
-          ring.classList.remove("cursor--hover");
-          dot.classList.remove("cursor--passive-card");
-          ring.classList.remove("cursor--passive-card");
-        });
-      });
 
-      // Hide on leave, show on enter
-      document.addEventListener("mouseleave", () => {
-        gsap.to([dot, ring], { opacity: 0, duration: 0.3 });
-      });
-      document.addEventListener("mouseenter", () => {
-        gsap.to([dot, ring], { opacity: 1, duration: 0.3 });
-      });
+          if (Math.abs(px - lx) < 0.3 && Math.abs(py - ly) < 0.3) {
+            gira = false;
+            return;
+          }
+          requestAnimationFrame(frame);
+        };
+
+        const sveglia = () => {
+          if (gira) return;
+          gira = true;
+          requestAnimationFrame(frame);
+        };
+
+        window.addEventListener(
+          "pointermove",
+          (e) => {
+            if (e.pointerType !== "mouse") return;
+            px = e.clientX;
+            py = e.clientY;
+            if (!acceso) {
+              acceso = true;
+              lx = px;
+              ly = py;
+              root.classList.add("cursor-on");
+            }
+            sveglia();
+          },
+          { passive: true },
+        );
+
+        // ── Gli stati, per delegation ──────────────────────────────────
+        const TESTO =
+          "input:not([type=button]):not([type=submit]):not([type=checkbox]):not([type=radio]), textarea, [contenteditable=true]";
+        const CLICCA =
+          'a[href], button, summary, [role="button"], label[for], select, input[type=checkbox], input[type=radio]';
+
+        const leggiStato = (t) => {
+          if (!(t instanceof Element)) return;
+          const spento = t.closest("[disabled], [aria-disabled=true]");
+          const testo = t.closest(TESTO);
+          const clicca = t.closest(CLICCA);
+          root.classList.toggle("cursor-off", !!spento);
+          root.classList.toggle("cursor-text", !spento && !!testo);
+          root.classList.toggle("cursor-hot", !spento && !testo && !!clicca);
+        };
+
+        document.addEventListener("pointerover", (e) => leggiStato(e.target), { passive: true });
+
+        // Il tasto premuto: lo stato lo porta <html>, cosi' vale anche se il
+        // puntatore esce dall'elemento mentre e' giu'.
+        window.addEventListener("pointerdown", () => root.classList.add("cursor-down"), {
+          passive: true,
+        });
+        const su = () => root.classList.remove("cursor-down");
+        window.addEventListener("pointerup", su, { passive: true });
+        window.addEventListener("pointercancel", su, { passive: true });
+        window.addEventListener("blur", su);
+
+        // Uscita dalla finestra: la lampada si spegne invece di restare
+        // parcheggiata sull'ultimo punto.
+        document.addEventListener("pointerleave", () => root.classList.remove("cursor-on"));
+        document.addEventListener("pointerenter", () => {
+          if (acceso) root.classList.add("cursor-on");
+        });
+      }
     </script>
   </body>
 </html>
