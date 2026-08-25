@@ -1135,10 +1135,28 @@ html[data-lh-armed] .lh-obj {
        proprio salto (vedi il commento su --lh-tx sopra). */
     --lh-tx: 0;
     --lh-ty: 0;
-    /* Niente parallasse: qui gli oggetti stanno in griglia, e uno
-       spostamento di qualche rem li farebbe accavallare — cioè esattamente
-       il difetto che questa disposizione risolve. */
-    transform: none;
+    /* La parallasse c'è anche qui, ma con una corsa di un ordine di
+       grandezza più corta: 0,375rem contro i 3rem del desktop. Il motivo è
+       geometrico e non estetico — in griglia gli oggetti sono a contatto, e
+       qualche rem li farebbe accavallare, cioè esattamente il difetto che
+       questa disposizione risolve. Sei pixel invece li fanno sembrare
+       appoggiati su un piano che si inclina, che è quello che succede
+       davvero: la sorgente qui è il giroscopio (lab-hero.ts), non il
+       puntatore.
+
+       Niente `rotate` nella formula, a differenza del desktop: in griglia le
+       rotazioni sono spente e la torcia ruota per conto suo, sull'immagine.
+
+       Niente termine `--sy`: lo scroll qui è ad aggancio, salta da una
+       scheda all'altra invece di scorrere, e non c'è un progresso continuo
+       da cui prendere un movimento. */
+    --lh-par-x: 0.375rem;
+    --lh-par-y: 0.3rem;
+    transform: translate3d(
+      calc(var(--mx, 0) * var(--depth) * var(--lh-par-x) * -1),
+      calc(var(--my, 0) * var(--depth) * var(--lh-par-y) * -1),
+      0
+    );
     /* Come .knoll-wrap nella home: senza questi reset la cella non può
        scendere sotto il min-content dell'immagine e le righe sforano. */
     display: flex;
@@ -1146,8 +1164,11 @@ html[data-lh-armed] .lh-obj {
     justify-content: center;
     min-width: 0;
     min-height: 0;
-    /* Niente trasformazione da animare, niente da promuovere: otto livelli
-       di composizione in meno da tenere in memoria proprio dove serve. */
+    /* `will-change` resta spento anche ora che una trasformazione c'è:
+       promuovere otto livelli costa memoria proprio sul dispositivo che ne
+       ha meno, e per sei pixel di corsa il compositore se la cava lo stesso
+       (una `transform` non tocca layout né pittura). Se un giorno si vedrà
+       scattare, questa è la prima leva da provare — non l'ampiezza. */
     will-change: auto;
   }
 
