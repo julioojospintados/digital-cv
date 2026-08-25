@@ -1066,7 +1066,7 @@ html[data-lh-armed] .lh-obj {
 
      Ora la regola e' un'altra e vale per tutte e quattro le sezioni: gli
      oggetti non stanno piu' centrati in una riga loro, escono dall'angolo
-     in basso a sinistra e vengono tagliati dal bordo. Il vantaggio non e'
+     in basso a destra e vengono tagliati dal bordo. Il vantaggio non e'
      estetico: la porzione fuori dal riquadro non costa spazio a nessuno,
      quindi la pianta torna senza togliere niente alla bio. Ed e' la
      grammatica giusta per un knolling, dove gli oggetti stanno su un piano
@@ -1081,9 +1081,9 @@ html[data-lh-armed] .lh-obj {
      mai il contenuto. */
   .lh-section__object {
     width: min(82%, var(--nat, 22rem));
-    justify-self: start;
+    justify-self: end;
     align-self: end;
-    margin-left: -16%;
+    margin-right: -16%;
     margin-bottom: -10%;
   }
 
