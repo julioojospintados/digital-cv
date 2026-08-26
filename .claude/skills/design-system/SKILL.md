@@ -327,8 +327,8 @@ La sezione mostra il badge `MCP` come firma del metodo.
 
 | Pattern                 | Libreria / Metodo                              | Stato                           |
 | ----------------------- | ---------------------------------------------- | ------------------------------- |
-| Smooth scroll           | `Lenis` (`lerp: 0.08`)                         | ✅ implementato in Layout.astro |
-| Custom cursor           | CSS + GSAP follower (dot + ring)               | ✅ implementato in Layout.astro |
+| Smooth scroll           | `Lenis` (`lerp: 0.15`)                         | ✅ implementato in Layout.astro |
+| Custom cursor           | Lampada: punto + alone, GSAP quickTo           | ✅ implementato in Layout.astro |
 | ScrollTrigger reveals   | GSAP ScrollTrigger + `.reveal` / `.is-visible` | ✅ parziale (cv.astro)          |
 | Split text hero         | char-by-char stagger (G/O separati)            | ✅ implementato in index.astro  |
 | Noise grain overlay     | SVG `feTurbulence` filter + CSS `body::after`  | ✅ implementato in global.css   |
@@ -655,7 +655,10 @@ leggibile — errore commesso il 2026-08-11 su `.lh-cred` in `/lab/home`.
 
 - `Lenis` in `Layout.astro`, integrato con GSAP ticker via `gsap.ticker.add()`
 - `data-lenis-prevent` su modal/overlays che hanno scroll interno
-- Velocità: `lerp: 0.08` — più lento = più premium
+- Velocità: `lerp: 0.15`. Questa guida ha detto `0.08` fino al 2026-08-26,
+  ed era sbagliato: il valore è stato alzato in `ab113a9` perché a 0,08 lo
+  scorrimento continuava per troppo tempo dopo il gesto, e su trackpad
+  sembrava che la pagina non rispondesse. Fra doc e codice vince il codice.
 - `(window as any).__lenis` esposto globalmente per pagine che ne hanno bisogno
 
 ---

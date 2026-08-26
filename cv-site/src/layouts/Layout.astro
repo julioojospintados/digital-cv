@@ -347,7 +347,9 @@ const jsonLd = {
         // ogni frame ma tutte insieme, PRIMA di scrivere qualsiasi stile:
         // leggere e scrivere alternati sugli stessi nodi forza il browser a
         // ricalcolare il layout a ogni giro.
-        const illuminati = Array.from(document.querySelectorAll(".lh-obj, .lh-section__object"));
+        const illuminati = Array.from(
+          document.querySelectorAll<HTMLElement>(".lh-obj, .lh-section__object"),
+        );
 
         const frame = () => {
           lx += (px - lx) * 0.16;
@@ -417,7 +419,7 @@ const jsonLd = {
         const CLICCA =
           'a[href], button, summary, [role="button"], label[for], select, input[type=checkbox], input[type=radio]';
 
-        const leggiStato = (t) => {
+        const leggiStato = (t: EventTarget | null) => {
           if (!(t instanceof Element)) return;
           const spento = t.closest("[disabled], [aria-disabled=true]");
           const testo = t.closest(TESTO);
