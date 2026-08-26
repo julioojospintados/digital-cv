@@ -47,8 +47,7 @@
   }
 }
 
-#cursor-core,
-#cursor-lamp {
+#cursor-core {
   position: fixed;
   top: 0;
   left: 0;
@@ -80,28 +79,17 @@
     box-shadow 0.2s ease;
 }
 
-/* L'alone. `screen` invece di un'opacita' piatta: si somma al fondo come
-   farebbe una luce vera, e sulle superfici gia' chiare non le sporca. */
-#cursor-lamp {
-  width: 22rem;
-  height: 22rem;
-  margin: -11rem 0 0 -11rem;
-  border-radius: 50%;
-  background: radial-gradient(
-    circle closest-side,
-    rgba(255, 236, 200, 0.15) 0%,
-    rgba(255, 220, 170, 0.065) 42%,
-    rgba(255, 214, 160, 0) 72%
-  );
-  mix-blend-mode: screen;
-  z-index: 100000;
-  transition:
-    opacity 0.35s ease,
-    transform 0.05s linear;
-}
+/* Qui c'era #cursor-lamp: un alone da 22rem in `mix-blend-mode: screen` che
+   inseguiva il puntatore con un ritardo. Tolto il 2026-08-27 su richiesta —
+   dava al cursore un'aria lenta, perche' un alone che arriva dopo si legge
+   come "la pagina sta rincorrendo il mouse" anche quando il punto e' esatto.
 
-html.cursor-on #cursor-core,
-html.cursor-on #cursor-lamp {
+   La LUCE pero' e' rimasta: la posizione che l'alone aveva continua a
+   esistere come due numeri in Layout.astro, ed e' quella che decide dove
+   cadono le ombre degli oggetti knolling. La sorgente non si vede piu', si
+   vede solo quello che illumina — che e' come funziona una luce vera. */
+
+html.cursor-on #cursor-core {
   opacity: 1;
 }
 
@@ -113,10 +101,6 @@ html.cursor-hot #cursor-core {
   box-shadow: 0 0 1.125rem rgba(255, 228, 180, 0.95);
 }
 
-html.cursor-hot #cursor-lamp {
-  opacity: 1.35;
-}
-
 /* ── Premuto ───────────────────────────────────────────────────────────
    Si stringe invece di allargarsi: e' il gesto che il dito fa davvero, e
    distingue "sto per premere" da "sto premendo". Senza, un cursore custom
@@ -126,10 +110,6 @@ html.cursor-down #cursor-core {
   height: 0.5rem;
   margin: -0.25rem 0 0 -0.25rem;
   box-shadow: 0 0 0.5rem rgba(255, 228, 180, 0.7);
-}
-
-html.cursor-down #cursor-lamp {
-  opacity: 0.75;
 }
 
 /* ── Sopra del testo ───────────────────────────────────────────────────
@@ -150,23 +130,17 @@ html.cursor-off #cursor-core {
   box-shadow: inset 0 0 0 1px rgba(255, 244, 224, 0.55);
 }
 
-html.cursor-off #cursor-lamp {
-  opacity: 0.4;
-}
-
 /* Un <dialog> aperto vive nel top layer del browser e dipinge sempre sopra
    il cursore custom (div fixed normale): inutile continuare ad animarlo
    dietro le quinte. Classe messa e tolta da memory-drawer.ts. */
-html.dialog-open #cursor-core,
-html.dialog-open #cursor-lamp {
+html.dialog-open #cursor-core {
   opacity: 0;
 }
 
 /* Sicurezza in piu': se il sistema cambia preferenza a pagina aperta, il
    file resta caricato ma non deve piu' disegnare niente. */
 @media (prefers-reduced-motion: reduce), (prefers-contrast: more) {
-  #cursor-core,
-  #cursor-lamp {
+  #cursor-core {
     display: none;
   }
 }

@@ -5469,15 +5469,15 @@ const NAV = [
         <p class="ds-sub__note">
           {
             it
-              ? "Non è un componente: è la pagina. Due <div> nel layout — #cursor-core, il punto, e #cursor-lamp, l'alone — e cinque classi sul <html> che ne cambiano lo stato. Non se ne può mostrare un secondo qui dentro, perché sono id unici e ce n'è già uno acceso: quello che stai muovendo adesso è la demo."
-              : "It is not a component: it is the page. Two <div>s in the layout — #cursor-core, the dot, and #cursor-lamp, the halo — and five classes on <html> that switch its state. A second one cannot be shown in here, because those are unique ids and one is already lit: the one you are moving right now is the demo."
+              ? "Non è un componente: è la pagina. Un <div> nel layout — #cursor-core, il punto — e cinque classi sul <html> che ne cambiano lo stato. Non se ne può mostrare un secondo qui dentro, perché è un id unico e ce n'è già uno acceso: quello che stai muovendo adesso è la demo."
+              : "It is not a component: it is the page. One <div> in the layout — #cursor-core, the dot — and five classes on <html> that switch its state. A second one cannot be shown in here, because that is a unique id and one is already lit: the one you are moving right now is the demo."
           }
         </p>
         <p class="ds-sub__note">
           {
             it
-              ? "La lampada non è decorazione: è la sorgente di luce della scena. Gli oggetti knolling calcolano la propria ombra portata rispetto a dove si trova, ed è il motivo per cui muovendo il puntatore le ombre girano invece di stare ferme."
-              : "The lamp is not decoration: it is the scene's light source. The knolling objects compute their cast shadow relative to where it sits, which is why moving the pointer turns the shadows instead of leaving them still."
+              ? "La luce non è decorazione: è la sorgente della scena. Gli oggetti knolling calcolano la propria ombra portata rispetto a dove si trova, ed è il motivo per cui muovendo il puntatore le ombre girano invece di stare ferme. La sorgente però è invisibile: fino al 2026-08-27 c'era anche #cursor-lamp, un alone da 22rem che inseguiva il puntatore, ed è stato tolto perché dava al cursore un'aria lenta — un alone che arriva dopo si legge come «la pagina sta rincorrendo il mouse», anche quando il punto è esatto. Restano i due numeri della sua posizione: la luce si vede solo da cosa illumina, che è come funziona una luce vera."
+              : "The light is not decoration: it is the scene's source. The knolling objects compute their cast shadow relative to where it sits, which is why moving the pointer turns the shadows instead of leaving them still. The source is invisible, though: until 2026-08-27 there was also #cursor-lamp, a 22rem halo trailing the pointer, removed because it made the cursor feel slow — a halo that arrives late reads as «the page is chasing the mouse», even when the dot is exact. Its position survives as two numbers: the light is visible only through what it lights, which is how a real light works."
           }
         </p>
         <div class="ds-table-wrap">
@@ -5534,8 +5534,8 @@ const NAV = [
                 <td>
                   {
                     it
-                      ? "Puntatore fuori dalla finestra: si spengono tutti e due."
-                      : "Pointer outside the window: both go dark."
+                      ? "Sopra qualcosa che non risponde: il punto si svuota e resta il solo bordo."
+                      : "Over something that does not respond: the dot empties out, leaving only its ring."
                   }
                 </td>
               </tr>
@@ -5544,8 +5544,8 @@ const NAV = [
                 <td>
                   {
                     it
-                      ? "C'è una modale aperta: la lampada si spegne, perché illuminerebbe un fondale che non si vede più."
-                      : "A modal is open: the lamp goes out, because it would be lighting a backdrop nobody can see any more."
+                      ? "C'è una modale aperta: il cursore si spegne. Un <dialog> vive nel top layer del browser e dipinge sempre sopra un div fixed, quindi continuare a disegnarlo sarebbe lavoro buttato."
+                      : "A modal is open: the cursor goes dark. A <dialog> lives in the browser's top layer and always paints above a plain fixed div, so continuing to draw it would be wasted work."
                   }
                 </td>
               </tr>
@@ -5555,8 +5555,8 @@ const NAV = [
         <p class="ds-section__note">
           {
             it
-              ? "Il vincolo che decide tutto: un cursore custom cancella il puntatore di sistema, e con lui le impostazioni di accessibilità del sistema operativo — puntatore ingrandito, ad alto contrasto, con la scia. Per questo il foglio non è mai importato dal markup, ma iniettato da uno script che prima controlla il puntatore fine e reduced-motion: dove non ha senso, non si scaricano nemmeno i byte."
-              : "The constraint that decides everything: a custom cursor erases the system pointer, and with it the operating system's accessibility settings — enlarged pointer, high contrast, trails. That is why the stylesheet is never imported from the markup but injected by a script that first checks for a fine pointer and reduced-motion: where it makes no sense, not even the bytes are downloaded."
+              ? "Il vincolo che decide tutto: un cursore custom cancella il puntatore di sistema, e con lui le impostazioni di accessibilità del sistema operativo — puntatore ingrandito, ad alto contrasto, con la scia. Per questo il foglio non è mai importato dal markup, ma iniettato da uno script che prima controlla il puntatore fine e reduced-motion: dove non ha senso, non si scaricano nemmeno i byte. Sul costo per frame vale la stessa disciplina: le posizioni degli oggetti illuminati si rileggono solo allo scorrimento e al ridimensionamento, non a ogni giro — N chiamate a getBoundingClientRect() per frame forzano il ricalcolo del layout mentre muovi il mouse, ed è così che un cursore esatto sembra in ritardo."
+              : "The constraint that decides everything: a custom cursor erases the system pointer, and with it the operating system's accessibility settings — enlarged pointer, high contrast, trails. That is why the stylesheet is never imported from the markup but injected by a script that first checks for a fine pointer and reduced-motion: where it makes no sense, not even the bytes are downloaded. The same discipline applies to per-frame cost: the lit objects' positions are re-read only on scroll and resize, not every pass — N getBoundingClientRect() calls per frame force a layout recalculation while you move the mouse, and that is how an exact cursor comes to feel late."
           }
         </p>
       </section>

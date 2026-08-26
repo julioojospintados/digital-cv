@@ -247,11 +247,12 @@ const jsonLd = {
     <!-- Skip to main content — keyboard/screen reader accessibility -->
     <a href="#main-content" class="skip-link">Vai al contenuto principale</a>
 
-    <!-- Cursore-lampada: nucleo (dove sei) + alone (la luce). aria-hidden e
-         pointer-events:none — non esistono per chi naviga da tastiera o con
-         uno screen reader, che e' esattamente come deve essere. -->
+    <!-- Il nucleo del cursore: il punto che dice dove sei. aria-hidden e
+         pointer-events:none — non esiste per chi naviga da tastiera o con uno
+         screen reader, che e' esattamente come deve essere. L'alone che lo
+         accompagnava e' stato tolto il 2026-08-27: la luce e' rimasta, ma ora
+         si vede solo da cosa illumina. -->
     <div id="cursor-core" aria-hidden="true"></div>
-    <div id="cursor-lamp" aria-hidden="true"></div>
 
     <slot />
 
@@ -308,10 +309,18 @@ const jsonLd = {
       window.addEventListener("scroll", fabSync, { passive: true });
     </script>
 
-    <!-- ── Cursore-lampada ──────────────────────────────────────────────
-         Nucleo + alone, e sugli oggetti knolling le ombre portate che si
-         spostano davvero: --lh-sh-x/y esistono gia' in lab-home.css, erano
-         solo costanti. La luce c'era, mancava di dire da dove venisse.
+    <!-- ── Cursore e luce di scena ──────────────────────────────────────
+         Un punto che segue il puntatore, e sugli oggetti knolling le ombre
+         portate che si spostano davvero: --lh-sh-x/y esistono gia' in
+         lab-home.css, erano solo costanti. La luce c'era, mancava di dire da
+         dove venisse.
+
+         La sorgente e' invisibile: fino al 2026-08-27 era un alone da 22rem
+         che inseguiva il puntatore, ed e' quello che dava al cursore un'aria
+         lenta — un alone in ritardo si legge come pagina che rincorre il
+         mouse, anche quando il punto e' esatto. Tolto l'alone, restano i due
+         numeri della sua posizione: la luce continua a esserci, si vede solo
+         attraverso le ombre che getta.
 
          Un rAF per l'intera scena, come lab-hero.ts: niente GSAP, che qui
          servirebbe per un lerp da dieci righe. Il loop si spegne da solo
@@ -331,43 +340,64 @@ const jsonLd = {
         window.matchMedia("(prefers-contrast: no-preference)").matches;
 
       const core = document.getElementById("cursor-core");
-      const lamp = document.getElementById("cursor-lamp");
 
-      if (ok && core && lamp) {
+      if (ok && core) {
         const root = document.documentElement;
 
         let px = 0,
           py = 0; // dove sta il puntatore
         let lx = 0,
-          ly = 0; // dove sta l'alone, che insegue
+          ly = 0; // dove sta la LUCE, che insegue il puntatore
         let acceso = false,
           gira = false;
 
-        // Gli oggetti che la luce illumina davvero. Le rect si rileggono a
-        // ogni frame ma tutte insieme, PRIMA di scrivere qualsiasi stile:
-        // leggere e scrivere alternati sugli stessi nodi forza il browser a
-        // ricalcolare il layout a ogni giro.
+        // Gli oggetti che la luce illumina davvero.
         const illuminati = Array.from(
           document.querySelectorAll<HTMLElement>(".lh-obj, .lh-section__object"),
         );
 
-        const frame = () => {
-          lx += (px - lx) * 0.16;
-          ly += (py - ly) * 0.16;
+        // Le rect si rileggevano a ogni frame, tutte: N chiamate a
+        // getBoundingClientRect() per giro, che costringono il browser a
+        // ricalcolare il layout mentre muovi il mouse. E' quello che dava al
+        // cursore l'aria di arrancare — non il punto, che e' sempre stato
+        // esatto, ma il frame che diventava lungo.
+        //
+        // Adesso si rileggono solo quando possono essere cambiate davvero:
+        // allo scorrimento e al ridimensionamento. Muovendo il mouse su una
+        // pagina ferma il costo per frame e' zero letture di layout.
+        let rects: DOMRect[] = [];
+        let daRileggere = true;
+        const invalida = () => {
+          daRileggere = true;
+        };
+        window.addEventListener("scroll", invalida, { passive: true });
+        window.addEventListener("resize", invalida, { passive: true });
 
+        const frame = () => {
+          // 0.32 e non 0.16: senza piu' l'alone da inseguire, il ritardo non
+          // serve piu' a nascondere niente. Le ombre girano il doppio piu'
+          // svelte e restano comunque morbide — a 1 seguirebbero il pixel e
+          // tremolerebbero.
+          lx += (px - lx) * 0.32;
+          ly += (py - ly) * 0.32;
+
+          // Il punto per primo, e con i valori esatti del puntatore: qualunque
+          // cosa venga dopo in questo frame, il cursore e' gia' al suo posto.
           core.style.transform = `translate3d(${px}px,${py}px,0)`;
-          lamp.style.transform = `translate3d(${lx.toFixed(1)}px,${ly.toFixed(1)}px,0)`;
 
           if (illuminati.length) {
             const h = window.innerHeight;
             const diag = Math.hypot(window.innerWidth, h) || 1;
-            const rects = illuminati.map((el) => el.getBoundingClientRect());
+            if (daRileggere) {
+              rects = illuminati.map((el) => el.getBoundingClientRect());
+              daRileggere = false;
+            }
 
             for (let i = 0; i < illuminati.length; i++) {
               const b = rects[i];
               // Fuori dalla finestra non si illumina niente: e' il grosso del
               // risparmio su una pagina lunga.
-              if (b.bottom < -200 || b.top > h + 200 || !b.width) continue;
+              if (!b || b.bottom < -200 || b.top > h + 200 || !b.width) continue;
 
               const dx = b.left + b.width / 2 - lx;
               const dy = b.top + b.height / 2 - ly;
@@ -441,8 +471,8 @@ const jsonLd = {
         window.addEventListener("pointercancel", su, { passive: true });
         window.addEventListener("blur", su);
 
-        // Uscita dalla finestra: la lampada si spegne invece di restare
-        // parcheggiata sull'ultimo punto.
+        // Uscita dalla finestra: il cursore si spegne invece di restare
+        // parcheggiato sull'ultimo punto.
         document.addEventListener("pointerleave", () => root.classList.remove("cursor-on"));
         document.addEventListener("pointerenter", () => {
           if (acceso) root.classList.add("cursor-on");
