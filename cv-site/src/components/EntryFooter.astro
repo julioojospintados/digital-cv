@@ -12,9 +12,11 @@ import "../styles/entry-footer.css";
 
 interface Props {
   lang?: "it" | "en";
-  /** Variante della home nuova: oggetto knolling accanto ai contatti ed
-   *  email come azione primaria. Spenta di default — le pagine sotto
-   *  /old-version usano lo stesso componente e restano com'erano. */
+  /** Oggetto knolling accanto ai contatti ed email come azione primaria.
+   *  Spenta di default per ragioni storiche: la variante nuda serviva le
+   *  pagine sotto /old-version, cancellate il 2026-08-26. Oggi l'unico
+   *  chiamante passa `emphasis`, quindi il ramo spento non lo esercita
+   *  nessuno — si può togliere, ma è un diff a sé. */
   emphasis?: boolean;
   /** Tutto il resto finisce sul <footer>: serve alla vetrina, che marca la
    *  radice dei componenti con `data-ds-snippet` per serializzarli. */

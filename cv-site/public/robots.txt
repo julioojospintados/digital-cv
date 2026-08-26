@@ -50,12 +50,11 @@ Allow: /
 # 3. Tutto il resto — ricerca organica inclusa (Googlebot, Bingbot, ecc.)
 #    /tools/ è il generatore CV privato dietro passphrase: non è contenuto
 #    del CV, non deve essere indicizzato né suggerito da nessun motore.
-#    /old-version/ è la versione precedente del sito, più il prototipo
-#    d'ingresso scartato: tenuti raggiungibili per poterli mostrare, ma non
-#    devono competere con la versione attuale sulle stesse chiavi.
+#    Qui c'era anche /old-version/, la versione precedente del sito:
+#    cancellata il 2026-08-26, quegli indirizzi ora rispondono 404 e non
+#    serve più vietarli.
 User-agent: *
 Disallow: /tools/
-Disallow: /old-version/
 Allow: /
 
 Sitemap: https://giulio-occhipinti.com/sitemap-index.xml

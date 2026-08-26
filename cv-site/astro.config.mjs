@@ -110,10 +110,10 @@ export default defineConfig({
     sitemap({
       // Il tool privato non deve comparire in sitemap.xml — non è contenuto
       // del CV, è un'utility interna dietro passphrase.
-      // /old-version/ è la versione precedente del sito, più il prototipo
-      // d'ingresso scartato: raggiungibili per poterli mostrare, ma non
-      // devono competere con quella attuale.
-      filter: (page) => !page.includes("/tools/") && !page.includes("/old-version/"),
+      // /tools/ sono le pagine private dietro passphrase. Qui c'era anche
+      // /old-version/, la versione precedente del sito: cancellata il
+      // 2026-08-26, vive in julioojospintados/old-digital-cv.
+      filter: (page) => !page.includes("/tools/"),
     }),
     stripComments(),
   ],

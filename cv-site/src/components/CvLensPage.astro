@@ -91,9 +91,9 @@ const clusterLabel = cluster?.label ?? modeLabel;
 // contraddicono, ma nemmeno si rispondono sempre. Per tornare indietro basta
 // togliere questo blocco.
 //
-// L'override sta qui e non in `lib/cv-view-model.ts` di proposito: quel
-// file serve anche /en/cv e le pagine di /old-version, che devono continuare
-// a mostrare la descrizione della lente. Questa scelta vale solo qui.
+// L'override sta qui e non in `lib/cv-view-model.ts` di proposito: quel file
+// è condiviso (lo leggono anche cv-i18n e exp-lanes) e restituisce il modello
+// grezzo. Questa scelta è di presentazione, e vale solo per questa pagina.
 const clusterRefs = EXP_CLUSTER_DEFS.find((c) => c.key === lens)?.refs ?? [];
 const rawItems = cluster?.items ?? [];
 

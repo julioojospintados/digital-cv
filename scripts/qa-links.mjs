@@ -71,7 +71,9 @@ for (const file of pagine) {
   // Parità di esistenza: ogni pagina pubblica italiana deve avere la sua
   // gemella inglese, e viceversa. Non guarda il contenuto — quello lo fa
   // qa-parity.mjs — solo che il file dall'altra parte ci sia.
-  const fuori = ["/lab/", "/old-version/", "/tools/", "/404", "/prototype/"];
+  // /lab/ e /old-version/ stavano qui: entrambi cancellati, il primo ad
+  // agosto e il secondo il 2026-08-26.
+  const fuori = ["/tools/", "/404", "/prototype/"];
   if (fuori.some((p) => url.startsWith(p))) continue;
   const gemella =
     url.startsWith("/en/") || url === "/en/"

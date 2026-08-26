@@ -28,8 +28,11 @@ function getInitialMode(): Mode {
     if (urlParam && VALID_MODES.includes(urlParam as Mode)) {
       return urlParam as Mode;
     }
-    // Il path: /design, /tech, /ai (slug) — e le chiavi, che restano valide
-    // perché /old-version/<chiave> le usa ancora.
+    // Il path: /design, /tech, /ai (slug). Accetta anche le chiavi interne
+    // (creative/tech/human): oggi nessuna pagina le ha nel path — /creative e
+    // /human sono 301 dichiarati in astro.config.mjs — ma il ramo costa una
+    // riga e copre il caso in cui un vecchio indirizzo arrivi senza passare
+    // dal redirect.
     const pathSegment = window.location.pathname.split("/").filter(Boolean)[0] ?? "";
     const fromPath = modeFromSegment(pathSegment);
     if (fromPath) return fromPath;
@@ -72,20 +75,16 @@ export function setMode(mode: Mode): void {
   }
 }
 
-// Pagine che usano il mode system ma non hanno una route di mode nel path
-// (es. /en/cv, /cv) — leggono il mode da localStorage invece di azzerarlo.
-const MODE_AWARE_PATHS = ["/old-version/en/cv"];
-
 // Pagine che dichiarano il proprio mode lato server (data-mode SSR nel
 // markup): il mode è del contenuto (primaryMode del case study), non
 // dell'utente — initMode non deve né cancellarlo né sovrascriverlo.
 const SSR_MODE_PATHS = ["/work", "/en/work"];
 
-// Route con la lente nel path ma non nel primo segmento: `/en/design`,
-// `/old-version/creative`. Il controllo standard qui sotto guarda
-// `pathname.split("/")[0]`, che lì vale "en" o "old-version" e non è
-// una lente — la pagina finiva quindi nel ramo `else`, quello che AZZERA
-// data-mode: colore giusto in SSR, pagina bianca dopo l'idratazione.
+// Route con la lente nel path ma non nel primo segmento: `/en/design`.
+// Il controllo standard qui sotto guarda `pathname.split("/")[0]`, che lì
+// vale "en" e non è una lente — la pagina finiva quindi nel ramo `else`,
+// quello che AZZERA data-mode: colore giusto in SSR, pagina bianca dopo
+// l'idratazione.
 //
 // Sintomo osservato e misurato con Playwright su tutte e quattro le lenti:
 // colore corretto al readyState "interactive" (è l'SSR), bianco a
@@ -96,16 +95,15 @@ const SSR_MODE_PATHS = ["/work", "/en/work"];
 // a non cancellare l'attributo — allinea anche il `modeStore`, da cui
 // <go-logo> prende il proprio colore: altrimenti il logo resta sull'ultima
 // lente memorizzata mentre il resto della pagina è già cambiato.
-// L'ordine conta: /old-version/en/... deve essere riconosciuto dal prefisso
-// più lungo, non da "/en/" — altrimenti la versione storica passerebbe per
-// una pagina del sito nuovo.
-const LENS_ROUTE_PREFIXES = ["/old-version/", "/en/"];
+//
+// Era un elenco di due prefissi: c'era anche "/old-version/", e l'ordine
+// contava. La versione storica è stata cancellata il 2026-08-26 (vive in
+// julioojospintados/old-digital-cv), quindi resta il solo /en/.
+const LENS_ROUTE_PREFIXES = ["/en/"];
 
 function lensFromPath(pathname: string): Mode | null {
   const prefix = LENS_ROUTE_PREFIXES.find((p) => pathname.startsWith(p));
   if (!prefix) return null;
-  // `/old-version/hero` e `/old-version/home` passano di qui: modeFromSegment li
-  // scarta, e restano quindi pagine senza lente.
   const seg = pathname.slice(prefix.length).split("/").filter(Boolean)[0] ?? "";
   return modeFromSegment(seg);
 }
@@ -123,11 +121,6 @@ export function initMode(): void {
     // Siamo su una pagina di lente (/design, /tech, /ai) — applica
     document.documentElement.dataset.mode = routeMode;
     modeStore.set(routeMode);
-  } else if (MODE_AWARE_PATHS.some((p) => pathname.startsWith(p))) {
-    // Pagina mode-aware senza route di mode (/en/cv) — usa localStorage o default 'creative'
-    const stored = modeStore.get();
-    const mode = VALID_MODES.includes(stored) ? stored : "creative";
-    document.documentElement.dataset.mode = mode;
   } else if (SSR_MODE_PATHS.some((p) => pathname.startsWith(p))) {
     // Case study (/work/*) — il data-mode SSR del progetto resta com'è
   } else {

@@ -1,6 +1,6 @@
 ---
 name: design-system
-description: "Regole visual e tecniche del Digital CV. Carica quando: crei componenti UI, animazioni GSAP, layout, card, skill grid, knolling, mode system (3 mode: tech/creative/human), colori, tipografia, responsive, mobile, GoLogo, FloatingMenu, SkillForceGraph, Lit islands, Awwwards, cursor custom, smooth scroll, bento grid, preloader, View Transitions, ottanio, accent."
+description: "Regole visual e tecniche del Digital CV. Carica quando: crei componenti UI, animazioni GSAP, layout, card, skill grid, knolling, mode system (3 mode: tech/creative/human), colori, tipografia, responsive, mobile, GoLogo, FloatingMenu, Lit islands, Awwwards, cursor custom, smooth scroll, bento grid, preloader, View Transitions, ottanio, accent."
 ---
 
 # Design System — Knolling CV
@@ -30,7 +30,9 @@ davvero invariante. **Tutti gli altri 4 token** (`--color-surface`, `--color-bor
 non sono valori fissi, sono ridefiniti dentro ogni blocco `[data-mode="..."]` in `global.css`.
 Un componente/doc che li mostra come costanti (es. sempre gli stessi valori `:root`) mostra
 dati sbagliati ogni volta che gira in un mode diverso dal default — bug reale trovato e
-corretto il 2026-07-23 in `WorkDesignSystem.astro` (leggeva `:root` invece del mode attivo).
+corretto il 2026-07-23 in `WorkDesignSystem.astro`, che leggeva `:root` invece del mode
+attivo. Quel componente è stato cancellato il 2026-08-26 con il resto del sito storico:
+la lezione resta, il file no.
 **Mai colori hardcoded — sempre CSS custom properties.**
 
 ```css
@@ -537,8 +539,8 @@ display (es. `clamp(2rem, 5vw, 4.5rem)`) restano fuori da questa scala: sono
 deliberatamente continui/responsivi, il loro valore giusto dipende dal
 viewport reale, non da un token fisso. Il pavimento dei 12px vale comunque
 anche lì — nessun bound minimo di un clamp può scendere sotto `var(--fs-12)`
-(vedi `SkillSquare.astro`, i due clamp con `cqi` hanno pavimento a
-`--fs-12`/`--fs-10` per lo stesso motivo).
+(lo faceva anche `SkillSquare.astro`, con due clamp in `cqi` e pavimento a
+`--fs-12`/`--fs-10`: componente cancellato il 2026-08-26, regola invariata).
 
 ### Il criterio giusto per `--fs-12`: natura del dato, non tipo di componente
 

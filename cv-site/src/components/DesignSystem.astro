@@ -11,9 +11,10 @@
  * divergenza non è improbabile, è impossibile.
  *
  * ── Cosa c'è dentro ──────────────────────────────────────────────────────
- * Il sistema **nuovo**: la home "/" (`lh-*`), /<lente> (`lc-*`),
- * /old-version/hero (`lab-*`) e /work (`work-*`). Il sito storico è fuori per
- * decisione esplicita del 2026-08-16.
+ * Il sistema vivo: la home "/" (`lh-*`), /<lente> (`lc-*`) e /work
+ * (`work-*`). Il sito storico e il prototipo d'ingresso (`lab-*`) erano
+ * documentati qui fino al 2026-08-26, quando sono stati cancellati: vivono
+ * nel repo julioojospintados/old-digital-cv.
  *
  * ── La regola delle demo ─────────────────────────────────────────────────
  * Il CSS non è ricopiato: la pagina importa i fogli veri. Il markup invece
@@ -43,7 +44,6 @@ import EntryFooter from "./EntryFooter.astro";
 import { LOCALES } from "../lib/cv-i18n";
 import "../styles/lab-home.css";
 import "../styles/lab-cv.css";
-import "../styles/lab-hero.css";
 import "../styles/memory-drawer.css";
 import "../styles/work-page.css";
 import "../styles/design-system.css";
@@ -116,22 +116,8 @@ const KNOLLING = [
 const PREFIXES = [
   { p: "lh-*", from: "/", file: "lab-home.css" },
   { p: "lc-*", from: "/<lente>", file: "lab-cv.css" },
-  { p: "lab-*", from: "/old-version/hero", file: "lab-hero.css" },
   { p: "work-*", from: "/work", file: "work-page.css" },
   { p: "ds-*", from: "questa pagina", file: "design-system.css" },
-];
-
-/* ── La still-life del prototipo hero ────────────────────────────────────
-   Impianto diverso da quello dell'ingresso: là gli oggetti sono sparsi in un
-   livello piatto, qui vivono in una scena con prospettiva e un asse Z. */
-const HERO_SCENE = [
-  { src: "megaphone", x: "79%", y: "19%", w: "17%", z: -6, depth: 0.1, r: "8deg", blur: 2.8 },
-  { src: "plant", x: "17%", y: "25%", w: "13%", z: -5, depth: 0.15, r: "-6deg", blur: 2.2 },
-  { src: "compass", x: "78%", y: "57%", w: "14%", z: -2, depth: 0.35, r: "5deg", blur: 0.6 },
-  { src: "laptop", x: "50%", y: "47%", w: "40%", z: 0, depth: 0.45, r: "-2deg", blur: 0 },
-  { src: "chess", x: "24%", y: "61%", w: "15%", z: 3, depth: 0.7, r: "-4deg", blur: 0 },
-  { src: "camera", x: "63%", y: "81%", w: "21%", z: 5, depth: 0.95, r: "6deg", blur: 0 },
-  { src: "multitool", x: "33%", y: "87%", w: "17%", z: 7, depth: 1.2, r: "-9deg", blur: 1.2 },
 ];
 
 /* ── Token di base, condivisi da tutto il sistema (global.css). ─────────── */
@@ -144,27 +130,24 @@ const BASE_TOKENS = [
   { name: "--color-accent", value: "rgba(255, 255, 255, 0.9)" },
 ];
 
-/* ── I tre vocabolari di /lab. La sovrapposizione è il punto della tabella. */
+/* ── I due vocabolari vivi. La sovrapposizione è il punto della tabella. */
 const LAB_TOKENS = [
-  { concept: it ? "Inchiostro" : "Ink", lh: "--lh-ink", lc: "--lc-ink", lab: "--lab-ink" },
+  { concept: it ? "Inchiostro" : "Ink", lh: "--lh-ink", lc: "--lc-ink" },
   {
     concept: it ? "Testo attenuato" : "Muted text",
     lh: "--lh-muted",
     lc: "--lc-muted",
-    lab: "--lab-muted",
   },
-  { concept: it ? "Linea" : "Line", lh: "--lh-line", lc: "--lc-line", lab: "--lab-line" },
+  { concept: it ? "Linea" : "Line", lh: "--lh-line", lc: "--lc-line" },
   {
     concept: it ? "Accento" : "Accent",
     lh: "--lh-accent",
     lc: "--lc-accent-line",
-    lab: "--lab-accent",
   },
   {
     concept: it ? "Margine laterale" : "Gutter",
     lh: "--lh-gutter",
     lc: "--lc-gutter",
-    lab: "--lab-gutter",
   },
 ];
 
@@ -419,7 +402,7 @@ const t = it
       prefixCol2: "Da dove viene",
       prefixCol3: "Foglio",
       prefixNote:
-        "Un prefisso dovrebbe dire cosa fa un componente, non in quale file è nato. Questi dicono la seconda cosa, e uno — lab-* — sembra la famiglia di tutto /lab, che non esiste più: è il prefisso di una prova d'ingresso sola, oggi archiviata in /old-version/hero. Rinominarli non varrebbe il diff, dato che nessuna pagina viva li usa.",
+        "Un prefisso dovrebbe dire cosa fa un componente, non in quale file è nato. Questi dicono la seconda cosa: lh-* e lc-* sono i nomi di due prove, non di due mestieri. Rinominarli non varrebbe il diff — ma è il motivo per cui il badge accanto al titolo va letto come «da dove viene», non come «che cos'è».",
       anatomyShow: "Mostra i numeri",
       anatomyHint:
         "Le parti nell'ordine in cui stanno nel markup. Premi il comando per vederle numerate sulla demo qui sopra.",
@@ -438,7 +421,6 @@ const t = it
       secMotionTok: "Movimento",
       secHome: "Componenti — ingresso",
       secLens: "Componenti — CV per lente",
-      secHero: "Componenti — hero",
       secWork: "Componenti — case study",
       secStates: "Stati",
       secMobile: "Mobile",
@@ -503,7 +485,7 @@ const t = it
       prefixCol2: "Where it comes from",
       prefixCol3: "Stylesheet",
       prefixNote:
-        "A prefix should say what a component does, not which file it was born in. These say the latter, and one — lab-* — even looks like the family prefix for all of /lab, which no longer exists: it belongs to a single entry prototype, now archived at /old-version/hero. Renaming them would not be worth the diff, since no live page uses them.",
+        "A prefix should say what a component does, not which file it was born in. These say the latter: lh-* and lc-* are the names of two prototypes, not of two crafts. Renaming them would not be worth the diff — but it is why the badge beside each title reads as «where it comes from», not «what it is».",
       anatomyShow: "Show the numbers",
       anatomyHint:
         "The parts in the order they appear in the markup. Press the control to see them numbered on the demo above.",
@@ -522,7 +504,6 @@ const t = it
       secMotionTok: "Motion",
       secHome: "Components — entry",
       secLens: "Components — CV per lens",
-      secHero: "Components — hero",
       secWork: "Components — case study",
       secStates: "States",
       secMobile: "Mobile",
@@ -651,22 +632,6 @@ const NAV = [
       { id: "lente-imbocchi", label: it ? "Imbocchi finali" : "Closing exits" },
       { id: "lente-lingue", label: it ? "Chip delle lingue" : "Language chips" },
       { id: "lente-contatti", label: it ? "Contatti in chiaro" : "Contacts in the open" },
-    ],
-  },
-  {
-    label: t.secHero,
-    items: [
-      { id: "hero-intestazione", label: it ? "Barra e intestazione" : "Bar and heading" },
-      { id: "hero-bottoni", label: it ? "Bottoni" : "Buttons" },
-      {
-        id: "hero-pannello",
-        label: it ? "Caso — pannello ed etichetta" : "Case — panel and label",
-      },
-      {
-        id: "hero-scena",
-        label: it ? "Still-life con prospettiva" : "Still life with perspective",
-      },
-      { id: "hero-etichette", label: it ? "Etichette e titoli" : "Labels and headings" },
     ],
   },
   {
@@ -942,12 +907,12 @@ const NAV = [
         </div>
 
         <div class="ds-sub">
-          <p class="ds-label">{it ? "I tre vocabolari di /lab" : "The three /lab vocabularies"}</p>
+          <p class="ds-label">{it ? "I due vocabolari" : "The two vocabularies"}</p>
           <p class="ds-sub__note">
             {
               it
-                ? "Lo stesso concetto porta tre nomi diversi, uno per prova. È un debito noto: quando /lab diventa il sito, questi prefissi spariscono e restano i nomi di base."
-                : "The same concept carries three different names, one per prototype. It is known debt: when /lab becomes the site, these prefixes disappear and the base names remain."
+                ? "Lo stesso concetto porta due nomi diversi, uno per pagina. Erano tre: la colonna del prototipo d'ingresso è sparita con lui il 2026-08-26. Resta un debito noto — i due prefissi dovrebbero diventare nomi di base."
+                : "The same concept carries two different names, one per page. There were three: the entry prototype's column went with it on 2026-08-26. It remains known debt — the two prefixes should become base names."
             }
           </p>
           <div class="ds-table-wrap">
@@ -957,7 +922,6 @@ const NAV = [
                   <th>{t.colConcept}</th>
                   <th>/</th>
                   <th>/{it ? "lente" : "lens"}</th>
-                  <th>/old-version/hero</th>
                 </tr>
               </thead>
               <tbody>
@@ -970,9 +934,6 @@ const NAV = [
                       </td>
                       <td>
                         <code>{row.lc}</code>
-                      </td>
-                      <td>
-                        <code>{row.lab}</code>
                       </td>
                     </tr>
                   ))
@@ -2498,8 +2459,8 @@ const NAV = [
             <p class="ds-spec__v">
               {
                 it
-                  ? "In fondo alle due home, una volta. La variante --emphasis è quella del sito nuovo: oggetto knolling accanto ai contatti, mail come azione primaria. Spenta di default perché lo stesso componente serve /old-version, che deve restare com'era."
-                  : "At the foot of the two home pages, once. The --emphasis variant is the current site's: knolling object beside the contacts, email as the primary action. Off by default, because the same component still serves /old-version, which must stay as it was."
+                  ? "In fondo alle due home, una volta, sempre con --emphasis: oggetto knolling accanto ai contatti e mail come azione primaria. La variante nuda è spenta di default per ragioni storiche — serviva la versione precedente del sito, cancellata il 2026-08-26 — e oggi non la usa nessuno."
+                  : "At the foot of the two home pages, once, always with --emphasis: knolling object beside the contacts and email as the primary action. The bare variant is off by default for historical reasons — it served the previous version of the site, deleted on 2026-08-26 — and nobody uses it today."
               }
             </p>
           </div>
@@ -4450,304 +4411,6 @@ const NAV = [
                 it
                   ? "I link sono sottolineati e non soltanto colorati (1.4.1), con l'offset che tiene la riga fuori dalle discendenti. Il separatore è aria-hidden: è punteggiatura, e letta ad alta voce sarebbe rumore."
                   : "The links are underlined, not merely coloured (1.4.1), with the offset keeping the rule clear of descenders. The separator is aria-hidden: it is punctuation, and read aloud it would be noise."
-              }
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section
-        class="ds-panel"
-        data-ds-panel="hero-intestazione"
-        aria-labelledby="hero-intestazione-t"
-      >
-        <div class="ds-panel__head">
-          <h2 class="ds-section__title" id="hero-intestazione-t">
-            {it ? "Barra e intestazione" : "Bar and heading"}
-          </h2>
-          <span class="ds-panel__group">{t.secHero}<span class="ds-origin">lab-*</span></span>
-        </div>
-
-        <div class="ds-stage">
-          <div class="lab">
-            <header class="lab-bar" style="position:static;" data-ds-snippet data-ds-drop="style">
-              <a href="#" class="lab-mark">GO</a>
-            </header>
-            <div class="lab-copy" style="padding-top:1rem;" data-ds-snippet data-ds-drop="style">
-              <p class="lab-role">Web & UX Designer</p>
-              <h2 class="lab-name">Giulio Occhipinti</h2>
-              <p class="lab-claim">
-                {
-                  it
-                    ? "Tecnologia, design e metodo in un unico ingaggio."
-                    : "Technology, design and method in a single engagement."
-                }
-              </p>
-              <p class="lab-where"><span>Torino, Italia</span></p>
-            </div>
-          </div>
-        </div>
-        <div class="ds-spec">
-          <div class="ds-spec__row ds-spec__row--wide">
-            <span class="ds-spec__k">{t.specClass}</span>
-            <p class="ds-spec__v">
-              <code>lab-bar · lab-mark · lab-copy · lab-role · lab-name · lab-claim</code>
-            </p>
-          </div>
-          <div class="ds-spec__row">
-            <span class="ds-spec__k">{t.specUse}</span>
-            <p class="ds-spec__v">
-              {
-                it
-                  ? "In cima al prototipo hero, una volta sola."
-                  : "At the top of the hero prototype, once only."
-              }
-            </p>
-          </div>
-          <div class="ds-spec__row ds-spec__row--dont">
-            <span class="ds-spec__k">{t.specDont}</span>
-            <p class="ds-spec__v">
-              {
-                it
-                  ? "Non aggiungere alla barra un selettore di modalità: la prova esiste per togliere la scelta all'ingresso — quattro bottoni di modalità che diventano zero è la misura che sta dimostrando."
-                  : "Do not add a mode selector to the bar: the prototype exists to remove the choice at the entry — four mode buttons becoming zero is the very figure it is demonstrating."
-              }
-            </p>
-          </div>
-          <div class="ds-spec__row ds-spec__row--wide">
-            <span class="ds-spec__k">{t.specA11y}</span>
-            <p class="ds-spec__v">
-              {
-                it
-                  ? "Qui il sistema ha ancora un difetto scritto invece che nascosto: `.lab :focus-visible` disegna l'anello con l'accento, che è esattamente ciò che la sezione Accessibilità dice di non fare. Il CV per lente l'ha già corretto passando all'inchiostro; il prototipo hero no, ed è da sistemare prima di promuoverlo."
-                  : "Here the system still carries a flaw written down rather than hidden: `.lab :focus-visible` draws the ring in the accent, which is exactly what the Accessibility section says not to do. The per-lens CV has already fixed it by switching to ink; the hero prototype has not, and it must be fixed before promoting it."
-              }
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section class="ds-panel" data-ds-panel="hero-bottoni" aria-labelledby="hero-bottoni-t">
-        <div class="ds-panel__head">
-          <h2 class="ds-section__title" id="hero-bottoni-t">{it ? "Bottoni" : "Buttons"}</h2>
-          <span class="ds-panel__group">{t.secHero}<span class="ds-origin">lab-*</span></span>
-        </div>
-
-        <div class="ds-stage">
-          <div class="lab">
-            <div class="lab-cta" data-ds-snippet>
-              <a href="#hero" class="lab-btn lab-btn--solid">Case study</a>
-              <a href="#hero" class="lab-btn">{it ? "CV in PDF" : "CV as PDF"}</a>
-            </div>
-          </div>
-        </div>
-        <div class="ds-spec">
-          <div class="ds-spec__row ds-spec__row--wide">
-            <span class="ds-spec__k">{t.specClass}</span>
-            <p class="ds-spec__v"><code>lab-cta · lab-btn · lab-btn--solid</code></p>
-          </div>
-          <div class="ds-spec__row">
-            <span class="ds-spec__k">{t.specUse}</span>
-            <p class="ds-spec__v">
-              {
-                it
-                  ? "Due per volta al massimo: una piena, una col solo bordo."
-                  : "Two at a time at most: one filled, one outlined."
-              }
-            </p>
-          </div>
-          <div class="ds-spec__row ds-spec__row--dont">
-            <span class="ds-spec__k">{t.specDont}</span>
-            <p class="ds-spec__v">
-              {
-                it
-                  ? "Non due piene affiancate. La gerarchia la porta il riempimento — la variante solida mette inchiostro scuro sull'accento, quella normale tiene il testo d'accento su fondo scuro: sono due quantità di superficie colorata, non due tinte."
-                  : "Never two filled side by side. Hierarchy comes from the fill — the solid variant puts dark ink on the accent, the plain one keeps accent text on a dark ground: two amounts of coloured surface, not two hues."
-              }
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section class="ds-panel" data-ds-panel="hero-pannello" aria-labelledby="hero-pannello-t">
-        <div class="ds-panel__head">
-          <h2 class="ds-section__title" id="hero-pannello-t">
-            {it ? "Caso — pannello ed etichetta" : "Case — panel and label"}
-          </h2>
-          <span class="ds-panel__group">{t.secHero}<span class="ds-origin">lab-*</span></span>
-        </div>
-        <p class="ds-sub__note">
-          {
-            it
-              ? "Il blocco che porta un progetto nel prototipo hero. Il pannello è pastello e non scuro: l'accento mescolato all'ottanio dava un cachi fangoso, mescolato a un bianco caldo dà il fondale a tinta piatta su cui si fotografano davvero le still-life. L'etichetta è lo stesso colore ma saturo e profondo, così si stacca invece di appoggiarsi. Passa il puntatore: l'oggetto si alza e la stanghetta del link si allunga."
-              : "The block that carries a project in the hero prototype. The panel is pastel, not dark: the accent mixed with the teal gave a muddy khaki, mixed with a warm white it gives the flat backdrop still lifes are actually shot on. The label is the same colour but saturated and deep, so it detaches instead of resting on it. Hover it: the object lifts and the link's rule extends."
-          }
-        </p>
-        <div class="ds-stage ds-stage--caso">
-          <div class="lab">
-            <article class="lab-case" style="--panel:var(--lab-p-creative)" data-ds-snippet>
-              <div class="lab-panel">
-                <img src="/knolling/laptop.webp" alt="" loading="lazy" decoding="async" />
-              </div>
-              <div class="lab-label">
-                <h3>Digital CV</h3>
-                <p class="lab-q">AI Workflow Designer</p>
-                <a href="#hero-pannello" class="lab-link">
-                  {it ? "Leggi il case study" : "Read the case study"}
-                </a>
-              </div>
-            </article>
-          </div>
-        </div>
-        <div class="ds-spec">
-          <div class="ds-spec__row ds-spec__row--wide">
-            <span class="ds-spec__k">{t.specClass}</span>
-            <p class="ds-spec__v">
-              <code>lab-case · lab-panel · lab-label · lab-q · lab-link</code>
-            </p>
-          </div>
-          <div class="ds-spec__row">
-            <span class="ds-spec__k">{t.specUse}</span>
-            <p class="ds-spec__v">
-              {
-                it
-                  ? "Uno per progetto, in colonna. --panel porta il colore della lente del progetto."
-                  : "One per project, in a column. --panel carries that project's lens colour."
-              }
-            </p>
-          </div>
-          <div class="ds-spec__row ds-spec__row--dont">
-            <span class="ds-spec__k">{t.specDont}</span>
-            <p class="ds-spec__v">
-              {
-                it
-                  ? "Non usare lab-label da sola come etichetta di testo: è il blocco caption del caso, con fondo, ombra e margine negativo che la fanno salire sul pannello. Fuori da lab-case si legge come un riquadro capitato lì — ed è esattamente l'errore che questa vetrina faceva fino al 2026-08-17."
-                  : "Do not use lab-label on its own as a text label: it is the case's caption block, with a fill, a shadow and a negative margin that lift it onto the panel. Outside lab-case it reads as a box that landed there by accident — which is exactly the mistake this showcase was making until 2026-08-17."
-              }
-            </p>
-          </div>
-          <div class="ds-spec__row ds-spec__row--wide">
-            <span class="ds-spec__k">{t.specA11y}</span>
-            <p class="ds-spec__v">
-              {
-                it
-                  ? "L'oggetto ha alt vuoto: il nome del progetto è scritto nell'h3 accanto. Il sollevamento e la stanghetta rispondono all'hover del caso intero, ma il link resta raggiungibile e leggibile da solo — l'animazione non porta informazione."
-                  : "The object has an empty alt: the project name is written in the adjacent h3. The lift and the rule respond to the whole case's hover, but the link stays reachable and readable on its own — the animation carries no information."
-              }
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section class="ds-panel" data-ds-panel="hero-scena" aria-labelledby="hero-scena-t">
-        <div class="ds-panel__head">
-          <h2 class="ds-section__title" id="hero-scena-t">
-            {it ? "Still-life con prospettiva" : "Still life with perspective"}
-          </h2>
-          <span class="ds-panel__group">{t.secHero}<span class="ds-origin">lab-*</span></span>
-        </div>
-
-        <p class="ds-sub__note">
-          {
-            it
-              ? "L'altra scena knolling del sistema, e un impianto diverso da quella dell'ingresso: qui c'è una prospettiva vera e un asse Z, e la parallasse inclina l'intero palco invece di spostare i singoli oggetti. Muovi il puntatore dentro il riquadro."
-              : "The system's other knolling scene, and a different mechanism from the entry's: here there is a real perspective and a Z axis, and the parallax tilts the whole stage instead of shifting individual objects. Move the pointer inside the frame."
-          }
-        </p>
-        <div class="ds-stage">
-          <div class="lab">
-            <div class="lab-scene" aria-hidden="true">
-              <div class="lab-stage" data-ds-scena-hero data-ds-snippet>
-                {
-                  HERO_SCENE.map((o) => (
-                    <div
-                      class="lab-obj"
-                      style={`--x:${o.x};--y:${o.y};--w:${o.w};--z:${o.z};--depth:${o.depth};--r:${o.r};--blur:${o.blur};--sh:${1 + o.depth}rem;--shb:${1.5 + o.depth * 1.5}rem`}
-                    >
-                      <img src={`/knolling/${o.src}.webp`} alt="" loading="lazy" decoding="async" />
-                    </div>
-                  ))
-                }
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="ds-spec">
-          <div class="ds-spec__row ds-spec__row--wide">
-            <span class="ds-spec__k">{t.specClass}</span>
-            <p class="ds-spec__v"><code>lab-scene · lab-stage · lab-obj</code></p>
-          </div>
-          <div class="ds-spec__row">
-            <span class="ds-spec__k">{t.specUse}</span>
-            <p class="ds-spec__v">
-              {
-                it
-                  ? "Una sola volta, accanto al testo d'ingresso del prototipo hero."
-                  : "Once only, beside the hero prototype's entry copy."
-              }
-            </p>
-          </div>
-          <div class="ds-spec__row ds-spec__row--dont">
-            <span class="ds-spec__k">{t.specDont}</span>
-            <p class="ds-spec__v">
-              {
-                it
-                  ? "Non mettere una transizione sul palco: --mx e --my sono riscritte a ogni fotogramma dallo script, e una transizione sopra un valore che cambia sessanta volte al secondo si limita a ripartire di continuo — la scena resterebbe indietro invece di seguire il puntatore."
-                  : "Do not put a transition on the stage: --mx and --my are rewritten every frame by the script, and a transition over a value changing sixty times a second simply restarts forever — the scene would lag instead of following the pointer."
-              }
-            </p>
-          </div>
-          <div class="ds-spec__row ds-spec__row--wide">
-            <span class="ds-spec__k">{t.specA11y}</span>
-            <p class="ds-spec__v">
-              {
-                it
-                  ? "L'intera scena è aria-hidden con alt vuoti: il contenuto informativo sta tutto nella colonna di testo accanto."
-                  : "The whole scene is aria-hidden with empty alts: the informative content is entirely in the adjacent text column."
-              }
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section class="ds-panel" data-ds-panel="hero-etichette" aria-labelledby="hero-etichette-t">
-        <div class="ds-panel__head">
-          <h2 class="ds-section__title" id="hero-etichette-t">
-            {it ? "Etichette e titoli" : "Labels and headings"}
-          </h2>
-          <span class="ds-panel__group">{t.secHero}<span class="ds-origin">lab-*</span></span>
-        </div>
-
-        <div class="ds-stage">
-          <div class="lab">
-            <p class="lab-eyebrow" data-ds-snippet>{it ? "Il percorso" : "The path"}</p>
-            <h2 class="lab-h2" data-ds-snippet>
-              {it ? "Quattro prove, un metodo" : "Four prototypes, one method"}
-            </h2>
-          </div>
-        </div>
-        <div class="ds-spec">
-          <div class="ds-spec__row ds-spec__row--wide">
-            <span class="ds-spec__k">{t.specClass}</span>
-            <p class="ds-spec__v"><code>lab-eyebrow · lab-h2</code></p>
-          </div>
-          <div class="ds-spec__row">
-            <span class="ds-spec__k">{t.specUse}</span>
-            <p class="ds-spec__v">
-              {
-                it
-                  ? "L'occhiello e il titolo aprono la sezione portfolio, una volta sola."
-                  : "The eyebrow and heading open the portfolio section, once only."
-              }
-            </p>
-          </div>
-          <div class="ds-spec__row ds-spec__row--dont">
-            <span class="ds-spec__k">{t.specDont}</span>
-            <p class="ds-spec__v">
-              {
-                it
-                  ? "Non usare lab-label come etichetta di testo: nonostante il nome è il blocco caption del caso, con fondo e ombra — sta nel pannello «Caso», non qui."
-                  : "Do not use lab-label as a text label: despite the name it is the case's caption block, with a fill and a shadow — it belongs to the «Case» panel, not here."
               }
             </p>
           </div>

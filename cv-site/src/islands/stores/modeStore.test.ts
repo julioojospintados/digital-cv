@@ -129,23 +129,12 @@ describe("initMode", () => {
     expect(modeStore.get()).toBe("human");
   });
 
-  it("route mode-aware (/en/cv) → usa il mode dallo store", () => {
-    window.history.replaceState({}, "", "/en/cv");
-    modeStore.set("creative");
-    document.documentElement.removeAttribute("data-mode");
-    initMode();
-    expect(document.documentElement.dataset.mode).toBe("creative");
-  });
-
-  it("route mode-aware (/en/cv) → lo store vince sul default", () => {
-    window.history.replaceState({}, "", "/en/cv");
-    // Store valido ma diverso dal default: verifica che initMode legga lo
-    // store invece di forzare DEFAULT_MODE.
-    modeStore.set("human");
-    document.documentElement.removeAttribute("data-mode");
-    initMode();
-    expect(document.documentElement.dataset.mode).toBe("human");
-  });
+  // Qui c'erano due casi su "/en/cv", l'unica route mode-aware senza lente
+  // nel path: leggeva il mode da localStorage invece di azzerarlo. Fallivano
+  // da tempo, perché quella pagina era diventata /old-version/en/cv e i test
+  // non erano stati aggiornati. Cancellati insieme al ramo che verificavano:
+  // /en/cv oggi è un 301 verso /en/design, e la versione storica non esiste
+  // più (2026-08-26).
 
   it("route root (/) → rimuove data-mode (colori neutri)", () => {
     window.history.replaceState({}, "", "/");

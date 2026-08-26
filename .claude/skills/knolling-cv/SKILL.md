@@ -77,9 +77,14 @@ Lo sfondo è **sempre ottanio** rgba(8,73,67,1). Mai hardcodare colori.
 | `/work` · `/work/<slug>` | `work/index.astro` · `work/[slug].astro` | Indice e case study |
 | `/en/work` · `/en/work/<slug>` · `/en/privacy` | `en/…` | Controparti EN (ancora file separati) |
 | `/privacy` | `privacy.astro` | Informativa |
-| `/old-version/hero` | `old-version/hero.astro` | Prototipo d'ingresso scartato, `noindex` — documentato dalla vetrina |
-| `/old-version/…` | `old-version/` | Sito precedente, servito ma `noindex`, non linkato |
 | `/home` `/cv` `/creative` `/human` `/en/cv` | `astro.config.mjs` | Legacy — 301 di rete, non pagine |
+
+⚠️ **Il sito storico non esiste più** (2026-08-26). `/old-version` e tutto
+ciò che serviva solo a lui — cinque pagine, cinque componenti card, l'isola
+`SkillForceGraph` con D3, `cv-init.ts`, `index-init.ts`, `mode-helpers.ts`,
+tre fogli di stile e `WorkDesignSystem.astro` — è stato cancellato. Vive in
+`github.com/julioojospintados/old-digital-cv`. Non ricrearlo qui: se serve
+mostrarlo, si deploya quel repo.
 
 ⚠️ **Lo slug dell'URL non è la chiave interna.** `creative` si serve su
 `/design`, `human` su `/ai`. Le chiavi compaiono ~427 volte nei dati, nel CSS
@@ -92,7 +97,7 @@ Lo sfondo è **sempre ottanio** rgba(8,73,67,1). Mai hardcodare colori.
 |---|---|---|
 | `GoLogo.lit.ts` | `<go-logo>` | Logo animato, click = reset a `/`, colore mode-reactive |
 | `FloatingMenu.lit.ts` | `<floating-menu>` | FAB: contatti, feedback |
-| `SkillForceGraph.lit.ts` | `<skill-force-graph>` | Grafo D3 delle skill — **solo `/old-version`**, accantonato sul sito nuovo (2026-08-20) |
+
 
 ### Parità IT ↔ EN — non solo i testi
 

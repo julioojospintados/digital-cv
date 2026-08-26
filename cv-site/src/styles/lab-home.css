@@ -575,9 +575,11 @@ html[data-lh-armed] .lh-obj {
    soli non si notava; da quando stanno sotto le card di "Chi sono", che sono
    a --radius-4, la differenza di forma si legge come un errore.
 
-   Scoped a `.lh` e non corretto alla fonte perche' memory-drawer.css serve
-   anche /old-version, che deve restare com'era. Stessa ragione e stesso
-   schema degli scavalchi del footer piu' sotto. */
+   Scoped a `.lh` e non corretto alla fonte perche' memory-drawer.css serviva
+   anche /old-version, che doveva restare com'era. Quella pagina non esiste
+   piu' dal 2026-08-26, quindi lo scavalco si potrebbe portare alla fonte —
+   vale anche per quelli del footer piu' sotto, stesso schema e stessa
+   ragione ormai scaduta. */
 .lh .about-action {
   border-radius: var(--radius-4);
 }

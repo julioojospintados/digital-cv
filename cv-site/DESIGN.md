@@ -1,5 +1,18 @@
 # DESIGN.md — Digital CV · Visual System & Architecture
 
+> ⚠️ **Buona parte di questo file descrive un sito che non esiste più.**
+> Il 2026-08-26 la versione precedente del CV è stata cancellata — `/old-version`,
+> `ExpCard`, `SkillSquare`, `ProjectCard`, `SoftItem`, `AiCard`, `SkillForceGraph`,
+> `cv-init.ts`, `index-init.ts`, `mode-helpers.ts`, `WorkDesignSystem.astro`,
+> `cv-page.css`, `index-page.css`, `lab-hero.css` — e vive in
+> `github.com/julioojospintados/old-digital-cv`. Le sezioni che nominano quei
+> file raccontano com'era, non com'è.
+>
+> **Il riferimento vivo del sistema è `/design-system`**: 57 pannelli in due
+> lingue, con demo dal vivo, schede di specifica e uno script che ne verifica la
+> copertura a ogni push (`npm run qa:showcase`). Questo file va riscritto attorno
+> a quello — è un lavoro a sé, segnato in `todo.md`.
+
 > Riscritto il 2026-07-23: la versione precedente era lo spec pre-implementazione
 > (3 mode, sfondi chiari, font Inter/Playfair/Georgia, `?mode=` come URL param,
 > `--color-accent-2`) e non rifletteva più il sito reale da anni. Questo

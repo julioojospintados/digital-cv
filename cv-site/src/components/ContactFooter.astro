@@ -14,10 +14,10 @@ interface Props {
 const { lang = "it" } = Astro.props;
 const data = lang === "en" ? cvDataEn : cvData;
 
-// `emphasis`: la variante della home nuova — email come azione primaria,
-// LinkedIn come secondaria, piu' il pulsante che copia l'indirizzo. Spento di
-// default perche' lo stesso componente serve anche /old-version, che deve
-// restare com'era.
+// `emphasis`: email come azione primaria, LinkedIn come secondaria, piu' il
+// pulsante che copia l'indirizzo. Spento di default per ragioni storiche —
+// serviva anche /old-version, cancellata il 2026-08-26. Oggi arriva sempre
+// acceso da EntryFooter.
 const emphasis = Astro.props.emphasis ?? false;
 
 const email = data.social.find((s) => s.platform === "Email");

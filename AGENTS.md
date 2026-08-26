@@ -438,15 +438,11 @@ cv-site/                  ← Astro site (the actual CV)
       work/index.astro    ← Case study index
       work/[slug].astro   ← Project case studies
       en/work/            ← English case studies (index.astro + [slug].astro)
-      old-version/        ← The pre-2026-08 site plus the discarded entry prototype,
-                            served but noindex: home.astro, [mode].astro,
-                            en/home.astro, en/cv.astro, hero.astro. Kept so they can
-                            be shown without rebuilding them from a commit; nothing
-                            links to them from the live site, by design. Internal
-                            links stay inside /old-version.
                             Legacy redirects (/home /cv /creative /human /en/cv) are
                             NOT pages: they are declared in astro.config.mjs so the
                             adapter emits real 301s instead of meta-refresh pages.
+                            They no longer point at anything of the old site: that
+                            was deleted on 2026-08-26 (see § "Il sito storico").
       tools/cv-recruiter.astro ← Private, unlinked, passphrase-gated CV generator (see AGENTS.md § "from a phone")
       tools/applications.astro ← Private, unlinked, passphrase-gated applications ledger view (see AGENTS.md § "Applications tracker")
       api/cv-recruiter.ts ← The 3 server routes on the site (prerender = false) — Gemini-powered backend for the page above
@@ -466,22 +462,13 @@ cv-site/                  ← Astro site (the actual CV)
       CvLensPage.astro    ← The CV page (/design /tech /ai + /en/*) — takes `lens` + `locale`
       MemoryDrawers.astro ← "Fun fact / Belongings / Travel" drawers — takes `lang`
       ContactFooter.astro ← Shared contact footer
-      WorkDesignSystem.astro ← SOSPESO dal 2026-08-26 — la vecchia sezione «Design System»
-                              dentro /work/digital-cv. Documentava il sistema precedente
-                              (quattro lenti, square/glow delle skill); /design-system l'ha
-                              sostituita. Import e riga commentati nei due [slug].astro,
-                              file non cancellato — prima di riattivarla va riscritta.
       cards/              ← Reusable card components
-        ExpCard.astro     ← Experience card (mode tags, impactScore, company logo)
-        AiCard.astro      ← AI-enhanced workflow card (impactScore badge)
-        ProjectCard.astro ← Project card (tech stack, links)
-        SkillSquare.astro ← Skill square with glow (NO progress bars)
-        SoftItem.astro    ← Soft / transversal skill item
-        WorkIndexCard.astro ← Case study index card
+        WorkIndexCard.astro ← Case study index card — the only one left. ExpCard,
+                              AiCard, ProjectCard, SkillSquare and SoftItem belonged
+                              to the old CV page and went with it on 2026-08-26.
     islands/              ← Lit interactive web components
       GoLogo.lit.ts       ← <go-logo>: animated logo, click = reset to /, mode-reactive color
       FloatingMenu.lit.ts ← <floating-menu>: FAB with contact/feedback links
-      SkillForceGraph.lit.ts ← <skill-force-graph>: D3 force-directed skill network (lazy-loaded)
       stores/modeStore.ts ← NanoStore for global mode state (tech/creative/human)
     lib/
       cv-i18n.ts          ← Locale + Mode types, LENS_SLUGS/MODE_BY_SLUG/lensPath (URL ↔ key),
@@ -491,9 +478,6 @@ cv-site/                  ← Astro site (the actual CV)
       exp-clusters.ts     ← Shared experience-cluster definitions (IT/EN labels, exp+proj refs)
       work-knolling.ts    ← Which knolling object each case study gets, keyed by slug
     scripts/              ← Shared client-side logic (vanilla TS + GSAP)
-      cv-init.ts          ← CV page init: mode switch, scroll, accordions, feedback carousel
-      index-init.ts       ← Home init: preloader, knolling, mode cards, launch journey
-      mode-helpers.ts     ← Pure mode-system functions (tested in mode-helpers.test.ts)
       work-journey.ts     ← /work page animations
       memory-drawer.ts    ← "About me" photo/story drawer (3D page-flip)
       intro-seen.ts       ← sessionStorage flag to skip the GO intro on return visits
@@ -501,10 +485,7 @@ cv-site/                  ← Astro site (the actual CV)
       global.css          ← CSS custom properties for the 3 lenses, reset, cursor, focus
       lab-cv.css          ← CV page styles (`lc-*`) — CvLensPage.astro
       lab-home.css        ← Entry page styles (`lh-*`) — HomeEntryPage.astro
-      lab-hero.css        ← Prototype entry styles (`lab-*`) — old-version/hero.astro
       work-page.css       ← /work page styles (`work-*`)
-      cv-page.css         ← Styles for the old CV page — used only by /old-version
-      index-page.css      ← Styles for the old home — used only by /old-version
     layouts/Layout.astro  ← Base layout (head/SEO/JSON-LD, fonts, Lenis, custom cursor, FAB)
 
 scripts/                  ← Root utility scripts (Node)
@@ -634,15 +615,16 @@ AGENTS.md                 ← This file — tool-agnostic project guide
 
 → **Scope.** The pages the showcase declares it covers: the entry (`lh-*`),
   the three lenses (`lc-*`) and `/work` (`work-*`), case studies discovered
-  automatically. `/privacy` and `/old-version` are outside it — the showcase
-  says so in its own header.
+  automatically. `/privacy` is outside it — the showcase says so in its own
+  header.
 
 → **The exclusion list is a declaration, not a mute button.** `FUORI` in that
-  script holds two entries today, each with its reason in writing: Astro's
-  scoping classes, and the `ds__*` of `WorkDesignSystem.astro` (illustrative
-  material inside one case study, not reusable vocabulary — if that ever
-  changes, document it and delete the line). Adding a third entry is a
-  decision somebody has to defend in a diff. Silencing the check is not.
+  script holds one entry today, with its reason in writing: Astro's scoping
+  classes. It used to hold a second — the 86 `ds__*` of
+  `WorkDesignSystem.astro` — and that line was removed on purpose when the
+  component was deleted, so that re-introducing anything like it fails the
+  check instead of slipping past it. Adding an entry is a decision somebody
+  has to defend in a diff. Silencing the check is not.
 
 → **What it cannot do**, and it says so itself: it proves a name is *absent*.
   It cannot prove a component is documented *well* — a class described under
@@ -788,41 +770,48 @@ looks like a gap to anyone reading the code for the first time, and each has
 already been raised and answered. Re-opening one costs the reader a round trip
 for nothing.
 
-→ **The «Design System» section inside `/work/digital-cv` is suspended, not
-  deleted** (2026-08-26). `WorkDesignSystem.astro` was born with the portfolio,
-  long before `/design-system` existed, and it documented the system as it was
-  then: "one stage, four lights" when there have been three lenses since
-  `617fb90`, and two of its eight tiles are about the skill square/glow grid
-  that the new site does not have. It was showing a recruiter the
-  documentation of a system that no longer exists. Import and render line are
-  commented in both `[slug].astro`; the 1619-line file stays. Re-enabling it
-  means rewriting it first — and `qa:showcase` will say so loudly, because the
-  exclusion that used to hide its 86 `ds__*` classes was removed on purpose.
+→ **Il sito storico è stato cancellato** (2026-08-26). `/old-version` — le
+  cinque pagine del CV precedente più il prototipo d'ingresso scartato — non
+  esiste più, e con lui se ne sono andati i componenti che serviva
+  (`ExpCard`, `AiCard`, `ProjectCard`, `SkillSquare`, `SoftItem`), l'isola
+  `SkillForceGraph` con la dipendenza **D3**, gli script `cv-init.ts`,
+  `index-init.ts` e `mode-helpers.ts`, i fogli `cv-page.css`,
+  `index-page.css`, `lab-hero.css`, e `WorkDesignSystem.astro` con i suoi 86
+  `ds__*`. Dalla vetrina sono spariti i cinque pannelli `lab-*` del prototipo
+  e la terza colonna della tabella dei vocabolari.
+
+  **Tutto vive in `github.com/julioojospintados/old-digital-cv`**, che è il
+  `main` di questo repo al commit `c4fc699` con i suoi 215 commit di storia.
+  Quel repo esiste apposta: è la ragione per cui questa cancellazione si
+  poteva fare. Prima di rimpiangere qualcosa, guarda lì.
+
+  Una cosa si è persa davvero: `/old-version` era un **indirizzo** da digitare
+  per mostrare a qualcuno il sito di prima. L'archivio è codice, non un URL.
+  Si recupera agganciando `old-digital-cv` a Vercel.
 
 → **Skills have no section of their own, and that is deliberate** (2026-08-20).
-  The D3 force graph and the square/glow grid are set aside — not deleted, they
-  still live in `/old-version`. On the new CV, a competence appears as a chip
+  The D3 force graph and the square/glow grid were set aside then and deleted
+  on 2026-08-26 with the rest of the old site — they live in the
+  `old-digital-cv` repo. On the new CV, a competence appears as a chip
   **inside the job where it was used**, which says more than a list of logos
   detached from any context. Do not propose re-adding a skills section, a graph
   or a grid unless Giulio asks.
 
 → **Methodology, growth areas, social impact and value flows stay out**
-  (2026-08-20). Same reasoning and same status: still in `cv.ts`, still rendered
-  by `/old-version`, out of the new pages on purpose.
+  (2026-08-20). Same reasoning: they are still in `cv.ts`, and no page renders
+  them any more — the one that did was deleted on 2026-08-26. Out of the new
+  pages on purpose.
 
-→ **The entry prototype is archived, not deleted** (2026-08-20). It was
-  `/lab/hero`, the second entry design compared against the one that became the
-  home; the comparison is over and it now lives at `/old-version/hero`, `noindex`
-  like the rest of that folder. `/lab/` no longer exists as a route at all. The
-  five `lab-*` panels in `/design-system` still document it and point there —
-  they document a real page, just an archived one. `scripts/lab-hero.ts` is
-  **not** part of the archive: the live home imports it for the pointer
-  parallax.
+→ **The entry prototype is gone** (2026-08-26). It was `/lab/hero`, then
+  `/old-version/hero`: the second entry design compared against the one that
+  became the home. The comparison ended long ago; the page, its `lab-hero.css`
+  and the five `lab-*` panels that documented it in `/design-system` were
+  deleted together. `scripts/lab-hero.ts` is **not** part of that: despite the
+  name, the live home imports it for the pointer parallax. Keep it.
 
-→ **`/old-version` is intentionally unlinked.** No page on the live site points
-  to it, and that is the point: it exists so Giulio can show the previous design
-  by typing the URL, not so visitors can wander into it. Do not "fix" it by
-  adding a link.
+→ **Do not recreate `/old-version`.** It was deliberately unlinked while it
+  existed, and then deleted outright. If the previous design has to be shown
+  to someone, deploy `old-digital-cv` — do not copy pages back into this repo.
 
 ---
 

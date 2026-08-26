@@ -6,9 +6,10 @@
  * ogni punto. Da qui li prendono la home ("/") e le pagine per lente, sia
  * italiane sia inglesi.
  *
- * I testi inglesi NON sono nuovi: sono quelli della home EN storica (oggi
- * sotto /old-version/en), spostati qui perché ora li serve la stessa pagina
- * che serve l'italiano.
+ * I testi inglesi NON sono nuovi: sono quelli della home EN storica,
+ * spostati qui quando una pagina sola ha cominciato a servire tutte e due le
+ * lingue. Quella home è stata cancellata il 2026-08-26 — questi testi sono
+ * l'unica cosa che ne è rimasta viva.
  *
  * ⚠️ Sono VOCE PERSONALE, non descrizioni di prodotto. Non riscriverli senza
  * chiedere: una riscrittura silenziosa è una perdita di identità, e una

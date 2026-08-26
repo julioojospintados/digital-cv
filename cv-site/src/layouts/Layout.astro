@@ -23,11 +23,9 @@ interface Props {
    * ConsentBanner.astro. */
   consentBannerWaitForWip?: boolean;
   /** Esclude la pagina dall'indicizzazione. Serve a 404.astro (servita per
-   * qualsiasi URL inesistente), ai prototipi sotto /lab/ e alla versione
-   * storica sotto /old-version/, che resta raggiungibile ma non deve
-   * competere con quella attuale sulle stesse chiavi di ricerca. In tutti e
-   * tre i casi va in coppia con la riga corrispondente in robots.txt e col
-   * filtro della sitemap: da solo, `noindex` non impedisce la scansione. */
+   * qualsiasi URL inesistente) e alle pagine private sotto /tools/. Va in
+   * coppia con la riga corrispondente in robots.txt e col filtro della
+   * sitemap: da solo, `noindex` non impedisce la scansione. */
   noindex?: boolean;
 }
 
@@ -48,10 +46,10 @@ const siteUrl = "https://giulio-occhipinti.com";
 const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
 
 // Coppia IT/EN della pagina corrente, quando esiste. Le pagine fuori dal
-// sito pubblico (prototipi, versione storica, strumenti privati) non hanno
-// controparte e non devono dichiararne una.
+// sito pubblico (gli strumenti privati, la 404) non hanno controparte e non
+// devono dichiararne una.
 const path = Astro.url.pathname.replace(/\/$/, "") || "/";
-const senzaControparte = ["/lab", "/old-version", "/tools", "/404"];
+const senzaControparte = ["/tools", "/404"];
 const alternates = senzaControparte.some((p) => path.startsWith(p))
   ? null
   : {
@@ -116,9 +114,9 @@ const jsonLd = {
          prima erano alberi separati e nessuno dei due lo dichiarava.
 
          Il percorso EN è quello IT con /en davanti — regola vera su tutto il
-         sito nuovo (/design ↔ /en/design, /work ↔ /en/work, / ↔ /en). Le
-         pagine che non hanno controparte (i prototipi, /old-version, /tools)
-         non lo emettono: `alternates` resta null e il blocco non esce.
+         sito (/design ↔ /en/design, /work ↔ /en/work, / ↔ /en). Le pagine
+         che non hanno controparte (/tools, la 404) non lo emettono:
+         `alternates` resta null e il blocco non esce.
 
          x-default punta all'italiano, che è la lingua della home. */
       alternates && (
