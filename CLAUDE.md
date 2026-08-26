@@ -53,6 +53,23 @@ Se dopo questo resta un dubbio che nessuno script scioglie, **chiedi** invece di
 aprire il ciclo completo: «questo non lo decido da solo, vuoi che passi il
 gauntlet?».
 
+## Due regole vincolanti, prima di chiudere un lavoro
+
+1. **Ogni componente creato o modificato va creato o modificato anche in
+   `/design-system`**, nello stesso lavoro: pannello, demo, scheda di
+   specifica, voce d'indice. Non è un consiglio — `npm run qa:showcase` gira
+   nel pre-push e ferma il push se una classe viva non è nominata dalla
+   vetrina. Il perché, il perimetro e come si dichiara un'eccezione stanno in
+   `AGENTS.md` § "Ogni componente sta in vetrina".
+
+2. **`analisi.md` (root, gitignored) va aggiornato prima di un push che
+   introduce una macrofunzionalità**: una libreria nuova, una pagina, una
+   rotta API, un tool MCP, un agente, una skill, un sottosistema, una regola
+   ferrea. Non per una correzione CSS o un ritocco di copy — per quello c'è
+   git. Serve a Giulio per raccontare il progetto come esperienza di lavoro,
+   quindi si scrive in quel registro: cosa fa, per chi, con quale tecnologia.
+   Dettagli in `AGENTS.md` § "`analisi.md`".
+
 ## Comportamento
 
 - Per domande **non legate al codice o al progetto corrente** (ricerche, confronti, decisioni), chiedi prima se conviene ragionare con **Sequential Thinking** step-by-step. Non fare questa domanda per operazioni di codice, build, file, git o MCP: procedi direttamente.

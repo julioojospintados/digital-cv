@@ -26,6 +26,7 @@
     "gen:thumbs": "node scripts/gen-photo-thumbs.mjs",
     "qa:parity": "node scripts/qa-parity.mjs",
     "qa:links": "node scripts/qa-links.mjs",
+    "qa:showcase": "node scripts/qa-showcase-coverage.mjs",
     "qa:prepush": "node scripts/qa-prepush.mjs",
     "qa:mobile": "node scripts/qa-mobile.js",
     "parse-cv": "node --import tsx/esm scripts/parse-cv.ts",

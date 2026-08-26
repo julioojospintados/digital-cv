@@ -1,4 +1,4 @@
-# Prima di ogni `git push`, in due tempi.
+# Prima di ogni `git push`, in tre tempi.
 #
 # 1. Lint e format — la stessa coppia che gira in CI ("Lint & format (repo
 #    intero)", .github/workflows/ci.yml): un errore come consentBannerWaitForWip
@@ -6,7 +6,8 @@
 #    un'email di CI fallita 20 minuti dopo. Sono secondi.
 #
 # 2. I controlli da browser — `npm run qa:prepush`: build vera, server statico
-#    su quella build, poi vetrina (qa:ds), parità IT ↔ EN e link interni.
+#    su quella build, poi vetrina (qa:ds), copertura della vetrina
+#    (qa:showcase), parità IT ↔ EN e link interni.
 #    Costa circa un minuto e mezzo, ed è per questo che sta QUI e non altrove:
 #    regola di progetto (Giulio, 2026-08-20), `qa:ds` si esegue solo prima di
 #    un push. Durante il lavoro bastano lint, format, test, qa:units e la build.
@@ -14,6 +15,13 @@
 #    Perché sulla build e non su un dev server: la cache delle dipendenze di un
 #    dev server rimasto aperto ha già prodotto falsi negativi (404 su chunk
 #    Vite invalidati da una build parallela, letti come errori di pagina).
+#
+# 3. Un promemoria per analisi.md — e SOLO un promemoria. Il file è gitignored:
+#    nessun hook può sapere se il suo contenuto è aggiornato, quindi bloccare
+#    il push sarebbe una bugia travestita da controllo. Compare quando il push
+#    porta un segnale «macro»: una dipendenza cambiata, o un file toccato sotto
+#    src/tools/, .claude/agents/, .claude/skills/, cv-site/src/pages/, scripts/.
+#    Vedi AGENTS.md § "analisi.md".
 #
 # Richiede cv-site/node_modules già installato — normale su una macchina di
 # sviluppo, non lo installiamo qui per non rallentare ogni push.
@@ -27,4 +35,30 @@ if [ "$SKIP_QA" = "1" ]; then
   exit 0
 fi
 
-npm run qa:prepush
+npm run qa:prepush || exit 1
+
+# ── Promemoria analisi.md (mai bloccante) ─────────────────────────────────
+# Confronta ciò che sta per partire con l'upstream; al primo push di un ramo
+# (nessun upstream) guarda l'ultimo commit e basta.
+BASE=$(git rev-parse --abbrev-ref --symbolic-full-name '@{u}' 2>/dev/null || echo 'HEAD~1')
+MACRO=$(git diff --name-only "$BASE"..HEAD 2>/dev/null |
+  grep -E '^(package\.json|cv-site/package\.json|src/tools/|\.claude/agents/|\.claude/skills/|cv-site/src/pages/|scripts/)' ||
+  true)
+
+if [ -n "$MACRO" ]; then
+  echo ""
+  echo "  📓 Questo push tocca qualcosa di «macro»:"
+  echo "$MACRO" | head -12 | sed 's/^/       /'
+  echo ""
+  if [ -f analisi.md ]; then
+    echo "     Se introduce una funzionalità nuova (libreria, pagina, rotta, tool MCP,"
+    echo "     agente, skill, sottosistema, regola ferrea), aggiorna analisi.md prima"
+    echo "     di raccontarlo altrove. Una correzione CSS non ci va."
+  else
+    echo "     analisi.md non c'è: è il registro delle macrofunzionalità del sito"
+    echo "     (root, gitignored). Vedi AGENTS.md, sezione analisi.md."
+  fi
+  echo ""
+fi
+
+exit 0

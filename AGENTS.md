@@ -466,7 +466,11 @@ cv-site/                  ← Astro site (the actual CV)
       CvLensPage.astro    ← The CV page (/design /tech /ai + /en/*) — takes `lens` + `locale`
       MemoryDrawers.astro ← "Fun fact / Belongings / Travel" drawers — takes `lang`
       ContactFooter.astro ← Shared contact footer
-      WorkDesignSystem.astro ← Design system section inside /work case studies
+      WorkDesignSystem.astro ← SOSPESO dal 2026-08-26 — la vecchia sezione «Design System»
+                              dentro /work/digital-cv. Documentava il sistema precedente
+                              (quattro lenti, square/glow delle skill); /design-system l'ha
+                              sostituita. Import e riga commentati nei due [slug].astro,
+                              file non cancellato — prima di riattivarla va riscritta.
       cards/              ← Reusable card components
         ExpCard.astro     ← Experience card (mode tags, impactScore, company logo)
         AiCard.astro      ← AI-enhanced workflow card (impactScore badge)
@@ -606,6 +610,80 @@ AGENTS.md                 ← This file — tool-agnostic project guide
 
 ---
 
+## Ogni componente sta in vetrina — regola vincolante
+
+→ **A component that is created or changed on the site is created or changed
+  in `/design-system` in the same piece of work.** Not "later", not "in a
+  follow-up": the same commit. A panel with its demo, its spec card
+  (class / when to use it / do not / accessibility, plus motion where there
+  is any) and its entry in the index.
+
+→ This is not new advice — it was already implied by "Adding a page or
+  component to the site" above. What is new is that **it is checked**.
+  `scripts/qa-showcase-coverage.mjs` (`npm run qa:showcase`) extracts every
+  `class` from the **built** HTML of the public pages and looks each name up
+  in the **built** `/design-system`. Anything the showcase never names fails
+  the run, and the run is part of `qa:prepush` — so the push stops.
+
+→ It exists because the rule was ignored for months, and nobody could tell.
+  On 2026-08-26 the count was **91 live classes** the showcase never named:
+  the lane timeline, the education path, the testimonials, the entry
+  contacts, the memory drawers, the photo lightbox, the /work journey, the
+  lamp cursor, the FAB. Eight pushes had left it behind one piece at a time.
+  A rule nobody can verify is not a rule, it is an intention.
+
+→ **Scope.** The pages the showcase declares it covers: the entry (`lh-*`),
+  the three lenses (`lc-*`) and `/work` (`work-*`), case studies discovered
+  automatically. `/privacy` and `/old-version` are outside it — the showcase
+  says so in its own header.
+
+→ **The exclusion list is a declaration, not a mute button.** `FUORI` in that
+  script holds two entries today, each with its reason in writing: Astro's
+  scoping classes, and the `ds__*` of `WorkDesignSystem.astro` (illustrative
+  material inside one case study, not reusable vocabulary — if that ever
+  changes, document it and delete the line). Adding a third entry is a
+  decision somebody has to defend in a diff. Silencing the check is not.
+
+→ **What it cannot do**, and it says so itself: it proves a name is *absent*.
+  It cannot prove a component is documented *well* — a class described under
+  the wrong panel passes. That half is still the reader's, see § Verification
+  loop below.
+
+→ Practical consequence when you add a component: write the panel while the
+  component is fresh, because the reasoning that belongs in the spec card
+  (why this shape, what breaks if you change it, which contrast ratio was
+  measured) is exactly what evaporates in a week.
+
+---
+
+## `analisi.md` — the running log of what this project *does*
+
+→ `analisi.md` at the repo root, **gitignored**, is Giulio's working record of
+  the site's macro-functionality: what exists, what it is for, and with which
+  technology. It is the raw material for a CV entry or a LinkedIn post — the
+  project described as a piece of work, not as a changelog.
+
+→ **What goes in.** A new library or dependency. A new page, route, API
+  endpoint, MCP tool, agent or skill. A new subsystem (the design-system
+  showcase, the QA gauntlet, the PDF renderer, the applications ledger). A
+  binding rule that changes how the project is worked on (rem-only units, the
+  accessibility bar, "every component is in the showcase"). A change of
+  stack, hosting or data flow.
+
+→ **What stays out.** A CSS fix, a copy change, a spacing tweak, a bug fix
+  that leaves the feature list identical. `analisi.md` is not `git log` —
+  the git history already exists and is better at that job.
+
+→ **When.** Before a push that adds or changes one of the things above.
+  `.husky/pre-push` prints a reminder when the push carries a macro signal
+  (a changed dependency, a new file under `src/tools/`, `.claude/agents/`,
+  `.claude/skills/`, `cv-site/src/pages/`, or `scripts/`) — a reminder, not a
+  block: the file is gitignored, so no hook can tell whether its contents are
+  actually up to date, and a check that cannot tell the truth must not
+  pretend to.
+
+---
+
 ## Verification loop — what a script decides, and what it cannot
 
 → `cv-site/` has a structural problem no amount of care fixes on its own: every
@@ -639,15 +717,15 @@ AGENTS.md                 ← This file — tool-agnostic project guide
   | `npm run lint`                  | the same lint + format, then:      |
   | `npm run format:check`          | `npm run qa:prepush`, which builds |
   | `npm test`                      | the site, serves the **real build**|
-  | `npm run qa:units`              | and runs `qa:ds` + `qa:parity` +   |
-  | `cd cv-site && npx astro build` | `qa:links` against it              |
+  | `npm run qa:units`              | and runs `qa:ds` + `qa:showcase` + |
+  | `cd cv-site && npx astro build` | `qa:parity` + `qa:links` on it     |
 
   **`qa:ds` is not to be run during ordinary work** — not even after touching
   the showcase. It costs a browser and a server; the pre-push hook is where it
   belongs, because that is the last moment a defect is still only yours.
   Escape hatch for an urgent push on a work branch: `SKIP_QA=1 git push`.
 
-→ The three browser checks, and what each one is for:
+→ The checks that run before a push, and what each one is for:
   - `qa:ds` (`qa-design-system.mjs`) — the showcase: index ↔ panel, spec cards,
     snippets, clean console, no horizontal scrollbar at 390px, IT/EN parity of
     the panels.
@@ -660,6 +738,10 @@ AGENTS.md                 ← This file — tool-agnostic project guide
     output, and no public page without its counterpart in the other language.
     No browser needed; it reads the HTML. It found five dead `/en/cv` links on
     a site that built clean.
+  - `qa:showcase` (`qa-showcase-coverage.mjs`) — every class alive on a public
+    page is named in the built `/design-system`. No browser either. It is the
+    enforcement of § "Ogni componente sta in vetrina", and on its first run it
+    found 91 undocumented classes across nine components.
 
 → `qa:prepush` serves the build on an **ephemeral port bound to 127.0.0.1**, not
   a fixed one. With a fixed port a leftover process from an earlier session can
@@ -706,6 +788,17 @@ looks like a gap to anyone reading the code for the first time, and each has
 already been raised and answered. Re-opening one costs the reader a round trip
 for nothing.
 
+→ **The «Design System» section inside `/work/digital-cv` is suspended, not
+  deleted** (2026-08-26). `WorkDesignSystem.astro` was born with the portfolio,
+  long before `/design-system` existed, and it documented the system as it was
+  then: "one stage, four lights" when there have been three lenses since
+  `617fb90`, and two of its eight tiles are about the skill square/glow grid
+  that the new site does not have. It was showing a recruiter the
+  documentation of a system that no longer exists. Import and render line are
+  commented in both `[slug].astro`; the 1619-line file stays. Re-enabling it
+  means rewriting it first — and `qa:showcase` will say so loudly, because the
+  exclusion that used to hide its 86 `ds__*` classes was removed on purpose.
+
 → **Skills have no section of their own, and that is deliberate** (2026-08-20).
   The D3 force graph and the square/glow grid are set aside — not deleted, they
   still live in `/old-version`. On the new CV, a competence appears as a chip
@@ -739,6 +832,8 @@ for nothing.
 - Put HTTP logic in `src/index.ts` or MCP logic in `src/http.ts`.
 - Commit `.env` — only `.env.example` is tracked.
 - Skip Zod validation for tool parameters or env vars.
+- Ship a new or changed component without its panel in `/design-system` — see
+  § "Ogni componente sta in vetrina". `npm run qa:showcase` fails the push.
 - Use progress bars for skills in the site — use the square/glow system from `DESIGN.md`.
 - Hardcode colors in cv-site — use CSS custom properties (`--color-bg`, `--color-accent`, etc.).
 

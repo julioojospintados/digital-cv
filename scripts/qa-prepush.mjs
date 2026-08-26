@@ -109,11 +109,16 @@ const BASE = `http://127.0.0.1:${server.address().port}`;
   console.log(`\n  Sito servito su ${BASE}`);
 }
 
-// ── 3. I due controlli ────────────────────────────────────────────────────
+// ── 3. I controlli ────────────────────────────────────────────────────────
+// qa-showcase-coverage non chiede il server (legge i file costruiti), ma gira
+// qui perché la build è già fatta e perché il push è il punto in cui la regola
+// «ogni componente sta in vetrina» diventa una condizione invece di un
+// proposito.
 const env = { ...process.env, QA_BASE_URL: BASE };
 let esito = 0;
 for (const [nome, script] of [
   ["vetrina (qa:ds)", "scripts/qa-design-system.mjs"],
+  ["copertura della vetrina", "scripts/qa-showcase-coverage.mjs"],
   ["parità IT ↔ EN", "scripts/qa-parity.mjs"],
   ["link interni", "scripts/qa-links.mjs"],
 ]) {

@@ -1,6 +1,18 @@
 ---
 import Layout from "../../../layouts/Layout.astro";
-import WorkDesignSystem from "../../../components/WorkDesignSystem.astro";
+// La sezione "Design System" dentro questo case study e' SOSPESA dal
+// 2026-08-26. Documentava il sistema precedente: parla di "quattro luci"
+// quando le lenti sono tre da 617fb90, e dedica due riquadri agli square
+// con glow delle skill, che sul sito nuovo non esistono piu' (decisione del
+// 2026-08-20, vivono solo in /old-version). La vetrina vera e' ora
+// /design-system: 62 pannelli, due lingue, un componente solo, e un
+// gauntlet che la verifica a ogni push.
+// Commentata e non cancellata: il file resta, e riattivarla significa
+// scommentare l'import e la riga piu' sotto. Prima pero' va aggiornata, o
+// si torna a mostrare a un recruiter la documentazione di un sistema che
+// non c'e'. Nota: gli 86 ds__* stanno tutti nel <style> del componente,
+// quindi commentarlo non lascia CSS morto da nessuna parte.
+// import WorkDesignSystem from "../../../components/WorkDesignSystem.astro";
 import LangSwitch from "../../../components/LangSwitch.astro";
 import { cvDataEn } from "@cv-data-en";
 import { lensPath } from "../../../lib/cv-i18n";
@@ -198,7 +210,9 @@ const totalSteps = String(processSteps.length).padStart(2, "0");
       )
     }
 
-    {slug === "digital-cv" && <WorkDesignSystem lang="en" />}
+    {
+      /* {slug === "digital-cv" && <WorkDesignSystem lang="en" />} — vedi la nota in testa al file. */
+    }
 
     {
       project.learnings && project.learnings.length > 0 && (

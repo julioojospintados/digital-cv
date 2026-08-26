@@ -62,3 +62,8 @@ clinerules.md
 
 # Generated personal CV PDFs — regenerate with `npm run pdf:ux`, never commit
 cv-output/
+
+# Registro personale delle macrofunzionalità del sito — materiale per il CV e
+# per LinkedIn, non documentazione del repo. Si aggiorna prima di un push che
+# introduce una macrofunzionalità (AGENTS.md § "analisi.md").
+analisi.md
