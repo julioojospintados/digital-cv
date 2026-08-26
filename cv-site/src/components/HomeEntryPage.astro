@@ -33,6 +33,7 @@ import {
 } from "../lib/lab-copy";
 import MemoryDrawers from "../components/MemoryDrawers.astro";
 import EntryFooter from "../components/EntryFooter.astro";
+import LangSwitch from "../components/LangSwitch.astro";
 import "../styles/lab-home.css";
 
 interface Props {
@@ -48,10 +49,7 @@ const about = ABOUT_TEXT[locale];
 const aboutCards = ABOUT_CARDS[locale];
 // I percorsi cambiano con la lingua: l'inglese vive sotto /en.
 const workHref = locale === "en" ? "/en/work" : "/work";
-const otherLocale = locale === "en" ? "it" : "en";
 const otherHomeHref = locale === "en" ? "/" : "/en";
-const otherLabel = locale === "en" ? "IT" : "EN";
-const otherTitle = locale === "en" ? LOCALES.it.ui.switchToIt : LOCALES.en.ui.switchToEn;
 
 // ── La composizione dell'ingresso ────────────────────────────────────────
 // Otto oggetti grandi disposti attorno al centro, che resta libero per il
@@ -172,11 +170,7 @@ const sections = MODES.map((mode) => ({
   <div class="lh">
     <header class="lh-bar">
       <a href={locale === "en" ? "/en" : "/"} class="lh-mark" aria-label={t.ui.backToEntry}> GO </a>
-      <nav class="lh-nav lh-nav--lang">
-        <a href={otherHomeHref} lang={otherLocale} hreflang={otherLocale} aria-label={otherTitle}>
-          {otherLabel}
-        </a>
-      </nav>
+      <LangSwitch locale={locale} href={otherHomeHref} />
     </header>
 
     <!-- ── Ingresso: una schermata, nessuna card ── -->

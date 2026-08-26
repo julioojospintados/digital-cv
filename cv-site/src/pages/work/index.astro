@@ -3,6 +3,7 @@ import Layout from "../../layouts/Layout.astro";
 import { cvData } from "@cv-data";
 import "../../styles/work-page.css";
 import WorkIndexCard from "../../components/cards/WorkIndexCard.astro";
+import LangSwitch from "../../components/LangSwitch.astro";
 
 const caseStudies = cvData.projects.filter((p) => !!p.slug);
 ---
@@ -16,7 +17,7 @@ const caseStudies = cvData.projects.filter((p) => !!p.slug);
     <go-logo></go-logo>
     <div class="work-nav__right">
       <a href="/tech" class="work-back">← Torna al CV</a>
-      <a href="/en/work" class="work-lang" lang="en" aria-label="Switch to English">EN</a>
+      <LangSwitch locale="it" href="/en/work" />
     </div>
   </nav>
 

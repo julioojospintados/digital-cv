@@ -192,32 +192,9 @@
   flex: 0 0 auto;
 }
 
-/* Cambio lingua. Inchiostro e non accento: in lente creative l'accento come
-   TESTO su questo fondo fa 3,62:1, sotto la soglia di 4,5:1 per un corpo
-   sotto i 24px. Bordo e min-height perché è un bersaglio da toccare, e a
-   testo nudo stava sotto i 24×24 di 2.5.8. */
-.lc-bar__lang {
-  flex: 0 0 auto;
-  display: inline-flex;
-  align-items: center;
-  min-height: 1.5rem;
-  padding: var(--size-2) var(--size-8);
-  border: 1px solid var(--lc-line);
-  border-radius: 999rem;
-  font-family: var(--font-mono);
-  font-size: var(--fs-12);
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  color: var(--lc-ink);
-  text-decoration: none;
-  transition: border-color var(--duration-state, 0.2s) ease;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .lc-bar__lang:hover {
-    border-color: var(--lc-line-strong);
-  }
-}
+/* Il cambio lingua è components/LangSwitch.astro, con il suo foglio
+   (lang-switch.css): vive anche sull'ingresso e sulle pagine /work, quindi
+   non sta qui. Da .lc eredita inchiostro, testo attenuato e filo forte. */
 
 .lc-bar__tagline {
   flex: 1 1 auto;
@@ -1346,11 +1323,18 @@
   gap: var(--size-2);
 }
 
+/* Solo le differenze rispetto alla griglia condivisa dichiarata piu' su
+   (.lc-tl__axisrow, .lc-lane__head, .lc-all__row), non una seconda griglia.
+
+   Qui c'erano anche `display: grid` e una `grid-template-columns` a TRE
+   colonne, rimasta da prima che la cronologia avesse le barre. Stessa
+   specificita' della condivisa e piu' in basso nel foglio: vinceva lei, la
+   quarta colonna (--lc-tl-w) spariva e ogni .lc-tl__track dentro una corsia
+   aperta veniva calcolata a 0px di larghezza. Le teste di corsia si
+   salvavano solo perche' .lc-lane__head non e' ridichiarata da nessuna
+   parte. Misurato: 0px su 1280, mentre su telefono la barra si vedeva —
+   la media query le assegna esplicitamente grid-column: 2. */
 .lc-all__row {
-  display: grid;
-  grid-template-columns: var(--lc-rail) 1fr auto;
-  gap: var(--size-12);
-  align-items: baseline;
   padding-block: var(--size-6);
   font-size: var(--fs-14);
 }
@@ -1392,12 +1376,22 @@
   color: var(--lc-ink);
 }
 
+/* Pallino e barra vanno inchiodati alla loro colonna, non lasciati al
+   posizionamento automatico: una riga in lente ha quattro figli, una fuori
+   lente ne ha tre, e senza queste due righe la barra finirebbe in colonna 3
+   (`auto`, quindi 0px di larghezza) proprio sulle righe senza pallino. E'
+   la stessa ragione per cui .lc-lane__head .lc-tl__track dichiara la sua. */
 .lc-all__mark {
+  grid-column: 3;
   width: 0.375rem;
   height: 0.375rem;
   border-radius: 50%;
   background: var(--lc-accent-line);
   align-self: center;
+}
+
+.lc-all__row .lc-tl__track {
+  grid-column: 4;
 }
 
 /* ═══ 2c — Le voci ════════════════════════════════════════════════════════

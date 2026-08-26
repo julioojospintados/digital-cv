@@ -6,7 +6,8 @@
 // oppure il build statico servito da .vercel/output/static.
 //
 // ── Perché esiste ─────────────────────────────────────────────────────────
-// La vetrina è 38 pannelli per due lingue: 76 schermate che nessuno ricontrolla
+// La vetrina è una sessantina di pannelli per due lingue: centoventi schermate
+// che nessuno ricontrolla
 // a mano dopo ogni modifica. Quasi tutto ciò che può rompersi qui è però
 // *decidibile* — la parità IT/EN, la corrispondenza fra indice e pannelli, la
 // presenza di scheda e snippet, un errore in console, una barra di scorrimento
@@ -42,6 +43,7 @@ const REFERENCE_PANELS = new Set([
   "tipografia",
   "forma",
   "movimento",
+  "cursore",
   "stati",
   "mobile",
   "animazioni",

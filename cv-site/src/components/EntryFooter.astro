@@ -16,8 +16,11 @@ interface Props {
    *  email come azione primaria. Spenta di default — le pagine sotto
    *  /old-version usano lo stesso componente e restano com'erano. */
   emphasis?: boolean;
+  /** Tutto il resto finisce sul <footer>: serve alla vetrina, che marca la
+   *  radice dei componenti con `data-ds-snippet` per serializzarli. */
+  [key: string]: unknown;
 }
-const { lang = "it", emphasis = false } = Astro.props;
+const { lang = "it", emphasis = false, ...rest } = Astro.props;
 
 // Il megafono: nella tabella degli oggetti e' "comunicazione, palco, voce",
 // ed e' l'unico dei tre rimasti liberi che dica la stessa cosa del titolo.
@@ -26,7 +29,7 @@ const { lang = "it", emphasis = false } = Astro.props;
 const OBJ = { file: "megaphone", nativeRem: 389 / 16 };
 ---
 
-<footer class:list={["entry-footer", { "entry-footer--emphasis": emphasis }]}>
+<footer class:list={["entry-footer", { "entry-footer--emphasis": emphasis }]} {...rest}>
   {
     emphasis && (
       <div class="lh-section__object entry-footer__object" style={`--nat:${OBJ.nativeRem}rem`}>

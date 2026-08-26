@@ -148,6 +148,7 @@ export interface LocaleStrings {
     goDeeper: string;
     caseStudiesLink: string;
     /** Cambio lingua */
+    langNav: string;
     switchToEn: string;
     switchToIt: string;
   };
@@ -246,6 +247,7 @@ const IT: LocaleStrings = {
     credentialId: "Codice credenziale:",
     goDeeper: "Se vuoi andare a fondo",
     caseStudiesLink: "Case study — processo, decisioni, risultati",
+    langNav: "Lingua",
     switchToEn: "Switch to English",
     switchToIt: "Passa all'italiano",
   },
@@ -339,6 +341,7 @@ const EN: LocaleStrings = {
     credentialId: "Credential ID:",
     goDeeper: "If you want to go deeper",
     caseStudiesLink: "Case studies — process, decisions, results",
+    langNav: "Language",
     switchToEn: "Switch to English",
     switchToIt: "Passa all'italiano",
   },

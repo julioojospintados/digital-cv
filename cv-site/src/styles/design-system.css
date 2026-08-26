@@ -983,6 +983,44 @@
   max-width: 26rem;
 }
 
+/* Tre componenti che nella pagina vera si posizionano rispetto alla finestra
+   e qui devono invece stare dentro il riquadro. Sono override della SOLA
+   posizione: forma, colori e stati restano quelli del foglio vero, altrimenti
+   la demo smetterebbe di essere la cosa che documenta.
+
+   Il FAB non è in questo elenco: quello resta fisso in basso a destra, dove
+   sta davvero. È l'unico dei quattro il cui posto È la sua definizione. */
+
+/* La lightbox è fixed e inset:0 — a schermo intero coprirebbe la vetrina. */
+.ds-stage--lightbox .photo-lightbox {
+  position: relative;
+  inset: auto;
+  min-height: 16rem;
+  border-radius: var(--radius-4);
+}
+
+.ds-stage--lightbox .photo-lightbox .memory-photo {
+  max-height: 14rem;
+  width: auto;
+}
+
+/* Il salto al contenuto vive a top:-100% finché non prende il focus: qui va
+   mostrato dov'è quando arriva, non dov'è quando dorme. */
+.ds-stage--skip .skip-link {
+  position: static;
+  top: auto;
+  left: auto;
+}
+
+/* Il viaggio è full-bleed dentro una colonna da 48rem (width:100vw più un
+   margine negativo): dentro il palco quel calcolo lo farebbe uscire dai due
+   lati. Qui torna largo quanto il riquadro, e resta nel ripiego verticale —
+   che è lo stato servito, quello senza .is-active. */
+.ds-stage--journey .journey {
+  width: auto;
+  margin-left: 0;
+}
+
 /* ── Intro: i numeri del sistema ─────────────────────────────────────── */
 
 .ds-facts {

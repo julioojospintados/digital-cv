@@ -48,6 +48,7 @@ import { LANE_DEFS, EXP_LANES, isoToYear, mergeSpans } from "../lib/exp-lanes";
 import { issuerMark } from "../lib/issuer-marks";
 import { LOCALES, MODES, lensPath, type Locale, type Mode } from "../lib/cv-i18n";
 import { TAGLINE, profileCopy } from "../lib/lab-copy";
+import LangSwitch from "./LangSwitch.astro";
 import "../styles/lab-cv.css";
 
 interface Props {
@@ -67,10 +68,7 @@ const workHref = locale === "en" ? "/en/work" : "/work";
 const cvPdf = locale === "en" ? "/cv/Giulio_Occhipinti_CV_EN.pdf" : "/cv/Giulio_Occhipinti_CV.pdf";
 // La stessa lente nell'altra lingua, non la home: chi cambia lingua vuole
 // continuare a leggere quello che stava leggendo.
-const otherLocale = locale === "en" ? "it" : "en";
-const otherHref = lensPath(lens, otherLocale);
-const otherLabel = locale === "en" ? "IT" : "EN";
-const otherTitle = locale === "en" ? LOCALES.it.ui.switchToIt : LOCALES.en.ui.switchToEn;
+const otherHref = lensPath(lens, locale === "en" ? "it" : "en");
 
 const { modeLabel, heroTitle, expClusters, timelineItems } = buildCvViewModel({
   data,
@@ -255,15 +253,7 @@ const MAX_CHIPS = 6;
         <go-logo></go-logo>
       </a>
       <p class="lc-bar__tagline">{tagline}</p>
-      <a
-        class="lc-bar__lang"
-        href={otherHref}
-        lang={otherLocale}
-        hreflang={otherLocale}
-        aria-label={otherTitle}
-      >
-        {otherLabel}
-      </a>
+      <LangSwitch locale={locale} href={otherHref} />
     </header>
 
     <main id="main-content" class="lc-main">

@@ -42,26 +42,9 @@
   color: var(--color-accent);
 }
 
-.work-lang {
-  font-family: var(--font-display);
-  font-size: var(--fs-12);
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  color: var(--color-text-muted);
-  text-decoration: none;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 2rem;
-  padding: var(--size-4) 0.65rem;
-  transition:
-    color var(--duration-micro) ease,
-    border-color var(--duration-micro) ease;
-}
-
-.work-lang:hover,
-.work-lang:focus-visible {
-  color: var(--color-text-primary);
-  border-color: rgba(255, 255, 255, 0.35);
-}
+/* Il cambio lingua è components/LangSwitch.astro (lang-switch.css). Qui
+   c'era .work-lang: stesso comando, terzo aspetto diverso — e due colori
+   scritti a mano invece dei token. */
 
 .work-main {
   max-width: 48rem;

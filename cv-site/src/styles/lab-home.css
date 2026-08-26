@@ -190,29 +190,9 @@
   text-decoration: none;
 }
 
-.lh-nav {
-  display: flex;
-  align-items: center;
-  gap: var(--size-16);
-}
-
-.lh-nav a {
-  font-family: var(--font-mono);
-  font-size: var(--fs-12);
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--lh-muted);
-  text-decoration: none;
-}
-
-/* 24px di altezza minima: è la soglia di 2.5.8 (Target Size, AA in WCAG 2.2).
-   Misurato dal vivo, il link della barra stava a 18px — l'unico bersaglio
-   della pagina sotto soglia. */
-.lh-nav a {
-  display: inline-flex;
-  align-items: center;
-  min-height: 1.5rem;
-}
+/* Il cambio lingua della barra è components/LangSwitch.astro, con il suo
+   foglio (lang-switch.css): stessa cosa in sei pagine, quindi non sta qui.
+   Da .lh eredita solo inchiostro e filo — vedi le righe .lh .lang-switch. */
 
 /* ── Ingresso ── */
 

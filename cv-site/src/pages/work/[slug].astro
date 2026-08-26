@@ -1,6 +1,7 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import WorkDesignSystem from "../../components/WorkDesignSystem.astro";
+import LangSwitch from "../../components/LangSwitch.astro";
 import { cvData } from "@cv-data";
 import { workKnollIcon, workKnollRatio } from "../../lib/work-knolling";
 import { lensPath } from "../../lib/cv-i18n";
@@ -46,7 +47,7 @@ const totalSteps = String(processSteps.length).padStart(2, "0");
     <go-logo></go-logo>
     <div class="work-nav__right">
       <a href={lensPath(mode)} class="work-back">← Torna al CV</a>
-      <a href={`/en/work/${slug}`} class="work-lang" lang="en" aria-label="Switch to English">EN</a>
+      <LangSwitch locale="it" href={`/en/work/${slug}`} />
     </div>
   </nav>
 

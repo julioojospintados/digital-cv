@@ -59,7 +59,7 @@ async function misura(path) {
     percorso: document.querySelectorAll(".lc-path__row").length,
     chips: document.querySelectorAll(".lc-chip").length,
     sezioni: document.querySelectorAll(".lh-section").length,
-    lingua: document.querySelector(".lc-bar__lang, .lh-nav--lang a")?.getAttribute("href") ?? "",
+    lingua: document.querySelector(".lang-switch a")?.getAttribute("href") ?? "",
     hreflang: [...document.querySelectorAll('link[rel="alternate"]')].length,
   }));
   await page.close();

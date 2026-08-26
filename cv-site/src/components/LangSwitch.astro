@@ -1,0 +1,62 @@
+---
+/**
+ * LangSwitch.astro — il cambio lingua come interruttore a due posizioni.
+ *
+ * Vive in sei pagine (ingresso IT/EN, CV IT/EN, /work indice e case study
+ * in due lingue): tenerne sei copie vuol dire che la prima modifica ne
+ * aggiorna una. Lo stile arriva con lui, come per EntryFooter.
+ *
+ * Non è un <input type="checkbox">: cambiare lingua è cambiare pagina, non
+ * ribaltare uno stato locale. La posizione accesa è la lingua corrente e
+ * non è un bersaglio (nessuno vuole cliccare dove già si trova); l'altra è
+ * un link normale, che funziona anche senza JavaScript perché di
+ * JavaScript non ne usa.
+ *
+ * L'ordine è sempre IT poi EN, nelle due lingue: è la stessa regola di
+ * parità che vale per il resto del sito — la versione inglese differisce
+ * per la lingua, non per l'ordine degli elementi.
+ */
+import type { Locale } from "../lib/cv-i18n";
+import { LOCALES } from "../lib/cv-i18n";
+import "../styles/lang-switch.css";
+
+interface Props {
+  /** La lingua della pagina in cui sta l'interruttore. */
+  locale: Locale;
+  /** L'indirizzo della stessa pagina nell'altra lingua. */
+  href: string;
+  /** Tutto il resto finisce sul <nav>: serve alla vetrina, che marca la
+   *  radice dei componenti con `data-ds-snippet` per serializzarli. */
+  [key: string]: unknown;
+}
+
+const { locale, href, ...rest } = Astro.props;
+const t = LOCALES[locale];
+
+// Ogni voce porta il proprio `lang`: senza, la sintesi vocale legge "EN"
+// con la fonetica italiana. La frase per esteso sta in `title`, non in
+// aria-label — sostituire il nome accessibile "EN" con "Switch to English"
+// toglierebbe dal nome il testo che si vede, che è quello che chi comanda
+// a voce prova a pronunciare (2.5.3 Label in Name).
+const OPTIONS = [
+  { key: "it" as const, label: "IT", href: locale === "it" ? null : href, title: t.ui.switchToIt },
+  { key: "en" as const, label: "EN", href: locale === "en" ? null : href, title: t.ui.switchToEn },
+];
+---
+
+<nav class="lang-switch" data-lang={locale} aria-label={t.ui.langNav} {...rest}>
+  <span class="lang-switch__thumb" aria-hidden="true"></span>
+  {
+    OPTIONS.map((o) =>
+      o.href === null ? (
+        <span class="lang-switch__opt" aria-current="true" lang={o.key}>
+          {o.label}
+        </span>
+      ) : (
+        <a class="lang-switch__opt" href={o.href} lang={o.key} hreflang={o.key} title={o.title}>
+          {o.label}
+        </a>
+      ),
+    )
+  }
+</nav>

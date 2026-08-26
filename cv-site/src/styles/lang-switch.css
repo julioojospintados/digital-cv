@@ -1,0 +1,133 @@
+/* ─────────────────────────────────────────────────────────────────────────
+   lang-switch.css — il cambio lingua, un interruttore a due posizioni.
+
+   Prima era un link solo, con scritto l'altra lingua: su una barra con
+   dentro anche il logo e la frase guida, "EN" da solo è ambiguo — dice
+   tanto «sei in inglese» quanto «vai in inglese», e le due letture portano
+   a due click opposti. Con tolte le voci di menu dalla barra è rimasto
+   l'unico comando lassù: vale la pena che si legga per quello che è.
+
+   L'interruttore mostra tutte e due le posizioni e ne accende una: la
+   lingua corrente è una superficie piena, l'altra è il link. Non c'è più
+   niente da indovinare, e in cambio costa 4rem di larghezza.
+
+   Lo importa components/LangSwitch.astro, quindi chi usa quel componente
+   riceve anche il suo stile.
+   ───────────────────────────────────────────────────────────────────────── */
+
+.lang-switch {
+  /* Inchiostro, mai accento — e non è pigrizia. All'ingresso nessuna lente
+     è stata scelta, e una pillola arancione lassù annuncerebbe una scelta
+     che il visitatore non ha ancora fatto (stessa ragione per cui .lh-mark
+     è in inchiostro). Sulla pagina CV la lente c'è, ma l'accento è già la
+     voce del bottone primario e dello stato corrente delle sezioni: darlo
+     anche alla lingua vuol dire dire «importante» due volte.
+     I default valgono dove non c'è un contenitore che li ridefinisce
+     (le pagine /work); .lh e .lc portano il proprio inchiostro, che è
+     opaco proprio per non spegnersi sul fondo. */
+  --ls-ink: var(--color-text-primary);
+  --ls-muted: var(--color-text-muted);
+  /* 0.44 e non 0.16: questo bordo IDENTIFICA un controllo, quindi gli
+     tocca il 3:1 di 1.4.11 — la stessa soglia, e lo stesso valore, di
+     --lc-line-strong. Il filo tenue va bene per separare, non per dire
+     «qui si tocca». */
+  --ls-line: color-mix(in srgb, var(--color-text-primary) 44%, transparent);
+  --ls-on-ink: var(--color-bg);
+  /* Posizione del cursore: 0 = sinistra (IT), 1 = destra (EN). */
+  --ls-i: 0;
+
+  position: relative;
+  flex: 0 0 auto;
+  display: inline-grid;
+  grid-template-columns: repeat(2, 1fr);
+  align-items: stretch;
+  padding: var(--size-2);
+  border: 1px solid var(--ls-line);
+  border-radius: 999rem;
+}
+
+.lh .lang-switch {
+  --ls-ink: var(--lh-ink);
+  --ls-muted: var(--lh-muted);
+  --ls-line: color-mix(in srgb, var(--lh-ink) 44%, transparent);
+}
+
+.lc .lang-switch {
+  --ls-ink: var(--lc-ink);
+  --ls-muted: var(--lc-muted);
+  --ls-line: var(--lc-line-strong);
+}
+
+.lang-switch[data-lang="en"] {
+  --ls-i: 1;
+}
+
+/* Il cursore. Largo esattamente una colonna: 50% del contenitore meno il
+   padding di un lato, che è ciò che la griglia lascia a ogni colonna.
+   Si sposta per multipli della propria larghezza, quindi la formula non va
+   rifatta se cambia il padding. */
+.lang-switch__thumb {
+  position: absolute;
+  top: var(--size-2);
+  bottom: var(--size-2);
+  left: var(--size-2);
+  width: calc(50% - var(--size-2));
+  border-radius: 999rem;
+  background: var(--ls-ink);
+  transform: translateX(calc(var(--ls-i) * 100%));
+  transition: transform var(--duration-micro) var(--ease-standard);
+  pointer-events: none;
+}
+
+.lang-switch__opt {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* 24×24 è il pavimento di 2.5.8, e qui è anche un vincolo di layout:
+     l'interruttore alto 30px (24 + 2 di padding + 1 di bordo per lato)
+     lascia la barra d'ingresso ai 78px su cui è tarato --lh-bar-h. */
+  min-height: 1.5rem;
+  min-width: 2rem;
+  padding-inline: var(--size-8);
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  color: var(--ls-muted);
+  transition: color var(--duration-micro) ease;
+}
+
+.lang-switch__opt[aria-current] {
+  color: var(--ls-on-ink);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  a.lang-switch__opt:hover {
+    color: var(--ls-ink);
+  }
+}
+
+/* Alla pressione il cursore parte prima della pagina. Il link è sempre e
+   solo l'altra posizione, quindi «un link premuto» basta a dire da che
+   parte deve andare — niente da calcolare, due regole speculari.
+   È l'unico momento in cui questo interruttore si muove davvero: il cambio
+   lingua è un cambio di pagina, non uno stato locale, e senza questo il
+   comando resterebbe fermo fino al ricaricamento. */
+.lang-switch[data-lang="it"]:has(a.lang-switch__opt:active) {
+  --ls-i: 1;
+}
+
+.lang-switch[data-lang="en"]:has(a.lang-switch__opt:active) {
+  --ls-i: 0;
+}
+
+.lang-switch:has(a.lang-switch__opt:active) .lang-switch__opt[aria-current] {
+  color: var(--ls-muted);
+}
+
+.lang-switch a.lang-switch__opt:active {
+  color: var(--ls-on-ink);
+}

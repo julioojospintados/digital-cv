@@ -38,6 +38,9 @@
  *     una tendina che nella pagina vera nasce chiusa.
  */
 import WorkIndexCard from "./cards/WorkIndexCard.astro";
+import LangSwitch from "./LangSwitch.astro";
+import EntryFooter from "./EntryFooter.astro";
+import { LOCALES } from "../lib/cv-i18n";
 import "../styles/lab-home.css";
 import "../styles/lab-cv.css";
 import "../styles/lab-hero.css";
@@ -50,18 +53,21 @@ interface Props {
 }
 const { lang = "it" } = Astro.props;
 const it = lang === "it";
+// Le etichette dei comandi dei cassetti arrivano dalla tabella vera, non
+// ricopiate: una demo che le ripete a mano diverge alla prima riscrittura.
+const ui = LOCALES[lang].ui;
 
 /* ── I quattro accenti. Unica fonte per tutte le tabelle colore. ────────── */
 const FACTS = [
   { n: "3", l: it ? "lenti, un accento ciascuna" : "lenses, one accent each" },
   {
-    n: "88",
+    n: "111",
     l: it
       ? "famiglie di componenti nei fogli di /lab e /work"
       : "component families across the /lab and /work stylesheets",
   },
   {
-    n: "103",
+    n: "110",
     l: it ? "token dichiarati fra base e prove" : "tokens declared across base and prototypes",
   },
   {
@@ -396,6 +402,7 @@ const t = it
       specClass: "Classe",
       specUse: "Quando usarlo",
       specDont: "Da non fare",
+      specMotion: "Movimento",
       specA11y: "Accessibilità",
       anatomy: "Anatomia",
       sizeTitle: "La scala delle dimensioni",
@@ -479,6 +486,7 @@ const t = it
       specClass: "Class",
       specUse: "When to use it",
       specDont: "Do not",
+      specMotion: "Motion",
       specA11y: "Accessibility",
       anatomy: "Anatomy",
       sizeTitle: "The size scale",
@@ -608,6 +616,10 @@ const NAV = [
       { id: "ingresso-scorri", label: it ? "Indicatore di scorrimento" : "Scroll cue" },
       { id: "ingresso-card-chi-sono", label: it ? "Card di Chi sono" : "About cards" },
       { id: "ingresso-modale-chi-sono", label: it ? "Modale di Chi sono" : "About modal" },
+      { id: "ingresso-comandi", label: it ? "Comandi dei cassetti" : "Drawer controls" },
+      { id: "ingresso-cassetti", label: it ? "Dentro i cassetti" : "Inside the drawers" },
+      { id: "ingresso-lightbox", label: it ? "Lightbox delle foto" : "Photo lightbox" },
+      { id: "ingresso-contatti", label: it ? "Contatti e firma" : "Contacts and sign-off" },
     ],
   },
   {
@@ -630,10 +642,14 @@ const NAV = [
       { id: "lente-chip", label: it ? "Chip e il comando +N" : "Chips and the +N control" },
       { id: "lente-badge-ai", label: it ? "Badge AI" : "AI badge" },
       { id: "lente-cronologia", label: it ? "Cronologia completa" : "Full timeline" },
+      { id: "lente-corsie", label: it ? "Corsie e barre" : "Lanes and bars" },
+      { id: "lente-voci", label: it ? "Le voci" : "The voices" },
+      { id: "lente-percorso", label: it ? "Percorso e certificazioni" : "Path and certifications" },
       { id: "lente-clienti", label: it ? "Incarichi presso clienti" : "Client engagements" },
       { id: "lente-occhiello", label: it ? "Occhiello e sigla" : "Eyebrow and initials" },
       { id: "lente-fondale", label: it ? "Fondale di sezione" : "Section backdrop" },
       { id: "lente-imbocchi", label: it ? "Imbocchi finali" : "Closing exits" },
+      { id: "lente-lingue", label: it ? "Chip delle lingue" : "Language chips" },
       { id: "lente-contatti", label: it ? "Contatti in chiaro" : "Contacts in the open" },
     ],
   },
@@ -665,11 +681,16 @@ const NAV = [
       { id: "work-learnings", label: it ? "Cosa ho imparato" : "What I learned" },
       { id: "work-sezione", label: it ? "Sezione di case study" : "Case-study section" },
       { id: "work-decisione", label: it ? "Decisione di progetto" : "Project decision" },
+      { id: "work-viaggio", label: it ? "Il viaggio" : "The journey" },
     ],
   },
   {
     label: it ? "Sistema" : "System",
     items: [
+      { id: "cambio-lingua", label: it ? "Cambio lingua" : "Language switch" },
+      { id: "cursore", label: it ? "Il cursore-lampada" : "The lamp cursor" },
+      { id: "fab", label: it ? "Il FAB dei contatti" : "The contact FAB" },
+      { id: "salto-al-contenuto", label: it ? "Salto al contenuto" : "Skip to content" },
       { id: "stati", label: t.secStates },
       { id: "mobile", label: t.secMobile },
       { id: "animazioni", label: t.secMotion },
@@ -1846,16 +1867,14 @@ const NAV = [
                 class="lh-mark"
                 aria-label={it ? "Torna all'ingresso" : "Back to the entry"}>GO</a
               >
-              <nav class="lh-nav">
-                <a href="/old-version/hero">{it ? "← altro ingresso" : "← other entry"}</a>
-              </nav>
+              <LangSwitch locale={lang} href="#ingresso-barra" />
             </header>
           </div>
         </div>
         <div class="ds-spec">
           <div class="ds-spec__row ds-spec__row--wide">
             <span class="ds-spec__k">{t.specClass}</span>
-            <p class="ds-spec__v"><code>lh-bar · lh-mark · lh-nav</code></p>
+            <p class="ds-spec__v"><code>lh-bar · lh-mark · lang-switch</code></p>
           </div>
           <div class="ds-spec__row">
             <span class="ds-spec__k">{t.specUse}</span>
@@ -1878,8 +1897,8 @@ const NAV = [
             <p class="ds-spec__v">
               {
                 it
-                  ? "Misurato dal vivo, il link «← altro ingresso» stava a 18px di bersaglio: sotto la soglia di 24×24 di 2.5.8. min-height: 1.5rem lo porta in norma senza cambiargli l'aspetto."
-                  : "Measured live, the «← other entry» link sat at an 18px target: below the 24×24 threshold of 2.5.8. min-height: 1.5rem brings it to compliance without changing how it looks."
+                  ? "L'interruttore è alto 30px in tutto — 24 di bersaglio più il padding e il bordo — ed è la misura su cui è tarato --lh-bar-h: alzarlo di un gradino sposta la barra oltre i 78px e l'ingresso ci passa sotto."
+                  : "The switch is 30px tall in all — a 24px target plus padding and border — and it is the measurement --lh-bar-h is tuned to: raising it one step pushes the bar past 78px and the entry slides underneath it."
               }
             </p>
           </div>
@@ -2136,6 +2155,377 @@ const NAV = [
 
       <section
         class="ds-panel"
+        data-ds-panel="ingresso-comandi"
+        aria-labelledby="ingresso-comandi-t"
+      >
+        <div class="ds-panel__head">
+          <h2 class="ds-section__title" id="ingresso-comandi-t">
+            {it ? "Comandi dei cassetti" : "Drawer controls"}
+          </h2>
+          <span class="ds-panel__group">{t.secHome}<span class="ds-origin">about-*</span></span>
+        </div>
+
+        <p class="ds-sub__note">
+          {
+            it
+              ? "Tre bottoni sotto «Chi sono», uno per cassetto. Non hanno un href e non hanno uno script proprio: portano data-drawer-open con la chiave, e memory-drawer.ts trova il <dialog> corrispondente cercando #dialog-<chiave>. Aggiungere un cassetto vuol dire aggiungere un bottone e un dialog con l'id giusto — niente da registrare da nessuna parte."
+              : "Three buttons under «About me», one per drawer. They have no href and no script of their own: they carry data-drawer-open with the key, and memory-drawer.ts finds the matching <dialog> by looking up #dialog-<key>. Adding a drawer means adding a button and a dialog with the right id — nothing to register anywhere."
+          }
+        </p>
+        <div class="ds-stage">
+          <div class="about-actions" role="group" aria-label={ui.aboutMore} data-ds-snippet>
+            <button class="about-action" type="button" data-drawer-open="funfact">
+              <span class="about-action__icon" aria-hidden="true">✦</span>
+              {ui.drawerFunFact}
+            </button>
+            <button class="about-action" type="button" data-drawer-open="trip">
+              <span class="about-action__icon" aria-hidden="true">✦</span>
+              {ui.drawerTrip}
+            </button>
+            <button class="about-action" type="button" data-drawer-open="belongings">
+              <span class="about-action__icon" aria-hidden="true">✦</span>
+              {ui.drawerBelongings}
+            </button>
+          </div>
+        </div>
+        <div class="ds-spec">
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specClass}</span>
+            <p class="ds-spec__v">
+              <code>about-actions · about-action · about-action__icon</code>
+            </p>
+          </div>
+          <div class="ds-spec__row">
+            <span class="ds-spec__k">{t.specUse}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Solo sotto «Chi sono», e solo per aprire un cassetto. Sono <button> e non link: non portano da nessuna parte, aprono qualcosa nella stessa pagina."
+                  : "Only under «About me», and only to open a drawer. They are <button>s, not links: they lead nowhere, they open something on the same page."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--dont">
+            <span class="ds-spec__k">{t.specDont}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Non farne una fila lunga: erano chip, e le chip dicevano le stesse cose senza mostrarle. Tre è il numero in cui ogni bottone porta davvero qualcosa da vedere dietro."
+                  : "Do not grow the row: these used to be chips, and chips said the same things without showing them. Three is the number at which every button really has something to show behind it."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specA11y}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "role=group con aria-label sul contenitore: i tre bottoni sono una scelta sola, e senza il gruppo arriverebbero come tre comandi scollegati in mezzo a un paragrafo. L'asterisco è decorativo e aria-hidden — il nome del bottone è la parola accanto."
+                  : "role=group with an aria-label on the container: the three buttons are one choice, and without the group they would arrive as three unrelated controls in the middle of a paragraph. The asterisk is decorative and aria-hidden — the button's name is the word beside it."
+              }
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="ds-panel"
+        data-ds-panel="ingresso-cassetti"
+        aria-labelledby="ingresso-cassetti-t"
+      >
+        <div class="ds-panel__head">
+          <h2 class="ds-section__title" id="ingresso-cassetti-t">
+            {it ? "Dentro i cassetti" : "Inside the drawers"}
+          </h2>
+          <span class="ds-panel__group">{t.secHome}<span class="ds-origin">memory-*</span></span>
+        </div>
+
+        <p class="ds-sub__note">
+          {
+            it
+              ? "Il guscio del cassetto è documentato sopra; qui c'è quello che ci sta dentro, e sono due cose diverse. Il racconto è una colonna di lettura su carta girata (--mr, un angolo per foglio); lo scatter è una griglia di miniature buttate sul tavolo, ognuna con la propria inclinazione. Nella pagina vera le foto sono le miniature da 640px: l'originale da 1500×2000 arriva solo quando se ne apre una, altrimenti «Viaggio» scaricherebbe 2,5 MB all'apertura."
+              : "The drawer shell is documented above; here is what goes inside it, and they are two different things. The story is a reading column on turned paper (--mr, one angle per sheet); the scatter is a grid of thumbnails dropped on the table, each with its own tilt. On the real page the photos are the 640px thumbnails: the 1500×2000 original arrives only when one is opened, or «Travel» would download 2.5 MB on open."
+          }
+        </p>
+        <div class="ds-stage">
+          <article class="memory-fact memory-fact--story" style="--mr:0deg" data-ds-snippet>
+            <p class="memory-fact__title">{it ? "Il fun fact" : "The fun fact"}</p>
+            <p class="memory-fact__body">
+              {
+                it
+                  ? "Un paragrafo per foglio: il cassetto gira una pagina per volta, e un blocco unico non avrebbe niente da girare."
+                  : "One paragraph per sheet: the drawer turns one page at a time, and a single block would have nothing to turn."
+              }
+            </p>
+            <p class="memory-fact__body">
+              {
+                it
+                  ? "L'inclinazione arriva da --mr, dichiarata sul foglio: è del pezzo di carta, non della regola."
+                  : "The tilt comes from --mr, declared on the sheet: it belongs to the piece of paper, not to the rule."
+              }
+            </p>
+          </article>
+        </div>
+        <div class="ds-stage">
+          <div class="memory-scatter" data-ds-snippet>
+            <button
+              type="button"
+              class="memory-photo-btn"
+              aria-label={it ? "Ingrandisci" : "Expand"}
+            >
+              <img
+                class="memory-photo"
+                src="/photos/belongings/thumb/concerto.webp"
+                data-full="/photos/belongings/concerto.webp"
+                alt=""
+                loading="lazy"
+                decoding="async"
+                style="--mr:-3deg"
+              />
+            </button>
+            <button
+              type="button"
+              class="memory-photo-btn"
+              aria-label={it ? "Ingrandisci" : "Expand"}
+            >
+              <img
+                class="memory-photo"
+                src="/photos/belongings/thumb/cheers.webp"
+                data-full="/photos/belongings/cheers.webp"
+                alt=""
+                loading="lazy"
+                decoding="async"
+                style="--mr:2deg"
+              />
+            </button>
+            <button
+              type="button"
+              class="memory-photo-btn"
+              aria-label={it ? "Ingrandisci" : "Expand"}
+            >
+              <img
+                class="memory-photo"
+                src="/photos/belongings/thumb/kid.webp"
+                data-full="/photos/belongings/kid.webp"
+                alt=""
+                loading="lazy"
+                decoding="async"
+                style="--mr:-1.5deg"
+              />
+            </button>
+          </div>
+        </div>
+        <div class="ds-spec">
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specClass}</span>
+            <p class="ds-spec__v">
+              <code
+                >memory-fact · memory-fact--story · memory-fact__title · memory-fact__body ·
+                memory-scatter · memory-photo-btn · memory-photo</code
+              >
+            </p>
+          </div>
+          <div class="ds-spec__row">
+            <span class="ds-spec__k">{t.specUse}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Il racconto dentro memory-dialog--reading, lo scatter dentro il guscio normale: la variante di lettura stringe a una colonna, ed è sbagliata per quattordici foto."
+                  : "The story goes inside memory-dialog--reading, the scatter inside the plain shell: the reading variant narrows to one column, which is wrong for fourteen photos."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row">
+            <span class="ds-spec__k">{t.specMotion}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Le miniature non si animano da sole: il movimento c'è solo quando se ne apre una, ed è un Flip da miniatura a lightbox (0,55s, power3.inOut). Con reduced-motion la durata va a zero e la foto arriva dov'è, senza tragitto."
+                  : "The thumbnails do not animate on their own: the movement happens only when one is opened, and it is a Flip from thumbnail to lightbox (0.55s, power3.inOut). Under reduced-motion the duration drops to zero and the photo simply arrives, with no journey."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--dont">
+            <span class="ds-spec__k">{t.specDont}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Non puntare src all'originale per «tanto lo ridimensiona il browser»: è il difetto che le miniature sono state generate per chiudere. E non mettere l'inclinazione nel CSS uguale per tutte — sarebbero una pila storta, non foto buttate sul tavolo."
+                  : "Do not point src at the original because «the browser will resize it anyway»: that is the exact defect the thumbnails were generated to close. And do not put one shared tilt in the CSS — it would read as a crooked stack, not photos dropped on a table."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specA11y}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Le foto hanno alt vuoto e il nome accessibile sta sul <button> che le avvolge: sono decorazione di un ricordo, e il comando è «ingrandisci», non la foto. Un alt descrittivo su ognuna vorrebbe dire far leggere quattordici descrizioni per arrivare in fondo al cassetto."
+                  : "The photos carry an empty alt and the accessible name sits on the wrapping <button>: they decorate a memory, and the control is «expand», not the photo. A descriptive alt on each would mean reading fourteen descriptions to reach the bottom of the drawer."
+              }
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="ds-panel"
+        data-ds-panel="ingresso-lightbox"
+        aria-labelledby="ingresso-lightbox-t"
+      >
+        <div class="ds-panel__head">
+          <h2 class="ds-section__title" id="ingresso-lightbox-t">
+            {it ? "Lightbox delle foto" : "Photo lightbox"}
+          </h2>
+          <span class="ds-panel__group"
+            >{t.secHome}<span class="ds-origin">photo-lightbox</span></span
+          >
+        </div>
+
+        <p class="ds-sub__note">
+          {
+            it
+              ? "La seconda superficie sovrapposta del sito, e l'unica che non esiste nel markup servito: la costruisce memory-drawer.ts dentro il <dialog> aperto, la prima volta che si tocca una foto. Vive dentro il cassetto e non sopra la pagina, quindi non c'è un secondo livello da chiudere in ordine — chiudere il cassetto chiude anche questa."
+              : "The site's second overlaid surface, and the only one that does not exist in the served markup: memory-drawer.ts builds it inside the open <dialog> the first time a photo is tapped. It lives inside the drawer, not above the page, so there is no second layer to close in order — closing the drawer closes this too."
+          }
+        </p>
+        <div class="ds-stage ds-stage--lightbox">
+          <div class="photo-lightbox is-active" data-ds-snippet>
+            <button type="button" class="photo-lightbox__close" aria-label={it ? "Chiudi" : "Close"}
+              >✕</button
+            >
+            <img
+              class="memory-photo"
+              src="/photos/trip/thumb/cave.webp"
+              alt=""
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+        </div>
+        <div class="ds-spec">
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specClass}</span>
+            <p class="ds-spec__v">
+              <code
+                >photo-lightbox (is-active) · photo-lightbox__close · memory-photo (is-flipping)</code
+              >
+            </p>
+          </div>
+          <div class="ds-spec__row">
+            <span class="ds-spec__k">{t.specUse}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Una per cassetto, creata al primo ingrandimento e poi riusata. Non si scrive a mano: la sola cosa da fornire è data-full sulla miniatura."
+                  : "One per drawer, created on the first expand and reused afterwards. It is never hand-written: the only thing to provide is data-full on the thumbnail."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row">
+            <span class="ds-spec__k">{t.specMotion}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Flip senza absolute: la foto resta nel flusso per tutta la durata e il tween punta alla posizione già corretta. Con absolute rientrava nel centraggio flex a fine animazione, e si vedeva uno scatto laterale in chiusura di tragitto — difetto vero, corretto togliendo l'ottimizzazione."
+                  : "Flip without absolute: the photo stays in flow for the whole duration and the tween targets the already-correct position. With absolute it re-entered the flex centring at the end, producing a visible sideways jump as the journey closed — a real defect, fixed by removing the optimisation."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--dont">
+            <span class="ds-spec__k">{t.specDont}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Non attaccarla al <body>: dentro il dialog eredita il suo top-layer e la sua chiusura. Fuori servirebbe una seconda gestione del focus e un secondo Esc, cioè due modali sovrapposte con due regole diverse."
+                  : "Do not attach it to <body>: inside the dialog it inherits its top layer and its closing. Outside, it would need a second focus trap and a second Esc — two stacked modals with two different rules."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specA11y}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Si chiude in tre modi: il comando ✕, un clic sul fondo (solo se il bersaglio è il fondo, non la foto) e un clic sulla foto stessa. Il comando resta il primo perché è l'unico raggiungibile da tastiera."
+                  : "It closes three ways: the ✕ control, a click on the backdrop (only when the target is the backdrop, not the photo), and a click on the photo itself. The control comes first because it is the only one reachable from the keyboard."
+              }
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="ds-panel"
+        data-ds-panel="ingresso-contatti"
+        aria-labelledby="ingresso-contatti-t"
+      >
+        <div class="ds-panel__head">
+          <h2 class="ds-section__title" id="ingresso-contatti-t">
+            {it ? "Contatti e firma" : "Contacts and sign-off"}
+          </h2>
+          <span class="ds-panel__group"
+            >{t.secHome}<span class="ds-origin">entry-footer · contact-*</span></span
+          >
+        </div>
+
+        <p class="ds-sub__note">
+          {
+            it
+              ? "Come finisce l'ingresso: il megafono, le due card di contatto e la firma. È il solo componente della vetrina, insieme alla card indice, importato davvero invece che ricopiato — EntryFooter.astro esiste e porta con sé il proprio foglio, quindi qui non può divergere nemmeno nel markup."
+              : "How the entry ends: the megaphone, the two contact cards and the sign-off. Along with the index card, it is the only component in this showcase that is genuinely imported rather than copied — EntryFooter.astro exists and brings its own stylesheet, so here it cannot diverge even in markup."
+          }
+        </p>
+        <div class="ds-stage">
+          <EntryFooter lang={lang} emphasis data-ds-snippet />
+        </div>
+        <div class="ds-spec">
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specClass}</span>
+            <p class="ds-spec__v">
+              <code
+                >entry-footer (--emphasis) · entry-footer__object · entry-footer__credit ·
+                contact-cta · contact-cta__title · contact-cta__grid · contact-card
+                (--primary/--secondary) · contact-card__label · contact-card__value ·
+                contact-card__cta · contact-card__copy</code
+              >
+            </p>
+          </div>
+          <div class="ds-spec__row">
+            <span class="ds-spec__k">{t.specUse}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "In fondo alle due home, una volta. La variante --emphasis è quella del sito nuovo: oggetto knolling accanto ai contatti, mail come azione primaria. Spenta di default perché lo stesso componente serve /old-version, che deve restare com'era."
+                  : "At the foot of the two home pages, once. The --emphasis variant is the current site's: knolling object beside the contacts, email as the primary action. Off by default, because the same component still serves /old-version, which must stay as it was."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--dont">
+            <span class="ds-spec__k">{t.specDont}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Non confonderlo con lc-contacts, che è la riga di contatti della pagina CV: là i recapiti stanno in chiaro dentro il primo strato, qui sono la chiusura di una pagina. Due posti, due forme, stesso indirizzo."
+                  : "Do not confuse it with lc-contacts, the CV page's contact line: there the details sit in the open inside the first layer, here they close a page. Two places, two shapes, same address."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specA11y}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Il pulsante che copia l'indirizzo nasce hidden e lo accende lo script solo dove gli appunti esistono: meglio nessun comando che un comando che non copia. La conferma non è un colore, è la parola in contact-card__copied."
+                  : "The copy-address button starts hidden and the script turns it on only where the clipboard exists: better no control than a control that does not copy. The confirmation is not a colour, it is the word in contact-card__copied."
+              }
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="ds-panel"
         data-ds-accent
         data-ds-panel="lente-barra"
         aria-labelledby="lente-barra-t"
@@ -2169,6 +2559,7 @@ const NAV = [
                     : "If there is an absolute truth, it must be very bored."
                 }
               </p>
+              <LangSwitch locale={lang} href="#lente-barra" />
             </header>
           </div>
         </div>
@@ -2176,7 +2567,7 @@ const NAV = [
           <div class="ds-spec__row ds-spec__row--wide">
             <span class="ds-spec__k">{t.specClass}</span>
             <p class="ds-spec__v">
-              <code>lc-bar · lc-bar__home · lc-bar__tagline</code>
+              <code>lc-bar · lc-bar__home · lc-bar__tagline · lang-switch</code>
             </p>
           </div>
           <div class="ds-spec__row">
@@ -3264,6 +3655,369 @@ const NAV = [
       <section
         class="ds-panel"
         data-ds-accent
+        data-ds-panel="lente-corsie"
+        aria-labelledby="lente-corsie-t"
+      >
+        <div class="ds-panel__head">
+          <h2 class="ds-section__title" id="lente-corsie-t">
+            {it ? "Corsie e barre" : "Lanes and bars"}
+          </h2>
+          <span class="ds-panel__group">{t.secLens}<span class="ds-origin">lc-*</span></span>
+        </div>
+
+        <p class="ds-sub__note">
+          {
+            it
+              ? "La cronologia completa non è un elenco ordinato per data: è un grafico. Ogni corsia è un <details>, non JavaScript — chiusa mostra la copertura unita del mestiere, aperta le singole righe. Quello che l'elenco non riusciva a dire, cioè che dal 2009 non c'è mai stato un ruolo solo alla volta, qui si vede senza contare niente."
+              : "The full timeline is not a list sorted by date: it is a chart. Each lane is a <details>, not JavaScript — closed it shows the merged coverage of that craft, open it shows the single rows. What the list could not say — that since 2009 there has never been one role at a time — is visible here without counting anything."
+          }
+        </p>
+        <div class="ds-stage">
+          <div class="lc">
+            <div class="lc-tl" data-ds-snippet>
+              <div class="lc-tl__axisrow" aria-hidden="true">
+                <span class="lc-tl__scale">
+                  <span class="lc-tl__tick" style="left:0%">2009</span>
+                  <span class="lc-tl__tick" style="left:31%">2014</span>
+                  <span class="lc-tl__tick" style="left:62%">2019</span>
+                  <span class="lc-tl__tick" style="left:93%">2024</span>
+                  <span class="lc-tl__now" style="left:97%"></span>
+                </span>
+              </div>
+
+              <details class="lc-lane" open data-ds-drop="open">
+                <summary class="lc-lane__head">
+                  <span class="lc-lane__name">
+                    <span class="tick" aria-hidden="true"></span>
+                    <span class="lc-lane__key lc-lane__key--design" aria-hidden="true"></span>
+                    Design
+                    <span class="lc-lane__n">2</span>
+                  </span>
+                  <span class="lc-tl__track" aria-hidden="true">
+                    <span class="lc-tl__bar lc-tl__bar--design" style="left:34%;width:63%"></span>
+                    <span class="lc-tl__now" style="left:97%"></span>
+                  </span>
+                </summary>
+                <ul class="lc-lane__list" role="list">
+                  <li class="lc-all__row is-lens">
+                    <span class="lc-all__years">
+                      <span class="lc-all__span">2021 — {it ? "oggi" : "today"}</span>
+                      <span class="lc-all__from">
+                        2021
+                        <span class="lc-all__on" aria-hidden="true">→</span>
+                      </span>
+                    </span>
+                    <span class="lc-all__what">
+                      <b>ALTEN Italia</b>
+                      <span class="lc-all__sep" aria-hidden="true"> · </span>
+                      <span class="lc-all__role">UX/UI Designer</span>
+                    </span>
+                    <span class="lc-all__mark" aria-hidden="true"></span>
+                    <span class="lc-tl__track" aria-hidden="true">
+                      <span class="lc-tl__bar lc-tl__bar--design" style="left:75%;width:22%"></span>
+                      <span class="lc-tl__now" style="left:97%"></span>
+                    </span>
+                  </li>
+                  <li class="lc-all__row">
+                    <span class="lc-all__years">
+                      <span class="lc-all__span">2014 — 2019</span>
+                      <span class="lc-all__from">2014</span>
+                    </span>
+                    <span class="lc-all__what">
+                      <b>{it ? "Studio indipendente" : "Independent studio"}</b>
+                      <span class="lc-all__sep" aria-hidden="true"> · </span>
+                      <span class="lc-all__role">Web Designer</span>
+                    </span>
+                    <span class="lc-tl__track" aria-hidden="true">
+                      <span class="lc-tl__bar lc-tl__bar--design" style="left:34%;width:31%"></span>
+                      <span class="lc-tl__now" style="left:97%"></span>
+                    </span>
+                  </li>
+                </ul>
+              </details>
+
+              <details class="lc-lane">
+                <summary class="lc-lane__head">
+                  <span class="lc-lane__name">
+                    <span class="tick" aria-hidden="true"></span>
+                    <span class="lc-lane__key lc-lane__key--tech" aria-hidden="true"></span>
+                    {it ? "Tecnologia" : "Technology"}
+                    <span class="lc-lane__n">1</span>
+                  </span>
+                  <span class="lc-tl__track" aria-hidden="true">
+                    <span class="lc-tl__bar lc-tl__bar--tech" style="left:50%;width:47%"></span>
+                    <span class="lc-tl__now" style="left:97%"></span>
+                  </span>
+                </summary>
+                <ul class="lc-lane__list" role="list">
+                  <li class="lc-all__row">
+                    <span class="lc-all__years">
+                      <span class="lc-all__span">2017 — {it ? "oggi" : "today"}</span>
+                      <span class="lc-all__from">
+                        2017
+                        <span class="lc-all__on" aria-hidden="true">→</span>
+                      </span>
+                    </span>
+                    <span class="lc-all__what">
+                      <b>{it ? "Progetti propri" : "Own projects"}</b>
+                      <span class="lc-all__sep" aria-hidden="true"> · </span>
+                      <span class="lc-all__role">{it ? "Sviluppo" : "Development"}</span>
+                    </span>
+                    <span class="lc-tl__track" aria-hidden="true">
+                      <span class="lc-tl__bar lc-tl__bar--tech" style="left:50%;width:47%"></span>
+                      <span class="lc-tl__now" style="left:97%"></span>
+                    </span>
+                  </li>
+                </ul>
+              </details>
+            </div>
+          </div>
+        </div>
+        <div class="ds-spec">
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specClass}</span>
+            <p class="ds-spec__v">
+              <code
+                >lc-tl · lc-tl__axisrow · lc-tl__scale · lc-tl__tick · lc-tl__now · lc-tl__track ·
+                lc-tl__bar · lc-lane · lc-lane__head · lc-lane__key · lc-lane__n · lc-lane__list</code
+              >
+            </p>
+          </div>
+          <div class="ds-spec__row">
+            <span class="ds-spec__k">{t.specUse}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Una sola volta, dentro «Tutte le esperienze». La barra prende il colore dalla corsia che la contiene, non dalla lente: dice il mestiere."
+                  : "Once only, inside «All roles». The bar takes its colour from the lane holding it, not from the lens: it states the craft."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row">
+            <span class="ds-spec__k">{t.specMotion}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Nessuno. L'apertura è quella nativa di <details>: senza JavaScript funziona lo stesso, ed è il motivo per cui non è un accordion fatto a mano."
+                  : "None. Opening is the native <details> behaviour: it works with no JavaScript, which is exactly why this is not a hand-rolled accordion."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--dont">
+            <span class="ds-spec__k">{t.specDont}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Non far sparire la corsia quando è chiusa: chiusa deve mostrare la copertura unita, altrimenti il grafico perde proprio l'informazione per cui esiste. E non lasciare il dato solo nella barra — le barre sono aria-hidden, gli anni stanno nel testo della riga."
+                  : "Do not let a closed lane disappear: closed, it must show the merged coverage, or the chart loses the very information it exists for. And never leave the data only in the bar — bars are aria-hidden, the years live in the row's text."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specA11y}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Il grafico è aria-hidden per intero e non porta nessun dato esclusivo: chi usa uno screen reader legge le righe, con anni, azienda e ruolo per esteso. La variante --off spegne la corsia fuori dalla lente attiva abbassandone l'opacità, non nascondendola: sono sussurri, non silenzi."
+                  : "The chart is aria-hidden throughout and carries no exclusive data: screen-reader users read the rows, with years, company and role written out. The --off variant dims a lane outside the active lens by lowering its opacity, never hiding it: whispers, not silence."
+              }
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="ds-panel"
+        data-ds-accent
+        data-ds-panel="lente-voci"
+        aria-labelledby="lente-voci-t"
+      >
+        <div class="ds-panel__head">
+          <h2 class="ds-section__title" id="lente-voci-t">{it ? "Le voci" : "The voices"}</h2>
+          <span class="ds-panel__group">{t.secLens}<span class="ds-origin">lc-*</span></span>
+        </div>
+
+        <p class="ds-sub__note">
+          {
+            it
+              ? "L'unico pezzo di pagina che un candidato non può scriversi da solo. Sta dopo le esperienze e non prima: una testimonianza letta senza sapere che cosa ha fatto è un complimento, letta dopo è una conferma. Il testo qui sotto è di esempio — le citazioni vere stanno in cv.ts."
+              : "The only part of the page a candidate cannot write for himself. It comes after the roles, not before: a testimonial read before knowing what he did is a compliment; read after, it is a confirmation. The text below is a placeholder — the real quotes live in cv.ts."
+          }
+        </p>
+        <div class="ds-stage">
+          <div class="lc">
+            <ul class="lc-voices__list" role="list" data-ds-snippet>
+              <li class="lc-voice">
+                <blockquote class="lc-voice__quote">
+                  {
+                    it
+                      ? "Ha messo ordine dove c'era un elenco di richieste, e da lì in poi abbiamo saputo che cosa stavamo costruendo."
+                      : "He brought order where there was a list of requests, and from then on we knew what we were building."
+                  }
+                </blockquote>
+                <p class="lc-voice__who">
+                  {it ? "Nome Cognome" : "Full Name"}
+                  <span class="lc-voice__role"> · Product Owner</span>
+                </p>
+              </li>
+              <li class="lc-voice">
+                <blockquote class="lc-voice__quote">
+                  {
+                    it
+                      ? "Parla con chi progetta e con chi sviluppa senza cambiare linguaggio due volte."
+                      : "He talks to the people who design and the people who build without switching language twice."
+                  }
+                </blockquote>
+                <p class="lc-voice__who">{it ? "Nome Cognome" : "Full Name"}</p>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="ds-spec">
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specClass}</span>
+            <p class="ds-spec__v">
+              <code
+                >lc-voices · lc-voices__list · lc-voice · lc-voice__quote · lc-voice__who ·
+                lc-voice__role</code
+              >
+            </p>
+          </div>
+          <div class="ds-spec__row">
+            <span class="ds-spec__k">{t.specUse}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Solo per citazioni vere, con nome. Il ruolo è facoltativo: senza, la riga resta il solo nome."
+                  : "Only for real quotes, with a name. The role is optional: without it the line is just the name."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--dont">
+            <span class="ds-spec__k">{t.specDont}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Niente carosello: nascondere metà della prova dietro un gesto è l'unica cosa che una testimonianza non può permettersi. Sono tutte in pagina, statiche, e restano poche apposta."
+                  : "No carousel: hiding half the evidence behind a gesture is the one thing a testimonial cannot afford. They are all on the page, static, and deliberately few."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specA11y}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Citazione in <blockquote> e attribuzione in un <p> separato: dentro la citazione, uno screen reader leggerebbe il nome come parte delle parole altrui."
+                  : "The quote in a <blockquote> and the attribution in a separate <p>: inside the quotation, a screen reader would read the name as part of someone else's words."
+              }
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="ds-panel"
+        data-ds-accent
+        data-ds-panel="lente-percorso"
+        aria-labelledby="lente-percorso-t"
+      >
+        <div class="ds-panel__head">
+          <h2 class="ds-section__title" id="lente-percorso-t">
+            {it ? "Percorso e certificazioni" : "Path and certifications"}
+          </h2>
+          <span class="ds-panel__group">{t.secLens}<span class="ds-origin">lc-*</span></span>
+        </div>
+
+        <p class="ds-sub__note">
+          {
+            it
+              ? "Formazione e certificazioni per intero, senza filtro di lente: qui il valore è la completezza, non la pertinenza. Il marchio dell'ente a sinistra è un logo quando ce l'ha e la sigla quando non ce l'ha — mai un quadrato vuoto, che leggerebbe come immagine rotta."
+              : "Education and certifications in full, with no lens filter: here the value is completeness, not relevance. The issuer's mark on the left is a logo when there is one and the initials when there is not — never an empty square, which would read as a broken image."
+          }
+        </p>
+        <div class="ds-stage">
+          <div class="lc">
+            <div class="lc-path__group" data-ds-snippet>
+              <h3 class="lc-path__group-title">
+                {it ? "Certificazioni" : "Certifications"}
+                <span class="lc-sec-count">2</span>
+              </h3>
+              <ul class="lc-path__list" role="list">
+                <li class="lc-path__row">
+                  <span
+                    class="lc-path__mark is-logo"
+                    style='--lc-mark: url("/logos/ibm.svg")'
+                    aria-hidden="true"></span>
+                  <span class="lc-path__what">
+                    <b>UX Design Fundamentals</b>
+                    <span class="lc-path__where"> · IBM</span>
+                    <span class="lc-path__id">ABC-123-XYZ</span>
+                  </span>
+                  <span class="lc-path__date">2025</span>
+                </li>
+                <li class="lc-path__row">
+                  <span class="lc-path__mark" aria-hidden="true">GO</span>
+                  <span class="lc-path__what">
+                    <b>{it ? "Corso senza logo" : "Course with no logo"}</b>
+                    <span class="lc-path__where">
+                      · {it ? "Ente senza marchio" : "Issuer with no mark"}</span
+                    >
+                    <span class="lc-path__wip">{it ? "in corso" : "in progress"}</span>
+                  </span>
+                  <span class="lc-path__date">2026</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="ds-spec">
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specClass}</span>
+            <p class="ds-spec__v">
+              <code
+                >lc-path · lc-path__group · lc-path__group-title · lc-path__list · lc-path__row ·
+                lc-path__mark (is-logo) · lc-path__what · lc-path__where · lc-path__wip ·
+                lc-path__id · lc-path__date</code
+              >
+            </p>
+          </div>
+          <div class="ds-spec__row">
+            <span class="ds-spec__k">{t.specUse}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Due gruppi, formazione e certificazioni, sullo stesso binario mono di «Tutte le esperienze»: per chi legge sono la stessa cosa, un elenco verificabile che si scorre con l'occhio."
+                  : "Two groups, education and certifications, on the same mono rail as «All roles»: to the reader they are the same thing, a verifiable list scanned rather than read."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--dont">
+            <span class="ds-spec__k">{t.specDont}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Il logo va in --lc-mark come sfondo, non in un <img>: è decorazione dell'ente, non contenuto, e il nome dell'ente è già scritto accanto in chiaro. Un <img> costringerebbe a un alt che ripete la riga."
+                  : "The logo goes into --lc-mark as a background, never an <img>: it decorates the issuer, it is not content, and the issuer's name is already written beside it. An <img> would force an alt that repeats the line."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specA11y}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Il marchio è aria-hidden in tutti e due i casi. Il codice credenziale porta davanti un lc-sr con «Codice credenziale:» — nudo sarebbe una sequenza di lettere e numeri letta senza sapere che cos'è."
+                  : "The mark is aria-hidden in both cases. The credential id is preceded by an lc-sr «Credential ID:» — bare, it would be a run of letters and digits read out with no idea what it is."
+              }
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="ds-panel"
+        data-ds-accent
         data-ds-panel="lente-clienti"
         aria-labelledby="lente-clienti-t"
       >
@@ -3564,6 +4318,73 @@ const NAV = [
                 it
                   ? "Non trasformarli in bottoni: sono l'uscita per chi ha già letto, non un invito per chi deve ancora decidere."
                   : "Do not turn them into buttons: they are the exit for someone who has already read, not an invitation for someone still deciding."
+              }
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="ds-panel" data-ds-panel="lente-lingue" aria-labelledby="lente-lingue-t">
+        <div class="ds-panel__head">
+          <h2 class="ds-section__title" id="lente-lingue-t">
+            {it ? "Chip delle lingue" : "Language chips"}
+          </h2>
+          <span class="ds-panel__group">{t.secLens}<span class="ds-origin">lc-*</span></span>
+        </div>
+
+        <p class="ds-sub__note">
+          {
+            it
+              ? "L'unica chip del sistema che porta due informazioni: la lingua e il livello. Il livello è in grassetto e non in un colore, perché la coppia va letta come una cosa sola — «Inglese B2», non «Inglese» più un'etichetta."
+              : "The only chip in the system carrying two pieces of information: the language and the level. The level is bold rather than coloured, because the pair reads as one thing — «English B2», not «English» plus a tag."
+          }
+        </p>
+        <div class="ds-stage">
+          <div class="lc">
+            <ul class="lc-langs" role="list" data-ds-snippet>
+              <li class="lc-lang">
+                {it ? "Italiano" : "Italian"}
+                <b class="lc-lang__lvl">{it ? "Madrelingua" : "Native"}</b>
+              </li>
+              <li class="lc-lang">
+                {it ? "Inglese" : "English"}
+                <b class="lc-lang__lvl">B2</b>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="ds-spec">
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specClass}</span>
+            <p class="ds-spec__v"><code>lc-langs · lc-lang · lc-lang__lvl</code></p>
+          </div>
+          <div class="ds-spec__row">
+            <span class="ds-spec__k">{t.specUse}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "In chiusura del primo strato, accanto a mail e LinkedIn: sono informazioni di contesto, non dati dei primi sette secondi."
+                  : "At the close of the first layer, beside email and LinkedIn: they are context, not first-seven-seconds data."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--dont">
+            <span class="ds-spec__k">{t.specDont}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Non usarle per le tecnologie: quelle sono lc-chip e vivono dentro l'esperienza in cui sono state usate. Due chip che si somigliano ma dicono cose diverse sono il modo più veloce per far leggere il livello come un tag."
+                  : "Do not use them for technologies: those are lc-chip and live inside the job where they were used. Two chips that look alike but say different things are the fastest way to have the level read as a tag."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specA11y}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "role=list esplicito: con list-style: none Safari toglie la semantica di elenco, e queste due voci restano un elenco anche senza pallini."
+                  : "An explicit role=list: with list-style: none Safari drops the list semantics, and these two entries are still a list without bullets."
               }
             </p>
           </div>
@@ -3956,12 +4777,7 @@ const NAV = [
             <div class="work-nav__right">
               <a href="#work-barra" class="work-back">{it ? "← Torna al CV" : "← Back to the CV"}</a
               >
-              <a
-                href="#work-barra"
-                class="work-lang"
-                lang={it ? "en" : "it"}
-                aria-label={it ? "Switch to English" : "Passa all'italiano"}>{it ? "EN" : "IT"}</a
-              >
+              <LangSwitch locale={lang} href="#work-barra" />
             </div>
           </nav>
         </div>
@@ -3969,7 +4785,7 @@ const NAV = [
           <div class="ds-spec__row ds-spec__row--wide">
             <span class="ds-spec__k">{t.specClass}</span>
             <p class="ds-spec__v">
-              <code>work-nav · work-nav__right · work-back · work-lang</code>
+              <code>work-nav · work-nav__right · work-back · lang-switch</code>
             </p>
           </div>
           <div class="ds-spec__row">
@@ -3997,8 +4813,8 @@ const NAV = [
             <p class="ds-spec__v">
               {
                 it
-                  ? "Il comando di lingua porta lang sull'elemento e un aria-label nella lingua di destinazione: chi usa uno screen reader sente «EN» pronunciato in inglese e non in italiano."
-                  : "The language control carries lang on the element and an aria-label in the target language: screen-reader users hear «EN» pronounced in English, not in Italian."
+                  ? "Il ritorno al CV punta alla lente da cui si è arrivati, non a una fissa: è l'unico comando della barra che cambia destinazione da pagina a pagina. Per il cambio lingua vedi «Cambio lingua», in Sistema."
+                  : "The back link points to the lens you came from, not a fixed one: it is the only control in the bar whose destination changes from page to page. For the language control see «Language switch», under System."
               }
             </p>
           </div>
@@ -4619,6 +5435,494 @@ const NAV = [
         </div>
       </section>
 
+      <section
+        class="ds-panel"
+        data-ds-accent
+        data-ds-panel="work-viaggio"
+        aria-labelledby="work-viaggio-t"
+      >
+        <div class="ds-panel__head">
+          <h2 class="ds-section__title" id="work-viaggio-t">{it ? "Il viaggio" : "The journey"}</h2>
+          <span class="ds-panel__group">{t.secWork}<span class="ds-origin">journey__*</span></span>
+        </div>
+
+        <p class="ds-sub__note">
+          {
+            it
+              ? "Il pezzo animato più grande del sito: il case study si percorre in orizzontale, con una strada disegnata in SVG, una bussola che la segue e un contachilometri in alto. Ventitré classi e uno script dedicato, work-journey.ts."
+              : "The largest animated piece on the site: the case study is travelled horizontally, along a road drawn in SVG, with a compass following it and an odometer at the top. Twenty-three classes and a dedicated script, work-journey.ts."
+          }
+        </p>
+        <p class="ds-sub__note">
+          {
+            it
+              ? "Quello che si vede qui sotto è lo stato servito, cioè il ripiego verticale: strada, bussola e HUD nascono display:none e la d dell'SVG è vuota. È work-journey.ts ad aggiungere .is-active, ed è solo da lì in poi che le tappe si mettono in fila, la strada prende una forma e la bussola comincia a camminare. Senza JavaScript restano tappe impilate, tutte leggibili — che è il comportamento voluto, non un fallimento."
+              : "What you see below is the served state, that is the vertical fallback: road, compass and HUD start out display:none and the SVG's d is empty. It is work-journey.ts that adds .is-active, and only from then on do the stops line up, the road take a shape and the compass start walking. With no JavaScript you get stacked stops, all readable — the intended behaviour, not a failure."
+          }
+        </p>
+        <div class="ds-stage ds-stage--journey">
+          <section
+            class="journey"
+            data-ds-snippet
+            aria-label={it
+              ? "Dal problema al risultato: il percorso del progetto"
+              : "From problem to outcome: the project's journey"}
+          >
+            <div class="journey__hud" aria-hidden="true">
+              <span>Step <b>00</b>/03</span>
+              <span class="journey__hud-bar"><b></b></span>
+              <span class="journey__hud-km">0 m</span>
+            </div>
+
+            <img
+              class="journey__traveler"
+              src="/knolling/compass.webp"
+              alt=""
+              aria-hidden="true"
+              loading="lazy"
+              decoding="async"
+              style="aspect-ratio: 208 / 341;"
+            />
+
+            <div class="journey__track">
+              <svg class="journey__road" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+                <path class="journey__road-base" d=""></path>
+                <path class="journey__road-progress" d=""></path>
+              </svg>
+
+              <article class="journey__panel journey__panel--start">
+                <img
+                  class="journey__stop-icon"
+                  src="/knolling/compass.webp"
+                  alt=""
+                  aria-hidden="true"
+                  loading="lazy"
+                  decoding="async"
+                  style="aspect-ratio: 208 / 341;"
+                />
+                <p class="journey__eyebrow">{it ? "Partenza" : "Start"}</p>
+                <h2 class="journey__start-title">{it ? "Il problema" : "The problem"}</h2>
+                <p class="journey__text">
+                  {
+                    it
+                      ? "Una frase sola, quella che il committente avrebbe scritto se gliel'avessero chiesto."
+                      : "A single sentence — the one the client would have written if anyone had asked."
+                  }
+                </p>
+                <p class="journey__hint" aria-hidden="true">
+                  {it ? "Scrolla per partire" : "Scroll to set off"}
+                  <span class="work-chevron"></span>
+                </p>
+              </article>
+
+              <article class="journey__panel journey__stop">
+                <p class="journey__step-num" aria-hidden="true">01</p>
+                <p class="journey__eyebrow">Step 01/03</p>
+                <h3 class="journey__stop-title">{it ? "La tappa" : "The stop"}</h3>
+                <p class="journey__text">
+                  {
+                    it
+                      ? "Un passo del processo: che cosa è stato fatto e perché in quest'ordine."
+                      : "One step of the process: what was done, and why in this order."
+                  }
+                </p>
+              </article>
+
+              <article class="journey__panel journey__panel--end">
+                <p class="journey__eyebrow">{it ? "Arrivo" : "Arrival"}</p>
+                <h2 class="journey__end-title">
+                  {it ? "Risultato misurabile" : "Measurable outcome"}
+                </h2>
+                <ul class="journey__outcomes">
+                  <li>{it ? "Un numero, non un aggettivo." : "A number, not an adjective."}</li>
+                  <li>{it ? "Un secondo numero." : "A second number."}</li>
+                </ul>
+              </article>
+            </div>
+          </section>
+        </div>
+        <div class="ds-spec">
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specClass}</span>
+            <p class="ds-spec__v">
+              <code
+                >journey (is-active) · journey__hud · journey__hud-bar · journey__hud-km ·
+                journey__traveler · journey__track · journey__road · journey__road-base ·
+                journey__road-progress · journey__panel (--start/--end) · journey__stop (is-passed)
+                · journey__stop-icon · journey__stop-title · journey__step-num · journey__eyebrow ·
+                journey__text · journey__hint · journey__outcomes · journey__start-title ·
+                journey__end-title</code
+              >
+            </p>
+          </div>
+          <div class="ds-spec__row">
+            <span class="ds-spec__k">{t.specUse}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Una per case study, e solo se il progetto ha davvero delle tappe di processo: con meno di due la sezione non viene resa affatto. Full-bleed dentro .work-main, che è largo 48rem."
+                  : "One per case study, and only when the project really has process steps: with fewer than two the section is not rendered at all. Full-bleed inside .work-main, which is 48rem wide."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row">
+            <span class="ds-spec__k">{t.specMotion}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "È l'unica eccezione alla regola dei 300ms: qui il movimento non è un feedback, è la navigazione. Il tempo lo detta lo scorrimento, non una durata — la strada avanza quanto avanza la rotella, e la bussola sta sempre dov'è arrivata la lettura."
+                  : "It is the one exception to the 300ms rule: here movement is not feedback, it is the navigation. Scrolling sets the pace, not a duration — the road advances as far as the wheel does, and the compass always sits where the reading has got to."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--dont">
+            <span class="ds-spec__k">{t.specDont}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Non mettere niente di indispensabile in HUD, strada o bussola: nel ripiego verticale sono display:none, quindi tutto quello che ci finisce sparisce per chi non ha JavaScript. Il numero della tappa sta anche nell'occhiello, in chiaro, apposta."
+                  : "Never put anything essential in the HUD, the road or the compass: in the vertical fallback they are display:none, so whatever lands there disappears for anyone without JavaScript. The step number is also in the eyebrow, in plain text, on purpose."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specA11y}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "La sezione porta un aria-label che dice dove porta il percorso, perché il titolo vero è dentro la prima tappa. HUD, bussola e strada sono aria-hidden: sono la resa grafica di un avanzamento già scritto negli occhielli. La bussola passa dietro le tappe (z-index 1 contro 2), così quando si incrociano la card resta leggibile."
+                  : "The section carries an aria-label saying where the journey leads, because the real heading lives inside the first stop. HUD, compass and road are aria-hidden: they are the graphic rendering of a progress already written in the eyebrows. The compass passes behind the stops (z-index 1 against 2), so when they cross the card stays readable."
+              }
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="ds-panel" data-ds-panel="cambio-lingua" aria-labelledby="cambio-lingua-t">
+        <div class="ds-panel__head">
+          <h2 class="ds-section__title" id="cambio-lingua-t">
+            {it ? "Cambio lingua" : "Language switch"}
+          </h2>
+          <span class="ds-panel__group"
+            >{it ? "Sistema" : "System"}<span class="ds-origin">lang-switch</span></span
+          >
+        </div>
+
+        <p class="ds-sub__note">
+          {
+            it
+              ? "Era un link solo, con scritta l'altra lingua. Su una barra che ha perso le voci di menu è rimasto l'unico comando lassù, e «EN» da solo dice tanto «sei in inglese» quanto «vai in inglese»: due letture opposte, due click opposti. L'interruttore mostra tutte e due le posizioni e ne accende una — costa 4rem di larghezza e toglie l'ambiguità."
+              : "It used to be a single link labelled with the other language. On a bar that has lost its menu items it is now the only control up there, and «EN» on its own says «you are in English» just as much as «go to English»: two opposite readings, two opposite clicks. The switch shows both positions and lights one — it costs 4rem of width and removes the ambiguity."
+          }
+        </p>
+        <div class="ds-stage">
+          <div class="ds-stage__row">
+            <div class="ds-stage__col">
+              <p class="ds-label">{it ? "Pagina italiana" : "Italian page"}</p>
+              <LangSwitch locale="it" href="#cambio-lingua" data-ds-snippet />
+            </div>
+            <div class="ds-stage__col">
+              <p class="ds-label">{it ? "Pagina inglese" : "English page"}</p>
+              <LangSwitch locale="en" href="#cambio-lingua" data-ds-snippet />
+            </div>
+          </div>
+        </div>
+        <p class="ds-sub__note">
+          {
+            it
+              ? "Le due posizioni, nell'ordine in cui stanno in pagina: a sinistra l'interruttore di una pagina italiana, a destra quello della stessa pagina in inglese. IT sta sempre prima, in tutte e due le lingue — la versione inglese differisce per la lingua, non per l'ordine."
+              : "The two positions, in the order they appear on the page: on the left the switch on an Italian page, on the right the same page in English. IT always comes first, in both languages — the English version differs in language, not in order."
+          }
+        </p>
+        <div class="ds-spec">
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specClass}</span>
+            <p class="ds-spec__v">
+              <code>lang-switch · lang-switch__thumb · lang-switch__opt</code>
+            </p>
+          </div>
+          <div class="ds-spec__row">
+            <span class="ds-spec__k">{t.specUse}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Una per pagina, in cima: ingresso, CV, indice e case study di /work. Il link punta alla stessa pagina nell'altra lingua, mai alla home."
+                  : "One per page, at the top: entry, CV, /work index and case studies. The link points to the same page in the other language, never to the home."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row">
+            <span class="ds-spec__k">{t.specMotion}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Il cursore parte alla pressione, non all'arrivo: cambiare lingua è cambiare pagina, e senza questo il comando resterebbe fermo fino al ricaricamento. 150ms, la durata di un feedback di pressione."
+                  : "The thumb moves on press, not on arrival: changing language means changing page, and without this the control would sit still until the reload. 150ms, the duration of a press feedback."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--dont">
+            <span class="ds-spec__k">{t.specDont}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Non riusarlo per la lente: le lenti sono tre, e un interruttore a due posizioni direbbe una cosa falsa. E non riempirlo d'accento — all'ingresso nessuna lente è stata scelta, e una pillola arancione lassù annuncia una scelta che il visitatore non ha ancora fatto."
+                  : "Do not reuse it for the lens: there are three lenses, and a two-position switch would state something false. And do not fill it with the accent — at the entry no lens has been chosen yet, and an orange pill up there announces a choice the visitor has not made."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specA11y}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "La posizione accesa non è un bersaglio: è uno <span> con aria-current, non un link verso la pagina in cui si è già. Il nome accessibile resta «EN», con la frase per esteso in title — sostituirlo con «Switch to English» toglierebbe dal nome il testo che si vede (2.5.3). Ogni voce porta il proprio lang, o la sintesi vocale legge «EN» all'italiana. Bersaglio 24px netti (2.5.8) e bordo al 44% di inchiostro, che è il 3:1 che 1.4.11 chiede a un bordo che identifica un controllo."
+                  : "The lit position is not a target: it is a <span> with aria-current, not a link to the page you are already on. The accessible name stays «EN», with the full sentence in title — replacing it with «Switch to English» would drop the visible text from the name (2.5.3). Each option carries its own lang, or screen readers pronounce «EN» in Italian. 24px net target (2.5.8), and a border at 44% ink, which is the 3:1 that 1.4.11 asks of a border identifying a control."
+              }
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="ds-panel" data-ds-panel="cursore" aria-labelledby="cursore-t">
+        <div class="ds-panel__head">
+          <h2 class="ds-section__title" id="cursore-t">
+            {it ? "Il cursore-lampada" : "The lamp cursor"}
+          </h2>
+          <span class="ds-panel__group"
+            >{it ? "Sistema" : "System"}<span class="ds-origin">cursor.css</span></span
+          >
+        </div>
+
+        <p class="ds-sub__note">
+          {
+            it
+              ? "Non è un componente: è la pagina. Due <div> nel layout — #cursor-core, il punto, e #cursor-lamp, l'alone — e cinque classi sul <html> che ne cambiano lo stato. Non se ne può mostrare un secondo qui dentro, perché sono id unici e ce n'è già uno acceso: quello che stai muovendo adesso è la demo."
+              : "It is not a component: it is the page. Two <div>s in the layout — #cursor-core, the dot, and #cursor-lamp, the halo — and five classes on <html> that switch its state. A second one cannot be shown in here, because those are unique ids and one is already lit: the one you are moving right now is the demo."
+          }
+        </p>
+        <p class="ds-sub__note">
+          {
+            it
+              ? "La lampada non è decorazione: è la sorgente di luce della scena. Gli oggetti knolling calcolano la propria ombra portata rispetto a dove si trova, ed è il motivo per cui muovendo il puntatore le ombre girano invece di stare ferme."
+              : "The lamp is not decoration: it is the scene's light source. The knolling objects compute their cast shadow relative to where it sits, which is why moving the pointer turns the shadows instead of leaving them still."
+          }
+        </p>
+        <div class="ds-table-wrap">
+          <table class="ds-table">
+            <thead>
+              <tr>
+                <th>{it ? "Classe su <html>" : "Class on <html>"}</th>
+                <th>{it ? "Quando" : "When"}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>cursor-on</code></td>
+                <td>
+                  {
+                    it
+                      ? "Il puntatore è dentro la finestra: punto e alone visibili."
+                      : "The pointer is inside the window: dot and halo visible."
+                  }
+                </td>
+              </tr>
+              <tr>
+                <td><code>cursor-hot</code></td>
+                <td>
+                  {
+                    it
+                      ? "Sopra qualcosa di toccabile: il punto cresce, l'alone si stringe."
+                      : "Over something tappable: the dot grows, the halo tightens."
+                  }
+                </td>
+              </tr>
+              <tr>
+                <td><code>cursor-down</code></td>
+                <td>
+                  {
+                    it
+                      ? "Pulsante premuto — la stessa risposta fisica dello scale(0.97) sui comandi."
+                      : "Button held down — the same physical answer as the scale(0.97) on controls."
+                  }
+                </td>
+              </tr>
+              <tr>
+                <td><code>cursor-text</code></td>
+                <td>
+                  {
+                    it
+                      ? "Sopra del testo selezionabile: il punto diventa una barra."
+                      : "Over selectable text: the dot becomes a caret."
+                  }
+                </td>
+              </tr>
+              <tr>
+                <td><code>cursor-off</code></td>
+                <td>
+                  {
+                    it
+                      ? "Puntatore fuori dalla finestra: si spengono tutti e due."
+                      : "Pointer outside the window: both go dark."
+                  }
+                </td>
+              </tr>
+              <tr>
+                <td><code>dialog-open</code></td>
+                <td>
+                  {
+                    it
+                      ? "C'è una modale aperta: la lampada si spegne, perché illuminerebbe un fondale che non si vede più."
+                      : "A modal is open: the lamp goes out, because it would be lighting a backdrop nobody can see any more."
+                  }
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p class="ds-section__note">
+          {
+            it
+              ? "Il vincolo che decide tutto: un cursore custom cancella il puntatore di sistema, e con lui le impostazioni di accessibilità del sistema operativo — puntatore ingrandito, ad alto contrasto, con la scia. Per questo il foglio non è mai importato dal markup, ma iniettato da uno script che prima controlla il puntatore fine e reduced-motion: dove non ha senso, non si scaricano nemmeno i byte."
+              : "The constraint that decides everything: a custom cursor erases the system pointer, and with it the operating system's accessibility settings — enlarged pointer, high contrast, trails. That is why the stylesheet is never imported from the markup but injected by a script that first checks for a fine pointer and reduced-motion: where it makes no sense, not even the bytes are downloaded."
+          }
+        </p>
+      </section>
+
+      <section class="ds-panel" data-ds-panel="fab" aria-labelledby="fab-t">
+        <div class="ds-panel__head">
+          <h2 class="ds-section__title" id="fab-t">
+            {it ? "Il FAB dei contatti" : "The contact FAB"}
+          </h2>
+          <span class="ds-panel__group"
+            >{it ? "Sistema" : "System"}<span class="ds-origin">floating-menu</span></span
+          >
+        </div>
+
+        <p class="ds-sub__note">
+          {
+            it
+              ? "Una delle tre island Lit vive, e l'unica presente su quasi ogni pagina. Il markup è una riga e basta: posizione, z-index e comportamento stanno dentro il componente e in una regola di global.css. Quello qui sotto è il FAB vero, non una copia — guarda in basso a destra: è lì che sta, ed è lì che deve stare. Sparisce quando lasci questo pannello, perché il pannello nascosto lo porta via con sé."
+              : "One of the three live Lit islands, and the only one present on nearly every page. The markup is a single line: position, z-index and behaviour live inside the component and in one rule in global.css. What follows is the real FAB, not a copy — look at the bottom right: that is where it sits, and where it must sit. It disappears when you leave this panel, because a hidden panel takes it with it."
+          }
+        </p>
+        <div class="ds-stage">
+          <floating-menu data-ds-snippet></floating-menu>
+        </div>
+        <div class="ds-spec">
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specClass}</span>
+            <p class="ds-spec__v">
+              <code>floating-menu · fab-trigger · fab-items · fab-item (shadow DOM)</code>
+            </p>
+          </div>
+          <div class="ds-spec__row">
+            <span class="ds-spec__k">{t.specUse}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Si accende dal layout con showFab, mai scrivendo il tag a mano. Sulla pagina CV non serve: lì i contatti stanno in chiaro nel primo strato, e un FAB sarebbe una caccia al tesoro per un'informazione già visibile."
+                  : "Turned on from the layout with showFab, never by writing the tag by hand. The CV page does not need it: there the contacts sit in the open in the first layer, and a FAB would be a treasure hunt for information already in view."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--dont">
+            <span class="ds-spec__k">{t.specDont}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Non aggiungerci voci: due sono il massimo che un pollice raggiunge senza guardare, e un FAB che diventa un menu è un menu messo nel posto sbagliato."
+                  : "Do not add entries: two is the most a thumb reaches without looking, and a FAB that becomes a menu is a menu put in the wrong place."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specA11y}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "È il componente che 2.4.11 tiene d'occhio: sta fisso in basso a destra e può coprire l'elemento che riceve il focus. Chiuso, le voci sono inert e aria-hidden — quindi non sono un buco nella tabulazione. E --fab-lift esiste perché il banner di consenso, quando c'era, lo alzava invece di sovrapporglisi."
+                  : "This is the component 2.4.11 watches: it is pinned bottom right and can cover the element receiving focus. Closed, its entries are inert and aria-hidden — so they are not a hole in the tab order. And --fab-lift exists because the consent banner, back when it was live, raised it instead of overlapping it."
+              }
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="ds-panel"
+        data-ds-panel="salto-al-contenuto"
+        aria-labelledby="salto-al-contenuto-t"
+      >
+        <div class="ds-panel__head">
+          <h2 class="ds-section__title" id="salto-al-contenuto-t">
+            {it ? "Salto al contenuto" : "Skip to content"}
+          </h2>
+          <span class="ds-panel__group"
+            >{it ? "Sistema" : "System"}<span class="ds-origin">skip-link</span></span
+          >
+        </div>
+
+        <p class="ds-sub__note">
+          {
+            it
+              ? "Il componente più invisibile del sistema, e l'unico obbligatorio: primo elemento del <body> di ogni pagina, sta a top:-100% finché non riceve il focus da tastiera, e allora scende. Qui è mostrato nella posizione in cui arriva — nella pagina vera non lo si vede se non tabulando."
+              : "The most invisible component in the system, and the only mandatory one: the first element in every page's <body>, it sits at top:-100% until it receives keyboard focus, and then drops down. It is shown here in the position it lands in — on the real page you never see it unless you tab."
+          }
+        </p>
+        <div class="ds-stage ds-stage--skip">
+          <a class="skip-link" href="#main-content" data-ds-snippet>
+            {it ? "Vai al contenuto principale" : "Skip to main content"}
+          </a>
+        </div>
+        <div class="ds-spec">
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specClass}</span>
+            <p class="ds-spec__v"><code>skip-link</code></p>
+          </div>
+          <div class="ds-spec__row">
+            <span class="ds-spec__k">{t.specUse}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? 'Una per pagina, prima di tutto il resto, e sempre in coppia con un <main id="main-content">. Senza il bersaglio è un link che non salta niente, ed è peggio che non averlo.'
+                  : 'One per page, before everything else, and always paired with a <main id="main-content">. Without the target it is a link that skips nothing, which is worse than not having it.'
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row">
+            <span class="ds-spec__k">{t.specMotion}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Anima top, non transform, ed è l'unica eccezione consapevole alla regola GPU: parte da fuori schermo e deve rientrare nel flusso, non scivolare sopra. 0,2s, il tempo di accorgersene senza aspettarlo."
+                  : "It animates top, not transform, and it is the one deliberate exception to the GPU rule: it starts off-screen and must come back into the flow, not glide over it. 0.2s — long enough to notice, short enough not to wait."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--dont">
+            <span class="ds-spec__k">{t.specDont}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Non nasconderlo con display:none o visibility:hidden: sparirebbe anche dalla tabulazione, e il componente esiste solo per chi tabula. Fuori schermo, sì; rimosso, mai."
+                  : "Do not hide it with display:none or visibility:hidden: it would vanish from the tab order too, and this component exists only for people who tab. Off-screen, yes; removed, never."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specA11y}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "2.4.1 Bypass Blocks. Compare su :focus-visible e non su :focus, così un clic del mouse su un link vicino non lo fa saltare fuori. Riempimento inchiostro con testo ottanio sopra: 9:1, e l'anello d'accento in più perché deve vedersi appena arriva."
+                  : "2.4.1 Bypass Blocks. It appears on :focus-visible rather than :focus, so a mouse click on a nearby link does not make it pop out. Ink fill with ottanio text on top: 9:1, plus the accent ring because it has to be seen the moment it lands."
+              }
+            </p>
+          </div>
+        </div>
+      </section>
+
       <section class="ds-panel" data-ds-panel="stati" aria-labelledby="stati-t">
         <div class="ds-panel__head">
           <h2 class="ds-section__title" id="stati-t">{t.secStates}</h2>
@@ -4826,6 +6130,7 @@ const NAV = [
   // Il logo è un web component, non una classe: va registrato o la vetrina
   // mostrerebbe un elemento vuoto dove dovrebbe esserci il componente.
   import "../islands/GoLogo.lit";
+  import "../islands/FloatingMenu.lit";
   import { initLensDropdownAutoClose } from "../scripts/lens-dropdown";
 
   // .ds-stage esclude la demo statica del pannello "Tendina di lente":
