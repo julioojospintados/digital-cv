@@ -198,6 +198,13 @@ const lanes = LANE_DEFS.map((def) => {
   };
 });
 
+// Le due corsie di mestiere per la testata. Sono le STESSE di `lanes`, non un
+// secondo calcolo: se la barra in cima e quella in fondo si contraddicessero,
+// la seconda smetterebbe di essere credibile. "Fuori orario" resta fuori — è
+// una corsia di completezza, e la fascia dei primi sette secondi non è il
+// posto per il lavoro da barista.
+const heroLanes = lanes.filter((l) => l.key !== "off");
+
 const tlTicks = Array.from({ length: Math.ceil((tlA - tlDa) / 4) }, (_, k) => tlDa + k * 4).map(
   (anno) => ({ anno, left: pct(anno) }),
 );
@@ -272,6 +279,41 @@ const MAX_CHIPS = 6;
           <p class="lc-claim">{heroTitle}</p>
 
           <p class="lc-meta">{data.personal.location} · {t.ui.availableRemote}</p>
+
+          <!-- Le due corsie di mestiere, in testata. Risponde alla domanda che
+               uno si fa davvero guardando un CV — «da quanto lo fa, e lo fa
+               ancora?» — con una forma invece che con due righe di testo.
+               È la stessa grafica della cronologia in fondo, sullo stesso
+               asse e con gli stessi colori: qui riassume, là si apre.
+               aria-hidden per intero, come quella in fondo: il dato in chiaro
+               resta negli anni scritti di «Dove lavora ora» qui sotto. -->
+          <div class="lc-hero-tl" aria-hidden="true">
+            <div class="lc-hero-tl__asse">
+              {
+                tlTicks.map((tk) => (
+                  <span class="lc-hero-tl__tick" style={`left:${tk.left}%`}>
+                    {tk.anno}
+                  </span>
+                ))
+              }
+            </div>
+            {
+              heroLanes.map((lane) => (
+                <div class="lc-hero-tl__riga">
+                  <span class="lc-hero-tl__et">{lane.label}</span>
+                  <span class="lc-hero-tl__track">
+                    {lane.merged.map((m) => (
+                      <span
+                        class:list={["lc-hero-tl__bar", `lc-tl__bar--${lane.key}`]}
+                        style={`left:${m.left}%;width:${m.width}%`}
+                      />
+                    ))}
+                    <span class="lc-hero-tl__now" style={`left:${tlNow}%`} />
+                  </span>
+                </div>
+              ))
+            }
+          </div>
 
           <!-- "Dove lavora ora, e prima": il dato più fissato in assoluto
                nello screening iniziale. -->

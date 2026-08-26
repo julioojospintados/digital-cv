@@ -1239,6 +1239,105 @@
   background: var(--lc-line-strong);
 }
 
+/* ── La cronologia in testata ─────────────────────────────────────────────
+   Le due corsie di mestiere sopra la piega. Non è una seconda cronologia: è
+   la stessa di sotto (stesso asse, stessi `lc-tl__bar--*`, stesso calcolo in
+   `heroLanes`), ridotta a due righe. Se un giorno le due divergessero, quella
+   in fondo perderebbe credibilità — per questo il markup riusa i colori di
+   corsia invece di ridefinirli.
+
+   Sta DOPO luogo e disponibilità e PRIMA di «Dove lavora ora»: risponde per
+   forma alla domanda «da quanto?», e subito sotto arrivano i nomi delle
+   aziende, che sono il dato che si cerca per secondo. Le due cose non si
+   sostituiscono, si rispondono. */
+
+.lc-hero-tl {
+  margin-top: var(--size-16);
+  max-width: 32rem;
+}
+
+.lc-hero-tl__asse {
+  position: relative;
+  height: var(--size-16);
+  margin-left: 11rem;
+  border-bottom: 1px solid var(--lc-line);
+}
+
+.lc-hero-tl__tick {
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  color: var(--lc-muted);
+}
+
+.lc-hero-tl__riga {
+  display: grid;
+  grid-template-columns: 11rem 1fr;
+  gap: var(--size-8);
+  align-items: center;
+  padding-block: var(--size-4);
+}
+
+.lc-hero-tl__et {
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  color: var(--lc-muted);
+  min-width: 0;
+}
+
+.lc-hero-tl__track {
+  position: relative;
+  height: 0.75rem;
+  border-radius: var(--radius-4);
+  background: rgba(245, 240, 230, 0.05);
+}
+
+.lc-hero-tl__bar {
+  position: absolute;
+  top: 0.125rem;
+  height: var(--size-8);
+  border-radius: var(--radius-4);
+  background: var(--lc-line-strong);
+}
+
+/* Specificità doppia di proposito: `.lc-tl__bar--tech` e `--design` sono
+   selettori a una classe e stanno PRIMA di questo blocco nel foglio, quindi
+   da soli perderebbero contro il fondo neutro qui sopra e le barre uscirebbero
+   tutte grigie. Successo davvero al primo giro. */
+.lc-hero-tl__bar.lc-tl__bar--tech {
+  background: var(--color-lens-tech);
+}
+
+.lc-hero-tl__bar.lc-tl__bar--design {
+  background: var(--color-lens-creative);
+}
+
+.lc-hero-tl__now {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--lc-line-strong);
+}
+
+/* Su telefono l'etichetta va sopra la barra invece che accanto: a 390px una
+   colonna da 9,5rem lascerebbe alla barra meno della metà della larghezza, e
+   una barra corta non dice più niente. Stessa scelta della cronologia in
+   fondo, dove la media query fa esattamente questo. */
+@media (max-width: 40rem) {
+  .lc-hero-tl__asse {
+    margin-left: 0;
+  }
+
+  .lc-hero-tl__riga {
+    grid-template-columns: 1fr;
+    gap: var(--size-2);
+    padding-block: var(--size-6);
+  }
+}
+
 /* ── Le teste di corsia ──────────────────────────────────────────────── */
 
 .lc-lane {
