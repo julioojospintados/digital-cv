@@ -288,6 +288,16 @@ export const cvDataEn = {
             "I defended typographic consistency, spacing and component states in code reviews, on a team of over 30 people.",
           ],
         },
+        {
+          mode: "human",
+          role: "AI Workflow Designer",
+          description:
+            "I brought AI into everyday consulting work, not into a side experiment: pair programming with Copilot and Claude on code that ships, and development environments prepared up front — agents, context instructions over MCP, Agile-cycle automation on GitLab. The project's rules reach the AI before the first prompt, so the speed-up stays inside decided boundaries instead of producing code that has to be read back in full.",
+          highlights: [
+            "I wrote agents, context instructions and reusable environments over the Model Context Protocol, instead of starting from an empty prompt every session.",
+            "I automated the Agile-cycle flows on GitLab and the Playwright tests, keeping direct ownership of layout and UX/UI.",
+          ],
+        },
       ],
     },
     {

@@ -147,6 +147,12 @@ export const EXP_CLUSTER_DEFS: ExpClusterDef[] = [
     refs: [
       { exp: 0, facet: "human" }, // Progetto Interno — layer MCP
       { exp: 1, facet: "human" }, // Digital CV — AI workflow
+      // ALTEN entra in questa lente il 2026-08-26. Aveva il solo facet
+      // `creative` (il design system di Aruba), quindi su /ai il datore di
+      // lavoro attuale — l'esperienza più lunga del CV — semplicemente non
+      // compariva. Terza e non prima: davanti restano i due progetti nati
+      // AI-native, che su questa lente sono la prova più forte.
+      { exp: 2, facet: "human" }, // ALTEN — pair programming e agenti
       { exp: 22, facet: "human" }, // Bambagia — MCP Figma/Wix
       { exp: 3, facet: "human" }, // Music Agency — digital strategy
       { exp: 7 }, // Satispay

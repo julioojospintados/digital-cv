@@ -467,6 +467,16 @@ export const cvData = {
             "Ho difeso coerenza tipografica, spacing e stati dei componenti nelle code review, su un team di oltre 30 persone.",
           ],
         },
+        {
+          mode: "human",
+          role: "AI Workflow Designer",
+          description:
+            "Ho portato l'AI dentro il lavoro di consulenza quotidiano, non in una prova a parte: pair programming con Copilot e Claude sul codice che va in produzione, e ambienti di sviluppo preparati prima — agenti, istruzioni di contesto via MCP, automazioni del ciclo Agile su GitLab. Le regole del progetto arrivano all'AI prima del primo prompt, così l'accelerazione resta dentro binari decisi e non produce codice da rileggere tutto.",
+          highlights: [
+            "Ho scritto agenti, istruzioni di contesto e ambienti riutilizzabili via Model Context Protocol, invece di ripartire da un prompt vuoto a ogni sessione.",
+            "Ho automatizzato i flussi del ciclo Agile su GitLab e i test in Playwright, tenendo il presidio diretto su layout e UX/UI.",
+          ],
+        },
       ],
     },
     {
