@@ -214,11 +214,15 @@ const jsonLd = {
       }
     </script>
 
-    <!-- Preload critical fonts — 400 for body text, 800 for preloader & entry name -->
-    <!-- font-display: block in global.css prevents FOUC during the preloader animation -->
-    <!-- 400: prefetch (not preload) — GSAP hides text at opacity:0 initially, preload would trigger an "unused preload" warning -->
+    <!-- I due pesi che servono al primo paint: 400 per il testo, 800 per il
+         preloader e il nome d'ingresso. Tutti e due sono dichiarati in
+         global.css sul file pubblico, cioe' su QUESTO indirizzo: se le due
+         cose divergono il preload non viene mai usato e il file arriva due
+         volte, che e' esattamente quello che succedeva al 400 fino al
+         2026-08-27 (prefetch verso una copia, @fontsource verso un'altra).
+         Il resto dei pesi arriva da @fontsource e non e' critico. -->
     <link
-      rel="prefetch"
+      rel="preload"
       as="font"
       type="font/woff2"
       href="/fonts/Lexend/lexend-latin-400-normal.woff2"

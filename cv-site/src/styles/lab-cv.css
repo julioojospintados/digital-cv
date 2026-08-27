@@ -295,11 +295,10 @@
   color: var(--lc-ink);
 }
 
-.lc-meta {
-  margin-top: 0.625rem;
-  font-size: var(--fs-14);
-  color: var(--lc-muted);
-}
+/* Qui c'erano .lc-meta e .lc-meta__langs: la riga «Torino, Italia ·
+   Disponibile da remoto» sotto il claim. Tolta il 2026-08-27 su richiesta —
+   nella fascia dei primi sette secondi competeva con nome, ruolo e i due
+   incarichi in corso, e il luogo resta comunque nei contatti in fondo. */
 
 /* ── Le lingue ─────────────────────────────────────────────────────
    Erano quattro delle sei voci di un'unica riga puntata che teneva insieme
@@ -351,15 +350,6 @@
   font-size: var(--fs-14);
   font-weight: 700;
   color: var(--color-text-primary);
-}
-
-/* Nessun nowrap qui: lo spazio unificatore nel template tiene insieme
-   "Inglese B2" senza rendere indivisibile l'intera riga. Il nowrap sull'intera
-   riga costava 416px di larghezza minima dentro un viewport da 390, e siccome
-   quella riga sta in una griglia allargava la colonna e spingeva fuori schermo
-   meta' dell'intestazione. Il vincolo e' per coppia, non per riga. */
-.lc-meta__langs {
-  overflow-wrap: break-word;
 }
 
 /* ── "Dove lavora ora, e prima" ────────────────────────────────────────── */

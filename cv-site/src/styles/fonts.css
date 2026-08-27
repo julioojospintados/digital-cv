@@ -5,8 +5,13 @@
    (vedi Layout.astro <head>: <link media="print" onload>, pattern loadCSS
    standard). Il peso 800 (preloader/nome hero) resta invece in global.css
    con font-display: block + il suo <link rel="preload"> dedicato — quello
-   sì deve essere pronto prima del primo paint. */
-@import "@fontsource/lexend/400.css";
+   sì deve essere pronto prima del primo paint.
+
+   Il 400 NON è più qui: è dichiarato in global.css sul file pubblico, lo
+   stesso che Layout.astro preloada. Da @fontsource arrivava con l'hash nel
+   nome, quindi il preload puntava a un'altra copia e il browser ne scaricava
+   due — con il testo che restava nel fallback finché non arrivava la seconda.
+   È il peso del corpo del testo: è quello che vale la pena avere subito. */
 @import "@fontsource/lexend/500.css";
 @import "@fontsource/lexend/600.css";
 @import "@fontsource/lexend/700.css";

@@ -243,10 +243,23 @@
    un contenitore da 14 sfonderebbe di lato. */
 .memory-scatter {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 15rem), 1fr));
+  /* 8rem, e la misura non è a occhio: dentro la modale su un telefono da
+     393px lo scatter è largo **281px**, e sul più stretto ancora in giro —
+     iPhone SE, 375px — è **263px**. Due colonne entrano solo se la traccia
+     minima sta sotto (263 − 8 di gap) / 2 = 127px: 7,5rem fa 120px e ci sta
+     su tutti e due. 8rem (128px) bastava sul 393 ma non sul SE, e 9,5rem non
+     bastava da nessuna parte — la griglia restava a una colonna e la modifica
+     non serviva a niente (verificato misurando `gridTemplateColumns`, che
+     rispondeva «281px», cioè una traccia sola).
+     Prima erano 15rem: le quattordici foto di "Cose mie" facevano 4.836px di
+     contenuto in 565px di finestra su iPhone SE, cioè **8,6 schermate** di
+     pollice per arrivare in fondo.
+     Le foto restano grandi abbastanza da riconoscerle, e per guardarne una
+     davvero c'è la lightbox — che è esattamente il lavoro che deve fare. */
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 7.5rem), 1fr));
   align-items: start;
   justify-items: center;
-  gap: var(--size-20) var(--size-24);
+  gap: var(--size-16) var(--size-8);
 }
 
 /* Wrapper nativo <button> intorno a .memory-photo — sostituisce
@@ -276,9 +289,12 @@
    larghezza della modale. Ora la misura la da' la cella della griglia. */
 .memory-photo {
   width: 100%;
-  /* Tetto per il caso a una colonna: su telefono la cella e' larga quanto la
-     modale, e senza questo la foto diventerebbe piu' alta della schermata. */
-  max-width: 22rem;
+  /* Tetto: senza, su una griglia larga la singola foto crescerebbe oltre il
+     necessario. 13rem tiene la cella comoda anche a tre e quattro colonne.
+     Il caso a una colonna non esiste piu' da quando la traccia minima e'
+     9,5rem — ma il tetto serve lo stesso, ed e' quello che impedisce alla
+     foto di diventare piu' alta della schermata. */
+  max-width: 12rem;
   aspect-ratio: 4 / 5;
   object-fit: cover;
   padding: var(--size-8) var(--size-8) var(--size-20);

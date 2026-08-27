@@ -16,23 +16,28 @@
    ───────────────────────────────────────────────────────────────────────── */
 
 .lang-switch {
-  /* Inchiostro, mai accento — e non è pigrizia. All'ingresso nessuna lente
-     è stata scelta, e una pillola arancione lassù annuncerebbe una scelta
-     che il visitatore non ha ancora fatto (stessa ragione per cui .lh-mark
-     è in inchiostro). Sulla pagina CV la lente c'è, ma l'accento è già la
-     voce del bottone primario e dello stato corrente delle sezioni: darlo
-     anche alla lingua vuol dire dire «importante» due volte.
+  /* Il cursore prende l'accento della lente (richiesta di Giulio,
+     2026-08-27: prima era inchiostro e restava bianco su tutte e tre).
+     È lecito perché qui l'accento è un RIEMPIMENTO, non un testo: la
+     soglia è il 3:1 di 1.4.11, non il 4,5:1 di 1.4.3, e l'etichetta
+     sopra è il quasi-nero del bottone primario, che su arancione — il
+     peggiore dei tre — tiene 5,64:1. Se un giorno l'accento diventasse
+     il COLORE dell'etichetta invece del suo fondo, quel conto salterebbe.
+
+     L'inchiostro resta per il bordo e per l'etichetta spenta: un filo
+     d'accento a 1px non arriverebbe al 3:1 su arancione.
      I default valgono dove non c'è un contenitore che li ridefinisce
      (le pagine /work); .lh e .lc portano il proprio inchiostro, che è
      opaco proprio per non spegnersi sul fondo. */
   --ls-ink: var(--color-text-primary);
   --ls-muted: var(--color-text-muted);
+  --ls-acceso: var(--color-accent);
+  --ls-su-acceso: rgba(16, 12, 8, 1);
   /* 0.44 e non 0.16: questo bordo IDENTIFICA un controllo, quindi gli
      tocca il 3:1 di 1.4.11 — la stessa soglia, e lo stesso valore, di
      --lc-line-strong. Il filo tenue va bene per separare, non per dire
      «qui si tocca». */
   --ls-line: color-mix(in srgb, var(--color-text-primary) 44%, transparent);
-  --ls-on-ink: var(--color-bg);
   /* Posizione del cursore: 0 = sinistra (IT), 1 = destra (EN). */
   --ls-i: 0;
 
@@ -73,7 +78,7 @@
   left: var(--size-2);
   width: calc(50% - var(--size-2));
   border-radius: 999rem;
-  background: var(--ls-ink);
+  background: var(--ls-acceso);
   transform: translateX(calc(var(--ls-i) * 100%));
   transition: transform var(--duration-micro) var(--ease-standard);
   pointer-events: none;
@@ -101,7 +106,7 @@
 }
 
 .lang-switch__opt[aria-current] {
-  color: var(--ls-on-ink);
+  color: var(--ls-su-acceso);
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -129,5 +134,5 @@
 }
 
 .lang-switch a.lang-switch__opt:active {
-  color: var(--ls-on-ink);
+  color: var(--ls-su-acceso);
 }
