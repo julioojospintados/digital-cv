@@ -28,6 +28,8 @@
  * quel nome è questa, e qui compare solo al clic.
  */
 
+import { LENS_HANDOFF_KEY } from "../lib/lens-motion";
+
 /** Lo stesso nome su entrambe le pagine: è ciò che le lega. */
 const NAME = "lens-object";
 
@@ -52,7 +54,38 @@ export function initLensTransition(): void {
       const obj = section?.querySelector<HTMLElement>(
         ".lh-section__object img:not(.lh-obj__shadow)",
       );
-      if (obj) obj.style.viewTransitionName = NAME;
+      if (!obj) return;
+      obj.style.viewTransitionName = NAME;
+
+      // ── La consegna: da dove parte l'oggetto ────────────────────────────
+      // La pagina di arrivo sa dove l'oggetto si ferma, ma non da dove è
+      // partito — sono due documenti, e la view transition fra documenti non
+      // passa niente all'infuori delle istantanee. Senza questa misura la
+      // durata del volo dovrebbe essere una costante, e una costante fa
+      // sembrare scattoso il volo lungo (oggetto a sinistra) e pigro quello
+      // corto (oggetto già a destra). Il centro e non l'angolo: è la distanza
+      // percorsa dall'oggetto, non dal suo riquadro.
+      const r = obj.getBoundingClientRect();
+      try {
+        sessionStorage.setItem(
+          LENS_HANDOFF_KEY,
+          JSON.stringify({
+            // Senza barra finale: `lensPath()` costruisce `/design`, ma un
+            // hosting statico può servire `/design/` e la pagina di arrivo si
+            // troverebbe `location.pathname` diverso da quello salvato —
+            // consegna scartata, durata di riposo, e il volo lungo torna a
+            // durare quanto quello corto. Trovato sulla build servita, non in
+            // sviluppo: `astro dev` non aggiunge la barra.
+            href: cta.pathname.replace(/\/+$/, "") || "/",
+            x: r.x + r.width / 2,
+            y: r.y + r.height / 2,
+            t: Date.now(),
+          }),
+        );
+      } catch {
+        // Navigazione privata, quota piena: si perde la misura, non la
+        // transizione. Senza consegna l'arrivo usa la durata di riposo.
+      }
     });
   });
 }

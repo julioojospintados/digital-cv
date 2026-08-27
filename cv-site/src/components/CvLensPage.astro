@@ -48,6 +48,7 @@ import { LANE_DEFS, EXP_LANES, isoToYear, mergeSpans } from "../lib/exp-lanes";
 import { issuerMark } from "../lib/issuer-marks";
 import { LOCALES, MODES, lensPath, type Locale, type Mode } from "../lib/cv-i18n";
 import { TAGLINE, profileCopy } from "../lib/lab-copy";
+import { LENS_MOTION, LENS_HANDOFF_KEY, LENS_HANDOFF_TTL } from "../lib/lens-motion";
 import LangSwitch from "./LangSwitch.astro";
 import "../styles/lab-cv.css";
 
@@ -244,6 +245,81 @@ const MAX_CHIPS = 6;
     href={`/knolling/${profile.object}.webp`}
     fetchpriority="high"
   />
+
+  {
+    /* Quanto dura il volo dell'oggetto, deciso su quanta strada fa davvero.
+
+      `is:inline` e in testa, non un modulo: `pagereveal` scatta prima del
+      primo disegno, e a quel punto un modulo differito non ha ancora girato.
+      Non è una preferenza di stile — le durate delle animazioni della view
+      transition sono già decise quando `ready` si risolve: scriverle dopo non
+      ha nessun effetto. Qui c'è quindi solo ciò che **deve** girare prima del
+      primo fotogramma; la correzione dell'atterraggio, che invece può
+      aspettare, sta nel modulo scripts/lens-arrival.ts.
+
+      L'interpolazione è una riga, ed è la stessa di `lensObjectDuration` in
+      lib/lens-motion.ts — dove sta scritto anche perché è sulla radice della
+      distanza e non lineare. Se cambia una, cambia l'altra: sono gli unici
+      due punti. */
+  }
+  <script
+    slot="head"
+    is:inline
+    define:vars={{ m: LENS_MOTION, chiave: LENS_HANDOFF_KEY, scadenza: LENS_HANDOFF_TTL }}
+  >
+    (() => {
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+      window.addEventListener("pagereveal", (e) => {
+        const vt = e.viewTransition || null;
+        // Depositato comunque, anche a null: è il modo in cui il modulo di
+        // arrivo sa che questo script è girato e che non c'era transizione.
+        const stato = { transition: vt };
+        window.__lensReveal = stato;
+        if (!vt) return;
+
+        const obj = document.querySelector(".lc-obj__img");
+        if (!obj) return;
+
+        // ── La misura che il modulo di arrivo non potrebbe più prendere ────
+        // Il bersaglio congelato dal browser va confrontato con dov'è
+        // l'oggetto **quando il volo comincia**. Un modulo differito può
+        // girare quando la pagina si è già assestata: lì misurerebbe la
+        // posizione finale, troverebbe scarto zero e non correggerebbe
+        // niente. Quindi la posizione di partenza e l'istante li prende
+        // questo script, che è già in esecuzione, e li lascia lì.
+        vt.ready.then(() => {
+          const r0 = obj.getBoundingClientRect();
+          stato.at = performance.now();
+          stato.previsto = { x: r0.x, y: r0.y };
+        });
+
+        // La consegna si legge una volta sola e si butta: una misura vecchia
+        // non deve poter decidere la durata di un volo di domani.
+        let da;
+        try {
+          const grezzo = sessionStorage.getItem(chiave);
+          sessionStorage.removeItem(chiave);
+          da = grezzo ? JSON.parse(grezzo) : null;
+        } catch {
+          return;
+        }
+        // Due guardie, non una: la consegna vale solo per la lente che
+        // l'aveva chiesta, e solo se è di adesso. Un ritorno col pulsante
+        // indietro o una scheda lasciata aperta non devono far durare il volo
+        // in base a una misura di un'altra volta.
+        const qui = location.pathname.replace(/\/+$/, "") || "/";
+        if (!da || da.href !== qui) return;
+        if (Date.now() - da.t > scadenza) return;
+
+        const r = obj.getBoundingClientRect();
+        const d = Math.hypot(r.x + r.width / 2 - da.x, r.y + r.height / 2 - da.y);
+        const k = Math.min(1, Math.max(0, (d - m.distNear) / (m.distFar - m.distNear)));
+        const ms = Math.round(m.objectNear + (m.objectFar - m.objectNear) * Math.sqrt(k));
+        document.documentElement.style.setProperty("--vt-object", ms + "ms");
+      });
+    })();
+  </script>
 
   <div class="lc">
     <!-- Barra. Non sticky: una barra fissa mangia proprio la fascia alta in
@@ -847,8 +923,13 @@ const MAX_CHIPS = 6;
   // e reagisce da sé al mode della pagina.
   import "../islands/GoLogo.lit";
   import { initLensDropdownAutoClose } from "../scripts/lens-dropdown";
+  import { initLensArrival } from "../scripts/lens-arrival";
 
   initLensDropdownAutoClose();
+  // Corregge il punto d'arrivo dell'oggetto in volo: la pagina si assesta nei
+  // suoi primi 150ms (webfont, deriva allo scroll), il fotogramma finale della
+  // transizione era già stato congelato prima. Vedi lens-arrival.ts.
+  initLensArrival();
 
   // ── "+4" — da etichetta morta a comando vero ──────────────────────────
   // L'HTML servito contiene già tutte le tecnologie. Qui si richiude ciò che

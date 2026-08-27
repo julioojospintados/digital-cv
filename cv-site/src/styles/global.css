@@ -111,6 +111,26 @@ button {
   --duration-page: 500ms;
   --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
 
+  /* ── Transizione fra le pagine — due tempi, non uno ───────────────────
+     Fino al 2026-08-27 la transizione aveva un solo numero (--duration-page)
+     per due cose che non hanno niente in comune: la dissolvenza fra le due
+     schermate e il volo dell'oggetto che le attraversa. Misurato, il difetto
+     era proprio lì — su due pagine che condividono lo stesso ottanio una
+     dissolvenza di mezzo secondo non si legge come dissolvenza, si legge come
+     i due testi sovrapposti a metà opacità per trecento millisecondi.
+     Separati, ognuno dei due può avere il tempo che gli serve.
+
+     I valori e il perché di ognuno stanno in `lib/lens-motion.ts`: quelli
+     sono le manopole, questi sono i valori di riposo — quello che si vede se
+     JavaScript non gira. --vt-object viene riscritto a ogni navigazione dallo
+     script inline di CvLensPage.astro, in base a quanta strada fa davvero
+     l'oggetto (le sezioni dell'ingresso lo tengono a sinistra o a destra a
+     turno, e a durata fissa i due voli hanno velocità diverse). */
+  --vt-fade: 220ms;
+  --vt-object: var(--duration-page);
+  --vt-ease-object: cubic-bezier(0.32, 0.72, 0, 1);
+  --vt-ease-fade: cubic-bezier(0.23, 1, 0.32, 1);
+
   /* ── Scala delle dimensioni ───────────────────────────────────────────
      Griglia da 4px, in rem, ancorata allo stesso root della scala
      tipografica. Il numero nel nome è il valore in px: un token si sceglie
@@ -537,17 +557,62 @@ body {
    come uno sfarfallio — non è un lampo di rendering, sono due tempi diversi
    sulla stessa transizione. Allineandoli il passaggio diventa un movimento
    solo.
-   Vale per TUTTE le navigazioni del sito, non solo per quelle con un
-   elemento condiviso: dove non c'è nulla da morphare resta comunque una
-   dissolvenza sola, un po' più distesa. */
-/* Tutti e tre: `old` e `new` sono le due istantanee che si dissolvono,
-   `group` e' quello che le sposta e le ridimensiona. Con i soli primi due il
-   gruppo restava a 250ms e lo scatto in mezzo al volo rimaneva. */
-::view-transition-group(root),
+
+   ⚠️ Allineare i tempi era giusto, allineare **le durate della dissolvenza**
+   no — ed è la correzione del 2026-08-27, con i numeri misurati sotto. Il
+   `group` è il contenitore: deve durare quanto l'oggetto che vola, altrimenti
+   torna lo scatto. Ma `old` e `new` sono le due istantanee che si incrociano,
+   e portarle a 500ms ha raddoppiato la finestra in cui i due testi si leggono
+   insieme, da 250ms a 500. Su due schermate dello stesso ottanio quella
+   sovrapposizione è l'unica cosa che si vede della dissolvenza: al 50% del
+   tempo `old` era a 0.46 e `new` a 0.54, cioè entrambe le pagine leggibili.
+   Il difetto che il commento qui sopra descriveva non era ancora sparito —
+   si era allungato. */
+::view-transition-group(root) {
+  animation-duration: var(--vt-object);
+  animation-timing-function: var(--ease-standard);
+}
+
+/* Una dissolvenza sola, non due sovrapposte.
+   Per difetto il browser incrocia le due istantanee in `plus-lighter`: le
+   somma. È la scelta giusta quando i due fotogrammi sono quasi uguali (la
+   somma di due opacità complementari torna esattamente l'originale), ma qui i
+   due fotogrammi sono due pagine diverse, e sommarle schiarisce il fondo e
+   raddoppia il testo proprio a metà strada.
+
+   Sotto: fusione normale, la pagina vecchia ferma e opaca sul fondo, quella
+   nuova che le sale sopra in --vt-fade. Risultato identico a una dissolvenza
+   incrociata vera (nessun lampo, nessun buco sul fondo), ma con un solo
+   numero a governarla — e quel numero è la manopola che decide quanto a lungo
+   si leggono due testi invece di uno. */
+::view-transition-image-pair(root) {
+  isolation: auto;
+}
+
 ::view-transition-old(root),
 ::view-transition-new(root) {
-  animation-duration: var(--duration-page);
-  animation-timing-function: var(--ease-standard);
+  mix-blend-mode: normal;
+}
+
+::view-transition-old(root) {
+  animation: none;
+  opacity: 1;
+}
+
+::view-transition-new(root) {
+  animation-name: vt-root-in;
+  animation-duration: var(--vt-fade);
+  animation-timing-function: var(--vt-ease-fade);
+  animation-fill-mode: both;
+}
+
+@keyframes vt-root-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .work-index-hero {
@@ -555,8 +620,8 @@ body {
 }
 
 ::view-transition-group(portfolio-hero) {
-  animation-duration: var(--duration-page);
-  animation-timing-function: var(--ease-standard);
+  animation-duration: var(--vt-object);
+  animation-timing-function: var(--vt-ease-object);
 }
 
 @media (prefers-reduced-motion: reduce) {

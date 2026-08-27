@@ -83,6 +83,15 @@
   --lc-sh-y: 7%;
   --lc-sh-blur: 1.1rem;
   --lc-sh-opacity: 0.32;
+  /* L'ombra di contatto — la stessa di --lh-sh-contact sull'ingresso, e lo
+     stesso motivo: la sagoma sfocata qui sopra dice "sollevato", questa dice
+     "appoggiato". Senza, il ritaglio galleggia.
+     Qui però c'è una seconda ragione, che è quella per cui è stata aggiunta il
+     2026-08-27: l'oggetto è lo stesso che arriva in volo dall'ingresso, dove
+     l'ombra di contatto ce l'ha. Averla da una parte e non dall'altra vuol
+     dire che a metà transizione l'oggetto la perde — smette di stare su un
+     piano e diventa un adesivo che scivola sopra al testo. */
+  --lc-sh-contact: 0 0.2rem 0.45rem rgba(0, 0, 0, 0.55);
 
   min-height: 100vh;
   background: var(--color-bg);
@@ -143,6 +152,10 @@
   width: 100%;
   height: 100%;
   object-fit: contain;
+}
+
+.lc-obj__img {
+  filter: drop-shadow(var(--lc-sh-contact));
 }
 
 .lc-obj__shadow {
@@ -1877,9 +1890,20 @@
   view-transition-name: lens-object;
 }
 
+/* --vt-object e non --duration-page: la durata del volo non è una costante
+   del sistema, è una funzione di quanta strada fa l'oggetto. Le sezioni
+   dell'ingresso lo tengono a sinistra e a destra a turno (lab-home.css
+   § Desktop), mentre qui atterra sempre in alto a destra: chi parte da
+   sinistra attraversa quasi tutta la finestra, chi parte da destra fa un
+   quarto di quella strada. Con un numero solo i due voli hanno velocità molto
+   diverse — il lungo scatta, il corto si trascina.
+   Chi scrive il valore giusto è lo script inline in testa a CvLensPage.astro,
+   prima che il browser costruisca le animazioni; i numeri stanno in
+   lib/lens-motion.ts. Senza JavaScript resta il valore di riposo di
+   global.css, che è il vecchio --duration-page. */
 ::view-transition-group(lens-object) {
-  animation-duration: var(--duration-page);
-  animation-timing-function: var(--ease-standard);
+  animation-duration: var(--vt-object);
+  animation-timing-function: var(--vt-ease-object);
 }
 
 /* Riduzione, non eliminazione: senza nome condiviso resta la transizione di

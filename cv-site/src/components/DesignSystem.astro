@@ -215,6 +215,28 @@ const MOTION_TOKENS = [
     value: "cubic-bezier(0.4, 0, 0.2, 1)",
     use: it ? "Curva unica del sistema" : "The system's single curve",
   },
+  {
+    name: "--vt-fade",
+    value: "220ms",
+    use: it ? "Dissolvenza fra le due pagine" : "The dissolve between the two pages",
+  },
+  {
+    name: "--vt-object",
+    value: "var(--duration-page)",
+    use: it
+      ? "Volo dell'oggetto condiviso — riscritto sulla distanza"
+      : "The shared object's flight — rewritten from the distance",
+  },
+  {
+    name: "--vt-ease-object",
+    value: "cubic-bezier(0.32, 0.72, 0, 1)",
+    use: it ? "Curva del volo" : "The flight's curve",
+  },
+  {
+    name: "--vt-ease-fade",
+    value: "cubic-bezier(0.23, 1, 0.32, 1)",
+    use: it ? "Curva della dissolvenza" : "The dissolve's curve",
+  },
 ];
 
 /* ── Stati: la stessa ricetta su tutti i comandi del sistema. ───────────── */
@@ -453,6 +475,9 @@ const t = it
       moEase: "La curva, contro la lineare",
       moEaseNote:
         "Sopra la curva del sistema, sotto una lineare della stessa durata. La lineare parte e si ferma di colpo, e per questo sembra meccanica: niente nel mondo fisico si muove così. La curva accelera e frena, e a parità di millisecondi si legge come più rapida.",
+      moPage: "Il cambio di pagina: due tempi, non uno",
+      moPageNote:
+        "Una transizione di pagina non è un movimento solo, e trattarla come tale è il difetto che questo sistema ha avuto fino al 2026-08-27. La dissolvenza fra le due schermate (--vt-fade) e il volo dell'oggetto che le attraversa (--vt-object) hanno lo stesso inizio e nient'altro in comune. Su due pagine che condividono lo stesso ottanio, della dissolvenza si vede una cosa sola: i due testi sovrapposti. A mezzo secondo si leggono insieme per trecento millisecondi, ed è quello che si percepisce come sfarfallio — non un lampo di rendering, due testi. A 220ms la finestra è di ottanta. Il volo invece non ha una durata giusta in assoluto: dipende da quanta strada fa. Le schede dell'ingresso tengono l'oggetto a sinistra e a destra a turno, mentre sulla lente atterra sempre in alto a destra, quindi lo stesso numero produce un volo lento e uno scattoso. --vt-object viene riscritto a ogni passaggio fra 420 e 700ms, sulla radice della distanza percorsa.",
       moReduced: "Con movimento ridotto",
       moReducedNote:
         "Ridurre non è eliminare: restano opacità e colore, spariscono le trasformazioni. L'affondo alla pressione resta anche lì, perché non è decorazione — è l'informazione che il comando ha risposto.",
@@ -536,6 +561,9 @@ const t = it
       moEase: "The curve, against linear",
       moEaseNote:
         "Above, the system's curve; below, a linear one of the same length. Linear starts and stops dead, which is why it feels mechanical: nothing in the physical world moves that way. The curve accelerates and brakes, and at identical milliseconds it reads as quicker.",
+      moPage: "The page change: two times, not one",
+      moPageNote:
+        "A page transition is not a single movement, and treating it as one is the flaw this system carried until 2026-08-27. The dissolve between the two screens (--vt-fade) and the flight of the object crossing them (--vt-object) share a start and nothing else. On two pages built on the same teal, only one thing of that dissolve is visible: the two texts on top of each other. At half a second they read together for three hundred milliseconds, and that is what registers as flicker — not a rendering glitch, two texts. At 220ms the window is eighty. The flight, on the other hand, has no right duration in the absolute: it depends on how far it travels. The entry's cards keep the object left and right in turn, while on the lens it always lands top right, so one number gives you one slow flight and one abrupt one. --vt-object is rewritten on every crossing between 420 and 700ms, on the square root of the distance covered.",
       moReduced: "Under reduced motion",
       moReducedNote:
         "Reduction is not removal: opacity and colour remain, transforms go. The tactile press survives even there, because it is not decoration — it is the information that the control responded.",
@@ -1189,6 +1217,11 @@ const NAV = [
             </li>
           </ul>
           <p class="ds-sub__note">{t.moEaseNote}</p>
+        </div>
+
+        <div class="ds-stage">
+          <p class="ds-sub__title">{t.moPage}</p>
+          <p class="ds-sub__note">{t.moPageNote}</p>
         </div>
 
         <div class="ds-table-wrap">
