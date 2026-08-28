@@ -200,6 +200,24 @@ const jsonLd = {
     <link rel="stylesheet" href={fontsCssUrl} media="print" onload="this.media='all'" />
     <noscript><link rel="stylesheet" href={fontsCssUrl} /></noscript>
 
+    <!-- Rallentatore della transizione di pagina: `?vt=slow` per accenderlo,
+         `?vt=off` per spegnerlo, dura quanto la sessione. Il perche' e la
+         regola che ne segue stanno in global.css, § Rallentatore.
+
+         Inline e in testa perche' l'attributo deve esserci PRIMA del primo
+         disegno: se arrivasse dopo, la transizione sarebbe gia' partita
+         alla velocita' di sempre e non ci sarebbe niente da guardare. -->
+    <script is:inline>
+      try {
+        const vt = new URLSearchParams(location.search).get("vt");
+        if (vt === "off") sessionStorage.removeItem("vt-slow");
+        else if (vt === "slow") sessionStorage.setItem("vt-slow", "1");
+        if (sessionStorage.getItem("vt-slow")) document.documentElement.dataset.vtSlow = "";
+      } catch {
+        // Navigazione privata con lo storage negato: pazienza, niente rallentatore.
+      }
+    </script>
+
     <!-- Cursore custom: richiesto solo su pointer fine (desktop/trackpad).
          matchMedia gira synchronously prima del primo paint (niente flash),
          e sui touch device (Moto G Power incluso — l'audit Lighthouse
