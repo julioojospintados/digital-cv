@@ -200,6 +200,77 @@ const jsonLd = {
     <link rel="stylesheet" href={fontsCssUrl} media="print" onload="this.media='all'" />
     <noscript><link rel="stylesheet" href={fontsCssUrl} /></noscript>
 
+    <!-- ── L'oggetto in volo aspetta che la pagina sia in piedi ────────────
+         Una transizione fra due documenti parte al PRIMO DISEGNO della
+         pagina di arrivo: nell'istante in cui quella pagina ha appena finito
+         il suo primo layout e deve ancora decodificare le immagini della
+         testata e rasterizzare. Chiedere un'animazione fluida proprio li' e'
+         chiedere al browser due cose insieme, e la seconda la fa male.
+
+         Prima qui c'era un'attesa fissa (`--delay-page: 190ms`) e funzionava
+         quando indovinava. Misurato: a browser caldo il buco peggiore
+         durante il volo passava da 21ms a 92 fra una prova e l'altra, e a
+         browser freddo — prima navigazione dopo l'apertura, cioe' il caso di
+         chi arriva dal QR — restava sopra i 300. Un numero fisso non puo'
+         sapere quanto ci mette una pagina a nascere su una macchina che non
+         conosce.
+
+         Quindi non si indovina piu': si guarda. L'animazione parte in pausa e
+         riparte al terzo fotogramma consecutivo consegnato in tempo, che e'
+         il segno che la pagina ha finito. Su una macchina veloce sono ~50ms,
+         su una lenta quanto serve. Il tetto e' mezzo secondo: se in mezzo
+         secondo la pagina non si e' calmata, si parte lo stesso — meglio
+         un'animazione imperfetta di un oggetto che resta appeso.
+
+         Senza JS non succede niente di male: le animazioni non vengono messe
+         in pausa e la transizione e' quella di prima. -->
+    <script is:inline>
+      addEventListener("pagereveal", (e) => {
+        const vt = e.viewTransition;
+        if (!vt) return;
+        vt.ready.then(() => {
+          const anim = document
+            .getAnimations()
+            .filter((a) => a.effect?.pseudoElement?.startsWith("::view-transition"));
+          if (!anim.length) return;
+          anim.forEach((a) => a.pause());
+
+          const via = (scaduto) => {
+            clearTimeout(tetto);
+            const t = performance.now() - t0;
+            // Scaduto il tetto si decide sui fatti, non sulla speranza: se in
+            // quel mezzo secondo la pagina ha consegnato meno della meta' dei
+            // fotogrammi che avrebbe dovuto, non si e' calmata e non si
+            // calmera'. Li' animare e' peggio che non animare — un volo a
+            // quattro scatti si legge come un difetto, l'oggetto gia' al suo
+            // posto no. `finish()` lo porta a destinazione senza disegnare il
+            // viaggio.
+            const fiacca = scaduto && visti < t / 33;
+            anim.forEach((a) => (fiacca ? a.finish() : a.play()));
+            if (window.__vt) {
+              window.__vt.attesa = t;
+              window.__vt.rinuncia = fiacca;
+            }
+          };
+          const t0 = performance.now();
+          const tetto = setTimeout(() => via(true), 600);
+
+          let buoni = 0;
+          let visti = 0;
+          let prec = t0;
+          const guarda = () => {
+            const ora = performance.now();
+            visti++;
+            buoni = ora - prec <= 20 ? buoni + 1 : 0;
+            prec = ora;
+            if (buoni >= 3) via(false);
+            else requestAnimationFrame(guarda);
+          };
+          requestAnimationFrame(guarda);
+        });
+      });
+    </script>
+
     <!-- Rallentatore della transizione di pagina: `?vt=slow` per accenderlo,
          `?vt=off` per spegnerlo, dura quanto la sessione. Il perche' e la
          regola che ne segue stanno in global.css, § Rallentatore.
@@ -210,11 +281,60 @@ const jsonLd = {
     <script is:inline>
       try {
         const vt = new URLSearchParams(location.search).get("vt");
-        if (vt === "off") sessionStorage.removeItem("vt-slow");
-        else if (vt === "slow") sessionStorage.setItem("vt-slow", "1");
+        if (vt === "off") {
+          sessionStorage.removeItem("vt-slow");
+          sessionStorage.removeItem("vt-debug");
+        } else if (vt === "slow") sessionStorage.setItem("vt-slow", "1");
+        else if (vt === "debug") sessionStorage.setItem("vt-debug", "1");
+        else if (vt === "slowdebug") {
+          sessionStorage.setItem("vt-slow", "1");
+          sessionStorage.setItem("vt-debug", "1");
+        }
         if (sessionStorage.getItem("vt-slow")) document.documentElement.dataset.vtSlow = "";
+        if (sessionStorage.getItem("vt-debug")) {
+          document.documentElement.dataset.vtDebug = "";
+          // Il campionamento sta QUI e non nel modulo, ed e' la stessa ragione
+          // per cui la transizione era da sistemare: uno <script> a modulo
+          // gira DOPO `pagereveal`, cioe' dopo l'istante che di questa
+          // transizione interessa di piu'. Un misuratore che arriva tardi
+          // misura solo la parte che gia' andava bene. Qui si raccolgono i
+          // numeri, il modulo li racconta.
+          const reg = { campioni: [], nome: null, durata: 0 };
+          reg.fine = new Promise((r) => (reg.chiudi = r));
+          window.__vt = reg;
+          addEventListener(
+            "pagereveal",
+            (e) => {
+              const vt = e.viewTransition;
+              if (!vt) return reg.chiudi();
+              vt.ready.then(() => {
+                const t0 = performance.now();
+                const el = document.documentElement;
+                const x = (n) => {
+                  const t = getComputedStyle(el, "::view-transition-group(" + n + ")").transform;
+                  const m = /matrix\(([^)]*)\)/.exec(t);
+                  return m ? parseFloat(m[1].split(",")[4]) : NaN;
+                };
+                reg.nome = ["lens-object", "portfolio-hero"].find((n) => !isNaN(x(n))) || null;
+                let viva = true;
+                const passo = () => {
+                  if (!viva) return;
+                  reg.campioni.push({ t: performance.now() - t0, x: reg.nome ? x(reg.nome) : 0 });
+                  requestAnimationFrame(passo);
+                };
+                passo();
+                vt.finished.finally(() => {
+                  viva = false;
+                  reg.durata = performance.now() - t0;
+                  reg.chiudi();
+                });
+              });
+            },
+            { once: true },
+          );
+        }
       } catch {
-        // Navigazione privata con lo storage negato: pazienza, niente rallentatore.
+        // Navigazione privata con lo storage negato: pazienza, niente strumenti.
       }
     </script>
 
@@ -314,6 +434,24 @@ const jsonLd = {
          Gli import restano statici di proposito: così il pezzo di codice
          viaggia con la pagina e resta in cache fra una lente e l'altra —
          a essere rimandata è l'accensione, non lo scaricamento. -->
+    <!-- Il racconto della sonda: import dinamico, quindi il file non viene
+         nemmeno scaricato se nessuno l'ha chiesto con `?vt=debug`.
+
+         E arriva DOPO la fine della transizione, non prima. Scaricare e
+         valutare un modulo mentre l'oggetto vola e' esattamente il tipo di
+         lavoro che fa perdere fotogrammi: misurato, con l'import in testa la
+         stessa transizione passava da 16 campioni a 8 e da 18ms di buco
+         peggiore a 357. Uno strumento che peggiora quello che misura non
+         misura niente. I numeri intanto sono gia' al sicuro: li raccoglie
+         l'interruttore inline qui sopra. -->
+    <script>
+      if (document.documentElement.hasAttribute("data-vt-debug")) {
+        void window.__vt?.fine.then(() =>
+          import("../scripts/vt-debug").then((m) => m.initVtDebug()),
+        );
+      }
+    </script>
+
     <script>
       import Lenis from "lenis";
       import { gsap } from "gsap";

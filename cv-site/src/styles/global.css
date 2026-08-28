@@ -129,13 +129,10 @@ button {
   --radius-16: 1rem;
   /* Raggio unico per buttons (decisione 2026-07-10) */
   --radius-4: 0.25rem;
-  /* 340 e non piu' 500. La regola di progetto e' «mai oltre 300ms» e la
-     transizione di pagina era l'unica eccezione mai discussa: misurata col
-     browser sulla build vera, non ci arrivava comunque — 500ms nominali si
-     chiudevano in 610-700, cioe' il motore era gia' fuori tempo massimo
-     prima ancora di disegnare. Meno fotogrammi da consegnare e' il modo
-     piu' diretto di consegnarli tutti. */
-  --duration-page: 340ms;
+  /* Il volo dell'oggetto condiviso. Quando parte non lo decide il CSS: lo
+     decide la pagina, quando ha finito di nascere — vedi Layout.astro,
+     § "L'oggetto in volo aspetta che la pagina sia in piedi". */
+  --duration-page: 260ms;
   --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
 
   /* ── Scala delle dimensioni ───────────────────────────────────────────
@@ -556,62 +553,82 @@ body {
   navigation: auto;
 }
 
-/* ── La radice non si dissolve: si cambia ─────────────────────────────────
-   Terzo e ultimo giro su questo passaggio, e vale la pena scrivere per
-   intero anche i due scartati, perche' sono l'argomento del terzo.
+/* ── La pagina non si fotografa, e l'oggetto parte dopo ───────────────────
+   Quarto giro, e questa volta la misura ha detto una cosa diversa dalle
+   altre tre. Le prime tre discutevano di COME far cambiare i due testi —
+   sovrapposti (due testi leggibili insieme, scartata il 27/08), sfalsati
+   (un fotogramma vuoto in mezzo, scartata il 28/08), di netto. Tutte e tre
+   sbagliavano bersaglio: il difetto non era la dissolvenza, era che nei
+   primi ~150ms della transizione **il browser non consegna nessun
+   fotogramma**. L'oggetto restava fermo, poi attraversava mezzo schermo in
+   un salto solo. La mediana dei fotogrammi diceva 16,7ms e sembrava tutto
+   a posto: la mediana e' il numero sbagliato quando un'animazione si
+   pianta all'inizio e poi recupera, perche' i pochi fotogrammi rimasti
+   sono regolari. Il numero giusto e' il buco piu' lungo.
 
-   1. Le due istantanee di pagina si sovrapponevano, com'e' di serie: per
-      mezzo secondo i due testi restavano leggibili tutti e due, uno sopra
-      l'altro, mentre la fotocamera era ancora per aria. Scartata il
-      2026-08-27.
-   2. Allora sono state sfalsate — la vecchia esce, poi entra la nuova.
-      Toglie la sovrapposizione e ne mette un'altra al suo posto: fra
-      l'uscita e l'ingresso c'e' un fotogramma in cui a schermo non c'e'
-      NESSUN testo. Verificato mettendo in pausa le animazioni dei pseudo e
-      sfogliandole a mano: a 70ms il testo della home e' a meta' opacita', a
-      135ms lo schermo e' vuoto — solo fondo e oggetto in volo — a 240ms
-      rientra il testo della lente. Finche' la transizione girava a dieci
-      fotogrammi al secondo quel vuoto era indistinguibile dal resto della
-      poltiglia; sistemata la fluidita', e' diventato la cosa piu' visibile
-      del passaggio. Scartata il 2026-08-28.
-   3. Nessuna dissolvenza. Il contenuto cambia di netto sotto l'oggetto che
-      vola.
+   Da dove vengono quei 150ms, letti nella traccia del browser: la
+   transizione fra due documenti parte al PRIMO DISEGNO della pagina di
+   arrivo, cioe' nell'istante in cui quella pagina ha appena finito il suo
+   primo layout (688 oggetti) e deve ancora decodificare le immagini della
+   testata e rasterizzare. Non e' codice nostro che si mette di traverso:
+   e' la pagina che nasce. Nessuna scelta di dissolvenza puo' spostarla.
 
-   La terza non e' un ripiego, e' la sola che qui abbia senso: tutte e tre
-   le lenti e l'ingresso condividono lo STESSO ottanio, quindi una
-   dissolvenza fra due di queste schermate non si legge mai come una
-   dissolvenza — si legge come "il testo se n'e' andato". Non c'e' nessuna
-   differenza di fondo che il passaggio possa raccontare. La continuita' la
-   porta gia' l'oggetto condiviso, che e' esattamente il suo mestiere: la
-   fotocamera resta la stessa cosa mentre tutto il resto cambia, ed e' lei
-   che dice al lettore che non e' finito da un'altra parte.
+   Due mosse, e la seconda e' quella che risolve.
 
-   `animation: none` e non `animation-duration: 0s`: cosi' spariscono
-   ENTRAMBE le animazioni di serie sulle istantanee — la dissolvenza e il
-   `mix-blend-mode: plus-lighter` che la accompagna. Quel blend serve
-   quando i due strati si attraversano davvero; senza attraversamento resta
-   solo il conto, due strati grandi quanto la finestra fusi a ogni
-   fotogramma, ed e' meta' del motivo per cui il passaggio non era fluido
-   (misurato: un fotogramma ogni 33-100ms dove la stessa pagina a riposo ne
-   fa uno ogni 16,7).
+   1. `view-transition-name: none` sulla radice. Di serie il browser
+      fotografa TUTTA la pagina su entrambi i lati e poi anima le due
+      istantanee; senza nome non le fotografa affatto e la pagina di arrivo
+      si disegna dal vivo, come in una navigazione qualunque, mentre
+      l'oggetto condiviso vola sopra. Sparisce anche il `plus-lighter` di
+      serie, cioe' due strati grandi quanto la finestra fusi a ogni
+      fotogramma. Misurato: fotogrammi persi da 6 su 15 a 3 su 18.
+      Conseguenza voluta: dove non c'e' un oggetto condiviso non resta
+      niente da animare, e un salto a /privacy torna a essere un salto.
 
-   Conseguenza voluta anche sulla radice: senza animazioni, dove NON c'e'
-   un elemento condiviso la transizione non dura niente e la pagina cambia
-   e basta. Prima anche un salto a /privacy si portava dietro mezzo secondo
-   di dissolvenza che nessuno aveva chiesto. */
-::view-transition-group(root),
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation: none;
-  mix-blend-mode: normal;
+   2. **L'oggetto non parte insieme alla pagina: la lascia nascere.** Se in
+      quei 150ms non si puo' disegnare, l'errore e' chiedere di disegnare.
+      L'animazione parte in pausa e riparte quando la pagina consegna tre
+      fotogrammi di fila in tempo — restare fermi e' la sola cosa che
+      riesce sempre, e un fotogramma perso mentre nulla si muove non si
+      vede. Il quando non e' nel CSS ma in Layout.astro, § "L'oggetto in
+      volo aspetta che la pagina sia in piedi", e li' c'e' anche il perche'
+      un'attesa FISSA non bastava.
+
+   Misurato, quattro prove per variante, Chromium con GPU a 1440x900,
+   guardando il buco piu' lungo DURANTE il volo:
+
+     com'era            84ms   ·  6 fotogrammi persi su 15  ·  10/13/18/15 posizioni
+     solo la mossa 1    84ms   ·  3 su 18                   ·  17/16/18/18
+     con l'attesa fissa 20,1ms ·  1 su 16                   ·  17/17/17/17
+
+   Quei numeri pero' erano tutti a browser CALDO, e li' l'attesa fissa
+   sembrava aver chiuso la faccenda. Non l'aveva chiusa: ripetendo le prove
+   a browser freddo, cioe' la prima navigazione dopo l'apertura — il caso
+   di chi arriva dal QR sul PDF — il buco tornava sopra i 300ms, e anche a
+   caldo ballava fra 21 e 92 da una prova all'altra. Da li' l'attesa
+   adattiva della mossa 2.
+
+   L'ultima colonna e' quella che conta piu' del resto: quante posizioni
+   distinte ha toccato l'oggetto in volo. Prima cambiava a ogni prova —
+   l'animazione dipendeva da quanto era occupato il browser in quel
+   momento. Adesso e' identica ogni volta.
+
+   Il prezzo e' che dal clic all'oggetto atterrato passano ~450ms invece di
+   340. Non e' attesa vera: la pagina nuova e' gia' tutta li' dal primo
+   fotogramma, e' solo l'oggetto che la raggiunge dopo. Si guarda con
+   `?vt=slow` e si misura con `?vt=debug` (§ Rallentatore). */
+:root {
+  view-transition-name: none;
 }
 
-::view-transition-old(root) {
-  opacity: 0;
-}
-
-::view-transition-new(root) {
-  opacity: 1;
+::view-transition-group(lens-object),
+::view-transition-old(lens-object),
+::view-transition-new(lens-object),
+::view-transition-group(portfolio-hero),
+::view-transition-old(portfolio-hero),
+::view-transition-new(portfolio-hero) {
+  animation-duration: var(--duration-page);
+  animation-timing-function: var(--ease-standard);
 }
 
 /* ── Rallentatore ─────────────────────────────────────────────────────────
@@ -630,14 +647,6 @@ body {
    non esiste, e l'attributo lo mette solo chi lo chiede a mano. */
 :root[data-vt-slow] {
   --duration-page: 3400ms;
-}
-
-/* Il gruppo dell'oggetto in volo e' l'unica cosa che dura: e' lui a
-   spostare e ridimensionare le due istantanee, ed e' lui a decidere quanto
-   dura tutto il passaggio. */
-::view-transition-group(portfolio-hero) {
-  animation-duration: var(--duration-page);
-  animation-timing-function: var(--ease-standard);
 }
 
 .work-index-hero {

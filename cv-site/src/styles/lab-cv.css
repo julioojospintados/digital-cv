@@ -2090,10 +2090,10 @@
   view-transition-name: lens-object;
 }
 
-::view-transition-group(lens-object) {
-  animation-duration: var(--duration-page);
-  animation-timing-function: var(--ease-standard);
-}
+/* I tempi del volo — attesa, durata, curva — non stanno qui: stanno in
+   global.css, § "La pagina non si fotografa", insieme al motivo per cui
+   l'oggetto parte in ritardo. Sono gli stessi per questo oggetto e per
+   quello del portfolio, e vanno cambiati in un posto solo. */
 
 /* Riduzione, non eliminazione: senza nome condiviso resta la transizione di
    default del browser, la pagina cambia e nessun oggetto attraversa lo
