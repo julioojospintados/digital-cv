@@ -60,6 +60,13 @@ interface Props {
 const { lens, locale } = Astro.props;
 const t = LOCALES[locale];
 const data = locale === "en" ? cvDataEn : cvData;
+// Il marchio LinkedIn, in linea e non da file: e' una sola forma, la vuole
+// in `currentColor` per seguire lo stato del link, e un <img> costerebbe una
+// richiesta in piu' per 700 byte. `aria-hidden` sul disegno, il nome del link
+// lo porta lo <span class="lc-sr"> accanto: un collegamento fatto di sola
+// icona senza nome accessibile e' un collegamento muto.
+const LINKEDIN_SVG = `<svg class="lc-contacts__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path fill="currentColor" d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05a3.74 3.74 0 0 1 3.37-1.85c3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.07 2.07 0 1 1 0-4.14 2.07 2.07 0 0 1 0 4.14ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0Z"/></svg>`;
+
 const profile = profileCopy(lens, locale);
 const tagline = TAGLINE[locale];
 // I percorsi cambiano con la lingua: l'inglese vive sotto /en.
@@ -349,8 +356,18 @@ const markStyle = (nome: string): string | undefined => {
         <div class="lc-head__glow" aria-hidden="true"></div>
 
         <div class="lc-head__text">
-          <h1 class="lc-name">{data.personal.name}</h1>
-          <p class="lc-role">{modeLabel}</p>
+          {
+            /* Nome e ruolo sulla stessa riga da desktop: sono la stessa
+              informazione — chi sei e in quale veste — e separarli su due
+              righe faceva scendere di un rigo tutto il resto della testata.
+              Sotto i 48rem la pillola va a capo da sola (flex-wrap), che è
+              il comportamento giusto: lì la larghezza non basta e spezzare
+              è meglio che stringere il nome. */
+          }
+          <div class="lc-ident">
+            <h1 class="lc-name">{data.personal.name}</h1>
+            <p class="lc-role">{modeLabel}</p>
+          </div>
 
           <p class="lc-claim">{heroTitle}</p>
 
@@ -416,8 +433,14 @@ const markStyle = (nome: string): string | undefined => {
             <span class="lc-contacts__sep" aria-hidden="true">·</span>
             {
               linkedin && (
-                <a href={linkedin.url} target="_blank" rel="noopener noreferrer">
-                  LinkedIn
+                <a
+                  href={linkedin.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="lc-contacts__in"
+                >
+                  <Fragment set:html={LINKEDIN_SVG} />
+                  <span class="lc-sr">LinkedIn</span>
                 </a>
               )
             }
@@ -503,7 +526,6 @@ const markStyle = (nome: string): string | undefined => {
               <details class="lc-lane">
                 <summary class="lc-lane__head">
                   <span class="lc-lane__name">
-                    <span class="tick" aria-hidden="true" />
                     <span
                       class:list={["lc-lane__key", `lc-lane__key--${lane.key}`]}
                       aria-hidden="true"
@@ -520,6 +542,7 @@ const markStyle = (nome: string): string | undefined => {
                     ))}
                     <span class="lc-tl__now" style={`left:${tlNow}%`} />
                   </span>
+                  <span class="tick" aria-hidden="true" />
                 </summary>
 
                 <ul class="lc-lane__list" role="list">
