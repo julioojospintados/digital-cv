@@ -40,6 +40,7 @@
 // TESTI: cv.ts, cv-i18n e lab-copy.ts (verbatim da index.astro). Nessuna
 // copy scritta qui.
 import Layout from "../layouts/Layout.astro";
+import lexend700 from "@fontsource/lexend/files/lexend-latin-700-normal.woff2?url";
 import { cvData } from "@cv-data";
 import { cvDataEn } from "@cv-data-en";
 import { buildCvViewModel } from "../lib/cv-view-model";
@@ -117,13 +118,12 @@ const items = rawItems.map((item, i) => {
   };
 });
 
-// ── Strato 1: le due righe di intestazione ───────────────────────────────
-// Prima i ruoli ancora in corso (è il dato più cercato: "dove lavora ora"),
-// nell'ordine curato di exp-clusters.ts; se ce n'è meno di due si completa
-// col più recente. Escono sempre da `items`, mai scritti a mano.
-const current = items.filter((i) => i.endYear === t.present);
-const byRecency = [...items].sort((a, b) => Number(b.startYear) - Number(a.startYear));
-const headline = [...current, ...byRecency.filter((i) => !current.includes(i))].slice(0, 2);
+// Qui stava "Dove lavora ora": due righe con azienda, ruolo e anni dei
+// due incarichi ancora aperti. Tolte il 2026-08-27 su richiesta di Giulio.
+// Che i ruoli siano ancora in corso lo dicono gia' le barre della cronologia
+// in testata, che arrivano a oggi; quello che si perde e' il NOME
+// dell'azienda sopra la piega — si legge scendendo di una schermata, dove
+// le esperienze cominciano. E' un costo noto, non una svista.
 
 // Il portfolio è la prova decisiva per il ruolo di design, e solo per
 // quello: su /tech o /human diventa un'uscita laterale che porta via
@@ -212,12 +212,31 @@ const tlNow = pct(annoOra);
 
 const email = data.social.find((s) => s.platform === "Email");
 const linkedin = data.social.find((s) => s.platform === "LinkedIn");
-// Le lingue non stanno piu' nella riga dei puntini: sono una fila di
-// pastiglie, una per lingua, col livello staccato dal nome. Prima erano
-// quattro delle sei voci di un unico elenco puntato che mescolava luogo,
-// disponibilita' e lingue con lo stesso separatore e lo stesso peso —
-// niente diceva dove finiva un tipo di dato e cominciava l'altro.
-const langChips = data.languages.map((l) => ({ name: l.name, level: l.level }));
+// Le lingue non stanno piu' nella riga dei puntini — quattro delle sei voci
+// di un unico elenco che mescolava luogo, disponibilita' e lingue con lo
+// stesso separatore e lo stesso peso — e dal 2026-08-27 non sono nemmeno
+// piu' pastiglie: sono una scala, una riga per lingua, con i sei gradini
+// del Quadro europeo accanto alla sigla. Perche' una scala, e perche' la
+// sigla resta comunque scritta, sta nel commento di .lc-langs in lab-cv.css.
+//
+// Il livello nei dati e' una stringa: "B2" per chi ha un codice,
+// "Madrelingua" / "Native" per chi non ce l'ha. Il codice si cerca DENTRO
+// la stringa invece di confrontarla per intero, cosi' la stessa riga vale
+// per l'italiano e per l'inglese senza una mappa per lingua.
+const CEFR = ["A1", "A2", "B1", "B2", "C1", "C2"] as const;
+
+const langChips = data.languages.map((l) => {
+  const gradino = CEFR.findIndex((c) => l.level.toUpperCase().includes(c));
+  return {
+    name: l.name,
+    level: l.level,
+    // Quattro tacche per un B2. Chi non ha un codice e' madrelingua: la
+    // scala si accende tutta, ma di un colore suo — non e' "un C2
+    // abbondante", e' un'altra categoria.
+    steps: gradino >= 0 ? gradino + 1 : CEFR.length,
+    native: gradino < 0,
+  };
+});
 
 // ── Strato 2c: percorso e voci ───────────────────────────────────────────
 // timelineItems arriva già unito e ordinato dal piu recente da
@@ -234,6 +253,30 @@ const formazione = timelineItems.filter((i) => i.type === "edu");
 const certificazioni = timelineItems.filter((i) => i.type === "cert");
 
 const MAX_CHIPS = 6;
+
+// ── Fuori orario ─────────────────────────────────────────────────────────
+// Il cluster `personal`: otto lavori fatti prima e accanto al mestiere, piu'
+// tre cose fatte per il gusto di farle (il film, il vinile, la poesia). Non
+// e' filtrato per lente — non e' una lente, e' una persona — e nasce chiuso:
+// chi legge un CV non ha chiesto questo, chi vuole saperlo apre.
+//
+// Per un anno questi dati sono rimasti in exp-clusters.ts senza che nessuna
+// pagina li leggesse. Il prezzo di quel silenzio e' documentato nell'avviso
+// su PROJ_CARD_META: tre riferimenti sfasati che nessuno poteva vedere.
+const offCluster = expClusters.find((c) => c.key === "personal");
+const offItems = offCluster?.items ?? [];
+const offLabel = offCluster?.label ?? "";
+
+// Lo stile della gronda del marchio: il file, e quando il marchio lo chiede
+// anche la sua altezza (vedi `altezza` in issuer-marks.ts). Sta nel
+// frontmatter e non nel markup perché i due elenchi qui sotto — formazione e
+// certificazioni — sono la stessa riga scritta due volte: una regola che vale
+// per uno e non per l'altro sarebbe un difetto invisibile.
+const markStyle = (nome: string): string | undefined => {
+  const m = issuerMark(nome);
+  if (!m.logo) return undefined;
+  return `--lc-mark: url("/logos/${m.logo}.svg")${m.altezza ? `; --lc-mark-h: ${m.altezza}` : ""}`;
+};
 ---
 
 <Layout
@@ -252,6 +295,26 @@ const MAX_CHIPS = 6;
     fetchpriority="high"
   />
 
+  {
+    /* Il 700 di Lexend, chiesto in testa e non scoperto dipingendo.
+
+       Un carattere si scarica quando serve a disegnare, cioe' dopo il primo
+       calcolo di layout — e quando arriva quel calcolo si rifa'. Misurato
+       sulla traccia del browser: `RemoteFontLoaded`, poi
+       `ScheduleStyleRecalculation`, poi un Layout da 63ms su 383 oggetti di
+       688, tutto dentro i primi 90ms della transizione dalla home. E' un
+       fotogramma solo, ma dura quanto quattro, ed e' quello in cui l'oggetto
+       in volo si pianta.
+
+       Chiesto da qui parte col parsing invece che col primo disegno, quindi
+       il testo nasce gia' con il carattere giusto e quel secondo layout non
+       esiste. Funziona perche' la home ha gia' fatto scendere il file
+       (`rel="prefetch"` in HomeEntryPage.astro): qui e' un colpo alla cache,
+       non una richiesta di rete. Le due righe si tengono per mano — se un
+       giorno sparisce quella di la', questa da sola arriva comunque tardi. */
+  }
+  <link slot="head" rel="preload" as="font" type="font/woff2" href={lexend700} crossorigin />
+
   <div class="lc">
     <!-- Barra. Non sticky: una barra fissa mangia proprio la fascia alta in
          cui si giocano i primi sette secondi. -->
@@ -260,6 +323,47 @@ const MAX_CHIPS = 6;
         <go-logo></go-logo>
       </a>
       <p class="lc-bar__tagline">{tagline}</p>
+
+      <!-- Selettore di lente. Sta qui, accanto al cambio lingua, perche' e'
+           la stessa famiglia di gesto: due modi di rileggere la stessa
+           pagina, non due contenuti. Resta retrocesso — chi arriva da un
+           annuncio UX non deve leggere "sono anche altre due cose" nei sette
+           secondi in cui decide — ma la retrocessione ora la fa la misura,
+           non il nascondersi in fondo alla colonna del testo.
+           <details> nativo, opzioni = link veri. -->
+      <details class="lc-lens">
+        <summary class="lc-lens__trigger">
+          <span class="lc-lens__dot" aria-hidden="true"></span>
+          {
+            /* "Stai vedendo:" resta nel nome accessibile ma esce dalla
+              pastiglia: in barra la frase intera non ci sta, e senza di essa
+              il comando si annuncerebbe solo col nome della lente — che non
+              dice che cosa fa. */
+          }
+          <span class="lc-lens__label">
+            <span class="lc-sr">{t.ui.youAreViewing} </span><b>{modeLabel}</b>
+          </span>
+          <span class="lc-lens__chevron tick" aria-hidden="true"></span>
+        </summary>
+        <ul class="lc-lens__list" role="list">
+          {
+            MODES.map((m) => (
+              <li>
+                <a
+                  href={lensPath(m, locale)}
+                  class:list={["lc-lens__opt", { "is-current": m === lens }]}
+                  data-lens={m}
+                  aria-current={m === lens ? "page" : undefined}
+                >
+                  <span class="lc-lens__opt-dot" aria-hidden="true" />
+                  {t.modeLabels[m]}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </details>
+
       <LangSwitch locale={locale} href={otherHref} />
     </header>
 
@@ -313,25 +417,6 @@ const MAX_CHIPS = 6;
             }
           </div>
 
-          <!-- "Dove lavora ora, e prima": il dato più fissato in assoluto
-               nello screening iniziale. -->
-          <dl class="lc-now">
-            {
-              headline.map((h) => (
-                <div class="lc-now__row">
-                  <dt class="lc-now__years">
-                    {h.startYear ? `${h.startYear} — ${h.endYear}` : ""}
-                  </dt>
-                  <dd class="lc-now__what">
-                    <b>{h.company}</b>
-                    <span class="lc-now__sep"> · </span>
-                    {h.role}
-                  </dd>
-                </div>
-              ))
-            }
-          </dl>
-
           <!-- Il PDF per primo: è l'oggetto che il recruiter inoltra
                all'hiring manager, e sulla pagina CV attuale non è linkato
                da nessuna parte pur esistendo in public/cv/. -->
@@ -368,7 +453,19 @@ const MAX_CHIPS = 6;
             {
               langChips.map((l) => (
                 <li class="lc-lang">
-                  {l.name}
+                  <span class="lc-lang__name">{l.name}</span>
+                  {/* La scala e' aria-hidden per intero: dice con una forma
+                      quello che la sigla accanto dice con due caratteri, e
+                      sei tacche lette una per una non sono un'informazione,
+                      sono rumore. */}
+                  <span
+                    class:list={["lc-lang__scale", { "is-native": l.native }]}
+                    aria-hidden="true"
+                  >
+                    {CEFR.map((_, i) => (
+                      <span class:list={["lc-lang__step", { "is-on": i < l.steps }]} />
+                    ))}
+                  </span>
                   <b class="lc-lang__lvl">{l.level}</b>
                 </li>
               ))
@@ -389,34 +486,11 @@ const MAX_CHIPS = 6;
             }
           </p>
 
-          <!-- Selettore di lente retrocesso: non tre pulsanti di pari peso
-               in cima. Chi arriva da un annuncio UX non deve leggere "sono
-               anche altre due cose" nei sette secondi in cui sta decidendo.
-               <details> nativo, opzioni = link veri. -->
-          <details class="lc-lens">
-            <summary class="lc-lens__trigger">
-              <span class="lc-lens__dot" aria-hidden="true"></span>
-              <span class="lc-lens__label">{t.ui.youAreViewing} <b>{modeLabel}</b></span>
-              <span class="lc-lens__chevron tick" aria-hidden="true"></span>
-            </summary>
-            <ul class="lc-lens__list" role="list">
-              {
-                MODES.map((m) => (
-                  <li>
-                    <a
-                      href={lensPath(m, locale)}
-                      class:list={["lc-lens__opt", { "is-current": m === lens }]}
-                      data-lens={m}
-                      aria-current={m === lens ? "page" : undefined}
-                    >
-                      <span class="lc-lens__opt-dot" aria-hidden="true" />
-                      {t.modeLabels[m]}
-                    </a>
-                  </li>
-                ))
-              }
-            </ul>
-          </details>
+          {
+            /* Il selettore di lente stava qui, in coda alla colonna del testo.
+              Dal 2026-08-27 e' in barra, accanto al cambio lingua: il perche'
+              e' scritto la', sul markup. */
+          }
         </div>
 
         <!-- Oggetto + sigla. L'ombra è la stessa immagine annerita, sfocata
@@ -796,11 +870,7 @@ const MAX_CHIPS = 6;
                 <li class="lc-path__row">
                   <span
                     class:list={["lc-path__mark", { "is-logo": issuerMark(e.institution).logo }]}
-                    style={
-                      issuerMark(e.institution).logo
-                        ? `--lc-mark: url("/logos/${issuerMark(e.institution).logo}.svg")`
-                        : undefined
-                    }
+                    style={markStyle(e.institution)}
                     aria-hidden="true"
                   >
                     {!issuerMark(e.institution).logo && issuerMark(e.institution).sigla}
@@ -827,11 +897,7 @@ const MAX_CHIPS = 6;
                 <li class="lc-path__row">
                   <span
                     class:list={["lc-path__mark", { "is-logo": issuerMark(c.institution).logo }]}
-                    style={
-                      issuerMark(c.institution).logo
-                        ? `--lc-mark: url("/logos/${issuerMark(c.institution).logo}.svg")`
-                        : undefined
-                    }
+                    style={markStyle(c.institution)}
                     aria-hidden="true"
                   >
                     {!issuerMark(c.institution).logo && issuerMark(c.institution).sigla}
@@ -853,6 +919,53 @@ const MAX_CHIPS = 6;
             }
           </ul>
         </div>
+      </section>
+
+      <!-- ── Fuori orario ─────────────────────────────────────────────────
+           Otto lavori e tre cose fatte per passione, in una sezione che nasce
+           CHIUSA. E' l'unica parte della pagina che non prova niente: le
+           esperienze provano il mestiere, il percorso prova i titoli, le voci
+           provano il modo di lavorare. Questa dice soltanto chi sei quando
+           smetti di lavorare, e per questo non puo' stare aperta in mezzo alle
+           altre — chi legge un CV non ha chiesto questo.
+
+           Le schede sono le stesse .lc-job--flat delle esperienze, non una
+           forma nuova: qui non c'e' niente da espandere (nessun highlight,
+           nessun cliente), e una scheda che si apre su niente e' un'affordance
+           che mente — la stessa ragione per cui in "Esperienza" il ramo piatto
+           esiste ancora. -->
+      <section class="lc-off" aria-labelledby="lc-off-title">
+        <details class="lc-off__box">
+          <summary class="lc-off__head">
+            <h2 class="lc-sec-title" id="lc-off-title">{offLabel}</h2>
+            <span class="lc-sec-count">{offItems.length}</span>
+            <span class="lc-off__tick tick" aria-hidden="true"></span>
+          </summary>
+
+          <p class="lc-off__lead">{t.ui.offLead}</p>
+
+          <div class="lc-jobs">
+            {
+              offItems.map((job) => (
+                <article class="lc-job lc-job--flat">
+                  <div class="lc-job__summary">
+                    <span class="lc-job__years">
+                      {job.startYear ? `${job.startYear} — ${job.endYear}` : ""}
+                    </span>
+                    <span class="lc-job__main">
+                      <h3 class="lc-job__title">
+                        <b>{job.company}</b>
+                        {job.role && <span class="lc-job__role"> — {job.role}</span>}
+                      </h3>
+                      {job.location && <span class="lc-job__where">{job.location}</span>}
+                      <span class="lc-job__lead">{job.description}</span>
+                    </span>
+                  </div>
+                </article>
+              ))
+            }
+          </div>
+        </details>
       </section>
 
       <!-- ══ STRATO 3 — 3-5 minuti. Qui solo gli imbocchi: chi arriva fin

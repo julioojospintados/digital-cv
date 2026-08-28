@@ -44,7 +44,7 @@ like items in a knolling photograph.
 | ---------- | ------------- | ------------ | ----------------------- | --------------------------- |
 | `/design`  | `/en/design`  | `creative`   | Web & UX Designer       | Orange `rgba(255,107,53,1)` |
 | `/tech`    | `/en/tech`    | `tech`       | Software Developer      | Cyan `rgba(0,255,200,1)`    |
-| `/ai`      | `/en/ai`      | `human`      | AI & Digital Specialist | Gold `rgba(240,200,127,1)`  |
+| `/ai`      | `/en/ai`      | `human`      | Comunicazione & AI      | Gold `rgba(240,200,127,1)`  |
 
 ⚠️ **The URL slug is NOT the internal key, and must never be conflated with it.**
 `creative` is served at `/design` and `human` at `/ai`. The keys appear ~427 times

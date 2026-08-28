@@ -7,7 +7,7 @@
  * che quell'elenco non riusciva a far vedere: dal 2009 non c'è mai stato meno
  * di tre ruoli in parallelo, con un picco di otto fra il 2017 e il 2018.
  *
- * Le corsie sono tre e non quattro. L'oro di "AI & Digital" non ne ha una
+ * Le corsie sono tre e non quattro. L'oro di "Comunicazione & AI" non ne ha una
  * perché non è un periodo: è un modo di lavorare che attraversa gli altri due,
  * e sulle schede lo dice già il badge AI. Metterlo qui lo farebbe leggere come
  * una fase iniziata nel 2025, che è falso.
@@ -30,7 +30,7 @@ export interface LaneDef {
 
 /** Ordine di stampa: i due mestieri in alto, il resto sotto. */
 export const LANE_DEFS: readonly LaneDef[] = [
-  { key: "tech", labels: { it: "Tecnologia", en: "Technology" } },
+  { key: "tech", labels: { it: "Sviluppo software", en: "Software development" } },
   { key: "design", labels: { it: "Design e comunicazione", en: "Design and communication" } },
   { key: "off", labels: { it: "Fuori orario", en: "Off the clock" } },
 ];

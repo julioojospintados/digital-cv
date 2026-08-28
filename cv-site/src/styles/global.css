@@ -129,7 +129,17 @@ button {
   --radius-16: 1rem;
   /* Raggio unico per buttons (decisione 2026-07-10) */
   --radius-4: 0.25rem;
-  --duration-page: 500ms;
+  /* 340 e non piu' 500. La regola di progetto e' «mai oltre 300ms» e la
+     transizione di pagina era l'unica eccezione mai discussa: misurata col
+     browser sulla build vera, non ci arrivava comunque — 500ms nominali si
+     chiudevano in 610-700, cioe' il motore era gia' fuori tempo massimo
+     prima ancora di disegnare. Meno fotogrammi da consegnare e' il modo
+     piu' diretto di consegnarli tutti. */
+  --duration-page: 340ms;
+  /* L'uscita della vecchia istantanea. Sta qui, e non scritta a mano nelle
+     due regole di @view-transition, perche' la seconda la usa come RITARDO:
+     sono lo stesso numero, e separarli e' il modo di farli divergere. */
+  --duration-page-out: 140ms;
   --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
 
   /* ── Scala delle dimensioni ───────────────────────────────────────────
@@ -552,7 +562,7 @@ body {
 
 /* La radice deve durare quanto l'elemento condiviso.
    Misurato: il browser dà alla radice 250ms fissi, mentre l'oggetto che
-   attraversa (portfolio-hero, lens-object) gira su --duration-page, cioè 500.
+   attraversa (portfolio-hero, lens-object) gira su --duration-page.
    A metà volo lo sfondo e il contenuto erano già scattati alla pagina nuova,
    e quello scatto in mezzo a un movimento ancora in corso è ciò che si legge
    come uno sfarfallio — non è un lampo di rendering, sono due tempi diversi
@@ -561,14 +571,71 @@ body {
    Vale per TUTTE le navigazioni del sito, non solo per quelle con un
    elemento condiviso: dove non c'è nulla da morphare resta comunque una
    dissolvenza sola, un po' più distesa. */
-/* Tutti e tre: `old` e `new` sono le due istantanee che si dissolvono,
-   `group` e' quello che le sposta e le ridimensiona. Con i soli primi due il
-   gruppo restava a 250ms e lo scatto in mezzo al volo rimaneva. */
-::view-transition-group(root),
-::view-transition-old(root),
-::view-transition-new(root) {
+/* Il GRUPPO dura quanto l'oggetto che vola: e' lui a spostare e
+   ridimensionare le istantanee, e se scade prima lo scatto in mezzo al volo
+   torna (era il difetto con i 250ms di serie).
+
+   Le due ISTANTANEE invece non si sovrappongono piu' — scelta di Giulio,
+   2026-08-27. Prima uscivano ed entravano insieme per tutti i 500ms, e fra
+   due pagine che condividono lo stesso ottanio quella dissolvenza non si
+   vedeva: si vedeva solo che per mezzo secondo i due testi restavano
+   leggibili tutti e due, sovrapposti, mentre la fotocamera era ancora per
+   aria. Adesso la vecchia esce in --duration-page-out e la nuova entra nel
+   tempo che resta. Nel mezzo c'e' un istante in cui sullo schermo non c'e' nessun
+   testo: resta il fondo — che e' ottanio in tutte e tre le lenti e arriva
+   dal body, quindi non e' un buco ma il tavolo — con sopra il solo oggetto
+   in volo.
+
+   Il ritardo e' scritto come sottrazione da --duration-page apposta: cosi'
+   l'ingresso finisce esattamente quando l'oggetto atterra, anche il giorno
+   in cui la durata di pagina cambia.
+
+   `both` su tutte e due non e' un dettaglio da copiare a caso: senza
+   `forwards` la vecchia istantanea, finita la sua animazione, tornerebbe
+   opaca per il tempo che resta; senza `backwards` la nuova sarebbe gia'
+   visibile durante il proprio ritardo. In entrambi i casi si rivedrebbero
+   due pagine addosso, cioe' esattamente cio' che questa scelta toglie. */
+::view-transition-group(root) {
   animation-duration: var(--duration-page);
   animation-timing-function: var(--ease-standard);
+}
+
+/* `mix-blend-mode: normal` non e' pignoleria: e' meta' del difetto.
+
+   Di serie il browser fa uscire ed entrare le due istantanee in
+   `plus-lighter`, ed e' la scelta giusta per la dissolvenza che aveva in
+   mente lui — due strati che si attraversano nello stesso istante, dove
+   sommare invece di sovrapporre e' l'unico modo perche' a meta' strada non
+   si veda un avvallamento scuro. Da quando le due istantanee sono
+   sfalsate (sopra) quell'istante non esiste piu': non si attraversano
+   mai, quindi non c'e' niente da sommare — resta solo il conto, due strati
+   grandi quanto la finestra fusi a ogni fotogramma.
+
+   Misurato con Playwright sulla build vera, finestra 1440x900, Chromium
+   con GPU: la stessa pagina a riposo disegna un fotogramma ogni 16,7ms;
+   dentro la transizione ne disegnava uno ogni 33-100ms, cioe' sette o
+   otto in tutto il passaggio. Sette fotogrammi non sono una dissolvenza,
+   sono tre lampi — ed e' esattamente cosi' che si vedeva: uno sfarfallio
+   sui testi, non un cambio di pagina.
+
+   `!important` perche' quel blend il browser non lo dichiara, lo ANIMA
+   (`-ua-mix-blend-mode-plus-lighter`): una regola normale, per quanto
+   specifica, perde contro un'animazione in corso. E' il caso raro in cui
+   `!important` non e' una scorciatoia ma l'unico livello della cascata che
+   sta sopra. */
+::view-transition-old(root) {
+  animation-duration: var(--duration-page-out);
+  animation-fill-mode: both;
+  animation-timing-function: var(--ease-standard);
+  mix-blend-mode: normal !important;
+}
+
+::view-transition-new(root) {
+  animation-delay: var(--duration-page-out);
+  animation-duration: calc(var(--duration-page) - var(--duration-page-out));
+  animation-fill-mode: both;
+  animation-timing-function: var(--ease-standard);
+  mix-blend-mode: normal !important;
 }
 
 .work-index-hero {

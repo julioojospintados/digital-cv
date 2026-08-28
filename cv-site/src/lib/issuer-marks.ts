@@ -31,6 +31,21 @@ export interface IssuerMark {
   logo?: string;
   /** Il ripiego quando un logo utilizzabile non esiste. Max 8 caratteri. */
   sigla: string;
+  /**
+   * Altezza della gronda, quando quella di serie non basta.
+   *
+   * Serve perché `mask-size: contain` non guarda il marchio, guarda il file.
+   * Il file IBM ha un viewBox quadrato (24×24) attorno a un lockup largo e
+   * basso: dentro una gronda alta una riga il quadrato si riduce a una riga,
+   * e il marchio dentro al quadrato resta alto un terzo di quello. Misurato:
+   * IBM rendeva 0,45rem contro gli 1,125rem dello IED, in una colonna che
+   * esiste apposta per allinearli. Alzando la gronda a 3rem il marchio torna
+   * a 1,19rem — la stessa altezza dello IED, che qui è il metro.
+   *
+   * L'altezza in più NON allarga la riga: ci pensa il margine negativo in
+   * `lab-cv.css`. Cresce il glifo, non il ritmo dell'elenco.
+   */
+  altezza?: string;
 }
 
 /**
@@ -41,7 +56,7 @@ export interface IssuerMark {
  * L'ordine conta, vince la prima che combacia.
  */
 const MARKS: readonly (readonly [string, IssuerMark])[] = [
-  ["ibm", { logo: "ibm", sigla: "IBM" }],
+  ["ibm", { logo: "ibm", sigla: "IBM", altezza: "3rem" }],
   ["europeo di design", { logo: "ied", sigla: "IED" }],
   ["skillup", { sigla: "SKILLUP" }],
   ["planet one", { sigla: "PLANET1" }],

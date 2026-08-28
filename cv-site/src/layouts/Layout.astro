@@ -284,23 +284,37 @@ const jsonLd = {
 
     <!-- Lenis smooth scroll + GSAP ScrollTrigger wiring — attivo su tutte
          le pagine, home inclusa. Niente più CSS scroll-snap: coerenza
-         site-wide, i reveal per-sezione sono in index-init.ts (ScrollTrigger). -->
+         site-wide, i reveal per-sezione sono in index-init.ts (ScrollTrigger).
+
+         L'accensione aspetta la fine della transizione di pagina. Non è
+         prudenza: costruire Lenis significa misurare il documento, e il
+         ticker di GSAP aggiunge un giro di rAF a ogni fotogramma — due cose
+         che, arrivando qui dalla home, cadevano dentro il mezzo secondo in
+         cui l'oggetto sta attraversando lo schermo. Il conto misurato e il
+         perché stanno in scripts/after-page-transition.ts.
+
+         Gli import restano statici di proposito: così il pezzo di codice
+         viaggia con la pagina e resta in cache fra una lente e l'altra —
+         a essere rimandata è l'accensione, non lo scaricamento. -->
     <script>
       import Lenis from "lenis";
       import { gsap } from "gsap";
       import { ScrollTrigger } from "gsap/ScrollTrigger";
+      import { afterPageTransition } from "../scripts/after-page-transition";
 
       gsap.registerPlugin(ScrollTrigger);
 
-      const lenis = new Lenis({ lerp: 0.15, syncTouch: true });
-      lenis.on("scroll", ScrollTrigger.update);
-      gsap.ticker.add((time) => {
-        lenis.raf(time * 1000);
-      });
-      gsap.ticker.lagSmoothing(0);
+      afterPageTransition(() => {
+        const lenis = new Lenis({ lerp: 0.15, syncTouch: true });
+        lenis.on("scroll", ScrollTrigger.update);
+        gsap.ticker.add((time) => {
+          lenis.raf(time * 1000);
+        });
+        gsap.ticker.lagSmoothing(0);
 
-      // Expose for pages that need direct access
-      window.__lenis = lenis;
+        // Expose for pages that need direct access
+        window.__lenis = lenis;
+      });
     </script>
 
     <!-- FAB visibile solo dopo il primo scroll — attributo SSR su <html>,

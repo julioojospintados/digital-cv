@@ -13,10 +13,14 @@
  * esperienza può comparire in più cluster con racconti diversi
  * (es. ALTEN come sviluppo, come Tech Lead, come design system).
  *
- * Il cluster `personal` non è legato a nessun mode: si apre dalla voce
- * "Fuori orario" in navbar/dropdown (cv-init.ts) e mostra la persona fuori
- * dal contesto lavorativo. UCI Cinemas (17) e Caveja (21) restano in cv.ts
- * ma fuori da ogni cluster (scelta del 2026-07-15).
+ * Il cluster `personal` non è legato a nessun mode: mostra la persona fuori
+ * dal contesto lavorativo, ed è attivo in tutte e tre le lenti. Dal
+ * 2026-08-27 lo rende di nuovo una pagina — la sezione "Fuori orario" in
+ * fondo a CvLensPage, chiusa di default. Per un anno era rimasto nei dati
+ * senza che niente lo leggesse: è il motivo per cui i suoi tre riferimenti
+ * ai progetti erano sfasati e nessuno se n'era accorto (vedi l'avviso su
+ * PROJ_CARD_META). UCI Cinemas (17) e Caveja (21) restano in cv.ts ma fuori
+ * da ogni cluster (scelta del 2026-07-15).
  */
 
 import type { Locale, Mode } from "./cv-i18n";
@@ -51,6 +55,20 @@ export interface ExpClusterDef {
  * Metadati di presentazione per i progetti mostrati come card esperienza
  * nel cluster personale (il tipo Project non ha ruolo né durata).
  * Chiave = indice in cvData.projects.
+ *
+ * ⚠️ Queste chiavi sono INDICI POSIZIONALI, e un indice posizionale si rompe
+ * in silenzio. È già successo: le tre voci erano su 3, 7 e 9, e qualcuno ha
+ * inserito "Music Agency" in posizione 3 spostando di uno tutto il resto.
+ * Da quel momento la chiave 3 puntava a Music Agency invece che al film
+ * "Double", la 7 al Square Festival invece che a Veni Vidi Vinyl, la 9 al
+ * Salone del Libro invece che alla poesia. Nessuno se n'è accorto perché il
+ * cluster `personal` non era reso da nessuna pagina — l'errore aspettava il
+ * giorno in cui qualcuno lo riaccendeva. Corretto il 2026-08-27 (3→4, 7→8,
+ * 9→10) insieme ai refs qui sotto, che avevano lo stesso sfasamento.
+ *
+ * Il controllo che impedisce il bis è in cv-view-model.test.ts: verifica per
+ * NOME che ogni chiave punti al progetto giusto. Se sposti un progetto in
+ * cvData.projects, quel test cade prima del push invece che in produzione.
  */
 export const PROJ_CARD_META: Record<
   number,
@@ -62,7 +80,7 @@ export const PROJ_CARD_META: Record<
   }
 > = {
   // Film "Double" — prodotto a Torino da Filmine, proiettato a San Francisco
-  3: {
+  4: {
     role: {
       it: "Attore deuteragonista, produzione Filmine",
       en: "Deuteragonist actor, produced by Filmine",
@@ -72,14 +90,14 @@ export const PROJ_CARD_META: Record<
     location: { it: "Torino · San Francisco", en: "Turin · San Francisco" },
   },
   // Veni Vidi Vinyl
-  7: {
+  8: {
     role: { it: "Co-ideatore della serata", en: "Co-creator of the night" },
     startYear: "2017",
     endYear: "2018",
     location: { it: "Torino", en: "Turin" },
   },
   // Poesia  — nessuna data singola: la card nasconde l'intervallo
-  9: {
+  10: {
     role: { it: "Poeta", en: "Poet" },
     location: { it: "Italia · Australia", en: "Italy · Australia" },
   },
@@ -141,7 +159,10 @@ export const EXP_CLUSTER_DEFS: ExpClusterDef[] = [
   },
   {
     key: "human",
-    labels: { it: "AI & Digital", en: "AI & Digital" },
+    // Stesso nome dell'etichetta di lente in cv-i18n.ts, e non per pigrizia:
+    // il titolo di questa sezione e la pastiglia in testata parlano della
+    // stessa cosa, e due nomi diversi si leggono come due cose diverse.
+    labels: { it: "Comunicazione & AI", en: "Communication & AI" },
     tags: "human",
     openForModes: ["human"],
     refs: [
@@ -166,9 +187,9 @@ export const EXP_CLUSTER_DEFS: ExpClusterDef[] = [
     openForModes: [],
     refs: [
       { exp: 8 }, // Presentatore & Live Host
-      { proj: 3 }, // Film "Double"
-      { proj: 7 }, // Veni Vidi Vinyl
-      { proj: 9 }, // Poesia
+      { proj: 4 }, // Film "Double" — era 3, vedi l'avviso su PROJ_CARD_META
+      { proj: 8 }, // Veni Vidi Vinyl — era 7
+      { proj: 10 }, // Poesia — era 9
       { exp: 23 }, // B-Teatro — attore e improvvisatore (2013–2019)
       { exp: 15 }, // B-Teatro — tecnico audio-visivo (2014–2018)
       { exp: 14 }, // None Teatro — insegnante di impro

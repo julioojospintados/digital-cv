@@ -94,7 +94,7 @@ Il sito è strutturato come un gioco narrativo, ma il GO si estende anche al wor
 ### GO nel sito (narrativa utente)
 
 - **Preloader**: `G` e `O` volano verso il nome (G→Giulio, O→Occhipinti) — rituale iniziatico
-- **Landing `/`**: scegliere Software Developer / Web & UX Designer / AI & Digital Specialist è come **scegliere il proprio personaggio**
+- **Landing `/`**: scegliere Software Developer / Web & UX Designer / Comunicazione & AI è come **scegliere il proprio personaggio**
 - **`/cv`**: le card passive diventano sussurri — l'utente esplora senza mai ricominciare da zero
 - **`<go-logo>`**: sempre visibile, click = Master Reset a `/` — mode-reactivo (cyan/orange/gold)
 - **CTA semantica**: sempre `GO Software Developer`, `GO Web & UX Designer`, ecc. — mai "Scopri", "Vedi", "Leggi"

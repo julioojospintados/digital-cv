@@ -82,7 +82,7 @@ tabella completa in §9.
 |---|---|---|---|
 | `tech` | Software Developer | CTO, recruiter tecnico | `laptop.webp`, `flashlight.webp` |
 | `creative` | Web & UX Designer | Art director, agenzia | `camera.webp`, `multitool.webp` |
-| `human` | AI & Digital Specialist | HR, fondatore, no-profit | `plant.webp`, `megaphone.webp` |
+| `human` | Comunicazione & AI | HR, fondatore, no-profit | `plant.webp`, `megaphone.webp` |
 ---
 
 ## 3. Struttura del sito

@@ -63,7 +63,7 @@ ma la regola base è questa — non ripeterla, solo estenderla se serve un termi
 |---|---|---|
 | tech (Software Developer) | Cyan `rgba(0,255,200,1)` | Architetture, codice, AI |
 | creative (Web & UX Designer) | Arancione `rgba(255,107,53,1)` | Storytelling, estetica, fotografia |
-| human (AI & Digital Specialist) | Oro `rgba(240,200,127,1)` | Impatto, relazione, autonomia strategica |
+| human (Comunicazione & AI) | Oro `rgba(240,200,127,1)` | Impatto, relazione, autonomia strategica |
 Il mode cambia **solo l'enfasi visiva** — mai il template, mai la struttura.
 Lo sfondo è **sempre ottanio** rgba(8,73,67,1). Mai hardcodare colori.
 

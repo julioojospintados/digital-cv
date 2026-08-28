@@ -297,7 +297,7 @@ La sezione mostra il badge `MCP` come firma del metodo.
 / (index.astro)
   → Preloader: GO appare, barra si riempie (1.0s)
   → GSAP: G e O "atterrano" nel nome → iulio/cchipinti appaiono char-by-char
-  → Utente sceglie: Software Developer / Web & UX Designer / AI & Digital Specialist (knolling reagisce, GO button appare)
+  → Utente sceglie: Software Developer / Web & UX Designer / Comunicazione & AI (knolling reagisce, GO button appare)
   → CTA "GO Software Developer / Web & UX Designer / etc." → launchJourney() → /cv?mode=X
 
 /cv (cv.astro)

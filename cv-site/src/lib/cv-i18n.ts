@@ -141,6 +141,8 @@ export interface LocaleStrings {
     /** Voci, percorso, imbocchi */
     voices: string;
     pathTitle: string;
+    /** Riga sotto il titolo di "Fuori orario". Voce, non interfaccia. */
+    offLead: string;
     education: string;
     certifications: string;
     inProgress: string;
@@ -164,10 +166,22 @@ const IT: LocaleStrings = {
   },
   present: "oggi",
   skillView: { graph: "Grafico", cards: "Card" },
+  /**
+   * ⚠️ La terza etichetta non nomina il proprio indirizzo, e va bene così.
+   * Si serve su /ai, la chiave interna è `human`, e si legge
+   * "Comunicazione & AI" (scelta di Giulio, 2026-08-27: la comunicazione
+   * contiene l'AI, non viceversa — ed è il nome che dà una casa a teatro,
+   * conduzione e giornalismo, che con "AI & Digital Specialist" non
+   * risultavano pertinenti a nessuna delle tre lenti).
+   *
+   * L'indirizzo NON è stato cambiato insieme al nome, ed è una scelta: /ai è
+   * stampato nel QR dei PDF già in giro e linkato da fuori. Il giorno in cui
+   * si cambia, si cambia in LENS_SLUGS con il suo redirect — non qui.
+   */
   modeLabels: {
     tech: "Software Developer",
     creative: "Web & UX Designer",
-    human: "AI & Digital Specialist",
+    human: "Comunicazione & AI",
   },
   modeDescriptions: {
     tech: "Angular, Lit e TypeScript al servizio del design. Progetto interfacce e le porto in produzione: disegnarle e costruirle sono lo stesso lavoro.",
@@ -241,6 +255,8 @@ const IT: LocaleStrings = {
     highlightedFor: "In evidenza per",
     voices: "Chi ha lavorato con me",
     pathTitle: "Formazione e certificazioni",
+    offLead:
+      "Otto lavori e tre cose fatte per il gusto di farle. Non provano una competenza: dicono con chi hai a che fare.",
     education: "Formazione",
     certifications: "Certificazioni",
     inProgress: "in corso",
@@ -266,7 +282,7 @@ const EN: LocaleStrings = {
   modeLabels: {
     tech: "Software Developer",
     creative: "Web & UX Designer",
-    human: "AI & Digital Specialist",
+    human: "Communication & AI",
   },
   modeDescriptions: {
     tech: "Angular, Lit and TypeScript in service of design. I design interfaces and ship them: drawing them and building them are the same job.",
@@ -335,6 +351,8 @@ const EN: LocaleStrings = {
     highlightedFor: "Highlighted for",
     voices: "People who worked with me",
     pathTitle: "Education and certifications",
+    offLead:
+      "Eight jobs and three things done for the love of doing them. They prove no skill: they tell you who you are dealing with.",
     education: "Education",
     certifications: "Certifications",
     inProgress: "in progress",

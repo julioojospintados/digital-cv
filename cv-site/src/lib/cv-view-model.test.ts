@@ -10,6 +10,7 @@ import {
   type CvSource,
 } from "./cv-view-model";
 import { MODES, DEFAULT_MODE, type Mode } from "./cv-i18n";
+import { EXP_CLUSTER_DEFS, PROJ_CARD_META } from "./exp-clusters";
 
 const IT = cvData as unknown as CvSource;
 const EN = cvDataEn as unknown as CvSource;
@@ -209,5 +210,36 @@ describe("orderSkillsForMode", () => {
   it("è stabile: a parità di punteggio resta l'ordine di cv.ts", () => {
     const neutre = ["Trello", "Scrum", "GitLab"];
     expect(orderSkillsForMode(neutre, "creative")).toEqual(neutre);
+  });
+});
+
+// I riferimenti ai progetti del cluster "Fuori orario" sono indici posizionali
+// in cvData.projects, e un indice posizionale si rompe in silenzio: è già
+// successo una volta (vedi l'avviso su PROJ_CARD_META in exp-clusters.ts), e
+// nessuno se n'è accorto per un anno perché quel cluster non era reso da
+// nessuna pagina. Adesso lo è. Questo controllo ancora ogni chiave al NOME del
+// progetto: sposta un progetto nell'array e il test cade prima del push.
+describe("PROJ_CARD_META — le chiavi puntano ai progetti giusti", () => {
+  const ATTESI: Record<number, { it: string; en: string }> = {
+    4: { it: 'Film "Double"', en: 'Film "Double"' },
+    8: { it: "Veni Vidi Vinyl", en: "Veni Vidi Vinyl" },
+    10: { it: "Poesia", en: "Poetry" },
+  };
+
+  for (const [chiave, nome] of Object.entries(ATTESI)) {
+    it(`${chiave} → ${nome.it}`, () => {
+      expect(PROJ_CARD_META[Number(chiave)]).toBeDefined();
+      expect(IT.projects[Number(chiave)]?.name).toBe(nome.it);
+      expect(EN.projects[Number(chiave)]?.name).toBe(nome.en);
+    });
+  }
+
+  it("il cluster personale cita esattamente quelle tre", () => {
+    const personale = EXP_CLUSTER_DEFS.find((c) => c.key === "personal");
+    const proj = (personale?.refs ?? [])
+      .filter((r): r is { proj: number } => "proj" in r)
+      .map((r) => r.proj)
+      .sort((a, b) => a - b);
+    expect(proj).toEqual(Object.keys(ATTESI).map(Number));
   });
 });
