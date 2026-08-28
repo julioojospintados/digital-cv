@@ -749,13 +749,30 @@
   color: var(--lc-ink);
 }
 
+/* Un pallino, e non piu' un trattino. Il trattino era la stessa forma del
+   comando che apre le righe — `.tick` in global.css e' una barretta
+   orizzontale di 2px che si piega a V quando la riga si apre — con lo stesso
+   peso visivo e a pochi centimetri di distanza sulla stessa pagina. Su
+   «Fuori orario» finivano perfino sulla stessa riga: trattino decorativo a
+   sinistra del titolo, tacca cliccabile a destra. Due segni quasi identici
+   che vogliono dire cose diverse non confondono solo la prima volta:
+   insegnano a diffidare di entrambi, e la tacca e' l'unica delle due che
+   deve essere creduta.
+
+   Il tondo non somiglia a nessun comando del sistema — non c'e' un solo
+   controllo circolare in tutta la pagina — quindi il segno torna a essere
+   quello che e': punteggiatura, non un invito a cliccare. L'accento resta
+   quello della lente: marca il titolo senza doverlo colorare, e il testo
+   resta inchiostro. */
 .lc-sec-title::before {
   content: "";
   flex: 0 0 auto;
-  width: 1.5rem;
-  height: 3px;
-  border-radius: 2px;
+  width: var(--size-8);
+  height: var(--size-8);
+  border-radius: 50%;
   background: var(--color-accent);
+  /* Alzato dalla linea di base fino a metà dell'altezza delle maiuscole:
+     appoggiato sulla base sembrerebbe caduto. */
   transform: translateY(-0.2em);
 }
 
