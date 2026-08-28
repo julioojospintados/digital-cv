@@ -757,6 +757,38 @@ AGENTS.md                 ← This file — tool-agnostic project guide
   what lint cannot see, and a check nobody runs is a check that was not
   written. `SKIP_QA=1 git push` skips them for an urgent push on a work
   branch — not on `main`.
+→ **`format:check` gira con `--cache`, e non è un'ottimizzazione.** Prettier
+  apre tutti i `.astro` del repo in un processo solo, e per ognuno istanzia il
+  compilatore Astro, che è un WASM con una sua memoria lineare che **non si
+  libera fra un file e l'altro**. Su questa macchina (3,9GB, di cui ~1GB
+  liberi con il browser aperto) la catena dell'hook — `npm run lint && npm run
+  format:check` — moriva così, a metà del secondo comando:
+
+  ```
+  runtime: out of memory: cannot allocate 4194304-byte block (285016064 in use)
+  fatal error: out of memory
+  ```
+
+  Non era un errore di formattazione, e non era nemmeno un file in
+  particolare: `DesignSystem.astro` (327KB, il più grosso del repo) passava da
+  solo tre volte su tre, ma sommato agli altri faceva traboccare il totale. Il
+  sintomo è ingannevole due volte — il messaggio arriva da un runtime Go che
+  con questo progetto non c'entra niente, e il push si ferma su un comando che
+  in isolamento funziona.
+
+  Con `--cache` prettier salta i file che non sono cambiati (chiave su
+  contenuto + opzioni), quindi il picco scende a quanto serve per il diff
+  vero. **La verifica non si indebolisce**: un file cambiato viene riaperto e
+  ricontrollato come prima, e la cache sta in `node_modules/.cache/prettier/`,
+  già ignorata. In CI la cache parte fredda e il controllo è quello pieno, ma
+  lì la memoria c'è.
+
+  La cura vera è un'altra ed è ancora aperta: `DesignSystem.astro` è un
+  componente da 6.600 righe, e continuerà a crescere perché la regola «ogni
+  componente sta in vetrina» lo impone. Va spezzato per gruppi (ingresso,
+  lente, work, sistema). Finché non succede, `--cache` è ciò che tiene in
+  piedi il push su questa macchina.
+
 → Typecheck and unit tests stay in CI rather than in the hook: they duplicate
   what the build already surfaces locally, and the hook is already the slow
   step.
