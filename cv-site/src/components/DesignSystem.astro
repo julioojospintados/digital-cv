@@ -207,13 +207,20 @@ const MOTION_TOKENS = [
   },
   {
     name: "--duration-page",
-    value: "500ms",
-    use: it ? "Transizioni di pagina" : "Page transitions",
+    value: "360ms",
+    use: it ? "Il volo dell'oggetto condiviso" : "The shared object's flight",
   },
   {
     name: "--ease-standard",
     value: "cubic-bezier(0.4, 0, 0.2, 1)",
     use: it ? "Curva unica del sistema" : "The system's single curve",
+  },
+  {
+    name: "--ease-flight",
+    value: "cubic-bezier(0.32, 0.72, 0, 1)",
+    use: it
+      ? "L'unica eccezione: l'oggetto che attraversa lo schermo"
+      : "The one exception: the object crossing the screen",
   },
 ];
 
@@ -1157,7 +1164,7 @@ const NAV = [
               [
                 { token: "--duration-micro", ms: "150ms" },
                 { token: "--duration-state", ms: "300ms" },
-                { token: "--duration-page", ms: "260ms" },
+                { token: "--duration-page", ms: "360ms" },
                 { token: "--duration-page-out", ms: "140ms" },
               ].map((d) => (
                 <li class="ds-runner">
@@ -1181,6 +1188,14 @@ const NAV = [
               <span class="ds-runner__label"><code>--ease-standard</code></span>
               <span class="ds-runner__track">
                 <span class="ds-runner__dot" style="--ds-dur:600ms"></span>
+              </span>
+            </li>
+            <li class="ds-runner">
+              <span class="ds-runner__label"><code>--ease-flight</code></span>
+              <span class="ds-runner__track">
+                <span
+                  class="ds-runner__dot"
+                  style="--ds-dur:600ms;--ds-ease:cubic-bezier(0.32,0.72,0,1)"></span>
               </span>
             </li>
             <li class="ds-runner">

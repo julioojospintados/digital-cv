@@ -132,8 +132,14 @@ button {
   /* Il volo dell'oggetto condiviso. Quando parte non lo decide il CSS: lo
      decide la pagina, quando ha finito di nascere — vedi Layout.astro,
      § "L'oggetto in volo aspetta che la pagina sia in piedi". */
-  --duration-page: 260ms;
+  --duration-page: 360ms;
   --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  /* La curva del solo oggetto che attraversa. `--ease-standard` e' fatta per
+     spostamenti brevi — parte decisa e frena in fretta, che su 640px di
+     percorso si legge come uno strappo iniziale. Questa parte piu' morbida e
+     scivola nell'arrivo: su una distanza lunga e' la differenza fra un
+     oggetto lanciato e un oggetto accompagnato. */
+  --ease-flight: cubic-bezier(0.32, 0.72, 0, 1);
 
   /* ── Scala delle dimensioni ───────────────────────────────────────────
      Griglia da 4px, in rem, ancorata allo stesso root della scala
@@ -628,7 +634,7 @@ body {
 ::view-transition-old(portfolio-hero),
 ::view-transition-new(portfolio-hero) {
   animation-duration: var(--duration-page);
-  animation-timing-function: var(--ease-standard);
+  animation-timing-function: var(--ease-flight);
 }
 
 /* ── Rallentatore ─────────────────────────────────────────────────────────
@@ -646,7 +652,7 @@ body {
    Non e' codice di prova lasciato in giro: senza attributo questa regola
    non esiste, e l'attributo lo mette solo chi lo chiede a mano. */
 :root[data-vt-slow] {
-  --duration-page: 3400ms;
+  --duration-page: 3600ms;
 }
 
 .work-index-hero {

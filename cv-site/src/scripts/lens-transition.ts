@@ -52,7 +52,24 @@ export function initLensTransition(): void {
       const obj = section?.querySelector<HTMLElement>(
         ".lh-section__object img:not(.lh-obj__shadow)",
       );
-      if (obj) obj.style.viewTransitionName = NAME;
+      if (!obj) return;
+      obj.style.viewTransitionName = NAME;
+      // E parte senza la sua ombra di contatto. Non e' un ritocco estetico:
+      // `filter: drop-shadow()` allarga il riquadro che il browser fotografa
+      // — l'ombra fa parte dell'inchiostro dell'elemento — quindi l'oggetto
+      // volava piu' grande di se stesso e con un alone scuro attorno.
+      // Misurato ritagliando la zona dei due bottoni della lente durante il
+      // volo: a 180ms, con l'ombra, la fotocamera copriva ancora meta' di
+      // "Portfolio — case study" e il testo si leggeva attraverso l'alone;
+      // senza, quella striscia e' pulita. Era il "flickering sulle CTA", che
+      // sembrava un cambio di carattere e invece era un'ombra di passaggio.
+      //
+      // Ed e' anche la cosa giusta a prescindere dal difetto: dall'altra
+      // parte l'immagine non ha nessun filtro (l'ombra della lente e' un
+      // ELEMENTO a parte, `.lc-obj__shadow`), quindi i due capi del morph
+      // ora sono lo stesso oggetto. Un morph fra un oggetto con l'ombra e
+      // uno senza non e' un morph, e' una dissolvenza fra due cose diverse.
+      obj.style.filter = "none";
     });
   });
 }
