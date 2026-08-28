@@ -71,15 +71,25 @@ Lo sfondo è **sempre ottanio** rgba(8,73,67,1). Mai hardcodare colori.
 
 | URL | File | Ruolo |
 |---|---|---|
-| `/` | `index.astro` | Entry: preloader GO + le 4 mode-card (knolling) |
-| `/tech` `/creative` `/human` | `[mode].astro` | Pagina CV filtrata per mode |
+| `/` · `/en` | `index.astro` · `en/index.astro` | Ingresso — gusci di `components/HomeEntryPage.astro` |
+| `/design` `/tech` `/ai` | `[lens].astro` | Pagina CV — guscio di `components/CvLensPage.astro` |
+| `/en/design` `/en/tech` `/en/ai` | `en/[lens].astro` | Le stesse, in inglese: **stesso componente** |
 | `/work` · `/work/<slug>` | `work/index.astro` · `work/[slug].astro` | Indice e case study |
-| `/privacy` | `privacy.astro` | Informativa (linkata dal banner di consenso) |
-| `/en` | `en/index.astro` | Entry inglese |
-| `/en/cv` | `en/cv.astro` | CV inglese (pagina statica, mode lato client) |
-| `/en/work` · `/en/work/<slug>` · `/en/privacy` | `en/…` | Controparti EN |
-| `/home` | `home.astro` | Legacy — redirect 301 a `/` |
-| `/cv` | `cv.astro` | Legacy — redirect 301 a `/creative` (DEFAULT_MODE) |
+| `/en/work` · `/en/work/<slug>` · `/en/privacy` | `en/…` | Controparti EN (ancora file separati) |
+| `/privacy` | `privacy.astro` | Informativa |
+| `/home` `/cv` `/creative` `/human` `/en/cv` | `astro.config.mjs` | Legacy — 301 di rete, non pagine |
+
+⚠️ **Il sito storico non esiste più** (2026-08-26). `/old-version` e tutto
+ciò che serviva solo a lui — cinque pagine, cinque componenti card, l'isola
+`SkillForceGraph` con D3, `cv-init.ts`, `index-init.ts`, `mode-helpers.ts`,
+tre fogli di stile e `WorkDesignSystem.astro` — è stato cancellato. Vive in
+`github.com/julioojospintados/old-digital-cv`. Non ricrearlo qui: se serve
+mostrarlo, si deploya quel repo.
+
+⚠️ **Lo slug dell'URL non è la chiave interna.** `creative` si serve su
+`/design`, `human` su `/ai`. Le chiavi compaiono ~427 volte nei dati, nel CSS
+`[data-mode]`, nei test: la mappa sta in `LENS_SLUGS` / `MODE_BY_SLUG` /
+`lensPath()` in `cv-i18n.ts`, ed è l'unico posto dove si costruisce un URL.
 
 ### Islands Lit attive
 
@@ -87,7 +97,7 @@ Lo sfondo è **sempre ottanio** rgba(8,73,67,1). Mai hardcodare colori.
 |---|---|---|
 | `GoLogo.lit.ts` | `<go-logo>` | Logo animato, click = reset a `/`, colore mode-reactive |
 | `FloatingMenu.lit.ts` | `<floating-menu>` | FAB: contatti, feedback |
-| `SkillForceGraph.lit.ts` | `<skill-force-graph>` | Grafo D3 force-directed delle skill |
+
 
 ### Parità IT ↔ EN — non solo i testi
 
@@ -96,11 +106,15 @@ non l'ordine degli elementi, non lo stato di default, non il comportamento,
 non la logica che li calcola. Vale per ordine DOM dei mode, voce attiva o
 accordion aperto di default, ordinamenti, contenuto delle dropdown.
 
-Unica asimmetria legittima: le pagine CV IT prendono il mode dalla route
-(`[mode].astro`), mentre `/en/cv` è una pagina statica senza mode nel path,
-quindi renderizza `DEFAULT_MODE` e cambia lato client. Va espressa
-**riusando la logica IT con `DEFAULT_MODE` al posto di `mode`**, mai con una
-condizione hardcoded tipo `=== "tech"`.
+**Dal 2026-08 non esiste più un'asimmetria legittima.** Ingresso e pagina CV
+sono un componente solo che riceve `locale` e rende entrambe le lingue; le
+quattro rotte sono gusci da otto righe. Le stringhe stanno in tabelle
+tipizzate (`LocaleStrings.ui` in `cv-i18n.ts`, `lab-copy.ts` per la voce):
+una chiave che manca in una lingua è un **errore di compilazione**. Se ti
+trovi a scrivere `=== "tech"` o `locale === "en" ? A : B` attorno a qualcosa
+che non sia un **percorso** o una **stringa**, fermati.
+
+Restano separate `/work` e `/privacy`: lì la parità è ancora tenuta a mano.
 
 Il mode di default è **`creative`** (Design-first). Cambiarlo tocca più file
 insieme — l'elenco completo è in `AGENTS.md` → "IT ↔ EN parity".

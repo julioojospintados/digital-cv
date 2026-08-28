@@ -1,6 +1,6 @@
 ---
 name: design-system
-description: "Regole visual e tecniche del Digital CV. Carica quando: crei componenti UI, animazioni GSAP, layout, card, skill grid, knolling, mode system (3 mode: tech/creative/human), colori, tipografia, responsive, mobile, GoLogo, FloatingMenu, SkillForceGraph, Lit islands, Awwwards, cursor custom, smooth scroll, bento grid, preloader, View Transitions, ottanio, accent."
+description: "Regole visual e tecniche del Digital CV. Carica quando: crei componenti UI, animazioni GSAP, layout, card, skill grid, knolling, mode system (3 mode: tech/creative/human), colori, tipografia, responsive, mobile, GoLogo, FloatingMenu, Lit islands, Awwwards, cursor custom, smooth scroll, intro dell'ingresso, View Transitions, ottanio, accent."
 ---
 
 # Design System — Knolling CV
@@ -8,7 +8,7 @@ description: "Regole visual e tecniche del Digital CV. Carica quando: crei compo
 ## Riferimento Visivo Knolling — CARICA SEMPRE
 
 **BLOCKING:** Prima di qualsiasi lavoro su layout, card, griglia o mobile — usa `view_image` per caricare:
-`.claude/skills/design-system/knolling-reference.png`
+`.github/skills/design-system/knolling-reference.png`
 
 Questa foto mostra i TUOI oggetti (megafono, laptop, bussola, fotocamera, torcia, scacchi, pianta, multitool)
 disposti in una fotografia knolling reale. È la **referenza visiva assoluta** per ogni decisione di layout.
@@ -30,7 +30,9 @@ davvero invariante. **Tutti gli altri 4 token** (`--color-surface`, `--color-bor
 non sono valori fissi, sono ridefiniti dentro ogni blocco `[data-mode="..."]` in `global.css`.
 Un componente/doc che li mostra come costanti (es. sempre gli stessi valori `:root`) mostra
 dati sbagliati ogni volta che gira in un mode diverso dal default — bug reale trovato e
-corretto il 2026-07-23 in `WorkDesignSystem.astro` (leggeva `:root` invece del mode attivo).
+corretto il 2026-07-23 in `WorkDesignSystem.astro`, che leggeva `:root` invece del mode
+attivo. Quel componente è stato cancellato il 2026-08-26 con il resto del sito storico:
+la lezione resta, il file no.
 **Mai colori hardcoded — sempre CSS custom properties.**
 
 ```css
@@ -72,10 +74,10 @@ alpha composto sull'ottanio):
   5.64:1, viola 4.73:1 — entrambi conformi), come bordo, come linea.
 → Se serve quel colore come testo, va **schiarito verso il bianco del minimo
   necessario**: arancione al 50%, viola al 45% (→ 4.70:1 e 4.75:1 sul fondo
-  di `/lab/home`). Ciano e oro restano interi. Il pattern è in
+  dell'ingresso). Ciano e oro restano interi. Il pattern è in
   `lab-home.css`: token `--accent` per i riempimenti, `--accent-text` per il
   testo.
-→ Questo è anche il motivo per cui i bottoni di `/lab/home` sono pieni e non
+→ Questo è anche il motivo per cui i bottoni dell'ingresso sono pieni e non
   fantasma: con il testo colorato su fondo trasparente due mode su quattro
   sarebbero fuori norma.
 
@@ -83,7 +85,7 @@ alpha composto sull'ottanio):
 
 Un gradiente, un bagliore, una luce d'ambiente: qualunque strato chiaro alza
 la luminanza del fondo e **abbassa il contrasto di tutto il testo sopra**.
-Caso reale (2026-08-11, `/lab/home`): un fondale con lampada bianca al 16% +
+Caso reale (2026-08-11, sull'ingresso): un fondale con lampada bianca al 16% +
 velo d'accento al 9% ha portato il testo secondario da 5.32:1 a **3.15:1** —
 sotto soglia, per un effetto puramente decorativo. Corretto scendendo a 8% e
 6% e togliendo l'alpha al testo.
@@ -182,7 +184,7 @@ inline nel testo, spaziatura equivalente). Vale per i toggle delle pagine
 
 ⚠️ L'anello di focus del sito usa `--color-accent`, e su ottanio i margini
 sono stretti: **creative 3.62:1** contro una soglia di 3.00:1.
-Conforme, ma con poco margine — una schiarita del fondo lo fa cadere. È esattamente quello che è successo su `/lab/home`, dove col fondale
+Conforme, ma con poco margine — una schiarita del fondo lo fa cadere. È esattamente quello che è successo sull'ingresso, dove col fondale
 illuminato l'anello arancione è sceso a **2.57:1**: lì è stato portato
 all'inchiostro chiaro (6.4:1 su tutte e quattro le schede). **Un anello di
 focus non è un elemento di marca** — è l'unica cosa che dice a chi naviga da
@@ -238,8 +240,12 @@ Cambia solo l'**enfasi visiva** tramite `data-state="active|passive"`:
 - Card con tag corrispondente al mode → `opacity: 1` (active)
 - Altre card → `opacity: var(--card-opacity-passive)` — mai `display:none` (sono sussurri)
 
-Il JavaScript in `cv.astro` applica `data-state` confrontando i `data-tags` con il mode corrente.
-Il CSS gestisce `opacity` e `transform` in base a `data-state`.
+⚠️ Il meccanismo `data-state` / `data-tags` descritto qui **non è più vivo**: lo
+guidava `cv.astro`, cancellato il 2026-08-26 col resto del sito storico. Ne
+restano solo le regole in `global.css`, che oggi nessun elemento indossa. La
+regola di disegno invece vale ancora, ed è quella che conta: una card fuori
+lente si abbassa di opacità, non sparisce. Chi la reimplementerà parta da lì,
+non dal CSS orfano.
 
 ---
 
@@ -294,18 +300,27 @@ La sezione mostra il badge `MCP` come firma del metodo.
 ## Flusso Utente
 
 ```
-/ (index.astro)
-  → Preloader: GO appare, barra si riempie (1.0s)
-  → GSAP: G e O "atterrano" nel nome → iulio/cchipinti appaiono char-by-char
-  → Utente sceglie: Software Developer / Web & UX Designer / Comunicazione & AI (knolling reagisce, GO button appare)
-  → CTA "GO Software Developer / Web & UX Designer / etc." → launchJourney() → /cv?mode=X
+/ · /en   (components/HomeEntryPage.astro)
+  → Intro GO: le due lettere atterrano nel nome, il resto compare
+    carattere per carattere, gli oggetti si posano a onda (lab-home-intro.ts).
+    Tornando è compressa a 20ms: un clic sul logo l'ha già marcata come vista.
+  → Una schermata per volta, con aggancio (lab-home-scroll.ts): il piano
+    knolling con gli otto oggetti, "Chi sono", poi le tre sezioni-lente.
+  → CTA "GO to …" → l'oggetto della sezione riceve il nome condiviso
+    (lens-transition.ts) e vola nella testata della lente.
 
-/cv (cv.astro)
-  → Dati da cv.ts via @cv-data
-  → Navbar sticky con toggle mode (cambia mode senza ricaricare)
-  → Sezioni: Hero · Skills Bento · Esperienze · AI Workflow · Soft Skills · Mindset · Progetti · Formazione
-  → Mode persiste in localStorage via modeStore.ts
+/design · /tech · /ai   (+ /en/…)   (components/CvLensPage.astro)
+  → Dati da cv.ts / cv.en.ts via @cv-data
+  → La lente cambia SOLO l'enfasi visiva: stesso template, stessa struttura,
+    stesso ottanio. Si sceglie dalla tendina in barra, ed è un indirizzo —
+    non uno stato in localStorage.
+  → Il logo GO riporta all'ingresso e l'oggetto rivola al suo posto nel
+    knolling (script inline in HomeEntryPage.astro).
 ```
+
+⚠️ Nessuna di queste due pagine è un file di rotta: sono componenti che
+ricevono `locale`, e le quattro rotte sono gusci da otto righe. Vedi
+`AGENTS.md` § "IT ↔ EN parity" prima di aggiungerci un `if`.
 
 ---
 
@@ -313,9 +328,9 @@ La sezione mostra il badge `MCP` come firma del metodo.
 
 | Componente                   | Ruolo narrativo                                                                  |
 | ---------------------------- | -------------------------------------------------------------------------------- |
-| `<go-logo>`                  | Ancora universale — click = Master Reset a `/`. Mode-reactivo (cyan/orange/gold) |
-| Mode cards (`index.astro`)   | Non pulsanti: **portali** — sensazione di "entrare in un mondo"                  |
-| GSAP Flip bento (`cv.astro`) | Ribilanciamento spazio al cambio mode — "Yes, And..." della griglia              |
+| `<go-logo>`                  | Ancora universale — click = ritorno all'ingresso, con l'oggetto che rivola al suo posto. Mode-reattivo (ciano/arancio/oro) |
+| Sezioni-lente (ingresso)     | Non pulsanti: **portali** — una schermata per lente, e l'oggetto che attraversa è ciò che rende il passaggio un ingresso e non un salto |
+| Oggetti knolling             | Ognuno è un mestiere posato sul tavolo: sono loro a viaggiare fra le pagine, non le card |
 | Knolling objects             | Risposta ambientale alla scelta: `is-hero` / `is-dim`                            |
 | Preloader GO                 | Rituale iniziatico — GSAP timeline: glow flash → sfuma → G/O atterrano nel nome  |
 
@@ -325,14 +340,14 @@ La sezione mostra il badge `MCP` come firma del metodo.
 
 | Pattern                 | Libreria / Metodo                              | Stato                           |
 | ----------------------- | ---------------------------------------------- | ------------------------------- |
-| Smooth scroll           | `Lenis` (`lerp: 0.08`)                         | ✅ implementato in Layout.astro |
-| Custom cursor           | CSS + GSAP follower (dot + ring)               | ✅ implementato in Layout.astro |
-| ScrollTrigger reveals   | GSAP ScrollTrigger + `.reveal` / `.is-visible` | ✅ parziale (cv.astro)          |
-| Split text hero         | char-by-char stagger (G/O separati)            | ✅ implementato in index.astro  |
+| Smooth scroll           | `Lenis` (`lerp: 0.15`)                         | ✅ implementato in Layout.astro |
+| Custom cursor           | Lampada: punto + alone, GSAP quickTo           | ✅ implementato in Layout.astro |
+| ScrollTrigger reveals   | GSAP ScrollTrigger, parallasse e ingressi      | ✅ in lab-home-scroll.ts        |
+| Split text hero         | char-by-char stagger (G/O separati)            | ✅ in lab-home-intro.ts         |
 | Noise grain overlay     | SVG `feTurbulence` filter + CSS `body::after`  | ✅ implementato in global.css   |
-| Preloader brandizzato   | GSAP timeline (GO → nome)                      | ✅ implementato in index.astro  |
-| Magnetic buttons        | `mousemove` + GSAP translate                   | ✅ implementato sulle mode card |
-| View Transitions        | `astro:transitions` / `startViewTransition`    | ❌ non usate (scelta esplicita) |
+| Intro brandizzata       | GSAP timeline (GO → nome)                      | ✅ in lab-home-intro.ts         |
+| Magnetic buttons        | `mousemove` + GSAP translate                   | ❌ mai implementati             |
+| View Transitions        | `@view-transition` fra documenti, oggetto condiviso | ✅ sono LA transizione del sito |
 | Responsive Mobile-First | Named media query (`@custom-media`, postcss)   | ✅ parziale                     |
 | Skip link               | `.skip-link` in Layout.astro                   | ✅ implementato                 |
 | Focus visible           | `:focus-visible` in global.css                 | ✅ implementato                 |
@@ -489,7 +504,7 @@ Oltre 80ms per item si percepisce come lentezza, non coreografia.
 }
 ```
 
-Hardware-accelerato. Applicabile alle sezioni di `cv.astro` con `IntersectionObserver`.
+Hardware-accelerato. Applicabile a una sezione con `IntersectionObserver`.
 
 ### CSS vs GSAP — Quando Usare Cosa
 
@@ -537,8 +552,8 @@ display (es. `clamp(2rem, 5vw, 4.5rem)`) restano fuori da questa scala: sono
 deliberatamente continui/responsivi, il loro valore giusto dipende dal
 viewport reale, non da un token fisso. Il pavimento dei 12px vale comunque
 anche lì — nessun bound minimo di un clamp può scendere sotto `var(--fs-12)`
-(vedi `SkillSquare.astro`, i due clamp con `cqi` hanno pavimento a
-`--fs-12`/`--fs-10` per lo stesso motivo).
+(lo faceva anche `SkillSquare.astro`, con due clamp in `cqi` e pavimento a
+`--fs-12`/`--fs-10`: componente cancellato il 2026-08-26, regola invariata).
 
 ### Il criterio giusto per `--fs-12`: natura del dato, non tipo di componente
 
@@ -608,7 +623,7 @@ non la dimensione — e la guida non lo diceva:
 Quindi: se una riga è poco leggibile, prima di alzare il corpo, prova a
 togliere il maiuscolo o a stringere il tracking. Alzare il corpo di una riga
 in mono maiuscolo spaziato la rende **più larga** senza renderla molto più
-leggibile — errore commesso il 2026-08-11 su `.lh-cred` in `/lab/home`.
+leggibile — errore commesso il 2026-08-11 su `.lh-cred` nell'ingresso.
 
 ### DO NOT (typography)
 
@@ -653,7 +668,10 @@ leggibile — errore commesso il 2026-08-11 su `.lh-cred` in `/lab/home`.
 
 - `Lenis` in `Layout.astro`, integrato con GSAP ticker via `gsap.ticker.add()`
 - `data-lenis-prevent` su modal/overlays che hanno scroll interno
-- Velocità: `lerp: 0.08` — più lento = più premium
+- Velocità: `lerp: 0.15`. Questa guida ha detto `0.08` fino al 2026-08-26,
+  ed era sbagliato: il valore è stato alzato in `ab113a9` perché a 0,08 lo
+  scorrimento continuava per troppo tempo dopo il gesto, e su trackpad
+  sembrava che la pagina non rispondesse. Fra doc e codice vince il codice.
 - `(window as any).__lenis` esposto globalmente per pagine che ne hanno bisogno
 
 ---
@@ -661,7 +679,7 @@ leggibile — errore commesso il 2026-08-11 su `.lh-cred` in `/lab/home`.
 ## CSS — Regole di Igiene
 
 - **Un solo blocco per selettore** — niente `.reveal` definito due volte con varianti diverse
-- **La classe `.reveal`** usa `.is-visible` (GSAP, cv.astro) E `.visible` (componenti statici) — entrambe già coperte in global.css
+- **`.reveal` / `.is-visible` / `.visible` in `global.css` non le indossa più nessuno**: erano del sito cancellato il 2026-08-26. Non costruirci sopra credendole vive — o si tolgono, o si riusano sapendo che partono da zero
 - **I token definiti devono essere usati** — se non sono referenziati con `var()`, rimuoverli
 - **Nessun colore inline** — neanche negli `style=""` degli oggetti knolling (solo `--kx`, `--ky`, ecc.)
 

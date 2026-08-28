@@ -136,10 +136,11 @@ Quando leggi il file `.todo.md` depenna i punti completati, ma non sentirti obbl
 
 Il **sito principale** (`cv-site/`) usa:
 
-- **Astro** (shell statica, routing statico per mode)
-- **Lit** (web components interattivi — 3 islands: GoLogo, FloatingMenu, SkillForceGraph)
+- **Astro** (shell statica, una rotta per lente)
+- **Lit** (web components interattivi — 2 islands: GoLogo, FloatingMenu)
 - **NanoStores** (stato globale mode: tech / creative / human)
-- **GSAP** + **ScrollTrigger** (animazioni, reveal, warp navigation)
+- **GSAP** + **ScrollTrigger** (intro dell'ingresso, parallasse, aggancio delle sezioni)
+- **View Transitions** fra documenti (l'oggetto knolling che attraversa da una pagina all'altra)
 - **D3** (grafo skill force-directed)
 - **View Transitions API** (transizioni animate)
 
@@ -207,12 +208,15 @@ src/                      ← MCP server + HTTP API (Node.js / TypeScript)
 
 cv-site/                  ← Sito Astro (il CV vero e proprio)
   src/
-    pages/                ← Astro pages (index, home, [mode], en/cv)
-    components/cards/     ← Componenti Astro statici (ExpCard, AiCard, ProjectCard, SkillSquare, SoftItem)
-    islands/              ← Lit web components (GoLogo, FloatingMenu, SkillForceGraph)
+    pages/                ← Solo rotte: gusci da 8 righe attorno ai due componenti sotto
+    components/           ← HomeEntryPage.astro (ingresso) e CvLensPage.astro (lente),
+                            ognuno rende IT ed EN ricevendo `locale`
+    components/cards/     ← WorkIndexCard.astro — l'unica card rimasta
+    islands/              ← Lit web components (GoLogo, FloatingMenu)
     islands/stores/       ← NanoStore modeStore
-    scripts/              ← GSAP init scripts (cv-init.ts, index-init.ts)
-    styles/global.css     ← CSS custom properties per i 4 mode
+    scripts/              ← Logica client condivisa (lab-home-intro, lab-home-scroll,
+                            lens-transition, memory-drawer, work-journey…)
+    styles/global.css     ← CSS custom properties per le 3 lenti
   DESIGN.md               ← Specifica completa design system
 
 .vscode/
