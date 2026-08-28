@@ -336,6 +336,13 @@ const MOTION = [
       : "The active panel tints the room. @property is required because an unregistered custom property cannot be interpolated.",
   },
   {
+    name: it ? "Transizione di pagina" : "Page transition",
+    how: "View Transitions · --duration-page · --ease-flight",
+    rule: it
+      ? "Vola solo l'oggetto condiviso: la pagina non si fotografa. E parte quando quella d'arrivo ha finito di nascere, non insieme a lei."
+      : "Only the shared object flies: the page is not photographed. And it starts when the arriving page has finished being born, not together with it.",
+  },
+  {
     name: it ? "Deriva degli oggetti" : "Object drift",
     how: "CSS · animation-timeline: view()",
     rule: it
@@ -666,6 +673,10 @@ const NAV = [
       { id: "salto-al-contenuto", label: it ? "Salto al contenuto" : "Skip to content" },
       { id: "stati", label: t.secStates },
       { id: "mobile", label: t.secMobile },
+      {
+        id: "transizione-di-pagina",
+        label: it ? "Transizione di pagina" : "Page transition",
+      },
       { id: "animazioni", label: t.secMotion },
       { id: "accessibilita", label: t.secA11y },
     ],
@@ -5861,6 +5872,114 @@ const NAV = [
         </div>
       </section>
 
+      <section
+        class="ds-panel"
+        data-ds-panel="transizione-di-pagina"
+        aria-labelledby="transizione-di-pagina-t"
+      >
+        <div class="ds-panel__head">
+          <h2 class="ds-section__title" id="transizione-di-pagina-t">
+            {it ? "Transizione di pagina" : "Page transition"}
+          </h2>
+          <span class="ds-panel__group"
+            >{it ? "Sistema" : "System"}<span class="ds-origin">view-transition</span></span
+          >
+        </div>
+
+        <p class="ds-sub__note">
+          {
+            it
+              ? "L'unico movimento del sistema che attraversa due pagine. Dall'ingresso a una lente, la fotocamera della sezione «design» è la stessa che accoglie su /design: dandole lo stesso nome sui due lati, il browser la tratta come UN oggetto che cambia posto invece che come due immagini scorrelate. È l'oggetto a portare la continuità — e deve portarla da solo, perché fra due schermate dello stesso ottanio una dissolvenza non si legge come una dissolvenza: si legge come «il testo se n'è andato»."
+              : "The only motion in the system that crosses two pages. From the entry to a lens, the camera in the «design» section is the same one that greets you on /design: give it the same name on both sides and the browser treats it as ONE object changing place, not two unrelated images. The object carries the continuity — and it has to carry it alone, because between two screens of the same ottanio a cross-fade does not read as a cross-fade: it reads as «the text went away»."
+          }
+        </p>
+
+        <div class="ds-stage">
+          <div class="ds-flight">
+            <div class="ds-flight__track">
+              <span class="ds-flight__from" aria-hidden="true"></span>
+              <img
+                class="ds-flight__obj"
+                src="/knolling/camera.webp"
+                alt=""
+                aria-hidden="true"
+                data-ds-snippet
+              />
+            </div>
+            <button class="ds-mode-btn" type="button" data-ds-flight-replay>
+              {it ? "Rigioca il volo" : "Replay the flight"}
+            </button>
+          </div>
+        </div>
+        <p class="ds-sub__note">
+          {
+            it
+              ? "La dimostrazione anima posizione e misura per riprodurre i tempi: durata e curva sono quelle vere, lette dagli stessi token. Nella pagina reale a muoversi è il gruppo ::view-transition-group, che costruisce il browser — qui non è riproducibile, perché richiede due documenti."
+              : "The demo animates position and size to reproduce the timing: duration and curve are the real ones, read from the same tokens. On the real page what moves is the ::view-transition-group the browser builds itself — not reproducible here, because it takes two documents."
+          }
+        </p>
+
+        <div class="ds-spec">
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specClass}</span>
+            <p class="ds-spec__v">
+              <code>view-transition-name: lens-object</code> · <code>portfolio-hero</code>
+            </p>
+          </div>
+          <div class="ds-spec__row">
+            <span class="ds-spec__k">{t.specUse}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Solo quando lo stesso oggetto esiste davvero su tutte e due le pagine. Sulla pagina di partenza il nome si assegna al clic (lens-transition.ts), mai nel CSS: lo stesso oggetto compare in tre sezioni, e un nome fisso farebbe leggere al browser qualunque navigazione come «stesso oggetto, nuova posizione». Sulla pagina di arrivo invece è statico, e lì è corretto: non c'è nessun clic da intercettare e il primo fotogramma deve già portarlo."
+                  : "Only when the same object genuinely exists on both pages. On the departing page the name is assigned on click (lens-transition.ts), never in CSS: the same object appears in three sections, and a static name would make the browser read any navigation as «same object, new position». On the arriving page it is static, and there it is correct: there is no click to intercept and the first frame must already carry it."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row">
+            <span class="ds-spec__k">{t.specMotion}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "--duration-page (360ms) con --ease-flight, la sola curva del sistema diversa da --ease-standard: su 640px di percorso quella standard si legge come uno strappo iniziale. La radice NON viene fotografata (view-transition-name: none), quindi la pagina d'arrivo si disegna dal vivo e dove non c'è un oggetto condiviso la navigazione è un salto. E il volo parte in pausa: riparte quando la pagina d'arrivo consegna quattro fotogrammi di fila in tempo, non dopo un'attesa fissa."
+                  : "--duration-page (360ms) with --ease-flight, the system's only curve other than --ease-standard: over 640px of travel the standard one reads as an initial jolt. The root is NOT photographed (view-transition-name: none), so the arriving page paints live and where there is no shared object the navigation is a cut. And the flight starts paused: it resumes when the arriving page delivers four frames in a row on time, not after a fixed wait."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--dont">
+            <span class="ds-spec__k">{t.specDont}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Non lasciare un filtro sull'oggetto che parte: drop-shadow fa parte del suo inchiostro, quindi allarga il riquadro fotografato e l'oggetto vola più grande di sé, con un alone che scurisce quello che sorvola. Non mettere il nome nel CSS di una pagina che è anche sorgente di altre navigazioni. E non rimettere una dissolvenza sulla radice: è stata provata sovrapposta (due testi leggibili insieme) e sfalsata (un fotogramma vuoto in mezzo), e scartata due volte."
+                  : "Do not leave a filter on the departing object: drop-shadow is part of its ink, so it widens the captured box and the object flies bigger than itself, with a halo that darkens whatever it passes over. Do not put the name in the CSS of a page that is also the source of other navigations. And do not bring back a cross-fade on the root: it was tried overlapping (two readable texts at once) and staggered (an empty frame in between), and rejected twice."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specA11y}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "A movimento ridotto il nome non viene assegnato da nessuna delle due parti: nessun oggetto attraversa lo schermo e la pagina cambia e basta. Riduzione, non eliminazione — la navigazione resta identica, solo senza volo. E la transizione non trattiene mai il contenuto: la pagina d'arrivo è completa e leggibile dal primo fotogramma, è solo la decorazione ad arrivare dopo."
+                  : "With reduced motion the name is assigned on neither side: no object crosses the screen and the page simply changes. Reduction, not removal — navigation is identical, just without the flight. And the transition never withholds content: the arriving page is complete and readable from the first frame; only the decoration arrives later."
+              }
+            </p>
+          </div>
+        </div>
+
+        <div class="ds-callout">
+          <p>
+            <strong>{it ? "Per guardarla." : "To watch it."}</strong>{" "}
+            {
+              it
+                ? "Su qualunque indirizzo del sito: ?vt=slow rallenta il passaggio dieci volte, ?vt=debug stampa in console il buco più lungo, i fotogrammi persi e le posizioni toccate dall'oggetto, ?vt=slowdebug tutti e due, ?vt=off spegne. Restano accesi per la sessione. Servono perché mezzo secondo non si guarda, si subisce — e di questa transizione si è discusso tre volte a memoria di un'impressione."
+                : "On any address on the site: ?vt=slow slows the passage ten times, ?vt=debug prints the worst gap, the dropped frames and the positions the object touched to the console, ?vt=slowdebug both, ?vt=off turns it off. They stay on for the session. They exist because half a second cannot be watched, only endured — and this transition was argued about three times from memory of an impression."
+            }
+          </p>
+        </div>
+      </section>
+
       <section class="ds-panel" data-ds-panel="animazioni" aria-labelledby="animazioni-t">
         <div class="ds-panel__head">
           <h2 class="ds-section__title" id="animazioni-t">{t.secMotion}</h2>
@@ -6076,6 +6195,25 @@ const NAV = [
       if (side && e.matches) side.open = true;
     });
   }
+
+  // ── Il volo, rigiocabile ───────────────────────────────────────────────
+  // Un movimento che dura tre decimi di secondo non si giudica vedendolo una
+  // volta sola, e nella pagina vera per rivederlo bisogna navigare avanti e
+  // indietro. Qui basta un bottone.
+  //
+  // La classe si toglie, si forza un riflusso leggendo offsetWidth, e si
+  // rimette: senza quella lettura il browser accorpa le due modifiche nello
+  // stesso fotogramma, non vede nessun cambiamento e l'animazione non
+  // riparte. E' il modo canonico di rigiocare un'animazione CSS.
+  document.querySelectorAll<HTMLButtonElement>("[data-ds-flight-replay]").forEach((btn) => {
+    const scena = btn.closest<HTMLElement>(".ds-flight");
+    if (!scena) return;
+    btn.addEventListener("click", () => {
+      scena.classList.remove("is-playing");
+      void scena.offsetWidth;
+      scena.classList.add("is-playing");
+    });
+  });
 
   // ── Selettore di mode ──────────────────────────────────────────────────
   // Scrive data-mode sulla radice della vetrina: le custom properties dei tre
