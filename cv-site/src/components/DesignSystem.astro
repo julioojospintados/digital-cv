@@ -622,7 +622,6 @@ const NAV = [
     items: [
       { id: "lente-barra", label: it ? "Barra del CV" : "CV bar" },
       { id: "lente-intestazione", label: it ? "Intestazione" : "Header" },
-      { id: "lente-testata-corsie", label: it ? "Corsie in testata" : "Lanes in the header" },
       {
         id: "lente-aureola",
         label: it ? "Aureola e oggetto dell'intestazione" : "Header halo and object",
@@ -2673,107 +2672,6 @@ const NAV = [
       <section
         class="ds-panel"
         data-ds-accent
-        data-ds-panel="lente-testata-corsie"
-        aria-labelledby="lente-testata-corsie-t"
-      >
-        <div class="ds-panel__head">
-          <h2 class="ds-section__title" id="lente-testata-corsie-t">
-            {it ? "Corsie in testata" : "Lanes in the header"}
-          </h2>
-          <span class="ds-panel__group">{t.secLens}<span class="ds-origin">lc-*</span></span>
-        </div>
-
-        <p class="ds-sub__note">
-          {
-            it
-              ? "Le due corsie di mestiere sopra la piega. Risponde per forma alla domanda che uno si fa davvero guardando un CV — «da quanto lo fa, e lo fa ancora?» — invece di farla ricavare da due righe di testo."
-              : "The two craft lanes above the fold. It answers by shape the question anyone actually asks of a CV — «how long has he done this, and does he still?» — instead of making it be inferred from two lines of text."
-          }
-        </p>
-        <p class="ds-sub__note">
-          {
-            it
-              ? "Non è una seconda cronologia: è la stessa di fondo pagina, ridotta a due righe. Stesso asse, stesso calcolo (heroLanes filtra lanes), stessi colori di corsia. Se le due divergessero, quella in fondo perderebbe credibilità — e sarebbe un difetto che nessuno script sa vedere."
-              : "It is not a second timeline: it is the one at the foot of the page, cut down to two rows. Same axis, same computation (heroLanes filters lanes), same lane colours. If the two diverged, the one below would lose its credibility — and no script would catch it."
-          }
-        </p>
-        <div class="ds-stage">
-          <div class="lc">
-            <div class="lc-hero-tl" data-ds-snippet>
-              <div class="lc-hero-tl__asse">
-                <span class="lc-hero-tl__tick" style="left:0%">2008</span>
-                <span class="lc-hero-tl__tick" style="left:22%">2012</span>
-                <span class="lc-hero-tl__tick" style="left:44%">2016</span>
-                <span class="lc-hero-tl__tick" style="left:66%">2020</span>
-                <span class="lc-hero-tl__tick" style="left:88%">2024</span>
-              </div>
-              <div class="lc-hero-tl__riga">
-                <span class="lc-hero-tl__et"
-                  >{it ? "Sviluppo software" : "Software development"}</span
-                >
-                <span class="lc-hero-tl__track">
-                  <span class="lc-hero-tl__bar lc-tl__bar--tech" style="left:56%;width:41%"></span>
-                  <span class="lc-hero-tl__now" style="left:97%"></span>
-                </span>
-              </div>
-              <div class="lc-hero-tl__riga">
-                <span class="lc-hero-tl__et">
-                  {it ? "Design e comunicazione" : "Design and communication"}
-                </span>
-                <span class="lc-hero-tl__track">
-                  <span class="lc-hero-tl__bar lc-tl__bar--design" style="left:6%;width:91%"></span>
-                  <span class="lc-hero-tl__now" style="left:97%"></span>
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="ds-spec">
-          <div class="ds-spec__row ds-spec__row--wide">
-            <span class="ds-spec__k">{t.specClass}</span>
-            <p class="ds-spec__v">
-              <code
-                >lc-hero-tl · lc-hero-tl__asse · lc-hero-tl__tick · lc-hero-tl__riga ·
-                lc-hero-tl__et · lc-hero-tl__track · lc-hero-tl__bar · lc-hero-tl__now</code
-              >
-            </p>
-          </div>
-          <div class="ds-spec__row">
-            <span class="ds-spec__k">{t.specUse}</span>
-            <p class="ds-spec__v">
-              {
-                it
-                  ? "Una sola volta, fra «disponibile da remoto» e «Dove lavora ora». Le due cose non si sostituiscono: la barra dice da quanto, le righe sotto dicono con chi."
-                  : "Once only, between «available remotely» and «where he works now». The two do not replace each other: the bar says how long, the rows below say with whom."
-              }
-            </p>
-          </div>
-          <div class="ds-spec__row ds-spec__row--dont">
-            <span class="ds-spec__k">{t.specDont}</span>
-            <p class="ds-spec__v">
-              {
-                it
-                  ? "Niente terza corsia in oro. Le lenti sono tre, i mestieri due: l'oro è una lente, non un mestiere, e la terza corsia del sistema è «Fuori orario» — che sopra la piega non ci va. E non ricalcolare gli intervalli qui: si prendono da lanes, o le due cronologie prima o poi si contraddicono."
-                  : "No third lane in gold. There are three lenses but two crafts: gold is a lens, not a craft, and the system's third lane is «Off the clock», which does not belong above the fold. And never recompute the spans here: take them from lanes, or the two timelines will contradict each other sooner or later."
-              }
-            </p>
-          </div>
-          <div class="ds-spec__row ds-spec__row--wide">
-            <span class="ds-spec__k">{t.specA11y}</span>
-            <p class="ds-spec__v">
-              {
-                it
-                  ? "aria-hidden per intero, come la cronologia in fondo: non porta nessun dato esclusivo, e gli anni in chiaro stanno nelle righe di «Dove lavora ora» subito sotto. Il colore della barra è il mestiere e non è mai l'unico segnale — l'etichetta lo scrive accanto (1.4.1). Sotto i 40rem l'etichetta sale sopra la barra: a 390px una colonna da 11rem lascerebbe alla barra meno della metà, e una barra corta non dice più niente."
-                  : "Fully aria-hidden, like the timeline at the foot: it carries no exclusive data, and the years in plain text sit in the «where he works now» rows right below. The bar's colour is the craft and is never the only signal — the label states it alongside (1.4.1). Below 40rem the label moves above the bar: at 390px an 11rem column would leave the bar less than half the width, and a short bar says nothing."
-              }
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section
-        class="ds-panel"
-        data-ds-accent
         data-ds-panel="lente-aureola"
         aria-labelledby="lente-aureola-t"
       >
@@ -3106,8 +3004,8 @@ const NAV = [
               <p class="lc-sec-note">
                 {
                   it
-                    ? "5 esperienze scelte per questa lente · 24 in totale, tutte elencate più sotto."
-                    : "5 entries chosen for this lens · 24 in total, all listed below."
+                    ? "5 esperienze scelte per questa lente · le 24 complete sono qui sopra."
+                    : "5 entries chosen for this lens · all 24 are listed above."
                 }
               </p>
             </div>

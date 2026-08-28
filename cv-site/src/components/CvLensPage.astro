@@ -197,13 +197,6 @@ const lanes = LANE_DEFS.map((def) => {
   };
 });
 
-// Le due corsie di mestiere per la testata. Sono le STESSE di `lanes`, non un
-// secondo calcolo: se la barra in cima e quella in fondo si contraddicessero,
-// la seconda smetterebbe di essere credibile. "Fuori orario" resta fuori — è
-// una corsia di completezza, e la fascia dei primi sette secondi non è il
-// posto per il lavoro da barista.
-const heroLanes = lanes.filter((l) => l.key !== "off");
-
 const tlTicks = Array.from({ length: Math.ceil((tlA - tlDa) / 4) }, (_, k) => tlDa + k * 4).map(
   (anno) => ({ anno, left: pct(anno) }),
 );
@@ -361,41 +354,6 @@ const markStyle = (nome: string): string | undefined => {
 
           <p class="lc-claim">{heroTitle}</p>
 
-          <!-- Le due corsie di mestiere, in testata. Risponde alla domanda che
-               uno si fa davvero guardando un CV — «da quanto lo fa, e lo fa
-               ancora?» — con una forma invece che con due righe di testo.
-               È la stessa grafica della cronologia in fondo, sullo stesso
-               asse e con gli stessi colori: qui riassume, là si apre.
-               aria-hidden per intero, come quella in fondo: il dato in chiaro
-               resta negli anni scritti di «Dove lavora ora» qui sotto. -->
-          <div class="lc-hero-tl" aria-hidden="true">
-            <div class="lc-hero-tl__asse">
-              {
-                tlTicks.map((tk) => (
-                  <span class="lc-hero-tl__tick" style={`left:${tk.left}%`}>
-                    {tk.anno}
-                  </span>
-                ))
-              }
-            </div>
-            {
-              heroLanes.map((lane) => (
-                <div class="lc-hero-tl__riga">
-                  <span class="lc-hero-tl__et">{lane.label}</span>
-                  <span class="lc-hero-tl__track">
-                    {lane.merged.map((m) => (
-                      <span
-                        class:list={["lc-hero-tl__bar", `lc-tl__bar--${lane.key}`]}
-                        style={`left:${m.left}%;width:${m.width}%`}
-                      />
-                    ))}
-                    <span class="lc-hero-tl__now" style={`left:${tlNow}%`} />
-                  </span>
-                </div>
-              ))
-            }
-          </div>
-
           <!-- Il PDF per primo: è l'oggetto che il recruiter inoltra
                all'hiring manager, e sulla pagina CV attuale non è linkato
                da nessuna parte pur esistendo in public/cv/. -->
@@ -492,6 +450,132 @@ const markStyle = (nome: string): string | undefined => {
       </section>
 
       <!-- ══ STRATO 2 — 30 secondi ════════════════════════════════════════ -->
+      <!-- ── 2a. La cronologia completa ───────────────────────────────────
+           Prima il fatto, poi la lettura. Questa sezione dà date, traiettoria
+           e assenza di buchi; la selezione per lente che viene dopo dice
+           quali di quei ruoli contano per chi sta guardando. Stava sotto, ed
+           era il rimedio a un dubbio — «cinque card dal 2019 sembrano un CV
+           da cinque anni» — arrivato però dopo che il dubbio era già venuto.
+           Spostata sopra (scelta di Giulio, 2026-08-28) fa un altro lavoro:
+           non rimedia, previene.
+
+           Con lei se n'è andata la versione ridotta che stava in testata,
+           sotto il badge della lente: due grafiche della stessa cosa a un
+           dito di distanza si facevano concorrenza, e quella piccola non
+           poteva che ripetere ciò che questa dice meglio.
+
+           Era un elenco di ventiquattro righe, e la garanzia bisognava
+           calcolarsela leggendo le date una per una. Ora le stesse date sono
+           barre su un asse condiviso, raggruppate in tre corsie: quello che
+           l'elenco non riusciva a dire — dal 2009 mai meno di tre ruoli in
+           parallelo, otto nel 2017 — si vede senza contare niente.
+
+           Le corsie sono <details> e non JavaScript: si aprono da sole anche
+           senza script, come le schede qui sopra, e chiuse mostrano la
+           copertura unita della corsia invece di sparire. Le barre sono
+           aria-hidden: il dato resta nel testo di ogni riga, che è quello che
+           legge uno screen reader. -->
+      <section class="lc-all" aria-labelledby="lc-all-title">
+        <div class="lc-sec-head">
+          <h2 class="lc-sec-title" id="lc-all-title">
+            {t.ui.allRoles}
+            <span class="lc-sec-count"
+              >{t.ui.sinceCount.replace("{n}", String(data.experience.length))}</span
+            >
+          </h2>
+        </div>
+        <div class="lc-tl">
+          <div class="lc-tl__axisrow" aria-hidden="true">
+            <span class="lc-tl__scale">
+              {
+                tlTicks.map((tk) => (
+                  <span class="lc-tl__tick" style={`left:${tk.left}%`}>
+                    {tk.anno}
+                  </span>
+                ))
+              }
+              <span class="lc-tl__now" style={`left:${tlNow}%`}></span>
+            </span>
+          </div>
+
+          {
+            lanes.map((lane) => (
+              <details class="lc-lane">
+                <summary class="lc-lane__head">
+                  <span class="lc-lane__name">
+                    <span class="tick" aria-hidden="true" />
+                    <span
+                      class:list={["lc-lane__key", `lc-lane__key--${lane.key}`]}
+                      aria-hidden="true"
+                    />
+                    {lane.label}
+                    <span class="lc-lane__n">{lane.count}</span>
+                  </span>
+                  <span class="lc-tl__track" aria-hidden="true">
+                    {lane.merged.map((m) => (
+                      <span
+                        class:list={["lc-tl__bar", `lc-tl__bar--${lane.key}`]}
+                        style={`left:${m.left}%;width:${m.width}%`}
+                      />
+                    ))}
+                    <span class="lc-tl__now" style={`left:${tlNow}%`} />
+                  </span>
+                </summary>
+
+                <ul class="lc-lane__list" role="list">
+                  {lane.items.map((e) => (
+                    <li class:list={["lc-all__row", { "is-lens": e.inLens }]}>
+                      <span class="lc-all__years">
+                        <span class="lc-all__span">{e.years}</span>
+                        <span class="lc-all__from">
+                          {e.startYear}
+                          {e.inProgress && (
+                            <span class="lc-all__on" aria-hidden="true">
+                              →
+                            </span>
+                          )}
+                          <span class="lc-sr">{e.years}</span>
+                        </span>
+                      </span>
+                      <span class="lc-all__what">
+                        <b>{e.company}</b>
+                        <span class="lc-all__sep" aria-hidden="true">
+                          {" "}
+                          ·{" "}
+                        </span>
+                        <span class="lc-all__role">{e.role}</span>
+                      </span>
+                      {e.inLens && (
+                        <>
+                          <span class="lc-all__mark" aria-hidden="true" />
+                          <span class="lc-sr">
+                            {t.ui.highlightedFor} {clusterLabel}
+                          </span>
+                        </>
+                      )}
+                      <span class="lc-tl__track" aria-hidden="true">
+                        <span
+                          class:list={["lc-tl__bar", `lc-tl__bar--${lane.key}`]}
+                          style={`left:${e.left}%;width:${e.width}%`}
+                        />
+                        <span class="lc-tl__now" style={`left:${tlNow}%`} />
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </details>
+            ))
+          }
+        </div>
+      </section>
+
+      <!-- ── 2b. La selezione per lente ────────────────────────────────────
+           Le stesse esperienze di sopra, filtrate e raccontate: qui non si
+           prova più niente — quello l'ha fatto la cronologia — si dice quali
+           di quei ruoli parlano a chi sta guardando da questa lente. È il
+           motivo per cui sta DOPO: una selezione letta prima dell'elenco
+           completo sembra tutto il curriculum, letta dopo si riconosce per
+           quello che è, una scelta. -->
       <section class="lc-exp" aria-labelledby="lc-exp-title">
         <img
           class="lc-bg-knoll"
@@ -686,116 +770,6 @@ const markStyle = (nome: string): string | undefined => {
            aperto". Regge perché il <summary> è ricco (vedi sopra): resta
            azienda, ruolo, anni e una riga di prova, e <details> si apre da
            sé anche senza script. -->
-
-      <!-- ── 2b. La cronologia completa ───────────────────────────────────
-           Il costo del filtro: cinque card dal 2019 fanno sembrare il tuo un
-           CV da cinque anni. Questa sezione è la garanzia di completezza:
-           date, traiettoria, assenza di buchi.
-
-           Era un elenco di ventiquattro righe, e la garanzia bisognava
-           calcolarsela leggendo le date una per una. Ora le stesse date sono
-           barre su un asse condiviso, raggruppate in tre corsie: quello che
-           l'elenco non riusciva a dire — dal 2009 mai meno di tre ruoli in
-           parallelo, otto nel 2017 — si vede senza contare niente.
-
-           Le corsie sono <details> e non JavaScript: si aprono da sole anche
-           senza script, come le schede qui sopra, e chiuse mostrano la
-           copertura unita della corsia invece di sparire. Le barre sono
-           aria-hidden: il dato resta nel testo di ogni riga, che è quello che
-           legge uno screen reader. -->
-      <section class="lc-all" aria-labelledby="lc-all-title">
-        <div class="lc-sec-head">
-          <h2 class="lc-sec-title" id="lc-all-title">
-            {t.ui.allRoles}
-            <span class="lc-sec-count"
-              >{t.ui.sinceCount.replace("{n}", String(data.experience.length))}</span
-            >
-          </h2>
-        </div>
-        <div class="lc-tl">
-          <div class="lc-tl__axisrow" aria-hidden="true">
-            <span class="lc-tl__scale">
-              {
-                tlTicks.map((tk) => (
-                  <span class="lc-tl__tick" style={`left:${tk.left}%`}>
-                    {tk.anno}
-                  </span>
-                ))
-              }
-              <span class="lc-tl__now" style={`left:${tlNow}%`}></span>
-            </span>
-          </div>
-
-          {
-            lanes.map((lane) => (
-              <details class="lc-lane">
-                <summary class="lc-lane__head">
-                  <span class="lc-lane__name">
-                    <span class="tick" aria-hidden="true" />
-                    <span
-                      class:list={["lc-lane__key", `lc-lane__key--${lane.key}`]}
-                      aria-hidden="true"
-                    />
-                    {lane.label}
-                    <span class="lc-lane__n">{lane.count}</span>
-                  </span>
-                  <span class="lc-tl__track" aria-hidden="true">
-                    {lane.merged.map((m) => (
-                      <span
-                        class:list={["lc-tl__bar", `lc-tl__bar--${lane.key}`]}
-                        style={`left:${m.left}%;width:${m.width}%`}
-                      />
-                    ))}
-                    <span class="lc-tl__now" style={`left:${tlNow}%`} />
-                  </span>
-                </summary>
-
-                <ul class="lc-lane__list" role="list">
-                  {lane.items.map((e) => (
-                    <li class:list={["lc-all__row", { "is-lens": e.inLens }]}>
-                      <span class="lc-all__years">
-                        <span class="lc-all__span">{e.years}</span>
-                        <span class="lc-all__from">
-                          {e.startYear}
-                          {e.inProgress && (
-                            <span class="lc-all__on" aria-hidden="true">
-                              →
-                            </span>
-                          )}
-                          <span class="lc-sr">{e.years}</span>
-                        </span>
-                      </span>
-                      <span class="lc-all__what">
-                        <b>{e.company}</b>
-                        <span class="lc-all__sep" aria-hidden="true">
-                          {" "}
-                          ·{" "}
-                        </span>
-                        <span class="lc-all__role">{e.role}</span>
-                      </span>
-                      {e.inLens && (
-                        <>
-                          <span class="lc-all__mark" aria-hidden="true" />
-                          <span class="lc-sr">
-                            {t.ui.highlightedFor} {clusterLabel}
-                          </span>
-                        </>
-                      )}
-                      <span class="lc-tl__track" aria-hidden="true">
-                        <span
-                          class:list={["lc-tl__bar", `lc-tl__bar--${lane.key}`]}
-                          style={`left:${e.left}%;width:${e.width}%`}
-                        />
-                        <span class="lc-tl__now" style={`left:${tlNow}%`} />
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </details>
-            ))
-          }
-        </div>
-      </section>
 
       <!-- ── 2c. Le voci ──────────────────────────────────────────────────
            Fin qui ha parlato solo lui. Due persone che ci hanno lavorato
