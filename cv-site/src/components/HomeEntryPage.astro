@@ -19,7 +19,6 @@
 //
 // TESTI: tutti da cv-i18n e @cv-data, nessuna copy scritta qui.
 import Layout from "../layouts/Layout.astro";
-import lexend700 from "@fontsource/lexend/files/lexend-latin-700-normal.woff2?url";
 import { cvData } from "@cv-data";
 import { cvDataEn } from "@cv-data-en";
 import { LOCALES, MODES, lensPath, type Locale } from "../lib/cv-i18n";
@@ -143,28 +142,6 @@ const sections = MODES.map((mode) => ({
 
 <Layout title={t.ui.homeTitle} description={t.ui.homeDescription} mode="creative" lang={locale}>
   <link slot="head" rel="preload" as="image" href="/knolling/laptop.webp" fetchpriority="high" />
-
-  {
-    /* Il peso 700 di Lexend non si usa qui: si usa **di là**, sulla pagina
-       della lente. Ed e' proprio per questo che va chiesto da qui.
-
-       Misurato con Playwright sulla build vera: cliccando "GO to…", quel file
-       partiva a pagina nuova gia' aperta e arrivava a 321ms, cioe' in mezzo
-       alla transizione. Un carattere che arriva fa ricalcolare il layout di
-       tutto il testo che lo aspettava — nella traccia, 383 oggetti su 688 e
-       48ms di Layout in un fotogramma che ne dura 16,7. E' li' che l'oggetto
-       in volo si fermava di colpo.
-
-       `prefetch` e non `preload` perche' la differenza e' esattamente questa:
-       preload dice "mi serve adesso" — e su una pagina che non lo usa il
-       browser lo scarica e poi avvisa in console che non e' servito a niente;
-       prefetch dice "mi servira' dopo", che e' la verita'. L'indirizzo arriva
-       da un import, non scritto a mano: e' @fontsource a servire questo file
-       e il nome porta l'impronta del contenuto, quindi scriverlo a mano
-       significherebbe puntare a una copia diversa e scaricarlo due volte —
-       lo stesso inciampo gia' visto sul peso 400 (vedi Layout.astro). */
-  }
-  <link slot="head" rel="prefetch" as="font" type="font/woff2" href={lexend700} crossorigin />
 
   {
     /* Anti-lampo. Senza questo l'ingresso viene disegnato tutto visibile, resta

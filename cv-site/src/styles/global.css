@@ -1,6 +1,8 @@
-/* I pesi 400/500/600/700 (Lexend + JetBrains Mono) sono stati spostati in
-   styles/fonts.css, caricato in modo non render-blocking da Layout.astro
-   (font-display: swap li rende sicuri da deferire — vedi commento lì). */
+/* Le facce di Lexend che servono al primo disegno — 400, 600, 700, 800 —
+   stanno QUI, nel foglio che blocca già il rendering, e i loro file sono
+   preloadati in Layout.astro. In styles/fonts.css, caricato in modo non
+   render-blocking, resta solo ciò che al primo disegno non serve: JetBrains
+   Mono. Il perché di questa divisione è scritto sotto, sopra il peso 600. */
 
 /* Peso 800 — font critico del preloader e del nome hero.
    font-display: block previene il FOUC durante l'animazione iniziale:
@@ -33,6 +35,60 @@
   font-display: block;
   font-weight: 800;
   src: url("/fonts/Lexend/lexend-latin-800-normal.woff2") format("woff2");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* ── I due pesi che mancavano al primo disegno: 600 e 700 ─────────────────
+   Misurato con Playwright su build vera, cache fredda, campionando la
+   larghezza dei bottoni della lente a ogni fotogramma. Passavano per TRE
+   valori prima di fermarsi:
+
+       79ms   180,20px   ← primo disegno
+      205ms   157,34px   ← si restringe del 13%
+      325ms   174,61px   ← valore definitivo
+
+   Due salti, e quello di mezzo verso il basso: e' il "le CTA rimpiccioliscono
+   dopo poco". A cache calda il valore e' uno solo dal primo campione, ed e' il
+   motivo per cui la prima volta che l'ho cercato non l'ho trovato.
+
+   La causa non e' il file che arriva tardi: e' la DICHIARAZIONE. Il 600 e il
+   700 stavano solo in fonts.css, che Layout.astro carica con il trucco
+   `media="print"` + `onload` per tenerlo fuori dal percorso critico. Finche'
+   quel foglio non si applica, per il browser la famiglia Lexend ha due sole
+   facce — 400 e 800 — quindi un `font-weight: 600` non trova niente e se lo
+   costruisce ingrassando il 400 (piu' largo: 180px). Poi il foglio si applica,
+   la faccia 600 esiste ma il file non e' ancora sceso, e con `swap` si ripiega
+   sul carattere di sistema (piu' stretto: 157px). Poi arriva il file (174,6px).
+
+   Il trucco `media=print` resta giusto per i pesi che non servono al primo
+   disegno. Per questi due no: e' MISURATO che ogni pagina del sito li usa
+   tutti e quattro — 400, 600, 700, 800 — quindi differirli significa
+   garantire un riflusso a ogni visita a freddo. Adesso stanno qui, nel foglio
+   che blocca gia' il rendering, e i file sono preloadati in Layout.astro.
+
+   ⚠️ Il file e' quello PUBBLICO, lo stesso indirizzo che il preload chiede:
+   la stessa regola scritta sopra per il 400. Se un giorno tornassero anche in
+   fonts.css via @fontsource, sarebbero due dichiarazioni della stessa faccia
+   verso due URL diversi e il browser scaricherebbe entrambi. */
+@font-face {
+  font-family: "Lexend";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 600;
+  src: url("/fonts/Lexend/lexend-latin-600-normal.woff2") format("woff2");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Lexend";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 700;
+  src: url("/fonts/Lexend/lexend-latin-700-normal.woff2") format("woff2");
   unicode-range:
     U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
     U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;

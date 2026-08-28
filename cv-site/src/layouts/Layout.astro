@@ -352,13 +352,17 @@ const jsonLd = {
       }
     </script>
 
-    <!-- I due pesi che servono al primo paint: 400 per il testo, 800 per il
-         preloader e il nome d'ingresso. Tutti e due sono dichiarati in
+    <!-- I QUATTRO pesi che servono al primo disegno: 400 per il testo, 600 per
+         bottoni e occhielli, 700 per i titoli, 800 per il preloader e il nome
+         d'ingresso. Non e' un elenco a occhio: misurato leggendo
+         document.fonts dopo il load su tutte e cinque le rotte pubbliche,
+         ognuna li usa tutti e quattro. Tutti e due sono dichiarati in
          global.css sul file pubblico, cioe' su QUESTO indirizzo: se le due
          cose divergono il preload non viene mai usato e il file arriva due
          volte, che e' esattamente quello che succedeva al 400 fino al
          2026-08-27 (prefetch verso una copia, @fontsource verso un'altra).
-         Il resto dei pesi arriva da @fontsource e non e' critico. -->
+         Da @fontsource resta solo JetBrains Mono, che al primo disegno non
+         serve. -->
     <link
       rel="preload"
       as="font"
@@ -371,6 +375,20 @@ const jsonLd = {
       as="font"
       type="font/woff2"
       href="/fonts/Lexend/lexend-latin-800-normal.woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="/fonts/Lexend/lexend-latin-600-normal.woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="/fonts/Lexend/lexend-latin-700-normal.woff2"
       crossorigin
     />
 

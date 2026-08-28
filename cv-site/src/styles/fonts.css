@@ -12,9 +12,17 @@
    nome, quindi il preload puntava a un'altra copia e il browser ne scaricava
    due — con il testo che restava nel fallback finché non arrivava la seconda.
    È il peso del corpo del testo: è quello che vale la pena avere subito. */
-@import "@fontsource/lexend/500.css";
-@import "@fontsource/lexend/600.css";
-@import "@fontsource/lexend/700.css";
+/* Qui resta SOLO JetBrains Mono, ed è il criterio della divisione: sono le
+   facce che al primo disegno non servono. Le quattro di Lexend che servono
+   (400, 600, 700, 800) stanno in global.css, che blocca il rendering, con i
+   file preloadati — il perché, con la misura, è scritto là sopra il peso 600.
+
+   Il 500 di Lexend non c'è più e non è un taglio a occhio: verificato su
+   tutte e cinque le rotte pubbliche leggendo document.fonts dopo il load,
+   nessuna pagina lo rende mai. Le due regole font-weight: 500 del progetto
+   sono su testo monospaziato. Un peso dichiarato e non usato non costa un
+   download — il browser scarica solo le facce che servono — ma costa una
+   riga che qualcuno dovrà capire. */
 @import "@fontsource/jetbrains-mono/400.css";
 @import "@fontsource/jetbrains-mono/500.css";
 @import "@fontsource/jetbrains-mono/600.css";

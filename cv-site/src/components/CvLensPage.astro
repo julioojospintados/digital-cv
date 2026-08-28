@@ -40,7 +40,6 @@
 // TESTI: cv.ts, cv-i18n e lab-copy.ts (verbatim da index.astro). Nessuna
 // copy scritta qui.
 import Layout from "../layouts/Layout.astro";
-import lexend700 from "@fontsource/lexend/files/lexend-latin-700-normal.woff2?url";
 import { cvData } from "@cv-data";
 import { cvDataEn } from "@cv-data-en";
 import { buildCvViewModel } from "../lib/cv-view-model";
@@ -294,26 +293,6 @@ const markStyle = (nome: string): string | undefined => {
     href={`/knolling/${profile.object}.webp`}
     fetchpriority="high"
   />
-
-  {
-    /* Il 700 di Lexend, chiesto in testa e non scoperto dipingendo.
-
-       Un carattere si scarica quando serve a disegnare, cioe' dopo il primo
-       calcolo di layout — e quando arriva quel calcolo si rifa'. Misurato
-       sulla traccia del browser: `RemoteFontLoaded`, poi
-       `ScheduleStyleRecalculation`, poi un Layout da 63ms su 383 oggetti di
-       688, tutto dentro i primi 90ms della transizione dalla home. E' un
-       fotogramma solo, ma dura quanto quattro, ed e' quello in cui l'oggetto
-       in volo si pianta.
-
-       Chiesto da qui parte col parsing invece che col primo disegno, quindi
-       il testo nasce gia' con il carattere giusto e quel secondo layout non
-       esiste. Funziona perche' la home ha gia' fatto scendere il file
-       (`rel="prefetch"` in HomeEntryPage.astro): qui e' un colpo alla cache,
-       non una richiesta di rete. Le due righe si tengono per mano — se un
-       giorno sparisce quella di la', questa da sola arriva comunque tardi. */
-  }
-  <link slot="head" rel="preload" as="font" type="font/woff2" href={lexend700} crossorigin />
 
   <div class="lc">
     <!-- Barra. Non sticky: una barra fissa mangia proprio la fascia alta in
