@@ -123,7 +123,14 @@ export function initLabHomeIntro(): void {
   // ── Stato iniziale ──────────────────────────────────────────────────────
   const copyGroup = [".lh-tagline", ".lh-cred", ".lh-bar"];
   const cue = document.querySelector<HTMLElement>(".lh-scroll");
-  const objects = Array.from(document.querySelectorAll<HTMLElement>(".lh-obj"));
+  // `:not([data-vt-landing])` — tornando da una lente, uno di questi oggetti
+  // non sta entrando: sta ATTERRANDO, portato dalla transizione di pagina.
+  // Nasconderlo per rigiocargli l'ingresso addosso significherebbe spegnere a
+  // meta' volo la cosa che si sta guardando. Chi lo marca e' lo script inline
+  // in HomeEntryPage.astro, prima del primo disegno.
+  const objects = Array.from(
+    document.querySelectorAll<HTMLElement>(".lh-obj:not([data-vt-landing])"),
+  );
 
   gsap.set(goChars, { opacity: 0, scale: 1.8, y: -20 });
   gsap.set(otherChars, { opacity: 0, y: 18 });

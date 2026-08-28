@@ -126,6 +126,14 @@ const NATIVE_REM: Record<string, number> = {
 // La pianta: 226px di larghezza nativa, come gli altri (vedi NATIVE_REM).
 const ABOUT_NATIVE_REM = 226 / 16;
 
+// Lente d'origine → oggetto che deve atterrare, per il ritorno via GO. Si
+// costruisce dagli stessi due dati che disegnano le sezioni, cosi' non esiste
+// una terza copia della corrispondenza da tenere allineata. Lo consuma lo
+// script inline piu' sotto, via define:vars.
+const ATTERRAGGI: Record<string, string> = Object.fromEntries(
+  MODES.map((mode) => [lensPath(mode, locale).replace(/\/$/, ""), sectionObject[mode]]),
+);
+
 const sections = MODES.map((mode) => ({
   mode,
   initial: initials[mode],
@@ -165,6 +173,71 @@ const sections = MODES.map((mode) => ({
     setTimeout(function () {
       document.documentElement.removeAttribute("data-lh-armed");
     }, 3000);
+  </script>
+
+  {
+    /* ── Il ritorno da una lente: l'oggetto rivola al suo posto ─────────────
+      L'andata la governa lens-transition.ts: al clic sulla CTA l'oggetto
+      della sezione riceve il nome condiviso e vola nella testata della
+      lente. Il ritorno, fino al 2026-08-28, non era una transizione ma un
+      "warp launch" tutto suo dentro GoLogo — speed-line, sfocatura e
+      vignetta nera — che per giunta si faceva fotografare in quello stato.
+
+      Qui c'è il pezzo mancante: la pagina d'ARRIVO deve dire quale dei suoi
+      oggetti è lo stesso che sta arrivando. Il piano knolling dell'ingresso
+      li ha già tutti e tre a schermo — camera, laptop, bussola — quindi
+      l'atterraggio è un posto vero, non inventato per l'occasione, e non
+      serve spostare lo scorrimento da nessuna parte.
+
+      Tre ragioni per cui questo sta in uno script inline e non in un modulo:
+
+      1. `pagereveal` scatta PRIMA del primo disegno, e i moduli differiti
+         girano dopo — misurato, in questa stessa sessione, mentre si
+         cercava perché la sonda della transizione non partiva. Un listener
+         registrato da un modulo non farebbe in tempo a esistere.
+      2. Il nome va dato prima che il browser fotografi la pagina nuova.
+      3. La mappa lente → oggetto NON è duplicata: arriva da `define:vars`,
+         costruita qui sopra dagli stessi dati che disegnano le sezioni.
+
+      L'oggetto d'arrivo va anche scoperto e sfilato: `[data-lh-armed]` lo
+      tiene a `opacity: 0` per l'anti-lampo dell'ingresso, e `drop-shadow`
+      gonfia il riquadro fotografato facendolo volare più grande di sé (lo
+      stesso difetto già chiuso in partenza). Si tocca solo LUI, non si
+      disarma niente: gli altri oggetti e il nome entrano come sempre.
+      `data-vt-landing` dice a lab-home-intro.ts di lasciarlo in pace, e
+      alla fine della transizione si rimette tutto com'era. */
+  }
+  <script slot="head" is:inline define:vars={{ ATTERRAGGI }}>
+    addEventListener("pagereveal", (e) => {
+      const vt = e.viewTransition;
+      if (!vt || !document.referrer) return;
+      let da;
+      try {
+        const u = new URL(document.referrer);
+        if (u.origin !== location.origin) return;
+        da = u.pathname.replace(/\/$/, "");
+      } catch {
+        return;
+      }
+      const oggetto = ATTERRAGGI[da];
+      if (!oggetto) return;
+
+      const box = document.querySelector('.lh-obj[data-obj="' + oggetto + '"]');
+      const img = box && box.querySelector(".lh-obj__img");
+      if (!img) return;
+
+      box.dataset.vtLanding = "";
+      box.style.opacity = "1";
+      img.style.filter = "none";
+      img.style.viewTransitionName = "lens-object";
+
+      vt.finished.finally(() => {
+        delete box.dataset.vtLanding;
+        box.style.opacity = "";
+        img.style.filter = "";
+        img.style.viewTransitionName = "";
+      });
+    });
   </script>
 
   <div class="lh">

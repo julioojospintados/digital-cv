@@ -1,5 +1,4 @@
 import { LitElement, html, css } from "lit";
-import { gsap } from "gsap";
 import { modeStore, type Mode } from "./stores/modeStore.ts";
 import { markIntroSeen } from "../scripts/intro-seen.ts";
 
@@ -119,155 +118,27 @@ class GoLogo extends LitElement {
     this._unsub?.();
   }
 
-  private _launching = false;
-
   private _handleClick() {
-    // Master Reset: torna alla landing con stato neutro. Stessa animazione
-    // "warp launch" dei bottoni "GO to..." della home (index-init.ts
-    // launchJourney) — un reload nudo lasciava vedere GO comparire subito e
-    // nome/card "assestarsi" con un beat di ritardo dietro: un transition
-    // intenzionale maschera quel riassemblaggio invece di esporlo.
-    if (this._launching) return;
-    this._launching = true;
-    this._launchHome();
-  }
-
-  private _launchHome() {
-    // Un ritorno via logo non è mai un primo atterraggio: marca l'intro come
-    // vista PRIMA di navigare, così la home salta il rituale G-O anche se in
-    // questa sessione non è ancora stata visitata (es. arrivo diretto su
-    // /tech da un link esterno). Il warp qui sotto È la transizione: farla
-    // seguire dal preloader sarebbe raccontare due arrivi di fila.
+    // Un ritorno via logo non e' mai un primo atterraggio: marca l'intro come
+    // vista PRIMA di navigare, cosi' l'ingresso salta il rituale G-O anche se
+    // in questa sessione non e' ancora stato visitato (arrivo diretto su /tech
+    // da un link esterno, per dire).
     markIntroSeen();
 
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      window.location.href = "/";
-      return;
-    }
-
-    document.body.style.pointerEvents = "none";
-
-    // Overlay e speed-line vivono fuori da <body> (figli diretti di <html>):
-    // così restano nitidi anche se sfumiamo/scaliamo #main-content, e
-    // funzionano identici su qualunque pagina (mode, work, case study) senza
-    // dipendere da markup home-specifico come #launch-overlay.
-    const overlay = document.createElement("div");
-    Object.assign(overlay.style, {
-      position: "fixed",
-      inset: "0",
-      background: "rgba(0,0,0,0.92)",
-      opacity: "0",
-      zIndex: "99998",
-      pointerEvents: "none",
-    });
-    document.documentElement.appendChild(overlay);
-
-    const cx = window.innerWidth / 2;
-    const cy = window.innerHeight / 2;
-    const lineCount = 28;
-    const lineEls: HTMLElement[] = [];
-
-    for (let i = 0; i < lineCount; i++) {
-      const angle = (i / lineCount) * 360;
-      const rad = (angle * Math.PI) / 180;
-      const dist = Math.random() * 60 + 10;
-      const len = Math.random() * 200 + 80;
-      const thick = Math.random() * 1.5 + 0.5;
-      const line = document.createElement("div");
-      Object.assign(line.style, {
-        position: "fixed",
-        left: `${cx + Math.cos(rad) * dist}px`,
-        top: `${cy + Math.sin(rad) * dist}px`,
-        width: `${len}px`,
-        height: `${thick}px`,
-        background: "rgba(255,255,255,0.9)",
-        transform: `rotate(${angle}deg)`,
-        transformOrigin: "left center",
-        opacity: "0",
-        zIndex: "99997",
-        pointerEvents: "none",
-      });
-      document.documentElement.appendChild(line);
-      lineEls.push(line);
-    }
-
-    // #main-content (presente su ogni pagina, obbligatorio per lo skip-link)
-    // invece di document.body: scalare/sfumare l'intero body sposterebbe il
-    // containing block degli elementi position:fixed (cursor custom, FAB,
-    // nav) causando salti visivi — #main-content è sempre un sibling di nav/FAB.
-    const main = document.getElementById("main-content");
-
-    const journey = gsap.timeline({
-      onComplete: () => {
-        lineEls.forEach((l) => l.remove());
-        overlay.remove();
-      },
-    });
-
-    const isTouchDevice = !window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-
-    const phase1Duration = isTouchDevice ? 0.55 : 0.6;
-    const phase1Stagger = isTouchDevice ? 0.02 : 0.018;
-    const phase2Duration = isTouchDevice ? 0.25 : 0.5;
-    const phase3Duration = isTouchDevice ? 0.35 : 0.35;
-    const phase3Stagger = isTouchDevice ? 0.012 : 0.009;
-    const blurStart = isTouchDevice ? 0.4 : 0.5;
-    const vignetteStart = isTouchDevice ? 0.75 : 0.9;
-    const navigateAt = isTouchDevice ? vignetteStart + 0.28 : vignetteStart + 0.4;
-
-    // Fase 1: comparsa — le speed-line "sparano" verso l'esterno
-    journey.fromTo(
-      lineEls,
-      { scaleX: 0, opacity: 0 },
-      {
-        scaleX: 1,
-        opacity: 0.85,
-        duration: phase1Duration,
-        stagger: { each: phase1Stagger, from: "random" },
-        ease: "power2.out",
-      },
-    );
-    // Fase 2: hold visibile prima di sparire
-    journey.to(lineEls, { opacity: 0.85, duration: phase2Duration, ease: "none" }, "-=0");
-    // Fase 3: allontanamento warp e dissolvenza
-    journey.to(
-      lineEls,
-      {
-        scaleX: 6,
-        opacity: 0,
-        duration: phase3Duration,
-        stagger: { each: phase3Stagger, from: "random" },
-        ease: "power4.in",
-      },
-      "-=0",
-    );
-
-    // Il mondo si allontana mentre acceleri
-    if (main) {
-      journey.to(
-        main,
-        {
-          opacity: 0,
-          scale: 0.85,
-          filter: "blur(10px)",
-          duration: phase3Duration,
-          ease: "power3.in",
-        },
-        blurStart,
-      );
-    }
-
-    // Vignette scura chiude la scena
-    journey.to(overlay, { opacity: 1, duration: 0.5, ease: "power2.inOut" }, vignetteStart);
-
-    // Naviga quando la vignette è abbastanza scura — non aspettare il completamento
-    journey.call(
-      () => {
-        window.location.href = "/";
-      },
-      undefined,
-      navigateAt,
-    );
+    // E poi naviga, e basta. Qui c'era un "warp launch": ventotto speed-line
+    // che sparavano dal centro, il contenuto sfocato e rimpicciolito, una
+    // vignetta nera, e la navigazione lanciata a meta' animazione. Era un
+    // residuo del sito precedente, ed era l'unico posto del sistema con una
+    // transizione tutta sua — per giunta incompatibile con quella vera: la
+    // pagina veniva fotografata gia' sfocata e coperta dal nero.
+    //
+    // Adesso il ritorno usa la stessa transizione dell'andata, ed e' proprio
+    // simmetrica: l'oggetto della lente rivola al suo posto nel piano
+    // knolling dell'ingresso. Il pezzo che lo rende possibile non e' qui —
+    // e' lo script inline in HomeEntryPage.astro, che al risveglio della
+    // pagina d'arrivo da' il nome condiviso all'oggetto giusto. Qui non
+    // serve fare niente: il nome sulla pagina che parte c'e' gia'.
+    window.location.href = "/";
   }
 
   render() {
