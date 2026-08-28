@@ -116,7 +116,8 @@
 
 .work-tag {
   font-size: var(--fs-12);
-  font-weight: 500;
+  /* Vedi design-system.css: il 500 non esiste e il browser sceglieva 400. */
+  font-weight: 400;
   letter-spacing: 0.05em;
   color: var(--color-text-muted);
   padding: 0.2rem 0.55rem;

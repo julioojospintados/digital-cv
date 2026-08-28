@@ -1,6 +1,5 @@
 ---
 import "../styles/global.css";
-import fontsCssUrl from "../styles/fonts.css?url";
 import cursorCssUrl from "../styles/cursor.css?url";
 import SpeedInsights from "@vercel/speed-insights/astro";
 import Analytics from "@vercel/analytics/astro";
@@ -192,13 +191,20 @@ const jsonLd = {
       )
     }
 
-    <!-- Fontsource 400-700 (Lexend + JetBrains Mono) — non render-blocking.
-         font-display:swap in fonts.css means the fallback font paints
-         immediately; loadCSS pattern (media=print -> onload=all) removes
-         these from the critical rendering path instead of serializing 8
-         @import fetches before first paint. -->
-    <link rel="stylesheet" href={fontsCssUrl} media="print" onload="this.media='all'" />
-    <noscript><link rel="stylesheet" href={fontsCssUrl} /></noscript>
+    <!-- Nessun foglio dei caratteri differito, e non e' una semplificazione:
+         e' la correzione. Qui c'era fonts.css, servito con il trucco
+         `media="print"` + `onload` per tenerlo fuori dal percorso critico.
+         Misurato: nell'istante in cui quel foglio passa a `media="all"` il
+         browser ricostruisce l'INTERO set di caratteri del documento e rifa'
+         la selezione da capo — le facce gia' risolte tornano "unloaded" e
+         vengono riabbinate. Le chip della lente saltavano li', da 51 a 54px a
+         247ms, e nessun `font-display` poteva impedirlo: la decisione veniva
+         presa due volte, e la seconda con la cache ormai calda dava un esito
+         diverso dalla prima.
+
+         Adesso tutte le facce che servono — quattro Lexend e tre JetBrains
+         Mono — sono dichiarate in global.css, che blocca gia' il rendering.
+         Un set solo, deciso una volta. -->
 
     <!-- ── L'oggetto in volo aspetta che la pagina sia in piedi ────────────
          Una transizione fra due documenti parte al PRIMO DISEGNO della
@@ -389,6 +395,34 @@ const jsonLd = {
       as="font"
       type="font/woff2"
       href="/fonts/Lexend/lexend-latin-700-normal.woff2"
+      crossorigin
+    />
+
+    <!-- E i tre pesi del monospaziato. Con `optional` un carattere che arriva
+         dopo la scadenza non viene usato affatto per quella vista: senza
+         questi preload le date, le chip e le sigle CEFR ripiegavano sul
+         monospaziato di sistema per tutta la prima pagina (misurato: chip a
+         51px invece di 54). Non sono byte in piu' — questi file scendevano
+         gia' su ogni pagina — e' solo la priorita' che cambia. -->
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="/fonts/JetBrainsMono/jetbrains-mono-latin-400-normal.woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="/fonts/JetBrainsMono/jetbrains-mono-latin-600-normal.woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      as="font"
+      type="font/woff2"
+      href="/fonts/JetBrainsMono/jetbrains-mono-latin-700-normal.woff2"
       crossorigin
     />
 

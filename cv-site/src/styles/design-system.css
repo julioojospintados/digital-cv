@@ -1454,7 +1454,10 @@
 .ds-matrix tbody th {
   font-family: var(--font-mono);
   font-size: var(--fs-10);
-  font-weight: 500;
+  /* 400 e non 500: il 500 di JetBrains non esiste piu (nessuna pagina lo
+     rendeva) e la regola di matching sceglieva gia il 400. Dichiararlo
+     evita che sembri un peso disponibile. */
+  font-weight: 400;
   letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--ds-muted);

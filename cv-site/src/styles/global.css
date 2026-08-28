@@ -1,8 +1,49 @@
 /* Le facce di Lexend che servono al primo disegno — 400, 600, 700, 800 —
    stanno QUI, nel foglio che blocca già il rendering, e i loro file sono
-   preloadati in Layout.astro. In styles/fonts.css, caricato in modo non
-   render-blocking, resta solo ciò che al primo disegno non serve: JetBrains
-   Mono. Il perché di questa divisione è scritto sotto, sopra il peso 600. */
+   preloadati in Layout.astro — insieme ai tre di JetBrains Mono, qui sotto.
+   Non esiste più un secondo foglio caricato dopo: c'era, si chiamava
+   fonts.css, ed era esso stesso il difetto. Il perché è scritto in
+   Layout.astro, dove stava il suo <link>. */
+
+/* ── `font-display: optional`, e perché non swap né block ─────────────────
+   Terzo giro su questo difetto, e i primi due hanno sbagliato bersaglio
+   perché la misura era fatta su `localhost`, dove un carattere preloadato
+   arriva sempre prima del primo disegno e quindi il difetto non può
+   manifestarsi. Rimisurato con 400ms di ritardo artificiale sui woff2 —
+   cioè una rete vera — campionando la larghezza dei bottoni della lente a
+   ogni fotogramma:
+
+     swap    265ms  157,34px  →  453ms  174,61px     due stati
+     block   219ms  157,34px  →  480ms  174,61px     due stati
+     optional         157,34px oppure 174,61px       UNO stato, sempre
+
+   `swap` dice testualmente «disegna col ripiego e poi riscambia»: il
+   riscambio È il difetto, e il preload accorcia la finestra senza mai
+   chiuderla. `block` sembra la cura e non lo è: nasconde i GLIFI, non la
+   scatola. Durante l'attesa il bottone resta dimensionato con le metriche
+   del ripiego e quando il carattere arriva cambia misura lo stesso — con in
+   più, per quei millisecondi, un'etichetta vuota. Misurato, non dedotto: la
+   riga `block` qui sopra ha due stati come `swap`.
+
+   `optional` è l'unica delle tre che promette ciò che serve: se il
+   carattere non è pronto entro ~100ms il browser usa il ripiego e **non
+   riscambia più** per quella vista. La pagina è coerente dal primo
+   fotogramma all'ultimo, sempre.
+
+   Il prezzo, misurato per non doverlo immaginare — latenza sui font e chi
+   vince al primo disegno:
+
+     0ms · 60ms · 120ms · 200ms    Lexend
+     400ms                          carattere di sistema, per quella vista
+
+   Cioè: il ripiego si vede solo alla prima visita su una rete lenta, mai
+   dalla seconda pagina in poi (i file sono same-origin, ~15KB, immutabili
+   per un anno). E quando si vede, si vede intero: nessun pezzo di pagina
+   che si riassesta sotto gli occhi.
+
+   L'800 resta `block` di proposito: è il nome del preloader, dove un lampo
+   di ripiego si vedrebbe e dove non c'è nessuna scatola che possa cambiare
+   misura sotto il testo. */
 
 /* Peso 800 — font critico del preloader e del nome hero.
    font-display: block previene il FOUC durante l'animazione iniziale:
@@ -11,10 +52,7 @@
 @font-face {
   font-family: "Lexend";
   font-style: normal;
-  /* swap e non block: questo e' il testo del sito, e tenerlo invisibile fino
-     al webfont sarebbe peggio dello scambio. Il block resta al solo 800, che
-     e' il nome nel preloader — li' un lampo di fallback si vedrebbe. */
-  font-display: swap;
+  font-display: optional;
   font-weight: 400;
   /* Il file PUBBLICO, lo stesso che <link rel="preload"> chiede in
      Layout.astro. Prima il 400 arrivava da @fontsource, cioe' da un URL con
@@ -54,7 +92,8 @@
    motivo per cui la prima volta che l'ho cercato non l'ho trovato.
 
    La causa non e' il file che arriva tardi: e' la DICHIARAZIONE. Il 600 e il
-   700 stavano solo in fonts.css, che Layout.astro carica con il trucco
+   700 stavano solo in fonts.css (il foglio differito, poi cancellato — vedi
+   Layout.astro), che Layout.astro caricava con il trucco
    `media="print"` + `onload` per tenerlo fuori dal percorso critico. Finche'
    quel foglio non si applica, per il browser la famiglia Lexend ha due sole
    facce — 400 e 800 — quindi un `font-weight: 600` non trova niente e se lo
@@ -70,12 +109,15 @@
 
    ⚠️ Il file e' quello PUBBLICO, lo stesso indirizzo che il preload chiede:
    la stessa regola scritta sopra per il 400. Se un giorno tornassero anche in
-   fonts.css via @fontsource, sarebbero due dichiarazioni della stessa faccia
-   verso due URL diversi e il browser scaricherebbe entrambi. */
+   un foglio differito via @fontsource, sarebbero due dichiarazioni della
+   stessa faccia verso due URL diversi e il browser scaricherebbe entrambi —
+   e, molto peggio, tornerebbe il difetto raccontato in Layout.astro: un
+   foglio con @font-face che si applica dopo il primo disegno ricostruisce
+   l'intero set di caratteri e rifà la selezione da capo. */
 @font-face {
   font-family: "Lexend";
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
   font-weight: 600;
   src: url("/fonts/Lexend/lexend-latin-600-normal.woff2") format("woff2");
   unicode-range:
@@ -86,9 +128,65 @@
 @font-face {
   font-family: "Lexend";
   font-style: normal;
-  font-display: swap;
+  font-display: optional;
   font-weight: 700;
   src: url("/fonts/Lexend/lexend-latin-700-normal.woff2") format("woff2");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* ── JetBrains Mono, stessa cura e una scelta diversa sul preload ─────────
+   Restavano due riflussi dopo aver sistemato Lexend, misurati campionando a
+   ogni fotogramma: le chip 51 → 54px e la scala delle lingue 242,9 → 235,1px,
+   entrambi a ~380ms. Stessa causa — le facce arrivavano dal foglio differito,
+   con lo `swap` di serie di @fontsource — quindi stessa cura: dichiarate qui,
+   dal file pubblico, con `optional`.
+
+   Ma NON preloadate, ed è una differenza voluta rispetto a Lexend. Il peso
+   dei quattro Lexend sul percorso critico si giustifica: sono il nome, i
+   titoli, i bottoni, cioè quasi ogni parola della pagina. Questi tre sono
+   etichette piccole — date, chip, sigle CEFR — e chiedere altri 64KB in
+   testa alla coda per loro sposterebbe il problema invece di risolverlo. Con
+   `optional` senza preload il patto è chiaro: se la faccia arriva in tempo si
+   vede JetBrains, se non arriva si vede il monospaziato di sistema per quella
+   vista, e in nessuno dei due casi qualcosa cambia misura sotto gli occhi.
+   Dalla seconda pagina in poi è sempre JetBrains, perché il file è in cache.
+
+   I byte non aumentano comunque: verificato, questi tre file scendevano già
+   su ogni pagina del sito. Cambia da dove sono dichiarati, non quanto pesano.
+
+   Il peso 500 non c'è: nessuna pagina lo rendeva. Le due regole che lo
+   chiedevano — una in design-system.css, una su .work-tag — adesso dichiarano
+   400, che è il peso che la regola di matching CSS sceglieva già per loro. */
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-display: optional;
+  font-weight: 400;
+  src: url("/fonts/JetBrainsMono/jetbrains-mono-latin-400-normal.woff2") format("woff2");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-display: optional;
+  font-weight: 600;
+  src: url("/fonts/JetBrainsMono/jetbrains-mono-latin-600-normal.woff2") format("woff2");
+  unicode-range:
+    U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
+    U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-display: optional;
+  font-weight: 700;
+  src: url("/fonts/JetBrainsMono/jetbrains-mono-latin-700-normal.woff2") format("woff2");
   unicode-range:
     U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329,
     U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
