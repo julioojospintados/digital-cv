@@ -131,7 +131,15 @@ export const EXP_CLUSTER_DEFS: ExpClusterDef[] = [
       { exp: 4 }, // Freelance Videomaker
       { exp: 9 }, // Freelance Fotografo
       { exp: 12 }, // FreeGinevro — Grafico Pubblicitario
-      { exp: 10 }, // Corriere di Chieri
+      // Corriere di Chieri (exp 10) stava qui fino al 2026-08-28: e' un
+      // lavoro di scrittura giornalistica, non di design, e senza un
+      // `facet` che lo riformulasse la sua descrizione base — cronaca
+      // locale, scadenze settimanali — finiva letta dentro "Esperienza —
+      // Design & UX" senza dire niente di design. Resta nella cronologia
+      // completa (lane "design" = "Design e comunicazione" in
+      // exp-lanes.ts, che e' un'etichetta piu' larga apposta) e non e'
+      // referenziata da nessun altro cluster: e' lo stesso trattamento gia'
+      // dato a UCI Cinemas e Caveja, fuori da ogni cluster per scelta.
     ],
   },
   {

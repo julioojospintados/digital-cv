@@ -207,7 +207,6 @@ const lanes = LANE_DEFS.map((def) => {
 const tlTicks = Array.from({ length: Math.ceil((tlA - tlDa) / 4) }, (_, k) => tlDa + k * 4).map(
   (anno) => ({ anno, left: pct(anno) }),
 );
-const tlNow = pct(annoOra);
 
 const email = data.social.find((s) => s.platform === "Email");
 const linkedin = data.social.find((s) => s.platform === "LinkedIn");
@@ -357,17 +356,16 @@ const markStyle = (nome: string): string | undefined => {
 
         <div class="lc-head__text">
           {
-            /* Nome e ruolo sulla stessa riga da desktop: sono la stessa
-              informazione — chi sei e in quale veste — e separarli su due
-              righe faceva scendere di un rigo tutto il resto della testata.
-              Sotto i 48rem la pillola va a capo da sola (flex-wrap), che è
-              il comportamento giusto: lì la larghezza non basta e spezzare
-              è meglio che stringere il nome. */
+            /* Il nome, e basta. Qui c'era anche la pillola con il nome della
+              lente (`.lc-role`), tolta il 2026-08-28: la stessa etichetta e'
+              gia' in barra, dentro il comando che cambia lente, e li' dice
+              una cosa in piu' — non solo quale lente stai leggendo, ma che
+              se ne puo' scegliere un'altra. Ripeterla qui sotto il nome era
+              il secondo posto in cui leggere la stessa parola a due
+              centimetri di distanza. `modeLabel` resta: lo usano il <title>,
+              la riga per screen reader e la tendina. */
           }
-          <div class="lc-ident">
-            <h1 class="lc-name">{data.personal.name}</h1>
-            <p class="lc-role">{modeLabel}</p>
-          </div>
+          <h1 class="lc-name">{data.personal.name}</h1>
 
           <p class="lc-claim">{heroTitle}</p>
 
@@ -517,7 +515,6 @@ const markStyle = (nome: string): string | undefined => {
                   </span>
                 ))
               }
-              <span class="lc-tl__now" style={`left:${tlNow}%`}></span>
             </span>
           </div>
 
@@ -540,7 +537,6 @@ const markStyle = (nome: string): string | undefined => {
                         style={`left:${m.left}%;width:${m.width}%`}
                       />
                     ))}
-                    <span class="lc-tl__now" style={`left:${tlNow}%`} />
                   </span>
                   <span class="tick" aria-hidden="true" />
                 </summary>
@@ -581,7 +577,6 @@ const markStyle = (nome: string): string | undefined => {
                           class:list={["lc-tl__bar", `lc-tl__bar--${lane.key}`]}
                           style={`left:${e.left}%;width:${e.width}%`}
                         />
-                        <span class="lc-tl__now" style={`left:${tlNow}%`} />
                       </span>
                     </li>
                   ))}

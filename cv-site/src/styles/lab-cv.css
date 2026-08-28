@@ -270,41 +270,12 @@
   position: relative;
 }
 
-/* Nome e ruolo sulla stessa riga: sono la stessa informazione, e su due
-   righe facevano scendere di un rigo tutto cio' che segue. `baseline` e non
-   `center` perche' la pillola ha un fondo pieno: allineata al centro
-   galleggerebbe rispetto alla parola accanto. `wrap` e' la via d'uscita per
-   gli schermi stretti — sotto una certa larghezza la pillola va a capo da
-   sola, che e' meglio che stringere il nome. */
-.lc-ident {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: var(--size-12);
-}
-
 .lc-name {
   font-family: var(--font-display);
   font-size: clamp(1.875rem, 5vw, 2.75rem);
   font-weight: 800;
   line-height: 1.05;
   letter-spacing: -0.02em;
-}
-
-/* Il ruolo della lente: secondo dato cercato, subito sotto il nome.
-   Pillola piena invece di testo colorato — e' il modo di avere il colore
-   acceso senza metterlo su del testo. L'etichetta quasi nera sopra
-   l'accento sta fra 5,76 (viola) e 14,97 (ciano): passa ovunque, e la
-   macchia di colore e' molto piu' grande di quanto sarebbe una parola
-   scritta in arancione. */
-.lc-role {
-  display: inline-block;
-  padding: 0.1875rem var(--size-12);
-  border-radius: var(--radius-4);
-  background: var(--color-accent);
-  color: var(--lc-on-accent);
-  font-size: var(--fs-16);
-  font-weight: 700;
 }
 
 .lc-claim {
@@ -1329,13 +1300,14 @@
   background: var(--color-lens-creative);
 }
 
-.lc-tl__now {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  width: 1px;
-  background: var(--lc-line-strong);
-}
+/* Qui c'era `.lc-tl__now`: una tacca senza etichetta, ripetuta su ogni riga
+   — l'asse, ogni corsia, e poi una volta per ciascuna esperienza aperta —
+   per segnare lo stesso punto, "oggi". Segnalata da Giulio il 2026-08-28:
+   con i ruoli in corso che finiscono proprio a oggi, la tacca finiva
+   incollata alla fine della barra, e senza una parola accanto (era
+   aria-hidden come il resto del grafico) si leggeva come un difetto di
+   disegno — un pixel in piu' — non come un dato. Tolta ovunque: dal
+   markup di CvLensPage.astro, dalla vetrina, da qui. */
 
 /* ── Le teste di corsia ──────────────────────────────────────────────── */
 

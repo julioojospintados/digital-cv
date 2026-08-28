@@ -2629,10 +2629,7 @@ const NAV = [
         <div class="ds-stage">
           <div class="lc">
             <div class="lc-head__text" data-ds-snippet>
-              <div class="lc-ident">
-                <h1 class="lc-name">Giulio Occhipinti</h1>
-                <p class="lc-role">Web & UX Designer</p>
-              </div>
+              <h1 class="lc-name">Giulio Occhipinti</h1>
               <p class="lc-claim">
                 {
                   it
@@ -2646,7 +2643,7 @@ const NAV = [
         <div class="ds-spec">
           <div class="ds-spec__row ds-spec__row--wide">
             <span class="ds-spec__k">{t.specClass}</span>
-            <p class="ds-spec__v"><code>lc-ident · lc-name · lc-role · lc-claim</code></p>
+            <p class="ds-spec__v"><code>lc-name · lc-claim</code></p>
           </div>
           <div class="ds-spec__row">
             <span class="ds-spec__k">{t.specUse}</span>
@@ -2663,8 +2660,8 @@ const NAV = [
             <p class="ds-spec__v">
               {
                 it
-                  ? "Non scrivere il ruolo in testo colorato: la pillola piena esiste perché l'arancione come testo si ferma a 3,62:1."
-                  : "Do not set the role in coloured text: the filled pill exists because orange as text stops at 3.62:1."
+                  ? "Non rimettere il nome della lente sotto il nome proprio. C'era, in una pillola d'accento, ed è stato tolto il 2026-08-28: la stessa etichetta è già in barra dentro il comando che cambia lente, e là dice una cosa in più — che se ne può scegliere un'altra. Qui era la seconda volta che si leggeva la stessa parola a due centimetri di distanza."
+                  : "Do not put the lens name back under the person's name. It was there, in an accent pill, and was removed on 2026-08-28: the same label already sits in the bar inside the control that switches lens, and there it says one thing more — that another one can be chosen. Here it was the second time you read the same word two centimetres apart."
               }
             </p>
           </div>
@@ -3614,7 +3611,6 @@ const NAV = [
                   <span class="lc-tl__tick" style="left:31%">2014</span>
                   <span class="lc-tl__tick" style="left:62%">2019</span>
                   <span class="lc-tl__tick" style="left:93%">2024</span>
-                  <span class="lc-tl__now" style="left:97%"></span>
                 </span>
               </div>
 
@@ -3627,7 +3623,6 @@ const NAV = [
                   </span>
                   <span class="lc-tl__track" aria-hidden="true">
                     <span class="lc-tl__bar lc-tl__bar--design" style="left:34%;width:63%"></span>
-                    <span class="lc-tl__now" style="left:97%"></span>
                   </span>
                   <span class="tick" aria-hidden="true"></span>
                 </summary>
@@ -3648,7 +3643,6 @@ const NAV = [
                     <span class="lc-all__mark" aria-hidden="true"></span>
                     <span class="lc-tl__track" aria-hidden="true">
                       <span class="lc-tl__bar lc-tl__bar--design" style="left:75%;width:22%"></span>
-                      <span class="lc-tl__now" style="left:97%"></span>
                     </span>
                   </li>
                   <li class="lc-all__row">
@@ -3663,7 +3657,6 @@ const NAV = [
                     </span>
                     <span class="lc-tl__track" aria-hidden="true">
                       <span class="lc-tl__bar lc-tl__bar--design" style="left:34%;width:31%"></span>
-                      <span class="lc-tl__now" style="left:97%"></span>
                     </span>
                   </li>
                 </ul>
@@ -3678,7 +3671,6 @@ const NAV = [
                   </span>
                   <span class="lc-tl__track" aria-hidden="true">
                     <span class="lc-tl__bar lc-tl__bar--tech" style="left:50%;width:47%"></span>
-                    <span class="lc-tl__now" style="left:97%"></span>
                   </span>
                   <span class="tick" aria-hidden="true"></span>
                 </summary>
@@ -3698,7 +3690,6 @@ const NAV = [
                     </span>
                     <span class="lc-tl__track" aria-hidden="true">
                       <span class="lc-tl__bar lc-tl__bar--tech" style="left:50%;width:47%"></span>
-                      <span class="lc-tl__now" style="left:97%"></span>
                     </span>
                   </li>
                 </ul>
@@ -3711,9 +3702,9 @@ const NAV = [
             <span class="ds-spec__k">{t.specClass}</span>
             <p class="ds-spec__v">
               <code
-                >lc-tl · lc-tl__axisrow · lc-tl__scale · lc-tl__tick · lc-tl__now · lc-tl__track ·
-                lc-tl__bar · lc-tl__bar--off · lc-lane · lc-lane__head · lc-lane__key ·
-                lc-lane__key--off · lc-lane__n · lc-lane__list</code
+                >lc-tl · lc-tl__axisrow · lc-tl__scale · lc-tl__tick · lc-tl__track · lc-tl__bar ·
+                lc-tl__bar--off · lc-lane · lc-lane__head · lc-lane__key · lc-lane__key--off ·
+                lc-lane__n · lc-lane__list</code
               >
             </p>
           </div>
