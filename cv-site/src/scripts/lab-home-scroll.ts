@@ -283,6 +283,31 @@ export function initLabHomeSnap(): void {
   const QUIET_MS = reduced ? 60 : 220;
 
   /**
+   * Il tetto: quanto si aspetta ANCORA, al massimo, oltre l'animazione, prima
+   * di riaprire comunque — anche se il trackpad non ha ancora smesso di
+   * parlare.
+   *
+   * Segnalato da Giulio (2026-08-29): dopo una scrollata sulla home, la
+   * successiva a volte non faceva niente, e serviva muovere il mouse per
+   * farla ripartire. Non era il mouse: era il tempo. Riprodotto con
+   * Playwright dando in pasto al sito una coda d'inerzia realistica — un
+   * trackpad Windows Precision continua a mandare eventi `wheel` per 1-3
+   * secondi dopo che le dita si sono alzate, a delta decrescente ma quasi
+   * mai a zero. `QUIET_MS` sopra aspetta il SILENZIO totale, e senza un
+   * tetto quell'attesa si allunga a ogni evento della coda: misurato, un
+   * flick con una coda da 2,5s teneva `busy` a true — quindi ogni gesto
+   * successivo veniva ignorato senza nessun segnale — per quasi 5 secondi.
+   *
+   * Il tetto non toglie la protezione, la limita: la parte "rumorosa" della
+   * coda, quella che rischia di essere scambiata per un gesto vero (il
+   * problema che QUIET_MS risolveva), si esaurisce quasi sempre nei primi
+   * 300-400ms. Oltre il tetto si riapre comunque: nel peggiore dei casi si
+   * salta una scheda di troppo, che è un difetto piccolo e raro; il blocco
+   * di piu' secondi era un difetto grande e certo.
+   */
+  const MAX_QUIET_WAIT_MS = reduced ? 60 : 500;
+
+  /**
    * Il rimbalzo finale. La sezione supera di poco il punto d'arrivo e ci
    * rientra: è quello che dà la sensazione di peso, invece di una frenata
    * liscia che si spegne e basta.
@@ -305,15 +330,23 @@ export function initLabHomeSnap(): void {
 
   let busy = false;
   let lastGestureTs = 0;
+  /** Quando scade il tetto per il ciclo di attesa in corso. 0 = nessun ciclo
+   *  attivo; si fissa al PRIMO giro di `release()` di ogni gesto e si
+   *  azzera quando si riapre, cosi' il gesto successivo riparte da zero. */
+  let releaseDeadline = 0;
 
-  /** Riapre ai gesti solo quando la scia si è spenta (vedi QUIET_MS). */
+  /** Riapre ai gesti quando la scia si e' spenta (QUIET_MS) o quando scade
+   *  il tetto (MAX_QUIET_WAIT_MS), quale dei due arriva prima. */
   const release = () => {
-    const quiet = performance.now() - lastGestureTs;
-    if (quiet < QUIET_MS) {
-      window.setTimeout(release, QUIET_MS - quiet);
+    const ora = performance.now();
+    if (!releaseDeadline) releaseDeadline = ora + MAX_QUIET_WAIT_MS;
+    const quiet = ora - lastGestureTs;
+    if (quiet < QUIET_MS && ora < releaseDeadline) {
+      window.setTimeout(release, Math.min(QUIET_MS - quiet, releaseDeadline - ora));
       return;
     }
     busy = false;
+    releaseDeadline = 0;
   };
 
   /** Ferma l'evento qui: Lenis ascolta in risalita e senza questo scorrerebbe
@@ -458,14 +491,31 @@ export function initLabHomeSnap(): void {
     (e) => {
       if (modalOpen()) return;
       if (Math.abs(e.deltaY) < 2) return;
+      // Il momento di QUESTO evento e quanto e' passato dal precedente,
+      // prima di aggiornare `lastGestureTs` — serve al controllo qui sotto,
+      // che deve confrontarsi con la scia, non con se stesso.
+      const ora = performance.now();
+      const silenzioPrecedente = ora - lastGestureTs;
       // Va segnato **sempre**, anche quando l'evento verrà ignorato: è
       // proprio la scia che si vuole misurare per sapere quando è finita.
-      lastGestureTs = performance.now();
+      lastGestureTs = ora;
       // Durante l'animazione l'evento si ferma qui e basta. Prima passava da
       // `take`, che prima di fermarlo consultava `shouldCapture` — e a pagina
       // in movimento quel controllo può dire di no, lasciando filtrare
       // l'inerzia a Lenis: la pagina scorreva sotto l'animazione.
       if (busy) {
+        swallow(e);
+        return;
+      }
+      // `busy` puo' essersi spento per il TETTO (vedi MAX_QUIET_WAIT_MS) con
+      // la coda del trackpad ancora viva: se questo evento arriva a meno di
+      // QUIET_MS dal precedente, e' ancora la stessa scia, non un gesto
+      // nuovo. Senza questo controllo il tetto risolve il blocco ma apre
+      // l'altro problema che QUIET_MS era nato per chiudere — una coda
+      // lunga che salta due o tre schede di fila invece di una. Misurato:
+      // senza, una coda sintetica da 2,5s portava dalla cima al fondo della
+      // pagina in un solo gesto.
+      if (silenzioPrecedente < QUIET_MS) {
         swallow(e);
         return;
       }
