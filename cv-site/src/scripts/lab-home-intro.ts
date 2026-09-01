@@ -63,6 +63,21 @@ export function initLabHomeIntro(): void {
   const name = document.querySelector<HTMLElement>(".lh-name");
   if (!name) return;
 
+  // Cambio lingua: questa pagina è quella di prima, tradotta. L'attributo lo
+  // mette lo script inline di HomeEntryPage.astro, che è il solo posto in cui
+  // si può decidere prima del primo disegno — lì c'è anche il perché e il
+  // numero che l'ha motivato. Qui la conseguenza: non si nasconde niente e non
+  // si anima niente, la pagina è già tutta a schermo dal primo fotogramma.
+  //
+  // L'unica cosa che si muove in un cambio lingua è il cursore
+  // dell'interruttore, e quella la disegna la transizione fra i due documenti
+  // (Layout.astro, § "Il cambio lingua attraversa invece di tagliare").
+  //
+  // `data-lh-armed` non è stato messo, quindi non c'è da toglierlo; e le
+  // lettere non vengono divise in .name-char, che è corretto — quella
+  // divisione serve solo a questa coreografia.
+  if (document.documentElement.hasAttribute("data-lh-nointro")) return;
+
   const introAlreadySeen = !shouldPlayInFull();
   try {
     sessionStorage.setItem(LAB_INTRO_KEY, "1");
@@ -112,13 +127,16 @@ export function initLabHomeIntro(): void {
   const otherChars = allChars.filter((c) => c !== firstGChar && c !== firstOChar);
 
   // ── Il lampo su G e O ───────────────────────────────────────────────────
-  // Tre stati con la stessa forma — due bagliori più l'alone scuro — perché
-  // GSAP interpola text-shadow numero per numero: liste di lunghezza diversa
-  // si interpolano male. L'alone è l'ultimo strato di tutti e tre, quindi non
-  // sparisce mai: è ciò che tiene leggibile il nome sopra agli oggetti.
-  const halo = getComputedStyle(name).getPropertyValue("--lh-name-halo").trim();
-  const glowOff = `0 0 0 rgba(255, 255, 255, 0), 0 0 0 rgba(255, 255, 255, 0), ${halo}`;
-  const glowOn = `0 0 28px rgba(255, 255, 255, 0.65), 0 0 12px rgba(255, 255, 255, 0.4), ${halo}`;
+  // Due stati con la stessa forma — due bagliori per parte — perché GSAP
+  // interpola text-shadow numero per numero: liste di lunghezza diversa si
+  // interpolano male.
+  // C'era un terzo strato in coda a entrambi, l'alone scuro del nome letto da
+  // --lh-name-halo, per non lasciare G e O senza ombra a lampo finito. Quel
+  // token non esiste più (vedi .lh-name in lab-home.css, § "Niente ombra
+  // dietro al nome"): a lampo spento il nome torna semplicemente senza ombra,
+  // come tutte le altre lettere.
+  const glowOff = "0 0 0 rgba(255, 255, 255, 0), 0 0 0 rgba(255, 255, 255, 0)";
+  const glowOn = "0 0 28px rgba(255, 255, 255, 0.65), 0 0 12px rgba(255, 255, 255, 0.4)";
 
   // ── Stato iniziale ──────────────────────────────────────────────────────
   const copyGroup = [".lh-tagline", ".lh-cred", ".lh-bar"];
@@ -167,8 +185,7 @@ export function initLabHomeIntro(): void {
     "-=0.1",
   );
   tl.to(goChars, { textShadow: glowOff, duration: 0.45, ease: "power2.in" });
-  // Tolto lo stile inline, l'alone torna a essere quello del CSS: da qui in
-  // poi se cambia il token, cambia anche sulla G e sulla O.
+  // Tolto lo stile inline, G e O tornano a quello che dice il foglio di stile.
   tl.set(goChars, { clearProps: "textShadow" });
 
   // 3. "iulio" e "cchipinti" — stagger a 30ms, il pavimento della regola

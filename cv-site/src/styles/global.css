@@ -792,6 +792,27 @@ body {
   animation-timing-function: var(--ease-flight);
 }
 
+/* ── Il cursore del cambio lingua attraversa le due pagine ────────────────
+   Nome assegnato al clic e al risveglio da Layout.astro, § "Il cambio lingua
+   attraversa invece di tagliare" — mai nel CSS, per la stessa ragione scritta
+   sopra: `.lang-switch__thumb` esiste su OGNI pagina del sito, e un nome fisso
+   farebbe leggere al browser anche una navigazione fra due lenti come «stesso
+   elemento», caricandola di una fotografia in più per niente.
+
+   Non ha bisogno di --ease-flight: quella curva esiste per l'oggetto che
+   attraversa mezzo schermo, qui il viaggio è di 33px dentro una pillola. E non
+   ha bisogno di --duration-page: è un CONTROLLO che risponde a un dito, e la
+   sua durata è quella degli altri controlli del sistema.
+
+   `--duration-micro` a movimento ridotto non basta a spegnerlo: la regola
+   globale che azzera le durate usa `*`, e i pseudo-elementi di transizione
+   stanno in un albero a parte che `*` non raggiunge. Lo spegne lo script, che
+   sotto `prefers-reduced-motion` il nome non lo assegna proprio. */
+::view-transition-group(lang-thumb) {
+  animation-duration: var(--duration-micro);
+  animation-timing-function: var(--ease-standard);
+}
+
 /* ── Rallentatore ─────────────────────────────────────────────────────────
    `?vt=slow` su un qualunque indirizzo del sito e il passaggio dura dieci
    volte tanto, per tutta la sessione, finche' non lo si spegne con

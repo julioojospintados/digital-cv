@@ -115,24 +115,46 @@
   }
 }
 
-/* Alla pressione il cursore parte prima della pagina. Il link è sempre e
-   solo l'altra posizione, quindi «un link premuto» basta a dire da che
-   parte deve andare — niente da calcolare, due regole speculari.
-   È l'unico momento in cui questo interruttore si muove davvero: il cambio
-   lingua è un cambio di pagina, non uno stato locale, e senza questo il
-   comando resterebbe fermo fino al ricaricamento. */
-.lang-switch[data-lang="it"]:has(a.lang-switch__opt:active) {
+/* ── Il cursore parte al tocco e NON torna indietro ───────────────────────
+   Il link è sempre e solo l'altra posizione, quindi «un link premuto» basta a
+   dire da che parte deve andare — niente da calcolare, due regole speculari.
+
+   Due stati, e il secondo è la correzione di un difetto vero, misurato il
+   2026-09-01. Con il solo `:active` il cursore faceva avanti e indietro: la
+   pressione lo mandava dall'altra parte, il RILASCIO spegneva `:active` e lo
+   riportava al punto di partenza, e solo dopo arrivava la pagina nuova con il
+   cursore di nuovo dall'altra parte. Cronometrato sull'interruttore vero:
+   150ms di andata alla pressione, 150ms di ritorno al rilascio, poi il cambio
+   pagina. Chi guardava vedeva «va su EN, torna su IT, si ricarica, è EN» — tre
+   movimenti per un comando che ne ha uno solo.
+
+   `[data-going]` è quel movimento reso definitivo: lo mette al clic lo script
+   in Layout.astro (§ "Il cambio lingua attraversa invece di tagliare"), e da lì
+   il cursore resta dov'è andato finché la pagina non cambia. `:active` resta
+   come stato di pressione per chi non ha JavaScript — lì la molla c'è ancora,
+   ma senza JS non c'è nemmeno la transizione fra le due pagine, e un feedback
+   di pressione è meglio di niente.
+
+   Fra le due pagine il cursore è lo STESSO elemento agli occhi del browser
+   (`view-transition-name: lang-thumb`, assegnato dallo stesso script): la
+   traversata la disegna la transizione di pagina, non la transizione CSS qui
+   sopra. Questa serve al solo tratto che avviene dentro una pagina sola. */
+.lang-switch[data-lang="it"]:has(a.lang-switch__opt:active),
+.lang-switch[data-lang="it"][data-going] {
   --ls-i: 1;
 }
 
-.lang-switch[data-lang="en"]:has(a.lang-switch__opt:active) {
+.lang-switch[data-lang="en"]:has(a.lang-switch__opt:active),
+.lang-switch[data-lang="en"][data-going] {
   --ls-i: 0;
 }
 
-.lang-switch:has(a.lang-switch__opt:active) .lang-switch__opt[aria-current] {
+.lang-switch:has(a.lang-switch__opt:active) .lang-switch__opt[aria-current],
+.lang-switch[data-going] .lang-switch__opt[aria-current] {
   color: var(--ls-muted);
 }
 
-.lang-switch a.lang-switch__opt:active {
+.lang-switch a.lang-switch__opt:active,
+.lang-switch[data-going] a.lang-switch__opt {
   color: var(--ls-su-acceso);
 }

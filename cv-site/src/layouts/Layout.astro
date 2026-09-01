@@ -26,6 +26,21 @@ interface Props {
    * coppia con la riga corrispondente in robots.txt e col filtro della
    * sitemap: da solo, `noindex` non impedisce la scansione. */
   noindex?: boolean;
+  /**
+   * La pagina si aggancia da sola, con `scroll-snap` nativo: qui Lenis **non**
+   * si accende.
+   *
+   * Non è una preferenza, è un'incompatibilità. Lenis non lascia scorrere il
+   * browser: intercetta la rotella e riscrive la posizione a ogni fotogramma.
+   * Per il motore di snap quello non è un gesto, è una sequenza di salti
+   * programmatici — e lo snap o non parte, o parte contro l'animazione. Le due
+   * cose vogliono possedere la stessa cosa, e una delle due deve cedere.
+   *
+   * Dove è `true` lo scorrimento è quello nativo: nessun evento intercettato,
+   * quindi nessuna finestra in cui un gesto possa sparire. È la ragione per
+   * cui la home sta su questo binario — vedi lab-home.css § "L'aggancio".
+   */
+  nativeSnap?: boolean;
 }
 
 const {
@@ -39,6 +54,7 @@ const {
   // di eslint. Rinominarla in consentBannerWaitForWip quando si riattiva.
   consentBannerWaitForWip: _consentBannerWaitForWip = false,
   noindex = false,
+  nativeSnap = false,
 } = Astro.props;
 
 const siteUrl = "https://giulio-occhipinti.com";
@@ -91,7 +107,12 @@ const jsonLd = {
 ---
 
 <!doctype html>
-<html lang={lang} data-mode={mode ?? "tech"} data-fab-scrollwait>
+<html
+  lang={lang}
+  data-mode={mode ?? "tech"}
+  data-fab-scrollwait
+  data-native-snap={nativeSnap ? "" : undefined}
+>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -205,6 +226,114 @@ const jsonLd = {
          Adesso tutte le facce che servono — quattro Lexend e tre JetBrains
          Mono — sono dichiarate in global.css, che blocca gia' il rendering.
          Un set solo, deciso una volta. -->
+
+    <!-- ── Il cambio lingua attraversa invece di tagliare ──────────────────
+         Misurato il 2026-09-01 sul cambio lingua della home, e i numeri sono
+         il motivo per cui questo script esiste:
+
+           · il cursore dell'interruttore faceva 150ms di andata alla
+             pressione e 150ms di RITORNO al rilascio, e solo dopo arrivava la
+             pagina nuova. Tre movimenti per un comando che ne ha uno;
+           · la transizione fra i due documenti c'era gia' — `pageswap` e
+             `pagereveal` consegnano entrambi un viewTransition — ma alla sua
+             `ready` le animazioni erano ZERO. La radice non si fotografa
+             (global.css, `view-transition-name: none`) e nessun elemento
+             portava un nome condiviso: il browser montava tutta la macchina
+             della transizione per non animare niente.
+
+         Qui non si accende niente di nuovo: si da' un nome all'unica cosa che
+         si muove davvero. Il cursore e' lo stesso oggetto sulle due pagine, in
+         due posizioni diverse — e' esattamente il caso per cui un
+         `view-transition-name` condiviso esiste. Costo: due assegnazioni di
+         stringa dentro una transizione che era gia' in corso.
+
+         Quello che NON si fa, e vale scriverlo perche' e' la prima idea che
+         viene: fotografare la radice per dissolvere le due lingue una
+         nell'altra. Tre ragioni. La dissolvenza di serie fonde i due strati in
+         `plus-lighter`, quindi la frase italiana e quella inglese si
+         leggerebbero sovrapposte — provata e scartata il 2026-08-27 per la
+         lente, e qui sarebbe peggio, perche' i due testi dicono la stessa cosa
+         in due lingue. La pagina d'arrivo, poi, al primo disegno e' ancora
+         nascosta dall'anti-lampo dell'ingresso: si dissolverebbe verso il
+         vuoto. E terzo, non serve — fra le due home cambiano la tagline, la
+         riga dei ruoli e i testi sotto la piega; il nome, gli oggetti e
+         l'impaginato sono identici, quindi non c'e' quasi niente da
+         dissolvere.
+
+         Le due meta':
+
+         1. ALLA PARTENZA (delegato, in cattura: il markup non c'e' ancora
+            quando questo script gira). `data-going` fissa il cursore dove sta
+            andando — e' la fine della molla — e il nome fa entrare il cursore
+            nella fotografia del documento che se ne va.
+         2. ALL'ARRIVO (`pagereveal`, prima del primo disegno). Il nome va
+            dato alla pagina nuova prima che il browser la fotografi, che e'
+            la stessa ragione per cui l'atterraggio dell'oggetto della lente
+            sta in uno script inline e non in un modulo.
+
+         Come si sa che questa navigazione e' un cambio lingua e non un'altra:
+         l'interruttore della pagina d'arrivo ha UN solo link, e quel link
+         punta alla pagina da cui si viene. Se combacia con il referrer,
+         allora si e' arrivati da li' cambiando lingua. Nessuna matematica sui
+         percorsi da tenere allineata a `lensPath()`: il dato e' gia' nel DOM,
+         messo da chi lo sa gia'.
+
+         A movimento ridotto il nome non si assegna: la regola globale che
+         azzera le durate usa `*`, e i pseudo-elementi della transizione
+         stanno in un albero che `*` non raggiunge. Senza nome non c'e'
+         niente da animare, ed e' il comportamento giusto. -->
+    <script is:inline>
+      (() => {
+        const NOME = "lang-thumb";
+        const fermo = matchMedia("(prefers-reduced-motion: reduce)").matches;
+        const nudo = (u) => u.pathname.replace(/\/+$/, "") || "/";
+
+        addEventListener(
+          "click",
+          (e) => {
+            const opt = e.target.closest && e.target.closest("a.lang-switch__opt");
+            if (!opt || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey) return;
+            const sw = opt.closest(".lang-switch");
+            if (!sw) return;
+            sw.dataset.going = "";
+            const th = sw.querySelector(".lang-switch__thumb");
+            if (th && !fermo) th.style.viewTransitionName = NOME;
+          },
+          true,
+        );
+
+        // Tornando indietro dalla cache la pagina e' quella di prima, con
+        // addosso lo stato di un viaggio gia' fatto: il cursore resterebbe
+        // dalla parte sbagliata rispetto alla lingua che si sta leggendo.
+        addEventListener("pageshow", (e) => {
+          if (!e.persisted) return;
+          document.querySelectorAll(".lang-switch[data-going]").forEach((sw) => {
+            delete sw.dataset.going;
+          });
+        });
+
+        addEventListener("pagereveal", (e) => {
+          const vt = e.viewTransition;
+          if (!vt || fermo || !document.referrer) return;
+          const sw = document.querySelector(".lang-switch");
+          const link = sw && sw.querySelector("a.lang-switch__opt");
+          const th = sw && sw.querySelector(".lang-switch__thumb");
+          if (!link || !th) return;
+          let da;
+          try {
+            da = new URL(document.referrer);
+          } catch {
+            return;
+          }
+          if (da.origin !== location.origin) return;
+          if (nudo(da) !== nudo(new URL(link.href))) return;
+          th.style.viewTransitionName = NOME;
+          vt.finished.finally(() => {
+            th.style.viewTransitionName = "";
+          });
+        });
+      })();
+    </script>
 
     <!-- ── L'oggetto in volo aspetta che la pagina sia in piedi ────────────
          Una transizione fra due documenti parte al PRIMO DISEGNO della
@@ -513,6 +642,17 @@ const jsonLd = {
       gsap.registerPlugin(ScrollTrigger);
 
       afterPageTransition(() => {
+        // Pagina che si aggancia da sola con `scroll-snap` nativo: Lenis resta
+        // spento, e lo scorrimento è quello del browser. Le due cose vogliono
+        // possedere la stessa posizione — il perché per esteso sta sulla prop
+        // `nativeSnap` in testa a questo file.
+        //
+        // ScrollTrigger non ne risente: senza Lenis torna semplicemente ad
+        // ascoltare l'evento `scroll` nativo, che è il suo comportamento
+        // predefinito. L'unica cosa che va tolta è il ponte `lenis.on("scroll")`,
+        // che senza Lenis non ha nessuno da ascoltare.
+        if (document.documentElement.hasAttribute("data-native-snap")) return;
+
         const lenis = new Lenis({ lerp: 0.15, syncTouch: true });
         lenis.on("scroll", ScrollTrigger.update);
         gsap.ticker.add((time) => {

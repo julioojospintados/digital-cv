@@ -323,10 +323,10 @@ const MOTION = [
   },
   {
     name: it ? "Aggancio delle sezioni" : "Section snapping",
-    how: it ? "Lenis · 0.8s · ease-out-back" : "Lenis · 0.8s · ease-out-back",
+    how: it ? "CSS scroll-snap · y mandatory" : "CSS scroll-snap · y mandatory",
     rule: it
-      ? "Una scrollata, una sezione. I pannelli più alti della finestra si leggono liberi e agganciano solo al bordo."
-      : "One scroll, one section. Panels taller than the window scroll freely and only snap at the edge.",
+      ? "Una scrollata, una sezione — e lo fa il browser. Lo faceva il JavaScript fino al 2026-08-31: distingueva il gesto dalla coda del touchpad guardando il tempo, e su un touchpad quella distinzione non esiste, così le spinte dentro la coda sparivano. Nessun evento intercettato, nessun gesto che può sparire. Sulla home Lenis resta spento: i due non possono possedere la stessa posizione."
+      : "One scroll, one section — and the browser does it. JavaScript did it until 2026-08-31: it told a gesture from a trackpad's inertia tail by elapsed time, and on a trackpad that distinction doesn't exist, so pushes inside the tail vanished. No event is intercepted, so no gesture can vanish. Lenis stays off on the home: the two cannot own the same scroll position.",
   },
   {
     name: it ? "Luce d'ambiente" : "Ambient light",
@@ -2135,8 +2135,8 @@ const NAV = [
             <p class="ds-spec__v">
               {
                 it
-                  ? "<dialog> nativo aperto con showModal(): focus trap, ESC e clic sul fondo arrivano dal browser. data-lenis-prevent ferma Lenis, e la guardia dialog-open in lab-home-scroll.ts ferma l'aggancio della home, che altrimenti scorrerebbe la pagina invece del contenuto."
-                  : "Native <dialog> opened with showModal(): focus trap, ESC and backdrop click come from the browser. data-lenis-prevent stops Lenis, and the dialog-open guard in lab-home-scroll.ts stops the home's snap, which would otherwise scroll the page instead of the content."
+                  ? "<dialog> nativo aperto con showModal(): focus trap, ESC e clic sul fondo arrivano dal browser. La rotellina dentro la modale non scorre più la pagina sotto: sulla home non c'è più né Lenis né un aggancio in JavaScript da cui difendersi, e altrove ci pensa data-lenis-prevent."
+                  : "Native <dialog> opened with showModal(): focus trap, ESC and backdrop click come from the browser. The wheel inside the modal no longer scrolls the page underneath: on the home there is neither Lenis nor a JavaScript snap left to guard against, and elsewhere data-lenis-prevent handles it."
               }
             </p>
           </div>
@@ -2462,8 +2462,8 @@ const NAV = [
         <p class="ds-sub__note">
           {
             it
-              ? "Come finisce l'ingresso: il megafono, le due card di contatto e la firma. È il solo componente della vetrina, insieme alla card indice, importato davvero invece che ricopiato — EntryFooter.astro esiste e porta con sé il proprio foglio, quindi qui non può divergere nemmeno nel markup."
-              : "How the entry ends: the megaphone, the two contact cards and the sign-off. Along with the index card, it is the only component in this showcase that is genuinely imported rather than copied — EntryFooter.astro exists and brings its own stylesheet, so here it cannot diverge even in markup."
+              ? "Come finisce l'ingresso: il megafono, le due card di contatto e la firma. È il solo componente della vetrina, insieme alla card indice, importato davvero invece che ricopiato — EntryFooter.astro esiste e porta con sé il proprio foglio, quindi qui non può divergere nemmeno nel markup. Il titolo è «Tocca a te. / Your move.» dal 2026-09-01: prima era «Parliamone. / Let's talk.», che in inglese ripeteva la costruzione di «Let's connect» trecento pixel più sotto e in italiano era il riempitivo di ogni pagina contatti esistente. Sotto al titolo non c'è più nessun occhiello: «CONTATTI» stava sotto invece che sopra, e un occhiello sotto il titolo non introduce, commenta."
+              : "How the entry ends: the megaphone, the two contact cards and the sign-off. Along with the index card, it is the only component in this showcase that is genuinely imported rather than copied — EntryFooter.astro exists and brings its own stylesheet, so here it cannot diverge even in markup. The title has been «Tocca a te. / Your move.» since 2026-09-01: it used to be «Parliamone. / Let's talk.», which in English repeated the construction of «Let's connect» three hundred pixels below, and in Italian was the filler every contact page already has. There is no eyebrow under the title any more: «CONTATTI» sat below instead of above, and an eyebrow under the title does not introduce, it comments."
           }
         </p>
         <div class="ds-stage">
@@ -5425,8 +5425,8 @@ const NAV = [
             <p class="ds-spec__v">
               {
                 it
-                  ? "Il cursore parte alla pressione, non all'arrivo: cambiare lingua è cambiare pagina, e senza questo il comando resterebbe fermo fino al ricaricamento. 150ms, la durata di un feedback di pressione."
-                  : "The thumb moves on press, not on arrival: changing language means changing page, and without this the control would sit still until the reload. 150ms, the duration of a press feedback."
+                  ? "Il cursore parte al tocco e non torna più indietro: `[data-going]` lo fissa dove sta andando, e la traversata fra le due pagine la disegna la transizione di documento — lo stesso cursore porta `view-transition-name: lang-thumb` in partenza e in arrivo, 150ms con la curva standard. Fino al 2026-09-01 il movimento era affidato al solo `:active`: la pressione lo mandava dall'altra parte, il rilascio lo riportava indietro, e solo dopo arrivava la pagina nuova con il cursore di nuovo di là. Cronometrato: 150ms di andata, 150ms di ritorno, poi il ricaricamento. Tre movimenti per un comando che ne ha uno."
+                  : "The thumb moves on press and never springs back: `[data-going]` pins it where it is going, and the crossing between the two pages is drawn by the document transition — the same thumb carries `view-transition-name: lang-thumb` on departure and on arrival, 150ms with the standard curve. Until 2026-09-01 the movement relied on `:active` alone: pressing sent it across, releasing brought it back, and only then did the new page arrive with the thumb across again. Timed: 150ms out, 150ms back, then the reload. Three movements for a control that has one."
               }
             </p>
           </div>

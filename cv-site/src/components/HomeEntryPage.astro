@@ -148,7 +148,13 @@ const sections = MODES.map((mode) => ({
 }));
 ---
 
-<Layout title={t.ui.homeTitle} description={t.ui.homeDescription} mode="creative" lang={locale}>
+<Layout
+  title={t.ui.homeTitle}
+  description={t.ui.homeDescription}
+  mode="creative"
+  lang={locale}
+  nativeSnap
+>
   <link slot="head" rel="preload" as="image" href="/knolling/laptop.webp" fetchpriority="high" />
 
   {
@@ -168,11 +174,42 @@ const sections = MODES.map((mode) => ({
       bianca per sempre. is:inline = eseguito durante il parse, prima del primo
       disegno; un modulo partirebbe troppo tardi, cioè a lampo già avvenuto. */
   }
-  <script slot="head" is:inline>
-    document.documentElement.setAttribute("data-lh-armed", "");
-    setTimeout(function () {
-      document.documentElement.removeAttribute("data-lh-armed");
-    }, 3000);
+  <script slot="head" is:inline define:vars={{ otherHomeHref }}>
+    // Un caso in cui questa pagina NON nasce: si arriva dalla stessa pagina
+    // nell'altra lingua. Lì non c'è niente da presentare — l'ingresso è già
+    // stato visto un istante fa, in italiano — e rigiocarlo vuol dire spegnere
+    // per due decimi di secondo la pagina che si sta guardando, che è appunto
+    // ciò che si legge come «si è ricaricata». Misurato il 2026-09-01 sul
+    // cambio lingua: .lh-name a opacity 0 per 197ms, cioè una dozzina di
+    // fotogrammi di ingresso vuoto, prima che il modulo arrivasse a rivelarlo.
+    //
+    // Come si riconosce il caso: il referrer è l'altra home. `otherHomeHref` è
+    // lo stesso valore che riceve l'interruttore di lingua qui sotto, non una
+    // seconda copia da tenere allineata.
+    let daAltraLingua = false;
+    try {
+      if (document.referrer) {
+        const da = new URL(document.referrer);
+        const nudo = function (p) {
+          return p.replace(/\/+$/, "") || "/";
+        };
+        daAltraLingua =
+          da.origin === location.origin &&
+          nudo(da.pathname) === nudo(new URL(otherHomeHref, location.origin).pathname);
+      }
+    } catch (_e) {
+      // Referrer illeggibile: si tratta come una visita qualunque, cioè con
+      // l'ingresso. Un'intro di troppo, non una pagina vuota.
+    }
+
+    if (daAltraLingua) {
+      document.documentElement.setAttribute("data-lh-nointro", "");
+    } else {
+      document.documentElement.setAttribute("data-lh-armed", "");
+      setTimeout(function () {
+        document.documentElement.removeAttribute("data-lh-armed");
+      }, 3000);
+    }
   </script>
 
   {
@@ -490,7 +527,7 @@ const sections = MODES.map((mode) => ({
 <script>
   import { initLabHero } from "../scripts/lab-hero";
   import { initLabHomeIntro } from "../scripts/lab-home-intro";
-  import { initLabHomeScroll, initLabHomeSnap, initLabHomeMood } from "../scripts/lab-home-scroll";
+  import { initLabHomeScroll, initLabHomeMood } from "../scripts/lab-home-scroll";
   import { initLensTransition } from "../scripts/lens-transition";
 
   // Per prima: è l'unica che nasconde qualcosa, e deve farlo prima che le
@@ -498,7 +535,9 @@ const sections = MODES.map((mode) => ({
   initLabHomeIntro();
   initLabHero();
   initLabHomeScroll();
-  initLabHomeSnap();
+  // L'aggancio non è più qui: lo fa il browser, con `scroll-snap` in
+  // lab-home.css. Vedi lì § "L'aggancio" per il perché di 200 righe di JS
+  // sostituite da cinque di CSS.
   initLabHomeMood();
   // Nessuna animazione: assegna solo il nome condiviso al clic. Vedi il file.
   initLensTransition();

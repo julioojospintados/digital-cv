@@ -95,7 +95,21 @@
   background: var(--color-bg);
   color: var(--lh-ink);
   font-family: var(--font-sans);
-  overflow-x: hidden;
+  /* `clip`, non `hidden`, ed è la differenza fra l'aggancio che funziona e
+     l'aggancio che non parte.
+     `overflow-x: hidden` rende l'elemento un contenitore di scorrimento su
+     **entrambi** gli assi: quando un asse non è `visible`, l'altro non può
+     restarlo e diventa `auto` da solo. Così `.lh` diventava il contenitore
+     di scorrimento più vicino alle sezioni, e `scroll-snap` aggancia sempre
+     al contenitore più vicino — che qui è alto quanto il suo contenuto e
+     quindi non scorre mai. Gli agganci finivano appesi a un contenitore
+     fermo, e il documento (che è quello che scorre davvero) non ne sapeva
+     niente: misurato, la pagina si fermava dove capitava invece che sulle
+     sezioni.
+     `clip` taglia l'eccedenza orizzontale senza creare nessun contenitore di
+     scorrimento, quindi il contenitore più vicino torna a essere `html` —
+     lo stesso motivo per cui global.css usa `clip` su `html`. */
+  overflow-x: clip;
 }
 
 /* ── Il fondale ───────────────────────────────────────────────────────────
@@ -193,6 +207,78 @@
 /* Il cambio lingua della barra è components/LangSwitch.astro, con il suo
    foglio (lang-switch.css): stessa cosa in sei pagine, quindi non sta qui.
    Da .lh eredita solo inchiostro e filo — vedi le righe .lh .lang-switch. */
+
+/* ── L'aggancio ───────────────────────────────────────────────────────────
+   Una schermata per volta — e a farlo è il browser.
+
+   Fino al 2026-08-31 lo faceva un meccanismo in JavaScript
+   (`initLabHomeSnap`, circa 200 righe): prendeva rotella, dito e tastiera in
+   fase di cattura, li fermava, e traduceva ogni gesto in "vai alla sezione
+   successiva". Il difetto non era un errore dentro quel codice, era la sua
+   forma. Per sapere se un evento fosse un gesto nuovo o la coda d'inerzia del
+   gesto precedente guardava il **tempo** passato dall'ultimo evento; ma su un
+   touchpad quella distinzione non esiste — la coda dura 1-3 secondi ed è
+   fatta di eventi continui, quindi ogni spinta nuova ci cadeva dentro e
+   veniva scartata come coda. Misurato: in quattro prove su quattro una
+   seconda spinta deliberata dentro la coda non produceva niente. Quattro giri
+   di correzioni hanno spostato quel confine senza mai toglierlo, perché il
+   problema era avere un confine da indovinare.
+
+   `scroll-snap` non deve indovinare niente: lo scorrimento resta quello
+   nativo, non si intercetta nessun evento, e quindi non esiste nessuna
+   finestra in cui un gesto possa sparire. Il browser sa distinguere il gesto
+   dall'inerzia per la ragione più semplice: è lui a produrli.
+
+   **`mandatory`, non `proximity`**, ed è una correzione fatta sulla misura,
+   non a priori. Con `proximity` il browser aggancia solo se il gesto finisce
+   *vicino* a un punto: misurato su pannelli da 557px con rotellate da 300px,
+   si agganciava una volta su tre — 300 no, 557 sì, 857 no. Un aggancio
+   intermittente è peggio di entrambi gli estremi, perché non se ne impara la
+   regola.
+
+   Il timore che sconsigliava `mandatory` — una sezione più alta della
+   finestra con la parte in eccedenza irraggiungibile — non si applica: le
+   specifiche prevedono che quando l'area d'aggancio è **più grande** della
+   finestra il vincolo si allenti, e dentro quella sezione ci si possa fermare
+   dove si vuole. È verificato più sotto, non dedotto.
+
+   **`scroll-snap-stop: always`** conserva il ritmo "una schermata per volta":
+   un gesto forte non scavalca tre pannelli. È il carattere dell'ingresso, ed
+   è la sola parte del vecchio meccanismo che valeva la pena tenere. Se un
+   giorno sembrasse troppo trattenuto, è questa riga il regolatore: toglierla
+   lascia scorrere via libero senza toccare nient'altro.
+
+   Una cosa si perde, ed è giusto saperlo: il **rimbalzo**. Il vecchio
+   aggancio superava di poco il bersaglio e ci rientrava (`easeOutBack`), e
+   quel sorpasso dava peso all'arrivo. L'assestamento nativo non ha sorpasso:
+   si posa e basta. È il prezzo di non possedere più l'animazione — e in
+   cambio non c'è più nessun gesto che sparisce.
+
+   Nota storica, perché questa non è un'idea nuova ma un ritorno: la home
+   usava scroll-snap nativo fino al 2026-07-09, quando fu tolto per uniformare
+   tutto a Lenis. Ma Lenis non lascia scorrere il browser — riscrive la
+   posizione a ogni fotogramma — e le due cose non possono possedere la stessa
+   posizione. Sulla home Lenis ora resta spento: prop `nativeSnap` in
+   Layout.astro, che è anche il posto dove questo compromesso è spiegato dal
+   lato del JavaScript.
+   ───────────────────────────────────────────────────────────────────────── */
+
+:root[data-native-snap] {
+  scroll-snap-type: y mandatory;
+  /* Lo scroll-padding globale (--size-80, che serve alle ancore per non
+     finire sotto la barra) qui sposterebbe **ogni** aggancio 5rem più in
+     basso, lasciando in vista una striscia della sezione precedente. I
+     pannelli tengono già conto della barra con un padding proprio — vedi
+     `padding-top: max(...)` su .lh-hero qui sotto. */
+  scroll-padding-top: 0;
+}
+
+:root[data-native-snap] .lh-hero,
+:root[data-native-snap] .lh-section,
+:root[data-native-snap] .lh .entry-footer {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
 
 /* ── Ingresso ── */
 
@@ -301,14 +387,24 @@
   line-height: 0.94;
   letter-spacing: -0.035em;
   text-wrap: balance;
-  /* Alone scuro dietro al testo: gli oggetti passano vicino e senza questo la
-     leggibilità dipenderebbe da cosa c'è sotto.
-     In una variabile perché il lampo su G e O (lab-home-intro.ts) lo rilegge e
-     se lo tiene come ultimo strato mentre pulsa: senza, la G e la O finirebbero
-     l'animazione senza alone, cioè illeggibili proprio dove passa il laptop. */
-  --lh-name-halo: 0 0.15rem 2.5rem rgba(4, 34, 31, 0.85);
-
-  text-shadow: var(--lh-name-halo);
+  /* ── Niente ombra dietro al nome, e il perché va scritto ────────────────
+     Ce n'era una: 0 0.15rem 2.5rem rgba(4, 34, 31, 0.85), quaranta pixel di
+     sfocatura quasi nera, per staccare il nome dagli oggetti che gli passano
+     vicino. Il difetto non era il disegno, era l'aritmetica. Fra quel nero e
+     l'ottanio del fondo ci sono ~36 livelli di colore, distribuiti su 40
+     pixel: circa un livello per pixel, che è esattamente la soglia sotto cui
+     una sfumatura o sparisce o si spezza in anelli concentrici. Chi dei due
+     succeda non lo decide il sito — lo decide il pannello (8 bit senza
+     dithering), il profilo colore, l'HDR di Windows acceso, lo scaling
+     frazionario. Su una macchina il nome era pulito, su un'altra sedeva
+     dentro un alone visibile. Un difetto che compare su un computer sì e su
+     uno no non è governabile: si toglie la causa.
+     Il nome resta leggibile senza: .lh-copy sta a z-index 3 e il piano
+     knolling a 1, quindi gli oggetti non ci passano mai sopra, e il crema su
+     ottanio tiene il contrasto da solo.
+     Se un giorno servisse di nuovo separarlo dal fondo, l'ombra va STRETTA
+     (2-3px, non 40): su quella distanza la rampa è troppo corta perché un
+     gradino si veda. È la larghezza, non l'ombra, a essere sbagliata. */
 }
 
 .lh-tagline {
@@ -318,7 +414,6 @@
   color: var(--lh-muted);
   max-width: 30rem;
   text-wrap: pretty;
-  text-shadow: 0 0.1rem 1.5rem rgba(4, 34, 31, 0.9);
 }
 
 /* La riga dei cinque ruoli. In mono spaziato come nella home vera: è una
@@ -335,7 +430,6 @@
   color: var(--lh-muted);
   max-width: 44rem;
   text-wrap: balance;
-  text-shadow: 0 0.1rem 1.5rem rgba(4, 34, 31, 0.9);
 }
 
 /* ── La comparsa all'atterraggio ──────────────────────────────────────────
@@ -832,7 +926,7 @@ html[data-lh-armed] .lh-obj {
   /* E prende la sua schermata, come ogni altra sezione.
      Ogni .lh-section è alta 100svh col contenuto centrato: sotto il testo
      resta mezza schermata vuota. Il footer, che era un blocco basso attaccato
-     in fondo, finiva dentro quel vuoto — e "Parliamone." si leggeva con
+     in fondo, finiva dentro quel vuoto — e "Tocca a te." si leggeva con
      ancora in vista la coda della sezione precedente (l'oggetto e il bottone
      "GO to…"), come se fossero lo stesso blocco.
 
@@ -905,7 +999,7 @@ html[data-lh-armed] .lh-obj {
    Con le due card impilate il blocco contatti misura circa 438px. Sommati i
    due margini di respiro da 64px e la firma si arriva a ~582px: sopra i 600px
    di finestra ci sta, sotto no — e quello che esce dalla schermata e' la
-   prima riga, cioe' "Parliamone.". Un titolo tagliato in alto e' il difetto
+   prima riga, cioe' "Tocca a te.". Un titolo tagliato in alto e' il difetto
    peggiore possibile qui, perche' e' l'unica parola che dice cosa si fa in
    questa schermata.
 
