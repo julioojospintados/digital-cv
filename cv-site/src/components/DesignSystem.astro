@@ -40,7 +40,7 @@
  */
 import WorkIndexCard from "./cards/WorkIndexCard.astro";
 import LangSwitch from "./LangSwitch.astro";
-import EntryFooter from "./EntryFooter.astro";
+import EmailCard from "./EmailCard.astro";
 import { LOCALES } from "../lib/cv-i18n";
 import "../styles/lab-home.css";
 import "../styles/lab-cv.css";
@@ -614,7 +614,7 @@ const NAV = [
       { id: "ingresso-comandi", label: it ? "Comandi dei cassetti" : "Drawer controls" },
       { id: "ingresso-cassetti", label: it ? "Dentro i cassetti" : "Inside the drawers" },
       { id: "ingresso-lightbox", label: it ? "Lightbox delle foto" : "Photo lightbox" },
-      { id: "ingresso-contatti", label: it ? "Contatti e firma" : "Contacts and sign-off" },
+      { id: "ingresso-email", label: it ? "L'email in «Chi sono»" : "The email in «Chi sono»" },
     ],
   },
   {
@@ -2445,39 +2445,33 @@ const NAV = [
         </div>
       </section>
 
-      <section
-        class="ds-panel"
-        data-ds-panel="ingresso-contatti"
-        aria-labelledby="ingresso-contatti-t"
-      >
+      <section class="ds-panel" data-ds-panel="ingresso-email" aria-labelledby="ingresso-email-t">
         <div class="ds-panel__head">
-          <h2 class="ds-section__title" id="ingresso-contatti-t">
-            {it ? "Contatti e firma" : "Contacts and sign-off"}
+          <h2 class="ds-section__title" id="ingresso-email-t">
+            {it ? "L'email in «Chi sono»" : "The email in «Chi sono»"}
           </h2>
-          <span class="ds-panel__group"
-            >{t.secHome}<span class="ds-origin">entry-footer · contact-*</span></span
+          <span class="ds-panel__group">{t.secHome}<span class="ds-origin">contact-card</span></span
           >
         </div>
 
         <p class="ds-sub__note">
           {
             it
-              ? "Come finisce l'ingresso: il megafono, le due card di contatto e la firma. È il solo componente della vetrina, insieme alla card indice, importato davvero invece che ricopiato — EntryFooter.astro esiste e porta con sé il proprio foglio, quindi qui non può divergere nemmeno nel markup. Il titolo è «Tocca a te. / Your move.» dal 2026-09-01: prima era «Parliamone. / Let's talk.», che in inglese ripeteva la costruzione di «Let's connect» trecento pixel più sotto e in italiano era il riempitivo di ogni pagina contatti esistente. Sotto al titolo non c'è più nessun occhiello: «CONTATTI» stava sotto invece che sopra, e un occhiello sotto il titolo non introduce, commenta."
-              : "How the entry ends: the megaphone, the two contact cards and the sign-off. Along with the index card, it is the only component in this showcase that is genuinely imported rather than copied — EntryFooter.astro exists and brings its own stylesheet, so here it cannot diverge even in markup. The title has been «Tocca a te. / Your move.» since 2026-09-01: it used to be «Parliamone. / Let's talk.», which in English repeated the construction of «Let's connect» three hundred pixels below, and in Italian was the filler every contact page already has. There is no eyebrow under the title any more: «CONTATTI» sat below instead of above, and an eyebrow under the title does not introduce, it comments."
+              ? "Fino al 2026-09-02 l'ingresso aveva una sesta schermata di congedo: titolo «Tocca a te.», card email, card LinkedIn, firma e megafono. È stata tolta, e di quel blocco è sopravvissuta questa card sola, risalita alla seconda schermata. Le due misure che l'hanno decisa: la chiusura era alta quanto lo schermo e il suo contenuto ne riempiva un terzo, mentre «Chi sono» arrivava a metà, con l'aria distribuita sopra il titolo e sotto i pulsanti. Lo spazio c'era già. Quello che si è perso va saputo: LinkedIn non è più raggiungibile dall'ingresso, resta sulle pagine della lente."
+              : "Until 2026-09-02 the entry had a sixth, closing screen: the «Your move.» title, an email card, a LinkedIn card, the sign-off and the megaphone. It was removed, and this single card is what survived, moving up to the second screen. The two measurements behind it: the closing screen was as tall as the viewport with its content filling a third of it, while «Chi sono» reached half, its air spread above the title and below the buttons. The room was already there. What was lost is worth stating: LinkedIn is no longer reachable from the entry, it stays on the lens pages."
           }
         </p>
         <div class="ds-stage">
-          <EntryFooter lang={lang} emphasis data-ds-snippet />
+          <EmailCard lang={lang} data-ds-snippet />
         </div>
         <div class="ds-spec">
           <div class="ds-spec__row ds-spec__row--wide">
             <span class="ds-spec__k">{t.specClass}</span>
             <p class="ds-spec__v">
               <code
-                >entry-footer (--emphasis) · entry-footer__object · entry-footer__credit ·
-                contact-cta · contact-cta__title · contact-cta__grid · contact-card
-                (--primary/--secondary) · contact-card__label · contact-card__value ·
-                contact-card__cta · contact-card__copy</code
+                >contact-card · contact-card--primary · contact-card__label · contact-card__value ·
+                contact-card__actions · contact-card__cta · contact-card__arrow · contact-card__copy
+                · contact-card__copied</code
               >
             </p>
           </div>
@@ -2486,18 +2480,28 @@ const NAV = [
             <p class="ds-spec__v">
               {
                 it
-                  ? "In fondo alle due home, una volta, sempre con --emphasis: oggetto knolling accanto ai contatti e mail come azione primaria. La variante nuda è spenta di default per ragioni storiche — serviva la versione precedente del sito, cancellata il 2026-08-26 — e oggi non la usa nessuno."
-                  : "At the foot of the two home pages, once, always with --emphasis: knolling object beside the contacts and email as the primary action. The bare variant is off by default for historical reasons — it served the previous version of the site, deleted on 2026-08-26 — and nobody uses it today."
+                  ? "Una sola, in fondo alla colonna di testo di «Chi sono», sulle due home. Non è un componente da riusare: è l'unico posto dell'ingresso in cui esiste l'indirizzo. Sotto le 56rem il riquadro sparisce e resta il solo bottone «Scrivimi»: etichetta, indirizzo in chiaro e «Copia» servono a un desktop, dove mailto può non aprire niente e l'indirizzo si trascrive a mano. Su un telefono l'app di posta c'è sempre, e quei 110px di riquadro spingevano la pianta sotto la piega."
+                  : "One only, at the foot of the «Chi sono» text column, on both home pages. It is not a component to reuse: it is the only place on the entry where the address exists. Below 56rem the box disappears and only the «Write to me» button remains: the label, the address in the open and «Copy» serve a desktop, where mailto may open nothing and the address gets transcribed by hand. On a phone the mail app is always there, and those 110px of box pushed the plant below the fold."
               }
             </p>
           </div>
-          <div class="ds-spec__row ds-spec__row--dont">
+          <div class="ds-spec__row">
+            <span class="ds-spec__k">{t.specMotion}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "La stanghetta avanza di 0.3rem al passaggio, 200ms. La spinta è su `translate` e non su `transform`, e non è indifferente: le proprietà singole si compongono in ordine fisso (translate, rotate, scale, transform), quindi un `transform: translateX()` agisce prima della rotazione e viene ruotato con lei — su una stanghetta girata di -45° la spinta orizzontale diventava una diagonale verso l'alto. Difetto trovato il 2026-09-02, presente da quando esisteva la card. È lo stesso idioma di @keyframes cta-arrow-nudge, che spinge le frecce dei case study con `translate: 0.3125rem 0`."
+                  : "The chevron moves 0.3rem forward on hover, 200ms. The nudge is on `translate`, not `transform`, and that is not interchangeable: the individual properties compose in a fixed order (translate, rotate, scale, transform), so a `transform: translateX()` acts before the rotation and gets rotated with it — on a chevron turned -45° the horizontal push became a diagonal upwards. Found on 2026-09-02, present for as long as the card existed. It is the same idiom as @keyframes cta-arrow-nudge, which nudges the case-study arrows with `translate: 0.3125rem 0`."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row">
             <span class="ds-spec__k">{t.specDont}</span>
             <p class="ds-spec__v">
               {
                 it
-                  ? "Non confonderlo con lc-contacts, che è la riga di contatti della pagina CV: là i recapiti stanno in chiaro dentro il primo strato, qui sono la chiusura di una pagina. Due posti, due forme, stesso indirizzo."
-                  : "Do not confuse it with lc-contacts, the CV page's contact line: there the details sit in the open inside the first layer, here they close a page. Two places, two shapes, same address."
+                  ? "Non darle il raggio delle tre card qui sopra. Quelle aprono un cassetto e sono la stessa cosa ripetuta tre volte; questa apre la posta, e la forma diversa è ciò che lo dice a chi il colore non lo distingue. E non confonderla con lc-contacts, la riga di recapiti della pagina CV: là stanno in chiaro dentro il primo strato, qui è una card sola dentro un racconto."
+                  : "Do not give it the radius of the three cards above. Those open a drawer and are the same thing three times over; this one opens the mail client, and the different shape is what says so to anyone who cannot tell the colours apart. And do not confuse it with lc-contacts, the CV page's contact line: there the details sit in the open inside the first layer, here it is a single card inside a story."
               }
             </p>
           </div>
@@ -2506,14 +2510,13 @@ const NAV = [
             <p class="ds-spec__v">
               {
                 it
-                  ? "Il pulsante che copia l'indirizzo nasce hidden e lo accende lo script solo dove gli appunti esistono: meglio nessun comando che un comando che non copia. La conferma non è un colore, è la parola in contact-card__copied."
-                  : "The copy-address button starts hidden and the script turns it on only where the clipboard exists: better no control than a control that does not copy. The confirmation is not a colour, it is the word in contact-card__copied."
+                  ? "Il pulsante che copia l'indirizzo nasce hidden e lo accende lo script solo dove gli appunti esistono: meglio nessun comando che un comando che non copia. La conferma non è un colore, è la parola in contact-card__copied, che sta già nel DOM sotto quella che sostituisce, così la larghezza non salta al clic e uno screen reader la trova senza una regione live. Il bottone è a filo, quindi l'accento QUI è il colore del testo, e per questo prende --accent-text prima di --accent: l'arancione pieno su ottanio fa 3,62:1, sotto il 4,5:1 di 1.4.3, e il token lo schiarisce al 50% verso il bianco (4,70:1). In «Chi sono» non c'è lente, quindi si scende al crema, che è l'inchiostro del testo. Su telefono l'indirizzo in chiaro sparisce ma non si perde: resta nell'href del mailto, e il link porta la frase per esteso in aria-label."
+                  : "The copy-address button starts hidden and the script turns it on only where the clipboard exists: better no control than a control that does not copy. The confirmation is not a colour, it is the word in contact-card__copied, already in the DOM underneath the one it replaces, so the width does not jump on click and a screen reader finds it without a live region. The button is an outline, so the accent HERE is the text colour, which is why it takes --accent-text before --accent: full orange on the ottanio ground is 3.62:1, below the 4.5:1 of 1.4.3, and the token lightens it 50% toward white (4.70:1). In «Chi sono» there is no lens, so it falls back to cream, which is the text ink. On a phone the address in the open disappears but is not lost: it stays in the mailto href, and the link carries the full sentence in aria-label."
               }
             </p>
           </div>
         </div>
       </section>
-
       <section
         class="ds-panel"
         data-ds-accent

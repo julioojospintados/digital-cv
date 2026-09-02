@@ -32,7 +32,7 @@ import {
   photoThumb,
 } from "../lib/lab-copy";
 import MemoryDrawers from "../components/MemoryDrawers.astro";
-import EntryFooter from "../components/EntryFooter.astro";
+import EmailCard from "../components/EmailCard.astro";
 import LangSwitch from "../components/LangSwitch.astro";
 import "../styles/lab-home.css";
 
@@ -422,6 +422,17 @@ const sections = MODES.map((mode) => ({
               {t.ui.drawerBelongings}
             </button>
           </div>
+
+          {
+            /* ── L'indirizzo, qui e non più in fondo ─────────────────────────
+              Fino al 2026-09-02 la home aveva una sesta schermata di congedo
+              che conteneva questa card. È stata tolta, e la card è risalita
+              qui: "Chi sono" arrivava a metà schermo, quindi lo spazio c'era
+              già, ed è dove chi legge sta ancora guardando la persona.
+              Il perché per esteso, e cosa si è perso con la chiusura
+              (LinkedIn, "Tocca a te.", la firma), sta in EmailCard.astro. */
+          }
+          <EmailCard lang={locale} />
         </div>
       </section>
 
@@ -472,7 +483,6 @@ const sections = MODES.map((mode) => ({
     </main>
 
     {/* Il footer della home vera: stesso componente, stesso stile. */}
-    <EntryFooter lang={locale} emphasis />
   </div>
 
   {
