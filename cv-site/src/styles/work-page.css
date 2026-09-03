@@ -20,26 +20,81 @@
   gap: var(--size-16);
 }
 
-/* display:inline-flex + min-height: target di tocco WCAG 2.2 SC 2.5.8
-   (min 24×24px) — prima era testo nudo a 18px di altezza (line-height del
-   solo font-size 12px, nessun padding). */
+/* ── Il ritorno al CV ─────────────────────────────────────────────────────
+   Rifatto il 2026-09-03, e la ragione è la stessa che due giorni prima aveva
+   rifatto `.work-hero__ds-link` poche righe più giù: era mono a 12px tutto
+   maiuscolo, attenuato, con una freccia "←" scritta come carattere dentro
+   l'etichetta. Quattro cose che nessun altro comando del sito fa. Su una
+   barra che contiene già il logo e l'interruttore lingua — due oggetti con
+   un contorno — l'unico comando senza contorno non si legge come comando: si
+   legge come una didascalia.
+
+   La ricetta è quella di `.lh-cta--ghost`, il bottone a filo delle sezioni
+   lente, con le stesse due deroghe già motivate su `.work-hero__ds-link`:
+   non è letteralmente quella classe (vive in lab-home.css, che queste pagine
+   non caricano), e l'accento sta nel BORDO e non nel testo, perché
+   `--accent-text` qui non esiste e l'arancione pieno come testo fa 3,62:1,
+   sotto il 4,5:1 di 1.4.3. Sul bordo la soglia è il 3:1 di 1.4.11, che
+   3,62:1 passa. L'etichetta prende l'inchiostro, che ha contrasto pieno su
+   tutte e tre le lenti.
+
+   L'unica misura che si discosta dal modello è l'altezza. `.lh-cta` è alto
+   ~2,9rem perché sta in mezzo a una sezione a tutta pagina; qui il vicino di
+   banco è l'interruttore lingua, alto 30px (vedi lang-switch.css: 24 di
+   contenuto + 2 di passo + 1 di filo per lato). 2rem tiene i due comandi
+   sulla stessa riga ottica e resta sopra i 24×24 di 2.5.8 — che è la soglia
+   vera, non i 44 che si citano a memoria.
+
+   La freccia non è più un glifo: è `.work-chevron--left`, lo stesso bordo
+   ruotato del resto della pagina. Un "←" preso dal font cambia disegno,
+   spessore e allineamento a ogni famiglia di caratteri, e qui accanto c'era
+   già il chevron giusto. */
 .work-back {
   display: inline-flex;
   align-items: center;
-  min-height: 1.5rem;
-  font-family: var(--font-mono);
-  font-size: var(--fs-12);
+  gap: 0.4rem;
+  min-height: 2rem;
+  padding-inline: var(--size-12);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-4);
+  background: transparent;
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  font-size: var(--fs-14);
   font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--color-text-muted);
+  letter-spacing: 0.01em;
   text-decoration: none;
-  transition: color var(--duration-micro) ease;
+  transition:
+    background-color var(--duration-state) var(--ease-standard),
+    transform var(--duration-micro) var(--ease-standard);
 }
 
-.work-back:hover,
+/* Al passaggio si tinge e si solleva, alla pressione rientra e si incava:
+   le stesse due righe di `.work-hero__ds-link`, cifre comprese. Se cambiano
+   là vanno cambiate qui — sono lo stesso bottone in due misure. */
+@media (hover: hover) and (pointer: fine) {
+  .work-back:hover {
+    background: color-mix(in srgb, var(--color-accent) 16%, transparent);
+    transform: translateY(-2px);
+  }
+}
+
 .work-back:focus-visible {
-  color: var(--color-accent);
+  background: color-mix(in srgb, var(--color-accent) 16%, transparent);
+}
+
+.work-back:active {
+  transform: scale(0.98);
+  box-shadow: inset 0 2px 0.5rem rgba(0, 0, 0, 0.4);
+}
+
+/* A movimento ridotto resta l'incavo, sparisce lo scatto: il riscontro alla
+   pressione non è decorazione. Stessa scelta di `.lh-cta`. */
+@media (prefers-reduced-motion: reduce) {
+  .work-back:hover,
+  .work-back:active {
+    transform: none;
+  }
 }
 
 /* Il cambio lingua è components/LangSwitch.astro (lang-switch.css). Qui
@@ -47,7 +102,7 @@
    scritti a mano invece dei token. */
 
 .work-main {
-  max-width: 48rem;
+  max-width: 75%;
   margin: 0 auto;
   padding: var(--size-24) var(--size-24) 6rem;
   display: flex;
@@ -64,16 +119,25 @@
   overflow: hidden;
 }
 
-.work-hero__icon {
-  position: absolute;
-  top: -1rem;
-  right: -1rem;
-  width: clamp(6rem, 22vw, 11rem);
-  opacity: 0.14;
-  pointer-events: none;
-  user-select: none;
-}
+/* Qui stava .work-hero__icon: l'oggetto knolling in filigrana nell'angolo
+   della testata, al 14%. Tolto il 2026-09-02 su richiesta di Giulio, insieme
+   al gemello sulla partenza del percorso e a quello delle card dell'indice.
+   Il costo è lo stesso scritto altrove: era un appiglio visivo, e adesso a
+   distinguere una pagina dall'altra restano solo le parole. */
 
+/* L'occhiello della testata. Vive in un posto solo: l'indice di /work, dove
+   dice «Portfolio». Sul CASE STUDY non c'è più — diceva «CASE STUDY» sopra il
+   titolo di un case study, cioè ripeteva a chi leggeva la cosa che stava
+   leggendo, e per dirlo si prendeva la prima riga. Tolto il 2026-09-02.
+
+   La distinzione conta anche per il contrasto, ed è il motivo per cui questa
+   regola può restare com'è: l'accento come TESTO a 12px passa solo dove
+   l'accento è chiaro. L'indice NON accende la lente (non passa `mode` a
+   Layout), quindi qui l'accento è il bianco di serie. La pagina del case
+   study la accende, e lì in lente creative lo stesso colore sarebbe stato
+   arancione pieno, cioè 3,62:1 su ottanio, sotto il 4,5:1 di 1.4.3.
+   Se un giorno questo occhiello tornasse su una pagina con la lente accesa,
+   il colore va rifatto prima di riusarlo. */
 .work-hero__eyebrow {
   font-family: var(--font-mono);
   font-size: var(--fs-12);
@@ -84,6 +148,79 @@
   margin: 0 0 var(--size-12);
 }
 
+/* La seconda metà del nome, sulla testata del case study. In `cv.ts` il nome
+   è una stringa sola che ne contiene due — "Trip-Runway — Travel Budget Yield
+   App" — e ora le due parti stanno su due righe: la prima è il nome, la
+   seconda dice che cos'è. A separarle è splitProjectName in
+   lib/project-name.ts, lo stesso helper che serve le card dell'indice, così
+   le due pagine non possono divergere.
+
+   `--color-text-muted` e non l'accento, proprio per non ripetere il difetto
+   dell'occhiello qui sopra: quel token è verificato AA in tutte e tre le
+   lenti (i rapporti stanno accanto alla sua definizione in global.css). La
+   gerarchia col ruolo la portano corpo e peso, non un terzo colore. */
+/* ── La sigla in filigrana della testata ──────────────────────────────────
+   Gemella di `.work-index-card__sigla`: stessa tecnica, stesso ruolo, misura
+   diversa. Sull'indice dice quale card stai guardando, qui dice su quale case
+   study sei atterrato — ed è lo stesso segno, quindi le due pagine si leggono
+   come due momenti della stessa cosa invece che come due pagine.
+
+   Riempie il posto lasciato vuoto da `.work-hero__icon`, l'oggetto knolling
+   tolto il 2026-09-02: il commento di allora annotava il costo — «restano solo
+   le parole a distinguere una pagina dall'altra» — e questo lo ripaga senza
+   riportare l'immagine che Giulio aveva chiesto di togliere. È un filo di
+   testo, non una fotografia.
+
+   Ed è l'oggetto che ATTRAVERSA. Fra l'indice e il case study è la sola cosa
+   grande presente su entrambe le pagine, quindi è quella che porta il peso del
+   passaggio; il nome, il descrittore e il ruolo viaggiano con lei ma sono
+   testo, e da soli il movimento non si vedeva. Il nome condiviso lo assegnano
+   al clic e al risveglio gli script in Layout.astro, mai qui — vale la regola
+   scritta in global.css sopra `@view-transition`.
+
+   Le misure, e perché. `clamp` con un tetto in rem per la stessa ragione della
+   card: dentro un contenitore `vw` guarda comunque la finestra, e senza tetto
+   su uno schermo largo la sigla uscirebbe dal riquadro invece di appoggiarcisi
+   — la taglia `overflow: hidden` di `.work-hero`, ma tagliata a metà smette di
+   essere un segno e diventa un errore. Il filo è 2px e non 1: a 11rem di corpo
+   un contorno da un pixel si legge come un difetto di rasterizzazione, non
+   come una scelta. Il 26% invece del 30% della card compensa il fatto che qui
+   il glifo è il doppio, quindi porta il doppio di inchiostro a parità di
+   opacità.
+
+   `z-index: 0` con `position: absolute` la mette nello strato dei discendenti
+   posizionati, che dipinge SOPRA il contenuto statico: per questo titolo,
+   descrittore, ruolo e tag portano tutti `position: relative; z-index: 1`.
+   Senza, la filigrana passerebbe davanti al testo. */
+.work-hero__sigla {
+  position: absolute;
+  top: -1.5rem;
+  right: -0.5rem;
+  z-index: 0;
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(5rem, 18vw, 11rem);
+  line-height: 0.8;
+  letter-spacing: -0.05em;
+  color: transparent;
+  -webkit-text-stroke: 2px color-mix(in srgb, var(--color-accent) 26%, transparent);
+  pointer-events: none;
+  user-select: none;
+}
+
+.work-hero__tagline {
+  font-family: var(--font-display);
+  font-size: clamp(1.0625rem, 2.2vw, 1.5rem);
+  font-weight: 600;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  color: var(--color-text-muted);
+  margin: 0 0 var(--size-12);
+  /* Sopra la filigrana — vedi .work-hero__sigla. */
+  position: relative;
+  z-index: 1;
+}
 .work-hero__title {
   font-family: var(--font-display);
   font-size: clamp(2rem, 5.5vw, 3.75rem);
@@ -271,7 +408,6 @@
 /* ── /work — pagina indice portfolio (griglia case study) ────────────── */
 .work-index-hero {
   padding-top: var(--size-24);
-  border-bottom: 1px solid var(--color-border);
   padding-bottom: var(--size-32);
 }
 
@@ -517,50 +653,73 @@
   }
 }
 
-.work-index-card__icon {
+/* Qui stavano .work-index-card__icon e la sua deroga per la torcia:
+   l'oggetto knolling in filigrana nell'angolo alto a destra della card, al
+   12% e tagliato dall'overflow. Tolto il 2026-09-02 su richiesta di Giulio.
+   Il costo: era il solo appiglio visivo che distingueva una card dall'altra
+   prima di leggerle. Ora quel lavoro lo fanno il nome e il sottotitolo, e
+   sono soli. */
+
+/* ── La sigla in filigrana ────────────────────────────────────────────────
+   Prende il posto dell'oggetto knolling che stava in questo angolo fino al
+   2026-09-02 (vedi la nota qui sopra), e fa lo stesso lavoro: dare all'occhio
+   qualcosa che distingua una card dall'altra prima di leggere.
+
+   Non è un disegno nuovo: è la stessa tecnica di .lh-section__initial sulla
+   home — la sigla «IO» di "Chi sono", le «WD/SD/AI» delle sezioni lente. Filo
+   e non riempimento, dietro al testo, tagliata dall'overflow della card.
+   Estendere un idioma che il sito ha già costa meno che inventarne uno, e si
+   legge come lo stesso sito invece che come una pagina a parte.
+
+   Le due lettere le calcola projectInitials() dal nome del progetto: non
+   stanno nei dati e non vanno mantenute. Il perché sta in lib/project-name.ts.
+
+   `z-index: 0` con `position: absolute` la mette nello strato dei
+   discendenti posizionati, che dipinge SOPRA il contenuto statico: per
+   questo nome, sottotitolo, ruolo e comando portano tutti `position:
+   relative; z-index: 1`. Senza, la filigrana passerebbe davanti al testo
+   invece che dietro. Il vecchio oggetto se la cavava perché stava al 12% di
+   opacità; qui il filo è più netto e il difetto si vedrebbe.
+
+   La misura è in vw ma con un tetto: dentro una card `vw` guarda comunque la
+   finestra, quindi senza `clamp` su uno schermo largo la sigla uscirebbe dal
+   riquadro invece di appoggiarcisi. */
+.work-index-card__sigla {
   position: absolute;
-  top: -0.75rem;
-  right: -0.75rem;
-  width: clamp(5rem, 18vw, 8rem);
-  opacity: 0.12;
+  top: -0.5rem;
+  right: 0.5rem;
+  z-index: 0;
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(3.5rem, 12vw, 5.5rem);
+  line-height: 0.8;
+  letter-spacing: -0.05em;
+  color: transparent;
+  -webkit-text-stroke: 1px color-mix(in srgb, var(--color-accent) 30%, transparent);
   pointer-events: none;
   user-select: none;
 }
 
-/* La torcia è l'unico oggetto che non regge la posa comune: è largo più del
-   triplo della sua altezza e in alto a destra come gli altri si legge come
-   una barra, non come una torcia. Più grande, ruotata e spinta oltre il
-   bordo entra nell'inquadratura dall'angolo — il taglio lo fa l'overflow
-   hidden della card. Solo da 36rem in su: su telefono la card è troppo
-   stretta perché un oggetto da 14rem non la invada.
+/* Qui stava .work-index-card__eyebrow, la stessa parola "CASE STUDY" ripetuta
+   sopra ogni card dell'indice dei case study. Tolta il 2026-09-02: si
+   prendeva la riga che l'occhio usa per cercare il nome, per dire una cosa
+   che il titolo della pagina aveva già detto.
 
-   DEVE stare dopo .work-index-card__icon e non prima: i due selettori hanno
-   la stessa specificità (una classe ciascuno), quindi vince l'ultimo che il
-   browser legge. Scritto sopra, passava solo transform — l'unica proprietà
-   che la regola comune non dichiara — e la torcia restava piccola e
-   nell'angolo di sempre, ruotata e basta. Qui stanno solo le differenze:
-   opacità, pointer-events e user-select restano nella regola comune. */
-@media (min-width: 36rem) {
-  .work-index-card__icon--flashlight {
-    top: 1.25rem;
-    right: -3.75rem;
-    width: 14rem;
-    transform: rotate(-45deg);
-  }
-}
-
-.work-index-card__eyebrow {
+   Al suo posto la seconda metà del nome, separata da splitProjectName
+   (lib/project-name.ts) — lo stesso helper della testata, così l'indice e il
+   case study non possono raccontare la stessa cosa in due modi. Muted e non
+   accento per la ragione scritta accanto a .work-hero__tagline. */
+.work-index-card__tagline {
   font-family: var(--font-display);
   font-size: var(--fs-16);
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--color-accent);
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--color-text-primary);
   margin: 0;
   position: relative;
   z-index: 1;
 }
-
 .work-index-card__name {
   font-family: var(--font-display);
   font-size: var(--fs-20);
@@ -582,6 +741,8 @@
 }
 
 .work-index-card__cta {
+  position: relative;
+  z-index: 1;
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
@@ -620,27 +781,79 @@
   rotate: 45deg;
 }
 
+/* Verso sinistra: è il ritorno della barra (.work-back). Stesso segno degli
+   altri, ruotato — non un "←" preso dal font. */
+.work-chevron--left {
+  rotate: 135deg;
+}
+
 /* CTA ancorata al Design System — solo sul case study digital-cv */
+/* ── Il comando verso il design system ───────────────────────────────────
+   Era una riga di testo in mono maiuscolo colorata d'accento, cioè una cosa
+   che non somigliava a nessun altro comando del sito. Rifatta il 2026-09-02
+   sul modello di `.lh-cta--ghost`, il bottone a filo delle sezioni lente:
+   stesso carattere (sans, non mono), stesso corpo, stesso peso, stesso
+   raggio, stesso passo interno, stessa risposta alla pressione.
+
+   Due differenze, e sono tutte e due obbligate.
+
+   1. **Non è letteralmente `.lh-cta`.** Quella classe vive in `lab-home.css`,
+      che questa pagina non carica: importarlo qui vorrebbe dire spedire
+      millequattrocento righe di stili della home su ogni case study. La cura
+      vera è promuovere `.lh-cta` in `global.css`, che è caricato ovunque, e
+      allora questa regola sparisce; finché non succede, questo è un doppione
+      dichiarato, e sta scritto qui perché chi tocca uno trovi anche l'altro.
+
+   2. **L'accento sta nel BORDO, non nel testo.** `.lh-cta--ghost` può
+      permetterselo perché sulla home esiste `--accent-text`, il token che
+      schiarisce l'arancione del 50% verso il bianco per portarlo da 3,62:1 a
+      4,70:1. Quel token è definito solo in `lab-home.css`: qui non esiste, e
+      `var(--accent-text, ...)` cadrebbe sull'arancione pieno, cioè sotto il
+      4,5:1 che 1.4.3 chiede al testo. Quindi l'etichetta prende l'inchiostro,
+      che ha contrasto pieno, e l'accento fa il bordo — dove la soglia è il
+      3:1 di 1.4.11 per un contorno che identifica un controllo, e 3,62:1 lo
+      passa. È lo stesso ragionamento del bottone pieno, al contrario. */
 .work-hero__ds-link {
   display: inline-flex;
   align-items: center;
-  gap: var(--size-8);
+  gap: 0.4rem;
   margin-top: var(--size-20);
-  font-family: var(--font-mono);
-  font-size: var(--fs-12);
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--color-accent);
+  padding: 0.8rem 1.35rem;
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-4);
+  background: transparent;
+  color: var(--color-text-primary);
+  font-family: var(--font-sans);
+  font-size: var(--fs-16);
+  font-weight: 600;
+  letter-spacing: 0.01em;
   text-decoration: none;
   position: relative;
   z-index: 1;
-  transition: gap 0.2s ease;
+  transition:
+    background-color var(--duration-state) var(--ease-standard),
+    transform var(--duration-micro) var(--ease-standard);
 }
 
-.work-hero__ds-link:hover,
+/* Alla pressione rientra e si incava, come .lh-cta. */
+.work-hero__ds-link:active {
+  transform: scale(0.98);
+  box-shadow: inset 0 2px 0.5rem rgba(0, 0, 0, 0.4);
+}
+
+/* Al passaggio si tinge e si solleva, come .lh-cta--ghost. Prima allargava il
+   `gap`, cioè spostava la freccia allontanandola dal testo: un movimento che
+   nessun altro comando del sito fa, e che su un bottone con un bordo si legge
+   come un difetto di allineamento invece che come una risposta. */
+@media (hover: hover) and (pointer: fine) {
+  .work-hero__ds-link:hover {
+    background: color-mix(in srgb, var(--color-accent) 16%, transparent);
+    transform: translateY(-2px);
+  }
+}
+
 .work-hero__ds-link:focus-visible {
-  gap: var(--size-12);
+  background: color-mix(in srgb, var(--color-accent) 16%, transparent);
 }
 
 /* ── /work/[slug] — Journey orizzontale del case study ────────────────────
@@ -905,23 +1118,15 @@
   background: rgba(255, 255, 255, 0.02);
 }
 
-/* Landmark knolling: l'oggetto del progetto a bordo strada, sulla partenza */
-.journey__stop-icon {
-  width: clamp(4.5rem, 9vw, 6.5rem);
-  margin: 0 0 var(--size-4);
-  align-self: flex-end;
-  user-select: none;
-  pointer-events: none;
-  filter: drop-shadow(0 0.5rem 1.125rem rgba(0, 0, 0, 0.4));
-}
+/* Qui stavano .journey__stop-icon e la sua variante a percorso attivo:
+   l'oggetto del progetto a bordo strada, sul pannello "Partenza", con una
+   parallasse leggera guidata da work-journey.ts. Tolto il 2026-09-02.
 
-.journey.is-active .journey__stop-icon {
-  position: absolute;
-  top: calc(clamp(4.5rem, 9vw, 6.5rem) * -0.62);
-  right: var(--size-16);
-  margin: 0;
-  will-change: transform;
-}
+   È anche la fine del flickering che Giulio vedeva proprio lì: quell'immagine
+   nasceva `loading="lazy"`, quindi arrivava mentre il pannello era già in
+   vista, e nello stesso momento GSAP le scriveva addosso un `xPercent` legato
+   allo scorrimento. Un'immagine che compare mentre qualcosa la sta già
+   spostando è un salto, non una comparsa. */
 
 /* Numero dello step: grande, outlined — chilometrica della strada */
 .journey__step-num {

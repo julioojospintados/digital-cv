@@ -784,10 +784,44 @@ body {
 
 ::view-transition-group(lens-object),
 ::view-transition-old(lens-object),
-::view-transition-new(lens-object),
-::view-transition-group(portfolio-hero),
-::view-transition-old(portfolio-hero),
-::view-transition-new(portfolio-hero) {
+::view-transition-new(lens-object) {
+  animation-duration: var(--duration-page);
+  animation-timing-function: var(--ease-flight);
+}
+
+/* La card dell indice che diventa la testata del case study. Nomi assegnati
+   al clic e al risveglio da Layout.astro, mai qui, per la ragione scritta
+   sopra: sull indice le card sono quattro, e un nome fisso le renderebbe
+   tutte candidate allo stesso morph.
+
+   Quattro nomi e non uno, dal 2026-09-03. Prima viaggiava il solo titolo, e
+   sulla carta era la scelta giusta — e lo stesso il passaggio non si vedeva.
+   Il motivo e' che la radice non si fotografa (regola qui sopra): tutto il
+   resto della pagina TAGLIA, e una parola che si sposta dentro un taglio non
+   la nota nessuno. Il rimedio non e' fotografare la pagina, che avrebbe
+   riportato la dissolvenza gia' scartata tre volte, ma dare a quel gesto
+   abbastanza massa da leggersi: la sigla in filigrana, il nome, il
+   descrittore e il ruolo sono le quattro cose che esistono IDENTICHE sulle
+   due pagine, quindi sono quattro morph veri e nessuna dissolvenza fra cose
+   diverse. La sigla e' quella che porta il peso — e' l oggetto grande, ed e'
+   il posto di questa pagina nella grammatica del sito: un oggetto attraversa,
+   il resto taglia, esattamente come fra l ingresso e la lente.
+
+   Stessa durata e stessa curva dell oggetto della lente: e lo stesso gesto,
+   un elemento che attraversa fra due pagine, e due gesti uguali che durano
+   diverso si leggono come due sistemi diversi. */
+::view-transition-group(case-sigla),
+::view-transition-old(case-sigla),
+::view-transition-new(case-sigla),
+::view-transition-group(case-title),
+::view-transition-old(case-title),
+::view-transition-new(case-title),
+::view-transition-group(case-tagline),
+::view-transition-old(case-tagline),
+::view-transition-new(case-tagline),
+::view-transition-group(case-role),
+::view-transition-old(case-role),
+::view-transition-new(case-role) {
   animation-duration: var(--duration-page);
   animation-timing-function: var(--ease-flight);
 }
@@ -831,15 +865,26 @@ body {
   --duration-page: 3600ms;
 }
 
-.work-index-hero {
-  view-transition-name: portfolio-hero;
-}
+/* Qui .work-index-hero prendeva `view-transition-name: portfolio-hero`.
+   Tolto il 2026-09-02, ed era un residuo: quel nome serviva a far volare la
+   card "Portfolio" della vecchia pagina CV dentro l'intestazione di /work, e
+   `.hero-portfolio-card` — l'altro capo del morph — è stata cancellata col
+   sito storico il 2026-08-26. Da allora il nome stava su UN elemento solo.
 
-@media (prefers-reduced-motion: reduce) {
-  .work-index-hero {
-    view-transition-name: none;
-  }
-}
+   Un nome senza gemello non è inerte: quando si lascia /work per un case
+   study il browser trova il nome solo sul lato vecchio, e anima da solo
+   l'istantanea che se ne va. Misurato il 2026-09-02 partendo dall'indice:
+   alla `ready` della transizione l'unica animazione era
+   `::view-transition-old(portfolio-hero)`, cioè l'intestazione di /work —
+   720x278 — tenuta a schermo sopra la pagina nuova per i 360ms di
+   --duration-page e poi svanita. Sovrapposta al titolo del case study, che
+   ha misure diverse, è il "flickering di dimensioni diverse" segnalato da
+   Giulio.
+
+   Il commento più in alto in questo file diceva che un nome statico è
+   corretto "quando quella pagina è solo destinazione e non è mai sorgente
+   del morph". Era vero quando è stato scritto. /work oggi è sorgente: da lì
+   si va ai quattro case study. */
 
 /* Cursore personalizzato: CSS spostato in styles/cursor.css, caricato
    condizionalmente da Layout.astro solo per pointer fine (desktop/trackpad)

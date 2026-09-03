@@ -192,11 +192,24 @@
   padding: var(--size-12) var(--lc-gutter);
 }
 
+/* Il riquadro si adatta al marchio, non viceversa. Era fisso a 2,5rem per
+   lato, e gia' con le lettere a 1,5rem il <go-logo> dentro ne usciva di un
+   mezzo rem in larghezza; portate a 1,75rem (2026-09-03, richiesta di
+   Giulio) lo sbordo sarebbe diventato visibile. Un contenitore che misura
+   una cosa che ha misure proprie e' un vincolo che va aggiornato a ogni
+   ritocco del marchio: qui non serve, perche' la barra e' un flex e il
+   marchio ha gia' il suo passo interno.
+
+   L'<a> resta, e non e' ridondante: <go-logo> e' un'isola Lit, quindi senza
+   JavaScript non renderizza nulla — questo link e' l'unico ritorno
+   all'ingresso che sopravvive a quel caso. */
 .lc-bar__home {
-  display: block;
-  width: 2.5rem;
-  height: 2.5rem;
+  display: inline-flex;
   flex: 0 0 auto;
+  /* Il marchio non e' una parola sottolineata. Il <go-logo> dentro e' di
+     livello inline, quindi si prendeva la sottolineatura di serie del link
+     che lo avvolge — una riga bianca sotto la "GO", dentro il suo riquadro. */
+  text-decoration: none;
 }
 
 /* Il cambio lingua è components/LangSwitch.astro, con il suo foglio
@@ -290,100 +303,14 @@
    nella fascia dei primi sette secondi competeva con nome, ruolo e i due
    incarichi in corso, e il luogo resta comunque nei contatti in fondo. */
 
-/* ── Le lingue ─────────────────────────────────────────────────────
-   Erano quattro delle sei voci di un'unica riga puntata che teneva insieme
-   luogo, disponibilita' e lingue con lo stesso separatore e lo stesso peso:
-   sei cose di tre tipi diversi, e niente che dicesse dove finiva l'uno e
-   cominciava l'altro. Il difetto non era la quantita', era che non fossero
-   distinguibili.
-
-   Il livello resta scritto (B2, A2, Madrelingua) e non diventa una scala di
-   pallini: il CEFR e' una credenziale con un nome, e "tre su cinque" e'
-   un'opinione che perde l'unico dato che un recruiter cerca. Il trattamento
-   grafico serve a separare i tipi di informazione, non a misurare.
-
-   Nessun nowrap sulla riga: e' la pastiglia a essere indivisibile, quindi il
-   ritorno a capo avviene fra una lingua e l'altra. E' lo stesso vincolo che
-   prima teneva uno spazio unificatore invisibile nel sorgente — qui lo porta
-   il layout, che e' il posto giusto. */
-/* Le lingue come scala, non piu' come pastiglie (scelta di Giulio,
-   2026-08-27: «le lingue le vorrei infografiche, non scritte»).
-
-   Le sei tacche sono i sei gradini del Quadro europeo — A1 A2 B1 B2 C1 C2 —
-   quindi non sono una barra di percentuale, che il progetto vieta: sono un
-   righello. Servono a far vedere in un colpo il rapporto fra le quattro
-   lingue, che quattro sigle in fila non mostravano: per sapere quale fosse
-   la piu' forte bisognava leggerle una per una e conoscere la scala.
-
-   La sigla resta scritta accanto, ed e' ancora la cosa piu' importante
-   della riga: «B2» e' una credenziale verificabile, e tradurla in «quattro
-   tacche su sei» perderebbe l'unico dato che un recruiter cerca davvero. Il
-   grafico separa i livelli, non li misura al posto del testo — ed e' lo
-   stesso motivo per cui il livello sta a --fs-14 e non al pavimento (vedi
-   il commento su .lc-lang__lvl qui sotto).
-
-   Madrelingua non e' un gradino della scala: si accende tutta, ma in
-   inchiostro invece che in accento, perche' non e' «un C2 abbondante» — e'
-   un'altra categoria, e due grafiche identiche direbbero il contrario. */
-.lc-langs {
-  display: grid;
-  /* Le tre colonne stanno qui, dichiarate una volta sola: e' cio' che
-     allinea fra loro le scale delle quattro righe. La riga le eredita con
-     subgrid; dove subgrid non arriva, il ripiego sulla riga tiene almeno la
-     stessa misura. */
-  grid-template-columns: auto minmax(4rem, 1fr) auto;
-  gap: var(--size-6) var(--size-12);
-  margin: var(--size-16) 0 0;
-  padding: 0;
-  list-style: none;
-  /* Oltre questa misura il righello si allunga e smette di leggersi come
-     una scala: diventano quattro barre lunghe uguali. */
-  max-width: 26rem;
-}
-
-.lc-lang {
-  display: grid;
-  grid-column: 1 / -1;
-  grid-template-columns: auto minmax(4rem, 1fr) auto;
-  grid-template-columns: subgrid;
-  align-items: center;
-  font-size: var(--fs-14);
-  color: var(--lc-muted);
-}
-
-.lc-lang__scale {
-  display: flex;
-  gap: var(--size-2);
-}
-
-.lc-lang__step {
-  flex: 1;
-  height: var(--size-6);
-  border-radius: var(--radius-4);
-  background: rgba(245, 240, 230, 0.12);
-}
-
-.lc-lang__step.is-on {
-  background: var(--lc-accent-line);
-}
-
-/* Madrelingua: accesa tutta, in inchiostro. Il perche' sta nel commento in
-   testa al blocco. */
-.lc-lang__scale.is-native .lc-lang__step {
-  background: var(--lc-ink);
-}
-
-/* Il livello e' il dato, non un'etichetta di sistema: sta a --fs-14 come il
-   nome accanto, non al pavimento dei 12. E' un difetto gia' trovato una
-   volta su questo progetto — il CEFR era finito a --fs-12 perche' il blocco
-   si chiamava "chip", e chiamarsi chip non basta a qualificare per il
-   pavimento (vedi design-system/SKILL.md). */
-.lc-lang__lvl {
-  font-family: var(--font-mono);
-  font-size: var(--fs-14);
-  font-weight: 700;
-  color: var(--color-text-primary);
-}
+/* Qui stavano .lc-langs e le sue .lc-lang*: la scala delle quattro lingue con
+   i sei gradini del Quadro europeo, fra i bottoni e i contatti. Tolta il
+   2026-09-02 su richiesta di Giulio.
+   Quello che si è perso, perché sia un costo noto e non una svista: il
+   livello di inglese era l'unico dato della testata che un recruiter
+   straniero cerca prima ancora del ruolo, e adesso non sta più da nessuna
+   parte sulla pagina. I dati restano in cv.ts, quindi rimetterla è rimettere
+   markup e stile, non ritrovare le informazioni. */
 
 /* Qui stava "Dove lavora ora, e prima": due righe con gli incarichi ancora
    aperti, subito sotto le corsie della testata. Tolte il 2026-08-27 su

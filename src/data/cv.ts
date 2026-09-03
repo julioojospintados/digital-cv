@@ -2027,7 +2027,7 @@ export const cvData = {
       ],
     },
     {
-      name: "trip-runway — Travel Budget Yield App",
+      name: "Trip-Runway — Travel Budget Yield App",
       description:
         "Ho trasformato looking-for-flights, il mio script personale di monitoraggio prezzi voli, in trip-runway: una web app che incrocia il costo del volo con il costo della vita a destinazione per calcolare i giorni massimi di viaggio sostenibili con un budget fisso. Next.js, Supabase e Prisma, con un'architettura anti-abuso che deduplica le chiamate API per rotta invece che per utente, e monetizzazione da affiliazione voli.",
       url: "https://trip-runway.vercel.app",

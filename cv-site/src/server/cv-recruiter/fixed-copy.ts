@@ -43,7 +43,7 @@ export const FIXED_COPY: Record<"it" | "en", FixedCopy> = {
   en: {
     linkedinUrl: "https://www.linkedin.com/in/giulio-occhipinti?locale=en_US",
     siteLabel: "Website",
-    workLinkLabel: "Read the case study",
+    workLinkLabel: "Read the Case study",
     qrCap: "Scan the code or tap the button —<br>the whole site is interactive",
     visitBtn: "Visit the site",
     secExperience: "Experience",
@@ -63,7 +63,7 @@ export const FIXED_COPY: Record<"it" | "en", FixedCopy> = {
   it: {
     linkedinUrl: "https://www.linkedin.com/in/giulio-occhipinti?locale=it_IT",
     siteLabel: "Sito",
-    workLinkLabel: "Leggi il case study",
+    workLinkLabel: "Leggi il Case study",
     qrCap: "Inquadra il codice o tocca il pulsante,<br>tutto il sito è interattivo",
     visitBtn: "Visita il sito",
     secExperience: "Esperienza",

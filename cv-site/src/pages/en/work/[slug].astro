@@ -10,8 +10,8 @@ import Layout from "../../../layouts/Layout.astro";
 import LangSwitch from "../../../components/LangSwitch.astro";
 import { cvDataEn } from "@cv-data-en";
 import { lensPath } from "../../../lib/cv-i18n";
-import { workKnollIcon, workKnollRatio } from "../../../lib/work-knolling";
 import "../../../styles/work-page.css";
+import { projectInitials, splitProjectName } from "../../../lib/project-name";
 
 export function getStaticPaths() {
   return cvDataEn.projects.filter((p) => !!p.slug).map((p) => ({ params: { slug: p.slug } }));
@@ -25,8 +25,6 @@ const mode = project.primaryMode ?? "tech";
 // live in lib/work-knolling.ts. Here it stays an atmospheric watermark, but
 // it must be the same object the reader just saw on the index card,
 // otherwise the page is not the continuation of that click.
-const icon = workKnollIcon(slug);
-const iconRatio = workKnollRatio(icon);
 const email =
   cvDataEn.social.find((s) => s.platform === "Email")?.url ??
   "mailto:giulio.occhipinti.g@gmail.com";
@@ -42,6 +40,13 @@ const processSteps = (project.process ?? []).map((step) => {
     : { title: null, body: step };
 });
 const totalSteps = String(processSteps.length).padStart(2, "0");
+
+const nomeProgetto = splitProjectName(project.name);
+// La sigla in filigrana della testata. È la stessa che il lettore ha appena
+// visto sulla card dell'indice — stesso helper, stesso calcolo — ed è ciò che
+// attraversa fra le due pagine (Layout.astro, § "Il nome del progetto
+// attraversa dall'indice al case study").
+const sigla = projectInitials(project.name);
 ---
 
 <Layout
@@ -54,24 +59,33 @@ const totalSteps = String(processSteps.length).padStart(2, "0");
   <nav class="work-nav">
     <go-logo></go-logo>
     <div class="work-nav__right">
-      <a href={lensPath(mode, "en")} class="work-back">← Back to CV</a>
+      <a href={lensPath(mode, "en")} class="work-back"
+        ><span class="work-chevron work-chevron--left" aria-hidden="true"></span>Back to CV</a
+      >
       <LangSwitch locale="en" href={`/work/${slug}`} />
     </div>
   </nav>
 
   <main class="work-main" id="main-content">
     <header class="work-hero">
-      <img
-        class="work-hero__icon"
-        src={`/knolling/${icon}`}
-        alt=""
-        aria-hidden="true"
-        loading="eager"
-        decoding="async"
-        style={`aspect-ratio: ${iconRatio};`}
-      />
-      <p class="work-hero__eyebrow">Case Study</p>
-      <h1 class="work-hero__title">{project.name}</h1>
+      {
+        /* La sigla in filigrana, come sulle card dell'indice: filo e non
+          riempimento, dietro al testo, tagliata dall'overflow della testata.
+          Prende il posto lasciato libero dall'oggetto knolling tolto il
+          2026-09-02, e fa lo stesso lavoro — dare all'occhio un appiglio che
+          distingua un case study dall'altro prima di leggere.
+          È anche l'oggetto che vola: fra l'indice e questa pagina è la sola
+          cosa grande che esiste su tutte e due, ed è quella che rende il
+          passaggio visibile invece che solo corretto. */
+      }
+      <p class="work-hero__sigla" aria-hidden="true">{sigla}</p>
+      {
+        /* Occhiello tolto e nome spezzato in due righe, come sulle card
+          dell'indice: stessa regola, stesso helper. Vedi
+          lib/project-name.ts. */
+      }
+      <h1 class="work-hero__title">{nomeProgetto.nome}</h1>
+      {nomeProgetto.descrittore && <p class="work-hero__tagline">{nomeProgetto.descrittore}</p>}
       {project.role && <p class="work-hero__role">{project.role}</p>}
       {
         project.tags && project.tags.length > 0 && (
@@ -138,16 +152,6 @@ const totalSteps = String(processSteps.length).padStart(2, "0");
 
             {project.problem && (
               <article class="journey__panel journey__panel--start">
-                <img
-                  class="journey__stop-icon"
-                  data-j-parallax
-                  src={`/knolling/${icon}`}
-                  alt=""
-                  aria-hidden="true"
-                  loading="lazy"
-                  decoding="async"
-                  style={`aspect-ratio: ${iconRatio};`}
-                />
                 <p class="journey__eyebrow">Departure</p>
                 <h2 class="journey__start-title">The problem</h2>
                 <p class="journey__text">{project.problem}</p>

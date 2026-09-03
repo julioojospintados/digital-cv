@@ -435,7 +435,7 @@ const t = it
       secMotionTok: "Movimento",
       secHome: "Componenti — ingresso",
       secLens: "Componenti — CV per lente",
-      secWork: "Componenti — case study",
+      secWork: "Componenti — Case study",
       secStates: "Stati",
       secMobile: "Mobile",
       secMotion: "Animazioni",
@@ -518,7 +518,7 @@ const t = it
       secMotionTok: "Motion",
       secHome: "Components — entry",
       secLens: "Components — CV per lens",
-      secWork: "Components — case study",
+      secWork: "Components — Case study",
       secStates: "States",
       secMobile: "Mobile",
       secMotion: "Animation",
@@ -644,7 +644,6 @@ const NAV = [
       { id: "lente-occhiello", label: it ? "Occhiello e sigla" : "Eyebrow and initials" },
       { id: "lente-fondale", label: it ? "Fondale di sezione" : "Section backdrop" },
       { id: "lente-imbocchi", label: it ? "Imbocchi finali" : "Closing exits" },
-      { id: "lente-lingue", label: it ? "Chip delle lingue" : "Language chips" },
       { id: "lente-contatti", label: it ? "Contatti in chiaro" : "Contacts in the open" },
     ],
   },
@@ -653,12 +652,12 @@ const NAV = [
     items: [
       { id: "work-barra", label: it ? "Barra di navigazione" : "Navigation bar" },
       { id: "work-indice-testata", label: it ? "Testata dell'indice" : "Index header" },
-      { id: "work-testata", label: it ? "Testata di case study" : "Case-study header" },
+      { id: "work-testata", label: it ? "Testata di Case study" : "Case-study header" },
       { id: "work-card", label: it ? "Card indice" : "Index card" },
       { id: "work-nav", label: it ? "Tag e navigazione" : "Tags and navigation" },
       { id: "work-cta", label: it ? "CTA di chiusura" : "Closing CTA" },
       { id: "work-learnings", label: it ? "Cosa ho imparato" : "What I learned" },
-      { id: "work-sezione", label: it ? "Sezione di case study" : "Case-study section" },
+      { id: "work-sezione", label: it ? "Sezione di Case study" : "Case-study section" },
       { id: "work-decisione", label: it ? "Decisione di progetto" : "Project decision" },
       { id: "work-viaggio", label: it ? "Il viaggio" : "The journey" },
     ],
@@ -1258,8 +1257,8 @@ const NAV = [
         <p class="ds-sub__note">
           {
             it
-              ? "L'unico componente del sistema che è un web component e non una classe. Reagisce alla lente attiva e, al click, riporta all'ingresso — anche da qui: è il comportamento vero, non l'ho disinnescato per la vetrina."
-              : "The system's only component that is a web component rather than a class. It reacts to the active lens and, on click, returns to the entry — from here too: that is the real behaviour, not defused for the showcase."
+              ? "L'unico componente del sistema che è un web component e non una classe. Reagisce alla lente attiva e, al click, riporta all'ingresso — anche da qui: è il comportamento vero, non l'ho disinnescato per la vetrina. Da settembre 2026 si dichiara comando anche da fermo: un filo d'inchiostro al 44% e una banda di luce che lo attraversa ogni quattro secondi e mezzo. Prima si accendeva solo sotto il puntatore, quindi su un telefono era due lettere e basta."
+              : "The system's only component that is a web component rather than a class. It reacts to the active lens and, on click, returns to the entry — from here too: that is the real behaviour, not defused for the showcase. Since September 2026 it declares itself a control at rest too: a 44% ink hairline and a band of light crossing it every four and a half seconds. Before, it only lit up under a pointer — so on a phone it was two letters and nothing more."
           }
         </p>
         <div class="ds-stage">
@@ -1287,8 +1286,8 @@ const NAV = [
             <p class="ds-spec__v">
               {
                 it
-                  ? "Non usarlo come decorazione ripetuta: è il comando che riporta all'ingresso, e due comandi identici sulla stessa schermata non si sa più quale premere."
-                  : "Do not use it as repeated decoration: it is the control that returns to the entry, and two identical controls on one screen leave you guessing which to press."
+                  ? "Non usarlo come decorazione ripetuta: è il comando che riporta all'ingresso, e due comandi identici sulla stessa schermata non si sa più quale premere. E non chiudere il riquadro con overflow: hidden per contenere la banda di luce — in lente tech l'alone delle lettere arriva a 2,25rem fuori dal bordo, e verrebbe tagliato. La banda infatti si muove per background-position, non per traslazione."
+                  : "Do not use it as repeated decoration: it is the control that returns to the entry, and two identical controls on one screen leave you guessing which to press. And do not clip the box with overflow: hidden to contain the band of light — in the tech lens the letters' halo reaches 2.25rem beyond the border and would be cut. That is why the band moves by background-position, not by translation."
               }
             </p>
           </div>
@@ -1297,8 +1296,18 @@ const NAV = [
             <p class="ds-spec__v">
               {
                 it
-                  ? "È un <button> dentro uno shadow root, quindi arriva già con ruolo e nome accessibile propri: non serve — e non va — avvolgerlo in un altro link."
-                  : "It is a <button> inside a shadow root, so it already carries its own role and accessible name: wrapping it in another link is unnecessary, and wrong."
+                  ? "È un <button> dentro uno shadow root, quindi arriva già con ruolo e nome accessibile propri: non serve — e non va — avvolgerlo in un altro link. Il filo a riposo è inchiostro al 44% e non accento: identifica un controllo, quindi gli tocca il 3:1 di 1.4.11, e un accento da un pixel non ci arriva sull'arancione della lente design. Stesso valore e stessa ragione di --ls-line."
+                  : "It is a <button> inside a shadow root, so it already carries its own role and accessible name: wrapping it in another link is unnecessary, and wrong. The resting hairline is 44% ink and not accent: it identifies a control, so it owes the 3:1 of 1.4.11, and a one-pixel accent does not reach it on the design lens's orange. Same value, same reason as --ls-line."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specMotion}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Una banda di luce attraversa il riquadro in 1,17s e poi si ferma per 3,3s: un passaggio, non un respiro. Il pulse del sistema chiama l'attenzione su una cosa dentro una pagina, mentre questo marchio sta in cima a ogni pagina — un respiro perpetuo lassù diventa rumore in due schermate. Alla pressione scala 0,98 con l'ombra interna, come .lc-btn e .lh-cta. A movimento ridotto spariscono la banda, lo scatto e il respiro del gradiente della lente design: quest'ultimo fino a oggi restava acceso, perché la regola globale azzera le durate con l'universale, che non attraversa lo shadow root."
+                  : "A band of light crosses the box in 1.17s, then pauses for 3.3s: a passage, not a breath. The system's pulse calls attention to one thing inside a page, whereas this mark sits at the top of every page — a perpetual breath up there becomes noise within two screens. On press it scales to 0.98 with the inner shadow, like .lc-btn and .lh-cta. With reduced motion the band, the press scale and the design lens's gradient breath all stop — that last one used to stay on, because the global rule zeroes durations with the universal selector, which does not cross a shadow root."
               }
             </p>
           </div>
@@ -2450,15 +2459,14 @@ const NAV = [
           <h2 class="ds-section__title" id="ingresso-email-t">
             {it ? "L'email in «Chi sono»" : "The email in «Chi sono»"}
           </h2>
-          <span class="ds-panel__group">{t.secHome}<span class="ds-origin">contact-card</span></span
-          >
+          <span class="ds-panel__group">{t.secHome}<span class="ds-origin">lh-cta</span></span>
         </div>
 
         <p class="ds-sub__note">
           {
             it
-              ? "Fino al 2026-09-02 l'ingresso aveva una sesta schermata di congedo: titolo «Tocca a te.», card email, card LinkedIn, firma e megafono. È stata tolta, e di quel blocco è sopravvissuta questa card sola, risalita alla seconda schermata. Le due misure che l'hanno decisa: la chiusura era alta quanto lo schermo e il suo contenuto ne riempiva un terzo, mentre «Chi sono» arrivava a metà, con l'aria distribuita sopra il titolo e sotto i pulsanti. Lo spazio c'era già. Quello che si è perso va saputo: LinkedIn non è più raggiungibile dall'ingresso, resta sulle pagine della lente."
-              : "Until 2026-09-02 the entry had a sixth, closing screen: the «Your move.» title, an email card, a LinkedIn card, the sign-off and the megaphone. It was removed, and this single card is what survived, moving up to the second screen. The two measurements behind it: the closing screen was as tall as the viewport with its content filling a third of it, while «Chi sono» reached half, its air spread above the title and below the buttons. The room was already there. What was lost is worth stating: LinkedIn is no longer reachable from the entry, it stays on the lens pages."
+              ? "Fino al 2026-09-02 l'ingresso aveva una sesta schermata di congedo: titolo «Tocca a te.», card email, card LinkedIn, firma e megafono. È stata tolta, e di quel blocco è sopravvissuto questo comando, risalito alla seconda schermata. Le due misure che l'hanno deciso: la chiusura era alta quanto lo schermo e il suo contenuto ne riempiva un terzo, mentre «Chi sono» arrivava a metà, con l'aria distribuita sopra il titolo e sotto i pulsanti. Lo spazio c'era già. Non è un componente con uno stile proprio: è `.lh-cta--ghost`, lo stesso bottone delle tre sezioni lente, dentro la stessa fascia `.lh-section__actions`. Zero righe di CSS in EmailCard.astro, quindi zero possibilità che diverga."
+              : "Until 2026-09-02 the entry had a sixth, closing screen: the «Your move.» title, an email card, a LinkedIn card, the sign-off and the megaphone. It was removed, and this control is what survived, moving up to the second screen. The two measurements behind it: the closing screen was as tall as the viewport with its content filling a third of it, while «Chi sono» reached half, its air spread above the title and below the buttons. The room was already there. It is not a component with a style of its own: it is `.lh-cta--ghost`, the same button as the three lens sections, inside the same `.lh-section__actions` band. Zero lines of CSS in EmailCard.astro, so zero chance of drift."
           }
         </p>
         <div class="ds-stage">
@@ -2468,11 +2476,7 @@ const NAV = [
           <div class="ds-spec__row ds-spec__row--wide">
             <span class="ds-spec__k">{t.specClass}</span>
             <p class="ds-spec__v">
-              <code
-                >contact-card · contact-card--primary · contact-card__label · contact-card__value ·
-                contact-card__actions · contact-card__cta · contact-card__arrow · contact-card__copy
-                · contact-card__copied</code
-              >
+              <code>lh-section__actions · lh-cta · lh-cta--ghost</code>
             </p>
           </div>
           <div class="ds-spec__row">
@@ -2480,18 +2484,8 @@ const NAV = [
             <p class="ds-spec__v">
               {
                 it
-                  ? "Una sola, in fondo alla colonna di testo di «Chi sono», sulle due home. Non è un componente da riusare: è l'unico posto dell'ingresso in cui esiste l'indirizzo. Sotto le 56rem il riquadro sparisce e resta il solo bottone «Scrivimi»: etichetta, indirizzo in chiaro e «Copia» servono a un desktop, dove mailto può non aprire niente e l'indirizzo si trascrive a mano. Su un telefono l'app di posta c'è sempre, e quei 110px di riquadro spingevano la pianta sotto la piega."
-                  : "One only, at the foot of the «Chi sono» text column, on both home pages. It is not a component to reuse: it is the only place on the entry where the address exists. Below 56rem the box disappears and only the «Write to me» button remains: the label, the address in the open and «Copy» serve a desktop, where mailto may open nothing and the address gets transcribed by hand. On a phone the mail app is always there, and those 110px of box pushed the plant below the fold."
-              }
-            </p>
-          </div>
-          <div class="ds-spec__row">
-            <span class="ds-spec__k">{t.specMotion}</span>
-            <p class="ds-spec__v">
-              {
-                it
-                  ? "La stanghetta avanza di 0.3rem al passaggio, 200ms. La spinta è su `translate` e non su `transform`, e non è indifferente: le proprietà singole si compongono in ordine fisso (translate, rotate, scale, transform), quindi un `transform: translateX()` agisce prima della rotazione e viene ruotato con lei — su una stanghetta girata di -45° la spinta orizzontale diventava una diagonale verso l'alto. Difetto trovato il 2026-09-02, presente da quando esisteva la card. È lo stesso idioma di @keyframes cta-arrow-nudge, che spinge le frecce dei case study con `translate: 0.3125rem 0`."
-                  : "The chevron moves 0.3rem forward on hover, 200ms. The nudge is on `translate`, not `transform`, and that is not interchangeable: the individual properties compose in a fixed order (translate, rotate, scale, transform), so a `transform: translateX()` acts before the rotation and gets rotated with it — on a chevron turned -45° the horizontal push became a diagonal upwards. Found on 2026-09-02, present for as long as the card existed. It is the same idiom as @keyframes cta-arrow-nudge, which nudges the case-study arrows with `translate: 0.3125rem 0`."
+                  ? "Uno solo, in fondo alla colonna di testo di «Chi sono», sulle due home. È l'unico posto dell'ingresso in cui si può scrivere a Giulio: LinkedIn è rimasto sulle pagine della lente. Sotto le 56rem diventa a tutta larghezza col testo centrato, ma non per una regola sua: lo eredita dalla fascia, come le CTA delle altre sezioni."
+                  : "One only, at the foot of the «Chi sono» text column, on both home pages. It is the only place on the entry from which you can write to Giulio: LinkedIn stayed on the lens pages. Below 56rem it goes full width with centred text, but not through a rule of its own: it inherits that from the band, like the other sections' CTAs."
               }
             </p>
           </div>
@@ -2500,8 +2494,8 @@ const NAV = [
             <p class="ds-spec__v">
               {
                 it
-                  ? "Non darle il raggio delle tre card qui sopra. Quelle aprono un cassetto e sono la stessa cosa ripetuta tre volte; questa apre la posta, e la forma diversa è ciò che lo dice a chi il colore non lo distingue. E non confonderla con lc-contacts, la riga di recapiti della pagina CV: là stanno in chiaro dentro il primo strato, qui è una card sola dentro un racconto."
-                  : "Do not give it the radius of the three cards above. Those open a drawer and are the same thing three times over; this one opens the mail client, and the different shape is what says so to anyone who cannot tell the colours apart. And do not confuse it with lc-contacts, the CV page's contact line: there the details sit in the open inside the first layer, here it is a single card inside a story."
+                  ? "Non rifarlo con un CSS proprio, per quanto identico: due definizioni dello stesso bottone divergono alla prima modifica e nessuno se ne accorge finché non finiscono una accanto all'altra. È già successo qui, fra il 2026-09-01 e il 2026-09-02. E non aggiungergli una stanghetta: `.lh-cta` non ne ha, e questo deve essere quel bottone, non quel bottone più qualcosa."
+                  : "Do not rebuild it with CSS of its own, however identical: two definitions of the same button drift on the first change and nobody notices until they end up side by side. It already happened here, between 2026-09-01 and 2026-09-02. And do not give it a chevron: `.lh-cta` has none, and this must be that button, not that button plus something."
               }
             </p>
           </div>
@@ -2510,8 +2504,8 @@ const NAV = [
             <p class="ds-spec__v">
               {
                 it
-                  ? "Il pulsante che copia l'indirizzo nasce hidden e lo accende lo script solo dove gli appunti esistono: meglio nessun comando che un comando che non copia. La conferma non è un colore, è la parola in contact-card__copied, che sta già nel DOM sotto quella che sostituisce, così la larghezza non salta al clic e uno screen reader la trova senza una regione live. Il bottone è a filo, quindi l'accento QUI è il colore del testo, e per questo prende --accent-text prima di --accent: l'arancione pieno su ottanio fa 3,62:1, sotto il 4,5:1 di 1.4.3, e il token lo schiarisce al 50% verso il bianco (4,70:1). In «Chi sono» non c'è lente, quindi si scende al crema, che è l'inchiostro del testo. Su telefono l'indirizzo in chiaro sparisce ma non si perde: resta nell'href del mailto, e il link porta la frase per esteso in aria-label."
-                  : "The copy-address button starts hidden and the script turns it on only where the clipboard exists: better no control than a control that does not copy. The confirmation is not a colour, it is the word in contact-card__copied, already in the DOM underneath the one it replaces, so the width does not jump on click and a screen reader finds it without a live region. The button is an outline, so the accent HERE is the text colour, which is why it takes --accent-text before --accent: full orange on the ottanio ground is 3.62:1, below the 4.5:1 of 1.4.3, and the token lightens it 50% toward white (4.70:1). In «Chi sono» there is no lens, so it falls back to cream, which is the text ink. On a phone the address in the open disappears but is not lost: it stays in the mailto href, and the link carries the full sentence in aria-label."
+                  ? "L'indirizzo non è scritto da nessuna parte sulla pagina: vive nell'href del mailto, e il nome accessibile del link è la frase per esteso in aria-label («Scrivi una email a Giulio»), non la sola parola visibile. `target=”_blank”` anche su un mailto non è una svista: se il gestore di posta è una webmail, `_self` sostituirebbe il CV con la pagina di composizione. Conseguenza da conoscere: su un desktop senza client configurato il clic non apre niente e non resta un secondo modo di prendere l'indirizzo, perché il pulsante che lo copiava è sparito col riquadro."
+                  : "The address is written nowhere on the page: it lives in the mailto href, and the link's accessible name is the full sentence in aria-label («Write an email to Giulio»), not just the visible word. `target=”_blank”` on a mailto is not an oversight: if the mail handler is webmail, `_self` would replace the CV with the compose page. A consequence worth knowing: on a desktop with no configured client the click opens nothing, and no second way to grab the address remains, because the button that copied it went with the box."
               }
             </p>
           </div>
@@ -2783,7 +2777,7 @@ const NAV = [
                 {it ? "Scarica il CV (PDF)" : "Download the CV (PDF)"}
               </a>
               <a class="lc-btn" href="#lente">
-                {it ? "Portfolio — case study" : "Portfolio — case studies"}
+                {it ? "Portfolio — Case study" : "Portfolio — Case studies"}
                 <span class="lc-btn__arrow" aria-hidden="true"></span>
               </a>
               <span class="lc-btn" aria-disabled="true">{it ? "Disabilitato" : "Disabled"}</span>
@@ -4357,94 +4351,6 @@ const NAV = [
         </div>
       </section>
 
-      <section class="ds-panel" data-ds-panel="lente-lingue" aria-labelledby="lente-lingue-t">
-        <div class="ds-panel__head">
-          <h2 class="ds-section__title" id="lente-lingue-t">
-            {it ? "Scala delle lingue" : "Language scale"}
-          </h2>
-          <span class="ds-panel__group">{t.secLens}<span class="ds-origin">lc-*</span></span>
-        </div>
-
-        <p class="ds-sub__note">
-          {
-            it
-              ? "Le sei tacche sono i sei gradini del Quadro europeo — A1 A2 B1 B2 C1 C2 — quindi non sono una barra di percentuale, che il sistema vieta: sono un righello, e servono a far vedere in un colpo il rapporto fra le lingue. La sigla resta scritta accanto ed è la cosa più importante della riga: «B2» è una credenziale verificabile, e tradurla in «quattro tacche su sei» perderebbe l'unico dato che un recruiter cerca. Madrelingua non è un gradino della scala: si accende tutta, ma in inchiostro — non è «un C2 abbondante», è un'altra categoria."
-              : "The six ticks are the six steps of the European framework — A1 A2 B1 B2 C1 C2 — so this is not a percentage bar, which the system forbids: it is a ruler, and it shows the relationship between the languages at a glance. The code stays written beside it and is the most important part of the row: «B2» is a verifiable credential, and turning it into «four ticks out of six» would lose the one datum a recruiter looks for. Native is not a step on the scale: it lights up whole, but in ink — it is not «a generous C2», it is another category."
-          }
-        </p>
-        <div class="ds-stage">
-          <div class="lc">
-            <ul class="lc-langs" role="list" data-ds-snippet>
-              <li class="lc-lang">
-                <span class="lc-lang__name">{it ? "Italiano" : "Italian"}</span>
-                <span class="lc-lang__scale is-native" aria-hidden="true">
-                  <span class="lc-lang__step is-on"></span>
-                  <span class="lc-lang__step is-on"></span>
-                  <span class="lc-lang__step is-on"></span>
-                  <span class="lc-lang__step is-on"></span>
-                  <span class="lc-lang__step is-on"></span>
-                  <span class="lc-lang__step is-on"></span>
-                </span>
-                <b class="lc-lang__lvl">{it ? "Madrelingua" : "Native"}</b>
-              </li>
-              <li class="lc-lang">
-                <span class="lc-lang__name">{it ? "Inglese" : "English"}</span>
-                <span class="lc-lang__scale" aria-hidden="true">
-                  <span class="lc-lang__step is-on"></span>
-                  <span class="lc-lang__step is-on"></span>
-                  <span class="lc-lang__step is-on"></span>
-                  <span class="lc-lang__step is-on"></span>
-                  <span class="lc-lang__step"></span>
-                  <span class="lc-lang__step"></span>
-                </span>
-                <b class="lc-lang__lvl">B2</b>
-              </li>
-            </ul>
-          </div>
-        </div>
-        <div class="ds-spec">
-          <div class="ds-spec__row ds-spec__row--wide">
-            <span class="ds-spec__k">{t.specClass}</span>
-            <p class="ds-spec__v">
-              <code
-                >lc-langs · lc-lang · lc-lang__name · lc-lang__scale (is-native) · lc-lang__step
-                (is-on) · lc-lang__lvl</code
-              >
-            </p>
-          </div>
-          <div class="ds-spec__row">
-            <span class="ds-spec__k">{t.specUse}</span>
-            <p class="ds-spec__v">
-              {
-                it
-                  ? "In chiusura del primo strato, accanto a mail e LinkedIn: sono informazioni di contesto, non dati dei primi sette secondi."
-                  : "At the close of the first layer, beside email and LinkedIn: they are context, not first-seven-seconds data."
-              }
-            </p>
-          </div>
-          <div class="ds-spec__row ds-spec__row--dont">
-            <span class="ds-spec__k">{t.specDont}</span>
-            <p class="ds-spec__v">
-              {
-                it
-                  ? "Non usare questa scala per le competenze: le barre di livello sulle skill sono vietate dal sistema, e qui è lecita solo perché i sei gradini sono una scala pubblica e verificabile, non un voto che ci diamo da soli. E non toglierla per fare spazio: senza tacche restano quattro sigle che vanno lette una per una."
-                  : "Do not use this scale for skills: level bars on skills are forbidden by the system, and it is admissible here only because the six steps are a public, verifiable scale rather than a score we award ourselves. And do not drop it to save room: without the ticks, four codes are left to be read one by one."
-              }
-            </p>
-          </div>
-          <div class="ds-spec__row ds-spec__row--wide">
-            <span class="ds-spec__k">{t.specA11y}</span>
-            <p class="ds-spec__v">
-              {
-                it
-                  ? "role=list esplicito: con list-style: none Safari toglie la semantica di elenco, e queste due voci restano un elenco anche senza pallini. La scala è aria-hidden per intero: dice con una forma quello che la sigla accanto dice con due caratteri, e sei tacche lette una per una non sarebbero un'informazione ma rumore."
-                  : "An explicit role=list: with list-style: none Safari drops the list semantics, and these two entries are still a list without bullets. The scale is aria-hidden in full: it says with a shape what the code beside it says in two characters, and six ticks read out one by one would be noise, not information."
-              }
-            </p>
-          </div>
-        </div>
-      </section>
-
       <section class="ds-panel" data-ds-panel="lente-contatti" aria-labelledby="lente-contatti-t">
         <div class="ds-panel__head">
           <h2 class="ds-section__title" id="lente-contatti-t">
@@ -4533,15 +4439,18 @@ const NAV = [
         <p class="ds-sub__note">
           {
             it
-              ? "La barra dei case study: logo a sinistra, ritorno e lingua a destra. Ogni comando è alto almeno 24px anche quando il testo è di 12 — è la correzione fatta quando si è misurato che il ritorno, a testo nudo, era un bersaglio da 18px."
-              : "The case-study bar: logo on the left, back link and language on the right. Every control is at least 24px tall even when the text is 12 — the fix made after measuring that the back link, as bare text, was an 18px target."
+              ? "La barra dei case study: logo a sinistra, ritorno e lingua a destra. Tre comandi, e da settembre 2026 tutti e tre hanno un contorno: il ritorno era mono maiuscolo attenuato con una freccia scritta come carattere, cioè l'unica cosa premibile della barra che non somigliava a nessun altro comando del sito. Ora è il bottone a filo del sistema, in misura da barra — 2rem, per stare sulla riga ottica dell'interruttore lingua e restare sopra i 24px di 2.5.8."
+              : "The case-study bar: logo on the left, back link and language on the right. Three controls, and since September 2026 all three have an outline: the back link used to be muted uppercase mono with an arrow typed as a character — the one pressable thing in the bar that looked like nothing else on the site. It is now the system's outline button, in bar size: 2rem, to sit on the language switch's optical line and stay above the 24px of 2.5.8."
           }
         </p>
         <div class="ds-stage">
           <nav class="work-nav" style="position:static;" data-ds-snippet data-ds-drop="style">
             <go-logo></go-logo>
             <div class="work-nav__right">
-              <a href="#work-barra" class="work-back">{it ? "← Torna al CV" : "← Back to the CV"}</a
+              <a href="#work-barra" class="work-back"
+                ><span class="work-chevron work-chevron--left" aria-hidden="true"></span>{
+                  it ? "Torna al CV" : "Back to the CV"
+                }</a
               >
               <LangSwitch locale={lang} href="#work-barra" />
             </div>
@@ -4551,7 +4460,7 @@ const NAV = [
           <div class="ds-spec__row ds-spec__row--wide">
             <span class="ds-spec__k">{t.specClass}</span>
             <p class="ds-spec__v">
-              <code>work-nav · work-nav__right · work-back · lang-switch</code>
+              <code>work-nav · work-nav__right · work-back · work-chevron--left · lang-switch</code>
             </p>
           </div>
           <div class="ds-spec__row">
@@ -4569,8 +4478,8 @@ const NAV = [
             <p class="ds-spec__v">
               {
                 it
-                  ? "Non lasciare i comandi come testo nudo: a 12px senza padding sono alti 18, sotto i 24×24 di 2.5.8."
-                  : "Do not leave the controls as bare text: at 12px with no padding they are 18 tall, below the 24×24 of 2.5.8."
+                  ? "Non lasciare i comandi come testo nudo — a 12px senza passo interno sono alti 18, sotto i 24×24 di 2.5.8 — e non scrivere la freccia come carattere: un «←» preso dal font cambia disegno, spessore e allineamento a ogni famiglia, mentre work-chevron--left è lo stesso segno del resto della pagina."
+                  : "Do not leave the controls as bare text — at 12px with no padding they are 18 tall, below the 24×24 of 2.5.8 — and do not type the arrow as a character: a font's «←» changes shape, weight and alignment with every family, while work-chevron--left is the same mark as the rest of the page."
               }
             </p>
           </div>
@@ -4666,7 +4575,7 @@ const NAV = [
       >
         <div class="ds-panel__head">
           <h2 class="ds-section__title" id="work-testata-t">
-            {it ? "Testata di case study" : "Case-study header"}
+            {it ? "Testata di Case study" : "Case-study header"}
           </h2>
           <span class="ds-panel__group">{t.secWork}<span class="ds-origin">work-*</span></span>
         </div>
@@ -4674,24 +4583,17 @@ const NAV = [
         <p class="ds-sub__note">
           {
             it
-              ? "L'oggetto knolling del progetto sta in filigrana all'angolo, al 14% di opacità e con overflow nascosto: firma la pagina senza contendere la lettura al titolo. Tutto il resto è sopra di lui per z-index, non per posizione."
-              : "The project's knolling object sits as a watermark in the corner, at 14% opacity with overflow hidden: it signs the page without competing with the title. Everything else sits above it by z-index, not by position."
+              ? "La sigla del progetto sta in filigrana all'angolo — filo e non riempimento, con overflow nascosto: firma la pagina senza contendere la lettura al titolo. Tutto il resto è sopra di lei per z-index, non per posizione. Fino al 2026-09-02 qui c'era l'oggetto knolling; la sigla ne prende il posto e in più attraversa: fra l'indice e questa pagina è lei l'oggetto che vola."
+              : "The project's initials sit as a watermark in the corner — outline, not fill, with overflow hidden: it signs the page without competing with the title. Everything else sits above it by z-index, not by position. Until 2026-09-02 this was the knolling object; the initials take its place and, on top of that, they travel: between the index and this page they are the object that flies."
           }
         </p>
         <div class="ds-stage">
           <header class="work-hero" data-ds-snippet>
-            <img
-              class="work-hero__icon"
-              data-ds-part="1"
-              src="/knolling/laptop.webp"
-              alt=""
-              aria-hidden="true"
-              loading="lazy"
-              decoding="async"
-              style="aspect-ratio: 524 / 476;"
-            />
-            <p class="work-hero__eyebrow" data-ds-part="2">Case Study</p>
-            <h1 class="work-hero__title" data-ds-part="3">Digital CV</h1>
+            <p class="work-hero__sigla" data-ds-part="1" aria-hidden="true">DC</p>
+            <h1 class="work-hero__title" data-ds-part="2">Digital CV</h1>
+            <p class="work-hero__tagline" data-ds-part="3">
+              {it ? "Progetto Open Source AI-Augmented" : "Open Source AI-Augmented Project"}
+            </p>
             <p class="work-hero__role" data-ds-part="4">AI Workflow Designer</p>
             <div class="work-hero__tags" data-ds-part="5">
               <span class="work-tag">Astro</span>
@@ -4715,23 +4617,23 @@ const NAV = [
           <ol class="ds-anatomy__list">
             <li class="ds-anatomy__item">
               <span class="ds-anatomy__n" aria-hidden="true">1</span>
-              <code class="ds-anatomy__cls">work-hero__icon</code>
+              <code class="ds-anatomy__cls">work-hero__sigla</code>
               <span class="ds-anatomy__role"
                 >{
                   it
-                    ? "L'oggetto knolling del progetto, al 14% e fuori dal flusso."
-                    : "The project's knolling object, at 14% and out of the flow."
+                    ? "Le iniziali del progetto, a filo e fuori dal flusso. Calcolate dal nome (projectInitials), non scritte nei dati."
+                    : "The project's initials, outlined and out of the flow. Computed from the name (projectInitials), not written into the data."
                 }</span
               >
             </li>
             <li class="ds-anatomy__item">
               <span class="ds-anatomy__n" aria-hidden="true">2</span>
-              <code class="ds-anatomy__cls">work-hero__eyebrow</code>
+              <code class="ds-anatomy__cls">work-hero__tagline</code>
               <span class="ds-anatomy__role"
                 >{
                   it
-                    ? "L'occhiello che dice di che tipo di pagina si tratta."
-                    : "The eyebrow saying what kind of page this is."
+                    ? "La seconda metà del nome, separata dalla prima da splitProjectName. Qui stava «CASE STUDY», che ripeteva a chi leggeva un case study che stava leggendo un case study."
+                    : "The second half of the name, split from the first by splitProjectName. This used to be «CASE STUDY», which told a reader of a case study that they were reading a case study."
                 }</span
               >
             </li>
@@ -4783,7 +4685,10 @@ const NAV = [
           <div class="ds-spec__row ds-spec__row--wide">
             <span class="ds-spec__k">{t.specClass}</span>
             <p class="ds-spec__v">
-              <code>work-hero · work-hero__icon · work-hero__title · work-hero__ds-link</code>
+              <code
+                >work-hero · work-hero__sigla · work-hero__title · work-hero__tagline ·
+                work-hero__role · work-hero__tags · work-hero__ds-link</code
+              >
             </p>
           </div>
           <div class="ds-spec__row">
@@ -4791,8 +4696,8 @@ const NAV = [
             <p class="ds-spec__v">
               {
                 it
-                  ? "In cima a ogni case study, con l'oggetto knolling del progetto."
-                  : "At the top of every case study, with that project's knolling object."
+                  ? "In cima a ogni case study, con la sigla del progetto."
+                  : "At the top of every case study, with that project's initials."
               }
             </p>
           </div>
@@ -4801,8 +4706,8 @@ const NAV = [
             <p class="ds-spec__v">
               {
                 it
-                  ? "Non alzare l'opacità della filigrana: a 0,14 è un fondale, più su comincia a contendere la lettura al titolo che le sta sopra."
-                  : "Do not raise the watermark's opacity: at 0.14 it is a backdrop, any higher and it starts competing with the title that sits over it."
+                  ? "Non riempire la sigla: il filo al 26% è un fondale, un glifo pieno comincia a contendere la lettura al titolo che gli sta sopra. E non toglierle il tetto in rem del clamp: dentro un contenitore i vw guardano comunque la finestra, e su uno schermo largo uscirebbe dal riquadro invece di appoggiarcisi."
+                  : "Do not fill the initials: the 26% outline is a backdrop, a solid glyph starts competing with the title above it. And do not remove the clamp's rem ceiling: inside a container, vw still measures the window, so on a wide screen it would run out of the box instead of resting against it."
               }
             </p>
           </div>
@@ -4811,8 +4716,8 @@ const NAV = [
             <p class="ds-spec__v">
               {
                 it
-                  ? "La filigrana è aria-hidden con alt vuoto e pointer-events: none — decorativa, e non deve nemmeno intercettare un tocco destinato al titolo."
-                  : "The watermark is aria-hidden with an empty alt and pointer-events: none — decorative, and it must not even intercept a tap meant for the title."
+                  ? "La filigrana è aria-hidden, pointer-events: none e user-select: none — decorativa, e non deve né essere letta ad alta voce (due lettere non sono un'informazione) né intercettare un tocco destinato al titolo."
+                  : "The watermark is aria-hidden, pointer-events: none and user-select: none — decorative, so it is neither read aloud (two letters are not information) nor able to intercept a tap meant for the title."
               }
             </p>
           </div>
@@ -4850,9 +4755,9 @@ const NAV = [
             <span class="ds-spec__k">{t.specClass}</span>
             <p class="ds-spec__v">
               <code
-                >work-index-card · work-index-card--pulse · work-index-card__icon--laptop ·
-                work-index-card__icon--flashlight · work-index-card__icon--megaphone ·
-                work-index-card__icon--multitool</code
+                >work-index-card · work-index-card--pulse · work-index-card__sigla ·
+                work-index-card__name · work-index-card__tagline · work-index-card__role ·
+                work-index-card__cta</code
               >
             </p>
           </div>
@@ -4908,7 +4813,7 @@ const NAV = [
             <span class="work-tag">Lit</span>
             <span class="work-tag">GSAP</span>
             <a class="work-back" href="#case-study" data-ds-snippet>
-              <span class="work-chevron" aria-hidden="true"></span>
+              <span class="work-chevron work-chevron--left" aria-hidden="true"></span>
               {it ? "Torna all'indice" : "Back to the index"}
             </a>
           </div>
@@ -4916,7 +4821,11 @@ const NAV = [
         <div class="ds-spec">
           <div class="ds-spec__row ds-spec__row--wide">
             <span class="ds-spec__k">{t.specClass}</span>
-            <p class="ds-spec__v"><code>work-tag · work-back · work-chevron</code></p>
+            <p class="ds-spec__v">
+              <code
+                >work-tag · work-back · work-chevron · work-chevron--left · work-chevron--down</code
+              >
+            </p>
           </div>
           <div class="ds-spec__row">
             <span class="ds-spec__k">{t.specUse}</span>
@@ -4980,7 +4889,7 @@ const NAV = [
                 >{it ? "Scrivimi" : "Write to me"}</a
               >
               <a class="work-cta__link work-cta__link--secondary" href="#work-cta"
-                >{it ? "Altri case study" : "More case studies"}</a
+                >{it ? "Altri Case study" : "More Case studies"}</a
               >
             </div>
           </div>
@@ -5082,7 +4991,7 @@ const NAV = [
       >
         <div class="ds-panel__head">
           <h2 class="ds-section__title" id="work-sezione-t">
-            {it ? "Sezione di case study" : "Case-study section"}
+            {it ? "Sezione di Case study" : "Case-study section"}
           </h2>
           <span class="ds-panel__group">{t.secWork}<span class="ds-origin">work-*</span></span>
         </div>
@@ -5827,7 +5736,7 @@ const NAV = [
           <div class="ds-spec__row ds-spec__row--wide">
             <span class="ds-spec__k">{t.specClass}</span>
             <p class="ds-spec__v">
-              <code>view-transition-name: lens-object</code> · <code>portfolio-hero</code>
+              <code>view-transition-name: lens-object</code>
             </p>
           </div>
           <div class="ds-spec__row">

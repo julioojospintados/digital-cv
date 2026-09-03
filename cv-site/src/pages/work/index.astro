@@ -16,7 +16,9 @@ const caseStudies = cvData.projects.filter((p) => !!p.slug);
   <nav class="work-nav">
     <go-logo></go-logo>
     <div class="work-nav__right">
-      <a href="/tech" class="work-back">← Torna al CV</a>
+      <a href="/tech" class="work-back"
+        ><span class="work-chevron work-chevron--left" aria-hidden="true"></span>Torna al CV</a
+      >
       <LangSwitch locale="it" href="/en/work" />
     </div>
   </nav>
@@ -39,7 +41,7 @@ const caseStudies = cvData.projects.filter((p) => !!p.slug);
             slug={p.slug!}
             role={p.role}
             workHref="/work"
-            ctaLabel="Leggi il case study"
+            ctaLabel="Leggi il Case study"
           />
         ))
       }

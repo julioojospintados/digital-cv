@@ -1,14 +1,17 @@
 ---
-// Stessa card usata nell'indice /work — riusata anche nella home (sezione
-// Web & UX Designer) come prova visiva. Markup + classi (work-page.css)
-// invariati rispetto all'originale inline in pages/work/index.astro, solo
-// estratti in componente per evitare due copie divergenti.
+// La card dell'indice /work. Markup e classi stanno in work-page.css.
 //
-// L'unica cosa che è cambiata rispetto a quella versione: l'oggetto knolling
-// è scelto per slug e non per mode — con 3 mode e 4 case study uscivano due
-// sole immagini su quattro card. Le mappe e il perché stanno in
-// lib/work-knolling.ts.
-import { workKnollIcon, workKnollRatio } from "../../lib/work-knolling";
+// Niente immagine. Fino al 2026-09-02 ogni card portava un oggetto knolling
+// in alto a destra, al 12% di opacità e tagliato dall'overflow: una filigrana,
+// non un'illustrazione. Tolta su richiesta di Giulio.
+// Quello che si è perso: era l'unica cosa che distingueva una card dall'altra
+// a colpo d'occhio, prima di leggere. Adesso le quattro card si distinguono
+// solo per il testo, quindi il nome e il sottotitolo devono fare tutto il
+// lavoro — è il motivo per cui il nome sta su una riga sua (splitProjectName,
+// lib/project-name.ts) invece che infilato in fondo a una stringa.
+// La mappa slug -> oggetto resta in lib/work-knolling.ts: la usa ancora la
+// testata del case study.
+import { projectInitials, splitProjectName } from "../../lib/project-name";
 
 interface Props {
   name: string;
@@ -26,31 +29,34 @@ const {
   slug,
   role,
   workHref = "/work",
-  ctaLabel = "Leggi il case study",
+  ctaLabel = "Leggi il Case study",
   pulse = false,
 } = Astro.props;
-const iconFile = workKnollIcon(slug);
-// Modificatore per oggetto (…__icon--flashlight): serve perché non tutti
-// stanno bene nella stessa posa. La regola comune vale per default, il
-// modificatore corregge solo chi ne ha bisogno.
-const iconName = iconFile.replace(".webp", "");
+// Il nome porta due cose in una stringa sola: vanno su due righe, e la
+// prima è il nome e basta. Il perché sta in lib/project-name.ts.
+const { nome, descrittore } = splitProjectName(name);
+const sigla = projectInitials(name);
 ---
 
 <a
   class:list={["work-index-card", { "work-index-card--pulse": pulse }]}
   href={`${workHref}/${slug}`}
 >
-  <img
-    class:list={["work-index-card__icon", `work-index-card__icon--${iconName}`]}
-    src={`/knolling/${iconFile}`}
-    alt=""
-    aria-hidden="true"
-    loading="lazy"
-    decoding="async"
-    style={`aspect-ratio: ${workKnollRatio(iconFile)};`}
-  />
-  <p class="work-index-card__eyebrow">Case Study</p>
-  <h2 class="work-index-card__name">{name}</h2>
+  {
+    /* Nessun occhiello. Diceva «CASE STUDY» sopra ogni card dell'indice
+      dei case study: ripeteva a chi guardava la cosa che stava già
+      guardando, e si prendeva la prima riga, cioè quella che l'occhio
+      usa per cercare il nome. Tolto il 2026-09-02. */
+  }
+  {
+    /* La sigla in filigrana, al posto dell oggetto knolling che stava qui
+      fino al 2026-09-02. aria-hidden perché è un appiglio per l occhio: due
+      lettere lette ad alta voce non sono un informazione, sono rumore.
+      Stessa ragione, e stessa tecnica, di .lh-section__initial sulla home. */
+  }
+  <p class="work-index-card__sigla" aria-hidden="true">{sigla}</p>
+  <h2 class="work-index-card__name">{nome}</h2>
+  {descrittore && <p class="work-index-card__tagline">{descrittore}</p>}
   {role && <p class="work-index-card__role">{role}</p>}
   <span class="work-index-card__cta">
     {ctaLabel}

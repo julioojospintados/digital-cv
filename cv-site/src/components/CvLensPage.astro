@@ -210,32 +210,12 @@ const tlTicks = Array.from({ length: Math.ceil((tlA - tlDa) / 4) }, (_, k) => tl
 
 const email = data.social.find((s) => s.platform === "Email");
 const linkedin = data.social.find((s) => s.platform === "LinkedIn");
-// Le lingue non stanno piu' nella riga dei puntini — quattro delle sei voci
-// di un unico elenco che mescolava luogo, disponibilita' e lingue con lo
-// stesso separatore e lo stesso peso — e dal 2026-08-27 non sono nemmeno
-// piu' pastiglie: sono una scala, una riga per lingua, con i sei gradini
-// del Quadro europeo accanto alla sigla. Perche' una scala, e perche' la
-// sigla resta comunque scritta, sta nel commento di .lc-langs in lab-cv.css.
-//
-// Il livello nei dati e' una stringa: "B2" per chi ha un codice,
-// "Madrelingua" / "Native" per chi non ce l'ha. Il codice si cerca DENTRO
-// la stringa invece di confrontarla per intero, cosi' la stessa riga vale
-// per l'italiano e per l'inglese senza una mappa per lingua.
-const CEFR = ["A1", "A2", "B1", "B2", "C1", "C2"] as const;
-
-const langChips = data.languages.map((l) => {
-  const gradino = CEFR.findIndex((c) => l.level.toUpperCase().includes(c));
-  return {
-    name: l.name,
-    level: l.level,
-    // Quattro tacche per un B2. Chi non ha un codice e' madrelingua: la
-    // scala si accende tutta, ma di un colore suo — non e' "un C2
-    // abbondante", e' un'altra categoria.
-    steps: gradino >= 0 ? gradino + 1 : CEFR.length,
-    native: gradino < 0,
-  };
-});
-
+// Qui si costruiva la scala delle lingue (CEFR, langChips) che stava fra i
+// bottoni e i contatti. Tolta il 2026-09-02 su richiesta di Giulio, markup e
+// stile compresi. Il costo da ricordare: il livello di inglese era l'unico
+// dato della testata che un recruiter straniero cerca prima del ruolo, e ora
+// non sta più da nessuna parte sulla pagina. I dati restano in cv.ts, quindi
+// tornare indietro è riscrivere markup e stile, non ritrovare informazioni.
 // ── Strato 2c: percorso e voci ───────────────────────────────────────────
 // timelineItems arriva già unito e ordinato dal piu recente da
 // buildCvViewModel — lo stesso che serve le pagine vere. Qui si separa per
@@ -385,44 +365,6 @@ const markStyle = (nome: string): string | undefined => {
               )
             }
           </div>
-
-          {
-            /* Le lingue come pastiglie: il livello CEFR resta scritto per
-              esteso perche' e' una credenziale, non un punteggio — tradurlo
-              in "tre pallini su cinque" perderebbe l'unico dato che un
-              recruiter cerca davvero. Il grafico qui separa i tipi di
-              informazione, non misura il livello.
-
-              Stanno DOPO i bottoni e prima dei contatti, non su in alto con
-              luogo e disponibilita': la fascia dei primi secondi porta gia'
-              nome, ruolo, claim e i due incarichi in corso, e le lingue non
-              competono con quelli. Qui invece chiudono il blocco insieme a
-              mail e LinkedIn — sono tutte informazioni di contatto e di
-              contesto, cioe' quello che si guarda dopo aver deciso che il
-              profilo interessa. */
-          }
-          <ul class="lc-langs" role="list">
-            {
-              langChips.map((l) => (
-                <li class="lc-lang">
-                  <span class="lc-lang__name">{l.name}</span>
-                  {/* La scala e' aria-hidden per intero: dice con una forma
-                      quello che la sigla accanto dice con due caratteri, e
-                      sei tacche lette una per una non sono un'informazione,
-                      sono rumore. */}
-                  <span
-                    class:list={["lc-lang__scale", { "is-native": l.native }]}
-                    aria-hidden="true"
-                  >
-                    {CEFR.map((_, i) => (
-                      <span class:list={["lc-lang__step", { "is-on": i < l.steps }]} />
-                    ))}
-                  </span>
-                  <b class="lc-lang__lvl">{l.level}</b>
-                </li>
-              ))
-            }
-          </ul>
 
           <!-- Contatti in chiaro, non dentro un FAB: "no treasure hunts for
                contact information". -->

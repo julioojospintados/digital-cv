@@ -227,6 +227,111 @@ const jsonLd = {
          Mono — sono dichiarate in global.css, che blocca gia' il rendering.
          Un set solo, deciso una volta. -->
 
+    <!-- ── La card dell'indice diventa la testata del case study ──────────
+         Da quando le immagini knolling sono state tolte (2026-09-02) fra
+         /work e un case study non restava piu' niente da animare: la
+         navigazione era un taglio secco. Il primo rimedio fece volare il
+         solo nome del progetto — l'unica cosa che esistesse davvero identica
+         sulle due pagine — e sulla carta bastava. Provato, non bastava:
+         Giulio ha riferito che fra le due pagine non si vede nessuna
+         transizione.
+
+         Il perche' e' scritto in global.css qualche riga sopra
+         @view-transition, e vale la pena rileggerlo prima di toccare questo
+         script: la RADICE NON SI FOTOGRAFA. Tutto cio' che non porta un nome
+         condiviso taglia, di netto, senza dissolvenza. Dentro un taglio
+         netto una parola che si sposta non la nota nessuno — non e' che
+         l'animazione manchi, e' che non ha massa.
+
+         Fotografare la pagina per dissolvere le due schermate una nell'altra
+         e' la prima idea che viene, ed e' gia' stata scartata tre volte (27
+         e 28 agosto, e di nuovo per il cambio lingua): due testi che si
+         leggono sovrapposti in `plus-lighter`, e la pagina d'arrivo che nei
+         primi 150ms non consegna fotogrammi.
+
+         La cura e' l'altra: dare al gesto abbastanza roba da leggersi. Fra
+         la card e la testata ci sono QUATTRO cose identiche — la sigla in
+         filigrana, il nome, il descrittore e il ruolo — e sono identiche sul
+         serio, stesso testo dallo stesso helper, quindi sono quattro morph
+         veri e non quattro dissolvenze fra cose diverse. La sigla porta il
+         peso: e' l'unico oggetto grande, cresce da 5,5rem a 11 e attraversa
+         mezza schermata. E' la stessa grammatica dell'ingresso verso la
+         lente — un oggetto attraversa, il resto taglia — scritta con
+         l'alfabeto che questa pagina ha, che e' tipografico e non
+         fotografico.
+
+         I nomi si assegnano al CLIC e non nel CSS, come vuole la regola del
+         progetto: sull'indice ci sono quattro card, e un nome fisso le
+         renderebbe tutte candidate allo stesso morph.
+
+         Due guardie, e sono due difetti gia' visti altrove nel file.
+         Alla PARTENZA si assegna solo se si sta davvero lasciando l'indice:
+         la stessa card vive anche in vetrina (/design-system), e da li' si
+         atterrerebbe su un case study che al risveglio non assegna nulla,
+         lasciando quattro istantanee orfane animate da sole sopra la pagina
+         nuova — il difetto corretto su `portfolio-hero` il 2026-09-02.
+         All'ARRIVO si assegna solo se si viene davvero dall'indice, per la
+         stessa ragione al contrario: da una lente si atterra sul case study
+         senza niente che voli.
+
+         A movimento ridotto non si assegna niente: la regola globale che
+         azzera le durate usa `*`, e i pseudo-elementi della transizione
+         stanno in un albero che `*` non raggiunge. Senza nome non c'e'
+         niente da animare, ed e' il comportamento giusto. -->
+    <script is:inline>
+      (() => {
+        // nome condiviso · dove sta sulla card · dove sta sulla testata.
+        // Quattro morph indipendenti, calcolati insieme dal browser.
+        const COPPIE = [
+          ["case-sigla", ".work-index-card__sigla", ".work-hero__sigla"],
+          ["case-title", ".work-index-card__name", ".work-hero__title"],
+          ["case-tagline", ".work-index-card__tagline", ".work-hero__tagline"],
+          ["case-role", ".work-index-card__role", ".work-hero__role"],
+        ];
+        const fermo = matchMedia("(prefers-reduced-motion: reduce)").matches;
+        const nudo = (p) => p.replace(/\/+$/, "") || "/";
+        const indice = (p) => nudo(p) === "/work" || nudo(p) === "/en/work";
+
+        addEventListener(
+          "click",
+          (e) => {
+            if (fermo || e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey) return;
+            if (!indice(location.pathname)) return;
+            const card = e.target.closest && e.target.closest("a.work-index-card");
+            if (!card) return;
+            for (const [nome, sorgente] of COPPIE) {
+              const el = card.querySelector(sorgente);
+              if (el) el.style.viewTransitionName = nome;
+            }
+          },
+          true,
+        );
+
+        addEventListener("pagereveal", (e) => {
+          const vt = e.viewTransition;
+          if (!vt || fermo || !document.referrer) return;
+          let da;
+          try {
+            da = new URL(document.referrer);
+          } catch {
+            return;
+          }
+          if (da.origin !== location.origin || !indice(da.pathname)) return;
+          const nominati = [];
+          for (const coppia of COPPIE) {
+            const el = document.querySelector(coppia[2]);
+            if (!el) continue;
+            el.style.viewTransitionName = coppia[0];
+            nominati.push(el);
+          }
+          if (!nominati.length) return;
+          vt.finished.finally(() => {
+            for (const el of nominati) el.style.viewTransitionName = "";
+          });
+        });
+      })();
+    </script>
+
     <!-- ── Il cambio lingua attraversa invece di tagliare ──────────────────
          Misurato il 2026-09-01 sul cambio lingua della home, e i numeri sono
          il motivo per cui questo script esiste:
@@ -450,7 +555,7 @@ const jsonLd = {
                   const m = /matrix\(([^)]*)\)/.exec(t);
                   return m ? parseFloat(m[1].split(",")[4]) : NaN;
                 };
-                reg.nome = ["lens-object", "portfolio-hero"].find((n) => !isNaN(x(n))) || null;
+                reg.nome = ["lens-object"].find((n) => !isNaN(x(n))) || null;
                 let viva = true;
                 const passo = () => {
                   if (!viva) return;

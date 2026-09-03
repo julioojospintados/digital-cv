@@ -1,34 +1,43 @@
 ---
 /**
- * EmailCard.astro — l'indirizzo email come card, dentro "Chi sono".
+ * EmailCard.astro — il comando per scrivere a Giulio, dentro "Chi sono".
  *
- * Nasce il 2026-09-02 dallo smontaggio del footer d'ingresso. Fino a ieri la
- * home aveva SEI schermate e l'ultima era il congedo: titolo "Tocca a te.",
- * card email, card LinkedIn, firma, megafono. Quella schermata è stata tolta
- * (scelta di Giulio) e di tutto il blocco è sopravvissuta questa card sola,
- * che è risalita alla seconda schermata.
+ * Nasce il 2026-09-02 dallo smontaggio del footer d'ingresso. Fino a quel
+ * giorno la home aveva SEI schermate e l'ultima era il congedo: titolo
+ * "Tocca a te.", card email, card LinkedIn, firma, megafono. Quella schermata
+ * è stata tolta, e di tutto il blocco è sopravvissuto questo comando, risalito
+ * alla seconda schermata.
  *
  * Il perché sta in due misure prese sulla pagina vera. La chiusura era alta
  * quanto lo schermo e il suo contenuto ne riempiva un terzo: una schermata
  * dimensionata per una quantità di roba che non c'era. "Chi sono", invece,
  * arrivava a circa metà, con l'aria distribuita sopra il titolo e sotto i
- * pulsanti — quindi lo spazio per l'indirizzo c'era già, ed è esattamente
- * dove ora sta la card.
+ * pulsanti, quindi lo spazio c'era già ed è dove ora sta il bottone.
  *
  * Cosa si è perso, e va saputo: **LinkedIn non è più raggiungibile
- * dall'ingresso** (resta sulle pagine della lente, dove c'è `lc-contacts`), e
- * "Tocca a te." non esiste più. La seconda era una frase di congedo, e a
- * schermata 2 su 5 non si sta congedando nessuno.
+ * dall'ingresso** (resta sulle pagine della lente, dove c'è `lc-contacts`),
+ * "Tocca a te." non esiste più, e con il riquadro se ne sono andati anche
+ * l'indirizzo in chiaro e il pulsante che lo copiava. Quest'ultima è la
+ * perdita che pesa: su un desktop senza client di posta configurato `mailto:`
+ * non apre niente e il clic fallisce in silenzio, e adesso non resta un
+ * secondo modo di prendere l'indirizzo. È una scelta di Giulio del
+ * 2026-09-02, fatta sapendo questo.
  *
- * Perché una card e non una riga: è la variante che Giulio ha scelto vedendo
- * le quattro affiancate. È l'unica in cui l'indirizzo si legge e si copia
- * senza cliccare niente, e in cui non c'è dubbio su cosa sia — le tre card
- * qui sopra aprono un racconto, questa apre la posta, e una forma diversa è
- * ciò che impedisce all'affordance di mentire.
+ * ── Perché qui non c'è nemmeno una riga di CSS ──────────────────────────
+ * Il bottone è `.lh-cta--ghost`, cioè LO STESSO delle tre sezioni lente
+ * ("GO to Web & UX Designer"), non una sua imitazione. `.lh-cta` è una classe
+ * libera in `lab-home.css`, non annidata sotto `.lh`, e la vetrina importa
+ * quel foglio: funziona in tutti e due i posti senza copiare niente. Un
+ * secondo blocco di regole che rifà lo stesso bottone sarebbe divergito alla
+ * prima modifica, e nessuno se ne sarebbe accorto finché i due non fossero
+ * finiti uno accanto all'altro.
  *
- * Le classi restano quelle del vecchio blocco contatti (`contact-card*`):
- * il markup è lo stesso, cambia solo dove vive, e rinominarle avrebbe
- * significato riscrivere la scheda della vetrina per niente.
+ * Stessa ragione per il contenitore: `.lh-section__actions` è la fascia che
+ * porta le CTA delle altre sezioni, e da lì arriva gratis il comportamento su
+ * telefono, cioè colonna a tutta larghezza col testo centrato sotto le 56rem.
+ *
+ * E per la stessa ragione qui **non c'è la stanghetta**: `.lh-cta` non ne ha,
+ * e questo deve essere quel bottone, non quel bottone più qualcosa.
  */
 import { cvData } from "@cv-data";
 import { cvDataEn } from "@cv-data-en";
@@ -44,338 +53,28 @@ const { lang = "it", ...rest } = Astro.props;
 const data = lang === "en" ? cvDataEn : cvData;
 
 const email = data.social.find((s) => s.platform === "Email");
-const emailAddress = email?.url.replace("mailto:", "") ?? "";
 
 const t =
   lang === "en"
-    ? {
-        label: "Email",
-        action: "Write to me",
-        aria: "Write an email to Giulio",
-        subject: "Hello Giulio",
-        copy: "Copy",
-        copied: "Copied",
-      }
-    : {
-        label: "Email",
-        action: "Scrivimi",
-        aria: "Scrivi una email a Giulio",
-        subject: "Ciao Giulio",
-        copy: "Copia",
-        copied: "Copiato",
-      };
+    ? { action: "Write to me", aria: "Write an email to Giulio", subject: "Hello Giulio" }
+    : { action: "Scrivimi", aria: "Scrivi una email a Giulio", subject: "Ciao Giulio" };
 ---
 
 {
   email && (
-    <div class="contact-card contact-card--primary" {...rest}>
-      <span class="contact-card__label">{t.label}</span>
-      <span class="contact-card__value">{emailAddress}</span>
-      <span class="contact-card__actions">
-        {/* _blank anche sul mailto: se il gestore di posta è webmail (Gmail nel
-            browser), _self sostituirebbe il CV con la pagina di composizione.
-            Con il client nativo la scheda transitoria si chiude da sola. */}
-        <a
-          class="contact-card__cta"
-          href={`${email.url}?subject=${encodeURIComponent(t.subject)}`}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label={t.aria}
-        >
-          {t.action}
-          <span class="contact-card__arrow" aria-hidden="true" />
-        </a>
-        {/* Il pulsante nasce `hidden` e lo accende lo script: se il
-            copia-incolla non è disponibile (contesto non sicuro, API assente)
-            non resta un comando che non fa niente. */}
-        <button class="contact-card__copy" type="button" data-copy={emailAddress} hidden>
-          <span data-copy-label>{t.copy}</span>
-          <span class="contact-card__copied" data-copy-done>
-            {t.copied}
-          </span>
-        </button>
-      </span>
+    <div class="lh-section__actions" {...rest}>
+      {/* _blank anche sul mailto: se il gestore di posta è webmail (Gmail nel
+          browser), _self sostituirebbe il CV con la pagina di composizione.
+          Con il client nativo la scheda transitoria si chiude da sola. */}
+      <a
+        class="lh-cta lh-cta--ghost"
+        href={`${email.url}?subject=${encodeURIComponent(t.subject)}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label={t.aria}
+      >
+        {t.action}
+      </a>
     </div>
   )
 }
-
-<style>
-  /* `.lh-section__copy` ha `justify-items: start`, che stringe ogni figlio al
-     proprio contenuto: senza queste due righe la card si fermerebbe alla
-     larghezza dell'indirizzo invece di occupare la colonna, come fa già
-     `.about-cards` per la stessa ragione. */
-  .contact-card {
-    justify-self: stretch;
-    width: 100%;
-    margin-top: var(--size-8);
-
-    display: flex;
-    flex-direction: column;
-    gap: var(--size-8);
-    padding: 1.15rem 1.25rem;
-    background: var(--color-surface);
-    border: 1px solid var(--color-border);
-    /* Più tondo delle tre card qui sopra, che stanno a --radius-4. Non è una
-       distrazione: quelle tre aprono un cassetto e sono la stessa cosa
-       ripetuta tre volte, questa fa un mestiere diverso, e la forma è il
-       segnale che lo dice a chi il colore non lo distingue. */
-    border-radius: var(--radius-16);
-  }
-
-  .contact-card--primary {
-    border-color: var(--color-accent);
-    box-shadow: inset 0 0 2rem color-mix(in srgb, var(--color-accent) 8%, transparent);
-  }
-
-  .contact-card__label {
-    font-family: var(--font-mono);
-    font-size: var(--fs-12);
-    font-weight: 700;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--color-accent);
-  }
-
-  .contact-card__value {
-    font-size: var(--fs-16);
-    font-weight: 600;
-    line-height: 1.35;
-    color: var(--color-text-primary);
-    overflow-wrap: anywhere;
-  }
-
-  .contact-card__actions {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: var(--size-8);
-    margin-top: var(--size-4);
-  }
-
-  /* ── Lo stesso bottone delle sezioni lente ───────────────────────────
-     È un `.lh-cta--ghost`: stesso carattere (sans, non mono), stesso corpo,
-     stesso raggio, stesso passo interno, stessa curva. La variante è quella
-     a filo, non quella piena — richiesta di Giulio il 2026-09-02, e ha
-     ragione: su questa pagina il riempimento d'accento è il segnale di
-     "questa è la strada principale", e le tre strade principali sono le
-     lenti. Un quarto bottone pieno dentro "Chi sono" avrebbe messo
-     l'indirizzo email allo stesso livello dei tre mestieri.
-
-     `--accent-text` prima di `--accent` non è pignoleria, è il token nato
-     apposta: l'arancione pieno come TESTO su ottanio fa 3,62:1, sotto il
-     4,5:1 che 1.4.3 chiede: `--accent-text` lo schiarisce al 50% verso il
-     bianco (4,70:1) e lascia intatti ciano e oro. Qui la lente non c'è —
-     "Chi sono" non ha data-mode — quindi si scende al fallback, che
-     sull'ingresso è il crema, cioè lo stesso inchiostro del testo.
-     L'ultimo anello (`--color-accent`) serve alla vetrina, che rende questo
-     componente fuori da `.lh`, dove `--accent` non esiste. */
-  .contact-card__cta {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    padding: 0.8rem 1.35rem;
-    border-radius: var(--radius-4);
-    background: transparent;
-    border: 1px solid var(--accent, var(--color-accent));
-    color: var(--accent-text, var(--accent, var(--color-accent)));
-    font-family: var(--font-sans);
-    font-size: var(--fs-16);
-    font-weight: 600;
-    letter-spacing: 0.01em;
-    text-decoration: none;
-    transition:
-      background-color var(--duration-state) var(--ease-standard),
-      filter var(--duration-state) var(--ease-standard),
-      transform var(--duration-micro) var(--ease-standard);
-  }
-
-  /* Alla pressione, la stessa risposta di .lh-cta: rientra e si incava. */
-  .contact-card__cta:active {
-    transform: scale(0.98);
-    filter: none;
-    box-shadow: inset 0 2px 0.5rem rgba(0, 0, 0, 0.4);
-  }
-
-  /* Stanghetta, non un glifo. Il progetto la costruisce ovunque con due bordi
-     di un quadratino ruotato — .work-chevron, .exp-cluster__chevron — e quel
-     commento lo dice per esteso: mai un glifo Unicode. La freccia che stava
-     qui (→) era l'eccezione, e si vedeva: dipende dal font, cambia peso da un
-     sistema all'altro e non eredita lo spessore del testo accanto.
-
-     ⚠️ Il nudge è su `translate`, NON su `transform`, e non è indifferente.
-     Le proprietà singole si compongono in un ordine fisso — translate, poi
-     rotate, poi scale, poi transform — quindi un `transform: translateX()`
-     agisce PRIMA della rotazione e viene ruotato con lei: su una stanghetta
-     girata di -45° la spinta orizzontale diventa una diagonale verso l'alto
-     a destra. È il difetto segnalato da Giulio il 2026-09-02, ed era lì da
-     quando esisteva la card. `translate` si compone dopo `rotate`, quindi la
-     spinta resta orizzontale nel sistema di riferimento del genitore, che è
-     quello che si vede. È anche l'idioma già usato dal progetto: vedi
-     @keyframes cta-arrow-nudge in global.css, che spinge le frecce dei case
-     study con `translate: 0.3125rem 0`. */
-  .contact-card__arrow {
-    display: inline-block;
-    width: 0.4rem;
-    height: 0.4rem;
-    flex-shrink: 0;
-    border: solid currentColor;
-    border-width: 0 0.09375rem 0.09375rem 0;
-    rotate: -45deg;
-    transition: translate 0.2s cubic-bezier(0.23, 1, 0.32, 1);
-  }
-
-  /* Copia negli appunti. Non è una rifinitura: su un desktop senza client di
-     posta configurato `mailto:` non apre niente e il clic fallisce in
-     silenzio — chi guarda resta con l'indirizzo davanti e nessun modo comodo
-     di prenderlo. */
-  /* `align-self: stretch` e non un'altezza propria: accanto c'è un .lh-cta,
-     alto quanto il suo passo interno più il testo. Fissare qui una misura
-     significherebbe inseguirla a ogni ritocco di quello; stirandosi, questo
-     bottone è alto quanto il suo vicino per costruzione. Il `min-height`
-     resta come pavimento per quando il vicino non c'è (2.5.8). */
-  .contact-card__copy {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    align-self: stretch;
-    min-height: 2.25rem;
-    padding: 0 var(--size-12);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-4);
-    background: transparent;
-    color: var(--color-text-primary);
-    font-family: var(--font-mono);
-    font-size: var(--fs-14);
-    cursor: pointer;
-    transition: border-color 0.2s ease;
-  }
-
-  .contact-card__copy[hidden] {
-    display: none;
-  }
-
-  /* "Copiato" sta già nel DOM sotto quello che sostituisce, non appare da JS:
-     così la larghezza del bottone non salta al clic, e chi legge con uno
-     screen reader trova la conferma senza una regione live. */
-  .contact-card__copied {
-    position: absolute;
-    inset: 0;
-    display: grid;
-    place-items: center;
-    border-radius: inherit;
-    background: var(--color-surface);
-    color: var(--color-text-primary);
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.15s ease;
-  }
-
-  .contact-card__copy.is-done .contact-card__copied {
-    opacity: 1;
-  }
-
-  @media (hover: hover) and (pointer: fine) {
-    .contact-card__cta:hover {
-      background: color-mix(in srgb, var(--accent, var(--color-accent)) 16%, transparent);
-      transform: translateY(-2px);
-    }
-
-    .contact-card__cta:hover .contact-card__arrow {
-      translate: 0.3rem 0;
-    }
-
-    .contact-card__copy:hover {
-      border-color: var(--color-accent);
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .contact-card__cta,
-    .contact-card__arrow,
-    .contact-card__copy {
-      transition-duration: 0.01ms !important;
-    }
-  }
-
-  /* ── Su telefono resta il solo comando ───────────────────────────────
-     Segnalato da Giulio il 2026-09-02 con uno screenshot: su un telefono la
-     pianta finiva sotto la piega, spinta giù dalla card. Il conto è semplice
-     — titolo, occhiello, tre card, tre pulsanti e poi un riquadro da ~110px:
-     l'oggetto knolling, che su mobile sta SOTTO il testo, non entrava più
-     nella schermata.
-
-     Quindi qui il riquadro non c'è: niente etichetta, niente indirizzo in
-     chiaro, niente pulsante "Copia", resta il bottone che apre la posta.
-
-     Non è una potatura per far entrare le cose, è la cosa giusta per il
-     mezzo. "Copia" esiste perché su un desktop senza client di posta
-     configurato `mailto:` non apre niente e il clic fallisce in silenzio: su
-     un telefono l'app di posta c'è sempre, quindi il comando che serviva a
-     rimediare non ha più niente da rimediare. E l'indirizzo in chiaro
-     serviva a poterlo trascrivere: su un telefono non lo trascrive nessuno.
-
-     L'indirizzo non si perde per chi usa uno screen reader: sta nell'href
-     del mailto, e il link porta il proprio aria-label per esteso. */
-  @media (max-width: 55.9375rem) {
-    .contact-card,
-    .contact-card--primary {
-      justify-self: stretch;
-      width: 100%;
-      margin-top: var(--size-16);
-      padding: 0;
-      background: none;
-      border: 0;
-      box-shadow: none;
-    }
-
-    .contact-card__label,
-    .contact-card__value,
-    .contact-card__copy {
-      display: none;
-    }
-
-    /* Largo quanto la colonna, come i tre pulsanti dei cassetti qui sopra e
-       come le tre card della bio: su questa schermata ogni comando occupa la
-       riga intera, e uno che si stringesse al proprio testo sarebbe l'unico
-       fuori squadra. Il testo si centra per la stessa ragione per cui si
-       centra in `.lh .about-action` — il bottone è più largo del proprio
-       contenuto, e allineato a sinistra lascerebbe un vuoto a destra che
-       sembra un errore di impaginazione. Su desktop niente di tutto questo:
-       lì i comandi stanno alla propria misura, e il bottone resta la pillola
-       che è, dentro il riquadro. */
-    .contact-card__actions {
-      margin-top: 0;
-      width: 100%;
-    }
-
-    .contact-card__cta {
-      width: 100%;
-      justify-content: center;
-    }
-  }
-</style>
-
-<script>
-  // Copia dell'indirizzo. Il pulsante nasce `hidden` e viene acceso qui: se
-  // l'API non c'è (contesto non sicuro, browser vecchio) resta nascosto,
-  // invece di restare visibile e non fare niente al clic.
-  const bottoni = document.querySelectorAll<HTMLButtonElement>(".contact-card__copy");
-  if (navigator.clipboard && bottoni.length) {
-    bottoni.forEach((b) => {
-      b.hidden = false;
-      let timer: number | undefined;
-      b.addEventListener("click", async () => {
-        const testo = b.dataset.copy;
-        if (!testo) return;
-        try {
-          await navigator.clipboard.writeText(testo);
-        } catch {
-          return; // permesso negato: nessuna conferma falsa
-        }
-        b.classList.add("is-done");
-        window.clearTimeout(timer);
-        timer = window.setTimeout(() => b.classList.remove("is-done"), 1600);
-      });
-    });
-  }
-</script>

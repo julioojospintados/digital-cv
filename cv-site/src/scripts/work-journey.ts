@@ -159,25 +159,11 @@ function initJourney(root: HTMLElement) {
     );
   }
 
-  // Parallasse leggera sui landmark knolling: viaggiano un filo più lenti
-  // delle card — profondità da strada, solo transform.
-  for (const icon of root.querySelectorAll<HTMLElement>("[data-j-parallax]")) {
-    gsap.fromTo(
-      icon,
-      { xPercent: 14 },
-      {
-        xPercent: -14,
-        ease: "none",
-        scrollTrigger: {
-          trigger: icon.closest(".journey__panel") as HTMLElement,
-          containerAnimation: tween,
-          start: "left right",
-          end: "right left",
-          scrub: true,
-        },
-      },
-    );
-  }
+  // Qui girava una parallasse leggera sui landmark knolling: gli oggetti a
+  // bordo strada viaggiavano un filo piu' lenti delle card, per dare
+  // profondita'. Le immagini sono state tolte il 2026-09-02 e con loro
+  // l'unico `[data-j-parallax]` della pagina: il ciclo restava, girava a
+  // vuoto e prometteva un effetto che non c'era piu'.
 
   // ── A11y tastiera: il focus su una tappa porta lo scroll alla sua
   // posizione lungo il viaggio (il pin + transform romperebbe lo
