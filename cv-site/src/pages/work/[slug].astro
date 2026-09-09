@@ -20,7 +20,15 @@ export function getStaticPaths() {
 const { slug } = Astro.params;
 const project = cvData.projects.find((p) => p.slug === slug)!;
 
-const mode = project.primaryMode ?? "tech";
+// La lente di /work è design, sempre — anche sul case study di un progetto
+// tech. Scelta di Giulio (2026-09-04): il portfolio è una sottosezione del
+// lavoro di design, quindi la sezione parla arancione dall'indice fino in
+// fondo, e il ritorno al CV porta alla lente design invece che a quella del
+// progetto. Prima erano due colori in due clic — pagina arancione, CV ciano —
+// e il salto si vedeva. `project.primaryMode` resta in cv.ts ed è ancora ciò
+// che decide dove un progetto compare nella pagina CV: qui non decide più il
+// colore.
+const mode = "creative" as const;
 // L'oggetto del case study — per slug, non per mode: le mappe e il perché
 // stanno in lib/work-knolling.ts. Qui resta un watermark d'atmosfera, ma
 // deve essere lo stesso oggetto che il lettore ha appena visto sulla card

@@ -272,6 +272,26 @@ button {
   /* WCAG AA ≥ 4.5:1 — ~5.7:1 su bg ottanio */
   --color-text-muted: rgba(192, 220, 215, 0.85);
   --color-accent: rgba(255, 255, 255, 0.9);
+  /* L'accento quando fa da TESTO. Due token per lo stesso colore, e la
+     differenza non è stilistica: `--color-accent` riempie, borda, traccia —
+     cose a cui basta il 3:1 di 1.4.11 — mentre un testo colorato su ottanio
+     deve il 4,5:1 di 1.4.3. Ciano (7,89:1) e oro (6,49:1) ci arrivano interi;
+     l'arancione della lente design si ferma a 3,62:1, quindi come testo va
+     schiarito del minimo necessario. È lo stesso schema già in piedi in
+     `lab-home.css` (`--accent` / `--accent-text`), portato qui perché serviva
+     anche fuori dall'ingresso: da settembre 2026 l'indice di /work accende la
+     lente design, e lì l'occhiello e le CTA delle card sono testo d'accento.
+     Fuori da un [data-mode] l'accento è già bianco caldo: nessuna correzione. */
+  --color-accent-text: var(--color-accent);
+  /* L'inchiostro che sta SOPRA una superficie d'accento: l'etichetta di un
+     bottone pieno, la voce accesa dell'interruttore lingua. Un valore solo per
+     tutte e tre le lenti, perché contro un fondo chiaro serve il quasi-nero e
+     basta — misurato: 6,87:1 sull'arancione (il peggiore dei tre), 12,30:1
+     sull'oro, 14,97:1 sul ciano. È lo stesso rgba di --ls-su-acceso in
+     lang-switch.css e di --lc-on-accent in lab-cv.css: tre nomi per un colore
+     solo sono un debito, non una scelta, e si chiude quando quei due fogli
+     adottano questo. */
+  --color-on-accent: rgba(16, 12, 8, 1);
   --card-opacity-active: 1;
   --card-opacity-passive: 0.28;
   --card-scale-passive: 1;
@@ -444,6 +464,8 @@ button {
   /* WCAG AA — ~4.8:1 su bg ottanio */
   --color-text-muted: rgba(0, 255, 200, 0.7);
   --color-accent: rgba(0, 255, 200, 1);
+  /* 7,89:1 come testo: passa intero, nessuna correzione. */
+  --color-accent-text: rgba(0, 255, 200, 1);
   --card-opacity-passive: 0.2;
   --card-scale-passive: 1;
 }
@@ -456,6 +478,17 @@ button {
   /* WCAG AA — ~4.9:1 su bg ottanio */
   --color-text-muted: rgba(255, 195, 155, 0.82);
   --color-accent: rgba(255, 107, 53, 1);
+  /* L'unico dei tre che come testo non ci arriva: 3,62:1 puro, sotto il
+     4,5:1 di 1.4.3. Schiarito del 30% verso il bianco fa 4,85:1 — il minimo
+     vero, verificato l'8 settembre 2026: al 20% si scende a 4,40 e si esce
+     dalla norma. Era al 50% (6,03:1) fino a quel giorno, ereditato da
+     `--accent-text` in lab-home.css, ed è stato Giulio a fermarsi sul colore:
+     schiarito di metà, a 12px l'arancione perde l'identità e la pagina si
+     legge dorata. La tinta non c'entra — resta 16° a ogni miscela, identica
+     all'accento pieno; a cambiare è solo quanta luce ci si mette dentro.
+     Il 4,70:1 che stava scritto qui e in altri tre punti era sbagliato: non
+     tornava con nessuna delle due formule. */
+  --color-accent-text: color-mix(in srgb, rgba(255, 107, 53, 1) 70%, white);
   --card-opacity-passive: 0.2;
   --card-scale-passive: 0.95;
 }
@@ -468,6 +501,8 @@ button {
   /* WCAG AA — ~4.6:1 su bg ottanio */
   --color-text-muted: rgba(240, 210, 148, 0.75);
   --color-accent: rgba(240, 200, 127, 1);
+  /* 6,49:1 come testo: passa intero, nessuna correzione. */
+  --color-accent-text: rgba(240, 200, 127, 1);
   --card-opacity-passive: 0.2;
   --card-scale-passive: 0.97;
 }

@@ -97,7 +97,17 @@
   min-width: 2rem;
   padding-inline: var(--size-8);
   font-family: var(--font-mono);
-  font-size: var(--fs-12);
+  /* 14px e non 12, dall'8 settembre 2026, e la ragione è un difetto misurato
+     su /work: accanto a «Torna al CV» — sans 14px — la base di «IT» cadeva
+     1,36px più in alto. Non è un problema di centratura (i due riquadri sono
+     centrati a 0,00): due corpi diversi centrati nei rispettivi riquadri non
+     atterrano sulla stessa riga di scrittura, ed è la riga di scrittura quella
+     che l'occhio confronta. Portarli alla stessa misura azzera lo scarto per
+     costruzione — misurato 0,00 — invece che con un ritocco da tarare a mano.
+     La pillola non cambia altezza: la governa min-height 1,5rem, e la riga a
+     14px sta dentro i 24px. Cresce di 5,6px in larghezza, e le lettere del
+     comando più piccolo del sito smettono di essere le più piccole. */
+  font-size: var(--fs-14);
   font-weight: 700;
   letter-spacing: 0.1em;
   text-decoration: none;

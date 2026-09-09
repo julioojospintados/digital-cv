@@ -20,24 +20,28 @@ class GoLogo extends LitElement {
       align-items: center;
     }
 
-    /* ── Il filo a riposo ──────────────────────────────────────
-       Era trasparente: il marchio si accendeva solo sotto il puntatore,
-       quindi su un telefono — dove un puntatore non esiste — "GO" restava
-       due lettere, e niente diceva che si potessero premere. Richiesta di
-       Giulio (2026-09-03): deve dichiararsi comando da fermo.
+    /* ── Il marchio è nudo ────────────────────────────────────
+       Nessun contorno: né a riposo né sotto il puntatore. A rispondere sono
+       le lettere. Il 3 settembre il filo c'era — inchiostro al 44%, per dire
+       «qui si preme» anche dove un puntatore non esiste — e il 4 Giulio l'ha
+       tolto: due lettere alte 28px in cima alla pagina sono già un marchio, e
+       un riquadro attorno le fa sembrare un bottone qualunque.
 
-       Il filo e' inchiostro al 44%, non accento, ed e' la stessa ricetta e
-       lo stesso valore di --ls-line (lang-switch.css). La ragione sta
-       scritta li' ed e' la stessa qui: un contorno che IDENTIFICA un
-       controllo deve tenere il 3:1 di 1.4.11, e un accento da un pixel non
-       ci arriva sull'arancione della lente design. L'accento resta la
-       risposta al passaggio, dove il contrasto lo porta gia' il filo di
-       prima. */
+       Il costo, scritto perché non venga riscoperto fra un mese come se fosse
+       una svista: su un touch screen il marchio non dichiara più di essere
+       premibile. Regge per due ragioni, non per una. La funzione non si perde
+       — è il ritorno all'ingresso, che sta anche nel menu contatti e nel logo
+       di ogni altra pagina — e il nome accessibile («GO — Torna
+       all'ingresso») la dichiara comunque a chi naviga a voce, da tastiera o
+       con lo screen reader. È il puntatore che perde un invito, non la
+       navigazione che perde una strada.
+
+       Il passo interno resta e non è decorazione: è ciò che tiene l'area
+       premibile sopra i 24×24 di 2.5.8 ora che non c'è più un bordo a
+       disegnarla. */
     button {
-      position: relative;
       background: transparent;
-      border: 1px solid
-        color-mix(in srgb, var(--color-text-primary, rgba(245, 240, 230, 1)) 44%, transparent);
+      border: 0;
       border-radius: var(--radius-4, 0.25rem);
       padding: 0.3rem 0.5rem;
       /* cursor: none segue il cursore custom globale */
@@ -48,96 +52,40 @@ class GoLogo extends LitElement {
       font-family: var(--font-display, "Lexend", ui-sans-serif, sans-serif);
       line-height: 1;
       transition:
-        border-color 0.2s ease,
-        background-color 0.2s ease,
+        filter var(--duration-state, 240ms) var(--ease-standard, ease),
         transform var(--duration-micro, 150ms) var(--ease-standard, ease);
     }
 
-    /* ── Il flusso ─────────────────────────────────────────────
-       Una banda di luce che attraversa la superficie e poi si ferma per tre
-       secondi e mezzo. Non e' un pulse, ed e' una distinzione voluta: il
-       pulse del sistema (.work-index-card--pulse, .profile-cta) chiama
-       l'attenzione su UNA cosa dentro una pagina, mentre questo marchio sta
-       in cima a OGNI pagina del sito — un respiro perpetuo lassu' diventa
-       rumore che si impara a ignorare in due schermate. Un passaggio ogni
-       quattro secondi e mezzo dice "sono vivo" senza chiedere niente.
+    /* Qui stava il flusso: una banda di luce che attraversava il riquadro
+       ogni quattro secondi e mezzo, dipinta da un ::before. Senza riquadro non
+       ha più una superficie da attraversare — era luce sul bordo di una cosa
+       che il bordo non ce l'ha più. Tolta il 2026-09-04 con lo stesso taglio. */
 
-       Si muove background-position, non transform, e non e' un dettaglio:
-       cosi' la banda resta dentro il riquadro senza bisogno di overflow
-       hidden, che taglierebbe l'alone delle lettere — in lente tech il
-       text-shadow arriva a 2,25rem fuori dal bordo, quindi il logo si
-       spegnerebbe per fare posto a un'animazione. Ed e' una proprieta' che
-       il compositore anima da solo, stessa ragione per cui il pulse delle
-       card anima opacity e non box-shadow.
-
-       Passa DIETRO alle lettere. Un pseudo-elemento posizionato dipinge
-       sopra al contenuto inline, quindi senza il position/z-index che .go-g
-       e .go-o portano qui sotto la banda passerebbe davanti al marchio
-       invece che sotto. */
-    button::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      border-radius: inherit;
-      pointer-events: none;
-      background-image: linear-gradient(
-        105deg,
-        transparent 44%,
-        color-mix(in srgb, var(--color-accent, rgba(0, 255, 200, 1)) 26%, transparent) 50%,
-        transparent 56%
-      );
-      background-size: 300% 100%;
-      background-position: 120% 0;
-      animation: go-flow 4.5s var(--ease-standard, ease) infinite;
-    }
-
-    /* Con l'immagine larga il triplo del riquadro, il 100% incolla il bordo
-       destro dell'immagine al bordo destro del riquadro: la banda, che sta a
-       meta' immagine, finisce fuori a SINISTRA. Lo 0% e' l'opposto. Quindi
-       si va da oltre-100 a sotto-zero, ed e' la banda che scorre da sinistra
-       a destra. I due valori fuori dai limiti sono il margine che la tiene
-       fuori campo durante la pausa. */
-    @keyframes go-flow {
-      0% {
-        background-position: 120% 0;
-      }
-      26%,
-      100% {
-        background-position: -20% 0;
-      }
-    }
-
+    /* La risposta al passaggio sta sul BOTTONE, non sulle lettere, ed è
+       l'unico posto dove funziona in tutte e tre le lenti: in lente design le
+       lettere hanno già un'animazione su "filter", e un'animazione batte una
+       dichiarazione normale nella cascata — un "brightness" scritto lì non si
+       vedrebbe mai. Sul genitore i due filtri si compongono invece di
+       contendersi la stessa proprietà. */
     @media (hover: hover) and (pointer: fine) {
       button:hover {
-        border-color: var(--color-accent, rgba(0, 255, 200, 1));
-        background-color: rgba(255, 255, 255, 0.06);
-      }
-
-      /* Sotto il puntatore la banda si fa piu' netta. Non cambia durata:
-         cambiarla a meta' corsa fa saltare la banda al fotogramma
-         corrispondente della nuova durata, e un salto e' proprio cio' che
-         questo effetto esiste per non fare. */
-      button:hover::before {
-        background-image: linear-gradient(
-          105deg,
-          transparent 40%,
-          color-mix(in srgb, var(--color-accent, rgba(0, 255, 200, 1)) 45%, transparent) 50%,
-          transparent 60%
-        );
+        filter: brightness(1.22);
       }
     }
 
-    /* Alla pressione rientra e si incava: la ricetta del sistema, identica a
-       .lc-btn e .lh-cta. Mai uno scurimento del riempimento — li' il motivo
-       e' il contrasto dell'etichetta, qui sarebbe l'alone delle lettere. */
+    /* Alla pressione il marchio rientra. Niente ombra interna, che è la
+       ricetta di .lc-btn e .lh-cta: quella si dipinge su una superficie, e
+       questo bottone non ne ha una. E lo scatto è 0,96 invece di 0,98 perché
+       senza riquadro manca il riferimento fermo che rende leggibile uno
+       scarto del 2%. */
     button:active {
-      transform: scale(0.98);
-      box-shadow: inset 0 2px 0.375rem rgba(0, 0, 0, 0.35);
+      transform: scale(0.96);
     }
 
     /* Anello INCHIOSTRO con stacco, non accento: con l'offset l'anello
        confina con la pagina e non col riquadro. Stessa regola di
-       .lc a:focus-visible. */
+       .lc a:focus-visible. Ed è l'unico contorno rimasto: da fermo il marchio
+       è nudo, ma sotto il fuoco da tastiera deve dichiararsi comando. */
     button:focus-visible {
       outline: 2px solid var(--color-text-primary, rgba(245, 240, 230, 1));
       outline-offset: 3px;
@@ -170,14 +118,20 @@ class GoLogo extends LitElement {
         0 0 2.25rem rgba(0, 255, 200, 0.2);
     }
 
-    /* ── CREATIVE: G e O con gradiente orange animato ─────────── */
+    /* ── CREATIVE: G e O con gradiente orange animato ───────────
+       Il respiro è calmo, e le tre cifre sono una scelta di Giulio
+       (2026-09-04): 3,6s invece di 2,2, luminosità +12% invece di +30%, alone
+       al 30% invece che al 75%. Prima era un flash — e un lampeggio in cima a
+       una pagina ferma si nota a ogni giro, cioè chiede attenzione a chi sta
+       leggendo altro. Questo si vede solo se lo si guarda, che è quanto deve
+       fare un marchio: dire che la pagina è viva, non chiamare. */
     :host([data-mode="creative"]) .go-g,
     :host([data-mode="creative"]) .go-o {
       color: transparent;
       background: linear-gradient(135deg, rgba(255, 107, 53, 1) 0%, rgba(255, 200, 50, 1) 100%);
       -webkit-background-clip: text;
       background-clip: text;
-      animation: go-orange-pulse 2.2s ease-in-out infinite;
+      animation: go-orange-pulse 3.6s ease-in-out infinite;
     }
 
     @keyframes go-orange-pulse {
@@ -186,7 +140,7 @@ class GoLogo extends LitElement {
         filter: brightness(1) drop-shadow(0 0 0 rgba(255, 107, 53, 0));
       }
       50% {
-        filter: brightness(1.3) drop-shadow(0 0 0.5rem rgba(255, 107, 53, 0.75));
+        filter: brightness(1.12) drop-shadow(0 0 0.5rem rgba(255, 107, 53, 0.3));
       }
     }
 
@@ -200,19 +154,15 @@ class GoLogo extends LitElement {
     }
 
     /* ── Movimento ridotto ─────────────────────────────────────
-       Il flusso e il respiro della lente design spariscono, il filo e
-       l'incavo restano: il primo e' decorazione, il secondo dice che il
-       comando esiste e che la pressione e' arrivata.
+       Sparisce il respiro della lente design, resta l'incavo alla pressione:
+       il primo è decorazione, il secondo dice che il comando esiste e che la
+       pressione è arrivata.
 
-       Questa regola serve davvero, e non e' una ripetizione di quella
-       globale: quella azzera le durate con l'universale, che non attraversa
-       lo shadow root — fino a oggi il gradiente della lente design pulsava
+       Questa regola serve davvero, e non è una ripetizione di quella globale:
+       quella azzera le durate con l'universale, che non attraversa lo shadow
+       root — fino al 3 settembre il gradiente della lente design pulsava
        anche a chi aveva chiesto di non vedere animazioni. */
     @media (prefers-reduced-motion: reduce) {
-      button::before {
-        animation: none;
-      }
-
       button:active {
         transform: none;
       }

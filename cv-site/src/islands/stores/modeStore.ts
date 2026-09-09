@@ -122,7 +122,20 @@ export function initMode(): void {
     document.documentElement.dataset.mode = routeMode;
     modeStore.set(routeMode);
   } else if (SSR_MODE_PATHS.some((p) => pathname.startsWith(p))) {
-    // Case study (/work/*) — il data-mode SSR del progetto resta com'è
+    // /work — la lente la dichiara la pagina, non l'utente: l'indice accende
+    // design (il portfolio è lavoro di design), il case study accende la
+    // propria (primaryMode). Il data-mode SSR quindi resta com'è.
+    //
+    // Ma va anche COPIATO nello store, e non è un dettaglio: <go-logo> prende
+    // il colore da lì, non dal DOM. Finché non lo si faceva, su /work il
+    // marchio restava sull'ultima lente memorizzata mentre la pagina era già
+    // un'altra — arancione sopra una pagina ciano, che è esattamente il difetto
+    // segnalato il 2026-09-03. È la stessa cura già applicata a /en/<lente>
+    // poche righe più su, per la stessa ragione.
+    const ssrMode = document.documentElement.dataset.mode;
+    if (ssrMode && VALID_MODES.includes(ssrMode as Mode)) {
+      modeStore.set(ssrMode as Mode);
+    }
   } else {
     // Home (/) o altre route non-mode — torna a neutro
     delete document.documentElement.dataset.mode;

@@ -535,10 +535,14 @@ html[data-lh-armed] .lh-obj {
    `--accent` è l'accento pieno: va bene per riempire un bottone, per un
    bordo, per una linea — cose a cui basta 3:1 (1.4.11) o niente.
    `--accent-text` è la variante che regge come **testo** sull'ottanio, dove
-   serve 4,5:1 (1.4.3). Due dei quattro accenti non ci arrivano puri:
-   arancione 3,62:1 e viola 3,04:1 — verificati a calcolo, non a occhio.
-   Ciano e oro passano interi, quindi restano intatti; gli altri due sono
-   schiariti del minimo che serve, non di più. */
+   serve 4,5:1 (1.4.3). Delle tre lenti una sola non ci arriva pura:
+   l'arancione, 3,62:1 — ciano (7,89) e oro (6,49) passano interi e restano
+   intatti. L'arancione è schiarito del 30%, che fa 4,85:1: il minimo vero,
+   rimisurato l'8 settembre 2026. Fino a quel giorno era il 50% (6,03:1, non
+   4,70 come stava scritto qui) e a 12px si leggeva dorato invece che
+   arancione. Il valore vive in due posti — qui e `--color-accent-text` in
+   global.css — e devono restare lo stesso numero: sono lo stesso colore
+   visto da due fogli, non due decisioni. */
 /* Chi sono — non è una lente, quindi non prende un accento di mode: resta
    sul bianco caldo del testo. È anche l'unica sezione senza data-mode,
    quindi l'osservatore in lab-home-scroll.ts non le assegna nessun colore
@@ -549,7 +553,7 @@ html[data-lh-armed] .lh-obj {
 
 .lh-section[data-mode="creative"] {
   --accent: var(--lh-mode-creative);
-  --accent-text: color-mix(in srgb, var(--lh-mode-creative) 50%, white);
+  --accent-text: color-mix(in srgb, var(--lh-mode-creative) 70%, white);
 }
 .lh-section[data-mode="tech"] {
   --accent: var(--lh-mode-tech);
@@ -801,7 +805,8 @@ html[data-lh-armed] .lh-obj {
    interi, l'arancione no, ed e' esattamente il caso della sezione design —
    cioe' l'unica scheda dove questo bottone esiste. `--accent-text` e' il
    token nato per questo: schiarisce l'arancione al 50% verso il bianco
-   (4,70:1) e lascia intatti gli altri due. Il fallback a `--accent` copre la
+   (6,03:1 — rimisurato l'8 settembre 2026: il 4,70 scritto qui non tornava)
+   e lascia intatti gli altri due. Il fallback a `--accent` copre la
    sezione "Chi sono", che non ha lente e quindi non definisce la variante. */
 .lh-cta--ghost {
   background: transparent;

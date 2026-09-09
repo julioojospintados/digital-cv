@@ -4,13 +4,41 @@
    un recruiter) senza passare dal mode-switcher, quindi non ha senso
    riproporre qui tutta la navigazione a 4 mode. */
 
+/* ── La misura della pagina, una sola per la barra e per il contenuto ─────
+   Il 2026-09-03 `.work-main` è passata da 48rem a 75% e la barra è rimasta a
+   48rem: due colonne diverse centrate sulla stessa pagina, quindi il logo
+   galleggiava rispetto al titolo che avrebbe dovuto sovrastare. Il difetto è
+   di quel tipo che si vede senza saperlo nominare — non è "storto", è che
+   niente si incolonna con niente.
+
+   Adesso la misura è una variabile sola: chi la cambia sposta barra e
+   contenuto insieme, che è l'unico modo in cui una modifica del genere non
+   può più scollarsi a metà.
+
+   Sotto i 60rem torna al 100%. Il 75% su un telefono vuol dire un ottavo di
+   schermo di margine morto per lato — 292px di colonna su 390 — e con
+   l'indice a carosello vuol dire anche che il "pieno vivo" delle card
+   (margin-inline negativo, poche righe più giù) smette di arrivare al bordo:
+   era pensato per annullare il solo padding. Fino al 3 settembre il problema
+   non esisteva perché 48rem è più largo di qualunque telefono, quindi il
+   limite non mordeva mai. */
+:root {
+  --work-measure: 75%;
+}
+
+@media (max-width: 60rem) {
+  :root {
+    --work-measure: 100%;
+  }
+}
+
 .work-nav {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--size-16);
   padding: var(--size-20) var(--size-24);
-  max-width: 48rem;
+  max-width: var(--work-measure);
   margin: 0 auto;
 }
 
@@ -21,66 +49,82 @@
 }
 
 /* ── Il ritorno al CV ─────────────────────────────────────────────────────
-   Rifatto il 2026-09-03, e la ragione è la stessa che due giorni prima aveva
-   rifatto `.work-hero__ds-link` poche righe più giù: era mono a 12px tutto
-   maiuscolo, attenuato, con una freccia "←" scritta come carattere dentro
-   l'etichetta. Quattro cose che nessun altro comando del sito fa. Su una
-   barra che contiene già il logo e l'interruttore lingua — due oggetti con
-   un contorno — l'unico comando senza contorno non si legge come comando: si
-   legge come una didascalia.
+   Rifatto due volte in due giorni. Il 3 settembre era diventato il bottone a
+   filo del sistema, perché prima era mono a 12px maiuscolo e attenuato: su
+   una barra dove logo e interruttore lingua avevano entrambi un contorno,
+   l'unico comando senza si leggeva come una didascalia. Il 4 settembre Giulio
+   l'ha voluto pieno — superficie d'accento, etichetta in inchiostro scuro.
 
-   La ricetta è quella di `.lh-cta--ghost`, il bottone a filo delle sezioni
-   lente, con le stesse due deroghe già motivate su `.work-hero__ds-link`:
-   non è letteralmente quella classe (vive in lab-home.css, che queste pagine
-   non caricano), e l'accento sta nel BORDO e non nel testo, perché
-   `--accent-text` qui non esiste e l'arancione pieno come testo fa 3,62:1,
-   sotto il 4,5:1 di 1.4.3. Sul bordo la soglia è il 3:1 di 1.4.11, che
-   3,62:1 passa. L'etichetta prende l'inchiostro, che ha contrasto pieno su
-   tutte e tre le lenti.
+   La ragione non è decorativa. Sulla barra ci sono tre comandi e nessuno dei
+   tre era la voce principale: il logo riporta all'ingresso, l'interruttore
+   cambia lingua, e questo — l'unica cosa che un lettore fa davvero dopo aver
+   letto un case study — pesava come gli altri due. Il pieno lo mette davanti
+   senza aggiungere un quarto oggetto alla barra.
 
-   L'unica misura che si discosta dal modello è l'altezza. `.lh-cta` è alto
-   ~2,9rem perché sta in mezzo a una sezione a tutta pagina; qui il vicino di
-   banco è l'interruttore lingua, alto 30px (vedi lang-switch.css: 24 di
-   contenuto + 2 di passo + 1 di filo per lato). 2rem tiene i due comandi
-   sulla stessa riga ottica e resta sopra i 24×24 di 2.5.8 — che è la soglia
-   vera, non i 44 che si citano a memoria.
+   Il conto del contrasto si ribalta rispetto alla versione a filo, ed è il
+   motivo per cui questa è lecita dove quella era obbligata: l'accento non è
+   più il colore del TESTO ma il suo FONDO, quindi non gli tocca il 4,5:1 di
+   1.4.3 ma il 3:1 di 1.4.11 di una superficie — e l'etichetta è
+   `--color-on-accent`, che sull'arancione della lente design (il peggiore dei
+   tre) tiene 6,87:1. È esattamente la ricetta del cursore acceso
+   dell'interruttore lingua, che gli sta a fianco: due superfici accese sulla
+   stessa barra, stesso inchiostro sopra. Da qui in poi `.work-back` e
+   `.work-hero__ds-link` non sono più lo stesso bottone in due misure — quello
+   resta a filo, questo no.
 
-   La freccia non è più un glifo: è `.work-chevron--left`, lo stesso bordo
-   ruotato del resto della pagina. Un "←" preso dal font cambia disegno,
-   spessore e allineamento a ogni famiglia di caratteri, e qui accanto c'era
-   già il chevron giusto. */
+   L'altezza resta 2rem per la ragione di prima: il vicino di banco è
+   l'interruttore lingua, alto 30px (24 di contenuto + 2 di passo + 1 di filo
+   per lato), e 2rem tiene i due comandi sulla stessa riga ottica restando
+   sopra i 24×24 di 2.5.8 — che è la soglia vera, non i 44 che si citano a
+   memoria.
+
+   La freccia non è un glifo ma `.work-chevron--left`, lo stesso bordo ruotato
+   del resto della pagina, ed è disegnata in `currentColor`: segue l'etichetta
+   nell'inchiostro scuro senza bisogno di una regola propria. */
 .work-back {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  min-height: 2rem;
+  /* 30px esatti, cioè l'altezza dell'interruttore lingua che gli sta a fianco
+     (24 di contenuto + 2 di passo + 1 di filo per lato). Era 2rem: 32 contro
+     30, e due riquadri accostati alti diversi non combaciano né sopra né
+     sotto — un pixel per parte, che su una pillola accanto a un rettangolo si
+     legge come «storto» prima ancora che si capisca perché. Ad adattarsi è
+     questo bottone, che vive solo qui, e non l'interruttore, che vive in sei
+     pagine: la cosa locale si allinea alla cosa condivisa, mai il contrario.
+     Non è sulla scala --size-* perché 30 non sta sulla griglia da 4: è una
+     misura presa da un altro componente, non una spaziatura scelta. Resta
+     sopra i 24×24 di 2.5.8. */
+  min-height: 1.875rem;
   padding-inline: var(--size-12);
   border: 1px solid var(--color-accent);
   border-radius: var(--radius-4);
-  background: transparent;
-  color: var(--color-text-primary);
+  background: var(--color-accent);
+  color: var(--color-on-accent);
   font-family: var(--font-sans);
   font-size: var(--fs-14);
   font-weight: 600;
   letter-spacing: 0.01em;
   text-decoration: none;
   transition:
-    background-color var(--duration-state) var(--ease-standard),
+    filter var(--duration-state) var(--ease-standard),
     transform var(--duration-micro) var(--ease-standard);
 }
 
-/* Al passaggio si tinge e si solleva, alla pressione rientra e si incava:
-   le stesse due righe di `.work-hero__ds-link`, cifre comprese. Se cambiano
-   là vanno cambiate qui — sono lo stesso bottone in due misure. */
+/* Al passaggio si schiarisce e si solleva. Non un cambio di colore: su una
+   superficie già piena l'unico modo di schiarire senza inventare un secondo
+   arancione è un filtro, che vale per tutte e tre le lenti con una riga sola.
+   L'anello di fuoco è quello globale (2px d'accento con stacco di 3), quindi
+   da tastiera si prende lo stesso schiarimento del puntatore più il contorno. */
 @media (hover: hover) and (pointer: fine) {
   .work-back:hover {
-    background: color-mix(in srgb, var(--color-accent) 16%, transparent);
+    filter: brightness(1.08);
     transform: translateY(-2px);
   }
 }
 
 .work-back:focus-visible {
-  background: color-mix(in srgb, var(--color-accent) 16%, transparent);
+  filter: brightness(1.08);
 }
 
 .work-back:active {
@@ -102,7 +146,7 @@
    scritti a mano invece dei token. */
 
 .work-main {
-  max-width: 75%;
+  max-width: var(--work-measure);
   margin: 0 auto;
   padding: var(--size-24) var(--size-24) 6rem;
   display: flex;
@@ -130,21 +174,19 @@
    titolo di un case study, cioè ripeteva a chi leggeva la cosa che stava
    leggendo, e per dirlo si prendeva la prima riga. Tolto il 2026-09-02.
 
-   La distinzione conta anche per il contrasto, ed è il motivo per cui questa
-   regola può restare com'è: l'accento come TESTO a 12px passa solo dove
-   l'accento è chiaro. L'indice NON accende la lente (non passa `mode` a
-   Layout), quindi qui l'accento è il bianco di serie. La pagina del case
-   study la accende, e lì in lente creative lo stesso colore sarebbe stato
-   arancione pieno, cioè 3,62:1 su ottanio, sotto il 4,5:1 di 1.4.3.
-   Se un giorno questo occhiello tornasse su una pagina con la lente accesa,
-   il colore va rifatto prima di riusarlo. */
+   Il colore è `--color-accent-text`, non `--color-accent`, e il giorno che
+   qui sopra era scritto è arrivato: dal 2026-09-04 l'indice accende la lente
+   design, quindi questo occhiello è arancione. Arancione pieno a 12px fa
+   3,62:1 su ottanio, sotto il 4,5:1 di 1.4.3; il token schiarito fa 6,03:1.
+   Sulle lenti tech e human i due token valgono lo stesso colore, quindi lì
+   non cambia niente. Il perché sta in global.css, accanto alla definizione. */
 .work-hero__eyebrow {
   font-family: var(--font-mono);
   font-size: var(--fs-12);
   font-weight: 700;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--color-accent);
+  color: var(--color-accent-text);
   margin: 0 0 var(--size-12);
 }
 
@@ -269,14 +311,30 @@
   font-weight: 700;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--color-accent);
+  /* Testo d'accento: `--color-accent-text` e non `--color-accent`. Su due dei
+     quattro case study la lente è design, e l'arancione pieno come testo sta
+     a 3,62:1 — era fuori norma da prima, qui si chiude. */
+  color: var(--color-accent-text);
   margin: 0 0 var(--size-16);
 }
 
+/* ── I testi secondari seguono la lente ──────────────────────────────────
+   Questi tre — il paragrafo della testata, il corpo delle decisioni e i
+   learnings — erano fissati a mano su un verde-azzurro, rgba(192,220,215).
+   Era un colore scritto a mano, che il progetto vieta, e finché /work non
+   accendeva nessuna lente non si notava: l'accento era il bianco di serie e
+   la pagina era fredda tutta. Da quando la sezione è arancione erano gli
+   unici elementi freddi rimasti, mentre ogni altro testo secondario —
+   compreso il ruolo dentro le card, che sta due centimetri più giù — segue
+   la lente ed è caldo. Due testi con lo stesso ruolo a 145° di distanza di
+   tinta: non è una gerarchia, è una svista che si vede.
+   Ora prendono `--color-text-muted`, che vale 4,95:1 sulla lente design e
+   resta verde-azzurro dove nessuna lente è accesa. Trovato misurando la
+   pagina l'8 settembre 2026, corretto nella stessa passata. */
 .work-section__text {
   font-size: var(--fs-16);
   line-height: 1.7;
-  color: rgba(192, 220, 215, 0.92);
+  color: var(--color-text-muted);
   max-width: 40rem;
   margin: 0;
 }
@@ -312,7 +370,7 @@
 .work-decision__body {
   font-size: var(--fs-16);
   line-height: 1.7;
-  color: rgba(192, 220, 215, 0.9);
+  color: var(--color-text-muted);
   max-width: 40rem;
   margin: 0;
 }
@@ -333,7 +391,7 @@
   font-size: var(--fs-16);
   line-height: 1.7;
   font-style: italic;
-  color: rgba(192, 220, 215, 0.9);
+  color: var(--color-text-muted);
   max-width: 40rem;
 }
 
@@ -341,7 +399,7 @@
   content: "—";
   position: absolute;
   left: 0;
-  color: var(--color-accent);
+  color: var(--color-accent-text);
   font-style: normal;
 }
 
@@ -406,9 +464,82 @@
 }
 
 /* ── /work — pagina indice portfolio (griglia case study) ────────────── */
+/* ── La testata dell'indice: il testo e l'oggetto ─────────────────────────
+   L'immagine è tornata l'8 settembre 2026, ed è una scelta di Giulio.
+   "Tornata" vale solo a metà: fino al 2 settembre ogni pagina di /work
+   portava un oggetto knolling in filigrana in un angolo, al 12-14% e tagliato
+   dal bordo del riquadro, e proprio per quello era stato tolto — una
+   filigrana tagliata non è un oggetto sul tavolo, è una texture. Questo è
+   l'opposto e va tenuto tale: posto suo, oggetto intero, opacità piena. Sta
+   ACCANTO al testo, non dietro.
+
+   La griglia ha nomi di area, e non è pedanteria: le due disposizioni non
+   sono l'una la versione stretta dell'altra. Su schermo largo l'oggetto sta
+   a destra di TUTTA la testata; sul telefono sta accanto al solo PARAGRAFO,
+   e il titolo resta a riga piena in tutte e due — affiancarlo a 390px gli
+   toglierebbe un terzo della riga, e il titolo è la ragione per cui la
+   testata esiste. La seconda disposizione è anche il motivo per cui qui non
+   c'è un contenitore attorno al testo: con un wrapper, l'oggetto starebbe
+   fuori e il paragrafo dentro, e non potrebbero mai stare sulla stessa riga.
+   Nessun row-gap: la spaziatura verticale la portano già i margini di
+   occhiello e titolo, e sommarci un gap li raddoppierebbe. */
 .work-index-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    "occhiello occhiello"
+    "titolo titolo"
+    "testo oggetto";
+  column-gap: var(--size-16);
   padding-top: var(--size-24);
   padding-bottom: var(--size-32);
+}
+
+.work-index-hero .work-hero__eyebrow {
+  grid-area: occhiello;
+}
+
+.work-index-hero .work-index-hero__title {
+  grid-area: titolo;
+}
+
+.work-index-hero .work-section__text {
+  grid-area: testo;
+}
+
+/* L'oggetto è la bussola, e la scelta ha un precedente scritto: in
+   lib/work-knolling.ts la bussola era l'unico oggetto ESCLUSO dai case study,
+   perché lungo la strada del processo è già il viaggiatore, e due metafore
+   nella stessa pagina si annullano. Qui la pagina è un'altra: l'indice non ha
+   nessuna strada, e la bussola dice la cosa giusta — orientarsi fra quattro
+   progetti prima di sceglierne uno. Che sia lo stesso oggetto che il lettore
+   ritrova un clic dopo, in cammino, è continuità e non ripetizione.
+
+   Misurata in larghezza con un tetto in rem, come tutto il resto: è alta più
+   del doppio di quanto è larga (208×341, misurato dall'header WebP e tenuto
+   in work-knolling.ts). Le due dimensioni sull'immagine non sono ridondanti:
+   riservano il posto prima che il file carichi, altrimenti il testo salta
+   quando arriva. */
+.work-index-hero__obj {
+  grid-area: oggetto;
+  align-self: center;
+  justify-self: end;
+  width: clamp(3.25rem, 18vw, 4.5rem);
+  height: auto;
+}
+
+@media (min-width: 40rem) {
+  .work-index-hero {
+    grid-template-areas:
+      "occhiello oggetto"
+      "titolo oggetto"
+      "testo oggetto";
+    column-gap: var(--size-32);
+  }
+
+  .work-index-hero__obj {
+    width: clamp(4.5rem, 14vw, 7.5rem);
+  }
 }
 
 .work-index-hero__title {
@@ -753,9 +884,7 @@
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--color-accent);
-  position: relative;
-  z-index: 1;
+  color: var(--color-accent-text);
   transition: gap 0.2s ease;
 }
 
@@ -807,7 +936,7 @@
    2. **L'accento sta nel BORDO, non nel testo.** `.lh-cta--ghost` può
       permetterselo perché sulla home esiste `--accent-text`, il token che
       schiarisce l'arancione del 50% verso il bianco per portarlo da 3,62:1 a
-      4,70:1. Quel token è definito solo in `lab-home.css`: qui non esiste, e
+      6,03:1. Quel token è definito solo in `lab-home.css`: qui non esiste, e
       `var(--accent-text, ...)` cadrebbe sull'arancione pieno, cioè sotto il
       4,5:1 che 1.4.3 chiede al testo. Quindi l'etichetta prende l'inchiostro,
       che ha contrasto pieno, e l'accento fa il bordo — dove la soglia è il
@@ -866,7 +995,7 @@
    di sezioni classico. `.is-active` (dal JS) attiva la modalità strada. */
 
 .journey {
-  /* Full-bleed dentro .work-main (max-width 48rem): html ha overflow-x:clip,
+  /* Full-bleed dentro .work-main (larga --work-measure): html ha overflow-x:clip,
      il breakout 100vw non genera scrollbar orizzontale. */
   width: 100vw;
   margin-left: calc(50% - 50vw);
@@ -1016,7 +1145,7 @@
 }
 
 .journey__hud b {
-  color: var(--color-accent);
+  color: var(--color-accent-text);
   font-weight: 700;
 }
 
@@ -1069,7 +1198,7 @@
   font-weight: 700;
   letter-spacing: 0.22em;
   text-transform: uppercase;
-  color: var(--color-accent);
+  color: var(--color-accent-text);
   margin: 0 0 0.6rem;
 }
 
@@ -1164,7 +1293,7 @@
   font-size: var(--fs-14);
   font-weight: 600;
   line-height: 1.55;
-  color: var(--color-accent);
+  color: var(--color-accent-text);
   padding-top: 0.65rem;
   border-top: 1px dashed color-mix(in srgb, var(--color-accent) 30%, transparent);
 }

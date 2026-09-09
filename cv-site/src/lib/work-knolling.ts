@@ -50,3 +50,28 @@ export function workKnollIcon(slug?: string): string {
 export function workKnollRatio(iconFile: string): string {
   return WORK_KNOLL_RATIO[iconFile] ?? WORK_KNOLL_RATIO[WORK_KNOLL_FALLBACK];
 }
+
+/**
+ * L'oggetto della testata dell'indice — la bussola. Non contraddice la nota
+ * qui sopra: quel divieto vale DENTRO un case study, dove la bussola è già il
+ * viaggiatore lungo la strada del processo, e due metafore nella stessa pagina
+ * si annullano. L'indice non ha nessuna strada, e lì la bussola dice la cosa
+ * giusta — orientarsi fra quattro progetti prima di sceglierne uno. Che sia lo
+ * stesso oggetto che si ritrova un clic dopo, in cammino, è il legame fra le
+ * due pagine: l'oggetto accompagna dentro invece di ripetersi.
+ * Scelta di Giulio, 2026-09-04.
+ */
+export const WORK_INDEX_ICON = "compass.webp";
+
+/**
+ * Le due dimensioni reali del file, per gli attributi width/height dell'img:
+ * riservano il posto prima che l'immagine carichi, altrimenti il testo accanto
+ * salta quando arriva. Derivate dallo stesso rapporto di WORK_KNOLL_RATIO, così
+ * non esiste un secondo posto dove i numeri possano divergere.
+ */
+export function workKnollSize(iconFile: string): { width: number; height: number } {
+  const [width, height] = workKnollRatio(iconFile)
+    .split("/")
+    .map((n) => Number(n.trim()));
+  return { width, height };
+}

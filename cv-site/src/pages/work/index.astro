@@ -4,19 +4,32 @@ import { cvData } from "@cv-data";
 import "../../styles/work-page.css";
 import WorkIndexCard from "../../components/cards/WorkIndexCard.astro";
 import LangSwitch from "../../components/LangSwitch.astro";
+import { lensPath } from "../../lib/cv-i18n";
+import { WORK_INDEX_ICON, workKnollSize } from "../../lib/work-knolling";
 
 const caseStudies = cvData.projects.filter((p) => !!p.slug);
+// L'oggetto della testata e le sue misure reali: entrambi da work-knolling.ts,
+// così l'indice IT e quello EN non possono mostrarne due diversi.
+const heroObj = workKnollSize(WORK_INDEX_ICON);
 ---
 
 <Layout
   title="Portfolio — Giulio Occhipinti"
   description="Case study: analisi UX/UI, decisioni tecniche e workflow AI-augmented dietro ai progetti di Giulio Occhipinti, dal problema al risultato misurabile."
+  mode="creative"
   showFab
 >
   <nav class="work-nav">
     <go-logo></go-logo>
     <div class="work-nav__right">
-      <a href="/tech" class="work-back"
+      {
+        /* Il ritorno porta alla lente design, non a /tech, e non è una
+      preferenza: da 2026-09-04 tutta la sezione /work parla arancione, quindi
+      un ritorno che atterra su una lente ciano sarebbe un salto di colore in
+      un clic. Passa da lensPath perché lo slug non è la chiave interna
+      (creative si serve su /design) e quella mappa vive in un posto solo. */
+      }
+      <a href={lensPath("creative")} class="work-back"
         ><span class="work-chevron work-chevron--left" aria-hidden="true"></span>Torna al CV</a
       >
       <LangSwitch locale="it" href="/en/work" />
@@ -26,11 +39,25 @@ const caseStudies = cvData.projects.filter((p) => !!p.slug);
   <main class="work-main" id="main-content">
     <header class="work-index-hero">
       <p class="work-hero__eyebrow">Portfolio</p>
-      <h1 class="work-index-hero__title">Case study, non un elenco.</h1>
+      <h1 class="work-index-hero__title">Case study</h1>
       <p class="work-section__text">
         Racconto ogni progetto dal problema al risultato misurabile: analisi UX/UI, decisioni
         tecniche, workflow AI-augmented. Tutto ciò che sta dietro al "com'è andata".
       </p>
+      {
+        /* Decorativa: alt vuoto. È un oggetto sul tavolo, non un'informazione —
+      letto ad alta voce ("bussola") non aggiungerebbe niente a chi sta per
+      scegliere fra quattro case study, e toglierebbe una riga al titolo. */
+      }
+      <img
+        class="work-index-hero__obj"
+        src={`/knolling/${WORK_INDEX_ICON}`}
+        alt=""
+        width={heroObj.width}
+        height={heroObj.height}
+        loading="eager"
+        decoding="async"
+      />
     </header>
 
     <div class="work-index-grid">

@@ -4,20 +4,31 @@ import { cvDataEn } from "@cv-data-en";
 import "../../../styles/work-page.css";
 import WorkIndexCard from "../../../components/cards/WorkIndexCard.astro";
 import LangSwitch from "../../../components/LangSwitch.astro";
+import { lensPath } from "../../../lib/cv-i18n";
+import { WORK_INDEX_ICON, workKnollSize } from "../../../lib/work-knolling";
 
 const caseStudies = cvDataEn.projects.filter((p) => !!p.slug);
+// The header object and its real dimensions: both from work-knolling.ts, so the
+// IT and EN indexes cannot end up showing two different ones.
+const heroObj = workKnollSize(WORK_INDEX_ICON);
 ---
 
 <Layout
   title="Portfolio — Giulio Occhipinti"
   description="Case studies: UX/UI analysis, technical decisions and AI-augmented workflow behind Giulio Occhipinti's projects, from problem to measurable outcome."
   lang="en"
+  mode="creative"
   showFab
 >
   <nav class="work-nav">
     <go-logo></go-logo>
     <div class="work-nav__right">
-      <a href="/en/design" class="work-back"
+      {
+        /* Same as the IT index: the back link goes through lensPath, not a
+      hand-written path — the URL slug is not the internal key (creative is
+      served at /design) and that map lives in one place only. */
+      }
+      <a href={lensPath("creative", "en")} class="work-back"
         ><span class="work-chevron work-chevron--left" aria-hidden="true"></span>Back to CV</a
       >
       <LangSwitch locale="en" href="/work" />
@@ -27,11 +38,25 @@ const caseStudies = cvDataEn.projects.filter((p) => !!p.slug);
   <main class="work-main" id="main-content">
     <header class="work-index-hero">
       <p class="work-hero__eyebrow">Portfolio</p>
-      <h1 class="work-index-hero__title">Case studies, not a list.</h1>
+      <h1 class="work-index-hero__title">Case studies</h1>
       <p class="work-section__text">
         I tell every project from problem to measurable outcome: UX/UI analysis, technical
         decisions, AI-augmented workflow. Everything behind "how it went".
       </p>
+      {
+        /* Decorative: empty alt. It is an object on the table, not information —
+      read aloud ("compass") it would add nothing for someone about to pick one
+      of four case studies, and it would cost the title a line. */
+      }
+      <img
+        class="work-index-hero__obj"
+        src={`/knolling/${WORK_INDEX_ICON}`}
+        alt=""
+        width={heroObj.width}
+        height={heroObj.height}
+        loading="eager"
+        decoding="async"
+      />
     </header>
 
     <div class="work-index-grid">
