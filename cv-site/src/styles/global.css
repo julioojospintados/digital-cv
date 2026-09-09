@@ -882,6 +882,37 @@ body {
   animation-timing-function: var(--ease-standard);
 }
 
+/* ── Il marchio non nato non collassa ──────────────────────────────────
+   `<go-logo>` è un'isola Lit: finché il suo modulo non gira, il tag è un
+   elemento sconosciuto al browser, senza stile e senza dimensione propria
+   — collassa a larghezza zero. Su OGNI navigazione a documento intero (ed
+   è cosi' per l'intero sito: le lenti, /work, i case study, /privacy,
+   404) l'intestazione nasce senza il marchio e scatta quando l'isola
+   finalmente si registra. Nel cambio lingua è dove si vede di più, perché
+   il resto della transizione (il cursore dell'interruttore, il contenuto)
+   è già fluido: lo scatto del marchio è l'unica cosa rimasta a leggersi
+   come "un refresh".
+
+   La cura è la stessa di ogni progressive enhancement: la pagina porta
+   già "GO" come testo semplice dentro il tag (vedi CvLensPage.astro e le
+   altre pagine che usano <go-logo>) — sparisce da solo quando Lit monta
+   il suo shadow root, che non ha uno <slot> e quindi non lo proietta più.
+   Questa regola gli da', da subito, lo stesso spazio del marchio vero:
+   stessi token di GoLogo.lit.ts (button + .go-g/.go-o), duplicati qui
+   perché quello stile vive in un shadow root che prima della definizione
+   non esiste ancora. */
+go-logo:not(:defined) {
+  display: inline-flex;
+  align-items: baseline;
+  padding: 0.3rem 0.5rem;
+  font-family: var(--font-display, "Lexend", ui-sans-serif, sans-serif);
+  font-size: var(--fs-28, 1.75rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: var(--color-text-primary, rgba(245, 240, 230, 1));
+}
+
 /* ── Rallentatore ─────────────────────────────────────────────────────────
    `?vt=slow` su un qualunque indirizzo del sito e il passaggio dura dieci
    volte tanto, per tutta la sessione, finche' non lo si spegne con

@@ -1283,7 +1283,7 @@ const NAV = [
         </p>
         <div class="ds-stage">
           <div class="lc">
-            <go-logo data-ds-snippet></go-logo>
+            <go-logo data-ds-snippet>GO</go-logo>
           </div>
         </div>
         <div class="ds-spec">
@@ -1316,8 +1316,8 @@ const NAV = [
             <p class="ds-spec__v">
               {
                 it
-                  ? "È un <button> dentro uno shadow root, quindi arriva già con ruolo e nome accessibile propri («GO — Torna all'ingresso»): non serve — e non va — avvolgerlo in un altro link. Senza contorno a riposo l'invito visivo su un touch screen non c'è: il costo è reale e sta scritto nel file, e regge perché la funzione non si perde (il ritorno all'ingresso sta anche nel menu contatti) e perché il nome accessibile la dichiara comunque a chi naviga a voce, da tastiera o con lo screen reader. Restano il passo interno, che tiene l'area premibile sopra i 24×24 di 2.5.8 ora che non c'è più un bordo a disegnarla, e l'anello di fuoco in inchiostro con stacco di 3."
-                  : "It is a <button> inside a shadow root, so it already carries its own role and accessible name («GO — Back to the entry»): wrapping it in another link is unnecessary, and wrong. With no resting outline the visual invitation is gone on a touch screen: that cost is real and written down in the file, and it holds because the function is not lost (returning to the entry also lives in the contact menu) and because the accessible name states it anyway for voice, keyboard and screen-reader users. What stays: the internal padding, which keeps the tap target above the 24×24 of 2.5.8 now that no border draws it, and the ink focus ring with its 3px offset."
+                  ? "È un <button> dentro uno shadow root, quindi arriva già con ruolo e nome accessibile propri («GO — Torna all'ingresso»): non serve — e non va — avvolgerlo in un altro link. Senza contorno a riposo l'invito visivo su un touch screen non c'è: il costo è reale e sta scritto nel file, e regge perché la funzione non si perde (il ritorno all'ingresso sta anche nel menu contatti) e perché il nome accessibile la dichiara comunque a chi naviga a voce, da tastiera o con lo screen reader. Restano il passo interno, che tiene l'area premibile sopra i 24×24 di 2.5.8 ora che non c'è più un bordo a disegnarla, e l'anello di fuoco in inchiostro con stacco di 3. Il tag porta anche «GO» come testo semplice fra le tag — misurato il 2026-09-09 sul cambio lingua: senza JS l'elemento è sconosciuto al browser e collassa a larghezza zero, e su ogni navigazione a documento intero c'era una finestra reale, non solo teorica, in cui l'intestazione nasceva senza il marchio e scattava quando l'isola si registrava. Il testo lo tiene visibile e cliccabile da subito; `go-logo:not(:defined)` in global.css gli da', da subito, lo stesso ingombro del marchio vero, cosi' lo scatto non c'e' quasi piu'. Lit lo sostituisce al montaggio, perché il suo template non ha uno <slot>."
+                  : "It is a <button> inside a shadow root, so it already carries its own role and accessible name («GO — Back to the entry»): wrapping it in another link is unnecessary, and wrong. With no resting outline the visual invitation is gone on a touch screen: that cost is real and written down in the file, and it holds because the function is not lost (returning to the entry also lives in the contact menu) and because the accessible name states it anyway for voice, keyboard and screen-reader users. What stays: the internal padding, which keeps the tap target above the 24×24 of 2.5.8 now that no border draws it, and the ink focus ring with its 3px offset. The tag also carries «GO» as plain text between its tags — measured on 2026-09-09 on the language switch: without JS the element is unknown to the browser and collapses to zero width, and on every full-document navigation there was a real, not just theoretical, window where the header was born without the mark and jumped once the island registered itself. The text keeps it visible and clickable from the start; `go-logo:not(:defined)` in global.css gives it, from the start, the real mark's own footprint, so the jump is almost gone. Lit replaces it on mount, because its template has no <slot>."
               }
             </p>
           </div>
@@ -2557,7 +2557,7 @@ const NAV = [
                 class="lc-bar__home"
                 aria-label={it ? "Torna alla home" : "Back to the home page"}
               >
-                <go-logo></go-logo>
+                <go-logo>GO</go-logo>
               </a>
               <p class="lc-bar__tagline">
                 {
@@ -4465,7 +4465,7 @@ const NAV = [
         </p>
         <div class="ds-stage">
           <nav class="work-nav" style="position:static;" data-ds-snippet data-ds-drop="style">
-            <go-logo></go-logo>
+            <go-logo>GO</go-logo>
             <div class="work-nav__right">
               <a href="#work-barra" class="work-back"
                 ><span class="work-chevron work-chevron--left" aria-hidden="true"></span>{
