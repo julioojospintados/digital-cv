@@ -1271,10 +1271,32 @@
   padding-block: var(--size-8);
   cursor: pointer;
   list-style: none;
+  transition: background-color var(--duration-micro) var(--ease-standard);
 }
 
 .lc-lane__head::-webkit-details-marker {
   display: none;
+}
+
+/* Stessa cosa premuta e sotto il puntatore mancavano del tutto: fermo e
+   sotto il puntatore era lo stesso identico stile, misurato — non un
+   difetto visto a occhio. Stesso velo dell'8% già su .lc-lens__opt, non
+   un'invenzione nuova: la riga intera segna dove si aprirà, il testo resta
+   a contrasto pieno com'è già per .lc-job qui sopra. */
+@media (hover: hover) and (pointer: fine) {
+  .lc-lane__head:hover {
+    background: rgba(255, 255, 255, 0.08);
+  }
+}
+
+.lc-lane__head:active {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lc-lane__head {
+    transition: none;
+  }
 }
 
 .lc-lane__name {

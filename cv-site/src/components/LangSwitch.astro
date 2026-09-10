@@ -38,6 +38,20 @@ const t = LOCALES[locale];
 // aria-label — sostituire il nome accessibile "EN" con "Switch to English"
 // toglierebbe dal nome il testo che si vede, che è quello che chi comanda
 // a voce prova a pronunciare (2.5.3 Label in Name).
+//
+// La posizione accesa porta anche `role="link"` + `aria-disabled="true"`,
+// dal 2026-09-11 — misurato con l'albero di accessibilità vero di Chrome
+// (CDP, non la sola lettura del DOM): uno <span> nudo con solo
+// `aria-current` ha ruolo "generic" e vi arriva dentro come testo anonimo,
+// fuso nella barra — nessun oggetto distinto, a differenza del vicino
+// <a>, che è un "link" vero e proprio con un nome suo. Non è (ancora)
+// la prova che gli screen reader reali perdano lo stato "corrente": è la
+// prova che quello span non è un oggetto a sé nell'albero, il che basta
+// da solo a giustificare il pattern più robusto — quello che i siti con
+// una voce di navigazione corrente "de-linkata" usano quasi ovunque.
+// `aria-disabled` non lo rende focalizzabile (verificato: nessuna
+// proprietà "focusable" compare), quindi il comportamento — non è un
+// bersaglio — resta lo stesso di prima.
 const OPTIONS = [
   { key: "it" as const, label: "IT", href: locale === "it" ? null : href, title: t.ui.switchToIt },
   { key: "en" as const, label: "EN", href: locale === "en" ? null : href, title: t.ui.switchToEn },
@@ -49,7 +63,13 @@ const OPTIONS = [
   {
     OPTIONS.map((o) =>
       o.href === null ? (
-        <span class="lang-switch__opt" aria-current="true" lang={o.key}>
+        <span
+          class="lang-switch__opt"
+          role="link"
+          aria-disabled="true"
+          aria-current="page"
+          lang={o.key}
+        >
           {o.label}
         </span>
       ) : (
