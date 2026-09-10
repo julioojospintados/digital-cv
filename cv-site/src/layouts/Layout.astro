@@ -386,12 +386,28 @@ const jsonLd = {
          A movimento ridotto il nome non si assegna: la regola globale che
          azzera le durate usa `*`, e i pseudo-elementi della transizione
          stanno in un albero che `*` non raggiunge. Senza nome non c'e'
-         niente da animare, ed e' il comportamento giusto. -->
+         niente da animare, ed e' il comportamento giusto.
+
+         Dal 2026-09-10 lo stesso script da' un nome anche a
+         `.lc-bar__tagline`, dove esiste (solo le pagine-lente — altrove
+         `querySelector` non trova nulla e non fa niente). Il verso lo
+         decide `opt.lang` al clic (la lingua di destinazione: il link porta
+         gia' l'attributo `lang` in LangSwitch.astro) e `document.documentElement.lang`
+         al risveglio (la lingua della pagina che sta nascendo) — le due
+         letture concordano per costruzione, perche' sono la stessa
+         navigazione vista dai due lati. Il nome sceglie fra
+         `lang-tagline-fwd`/`-back`: il perche' di due nomi invece di uno e'
+         nel commento sopra il blocco in global.css. Sotto i 40rem la
+         tagline e' `display:none` (lab-cv.css): il controllo sul display
+         evita di dare un nome a un elemento che il browser non fotografa
+         comunque, non e' indispensabile ma rende l'intento esplicito. -->
     <script is:inline>
       (() => {
-        const NOME = "lang-thumb";
+        const NOME_THUMB = "lang-thumb";
         const fermo = matchMedia("(prefers-reduced-motion: reduce)").matches;
         const nudo = (u) => u.pathname.replace(/\/+$/, "") || "/";
+        const nomeTagline = (verso) => (verso === "fwd" ? "lang-tagline-fwd" : "lang-tagline-back");
+        const taglineVisibile = (tag) => tag && getComputedStyle(tag).display !== "none";
 
         addEventListener(
           "click",
@@ -401,8 +417,13 @@ const jsonLd = {
             const sw = opt.closest(".lang-switch");
             if (!sw) return;
             sw.dataset.going = "";
+            if (fermo) return;
             const th = sw.querySelector(".lang-switch__thumb");
-            if (th && !fermo) th.style.viewTransitionName = NOME;
+            if (th) th.style.viewTransitionName = NOME_THUMB;
+            const tag = document.querySelector(".lc-bar__tagline");
+            if (taglineVisibile(tag)) {
+              tag.style.viewTransitionName = nomeTagline(opt.lang === "en" ? "fwd" : "back");
+            }
           },
           true,
         );
@@ -432,9 +453,17 @@ const jsonLd = {
           }
           if (da.origin !== location.origin) return;
           if (nudo(da) !== nudo(new URL(link.href))) return;
-          th.style.viewTransitionName = NOME;
+          th.style.viewTransitionName = NOME_THUMB;
+          const tag = document.querySelector(".lc-bar__tagline");
+          const usaTagline = taglineVisibile(tag);
+          if (usaTagline) {
+            tag.style.viewTransitionName = nomeTagline(
+              document.documentElement.lang === "en" ? "fwd" : "back",
+            );
+          }
           vt.finished.finally(() => {
             th.style.viewTransitionName = "";
+            if (usaTagline) tag.style.viewTransitionName = "";
           });
         });
       })();

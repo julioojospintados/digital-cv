@@ -307,6 +307,11 @@ button {
      decide la pagina, quando ha finito di nascere — vedi Layout.astro,
      § "L'oggetto in volo aspetta che la pagina sia in piedi". */
   --duration-page: 360ms;
+  /* Scorrimento della tagline al cambio lingua — scelta di Giulio il
+     2026-09-10 dopo un confronto diretto fra cinque proposte, più lenta
+     delle altre perché a 500ms il testo si legge come un movimento, sotto
+     comincia a sembrare un tremore. Vedi il blocco più giù. */
+  --duration-lang-tagline: 500ms;
   --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
   /* La curva del solo oggetto che attraversa. `--ease-standard` e' fatta per
      spostamenti brevi — parte decisa e frena in fretta, che su 640px di
@@ -880,6 +885,83 @@ body {
 ::view-transition-group(lang-thumb) {
   animation-duration: var(--duration-micro);
   animation-timing-function: var(--ease-standard);
+}
+
+/* ── La tagline della lente attraversa nello stesso verso della pillola ───
+   Scelta di Giulio il 2026-09-10, fra cinque proposte messe a confronto
+   in un prototipo dedicato (solo il cursore / ingresso a cascata /
+   dissolvenza mirata / scorrimento direzionale / sfocatura e scala):
+   questa. Stesso meccanismo di `lang-thumb` qui sopra — nome assegnato al
+   clic e al risveglio da Layout.astro, mai un nome fisso qui, perché
+   `.lc-bar__tagline` esiste su ogni pagina-lente e un nome statico
+   farebbe morfare fra loro due navigazioni scorrelate (stessa ragione
+   scritta sopra per `lang-thumb`).
+
+   Due nomi, non uno, perché il verso conta: `lang-tagline-fwd` quando la
+   lingua d'arrivo è EN (la pillola va a destra), `lang-tagline-back`
+   quando è IT (va a sinistra). Il testo vecchio esce nello stesso verso
+   in cui si muove l'interruttore, il nuovo entra dal verso opposto — due
+   animazioni scritte per esteso, non uno `calc()` con un segno: un
+   offset negativo si scrive letterale, non moltiplicato (AGENTS.md,
+   § Units). Lo script sceglie il verso leggendo `document.documentElement.lang`
+   sulla pagina d'arrivo.
+
+   `--ease-flight`, non `--ease-standard`: stesso tipo di movimento
+   dell'oggetto che attraversa fra ingresso e lente — qualcosa che passa,
+   non qualcosa che appare — anche se qui il viaggio è di 0,75rem, non
+   mezzo schermo. La riga può cambiare larghezza fra le due lingue (IT e
+   EN non hanno la stessa lunghezza): il gruppo la morfa da sola, come già
+   fa per `case-sigla`/`case-title` qui sotto — lo scorrimento è
+   sull'`old`/`new`, il ridimensionamento resta al gruppo, e i due
+   restano sincronizzati perché condividono durata e curva. */
+::view-transition-group(lang-tagline-fwd),
+::view-transition-group(lang-tagline-back) {
+  animation-duration: var(--duration-lang-tagline);
+  animation-timing-function: var(--ease-flight);
+}
+::view-transition-old(lang-tagline-fwd) {
+  animation: lang-tagline-out-fwd var(--duration-lang-tagline) var(--ease-flight) both;
+}
+::view-transition-new(lang-tagline-fwd) {
+  animation: lang-tagline-in-fwd var(--duration-lang-tagline) var(--ease-flight) both;
+}
+::view-transition-old(lang-tagline-back) {
+  animation: lang-tagline-out-back var(--duration-lang-tagline) var(--ease-flight) both;
+}
+::view-transition-new(lang-tagline-back) {
+  animation: lang-tagline-in-back var(--duration-lang-tagline) var(--ease-flight) both;
+}
+@keyframes lang-tagline-out-fwd {
+  to {
+    transform: translateX(0.75rem);
+    opacity: 0;
+  }
+}
+@keyframes lang-tagline-in-fwd {
+  from {
+    transform: translateX(-0.75rem);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+@keyframes lang-tagline-out-back {
+  to {
+    transform: translateX(-0.75rem);
+    opacity: 0;
+  }
+}
+@keyframes lang-tagline-in-back {
+  from {
+    transform: translateX(0.75rem);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 
 /* ── Il marchio non nato non collassa ──────────────────────────────────
