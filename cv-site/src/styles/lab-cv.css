@@ -585,10 +585,25 @@
   right: 0;
   z-index: 10;
   margin-top: var(--size-4);
-  min-width: 100%;
+  /* Larga quanto le voci, non quanto il trigger. Era `min-width: 100%`,
+     legata alla larghezza del pallottoliere che l'ha aperta — che varia da
+     lente a lente, perché il trigger mostra il NOME della lente attiva
+     ("Web & UX Designer" su /design, "Software Developer" su /tech...).
+     Coincideva quasi sempre perché quei nomi sono lunghi quanto le tre
+     opzioni della lista, ma è una coincidenza di contenuto, non una misura
+     — un'etichetta più corta (una traduzione, un rename) avrebbe stretto
+     la tendina senza che le tre voci dentro fossero cambiate di una
+     lettera. `max-content` la lega a ciò che ci sta scritto dentro. */
+  width: max-content;
   padding: var(--size-4);
   border: 1px solid var(--lc-line-strong);
-  border-radius: var(--radius-4);
+  /* --radius-4 (quello dei bottoni) accanto al trigger a pillola (999rem)
+     era un salto secco — due raggi agli estremi opposti della scala, uno
+     dentro l'altro. --radius-16 è l'altro raggio che il progetto si è dato
+     (decisione 2026-07-10): lo stesso delle card, ed è quello giusto per un
+     pannello che si apre, non per un controllo che si preme. Le voci dentro
+     restano a --radius-4 — sono bottoni, non il pannello che le contiene. */
+  border-radius: var(--radius-16);
   /* Opaco: una tendina semitrasparente sopra del testo è illeggibile, e il
      backdrop-filter non sostituisce il contrasto. */
   background: rgba(6, 52, 48, 1);
@@ -624,6 +639,16 @@
 }
 
 @media (hover: hover) and (pointer: fine) {
+  /* Il trigger non aveva nessuno stato hover: a riposo e sotto il
+     puntatore era pixel per pixel lo stesso stile — misurato, non solo
+     guardato. Stesso idioma di `.lc-btn:hover` più su, non uno nuovo: un
+     velo d'accento al 10% e il bordo che passa dal filo neutro a quello
+     colorato. */
+  .lc-lens__trigger:hover {
+    background: color-mix(in srgb, var(--color-accent) 10%, transparent);
+    border-color: var(--lc-accent-line);
+  }
+
   .lc-lens__opt:hover {
     background: rgba(255, 255, 255, 0.08);
   }

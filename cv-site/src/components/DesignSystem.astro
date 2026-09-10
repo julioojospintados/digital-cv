@@ -2994,6 +2994,16 @@ const NAV = [
               }
             </p>
           </div>
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specMotion}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Due difetti trovati con uno sguardo diretto, non solo guardati — misurati con lo stile calcolato prima e dopo il passaggio del puntatore. Il trigger non aveva alcuno stato hover: fermo o sotto il puntatore era lo stesso identico stile. Ora prende lo stesso velo d'accento al 10% di .lc-btn, non un'invenzione nuova. E la tendina misurava la propria larghezza sul trigger (`min-width: 100%`) invece che sul proprio contenuto: coincideva quasi sempre, perché il nome della lente attiva è lungo quanto le tre opzioni, ma restava una coincidenza — un'etichetta più corta l'avrebbe stretta senza che le voci dentro cambiassero. `width: max-content` la lega a ciò che ci scrive davvero dentro. Il raggio è salito da --radius-4 (quello dei bottoni) a --radius-16 (quello delle card): --radius-4 accanto al trigger a pillola era un salto secco fra i due estremi della scala."
+                  : "Two defects found by looking directly, not just glancing — measured from the computed style before and after the pointer passed over. The trigger had no hover state at all: at rest or under the pointer it was the exact same style. It now takes the same 10% accent wash as .lc-btn, not a new invention. And the dropdown measured its own width off the trigger (`min-width: 100%`) rather than its own content: it coincided almost always, because the active lens's name is as long as the three options, but it stayed a coincidence — a shorter label would have narrowed it without the items inside changing at all. `width: max-content` ties it to what is actually written inside. The radius moved from --radius-4 (the buttons' own) to --radius-16 (the cards' one): --radius-4 next to the pill-shaped trigger was a sharp jump between the two opposite ends of the scale."
+              }
+            </p>
+          </div>
         </div>
       </section>
 
