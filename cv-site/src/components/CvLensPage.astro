@@ -131,10 +131,14 @@ const items = rawItems.map((item, i) => {
 // dell'azienda sopra la piega — si legge scendendo di una schermata, dove
 // le esperienze cominciano. E' un costo noto, non una svista.
 
-// Il portfolio è la prova decisiva per il ruolo di design, e solo per
-// quello: su /tech o /human diventa un'uscita laterale che porta via
-// dal CV proprio nei secondi in cui si sta decidendo.
-const showPortfolio = lens === "creative";
+// Fino al 2026-09-11 il portfolio compariva solo sulla lente creative: era
+// pensato come prova decisiva solo per il ruolo di design, un'uscita
+// laterale sulle altre due. Deciso da Giulio di toglierlo: un link
+// condiviso o un QR possono portare diretti su /tech o /ai, e su quelle
+// pagine non c'era alcun modo di scoprire che il portfolio esiste — un
+// effetto collaterale, non una scelta di prodotto voluta. Il bottone ora
+// compare su tutte e tre le lenti, con il colore che già eredita dalla
+// lente (--color-accent, mai hardcoded) — non serve altro.
 
 // ── Strato 2b: la cronologia completa ────────────────────────────────────
 const yearsLabel = (start: string, end: string): string => {
@@ -357,14 +361,10 @@ const markStyle = (nome: string): string | undefined => {
             <a class="lc-btn lc-btn--primary" href={cvPdf} download>
               {t.ui.downloadCv}
             </a>
-            {
-              showPortfolio && (
-                <a class="lc-btn" href={workHref}>
-                  {t.ui.portfolioCta}
-                  <span class="lc-btn__arrow" aria-hidden="true" />
-                </a>
-              )
-            }
+            <a class="lc-btn" href={workHref}>
+              {t.ui.portfolioCta}
+              <span class="lc-btn__arrow" aria-hidden="true"></span>
+            </a>
           </div>
 
           <!-- Contatti in chiaro, nel primo strato: restano qui anche dal

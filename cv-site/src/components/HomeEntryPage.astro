@@ -142,10 +142,13 @@ const sections = MODES.map((mode) => ({
   title: PROFILE_TEXT[locale][mode].title,
   eyebrow: t.modeLabels[mode],
   desc: PROFILE_TEXT[locale][mode].desc,
-  // Il portfolio è la prova più importante per il ruolo target: nella
-  // sezione design la sua CTA deve esserci, accanto a quella del CV.
-  portfolio: mode === "creative",
 }));
+
+// Fino al 2026-09-11 la CTA del portfolio compariva solo nella sezione
+// design (un campo `portfolio: mode === "creative"` su ogni riga sopra).
+// Tolto su richiesta di Giulio, stessa ragione della pagina CV (vedi
+// CvLensPage.astro): ora compare in tutte e tre, e il colore arriva già
+// dal mode della sezione — non serve un campo per deciderlo caso per caso.
 ---
 
 <Layout
@@ -470,11 +473,9 @@ const sections = MODES.map((mode) => ({
                 <a class="lh-cta" href={lensPath(s.mode, locale)}>
                   {t.ui.goTo} {s.eyebrow}
                 </a>
-                {s.portfolio && (
-                  <a class="lh-cta lh-cta--ghost" href={workHref}>
-                    {t.ui.explorePortfolio}
-                  </a>
-                )}
+                <a class="lh-cta lh-cta--ghost" href={workHref}>
+                  {t.ui.explorePortfolio}
+                </a>
               </div>
             </div>
           </section>
