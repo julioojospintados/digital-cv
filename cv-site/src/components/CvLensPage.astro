@@ -262,6 +262,7 @@ const markStyle = (nome: string): string | undefined => {
   description={t.modeDescriptions[lens] ?? t.fallbackDescription}
   mode={lens}
   lang={locale}
+  showFab
 >
   <!-- L'oggetto della lente è il pezzo grafico più pesante sopra la piega:
        va chiesto subito, non scoperto a fine parsing. -->
@@ -366,8 +367,10 @@ const markStyle = (nome: string): string | undefined => {
             }
           </div>
 
-          <!-- Contatti in chiaro, non dentro un FAB: "no treasure hunts for
-               contact information". -->
+          <!-- Contatti in chiaro, nel primo strato: restano qui anche dal
+               2026-09-10, quando questa pagina ha acceso anche il FAB
+               (showFab in Layout, vedi qui sopra) per la raggiungibilità
+               a metà scroll — il FAB si aggiunge, non li sostituisce. -->
           <p class="lc-contacts">
             {email && <a href={email.url}>{email.label}</a>}
             <span class="lc-contacts__sep" aria-hidden="true">·</span>
@@ -909,9 +912,14 @@ const markStyle = (nome: string): string | undefined => {
 </Layout>
 
 <script>
-  // Solo la firma GO della barra: l'island si autoregistra come <go-logo>
-  // e reagisce da sé al mode della pagina.
+  // La firma GO della barra: l'island si autoregistra come <go-logo>
+  // e reagisce da sé al mode della pagina. FloatingMenu è lo stesso import
+  // di work/index.astro — showFab (vedi <Layout> qui sopra) renderizza
+  // <floating-menu/>, ma senza registrare la classe l'elemento personalizzato
+  // resta inerte: nessuno shadow DOM, nessun contenuto. Dal 2026-09-10 anche
+  // le tre lenti passano showFab, quindi serve qui.
   import "../islands/GoLogo.lit";
+  import "../islands/FloatingMenu.lit";
   import { initLensDropdownAutoClose } from "../scripts/lens-dropdown";
 
   initLensDropdownAutoClose();
