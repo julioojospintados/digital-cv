@@ -1201,13 +1201,7 @@
 .lc-tl {
   /* Una sola dichiarazione della griglia, condivisa da asse, teste di corsia
      e righe: se non fossero identiche le barre non starebbero sullo stesso
-     asse, che e' tutto il punto. Nessun padding qui: un padding sul
-     contenitore comune restringe le colonne flessibili (il nome, la
-     timeline) su tutte e tre le righe insieme — provato il 2026-09-10 e
-     scartato subito da Giulio, perche' rimpiccioliva l'asse e le barre, cioe'
-     il dato, per fare posto a un dettaglio decorativo. Il respiro laterale
-     dell'hover vive invece su .lc-lane__head::before, qui sotto: uno sfondo
-     via pseudo-elemento, inset dai bordi, che non tocca la griglia. */
+     asse, che e' tutto il punto. */
   --lc-tl-w: minmax(9rem, 1fr);
   display: grid;
   gap: var(--size-2);
@@ -1281,61 +1275,46 @@
 
 .lc-lane {
   border-top: 1px solid var(--lc-line);
+  /* Padding esterno della corsia, non un inset decorativo: dal 2026-09-10,
+     su richiesta esplicita di Giulio dopo un giro di prove (vedi cronologia
+     nella vetrina). var(--size-16) = 1rem. */
+  padding-inline: var(--size-16);
 }
 
 .lc-lane__head {
-  position: relative;
   padding-block: var(--size-8);
   cursor: pointer;
   list-style: none;
-}
-
-.lc-lane__head::-webkit-details-marker {
-  display: none;
-}
-
-/* Corretto il 2026-09-10, su segnalazione di Giulio: il velo bianco all'8%
-   usato finora non aveva nulla a che vedere con l'hover delle schede di
-   lavoro qui sopra (.lc-job), e le due zone si leggevano come due
-   componenti diversi invece che la stessa interazione. Ora è lo stesso
-   linguaggio: sfondo tinto di lente (--color-surface) + filo d'accento,
-   non un velo bianco generico — e lo stato resta acceso quando la corsia
-   è aperta, non solo di passaggio sotto il puntatore, come per .lc-job[open]
-   qui sopra.
-
-   Lo sfondo dipinge uno pseudo-elemento, non .lc-lane__head stesso: la
-   griglia della riga (condivisa con l'asse e con .lc-all__row, vedi sopra)
-   resta a larghezza piena — solo il rettangolo colorato è inset di 0,875rem
-   per lato, "padding esterno" della corsia senza restringere le colonne che
-   ci sono dentro. pointer-events:none perche' e' pura decorazione: il
-   bersaglio di hover/click resta .lc-lane__head per intero, bordo a bordo,
-   com'era prima. */
-.lc-lane__head::before {
-  content: "";
-  position: absolute;
-  inset: 0 0.875rem;
   border-radius: var(--radius-4);
-  pointer-events: none;
   box-shadow: inset 3px 0 0 0 transparent;
   transition:
     background-color var(--duration-micro) var(--ease-standard),
     box-shadow var(--duration-state) var(--ease-standard);
 }
 
+.lc-lane__head::-webkit-details-marker {
+  display: none;
+}
+
+/* Sfondo tinto di lente (--color-surface) + filo d'accento — stesso
+   linguaggio di .lc-job qui sopra — direttamente su .lc-lane__head: copre
+   la riga per intero, bordo a bordo entro il padding di .lc-lane. Lo stato
+   resta acceso quando la corsia è aperta, non solo di passaggio: l'hover
+   ne è l'anteprima, esattamente come per .lc-job[open]. */
 @media (hover: hover) and (pointer: fine) {
-  .lc-lane__head:hover::before {
+  .lc-lane__head:hover {
     background: var(--color-surface);
     box-shadow: inset 3px 0 0 0 var(--lc-accent-line);
   }
 }
 
-.lc-lane[open] > .lc-lane__head::before {
+.lc-lane[open] > .lc-lane__head {
   background: var(--color-surface);
   box-shadow: inset 3px 0 0 0 var(--lc-accent-line);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .lc-lane__head::before {
+  .lc-lane__head {
     transition: none;
   }
 }
