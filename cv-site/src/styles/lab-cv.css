@@ -1281,26 +1281,39 @@
   padding-block: var(--size-8);
   cursor: pointer;
   list-style: none;
-  transition: background-color var(--duration-micro) var(--ease-standard);
+  /* Il filo d'accento via box-shadow inset, non border: questa riga
+     condivide la griglia con l'asse e con .lc-all__row (vedi sopra, "una
+     sola dichiarazione della griglia... se non fossero identiche le barre
+     non starebbero sullo stesso asse"). Un border consumerebbe spazio di
+     layout e disallineerebbe le colonne; un inset shadow no. */
+  box-shadow: inset 3px 0 0 0 transparent;
+  transition:
+    background-color var(--duration-micro) var(--ease-standard),
+    box-shadow var(--duration-state) var(--ease-standard);
 }
 
 .lc-lane__head::-webkit-details-marker {
   display: none;
 }
 
-/* Stessa cosa premuta e sotto il puntatore mancavano del tutto: fermo e
-   sotto il puntatore era lo stesso identico stile, misurato — non un
-   difetto visto a occhio. Stesso velo dell'8% già su .lc-lens__opt, non
-   un'invenzione nuova: la riga intera segna dove si aprirà, il testo resta
-   a contrasto pieno com'è già per .lc-job qui sopra. */
+/* Corretto il 2026-09-10, su segnalazione di Giulio: il velo bianco all'8%
+   usato finora non aveva nulla a che vedere con l'hover delle schede di
+   lavoro qui sopra (.lc-job), e le due zone si leggevano come due
+   componenti diversi invece che la stessa interazione. Ora è lo stesso
+   linguaggio: sfondo tinto di lente (--color-surface) + filo d'accento,
+   non un velo bianco generico — e lo stato resta acceso quando la corsia
+   è aperta, non solo di passaggio sotto il puntatore, come per .lc-job[open]
+   qui sopra. */
 @media (hover: hover) and (pointer: fine) {
   .lc-lane__head:hover {
-    background: rgba(255, 255, 255, 0.08);
+    background: var(--color-surface);
+    box-shadow: inset 3px 0 0 0 var(--lc-accent-line);
   }
 }
 
-.lc-lane__head:active {
-  background: rgba(255, 255, 255, 0.14);
+.lc-lane[open] > .lc-lane__head {
+  background: var(--color-surface);
+  box-shadow: inset 3px 0 0 0 var(--lc-accent-line);
 }
 
 @media (prefers-reduced-motion: reduce) {
