@@ -148,7 +148,13 @@
 .work-main {
   max-width: var(--work-measure);
   margin: 0 auto;
-  padding: var(--size-24) var(--size-24) 6rem;
+  /* Il fondo era 6rem (96px): su un indice di quattro card, senza altro
+     sotto, era spazio vuoto che bastava a far comparire uno scroll residuo
+     su finestre desktop comuni (900-1000px di altezza utile) senza che ci
+     fosse altro da leggere scendendo — segnalato da Giulio il 2026-09-10
+     con uno screenshot. var(--size-48) lascia comunque un margine reale
+     sotto l'ultima card, solo non gonfiato. */
+  padding: var(--size-24) var(--size-24) var(--size-48);
   display: flex;
   flex-direction: column;
   gap: 3.5rem;
