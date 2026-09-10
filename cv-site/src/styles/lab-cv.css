@@ -1279,44 +1279,48 @@
      su richiesta esplicita di Giulio dopo un giro di prove (vedi cronologia
      nella vetrina). var(--size-16) = 1rem. */
   padding-inline: var(--size-16);
-}
-
-.lc-lane__head {
-  padding-block: var(--size-8);
-  cursor: pointer;
-  list-style: none;
-  border-radius: var(--radius-4);
+  /* Sfondo tinto di lente + filo d'accento sull'intero <details>, non solo
+     sulla testa: stesso bersaglio di .lc-job qui sopra (details.lc-job, non
+     .lc-job__summary) — su richiesta diretta di Giulio, corretta due volte.
+     Da' anche coerenza in piu': aperta, la corsia tinge di se' anche le
+     righe sotto, come .lc-job tinge il proprio corpo aperto.
+     border-radius asimmetrico come .lc-job: il filo d'accento sta solo a
+     sinistra, e un raggio anche li' avrebbe fatto curvare l'ombra insieme
+     all'angolo — un uncino al posto di una riga dritta. Era il difetto
+     vero del tentativo precedente, non la copertura parziale che sembrava. */
+  border-radius: 0 var(--radius-4) var(--radius-4) 0;
   box-shadow: inset 3px 0 0 0 transparent;
   transition:
     background-color var(--duration-micro) var(--ease-standard),
     box-shadow var(--duration-state) var(--ease-standard);
 }
 
-.lc-lane__head::-webkit-details-marker {
-  display: none;
-}
-
-/* Sfondo tinto di lente (--color-surface) + filo d'accento — stesso
-   linguaggio di .lc-job qui sopra — direttamente su .lc-lane__head: copre
-   la riga per intero, bordo a bordo entro il padding di .lc-lane. Lo stato
-   resta acceso quando la corsia è aperta, non solo di passaggio: l'hover
-   ne è l'anteprima, esattamente come per .lc-job[open]. */
 @media (hover: hover) and (pointer: fine) {
-  .lc-lane__head:hover {
+  .lc-lane:hover {
     background: var(--color-surface);
     box-shadow: inset 3px 0 0 0 var(--lc-accent-line);
   }
 }
 
-.lc-lane[open] > .lc-lane__head {
+.lc-lane[open] {
   background: var(--color-surface);
   box-shadow: inset 3px 0 0 0 var(--lc-accent-line);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .lc-lane__head {
+  .lc-lane {
     transition: none;
   }
+}
+
+.lc-lane__head {
+  padding-block: var(--size-8);
+  cursor: pointer;
+  list-style: none;
+}
+
+.lc-lane__head::-webkit-details-marker {
+  display: none;
 }
 
 .lc-lane__name {
