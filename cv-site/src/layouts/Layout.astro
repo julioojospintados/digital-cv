@@ -760,10 +760,11 @@ const jsonLd = {
          misura niente. I numeri intanto sono gia' al sicuro: li raccoglie
          l'interruttore inline qui sopra. -->
     <script>
+      // __vt e' un global custom, assegnato dallo script inline qui sopra —
+      // stesso cast di vt-debug.ts, che legge lo stesso window.__vt.
+      const vt = (window as Window & { __vt?: { fine: Promise<void> } }).__vt;
       if (document.documentElement.hasAttribute("data-vt-debug")) {
-        void window.__vt?.fine.then(() =>
-          import("../scripts/vt-debug").then((m) => m.initVtDebug()),
-        );
+        void vt?.fine.then(() => import("../scripts/vt-debug").then((m) => m.initVtDebug()));
       }
     </script>
 

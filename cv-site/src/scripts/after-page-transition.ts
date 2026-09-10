@@ -24,9 +24,16 @@
  * decimi di secondo nessuno usa perche' sta ancora guardando.
  */
 
-/** Le animazioni della transizione di pagina, se ce n'e' una in corso. */
+/** Le animazioni della transizione di pagina, se ce n'e' una in corso.
+ *  `pseudoElement` e' su KeyframeEffect, non sul tipo base AnimationEffect
+ *  che dichiara `.effect` — a runtime e' sempre un KeyframeEffect, ma serve
+ *  il cast perche' TypeScript lo veda. */
 const inVolo = (): Animation[] =>
-  document.getAnimations().filter((a) => a.effect?.pseudoElement?.startsWith("::view-transition"));
+  document
+    .getAnimations()
+    .filter((a) =>
+      (a.effect as KeyframeEffect | null)?.pseudoElement?.startsWith("::view-transition"),
+    );
 
 /**
  * Rete di sicurezza. `finished` di una transizione puo' non risolversi mai —
