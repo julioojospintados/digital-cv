@@ -1205,6 +1205,17 @@
   --lc-tl-w: minmax(9rem, 1fr);
   display: grid;
   gap: var(--size-2);
+  /* Il margine laterale sta qui e non su .lc-tl__axisrow / .lc-lane__head /
+     .lc-all__row: sono tre griglie separate che si allineano solo perche'
+     hanno la stessa grid-template-columns E la stessa larghezza — un padding
+     dichiarato su una sola di loro le avrebbe disallineate. Qui, sul
+     contenitore comune, riduce la larghezza di tutte e tre allo stesso modo,
+     quindi l'asse resta intatto. Segnalato da Giulio il 2026-09-10: con lo
+     sfondo dell'hover ora visibile (vedi .lc-lane__head qui sotto), l'assenza
+     di respiro laterale si vedeva — prima, senza nessuno sfondo, non si
+     notava che il testo arrivava fino al bordo. Stesso 0,875rem di
+     .lc-job__summary qui sopra, per coerenza fra le due zone. */
+  padding-inline: 0.875rem;
 }
 
 .lc-tl__axisrow,
