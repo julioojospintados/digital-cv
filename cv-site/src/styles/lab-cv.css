@@ -465,18 +465,28 @@
   color: var(--lc-muted);
 }
 
+/* Bersaglio ≥24×24 (2.2 – 2.5.8): misurato 18px su tutte e tre le lenti,
+   desktop e mobile — nessun media query li distingue, quindi un solo fix
+   copre entrambi. Stessa mossa già fatta per l'etichetta del cambio lingua
+   l'8 settembre 2026 (lang-switch.css): min-height 1,5rem tiene il
+   bersaglio a 24px netti senza toccare la dimensione del testo, che resta
+   leggibile uguale. */
 .lc-contacts a {
   color: var(--lc-ink);
   text-decoration: underline;
   text-underline-offset: 0.2em;
-}
-
-/* L'icona al posto della parola. Il link resta alto quanto la riga di
-   testo — non si stringe il bersaglio per far stare un disegno — e il colore
-   lo eredita, cosi' segue hover e focus senza una regola in piu'. */
-.lc-contacts__in {
   display: inline-flex;
   align-items: center;
+  min-height: 1.5rem;
+}
+
+/* L'icona al posto della parola. Il colore lo eredita, cosi' segue hover e
+   focus senza una regola in piu'; min-width porta anche la larghezza a
+   24px, che qui — a differenza del link email, già largo per il testo —
+   altrimenti resterebbe quella stretta dell'SVG. */
+.lc-contacts__in {
+  justify-content: center;
+  min-width: 1.5rem;
   vertical-align: middle;
 }
 
