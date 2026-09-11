@@ -229,12 +229,24 @@
    Le misure, e perché. `clamp` con un tetto in rem per la stessa ragione della
    card: dentro un contenitore `vw` guarda comunque la finestra, e senza tetto
    su uno schermo largo la sigla uscirebbe dal riquadro invece di appoggiarcisi
-   — la taglia `overflow: hidden` di `.work-hero`, ma tagliata a metà smette di
-   essere un segno e diventa un errore. Il filo è 2px e non 1: a 11rem di corpo
-   un contorno da un pixel si legge come un difetto di rasterizzazione, non
-   come una scelta. Il 26% invece del 30% della card compensa il fatto che qui
-   il glifo è il doppio, quindi porta il doppio di inchiostro a parità di
-   opacità.
+   — la taglia `overflow: hidden` di `.work-hero`. Il filo è 2px e non 1: a
+   11rem di corpo un contorno da un pixel si legge come un difetto di
+   rasterizzazione, non come una scelta. Il 26% invece del 30% della card
+   compensa il fatto che qui il glifo è il doppio, quindi porta il doppio di
+   inchiostro a parità di opacità.
+
+   `top`: non -1.5rem come sembrerebbe naturale copiando la card in scala.
+   A 11rem di corpo (il tetto del clamp, raggiunto già a 1440px) la sommità
+   delle lettere sporge dal proprio line-box per metrica del font — a
+   `line-height: 0.8` il line-box è più basso di quanto il glifo Lexend 800
+   richieda, e l'eccedenza si distribuisce sopra E sotto. Misurato con
+   Playwright togliendo temporaneamente l'overflow: con top:-1.5rem
+   l'inchiostro reale iniziava ~11,6px (0,72rem) sopra il bordo di
+   `.work-hero`, quindi `overflow: hidden` tagliava la testa delle lettere —
+   il difetto segnalato da Giulio su /work/product-discovery (screenshot,
+   2026-09-11). -0.5rem lascia margine sopra la soglia misurata su tutte le
+   sigle a due lettere del sito (P/L/D non hanno discendenti, quindi il
+   rischio è solo in alto).
 
    `z-index: 0` con `position: absolute` la mette nello strato dei discendenti
    posizionati, che dipinge SOPRA il contenuto statico: per questo titolo,
@@ -242,7 +254,7 @@
    Senza, la filigrana passerebbe davanti al testo. */
 .work-hero__sigla {
   position: absolute;
-  top: -1.5rem;
+  top: -0.5rem;
   right: -0.5rem;
   z-index: 0;
   margin: 0;
