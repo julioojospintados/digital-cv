@@ -65,11 +65,22 @@ const canonicalUrl = new URL(Astro.url.pathname, siteUrl).href;
 // devono dichiararne una.
 const path = Astro.url.pathname.replace(/\/$/, "") || "/";
 const senzaControparte = ["/tools", "/404"];
+// Lo slash finale va rimesso prima di dichiarare un URL. `path` qui sopra lo
+// toglie per poter fare l'aritmetica del prefisso /en, ma la forma canonica
+// del sito e' quella CON lo slash: e' quella che emettono Astro (build
+// "directory"), il canonical due righe piu' su e la sitemap. Senza questa
+// normalizzazione l'hreflang dichiarava /design mentre il canonical della
+// stessa pagina dichiarava /design/ — e un cluster hreflang che punta a URL
+// non canonici Google lo scarta per intero, non solo la riga sbagliata.
+const conSlash = (p: string) => (p.endsWith("/") ? p : `${p}/`);
 const alternates = senzaControparte.some((p) => path.startsWith(p))
   ? null
   : {
-      it: new URL(path.startsWith("/en") ? path.slice(3) || "/" : path, siteUrl).href,
-      en: new URL(path.startsWith("/en") ? path : `/en${path === "/" ? "" : path}`, siteUrl).href,
+      it: new URL(conSlash(path.startsWith("/en") ? path.slice(3) || "/" : path), siteUrl).href,
+      en: new URL(
+        conSlash(path.startsWith("/en") ? path : `/en${path === "/" ? "" : path}`),
+        siteUrl,
+      ).href,
     };
 // Screenshot reale della home 1200×630, JPEG ~90KB: WhatsApp scarta le
 // immagini og sopra ~300KB. Nome nuovo (og-cover) = cache busting per le

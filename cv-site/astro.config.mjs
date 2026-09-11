@@ -114,6 +114,20 @@ export default defineConfig({
       // /old-version/, la versione precedente del sito: cancellata il
       // 2026-08-26, vive in julioojospintados/old-digital-cv.
       filter: (page) => !page.includes("/tools/"),
+      // Data di build su ogni URL. Senza `lastmod` la sitemap e' un elenco di
+      // indirizzi senza date: Google non ha nessun segnale che qualcosa sia
+      // cambiato e non ha motivo di riscaricarla. Misurato l'11-09-2026, ne
+      // aveva in memoria una versione ferma al 18-07, precedente alla
+      // ristrutturazione delle rotte — e /design /tech /ai /work risultavano
+      // "URL sconosciuto a Google", mai scansionate, con zero impressioni.
+      //
+      // E' la data del deploy, non quella dell'ultima modifica del singolo
+      // contenuto: il sito si rigenera tutto insieme e le pagine nascono da
+      // dati e componenti condivisi (cv.ts, CvLensPage.astro), quindi una
+      // data per pagina sarebbe piu' precisa in apparenza e non piu' vera.
+      // Il limite da conoscere: rideployare spesso senza cambiare niente
+      // insegna a Google a non fidarsi di questo campo.
+      lastmod: new Date(),
     }),
     stripComments(),
   ],

@@ -7,8 +7,8 @@
     },
     "gsc": {
       "type": "stdio",
-      "command": "npx",
-      "args": ["-y", "suganthan-gsc-mcp"],
+      "command": "node",
+      "args": ["C:/nvm4w/nodejs/node_modules/suganthan-gsc-mcp/dist/index.js"],
       "env": {
         "GSC_KEY_FILE": "${GSC}",
         "GSC_AUTH_MODE": "service_account",
@@ -21,8 +21,8 @@
     },
     "playwright": {
       "type": "stdio",
-      "command": "cmd",
-      "args": ["/c", "npx", "-y", "@playwright/mcp@latest"]
+      "command": "node",
+      "args": ["C:/nvm4w/nodejs/node_modules/@playwright/mcp/cli.js"]
     },
     "github": {
       "type": "http",
