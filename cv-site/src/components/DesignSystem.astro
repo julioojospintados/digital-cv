@@ -4778,7 +4778,13 @@ const NAV = [
         </div>
 
         <div class="ds-stage">
-          <div class="work-index-grid" style="margin:0;" data-ds-snippet data-ds-drop="style">
+          <div
+            class="work-index-grid"
+            style="margin:0;"
+            data-lenis-prevent-horizontal
+            data-ds-snippet
+            data-ds-drop="style"
+          >
             <WorkIndexCard name="Digital CV" slug="digital-cv" role="AI Workflow Designer" />
             <WorkIndexCard name="Trip Runway" slug="trip-runway" role="Product Designer" pulse />
           </div>
@@ -4818,8 +4824,8 @@ const NAV = [
             <p class="ds-spec__v">
               {
                 it
-                  ? "Non usare pulse su più di una card: segnala la novità, e due novità non sono più una novità."
-                  : "Do not use pulse on more than one card: it flags what is new, and two new things are no longer new."
+                  ? "Non usare pulse su più di una card: segnala la novità, e due novità non sono più una novità. E non togliere data-lenis-prevent-horizontal dalla griglia: Lenis con syncTouch annulla ogni tocco che si muove anche di poco in verticale, e sul telefono il carosello smette di scorrere."
+                  : "Do not use pulse on more than one card: it flags what is new, and two new things are no longer new. And do not remove data-lenis-prevent-horizontal from the grid: Lenis with syncTouch cancels every touch that moves even slightly vertically, and on a phone the carousel stops scrolling."
               }
             </p>
           </div>

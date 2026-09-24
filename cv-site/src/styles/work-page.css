@@ -578,7 +578,14 @@
 
    L'affordance non è una freccia né una fila di puntini — è la card
    accanto che sbircia dal bordo (78%, non 100%) e lo scatto dello snap.
-   Due segnali fisici, zero cromo aggiunto. */
+   Due segnali fisici, zero cromo aggiunto.
+
+   Il markup porta data-lenis-prevent-horizontal, e senza non scorre.
+   Lenis gira con syncTouch: intercetta ogni touchmove con una componente
+   verticale e lo annulla con preventDefault per guidare lui la pagina. Uno
+   swipe col pollice non è mai orizzontale puro, quindi il carosello non
+   partiva mai. L'attributo lascia al browser i gesti a prevalenza
+   orizzontale; quelli verticali passano ancora da Lenis. */
 .work-index-grid {
   display: flex;
   gap: var(--size-16);
