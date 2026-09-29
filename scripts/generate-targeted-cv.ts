@@ -84,7 +84,7 @@ const localeSchema = z.object({
   siteLabel: z.string(),
   workLinkLabel: z.string(),
   qrCap: z.string(),
-  visitBtn: z.string(),
+  visitBtn: z.string().optional(), // non più renderizzato, vedi Locale
   profileLead: z.string(),
   profile: z.string(),
   secExperience: z.string(),

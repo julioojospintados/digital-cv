@@ -70,7 +70,10 @@ export interface Locale {
   siteLabel: string;
   workLinkLabel: string;
   qrCap: string;
-  visitBtn: string;
+  /** Non più renderizzato: il pulsante sotto il QR è stato tolto il
+   *  2026-09-29, ora QR e didascalia sono un unico link. Resta facoltativo
+   *  per non rompere i JSON già salvati in cv-output/targeted/. */
+  visitBtn?: string;
   profileLead: string;
   profile: string;
   secExperience: string;
@@ -182,13 +185,22 @@ export function buildHtml(L: Locale, assets: PdfAssets): string {
 }
 @page{size:A4;margin:0;}
 *{box-sizing:border-box;margin:0;padding:0;}
-html{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+html{-webkit-print-color-adjust:exact;print-color-adjust:exact;background:var(--bg);}
 body{font-family:var(--sans);color:var(--cream);background:var(--bg);font-size:9.3pt;line-height:1.44;}
 a{color:inherit;text-decoration:none;}
 
-/* Foglio A4: ottanio a tutti i bordi + padding interno uniforme, uguale su ogni pagina */
-.sheet{width:210mm;height:297mm;box-sizing:border-box;padding:15mm 15mm 14mm;
-  background:var(--bg);overflow:hidden;position:relative;}
+/* Il foglio non ha più un'altezza fissa. Prima era 297mm con overflow:hidden:
+   quello che non ci stava non passava alla pagina dopo, spariva, e nessun
+   errore lo segnalava. Il CV UX usciva senza metà delle esperienze
+   (2026-09-29). Ora il contenuto scorre da una pagina all'altra.
+   I margini non li dà @page: Chromium lascia bianca l'area di margine anche
+   con lo sfondo su html. Li dà il padding di .doc, e box-decoration-break:
+   clone lo ripete in cima e in fondo a ogni pagina, invece di metterlo solo
+   all'inizio del primo frammento e alla fine dell'ultimo.
+   Il secondo .sheet non forza un salto: parte dove finisce il primo. */
+.doc{padding:15mm 15mm 14mm;background:var(--bg);
+  -webkit-box-decoration-break:clone;box-decoration-break:clone;}
+.sheet{position:relative;}
 .sheet > section:first-child,.sheet > .head:first-child{margin-top:0;}
 
 /* link = accent + underline (clickable, no icon) */
@@ -214,15 +226,16 @@ a.lnk{color:var(--accent);text-decoration:underline;text-decoration-thickness:.8
 .contacts a.on-dark{color:var(--cream);text-decoration:underline;
   text-decoration-color:var(--accent);text-decoration-thickness:.8pt;text-underline-offset:1.8pt;}
 
-.qcol{display:flex;flex-direction:column;align-items:center;gap:3.5mm;width:42mm;}
-.qcol img{width:42mm;height:42mm;display:block;border-radius:3mm;}
-.qcol .cap{font-family:var(--mono);font-weight:500;font-size:6.6pt;letter-spacing:.03em;
+/* QR e didascalia sono un unico link: il pulsante "Visita il sito" sotto il
+   QR ripeteva lo stesso indirizzo e occupava da solo mezza intestazione. */
+.qcol{display:flex;flex-direction:column;align-items:center;gap:2mm;width:30mm;}
+.qcol img{width:30mm;height:30mm;display:block;border-radius:2.5mm;}
+.qcol .cap{font-family:var(--mono);font-weight:500;font-size:6.4pt;letter-spacing:.03em;
   color:var(--mut);text-align:center;line-height:1.4;}
-.qcol .btn{width:100%;}
 
 /* ── SECTIONS ── */
 section{margin-top:4mm;}
-.sec-h{display:flex;align-items:baseline;gap:3mm;margin-bottom:3mm;
+.sec-h{break-after:avoid;display:flex;align-items:baseline;gap:3mm;margin-bottom:3mm;
   border-bottom:1.5px solid var(--line);padding-bottom:1.8mm;}
 .sec-h h2{font-weight:800;font-size:11pt;letter-spacing:-.01em;}
 .sec-h span{font-family:var(--mono);font-weight:700;font-size:6.6pt;letter-spacing:.16em;
@@ -293,6 +306,7 @@ section{margin-top:4mm;}
 
 </style></head><body>
 
+<div class="doc">
 <div class="sheet">
 <header class="head">
   <div>
@@ -306,11 +320,10 @@ section{margin-top:4mm;}
       <span class="ct plain">${L.location}</span>
     </div>
   </div>
-  <figure class="qcol">
-    <a href="${SITE}"><img src="${assets.qr}" alt="QR code — ${SITE}"></a>
-    <div class="cap">${L.qrCap}</div>
-    <a class="btn" href="${SITE}">${L.visitBtn}</a>
-  </figure>
+  <a class="qcol" href="${SITE}">
+    <img src="${assets.qr}" alt="QR code — ${SITE}">
+    <span class="cap">${L.qrCap}</span>
+  </a>
 </header>
 
 <section>
@@ -362,6 +375,7 @@ section{margin-top:4mm;}
 <div class="sign">${SIGNATURE[L.lang]}</div>
 ${L.gdprFooter ? `<div class="gdpr">${L.gdprFooter}</div>` : ""}
 </div><!-- /sheet 2 -->
+</div><!-- /doc -->
 
 </body></html>`;
 }

@@ -55,8 +55,7 @@ const EN: Locale = {
   linkedinUrl: "https://www.linkedin.com/in/giulio-occhipinti?locale=en_US",
   siteLabel: "Website",
   workLinkLabel: "Read the case study",
-  qrCap: "Scan the code or tap the button —<br>the whole site is interactive",
-  visitBtn: "Visit the site",
+  qrCap: "Tap or scan the code,<br>the whole site is interactive",
   profileLead: "Cultivating empathy, with jokes in my pocket.",
   profile:
     "Countless different jobs behind me, a few plants at home, and a well-stamped passport. I lived in three different countries before moving back to Italy, but I did manage to swim in all three swimmable oceans — the other two are just too cold. An improviser of jokes and journeys, I've put down roots in the digital world while keeping a strong sensitivity — people tell me about it often — toward others and myself, with a wink toward poetry and photography. These days I'm trying to connect the dots across UX/UI design, software development, and digital strategy, applying the same logic chess requires. I play looking for the move that sees ahead.",
@@ -250,8 +249,7 @@ const IT: Locale = {
   linkedinUrl: "https://www.linkedin.com/in/giulio-occhipinti?locale=it_IT",
   siteLabel: "Sito",
   workLinkLabel: "Leggi il case study",
-  qrCap: "Inquadra il codice o tocca il pulsante,<br>tutto il sito è interattivo",
-  visitBtn: "Visita il sito",
+  qrCap: "Tocca o inquadra il codice,<br>tutto il sito è interattivo",
   profileLead: "Coltivatore di empatia e battute in tasca.",
   profile:
     "Tantissimi lavori diversi alle spalle, alcune piante in casa e un passaporto ben timbrato. Ho vissuto in tre Stati diversi prima di tornare in Italia, ma sono riuscito a fare il bagno nei tre oceani balneabili, gli altri due sono troppo freddi. Improvvisatore di battute e in viaggio, ho messo radici nel digitale, mantenendo una forte sensibilità, caratteristica che le persone mi fanno notare spesso, verso gli altri e me stesso, strizzando l'occhiolino alla poesia e alla fotografia. Attualmente cerco di unire i puntini nel mondo UX/UI design, sviluppo software e strategie digitali, applicando la stessa logica che serve negli scacchi. Gioco cercando la mossa che anticipa.",

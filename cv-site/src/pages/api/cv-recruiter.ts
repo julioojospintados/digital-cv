@@ -222,7 +222,6 @@ export const POST: APIRoute = async ({ request }) => {
       siteLabel: copy.siteLabel,
       workLinkLabel: copy.workLinkLabel,
       qrCap: copy.qrCap,
-      visitBtn: copy.visitBtn,
       profileLead: cvContent.profileLead,
       profile: cvContent.profile,
       secExperience: copy.secExperience,

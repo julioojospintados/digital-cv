@@ -158,7 +158,7 @@ Nessun campo oltre a questi. `gdprFooter` e `_meta` sono gli unici opzionali. `_
   "siteLabel": "Website | Sito",
   "workLinkLabel": "testo del link al case study",
   "qrCap": "didascalia sotto il QR",
-  "visitBtn": "testo bottone sito",
+  "visitBtn": "facoltativo, non più mostrato nel PDF",
   "profileLead": "riga di apertura del profilo",
   "profile": "paragrafo di profilo",
   "secExperience": "...", "expEyebrow": "...", "earlier": "...",

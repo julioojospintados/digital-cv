@@ -24,7 +24,6 @@ interface FixedCopy {
   siteLabel: string;
   workLinkLabel: string;
   qrCap: string;
-  visitBtn: string;
   secExperience: string;
   expEyebrow: string;
   secWork: string;
@@ -44,8 +43,7 @@ export const FIXED_COPY: Record<"it" | "en", FixedCopy> = {
     linkedinUrl: "https://www.linkedin.com/in/giulio-occhipinti?locale=en_US",
     siteLabel: "Website",
     workLinkLabel: "Read the Case study",
-    qrCap: "Scan the code or tap the button —<br>the whole site is interactive",
-    visitBtn: "Visit the site",
+    qrCap: "Tap or scan the code,<br>the whole site is interactive",
     secExperience: "Experience",
     expEyebrow: "selected · most recent first",
     secWork: "Selected Work",
@@ -64,8 +62,7 @@ export const FIXED_COPY: Record<"it" | "en", FixedCopy> = {
     linkedinUrl: "https://www.linkedin.com/in/giulio-occhipinti?locale=it_IT",
     siteLabel: "Sito",
     workLinkLabel: "Leggi il Case study",
-    qrCap: "Inquadra il codice o tocca il pulsante,<br>tutto il sito è interattivo",
-    visitBtn: "Visita il sito",
+    qrCap: "Tocca o inquadra il codice,<br>tutto il sito è interattivo",
     secExperience: "Esperienza",
     expEyebrow: "selezione · più recenti prima",
     secWork: "Lavori selezionati",
