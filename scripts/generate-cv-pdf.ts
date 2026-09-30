@@ -15,6 +15,7 @@
  */
 
 import { chromium } from "playwright";
+import { assertNoClippedText } from "./cv-pdf-template.js";
 import { readFileSync, mkdirSync } from "fs";
 import { dirname, resolve } from "path";
 import { fileURLToPath } from "url";
@@ -758,6 +759,11 @@ async function main(): Promise<void> {
     const html = buildHtml(locale, qrSvgByLang.get(locale.lang)!, assets, grain);
     await page.setContent(html, { waitUntil: "networkidle" });
     await page.evaluate(() => document.fonts.ready);
+    // Questo è un poster di una pagina sola, con body alto 297mm e
+    // overflow:hidden: il contenuto non può andare a capo su un'altra pagina.
+    // Se non ci sta, la generazione si ferma — un CV tagliato non si pubblica
+    // (regola di Giulio, 2026-09-30). Si accorcia il contenuto, non il foglio.
+    await assertNoClippedText(page, `CV del sito ${locale.lang}`);
 
     const outPath = resolve(OUT_DIR, locale.file);
     await page.pdf({

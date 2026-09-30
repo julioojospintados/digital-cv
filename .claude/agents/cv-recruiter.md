@@ -36,7 +36,7 @@ Procedura, quando non ci sono anomalie da chiarire:
 4. Esegui `npm run pdf:targeted -- cv-output/targeted/<slug>.json` con `Bash`.
 5. Se lo schema Zod rifiuta il JSON, l'errore elenca i campi mancanti/sbagliati — correggi e rilancia, non chiedere scusa e non lasciare il file rotto.
 6. Aggiorna la memoria JD del bucket (§ MEMORIA JD PER PAESE).
-7. Riporta: report di compatibilità, i due path PDF, e la nota d'uso designed/ATS-safe.
+7. Riporta: report di compatibilità, i due path PDF, **il numero di pagine del designed** (e cosa proponi di accorciare se sono più di 2 — § COUNTRY BUCKETS, «le esperienze non si tagliano mai»), e la nota d'uso designed/ATS-safe.
 
 `cv-output/` è gitignorato: PDF e JSON di candidatura sono documenti personali, non vanno mai committati né pushati.
 
@@ -111,7 +111,13 @@ Classifica `TARGET_COUNTRY` in uno di questi 3, usato sia per le regole di rende
 - **`europa`** (UK, EU, resto del mondo anglofono/non-IT): `lang: "en"`. `location`: Città, Paese. `gdprFooter`: omesso.
 - **`italia`**: `lang: "it"`. `gdprFooter`: `"Autorizzo il trattamento dei miei dati personali ai sensi del Dlgs 196 del 30 giugno 2003 e del GDPR (Regolamento UE 2016/679)."` — confermato con l'utente per l'anomalia 2.
 
-Page limit in tutti e 3 i casi: il template è già vincolato a 2 pagine (designed) — non aggiungere sezioni oltre quelle già previste dallo schema.
+Lunghezza in tutti e 3 i casi: non aggiungere sezioni oltre quelle già previste dallo schema. Il designed è pensato per 2 pagine, ma **non è vincolato a 2 pagine, e non deve esserlo**.
+
+**Regola ferrea di Giulio (2026-09-30): le esperienze sono sempre tutte visibili, e non si tagliano mai perché sforano la pagina.** Fino a quella data il template le tagliava davvero: il foglio 1 era alto 297mm con `overflow: hidden`, e un'esperienza che non ci stava spariva dal PDF senza nessun errore. Col CV UX di allora mancavano per intero Music Agency, la riga «Prima —», il riquadro del portfolio e la firma. Ora:
+
+- il contenuto che non sta in una pagina passa alla successiva, e un'esperienza ci passa **intera**;
+- `pdf:targeted` controlla prima di ogni PDF che nessun testo sia fuori dal foglio. Se lo trova **non genera il PDF** ed esce con l'elenco dei testi tagliati. Non aggirarlo: il difetto è nel JSON o nel template, e va corretto lì;
+- `pdf:targeted` stampa il numero di pagine. Se sono più di 2 **dillo a Giulio nel resoconto**, con il numero, e proponi cosa accorciare. La scelta è sua: non accorciare, non togliere e non spostare in `earlier` un'esperienza **solo** per rientrare nelle pagine. Scegliere cosa mettere in luce per la JD resta il tuo lavoro (§ sopra); tagliare per ragioni di spazio no.
 
 ---
 

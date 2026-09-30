@@ -21,6 +21,7 @@
 import { chromium as playwright } from "playwright-core";
 import sparticuzChromium from "@sparticuz/chromium";
 import {
+  assertNoClippedText,
   buildHtml,
   buildHtmlAts,
   buildCoverLetterHtml,
@@ -76,6 +77,9 @@ export async function renderPdfs(
 
     await page.setContent(buildHtml(locale, PDF_ASSETS), { waitUntil: "networkidle" });
     await page.evaluate(() => document.fonts.ready);
+    // Un CV con un'esperienza tagliata non si consegna: lancia, il catch qui
+    // sotto ripiega sul JSON e l'errore finisce nei log con il testo tagliato.
+    await assertNoClippedText(page, "CV designed");
     const designed = await page.pdf({
       format: "A4",
       printBackground: true,
@@ -84,6 +88,7 @@ export async function renderPdfs(
 
     await page.setContent(buildHtmlAts(locale, PDF_ASSETS), { waitUntil: "networkidle" });
     await page.evaluate(() => document.fonts.ready);
+    await assertNoClippedText(page, "CV ATS");
     const atsDraft = await page.pdf({ format: "A4", printBackground: true });
 
     let coverLetterPdf: Buffer | null = null;

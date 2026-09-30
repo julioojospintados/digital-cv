@@ -31,7 +31,13 @@ import { chromium } from "playwright";
 import { mkdirSync } from "fs";
 import { dirname, resolve } from "path";
 import { fileURLToPath } from "url";
-import { buildHtml, buildHtmlAts, type Locale } from "./cv-pdf-template.js";
+import {
+  assertNoClippedText,
+  buildHtml,
+  buildHtmlAts,
+  pdfPageCount,
+  type Locale,
+} from "./cv-pdf-template.js";
 import { loadPdfAssets } from "./load-pdf-assets.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -447,20 +453,22 @@ async function main(): Promise<void> {
   for (const L of locales) {
     await page.setContent(buildHtml(L, ASSETS), { waitUntil: "networkidle" });
     await page.evaluate(() => document.fonts.ready);
+    await assertNoClippedText(page, `CV designed ${L.lang}`);
     const outPath = resolve(OUT_DIR, L.file);
-    await page.pdf({
+    const pdf = await page.pdf({
       path: outPath,
       format: "A4",
       printBackground: true,
       preferCSSPageSize: true,
     });
-    console.log(`PDF generato: ${outPath}`);
+    console.log(`PDF generato: ${outPath} (${pdfPageCount(pdf)} pagine)`);
   }
 
   // Draft ATS-puro — file separato, non sostituisce quello disegnato sopra.
   for (const L of locales) {
     await page.setContent(buildHtmlAts(L, ASSETS), { waitUntil: "networkidle" });
     await page.evaluate(() => document.fonts.ready);
+    await assertNoClippedText(page, `CV ATS ${L.lang}`);
     const atsFile = L.file.replace(".pdf", "_ATS_DRAFT.pdf");
     const outPath = resolve(OUT_DIR, atsFile);
     await page.pdf({ path: outPath, format: "A4", printBackground: true });

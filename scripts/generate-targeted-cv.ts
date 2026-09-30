@@ -23,7 +23,13 @@ import { readFileSync, mkdirSync } from "fs";
 import { dirname, resolve } from "path";
 import { fileURLToPath } from "url";
 import { z } from "zod";
-import { buildHtml, buildHtmlAts, type Locale } from "./cv-pdf-template.js";
+import {
+  assertNoClippedText,
+  buildHtml,
+  buildHtmlAts,
+  pdfPageCount,
+  type Locale,
+} from "./cv-pdf-template.js";
 import { loadPdfAssets } from "./load-pdf-assets.js";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -140,12 +146,28 @@ async function main(): Promise<void> {
 
   await page.setContent(buildHtml(locale, ASSETS), { waitUntil: "networkidle" });
   await page.evaluate(() => document.fonts.ready);
+  await assertNoClippedText(page, "CV designed");
   const outPath = resolve(OUT_DIR, locale.file);
-  await page.pdf({ path: outPath, format: "A4", printBackground: true, preferCSSPageSize: true });
-  console.log(`PDF generato: ${outPath}`);
+  const designed = await page.pdf({
+    path: outPath,
+    format: "A4",
+    printBackground: true,
+    preferCSSPageSize: true,
+  });
+  const pagine = pdfPageCount(designed);
+  console.log(`PDF generato: ${outPath} (${pagine} pagine)`);
+  // Non un errore: le esperienze che non stanno nel foglio 1 passano alla
+  // pagina dopo invece di essere tagliate. Ma chi genera deve saperlo, e
+  // dirlo a Giulio: la scelta di accorciare è sua, non del template.
+  if (pagine > 2) {
+    console.log(
+      `  ⚠ ${pagine} pagine invece di 2: il contenuto non stava ed è andato a capo, niente è tagliato.`,
+    );
+  }
 
   await page.setContent(buildHtmlAts(locale, ASSETS), { waitUntil: "networkidle" });
   await page.evaluate(() => document.fonts.ready);
+  await assertNoClippedText(page, "CV ATS");
   const atsPath = resolve(OUT_DIR, locale.file.replace(".pdf", "_ATS_DRAFT.pdf"));
   await page.pdf({ path: atsPath, format: "A4", printBackground: true });
   console.log(`PDF generato (draft ATS-puro): ${atsPath}`);

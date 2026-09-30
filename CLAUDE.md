@@ -53,7 +53,7 @@ Se dopo questo resta un dubbio che nessuno script scioglie, **chiedi** invece di
 aprire il ciclo completo: «questo non lo decido da solo, vuoi che passi il
 gauntlet?».
 
-## Due regole vincolanti, prima di chiudere un lavoro
+## Tre regole vincolanti, prima di chiudere un lavoro
 
 1. **Ogni componente creato o modificato va creato o modificato anche in
    `/design-system`**, nello stesso lavoro: pannello, demo, scheda di
@@ -69,6 +69,16 @@ gauntlet?».
    git. Serve a Giulio per raccontare il progetto come esperienza di lavoro,
    quindi si scrive in quel registro: cosa fa, per chi, con quale tecnologia.
    Dettagli in `AGENTS.md` § "`analisi.md`".
+
+3. **Quando Giulio chiede un CV, le esperienze sono tutte visibili e non si
+   tagliano mai perché sforano la pagina.** Vale per ogni CV prodotto da
+   questo progetto: `pdf:ux`, `pdf:targeted`, `pdf:full`, `pdf:cv`, l'agente
+   `cv-recruiter`, il tool web e il tool MCP. Quello che non sta va alla
+   pagina dopo, intero. Ogni generatore controlla i testi tagliati prima del
+   PDF e, se ne trova, si ferma invece di consegnare: non aggirarlo. Se il CV
+   supera le pagine previste, **dillo a Giulio** con il numero e proponi cosa
+   accorciare: decide lui, non si accorcia in silenzio. Dettagli in
+   `AGENTS.md` § "Un CV non taglia mai un'esperienza".
 
 ## Comportamento
 

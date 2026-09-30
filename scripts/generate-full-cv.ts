@@ -29,7 +29,13 @@ import { chromium } from "playwright";
 import { mkdirSync } from "fs";
 import { dirname, resolve } from "path";
 import { fileURLToPath } from "url";
-import { buildHtmlAts, type Locale, type Experience, type Work } from "./cv-pdf-template.js";
+import {
+  assertNoClippedText,
+  buildHtmlAts,
+  type Locale,
+  type Experience,
+  type Work,
+} from "./cv-pdf-template.js";
 import { loadPdfAssets } from "./load-pdf-assets.js";
 import { locales as uxLocales } from "./generate-ux-cv.js";
 import { cvData, type WorkExperience, type Project } from "../src/data/cv.js";
@@ -119,6 +125,7 @@ async function main(): Promise<void> {
   for (const L of locales) {
     await page.setContent(buildHtmlAts(L, ASSETS), { waitUntil: "networkidle" });
     await page.evaluate(() => document.fonts.ready);
+    await assertNoClippedText(page, `CV completo ${L.lang}`);
     const outPath = resolve(OUT_DIR, L.file);
     await page.pdf({ path: outPath, format: "A4", printBackground: true });
     console.log(`PDF generato (storico completo): ${outPath}`);

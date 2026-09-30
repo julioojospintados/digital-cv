@@ -491,10 +491,11 @@ cv-site/                  ← Astro site (the actual CV)
 scripts/                  ← Root utility scripts (Node)
   parse-cv.ts             ← Parse source CV data
   generate-cv-pdf.ts      ← Render the knolling CV to A4 PDFs with QR (npm run pdf:cv)
-  cv-pdf-template.ts      ← Pure Locale type + buildHtml/buildHtmlAts/buildCoverLetterHtml (no fs/Playwright) — shared by every PDF renderer, CLI and serverless
+  cv-pdf-template.ts      ← Pure Locale type + buildHtml/buildHtmlAts/buildCoverLetterHtml + assertNoClippedText/pdfPageCount (no fs/Playwright) — shared by every PDF renderer, CLI and serverless. See § "Un CV non taglia mai un'esperienza"
   load-pdf-assets.ts      ← Reads font/QR from disk into a PdfAssets — Node CLI only, do not import from cv-site
   generate-ux-cv.ts       ← UX/UI CV, designed + ATS-draft (npm run pdf:ux) — owns the IT/EN Locale content, renders via cv-pdf-template.ts
   generate-targeted-cv.ts ← Renders one job-application-specific Locale JSON (npm run pdf:targeted -- <path>) — consumer of .claude/agents/cv-recruiter.md's output
+  generate-full-cv.ts     ← Full-history ATS CV, every role (npm run pdf:full)
   gen-pdf-assets.mjs      ← Regenerates generated/pdf-assets.json (rerun only if fonts/QR change — see AGENTS.md § "from a phone")
   gen-og-image.mjs        ← Generate the Open Graph image
   qa-mobile.js            ← Responsive QA via Playwright (npm run qa:mobile)
@@ -539,6 +540,51 @@ generated/
 CLAUDE.md                 ← Claude Code entry point (imports this file, adds skill-loading + MCP notes)
 AGENTS.md                 ← This file — tool-agnostic project guide
 ```
+
+---
+
+## Un CV non taglia mai un'esperienza — regola vincolante
+
+→ **Rule from Giulio, 2026-09-30, marked as important: when he asks for a CV,
+  every experience is visible, and nothing is cut because it runs past the
+  page.** It applies to every CV this repo produces — `pdf:ux`,
+  `pdf:targeted`, `pdf:full`, `pdf:cv`, the `cv-recruiter` subagent, the
+  Gemini web tool and the MCP tool.
+
+→ **Why it exists — it was really happening.** The designed template
+  (`buildHtml` in `scripts/cv-pdf-template.ts`) put header, profile and *all*
+  experiences in one `.sheet` with `height: 297mm; overflow: hidden`. Whatever
+  did not fit vanished from the PDF with no error. When the rule was written,
+  the UX CV itself overflowed both sheets (content 369mm and 342mm on 297):
+  the Music Agency role, the «Earlier —» line, the portfolio box and the
+  signature were missing from every copy generated until then, in both
+  languages. Nobody noticed, because missing text raises no error.
+
+→ **How it is enforced — by construction and by a check.**
+  - The sheet grows (`min-height`, no `overflow: hidden`) and
+    `box-decoration-break: clone` repeats padding and background on every page
+    it spans. `.entry` has `break-inside: avoid`, so a role moves to the next
+    page whole; `.sec-h` has `break-after: avoid`, so a heading is never left
+    alone at the bottom.
+  - `assertNoClippedText(page, label)` (same module, pure — importable from the
+    serverless renderer) runs before **every** `page.pdf()` of a CV: it walks
+    every text node and fails if any piece of text lies outside an ancestor
+    that clips. On failure the PDF is **not** written — the CLI scripts exit
+    with the list of clipped text; `render-pdf.ts` falls back to JSON-only, per
+    its never-throw contract. The check is a JS string, not a function, on
+    purpose: tsx and Vite inject a `__name` helper into nested functions that
+    does not exist in the browser.
+  - `pdf:cv` (the one-page poster in `cv-site/public/cv/`) is the one generator
+    that cannot flow, by design. There the same check means: if it does not
+    fit, generation stops, and it is the content that gets shortened, not the
+    sheet.
+
+→ **Pages are reported, not capped.** `pdf:ux` and `pdf:targeted` print the
+  page count of the designed PDF; `pdf:targeted` warns above 2. Whoever
+  generates the CV tells Giulio the number and proposes what to shorten.
+  **Shortening is his call**: never drop, trim or demote to `earlier` an
+  experience only to hit a page count. Choosing what to highlight for a job
+  description is tailoring; cutting for space is not.
 
 ---
 

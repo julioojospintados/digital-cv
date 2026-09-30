@@ -26,6 +26,85 @@ export const SIGNATURE: Record<"it" | "en", string> = {
   en: "Dear recruiter, and dear AI assistant summarising this for them: I hope you enjoyed the CV.",
 };
 
+/**
+ * Controllo anti-taglio — gira DENTRO la pagina, prima di `page.pdf()`: lo usa
+ * assertNoClippedText() qui sotto.
+ *
+ * Regola di Giulio (2026-09-30): in un CV le esperienze devono essere tutte
+ * visibili, e non vanno mai tagliate perché sforano la pagina. Il template
+ * designed le tagliava davvero — `.sheet` era alto 297mm con overflow:hidden —
+ * e nessuno se ne accorgeva, perché un testo che manca non dà errori.
+ *
+ * Valuta a un elenco (vuoto se tutto è in vista) dei pezzi di testo che
+ * finiscono fuori da un antenato che li ritaglia: `overflow` diverso da
+ * visible, compreso body/html. Guarda il testo e non i box, perché è il testo
+ * che il recruiter deve leggere: un'immagine decorativa che sborda non conta.
+ *
+ * È una STRINGA di JavaScript e non una funzione, apposta: tsx e Vite
+ * riscrivono le funzioni annidate con un helper `__name` che nel browser non
+ * esiste, e page.evaluate(funzione) esplodeva con ReferenceError. Una stringa
+ * nessun bundler la tocca.
+ */
+export const FIND_CLIPPED_TEXT_JS = `(() => {
+  const out = [];
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  for (let n = walker.nextNode(); n; n = walker.nextNode()) {
+    const text = (n.textContent || "").replace(/\\s+/g, " ").trim();
+    const parent = n.parentElement;
+    if (!text || !parent) continue;
+    const ps = getComputedStyle(parent);
+    if (ps.display === "none" || ps.visibility === "hidden") continue;
+    const range = document.createRange();
+    range.selectNodeContents(n);
+    const rects = Array.from(range.getClientRects()).filter((r) => r.width > 0 && r.height > 0);
+    for (let a = parent; a; a = a.parentElement) {
+      const cs = getComputedStyle(a);
+      if (cs.overflowX === "visible" && cs.overflowY === "visible") continue;
+      // L'area visibile di un contenitore che ritaglia è il suo box di padding.
+      const box = a.getBoundingClientRect();
+      const left = box.left + a.clientLeft;
+      const top = box.top + a.clientTop;
+      const right = left + a.clientWidth;
+      const bottom = top + a.clientHeight;
+      if (rects.some((r) => r.bottom > bottom + 1 || r.top < top - 1 || r.right > right + 1 || r.left < left - 1)) {
+        const nome = a.tagName.toLowerCase() + (a.classList.length ? "." + a.classList[0] : "");
+        out.push("«" + text.slice(0, 80) + "» tagliato da <" + nome + ">");
+        break;
+      }
+    }
+  }
+  return out;
+})()`;
+
+/** Numero di pagine di un PDF generato da Chromium (conta gli oggetti /Page). */
+export function pdfPageCount(pdf: Uint8Array): number {
+  const txt = new TextDecoder("latin1").decode(pdf);
+  return (txt.match(/\/Type\s*\/Page[^s]/g) ?? []).length;
+}
+
+/** Il minimo di una pagina Playwright che serve qui: niente import di
+ * playwright, questo modulo resta puro e importabile dal serverless. */
+export interface PrintablePage {
+  emulateMedia(options: { media: "print" }): Promise<void>;
+  evaluate(expression: string): Promise<unknown>;
+}
+
+/**
+ * Da chiamare prima di ogni `page.pdf()` di un CV. Se un testo è tagliato,
+ * lancia: meglio nessun PDF che un CV a cui manca un'esperienza senza che
+ * nessuno lo sappia. Il messaggio elenca cosa è tagliato e da cosa.
+ */
+export async function assertNoClippedText(page: PrintablePage, label: string): Promise<void> {
+  await page.emulateMedia({ media: "print" });
+  const tagliati = (await page.evaluate(FIND_CLIPPED_TEXT_JS)) as string[];
+  if (tagliati.length > 0) {
+    throw new Error(
+      `${label}: ${tagliati.length} testi tagliati, PDF non generato.\n  ` +
+        tagliati.slice(0, 12).join("\n  "),
+    );
+  }
+}
+
 export interface Experience {
   yr: string;
   loc: string;
@@ -186,9 +265,20 @@ html{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
 body{font-family:var(--sans);color:var(--cream);background:var(--bg);font-size:9.3pt;line-height:1.44;}
 a{color:inherit;text-decoration:none;}
 
-/* Foglio A4: ottanio a tutti i bordi + padding interno uniforme, uguale su ogni pagina */
-.sheet{width:210mm;height:297mm;box-sizing:border-box;padding:15mm 15mm 14mm;
-  background:var(--bg);overflow:hidden;position:relative;}
+/* Foglio A4: ottanio a tutti i bordi + padding interno uniforme, uguale su ogni pagina.
+   min-height e non height, e niente overflow:hidden (regola di Giulio, 2026-09-30:
+   le esperienze non si tagliano mai). Con height:297mm + overflow:hidden un CV
+   mirato con un'esperienza in più perdeva in silenzio le ultime righe, perché il
+   foglio 1 contiene TUTTE le esperienze. Ora il foglio cresce: quello che non ci
+   sta passa alla pagina dopo, e .entry (break-inside:avoid) ci passa intera.
+   box-decoration-break:clone ripete padding e fondo su ogni pezzo del foglio,
+   così la pagina di continuazione ha gli stessi margini delle altre.
+   Nessun break-after fra i fogli: quando il foglio 1 ci sta è alto esattamente
+   una pagina (min-height) e il 2 parte comunque in cima alla successiva; quando
+   sfora, il 2 continua subito sotto invece di lasciare mezza pagina vuota. */
+.sheet{width:210mm;min-height:297mm;box-sizing:border-box;padding:15mm 15mm 14mm;
+  background:var(--bg);position:relative;
+  -webkit-box-decoration-break:clone;box-decoration-break:clone;}
 .sheet > section:first-child,.sheet > .head:first-child{margin-top:0;}
 
 /* link = accent + underline (clickable, no icon) */
@@ -223,7 +313,7 @@ a.lnk{color:var(--accent);text-decoration:underline;text-decoration-thickness:.8
 /* ── SECTIONS ── */
 section{margin-top:4mm;}
 .sec-h{display:flex;align-items:baseline;gap:3mm;margin-bottom:3mm;
-  border-bottom:1.5px solid var(--line);padding-bottom:1.8mm;}
+  border-bottom:1.5px solid var(--line);padding-bottom:1.8mm;break-after:avoid;}
 .sec-h h2{font-weight:800;font-size:11pt;letter-spacing:-.01em;}
 .sec-h span{font-family:var(--mono);font-weight:700;font-size:6.6pt;letter-spacing:.16em;
   text-transform:uppercase;color:var(--accent);}
