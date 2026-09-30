@@ -4777,24 +4777,29 @@ const NAV = [
           <span class="ds-panel__group">{t.secWork}<span class="ds-origin">work-*</span></span>
         </div>
 
-        <div class="ds-stage">
-          <div
-            class="work-index-grid"
-            style="margin:0;"
-            data-lenis-prevent-horizontal
-            data-ds-snippet
-            data-ds-drop="style"
-          >
-            <WorkIndexCard name="Digital CV" slug="digital-cv" role="AI Workflow Designer" />
-            <WorkIndexCard name="Trip Runway" slug="trip-runway" role="Product Designer" pulse />
+        <div class="ds-stage ds-stage--stack">
+          <div class="work-index-grid" data-ds-snippet>
+            <WorkIndexCard
+              name="Digital CV"
+              slug="digital-cv"
+              role="AI Workflow Designer"
+              stackIndex={0}
+            />
+            <WorkIndexCard
+              name="Trip Runway"
+              slug="trip-runway"
+              role="Product Designer"
+              stackIndex={1}
+              pulse
+            />
           </div>
         </div>
         <div class="ds-callout">
           <p>
             {
               it
-                ? "Sotto le 36rem la griglia diventa un carosello orizzontale: la card accanto sbircia dal bordo, lo snap la centra e le vicine si ritraggono: nessuna freccia, nessun puntino. La variante con pulse segnala la novità con un alone che respira. È l'unico elemento del sistema con un'animazione che parte da sola: dura meno di 5 secondi per ciclo e rispetta 2.2.2."
-                : "Below 36rem the grid becomes a horizontal carousel: the next card peeks past the edge, snap centres it and its neighbours pull back: no arrows, no dots. The pulse variant flags what is new with a breathing glow. It is the system's only self-starting animation: each cycle is under 5 seconds and it respects 2.2.2."
+                ? "Le card stanno in una pila: ognuna è sticky, arrivata in cima si ferma e la successiva le sale sopra, sfalsata di un gradino (--stack-i, passato dal componente con stackIndex). Scorri questa pagina e lo vedi qui sopra, perché la demo è la stessa classe. Niente JavaScript: è solo position: sticky. Fino al 2026-09-30 sul telefono era un carosello orizzontale, tolto perché chiedeva un gesto che il resto del sito non insegna. La variante con pulse segnala la novità con un alone che respira. È l'unico elemento del sistema con un'animazione che parte da sola: dura meno di 5 secondi per ciclo e rispetta 2.2.2."
+                : "The cards sit in a stack: each one is sticky, stops when it reaches the top, and the next one slides over it, offset by one step (--stack-i, passed by the component as stackIndex). Scroll this page and you see it above, because the demo is the same class. No JavaScript: it is only position: sticky. Until 2026-09-30 it was a horizontal carousel on phones, removed because it asked for a gesture the rest of the site never teaches. The pulse variant flags what is new with a breathing glow. It is the system's only self-starting animation: each cycle is under 5 seconds and it respects 2.2.2."
             }
           </p>
         </div>
@@ -4803,9 +4808,9 @@ const NAV = [
             <span class="ds-spec__k">{t.specClass}</span>
             <p class="ds-spec__v">
               <code
-                >work-index-card · work-index-card--pulse · work-index-card__sigla ·
-                work-index-card__name · work-index-card__tagline · work-index-card__role ·
-                work-index-card__cta</code
+                >work-index-grid (--stack-i) · work-index-card · work-index-card--pulse ·
+                work-index-card__sigla · work-index-card__name · work-index-card__tagline ·
+                work-index-card__role · work-index-card__cta</code
               >
             </p>
           </div>
@@ -4824,8 +4829,8 @@ const NAV = [
             <p class="ds-spec__v">
               {
                 it
-                  ? "Non usare pulse su più di una card: segnala la novità, e due novità non sono più una novità. E non togliere data-lenis-prevent-horizontal dalla griglia: Lenis con syncTouch annulla ogni tocco che si muove anche di poco in verticale, e sul telefono il carosello smette di scorrere."
-                  : "Do not use pulse on more than one card: it flags what is new, and two new things are no longer new. And do not remove data-lenis-prevent-horizontal from the grid: Lenis with syncTouch cancels every touch that moves even slightly vertically, and on a phone the carousel stops scrolling."
+                  ? "Non usare pulse su più di una card: segnala la novità, e due novità non sono più una novità. E non rendere trasparente lo sfondo della card dentro la pila: la card coperta trasparirebbe da quella sopra, e due testi sovrapposti non si leggono. Non mettere overflow: hidden su un antenato della griglia: sticky smette di funzionare senza dare errori."
+                  : "Do not use pulse on more than one card: it flags what is new, and two new things are no longer new. And do not make the card background transparent inside the stack: the covered card would show through the one above, and two overlapping texts cannot be read. Do not put overflow: hidden on any ancestor of the grid: sticky stops working without raising any error."
               }
             </p>
           </div>
@@ -4834,8 +4839,8 @@ const NAV = [
             <p class="ds-spec__v">
               {
                 it
-                  ? "L'alone pulsante dura meno di 5 secondi per ciclo (2.2.2) e si ferma con prefers-reduced-motion."
-                  : "The pulsing glow runs under 5 seconds per cycle (2.2.2) and stops under prefers-reduced-motion."
+                  ? "L'alone pulsante dura meno di 5 secondi per ciclo (2.2.2) e si ferma con prefers-reduced-motion. Nella pila, una card coperta che riceve il focus da tastiera sale davanti (z-index 2): il browser non la fa scorrere perché geometricamente è già in vista, ed è la card sopra a nasconderla (2.4.11)."
+                  : "The pulsing glow runs under 5 seconds per cycle (2.2.2) and stops under prefers-reduced-motion. In the stack, a covered card that receives keyboard focus comes to the front (z-index 2): the browser does not scroll it, because geometrically it is already in view, and it is the card above that hides it (2.4.11)."
               }
             </p>
           </div>
@@ -5178,18 +5183,18 @@ const NAV = [
         <p class="ds-sub__note">
           {
             it
-              ? "Il pezzo animato più grande del sito: il case study si percorre in orizzontale, con una strada disegnata in SVG, una bussola che la segue e un contachilometri in alto. Ventitré classi e uno script dedicato, work-journey.ts."
-              : "The largest animated piece on the site: the case study is travelled horizontally, along a road drawn in SVG, with a compass following it and an odometer at the top. Twenty-three classes and a dedicated script, work-journey.ts."
+              ? "Il pezzo animato più grande del sito: il case study si percorre lungo una strada disegnata in SVG che scende con la pagina, in una corsia a sinistra delle tappe, con una bussola che la percorre all'altezza di chi legge e un contachilometri che resta in vista. Uno script dedicato, work-journey.ts. Fino al 2026-09-30 la strada era orizzontale e la sezione si pinnava: tolta perché la pagina smetteva di scendere e andava di lato senza che nessuno lo chiedesse."
+              : "The largest animated piece on the site: the case study is travelled along a road drawn in SVG that runs down with the page, in a lane to the left of the stops, with a compass walking it at the reader's height and an odometer that stays in view. A dedicated script, work-journey.ts. Until 2026-09-30 the road was horizontal and the section pinned: removed because the page stopped going down and went sideways without anyone asking."
           }
         </p>
         <p class="ds-sub__note">
           {
             it
-              ? "Quello che si vede qui sotto è lo stato servito, cioè il ripiego verticale: strada, bussola e HUD nascono display:none e la d dell'SVG è vuota. È work-journey.ts ad aggiungere .is-active, ed è solo da lì in poi che le tappe si mettono in fila, la strada prende una forma e la bussola comincia a camminare. Senza JavaScript restano tappe impilate, tutte leggibili — che è il comportamento voluto, non un fallimento."
-              : "What you see below is the served state, that is the vertical fallback: road, compass and HUD start out display:none and the SVG's d is empty. It is work-journey.ts that adds .is-active, and only from then on do the stops line up, the road take a shape and the compass start walking. With no JavaScript you get stacked stops, all readable — the intended behaviour, not a failure."
+              ? "Quello che si vede qui sotto è lo stato servito, cioè il ripiego: strada, bussola e HUD nascono display:none e la d dell'SVG è vuota. È work-journey.ts ad aggiungere .is-active, ed è solo da lì in poi che si apre la corsia, la strada prende una forma e la bussola comincia a camminare. Senza JavaScript restano tappe impilate, tutte leggibili — che è il comportamento voluto, non un fallimento."
+              : "What you see below is the served state, that is the fallback: road, compass and HUD start out display:none and the SVG's d is empty. It is work-journey.ts that adds .is-active, and only from then on does the lane open, the road take a shape and the compass start walking. With no JavaScript you get stacked stops, all readable — the intended behaviour, not a failure."
           }
         </p>
-        <div class="ds-stage ds-stage--journey">
+        <div class="ds-stage">
           <section
             class="journey"
             data-ds-snippet
@@ -5198,20 +5203,12 @@ const NAV = [
               : "From problem to outcome: the project's journey"}
           >
             <div class="journey__hud" aria-hidden="true">
-              <span>Step <b>00</b>/03</span>
-              <span class="journey__hud-bar"><b></b></span>
-              <span class="journey__hud-km">0 m</span>
+              <div class="journey__hud-inner">
+                <span>Step <b>00</b>/03</span>
+                <span class="journey__hud-bar"><b></b></span>
+                <span class="journey__hud-km">0 m</span>
+              </div>
             </div>
-
-            <img
-              class="journey__traveler"
-              src="/knolling/compass.webp"
-              alt=""
-              aria-hidden="true"
-              loading="lazy"
-              decoding="async"
-              style="aspect-ratio: 208 / 341;"
-            />
 
             <div class="journey__track">
               <svg class="journey__road" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
@@ -5219,16 +5216,17 @@ const NAV = [
                 <path class="journey__road-progress" d=""></path>
               </svg>
 
+              <img
+                class="journey__traveler"
+                src="/knolling/compass.webp"
+                alt=""
+                aria-hidden="true"
+                loading="lazy"
+                decoding="async"
+                style="aspect-ratio: 208 / 341;"
+              />
+
               <article class="journey__panel journey__panel--start">
-                <img
-                  class="journey__stop-icon"
-                  src="/knolling/compass.webp"
-                  alt=""
-                  aria-hidden="true"
-                  loading="lazy"
-                  decoding="async"
-                  style="aspect-ratio: 208 / 341;"
-                />
                 <p class="journey__eyebrow">{it ? "Partenza" : "Start"}</p>
                 <h2 class="journey__start-title">{it ? "Il problema" : "The problem"}</h2>
                 <p class="journey__text">
@@ -5240,7 +5238,7 @@ const NAV = [
                 </p>
                 <p class="journey__hint" aria-hidden="true">
                   {it ? "Scrolla per partire" : "Scroll to set off"}
-                  <span class="work-chevron"></span>
+                  <span class="work-chevron work-chevron--down"></span>
                 </p>
               </article>
 
@@ -5275,12 +5273,12 @@ const NAV = [
             <span class="ds-spec__k">{t.specClass}</span>
             <p class="ds-spec__v">
               <code
-                >journey (is-active) · journey__hud · journey__hud-bar · journey__hud-km ·
-                journey__traveler · journey__track · journey__road · journey__road-base ·
-                journey__road-progress · journey__panel (--start/--end) · journey__stop (is-passed)
-                · journey__stop-icon · journey__stop-title · journey__step-num · journey__eyebrow ·
-                journey__text · journey__hint · journey__outcomes · journey__start-title ·
-                journey__end-title</code
+                >journey (is-active, --j-lane) · journey__hud · journey__hud-inner ·
+                journey__hud-bar · journey__hud-km · journey__traveler · journey__track ·
+                journey__road · journey__road-base · journey__road-progress · journey__dot
+                (is-passed) · journey__panel (--start/--end) · journey__stop · journey__stop-title ·
+                journey__step-num · journey__eyebrow · journey__text · journey__hint ·
+                journey__outcomes · journey__start-title · journey__end-title</code
               >
             </p>
           </div>
@@ -5289,8 +5287,8 @@ const NAV = [
             <p class="ds-spec__v">
               {
                 it
-                  ? "Una per case study, e solo se il progetto ha davvero delle tappe di processo: con meno di due la sezione non viene resa affatto. Full-bleed dentro .work-main, che è largo 48rem."
-                  : "One per case study, and only when the project really has process steps: with fewer than two the section is not rendered at all. Full-bleed inside .work-main, which is 48rem wide."
+                  ? "Una per case study, e solo se il progetto ha davvero delle tappe di processo: con meno di due la sezione non viene resa affatto. Sta nella colonna di .work-main: la corsia della strada (--j-lane) è presa dal padding sinistro della traccia, non da un margine fuori colonna."
+                  : "One per case study, and only when the project really has process steps: with fewer than two the section is not rendered at all. It sits in the .work-main column: the road's lane (--j-lane) comes out of the track's left padding, not from a margin outside the column."
               }
             </p>
           </div>
@@ -5319,8 +5317,8 @@ const NAV = [
             <p class="ds-spec__v">
               {
                 it
-                  ? "La sezione porta un aria-label che dice dove porta il percorso, perché il titolo vero è dentro la prima tappa. HUD, bussola e strada sono aria-hidden: sono la resa grafica di un avanzamento già scritto negli occhielli. La bussola passa dietro le tappe (z-index 1 contro 2), così quando si incrociano la card resta leggibile."
-                  : "The section carries an aria-label saying where the journey leads, because the real heading lives inside the first stop. HUD, compass and road are aria-hidden: they are the graphic rendering of a progress already written in the eyebrows. The compass passes behind the stops (z-index 1 against 2), so when they cross the card stays readable."
+                  ? "La sezione porta un aria-label che dice dove porta il percorso, perché il titolo vero è dentro la prima tappa. HUD, bussola e strada sono aria-hidden: sono la resa grafica di un avanzamento già scritto negli occhielli. La bussola cammina nella corsia, fuori dal testo, e comunque sta sotto le tappe (z-index 1 contro 2). Senza pin, focus da tastiera e ricerca nella pagina tornano a portare la tappa in vista da soli: con la strada orizzontale serviva uno script apposta."
+                  : "The section carries an aria-label saying where the journey leads, because the real heading lives inside the first stop. HUD, compass and road are aria-hidden: they are the graphic rendering of a progress already written in the eyebrows. The compass walks in the lane, clear of the text, and sits below the stops anyway (z-index 1 against 2). With no pin, keyboard focus and find-in-page bring a stop into view on their own again: with the horizontal road that took a dedicated script."
               }
             </p>
           </div>

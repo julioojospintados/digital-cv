@@ -113,9 +113,10 @@ const sigla = projectInitials(project.name);
       }
     </header>
 
-    <!-- Horizontal journey: the project's timeline is the road — Problem
-         (departure) → process steps (stops) → Measurable outcome (arrival).
-         Without JS or with reduced-motion it stays a vertical stack. -->
+    <!-- Journey: the project's timeline is the road, and it runs down with
+         the page — Problem (departure) → process steps (stops) → Measurable
+         outcome (arrival). Without JS or with reduced-motion the stops stay
+         stacked, with no road. -->
     {
       processSteps.length > 0 && (
         <section
@@ -124,27 +125,18 @@ const sigla = projectInitials(project.name);
           aria-label="From problem to outcome: the project journey"
         >
           <div class="journey__hud" aria-hidden="true">
-            <span>
-              Step <b data-j-current>00</b>/{totalSteps}
-            </span>
-            <span class="journey__hud-bar">
-              <b data-j-bar />
-            </span>
-            <span class="journey__hud-km" data-j-km>
-              0 m
-            </span>
+            <div class="journey__hud-inner">
+              <span>
+                Step <b data-j-current>00</b>/{totalSteps}
+              </span>
+              <span class="journey__hud-bar">
+                <b data-j-bar />
+              </span>
+              <span class="journey__hud-km" data-j-km>
+                0 m
+              </span>
+            </div>
           </div>
-
-          <img
-            class="journey__traveler"
-            data-j-traveler
-            src="/knolling/compass.webp"
-            alt=""
-            aria-hidden="true"
-            loading="lazy"
-            decoding="async"
-            style="aspect-ratio: 208 / 341;"
-          />
 
           <div class="journey__track" data-j-track>
             <svg
@@ -157,13 +149,24 @@ const sigla = projectInitials(project.name);
               <path class="journey__road-progress" data-j-road-progress d="" />
             </svg>
 
+            <img
+              class="journey__traveler"
+              data-j-traveler
+              src="/knolling/compass.webp"
+              alt=""
+              aria-hidden="true"
+              loading="lazy"
+              decoding="async"
+              style="aspect-ratio: 208 / 341;"
+            />
+
             {project.problem && (
               <article class="journey__panel journey__panel--start">
                 <p class="journey__eyebrow">Departure</p>
                 <h2 class="journey__start-title">The problem</h2>
                 <p class="journey__text">{project.problem}</p>
                 <p class="journey__hint" aria-hidden="true">
-                  Scroll to depart <span class="work-chevron" />
+                  Scroll to depart <span class="work-chevron work-chevron--down" />
                 </p>
               </article>
             )}

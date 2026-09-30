@@ -22,6 +22,10 @@ interface Props {
   /** Pulse periodico (stesso linguaggio delle mode-card della home) invece
    * del solo glow al hover — riservato all'istanza "vetrina" nella home. */
   pulse?: boolean;
+  /** Posizione nella pila sticky dell'indice /work: sfalsa il `top` di un
+   * gradino per card, così quelle sotto restano visibili come un bordo.
+   * Fuori dalla pila non serve e non si passa. */
+  stackIndex?: number;
 }
 
 const {
@@ -31,6 +35,7 @@ const {
   workHref = "/work",
   ctaLabel = "Leggi il Case study",
   pulse = false,
+  stackIndex,
 } = Astro.props;
 // Il nome porta due cose in una stringa sola: vanno su due righe, e la
 // prima è il nome e basta. Il perché sta in lib/project-name.ts.
@@ -41,6 +46,7 @@ const sigla = projectInitials(name);
 <a
   class:list={["work-index-card", { "work-index-card--pulse": pulse }]}
   href={`${workHref}/${slug}`}
+  style={stackIndex !== undefined ? `--stack-i: ${stackIndex}` : undefined}
 >
   {
     /* Nessun occhiello. Diceva «CASE STUDY» sopra ogni card dell'indice

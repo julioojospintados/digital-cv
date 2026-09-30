@@ -1012,13 +1012,14 @@
   left: auto;
 }
 
-/* Il viaggio è full-bleed dentro una colonna da 48rem (width:100vw più un
-   margine negativo): dentro il palco quel calcolo lo farebbe uscire dai due
-   lati. Qui torna largo quanto il riquadro, e resta nel ripiego verticale —
-   che è lo stato servito, quello senza .is-active. */
-.ds-stage--journey .journey {
-  width: auto;
-  margin-left: 0;
+/* La pila delle card di /work è sticky, e sticky non funziona dentro un
+   antenato con overflow diverso da visible: con l'overflow-x del palco la
+   demo resterebbe piatta, due card una sotto l'altra, e la vetrina
+   mostrerebbe un componente che non si comporta come sul sito. La pila
+   cresce solo in verticale, quindi aprire l'overflow qui non riporta lo
+   scroll orizzontale che la regola del palco esiste per evitare. */
+.ds-stage--stack {
+  overflow: visible;
 }
 
 /* ── Intro: i numeri del sistema ─────────────────────────────────────── */

@@ -3,12 +3,17 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-// ── /work — journey orizzontale ──────────────────────────────────────────
-// Scroll verticale (wheel, trackpad, swipe touch: input naturale ovunque)
-// scrubbato in traslazione orizzontale del track pinnato — il pattern
-// "strada da percorrere". Senza JS o con prefers-reduced-motion la sezione
-// resta lo stack verticale definito dal CSS di default: il journey è
-// progressive enhancement, mai un requisito.
+// ── /work/[slug] — journey verticale ─────────────────────────────────────
+// La strada scende con la pagina, in una corsia a sinistra delle tappe, e la
+// bussola la percorre restando all'altezza del centro della finestra: dove
+// sta chi legge. Fino al 2026-09-30 la sezione si pinnava e lo scroll veniva
+// tradotto in orizzontale; l'effetto, visto usare, era strano (la pagina
+// smetteva di scendere e andava di lato), quindi il viaggio è tornato sul
+// gesto che la pagina ha già. Niente pin: lo scroll resta del browser.
+//
+// Senza JS o con prefers-reduced-motion la sezione resta lo stack verticale
+// del CSS di default, senza strada: il journey è progressive enhancement,
+// mai un requisito.
 
 const root = document.querySelector<HTMLElement>("[data-journey]");
 const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -29,116 +34,119 @@ function initJourney(root: HTMLElement) {
 
   root.classList.add("is-active");
 
-  const distance = () => track.scrollWidth - root.clientWidth;
-
-  // ── Strada SVG — path ondulato generato a runtime (la larghezza del
-  // track dipende dal numero di tappe e dal viewport, non è nota al build).
-  // Curve morbide alternate: la percezione di "strada", non una retta.
+  // ── Strada SVG — path ondulato generato a runtime: l'altezza della
+  // traccia dipende dal testo, dal viewport e dai font, non è nota al build.
+  // Curve morbide alternate dentro la corsia: la percezione di "strada",
+  // non una retta.
   const dots: SVGCircleElement[] = [];
   let pathLen = 0;
-  let stopCentersX: number[] = [];
+  let trackH = 0;
+  let stopCentersY: number[] = [];
+
+  function laneWidth() {
+    // La corsia è il padding-left della traccia meno lo stacco dal testo:
+    // leggerla dal CSS evita un secondo numero che possa divergere.
+    const pad = parseFloat(getComputedStyle(track).paddingLeft) || 0;
+    return Math.max(32, pad - 12);
+  }
 
   function buildRoad() {
-    const w = track.scrollWidth;
-    const h = root.clientHeight;
-    // Sotto i 40rem le card sono molto più strette (--panel width scende a
-    // min(82vw, 21rem)): lo stesso testo va a capo su molte più righe e le
-    // card diventano abbastanza alte da estendersi, centrate verticalmente,
-    // fin dove staziona la bussola. La strada quindi sta bassa (90% mobile,
-    // 76% desktop) e le card sono spostate verso l'alto dal padding-bottom
-    // del track (work-page.css): due margini indipendenti di sicurezza.
-    const isMobileViewport = window.matchMedia("(max-width: 40rem)").matches;
-    const roadY = h * (isMobileViewport ? 0.9 : 0.76);
-    const amp = Math.min(h * 0.045, 42);
+    const w = laneWidth();
+    const h = track.offsetHeight;
+    trackH = h;
+    const roadX = w / 2;
+    const amp = w * 0.22;
 
     svg.setAttribute("width", String(w));
     svg.setAttribute("height", String(h));
     svg.setAttribute("viewBox", `0 0 ${w} ${h}`);
 
-    const seg = 520;
-    let d = `M 0 ${roadY}`;
-    let x = 0;
-    let up = true;
-    while (x < w) {
-      const nx = Math.min(x + seg, w);
-      // Control point proporzionati alla larghezza REALE del segmento:
-      // l'ultimo tratto può essere più corto di `seg` e control point
-      // oltre nx disegnerebbero un ricciolo a fine strada.
-      const sw = nx - x;
-      const dy = (up ? -amp : amp) * Math.min(1, sw / seg);
-      d += ` C ${x + sw * 0.38} ${roadY + dy}, ${nx - sw * 0.38} ${roadY + dy}, ${nx} ${roadY}`;
-      x = nx;
-      up = !up;
+    const seg = 420;
+    let d = `M ${roadX} 0`;
+    let y = 0;
+    let left = true;
+    while (y < h) {
+      const ny = Math.min(y + seg, h);
+      // Control point proporzionati alla lunghezza REALE del segmento:
+      // l'ultimo tratto può essere più corto di `seg`, e control point
+      // oltre ny disegnerebbero un ricciolo a fine strada.
+      const sh = ny - y;
+      const dx = (left ? -amp : amp) * Math.min(1, sh / seg);
+      d += ` C ${roadX + dx} ${y + sh * 0.38}, ${roadX + dx} ${ny - sh * 0.38}, ${roadX} ${ny}`;
+      y = ny;
+      left = !left;
     }
     basePath.setAttribute("d", d);
     progPath.setAttribute("d", d);
 
     pathLen = progPath.getTotalLength();
     progPath.style.strokeDasharray = String(pathLen);
-    progPath.style.strokeDashoffset = String(pathLen);
 
-    // Milestone: un punto sulla strada al centro di ogni tappa
+    // Milestone: un punto sulla strada all'altezza del centro di ogni tappa
     dots.forEach((c) => c.remove());
     dots.length = 0;
-    stopCentersX = stops.map((s) => s.offsetLeft + s.offsetWidth / 2);
-    for (const cx of stopCentersX) {
+    stopCentersY = stops.map((s) => s.offsetTop + s.offsetHeight / 2);
+    for (const cy of stopCentersY) {
       const c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
       c.setAttribute("class", "journey__dot");
-      c.setAttribute("cx", String(cx));
-      c.setAttribute("cy", String(roadY));
-      c.setAttribute("r", "7");
+      c.setAttribute("cx", String(roadX));
+      c.setAttribute("cy", String(cy));
+      c.setAttribute("r", "6");
       svg.appendChild(c);
       dots.push(c);
-    }
-
-    // La bussola viaggia APPESA SOTTO la strada (solo il bordo superiore
-    // tocca la linea): sopra la linea restano le card, sotto solo lei.
-    // Prima stava appoggiata sopra (top = roadY - h*0.92) e con le card
-    // alte finiva sovrapposta al testo, rendendolo illeggibile.
-    if (traveler) {
-      traveler.style.top = `${roadY - traveler.offsetHeight * 0.15}px`;
     }
   }
 
   buildRoad();
   ScrollTrigger.addEventListener("refreshInit", buildRoad);
+  // Il testo delle tappe va a capo diversamente quando arrivano i font o
+  // cambia la larghezza: la strada va ridisegnata sull'altezza vera.
+  let lastH = track.offsetHeight;
+  new ResizeObserver(() => {
+    if (track.offsetHeight !== lastH) {
+      lastH = track.offsetHeight;
+      ScrollTrigger.refresh();
+    }
+  }).observe(track);
 
-  // ── Tween principale: scroll → x del track ──
-  const tween = gsap.to(track, {
-    x: () => -distance(),
-    ease: "none",
-    scrollTrigger: {
-      trigger: root,
-      start: "top top",
-      end: () => "+=" + distance(),
-      pin: true,
-      // Il parent (.work-main) è display:flex — ScrollTrigger in quel caso
-      // disattiva pinSpacing di default e il viaggio resta senza pista di
-      // scroll. Forzarlo: il journey è l'ultimo figlio, il padding dello
-      // spacer estende semplicemente l'altezza del documento.
-      pinSpacing: true,
-      anticipatePin: 1,
-      scrub: 1,
-      invalidateOnRefresh: true,
-      onUpdate(self) {
-        const p = self.progress;
-        // Strada che si disegna
-        progPath.style.strokeDashoffset = String(pathLen * (1 - p));
-        // "Sei qui": centro del viewport proiettato sul mondo del track
-        const worldX = p * distance() + root.clientWidth / 2;
-        const passed = stopCentersX.filter((c) => c <= worldX).length;
-        if (hudCurrent) hudCurrent.textContent = String(passed).padStart(2, "0");
-        if (hudBar) hudBar.style.width = `${p * 100}%`;
-        // Odometro letterale: 1 pixel percorso = 1 metro. Un dato, non marketing.
-        if (hudKm) hudKm.textContent = `${Math.round(p * distance())} m`;
-        dots.forEach((c, i) => c.classList.toggle("is-passed", i < passed));
-        // La bussola oscilla cercando il nord mentre viaggia
-        if (traveler) gsap.set(traveler, { rotation: Math.sin(p * Math.PI * 5) * 7 });
-      },
-    },
+  const moveTraveler = traveler
+    ? gsap.quickTo(traveler, "y", { duration: 0.45, ease: "power3.out" })
+    : null;
+
+  function update(p: number) {
+    // Strada che si disegna
+    progPath.style.strokeDashoffset = String(pathLen * (1 - p));
+    // "Sei qui": il centro della finestra proiettato sulla traccia
+    const hereY = p * trackH;
+    const passed = stopCentersY.filter((c) => c <= hereY).length;
+    if (hudCurrent) hudCurrent.textContent = String(passed).padStart(2, "0");
+    if (hudBar) hudBar.style.width = `${p * 100}%`;
+    // Odometro letterale: 1 pixel percorso = 1 metro. Un dato, non marketing.
+    if (hudKm) hudKm.textContent = `${Math.round(hereY)} m`;
+    dots.forEach((c, i) => c.classList.toggle("is-passed", i < passed));
+    if (traveler && moveTraveler) {
+      const th = traveler.offsetHeight;
+      moveTraveler(Math.min(Math.max(hereY - th / 2, 0), Math.max(trackH - th, 0)));
+      // La bussola oscilla cercando il nord mentre viaggia
+      gsap.set(traveler, { rotation: Math.sin(p * Math.PI * 5) * 7 });
+    }
+  }
+
+  // ── Scroll → progresso del viaggio. Parte quando la cima della traccia
+  // incontra il centro della finestra e finisce quando ci arriva il fondo:
+  // così `p * altezza` è esattamente il punto della traccia che sta davanti
+  // agli occhi, ed è lì che la bussola deve trovarsi.
+  const st = ScrollTrigger.create({
+    trigger: track,
+    start: "top center",
+    end: "bottom center",
+    invalidateOnRefresh: true,
+    onUpdate: (self) => update(self.progress),
+    onRefresh: (self) => update(self.progress),
   });
+  update(st.progress);
 
-  // ── Reveal delle tappe relative al viaggio (containerAnimation) ──
+  // ── Reveal delle tappe mentre entrano in vista ──
   for (const panel of panels) {
     gsap.fromTo(
       panel,
@@ -150,35 +158,15 @@ function initJourney(root: HTMLElement) {
         ease: "power2.out",
         scrollTrigger: {
           trigger: panel,
-          containerAnimation: tween,
-          start: "left 88%",
-          end: "left 52%",
+          start: "top 88%",
+          end: "top 60%",
           scrub: true,
         },
       },
     );
   }
 
-  // Qui girava una parallasse leggera sui landmark knolling: gli oggetti a
-  // bordo strada viaggiavano un filo piu' lenti delle card, per dare
-  // profondita'. Le immagini sono state tolte il 2026-09-02 e con loro
-  // l'unico `[data-j-parallax]` della pagina: il ciclo restava, girava a
-  // vuoto e prometteva un effetto che non c'era piu'.
-
-  // ── A11y tastiera: il focus su una tappa porta lo scroll alla sua
-  // posizione lungo il viaggio (il pin + transform romperebbe lo
-  // scroll-into-view nativo del browser).
-  track.addEventListener("focusin", (e) => {
-    const panel = (e.target as HTMLElement).closest<HTMLElement>(".journey__panel");
-    const st = tween.scrollTrigger;
-    if (!panel || !st) return;
-    const frac = Math.min(
-      1,
-      Math.max(0, (panel.offsetLeft + panel.offsetWidth / 2 - root.clientWidth / 2) / distance()),
-    );
-    const y = st.start + frac * (st.end - st.start);
-    const lenis = (window as { __lenis?: { scrollTo: (y: number, o?: object) => void } }).__lenis;
-    if (lenis) lenis.scrollTo(y, { immediate: true });
-    else window.scrollTo(0, y);
-  });
+  // Qui c'era un listener `focusin` che riportava lo scroll sulla tappa
+  // col focus: con il pin e il transform orizzontale lo scroll-into-view
+  // nativo del browser non funzionava. Senza pin funziona da solo.
 }

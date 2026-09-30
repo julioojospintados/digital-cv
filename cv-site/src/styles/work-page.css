@@ -16,10 +16,8 @@
    può più scollarsi a metà.
 
    Sotto i 60rem torna al 100%. Il 75% su un telefono vuol dire un ottavo di
-   schermo di margine morto per lato — 292px di colonna su 390 — e con
-   l'indice a carosello vuol dire anche che il "pieno vivo" delle card
-   (margin-inline negativo, poche righe più giù) smette di arrivare al bordo:
-   era pensato per annullare il solo padding. Fino al 3 settembre il problema
+   schermo di margine morto per lato — 292px di colonna su 390. Fino al 3
+   settembre il problema
    non esisteva perché 48rem è più largo di qualunque telefono, quindi il
    limite non mordeva mai. */
 :root {
@@ -283,13 +281,17 @@
 }
 .work-hero__title {
   font-family: var(--font-display);
-  font-size: clamp(2rem, 5.5vw, 3.75rem);
+  /* Scala da titolo di copertina (2026-09-30): il nome del progetto è la
+     prima cosa che il case study ha da dire, e a 3,75rem stava alla pari
+     del paragrafo accanto. Il tetto della misura sale con lui, altrimenti
+     un nome di due parole andrebbe a capo parola per parola. */
+  font-size: clamp(2.5rem, 8vw, 5.5rem);
   font-weight: 800;
-  letter-spacing: -0.03em;
-  line-height: 1.05;
+  letter-spacing: -0.035em;
+  line-height: 1;
   color: var(--color-text-primary);
-  margin: 0 0 var(--size-12);
-  max-width: 34rem;
+  margin: 0 0 var(--size-16);
+  max-width: 44rem;
   position: relative;
   z-index: 1;
 }
@@ -324,16 +326,19 @@
 
 /* ── Sezioni testuali (problema / processo) ── */
 .work-section__title {
-  font-family: var(--font-mono);
-  font-size: var(--fs-14);
-  font-weight: 700;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
+  /* Da etichetta in mono maiuscolo a titolo vero (2026-09-30). «Decisioni
+     chiave» e «Cosa ho imparato» sono le due sezioni che un selezionatore
+     cerca, e a 14px in maiuscoletto si leggevano come una didascalia. */
+  font-family: var(--font-display);
+  font-size: clamp(var(--fs-28), 5vw, var(--fs-48));
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
   /* Testo d'accento: `--color-accent-text` e non `--color-accent`. Su due dei
      quattro case study la lente è design, e l'arancione pieno come testo sta
      a 3,62:1 — era fuori norma da prima, qui si chiude. */
   color: var(--color-accent-text);
-  margin: 0 0 var(--size-16);
+  margin: 0 0 var(--size-24);
 }
 
 /* ── I testi secondari seguono la lente ──────────────────────────────────
@@ -562,136 +567,86 @@
 
 .work-index-hero__title {
   font-family: var(--font-display);
-  font-size: clamp(2rem, 5.5vw, 3.5rem);
+  font-size: clamp(2.75rem, 9vw, 6rem);
   font-weight: 800;
-  letter-spacing: -0.03em;
-  line-height: 1.1;
+  letter-spacing: -0.035em;
+  line-height: 1;
   color: var(--color-text-primary);
-  margin: 0 0 0.85rem;
-  max-width: 32rem;
+  margin: 0 0 var(--size-16);
+  max-width: 44rem;
 }
 
-/* ── Indice portfolio: carosello su mobile, griglia da 36rem in su ───────
-   Su telefono le quattro card impilate erano quattro schermate di scroll
-   verticale dentro una pagina che già scorre: il portfolio finiva sotto il
-   pollice e basta. In orizzontale stanno su una riga sola e si sfogliano.
+/* ── Indice portfolio: una pila di card che si sovrappongono ─────────────
+   Fino al 2026-09-30 era un carosello orizzontale sul telefono e una
+   griglia a due colonne da 36rem in su. Il carosello chiedeva un gesto che
+   la pagina non insegna (tutto il resto del sito scorre in verticale) e
+   litigava con Lenis: servivano data-lenis-prevent-horizontal e uno snap
+   per farlo partire, e anche così lo swipe diagonale del pollice finiva a
+   metà fra la pagina e la riga. Scelta di Giulio: si torna al verticale.
 
-   L'affordance non è una freccia né una fila di puntini — è la card
-   accanto che sbircia dal bordo (78%, non 100%) e lo scatto dello snap.
-   Due segnali fisici, zero cromo aggiunto.
+   Verticale non vuol dire quattro schermate di lista. Ogni card è sticky:
+   arrivata in cima si ferma, e la successiva le sale sopra, sfalsata di un
+   gradino (--stack-i, dal componente). Si sfoglia un progetto alla volta,
+   grande, con lo stesso gesto del resto della pagina — e senza JavaScript:
+   è solo `position: sticky`, quindi niente da inizializzare, niente da
+   rompere se uno script non arriva.
 
-   Il markup porta data-lenis-prevent-horizontal, e senza non scorre.
-   Lenis gira con syncTouch: intercetta ogni touchmove con una componente
-   verticale e lo annulla con preventDefault per guidare lui la pagina. Uno
-   swipe col pollice non è mai orizzontale puro, quindi il carosello non
-   partiva mai. L'attributo lascia al browser i gesti a prevalenza
-   orizzontale; quelli verticali passano ancora da Lenis. */
+   Due cose che la pila richiede e che la griglia non chiedeva:
+   - lo sfondo della card deve essere opaco. Con il bianco al 2% di prima la
+     card sotto trasparirebbe da quella sopra, e due testi sovrapposti non si
+     leggono. È l'ottanio schiarito con color-mix, non un colore nuovo;
+   - una card coperta che riceve il focus da tastiera va portata davanti
+     (2.4.11 Focus Not Obscured). Il browser non la fa scorrere, perché
+     geometricamente è già in vista: è la card sopra a nasconderla. */
 .work-index-grid {
   display: flex;
-  gap: var(--size-16);
-  overflow-x: auto;
-  overscroll-behavior-x: contain;
-  scroll-snap-type: x mandatory;
-  /* Niente barra: sotto c'è già quella verticale della pagina, e due barre
-     su un telefono si leggono come un errore di layout. */
-  scrollbar-width: none;
-  padding-block: var(--size-8);
-  /* A pieno vivo: annulla il padding di .work-main e se lo riprende come
-     proprio, così lo sbircio avviene al bordo dello schermo e le card
-     guadagnano larghezza vera. */
-  margin-inline: calc(var(--size-24) * -1);
-  padding-inline: var(--size-24);
-}
-
-.work-index-grid::-webkit-scrollbar {
-  display: none;
+  flex-direction: column;
+  gap: var(--size-24);
+  /* Lo spazio sotto l'ultima card è quello in cui la pila si scioglie: senza,
+     l'ultima arriva in cima e la sezione finisce nello stesso istante. */
+  padding-bottom: var(--size-48);
 }
 
 .work-index-grid > .work-index-card {
-  /* 85% e non 78%: lo sbircio serve a dire che c'è dell'altro, non a
-     rubare un sesto dello schermo alla card che si sta leggendo. */
-  flex: 0 0 85%;
-  scroll-snap-align: center;
-  /* Le card si dimensionavano sul testo e restavano basse in mezzo a uno
-     schermo vuoto. Qui prendono l'altezza che c'è: min-height, non height,
-     quindi un titolo lungo o un'interlinea maggiorata (1.4.12) le allunga
-     invece di tagliarle. Il CTA sta già in fondo per via del margin-top
-     auto, quindi lo spazio in più va al respiro fra i blocchi.
-     42vh e non di più: a 58vh la card diventava alta ma vuota, con duecento
-     pixel di niente fra il ruolo e il CTA — un vuoto grande si legge come
-     un errore, non come respiro. */
-  min-height: 42vh;
+  position: sticky;
+  top: calc(var(--size-24) + var(--stack-i, 0) * var(--size-16));
+  /* min-height e non height: un nome lungo o un'interlinea maggiorata
+     (1.4.12) allungano la card invece di tagliarla. Il tetto in rem tiene la
+     card sotto l'altezza della finestra su un portatile basso, altrimenti la
+     sua coda non arriverebbe mai in vista prima di essere coperta. A 24rem e
+     62svh era mezza vuota: il contenuto ne occupava metà, sotto c'era aria
+     che si leggeva come un difetto. */
+  min-height: min(19rem, 52svh);
+  padding: clamp(var(--size-24), 4vw, var(--size-48));
+  background: color-mix(in srgb, var(--color-bg) 94%, var(--color-text-primary));
+  box-shadow: 0 -0.75rem 2rem rgba(0, 0, 0, 0.35);
 }
 
-/* Il passaggio da una all'altra: al centro la card è intera, le vicine si
-   ritraggono e si spengono. È un'animazione guidata dallo scorrimento
-   (view timeline), non da JS e non da un timer: il browser la lega alla
-   posizione del dito, quindi il movimento segue il trascinamento e torna
-   indietro se cambi idea a metà. Un carosello a JS, invece, parte quando il
-   gesto è già finito — è lì che si sente "l'animazione" invece
-   dell'oggetto.
-   Dove non è supportata (Safari più vecchi) non resta niente di rotto:
-   restano lo snap e la card che sbircia, che dicono già che si scorre. */
-@supports (animation-timeline: view()) {
-  .work-index-grid > .work-index-card {
-    /* Longhand e non la scorciatoia "animation": la scorciatoia azzera
-       animation-timeline, e l'ordine delle righe diventerebbe una trappola. */
-    animation-name: work-card-focus;
-    animation-timing-function: linear;
-    animation-fill-mode: both;
-    animation-timeline: view(inline);
-  }
+.work-index-grid > .work-index-card:hover,
+.work-index-grid > .work-index-card:focus-visible {
+  background: color-mix(in srgb, var(--color-bg) 91%, var(--color-text-primary));
 }
 
-/* La prima e l'ultima card non possono centrarsi del tutto (il contenitore
-   non ha mezzo schermo di margine ai lati): a riposo restano a scala 0.99
-   invece di 1. È fuori dalla soglia del percepibile, e la sola alternativa
-   era un full-bleed a vw che si rompe dove la barra di scorrimento occupa
-   spazio. */
-@keyframes work-card-focus {
-  0%,
-  100% {
-    opacity: 0.55;
-    scale: 0.9;
-  }
-
-  50% {
-    opacity: 1;
-    scale: 1;
-  }
+.work-index-grid > .work-index-card:focus-visible {
+  z-index: 2;
 }
 
-/* Riduzione ≠ eliminazione, ma qui l'effetto È il movimento: resta lo
-   snap, che è navigazione, e sparisce il respiro, che è decorazione. */
-@media (prefers-reduced-motion: reduce) {
-  .work-index-grid > .work-index-card {
-    animation: none;
-    opacity: 1;
-    scale: 1;
-  }
+/* Dentro la pila la card è grande quanto metà schermo, e il nome deve
+   esserlo con lei: a --fs-20 galleggiava in un riquadro vuoto. Fluido, come
+   i titoli di testata (DESIGN.md, eccezione dei clamp display). */
+.work-index-grid .work-index-card__name {
+  font-size: clamp(var(--fs-28), 5vw, var(--fs-48));
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
 }
 
-/* Da 36rem c'è spazio per vederle tutte insieme: un carosello che nasconde
-   metà portfolio dove lo schermo non lo chiede sarebbe una perdita secca. */
-@media (min-width: 36rem) {
-  .work-index-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--size-20);
-    overflow-x: visible;
-    scroll-snap-type: none;
-    padding-block: 0;
-    margin-inline: 0;
-    padding-inline: 0;
-  }
+.work-index-grid .work-index-card__tagline {
+  font-size: clamp(var(--fs-16), 2vw, var(--fs-20));
+}
 
-  .work-index-grid > .work-index-card {
-    flex: initial;
-    min-height: auto;
-    animation: none;
-    opacity: 1;
-    scale: 1;
-  }
+.work-index-grid .work-index-card__sigla {
+  font-size: clamp(5rem, 18vw, 10rem);
 }
 
 .work-index-card {
@@ -1010,33 +965,42 @@
   background: color-mix(in srgb, var(--color-accent) 16%, transparent);
 }
 
-/* ── /work/[slug] — Journey orizzontale del case study ────────────────────
+/* ── /work/[slug] — Journey del case study ────────────────────────────────
    La spina temporale del progetto è letteralmente una strada: Problema
    (partenza) → step del processo (tappe) → Risultato misurabile (arrivo).
-   Scroll verticale scrubbato in traslazione orizzontale (work-journey.ts).
-   Decisioni, design system e learnings restano sezioni verticali: sono
-   lettura riflessiva, non cronologica. Le regole base qui sotto sono il
-   fallback verticale — no-JS e prefers-reduced-motion vedono lo stack
-   di sezioni classico. `.is-active` (dal JS) attiva la modalità strada. */
+   Decisioni, design system e learnings restano sezioni normali: sono
+   lettura riflessiva, non cronologica.
+
+   Fino al 2026-09-30 la strada era orizzontale: la sezione si pinnava e lo
+   scroll verticale veniva tradotto in traslazione laterale. Giulio ha visto
+   come la usava la gente e l'effetto era strano — la pagina smetteva di
+   scendere e cominciava ad andare di lato, senza che nessuno lo avesse
+   chiesto, e chi voleva solo arrivare in fondo doveva attraversare tutto il
+   viaggio. Ora la strada scende con la pagina, in una corsia a sinistra, e
+   la bussola la percorre restando all'altezza di chi legge. Nessun pin: lo
+   scroll resta quello del browser, anche da tastiera e con la ricerca
+   nella pagina, che prima atterravano su tappe fuori schermo.
+
+   Le regole base qui sotto sono il fallback — no-JS e
+   prefers-reduced-motion vedono le tappe impilate senza strada.
+   `.is-active` (da work-journey.ts) apre la corsia e accende la strada. */
 
 .journey {
-  /* Full-bleed dentro .work-main (larga --work-measure): html ha overflow-x:clip,
-     il breakout 100vw non genera scrollbar orizzontale. */
-  width: 100vw;
-  margin-left: calc(50% - 50vw);
+  /* La corsia della strada: larga abbastanza per la bussola, stretta
+     abbastanza da lasciare al testo la riga intera anche a 390px. */
+  --j-lane: clamp(3rem, 8vw, 5.5rem);
   position: relative;
 }
 
 .journey__track {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: var(--size-20);
-  padding: 0 var(--size-24);
   max-width: 48rem;
-  margin: 0 auto;
 }
 
-/* Elementi solo-journey: nascosti nel fallback verticale */
+/* Elementi solo-journey: nascosti nel fallback */
 .journey__road,
 .journey__hud,
 .journey__traveler,
@@ -1045,53 +1009,15 @@
 }
 
 /* ── Journey attivo — la strada ── */
-.journey.is-active {
-  height: 100svh;
-  overflow: hidden;
-}
-
 .journey.is-active .journey__track {
-  flex-direction: row;
-  align-items: center;
-  height: 100%;
-  width: max-content;
-  max-width: none;
-  margin: 0;
-  gap: clamp(3.5rem, 9vw, 8rem);
-  /* padding-bottom: riduce il box di centratura verticale → le card salgono
-     di ~6vh. Meno vuoto tra hero e prima card in ingresso, più distanza tra
-     il fondo delle card e la strada/bussola (che vive sotto la linea). */
-  padding: 0 16vw 12vh 14vw;
-  will-change: transform;
+  padding-left: calc(var(--j-lane) + var(--size-12));
+  gap: clamp(var(--size-40), 9vh, var(--size-80));
 }
 
 .journey.is-active .journey__panel {
   position: relative;
-  /* Sopra la bussola viaggiatrice (z-index 1): quando si incrociano, la
-     card-stazione resta leggibile e cliccabile, la bussola passa dietro
-     come oggetto di scena. */
   z-index: 2;
-  flex-shrink: 0;
-  width: clamp(19rem, 36vw, 25rem);
   will-change: transform, opacity;
-}
-
-/* Partenza (il problema) e arrivo (risultato): testo più lungo delle
-   tappe-processo — pannello più largo per non superare l'altezza utile. */
-.journey.is-active .journey__panel--start,
-.journey.is-active .journey__panel--end {
-  width: clamp(21rem, 44vw, 31rem);
-}
-
-@media (max-width: 40rem) {
-  .journey.is-active .journey__panel {
-    width: min(82vw, 21rem);
-  }
-
-  .journey.is-active .journey__panel--start,
-  .journey.is-active .journey__panel--end {
-    width: min(86vw, 23rem);
-  }
 }
 
 .journey.is-active .journey__road {
@@ -1111,8 +1037,17 @@
   display: block;
 }
 
+/* Il cruscotto resta in vista mentre si scende: sticky, alto zero perché
+   non spinga giù la prima tappa, allineato a destra. Ha un fondo suo perché
+   adesso passa sopra al testo delle tappe invece che sopra al vuoto. */
 .journey.is-active .journey__hud {
   display: flex;
+  position: sticky;
+  top: var(--size-16);
+  z-index: 3;
+  height: 0;
+  justify-content: flex-end;
+  overflow: visible;
 }
 
 /* ── Strada SVG ── */
@@ -1152,14 +1087,17 @@
 }
 
 /* ── HUD di viaggio — dati in mono, come un cruscotto ── */
-.journey__hud {
-  position: absolute;
-  top: var(--size-20);
-  right: var(--size-24);
-  z-index: 2;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 0.45rem;
+.journey__hud-inner {
+  display: flex;
+  align-items: center;
+  gap: var(--size-12);
+  padding: 0.45rem var(--size-12);
+  border: 1px solid var(--color-border);
+  border-radius: 999rem;
+  /* Quasi opaco, e non vetro smerigliato: sul telefono la pillola passa
+     sopra il testo delle tappe, e al 82% le righe sotto si leggevano
+     attraverso le cifre del cruscotto — due testi uno sull'altro. */
+  background: color-mix(in srgb, var(--color-bg) 96%, var(--color-text-primary));
   font-family: var(--font-mono);
   font-size: var(--fs-12);
   font-weight: 700;
@@ -1175,7 +1113,7 @@
 }
 
 .journey__hud-bar {
-  width: 8.5rem;
+  width: clamp(3rem, 12vw, 8.5rem);
   height: 2px;
   background: rgba(255, 255, 255, 0.14);
   overflow: hidden;
@@ -1193,12 +1131,16 @@
   opacity: 0.75;
 }
 
-/* ── Bussola viaggiatrice — appoggiata sulla strada, oscilla nel bob ── */
+/* ── Bussola viaggiatrice — cammina lungo la corsia, all'altezza di chi
+   legge. work-journey.ts le scrive la `y` (transform); il respiro del bob
+   sta su `translate`, che è una proprietà separata e quindi si somma invece
+   di sovrascriverla. */
 .journey__traveler {
   position: absolute;
-  left: 7vw;
+  top: 0;
+  left: calc(var(--j-lane) * 0.19);
   z-index: 1;
-  width: clamp(3.25rem, 6.5vw, 5rem);
+  width: calc(var(--j-lane) * 0.62);
   pointer-events: none;
   user-select: none;
   filter: drop-shadow(0 0.625rem 1.375rem rgba(0, 0, 0, 0.45));
@@ -1236,7 +1178,7 @@
 
 .journey__start-title {
   font-family: var(--font-display);
-  font-size: clamp(1.6rem, 3.6vw, 2.4rem);
+  font-size: clamp(var(--fs-32), 5.5vw, 3.5rem);
   font-weight: 800;
   letter-spacing: -0.02em;
   line-height: 1.1;
@@ -1256,8 +1198,21 @@
   color: var(--color-text-muted);
 }
 
+/* La strada ora scende, e la freccia con lei: stessa spinta del
+   cta-arrow-nudge di global.css, sull'asse verticale. */
 .journey__hint .work-chevron {
-  animation: cta-arrow-nudge 1.3s ease-in-out infinite;
+  animation: journey-hint-nudge 1.3s ease-in-out infinite;
+}
+
+@keyframes journey-hint-nudge {
+  0%,
+  100% {
+    translate: 0 -0.125rem;
+  }
+
+  50% {
+    translate: 0 0.1875rem;
+  }
 }
 
 /* Tappa-processo: card-stazione — stesso linguaggio delle work-index-card.
@@ -1326,7 +1281,7 @@
 /* Fine strada: titolo del traguardo */
 .journey__end-title {
   font-family: var(--font-display);
-  font-size: clamp(1.6rem, 3.6vw, 2.4rem);
+  font-size: clamp(var(--fs-32), 5.5vw, 3.5rem);
   font-weight: 800;
   letter-spacing: -0.02em;
   line-height: 1.08;

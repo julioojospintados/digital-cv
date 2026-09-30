@@ -60,12 +60,13 @@ const heroObj = workKnollSize(WORK_INDEX_ICON);
       />
     </header>
 
-    <div class="work-index-grid" data-lenis-prevent-horizontal>
+    <div class="work-index-grid">
       {
-        caseStudies.map((p) => (
+        caseStudies.map((p, i) => (
           <WorkIndexCard
             name={p.name}
             slug={p.slug!}
+            stackIndex={i}
             role={p.role}
             workHref="/work"
             ctaLabel="Leggi il Case study"
