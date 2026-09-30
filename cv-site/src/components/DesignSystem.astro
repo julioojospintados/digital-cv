@@ -814,7 +814,7 @@ const NAV = [
           dall'indice. Ha un id come gli altri, quindi ci si torna dall'indice
           e l'indirizzo resta condivisibile. */
       }
-      <section class="ds-panel ds-intro" data-ds-panel="intro" aria-labelledby="intro-t">
+      <section class="ds-panel ds-intro" id="intro" data-ds-panel="intro" aria-labelledby="intro-t">
         <h2 class="ds-head__title" id="intro-t">{t.title}</h2>
         <p class="ds-head__lead">{t.lead}</p>
         <div class="ds-intro__why">
@@ -878,7 +878,13 @@ const NAV = [
         </div>
       </section>
 
-      <section class="ds-panel" data-ds-accent data-ds-panel="colore" aria-labelledby="colore-t">
+      <section
+        class="ds-panel"
+        data-ds-accent
+        id="colore"
+        data-ds-panel="colore"
+        aria-labelledby="colore-t"
+      >
         <div class="ds-panel__head">
           <h2 class="ds-section__title" id="colore-t">{t.secColour}</h2>
           <span class="ds-panel__group">{t.secFoundations}</span>
@@ -1020,7 +1026,12 @@ const NAV = [
         </div>
       </section>
 
-      <section class="ds-panel" data-ds-panel="tipografia" aria-labelledby="tipografia-t">
+      <section
+        class="ds-panel"
+        id="tipografia"
+        data-ds-panel="tipografia"
+        aria-labelledby="tipografia-t"
+      >
         <div class="ds-panel__head">
           <h2 class="ds-section__title" id="tipografia-t">{t.secType}</h2>
           <span class="ds-panel__group">{t.secFoundations}</span>
@@ -1073,7 +1084,13 @@ const NAV = [
         </div>
       </section>
 
-      <section class="ds-panel" data-ds-accent data-ds-panel="forma" aria-labelledby="forma-t">
+      <section
+        class="ds-panel"
+        data-ds-accent
+        id="forma"
+        data-ds-panel="forma"
+        aria-labelledby="forma-t"
+      >
         <div class="ds-panel__head">
           <h2 class="ds-section__title" id="forma-t">{t.secShape}</h2>
           <span class="ds-panel__group">{t.secFoundations}</span>
@@ -1175,7 +1192,12 @@ const NAV = [
         </div>
       </section>
 
-      <section class="ds-panel" data-ds-panel="movimento" aria-labelledby="movimento-t">
+      <section
+        class="ds-panel"
+        id="movimento"
+        data-ds-panel="movimento"
+        aria-labelledby="movimento-t"
+      >
         <div class="ds-panel__head">
           <h2 class="ds-section__title" id="movimento-t">{t.secMotionTok}</h2>
           <span class="ds-panel__group">{t.secFoundations}</span>
@@ -1266,7 +1288,13 @@ const NAV = [
         </div>
       </section>
 
-      <section class="ds-panel" data-ds-accent data-ds-panel="logo" aria-labelledby="logo-t">
+      <section
+        class="ds-panel"
+        data-ds-accent
+        id="logo"
+        data-ds-panel="logo"
+        aria-labelledby="logo-t"
+      >
         <div class="ds-panel__head">
           <h2 class="ds-section__title" id="logo-t">{it ? "Il logo" : "The logo"}</h2>
           <span class="ds-panel__group"
@@ -1334,7 +1362,12 @@ const NAV = [
         </div>
       </section>
 
-      <section class="ds-panel" data-ds-panel="ingresso-titolo" aria-labelledby="ingresso-titolo-t">
+      <section
+        class="ds-panel"
+        id="ingresso-titolo"
+        data-ds-panel="ingresso-titolo"
+        aria-labelledby="ingresso-titolo-t"
+      >
         <div class="ds-panel__head">
           <h2 class="ds-section__title" id="ingresso-titolo-t">
             {it ? "Titolo d'ingresso" : "Entry heading"}
@@ -1386,6 +1419,7 @@ const NAV = [
       <section
         class="ds-panel"
         data-ds-accent
+        id="ingresso-sezione-lente"
         data-ds-panel="ingresso-sezione-lente"
         aria-labelledby="ingresso-sezione-lente-t"
       >
@@ -1428,8 +1462,8 @@ const NAV = [
                   }
                 </p>
                 <div class="lh-section__actions" data-ds-part="5">
-                  <a class="lh-cta" href="#ingresso">GO to Web & UX Designer</a>
-                  <a class="lh-cta lh-cta--ghost" href="#ingresso">
+                  <a class="lh-cta" href="#ingresso-sezione-lente">GO to Web & UX Designer</a>
+                  <a class="lh-cta lh-cta--ghost" href="#ingresso-sezione-lente">
                     {it ? "Esplora il portfolio" : "Explore the portfolio"}
                   </a>
                 </div>
@@ -1555,6 +1589,7 @@ const NAV = [
       <section
         class="ds-panel"
         data-ds-accent
+        id="ingresso-cta"
         data-ds-panel="ingresso-cta"
         aria-labelledby="ingresso-cta-t"
       >
@@ -1600,7 +1635,7 @@ const NAV = [
                           <td>
                             <a
                               class={`lh-cta${row.variant}${st.cls ? " " + st.cls : ""}`}
-                              href={st.disabled ? undefined : "#ingresso"}
+                              href={st.disabled ? undefined : "#ingresso-cta"}
                               aria-disabled={st.disabled ? "true" : undefined}
                               role={st.disabled ? "link" : undefined}
                             >
@@ -1629,11 +1664,11 @@ const NAV = [
               <div class="ds-stage__row">
                 <div class="ds-case">
                   <p class="ds-label">{t.stFilled}</p>
-                  <a class="lh-cta" href="#ingresso" data-ds-snippet>GO to Web & UX Designer</a>
+                  <a class="lh-cta" href="#ingresso-cta" data-ds-snippet>GO to Web & UX Designer</a>
                 </div>
                 <div class="ds-case">
                   <p class="ds-label">{t.stOutline}</p>
-                  <a class="lh-cta lh-cta--ghost" href="#ingresso" data-ds-snippet>
+                  <a class="lh-cta lh-cta--ghost" href="#ingresso-cta" data-ds-snippet>
                     {it ? "Esplora il portfolio" : "Explore the portfolio"}
                   </a>
                 </div>
@@ -1699,6 +1734,7 @@ const NAV = [
 
       <section
         class="ds-panel"
+        id="ingresso-oggetto"
         data-ds-panel="ingresso-oggetto"
         aria-labelledby="ingresso-oggetto-t"
       >
@@ -1767,7 +1803,12 @@ const NAV = [
         </div>
       </section>
 
-      <section class="ds-panel" data-ds-panel="ingresso-scena" aria-labelledby="ingresso-scena-t">
+      <section
+        class="ds-panel"
+        id="ingresso-scena"
+        data-ds-panel="ingresso-scena"
+        aria-labelledby="ingresso-scena-t"
+      >
         <div class="ds-panel__head">
           <h2 class="ds-section__title" id="ingresso-scena-t">
             {it ? "Scena knolling con parallasse" : "Knolling stage with parallax"}
@@ -1863,7 +1904,12 @@ const NAV = [
         </div>
       </section>
 
-      <section class="ds-panel" data-ds-panel="ingresso-barra" aria-labelledby="ingresso-barra-t">
+      <section
+        class="ds-panel"
+        id="ingresso-barra"
+        data-ds-panel="ingresso-barra"
+        aria-labelledby="ingresso-barra-t"
+      >
         <div class="ds-panel__head">
           <h2 class="ds-section__title" id="ingresso-barra-t">
             {it ? "Barra d'ingresso" : "Entry bar"}
@@ -1924,7 +1970,12 @@ const NAV = [
         </div>
       </section>
 
-      <section class="ds-panel" data-ds-panel="ingresso-scorri" aria-labelledby="ingresso-scorri-t">
+      <section
+        class="ds-panel"
+        id="ingresso-scorri"
+        data-ds-panel="ingresso-scorri"
+        aria-labelledby="ingresso-scorri-t"
+      >
         <div class="ds-panel__head">
           <h2 class="ds-section__title" id="ingresso-scorri-t">
             {it ? "Indicatore di scorrimento" : "Scroll cue"}
@@ -1993,6 +2044,7 @@ const NAV = [
 
       <section
         class="ds-panel"
+        id="ingresso-card-chi-sono"
         data-ds-panel="ingresso-card-chi-sono"
         aria-labelledby="ingresso-card-chi-sono-t"
       >
@@ -2076,6 +2128,7 @@ const NAV = [
 
       <section
         class="ds-panel"
+        id="ingresso-modale-chi-sono"
         data-ds-panel="ingresso-modale-chi-sono"
         aria-labelledby="ingresso-modale-chi-sono-t"
       >
@@ -2174,6 +2227,7 @@ const NAV = [
 
       <section
         class="ds-panel"
+        id="ingresso-comandi"
         data-ds-panel="ingresso-comandi"
         aria-labelledby="ingresso-comandi-t"
       >
@@ -2249,6 +2303,7 @@ const NAV = [
 
       <section
         class="ds-panel"
+        id="ingresso-cassetti"
         data-ds-panel="ingresso-cassetti"
         aria-labelledby="ingresso-cassetti-t"
       >
@@ -2389,6 +2444,7 @@ const NAV = [
 
       <section
         class="ds-panel"
+        id="ingresso-lightbox"
         data-ds-panel="ingresso-lightbox"
         aria-labelledby="ingresso-lightbox-t"
       >
@@ -2474,7 +2530,12 @@ const NAV = [
         </div>
       </section>
 
-      <section class="ds-panel" data-ds-panel="ingresso-email" aria-labelledby="ingresso-email-t">
+      <section
+        class="ds-panel"
+        id="ingresso-email"
+        data-ds-panel="ingresso-email"
+        aria-labelledby="ingresso-email-t"
+      >
         <div class="ds-panel__head">
           <h2 class="ds-section__title" id="ingresso-email-t">
             {it ? "L'email in «Chi sono»" : "The email in «Chi sono»"}
@@ -2534,6 +2595,7 @@ const NAV = [
       <section
         class="ds-panel"
         data-ds-accent
+        id="lente-barra"
         data-ds-panel="lente-barra"
         aria-labelledby="lente-barra-t"
       >
@@ -2633,6 +2695,7 @@ const NAV = [
       <section
         class="ds-panel"
         data-ds-accent
+        id="lente-intestazione"
         data-ds-panel="lente-intestazione"
         aria-labelledby="lente-intestazione-t"
       >
@@ -2688,6 +2751,7 @@ const NAV = [
       <section
         class="ds-panel"
         data-ds-accent
+        id="lente-aureola"
         data-ds-panel="lente-aureola"
         aria-labelledby="lente-aureola-t"
       >
@@ -2773,6 +2837,7 @@ const NAV = [
       <section
         class="ds-panel"
         data-ds-accent
+        id="lente-bottoni"
         data-ds-panel="lente-bottoni"
         aria-labelledby="lente-bottoni-t"
       >
@@ -2793,10 +2858,10 @@ const NAV = [
         <div class="ds-stage">
           <div class="lc">
             <div class="lc-actions" data-ds-snippet>
-              <a class="lc-btn lc-btn--primary" href="#lente">
+              <a class="lc-btn lc-btn--primary" href="#lente-bottoni">
                 {it ? "Scarica il CV (PDF)" : "Download the CV (PDF)"}
               </a>
-              <a class="lc-btn" href="#lente">
+              <a class="lc-btn" href="#lente-bottoni">
                 {it ? "Portfolio — Case study" : "Portfolio — Case studies"}
                 <span class="lc-btn__arrow" aria-hidden="true"></span>
               </a>
@@ -2845,6 +2910,7 @@ const NAV = [
       <section
         class="ds-panel"
         data-ds-accent
+        id="lente-tendina"
         data-ds-panel="lente-tendina"
         aria-labelledby="lente-tendina-t"
       >
@@ -2878,7 +2944,7 @@ const NAV = [
                   MODES.map((m, i) => (
                     <li>
                       <a
-                        href="#lente"
+                        href="#lente-tendina"
                         class:list={["lc-lens__opt", { "is-current": i === 0 }]}
                         data-lens={m.key}
                         aria-current={i === 0 ? "page" : undefined}
@@ -3010,6 +3076,7 @@ const NAV = [
       <section
         class="ds-panel"
         data-ds-accent
+        id="lente-sezione"
         data-ds-panel="lente-sezione"
         aria-labelledby="lente-sezione-t"
       >
@@ -3080,6 +3147,7 @@ const NAV = [
       <section
         class="ds-panel"
         data-ds-accent
+        id="lente-esperienza"
         data-ds-panel="lente-esperienza"
         aria-labelledby="lente-esperienza-t"
       >
@@ -3347,6 +3415,7 @@ const NAV = [
       <section
         class="ds-panel"
         data-ds-accent
+        id="lente-chip"
         data-ds-panel="lente-chip"
         aria-labelledby="lente-chip-t"
       >
@@ -3434,6 +3503,7 @@ const NAV = [
       <section
         class="ds-panel"
         data-ds-accent
+        id="lente-badge-ai"
         data-ds-panel="lente-badge-ai"
         aria-labelledby="lente-badge-ai-t"
       >
@@ -3532,6 +3602,7 @@ const NAV = [
       <section
         class="ds-panel"
         data-ds-accent
+        id="lente-cronologia"
         data-ds-panel="lente-cronologia"
         aria-labelledby="lente-cronologia-t"
       >
@@ -3612,6 +3683,7 @@ const NAV = [
       <section
         class="ds-panel"
         data-ds-accent
+        id="lente-corsie"
         data-ds-panel="lente-corsie"
         aria-labelledby="lente-corsie-t"
       >
@@ -3781,6 +3853,7 @@ const NAV = [
       <section
         class="ds-panel"
         data-ds-accent
+        id="lente-voci"
         data-ds-panel="lente-voci"
         aria-labelledby="lente-voci-t"
       >
@@ -3871,6 +3944,7 @@ const NAV = [
       <section
         class="ds-panel"
         data-ds-accent
+        id="lente-percorso"
         data-ds-panel="lente-percorso"
         aria-labelledby="lente-percorso-t"
       >
@@ -3970,6 +4044,7 @@ const NAV = [
       <section
         class="ds-panel"
         data-ds-accent
+        id="lente-fuori-orario"
         data-ds-panel="lente-fuori-orario"
         aria-labelledby="lente-fuori-orario-t"
       >
@@ -4075,6 +4150,7 @@ const NAV = [
       <section
         class="ds-panel"
         data-ds-accent
+        id="lente-clienti"
         data-ds-panel="lente-clienti"
         aria-labelledby="lente-clienti-t"
       >
@@ -4155,6 +4231,7 @@ const NAV = [
       <section
         class="ds-panel"
         data-ds-accent
+        id="lente-occhiello"
         data-ds-panel="lente-occhiello"
         aria-labelledby="lente-occhiello-t"
       >
@@ -4226,6 +4303,7 @@ const NAV = [
       <section
         class="ds-panel"
         data-ds-accent
+        id="lente-fondale"
         data-ds-panel="lente-fondale"
         aria-labelledby="lente-fondale-t"
       >
@@ -4307,6 +4385,7 @@ const NAV = [
       <section
         class="ds-panel"
         data-ds-accent
+        id="lente-imbocchi"
         data-ds-panel="lente-imbocchi"
         aria-labelledby="lente-imbocchi-t"
       >
@@ -4381,7 +4460,12 @@ const NAV = [
         </div>
       </section>
 
-      <section class="ds-panel" data-ds-panel="lente-contatti" aria-labelledby="lente-contatti-t">
+      <section
+        class="ds-panel"
+        id="lente-contatti"
+        data-ds-panel="lente-contatti"
+        aria-labelledby="lente-contatti-t"
+      >
         <div class="ds-panel__head">
           <h2 class="ds-section__title" id="lente-contatti-t">
             {it ? "Contatti in chiaro" : "Contacts in the open"}
@@ -4399,9 +4483,9 @@ const NAV = [
         <div class="ds-stage">
           <div class="lc">
             <p class="lc-contacts" data-ds-snippet>
-              <a href="#lente">giulio.occhipinti.g@gmail.com</a>
+              <a href="#lente-contatti">giulio.occhipinti.g@gmail.com</a>
               <span class="lc-contacts__sep" aria-hidden="true">·</span>
-              <a href="#lente" class="lc-contacts__in">
+              <a href="#lente-contatti" class="lc-contacts__in">
                 <svg class="lc-contacts__icon" viewBox="0 0 24 24" aria-hidden="true">
                   <path
                     fill="currentColor"
@@ -4456,6 +4540,7 @@ const NAV = [
       <section
         class="ds-panel"
         data-ds-accent
+        id="work-barra"
         data-ds-panel="work-barra"
         aria-labelledby="work-barra-t"
       >
@@ -4529,6 +4614,7 @@ const NAV = [
       <section
         class="ds-panel"
         data-ds-accent
+        id="work-indice-testata"
         data-ds-panel="work-indice-testata"
         aria-labelledby="work-indice-testata-t"
       >
@@ -4612,6 +4698,7 @@ const NAV = [
       <section
         class="ds-panel"
         data-ds-accent
+        id="work-testata"
         data-ds-panel="work-testata"
         aria-labelledby="work-testata-t"
       >
@@ -4644,7 +4731,7 @@ const NAV = [
             </div>
             <a href="#work-testata" class="work-hero__ds-link" data-ds-part="6">
               {it ? "Esplora il design system" : "Explore the design system"}
-              <span class="work-chevron work-chevron--down" aria-hidden="true"></span>
+              <span class="work-chevron" aria-hidden="true"></span>
             </a>
           </header>
         </div>
@@ -4769,6 +4856,7 @@ const NAV = [
       <section
         class="ds-panel"
         data-ds-accent
+        id="work-card"
         data-ds-panel="work-card"
         aria-labelledby="work-card-t"
       >
@@ -4850,6 +4938,7 @@ const NAV = [
       <section
         class="ds-panel"
         data-ds-accent
+        id="work-nav"
         data-ds-panel="work-nav"
         aria-labelledby="work-nav-t"
       >
@@ -4865,7 +4954,7 @@ const NAV = [
             <span class="work-tag" data-ds-snippet>Astro</span>
             <span class="work-tag">Lit</span>
             <span class="work-tag">GSAP</span>
-            <a class="work-back" href="#case-study" data-ds-snippet>
+            <a class="work-back" href="#work-nav" data-ds-snippet>
               <span class="work-chevron work-chevron--left" aria-hidden="true"></span>
               {it ? "Torna all'indice" : "Back to the index"}
             </a>
@@ -4916,6 +5005,7 @@ const NAV = [
       <section
         class="ds-panel"
         data-ds-accent
+        id="work-cta"
         data-ds-panel="work-cta"
         aria-labelledby="work-cta-t"
       >
@@ -4978,6 +5068,7 @@ const NAV = [
       <section
         class="ds-panel"
         data-ds-accent
+        id="work-learnings"
         data-ds-panel="work-learnings"
         aria-labelledby="work-learnings-t"
       >
@@ -5039,6 +5130,7 @@ const NAV = [
       <section
         class="ds-panel"
         data-ds-accent
+        id="work-sezione"
         data-ds-panel="work-sezione"
         aria-labelledby="work-sezione-t"
       >
@@ -5099,6 +5191,7 @@ const NAV = [
       <section
         class="ds-panel"
         data-ds-accent
+        id="work-decisione"
         data-ds-panel="work-decisione"
         aria-labelledby="work-decisione-t"
       >
@@ -5172,6 +5265,7 @@ const NAV = [
       <section
         class="ds-panel"
         data-ds-accent
+        id="work-viaggio"
         data-ds-panel="work-viaggio"
         aria-labelledby="work-viaggio-t"
       >
@@ -5325,7 +5419,12 @@ const NAV = [
         </div>
       </section>
 
-      <section class="ds-panel" data-ds-panel="cambio-lingua" aria-labelledby="cambio-lingua-t">
+      <section
+        class="ds-panel"
+        id="cambio-lingua"
+        data-ds-panel="cambio-lingua"
+        aria-labelledby="cambio-lingua-t"
+      >
         <div class="ds-panel__head">
           <h2 class="ds-section__title" id="cambio-lingua-t">
             {it ? "Cambio lingua" : "Language switch"}
@@ -5411,7 +5510,7 @@ const NAV = [
         </div>
       </section>
 
-      <section class="ds-panel" data-ds-panel="cursore" aria-labelledby="cursore-t">
+      <section class="ds-panel" id="cursore" data-ds-panel="cursore" aria-labelledby="cursore-t">
         <div class="ds-panel__head">
           <h2 class="ds-section__title" id="cursore-t">
             {it ? "Il cursore-lampada" : "The lamp cursor"}
@@ -5516,7 +5615,7 @@ const NAV = [
         </p>
       </section>
 
-      <section class="ds-panel" data-ds-panel="fab" aria-labelledby="fab-t">
+      <section class="ds-panel" id="fab" data-ds-panel="fab" aria-labelledby="fab-t">
         <div class="ds-panel__head">
           <h2 class="ds-section__title" id="fab-t">
             {it ? "Il FAB dei contatti" : "The contact FAB"}
@@ -5578,6 +5677,7 @@ const NAV = [
 
       <section
         class="ds-panel"
+        id="salto-al-contenuto"
         data-ds-panel="salto-al-contenuto"
         aria-labelledby="salto-al-contenuto-t"
       >
@@ -5650,7 +5750,7 @@ const NAV = [
         </div>
       </section>
 
-      <section class="ds-panel" data-ds-panel="stati" aria-labelledby="stati-t">
+      <section class="ds-panel" id="stati" data-ds-panel="stati" aria-labelledby="stati-t">
         <div class="ds-panel__head">
           <h2 class="ds-section__title" id="stati-t">{t.secStates}</h2>
         </div>
@@ -5686,7 +5786,7 @@ const NAV = [
         </div>
       </section>
 
-      <section class="ds-panel" data-ds-panel="mobile" aria-labelledby="mobile-t">
+      <section class="ds-panel" id="mobile" data-ds-panel="mobile" aria-labelledby="mobile-t">
         <div class="ds-panel__head">
           <h2 class="ds-section__title" id="mobile-t">{t.secMobile}</h2>
         </div>
@@ -5733,6 +5833,7 @@ const NAV = [
 
       <section
         class="ds-panel"
+        id="transizione-di-pagina"
         data-ds-panel="transizione-di-pagina"
         aria-labelledby="transizione-di-pagina-t"
       >
@@ -5839,7 +5940,12 @@ const NAV = [
         </div>
       </section>
 
-      <section class="ds-panel" data-ds-panel="animazioni" aria-labelledby="animazioni-t">
+      <section
+        class="ds-panel"
+        id="animazioni"
+        data-ds-panel="animazioni"
+        aria-labelledby="animazioni-t"
+      >
         <div class="ds-panel__head">
           <h2 class="ds-section__title" id="animazioni-t">{t.secMotion}</h2>
         </div>
@@ -5887,7 +5993,12 @@ const NAV = [
         </div>
       </section>
 
-      <section class="ds-panel" data-ds-panel="accessibilita" aria-labelledby="accessibilita-t">
+      <section
+        class="ds-panel"
+        id="accessibilita"
+        data-ds-panel="accessibilita"
+        aria-labelledby="accessibilita-t"
+      >
         <div class="ds-panel__head">
           <h2 class="ds-section__title" id="accessibilita-t">{t.secA11y}</h2>
         </div>
