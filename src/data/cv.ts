@@ -386,7 +386,7 @@ export const cvData = {
     },
     {
       company: "ALTEN Italia",
-      role: "Frontend Developer",
+      role: "Frontend Developer & UX/UI Design System",
       startDate: "2019-07",
       endDate: "present",
       location: "Torino, Italia",
@@ -403,7 +403,7 @@ export const cvData = {
         },
         {
           client: "Aruba",
-          role: "Tech Lead & Design System Developer",
+          role: "Tech Lead · UX/UI & Design System Developer",
           description:
             "Progettazione e sviluppo della libreria di Web Components in Lit (100+ componenti usati per la realizzazione degli applicativi aziendali). Allineamento continuo con i team UX/UI su Figma, cura dei principi di accessibilità (WCAG) e integrazione di Storybook per la documentazione. Gestione delle code review, architettura SCSS modulare con BEM e test unitari con Jest e poi Vitest. Nel ruolo di Tech Lead ho gestito il team Agile facendo da ponte tra design e sviluppo per velocizzare l'onboarding e la consegna dei componenti.",
         },
@@ -422,6 +422,7 @@ export const cvData = {
       ],
       highlights: [
         "Ho guidato come Tech Lead e Scrum Master il team Aruba Design System, oltre 3 anni e più di 30 persone: libreria di oltre 100 componenti WebComponents adottata cross-prodotto.",
+        "Ho lavorato sul lato UX/UI del design system Aruba: stati, accessibilità (WCAG) e coerenza visiva dei componenti, allineati con i designer su Figma.",
         "Ho sviluppato architettura Angular enterprise per Intesa San Paolo in un team di oltre 50 persone, con standard condivisi e code review.",
         "Ho introdotto test unitari sistematici con Jest, con impatto diretto su stabilità dei rilasci e coverage.",
       ],
@@ -459,7 +460,7 @@ export const cvData = {
       facets: [
         {
           mode: "creative",
-          role: "Design System Developer — Aruba",
+          role: "UX/UI & Design System Developer — Aruba",
           description:
             "Ho costruito il design system di Aruba dal lato di chi lo usa ogni giorno: una libreria di oltre 100 WebComponents in Lit, progettata insieme ai designer perché ogni componente rispetti tipografia, spacing e stati definiti in Figma.",
           highlights: [

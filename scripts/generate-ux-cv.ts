@@ -101,10 +101,10 @@ const EN: Locale = {
     {
       yr: "2019 — present",
       loc: "Turin, Italy",
-      role: "Frontend Developer",
+      role: "Frontend Developer &amp; UX/UI Design System",
       org: "ALTEN Italia @ Aruba &amp; Intesa San Paolo",
       bullets: [
-        "For <b>Aruba</b> I built the design system: a <b>100+ component library</b> in Lit, with the design team, honouring the typography, spacing and states defined in Figma.",
+        "For <b>Aruba</b> I built the design system, on the <b>UX/UI</b> side and in code: a <b>100+ component library</b> in Lit, with the design team, honouring the typography, spacing, states and accessibility (WCAG) defined in Figma.",
         "On the Aruba design system I was <b>Tech Lead and, in that role, Scrum Master</b>; for <b>Intesa San Paolo</b> I worked as a frontend developer on enterprise Angular, with systematic testing (Jest).",
       ],
     },
@@ -296,10 +296,10 @@ const IT: Locale = {
     {
       yr: "2019 — oggi",
       loc: "Torino, Italia",
-      role: "Frontend Developer",
+      role: "Frontend Developer &amp; UX/UI Design System",
       org: "ALTEN Italia @ Aruba &amp; Intesa San Paolo",
       bullets: [
-        "Per <b>Aruba</b> ho costruito il design system: una <b>libreria di 100+ componenti</b> in Lit, insieme al team di design, nel rispetto di tipografia, spaziature e stati definiti in Figma.",
+        "Per <b>Aruba</b> ho costruito il design system, lato <b>UX/UI</b> e lato codice: una <b>libreria di 100+ componenti</b> in Lit, insieme al team di design, nel rispetto di tipografia, spaziature, stati e accessibilità (WCAG) definiti in Figma.",
         "Sul design system Aruba ero <b>Tech Lead e, in quel ruolo, Scrum Master</b>; per <b>Intesa San Paolo</b> ho lavorato come frontend developer su Angular enterprise, con test sistematici (Jest).",
       ],
     },

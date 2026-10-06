@@ -207,7 +207,7 @@ export const cvDataEn = {
     },
     {
       company: "ALTEN Italia",
-      role: "Frontend Developer",
+      role: "Frontend Developer & UX/UI Design System",
       startDate: "2019-07",
       endDate: "present",
       location: "Turin, Italy",
@@ -224,7 +224,7 @@ export const cvDataEn = {
         },
         {
           client: "Aruba",
-          role: "Tech Lead & Design System Developer",
+          role: "Tech Lead · UX/UI & Design System Developer",
           description:
             "Design and development of the Web Components library in Lit (100+ components used to build the company's applications). Continuous alignment with the UX/UI teams on Figma, care for accessibility principles (WCAG) and Storybook integration for documentation. Ownership of code reviews, modular SCSS architecture with BEM, and unit tests with Jest and later Vitest. As Tech Lead I ran the Agile team, bridging design and development to speed up onboarding and component delivery.",
         },
@@ -243,6 +243,7 @@ export const cvDataEn = {
       ],
       highlights: [
         "I led the Aruba Design System team as Tech Lead and Scrum Master, over 3 years and more than 30 people: a library of over 100 WebComponents adopted cross-product.",
+        "I worked on the UX/UI side of the Aruba design system: component states, accessibility (WCAG) and visual consistency, aligned with the designers in Figma.",
         "I developed enterprise Angular architecture for Intesa San Paolo in a team of over 50 people, with shared standards and code review.",
         "I introduced systematic unit testing with Jest, with direct impact on release stability and coverage.",
       ],
@@ -280,7 +281,7 @@ export const cvDataEn = {
       facets: [
         {
           mode: "creative",
-          role: "Design System Developer — Aruba",
+          role: "UX/UI & Design System Developer — Aruba",
           description:
             "I built the Aruba design system from the side of the people who use it every day: a library of over 100 WebComponents in Lit, designed together with the designers so every component respects the typography, spacing and states defined in Figma.",
           highlights: [
