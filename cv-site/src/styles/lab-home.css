@@ -930,8 +930,8 @@ html[data-lh-armed] .lh-obj {
    primo era pieno e gli altri a contorno; Giulio li ha voluti tutti pieni. Prima è stata una riga di «prove»
    in testo mono e poi una fila di chip, bocciate tutte e due: la prima non
    sembrava un componente, la seconda si leggeva come un elenco da scorrere.
-   Su telefono la riga c'è, più compatta e in un altro punto: vedi
-   § «I badge anche su telefono» nel blocco mobile. */
+   Su telefono la riga c'è, più compatta e sotto il ruolo: vedi § «Le schede
+   delle lenti su telefono» in fondo al blocco mobile. */
 .lh-section__proof {
   display: none;
 }
@@ -1108,47 +1108,6 @@ html[data-lh-armed] .lh-obj {
 
   .lh-cta {
     text-align: center;
-  }
-
-  /* ── I badge anche su telefono (2026-10-13) ─────────────────────────────
-     Sotto il ruolo e sopra il paragrafo, non dopo il testo come su desktop.
-     Il motivo è il percorso dell'occhio su una colonna sola: titolo, ruolo,
-     poi chi scorre in tre secondi si ferma alla prima cosa che spicca. Dopo
-     il testo i badge pieni toccavano il bottone pieno e si leggevano come un
-     unico blocco di accento: il CTA perdeva il primato. Sotto il ruolo fanno
-     da intestazione — chi, cosa fa, con che cosa — e il paragrafo resta per
-     chi vuole leggere. L'ordine si sposta con `order`, non nel DOM: i badge
-     non ricevono il focus, quindi l'ordine di tabulazione non cambia.
-
-     Più compatti che su desktop (11px, gap 4px): così stanno in due righe
-     a 390px anche gli otto della lente Dev. Misurato a 390×844: la scheda
-     non cresce, i 49px escono dall'aria fra i bottoni e l'oggetto. Sui
-     telefoni bassi (667px) la scheda era già più alta della finestra e si
-     allunga di 50–76px: scende l'oggetto, i bottoni restano in vista. */
-  .lh-section__proof {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--size-4);
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  .lh-section__text,
-  .lh-section__actions {
-    order: 1;
-  }
-
-  .lh-section__proof .lc-badge {
-    min-height: var(--size-20);
-    padding: 0.125rem var(--size-6);
-    font-size: 0.6875rem;
-    letter-spacing: 0.06em;
-  }
-
-  .lh-section[data-mode] .lh-section__proof {
-    --color-accent: var(--accent);
-    --color-accent-text: var(--accent-text, var(--accent));
   }
 
   .lh-hero {
@@ -1372,6 +1331,108 @@ html[data-lh-armed] .lh-obj {
   .lh-section__initial {
     top: -0.15em;
     bottom: auto;
+  }
+}
+
+/* ── Le schede delle lenti su telefono: oggetto in mezzo, bottoni in fondo ──
+   Scelta di Giulio il 2026-10-13, dopo sette varianti messe a confronto.
+   L'ordine è titolo · ruolo · badge · testo · oggetto · bottoni.
+
+   Perché così, e non come prima (testo, bottoni, oggetto in coda):
+   - la scheda si legge dall'alto in basso e finisce con l'azione, e i
+     bottoni stanno dove arriva il pollice;
+   - l'oggetto fa da pausa fra le parole e la scelta, invece di restare
+     staccato da tutto in fondo alla scheda;
+   - i badge stanno sotto il ruolo e lontano dal bottone pieno: dopo il testo
+     le due masse di accento si toccavano e il bottone perdeva il primato.
+
+   Come: la colonna di testo diventa `display: contents`, così titolo, ruolo,
+   badge, testo e bottoni diventano figli diretti della scheda e si possono
+   ordinare insieme all'oggetto, che nel DOM sta prima di tutti. Il DOM non
+   cambia: desktop e lettori di schermo leggono l'ordine di sempre (titolo,
+   ruolo, testo, badge, bottoni), e i badge non ricevono il focus, quindi
+   l'ordine di tabulazione resta quello. La sigla perde la colonna come
+   riferimento e si aggancia alla scheda, con `isolation` a tenerle il
+   livello dietro al titolo.
+
+   Solo le schede delle lenti (`[data-mode]`): «Chi sono» ha un'altra
+   struttura e resta com'è. */
+@media (max-width: 55.99rem) {
+  .lh-section[data-mode] {
+    display: flex;
+    flex-direction: column;
+    gap: var(--size-16);
+    isolation: isolate;
+  }
+
+  .lh-section[data-mode] .lh-section__copy {
+    display: contents;
+  }
+
+  .lh-section[data-mode] .lh-section__initial {
+    top: calc(clamp(var(--size-32), 7vh, var(--size-48)) - 0.15em);
+    right: max(var(--lh-gutter), calc(100% - var(--lh-gutter) - 32rem));
+  }
+
+  .lh-section[data-mode] .lh-section__text {
+    order: 1;
+  }
+
+  /* L'oggetto prende lo spazio che avanza fra il testo e i bottoni: nessun
+     tetto in altezza, ci pensa quello in larghezza (min(42vw, --nat)). */
+  .lh-section[data-mode] .lh-section__object {
+    order: 2;
+    flex: 1 1 0;
+    min-height: 0;
+    max-height: none;
+    height: auto;
+    align-self: center;
+    margin-block: var(--size-8);
+  }
+
+  .lh-section[data-mode] .lh-section__actions {
+    order: 3;
+    align-self: stretch;
+  }
+
+  /* I badge: pieni come su desktop, più compatti (11px, gap 4px) perché
+     anche gli otto della lente Dev stiano in due righe a 390px. */
+  .lh-section__proof {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--size-4);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .lh-section__proof .lc-badge {
+    min-height: var(--size-20);
+    padding: 0.125rem var(--size-6);
+    font-size: 0.6875rem;
+    letter-spacing: 0.06em;
+  }
+
+  .lh-section[data-mode] .lh-section__proof {
+    --color-accent: var(--accent);
+    --color-accent-text: var(--accent-text, var(--accent));
+  }
+}
+
+/* Telefoni bassi (sotto i 700px: iPhone SE, Android piccoli). Misurato:
+   con i bottoni in fondo l'oggetto restava a 0px e i bottoni finivano a filo
+   del bordo dello schermo o sotto. Qui i bottoni tornano subito dopo il
+   testo e l'oggetto va in coda con l'altezza di prima: la scheda si allunga,
+   ma l'azione resta in vista. */
+@media (max-width: 55.99rem) and (max-height: 43.75rem) {
+  .lh-section[data-mode] .lh-section__actions {
+    order: 2;
+  }
+
+  .lh-section[data-mode] .lh-section__object {
+    order: 3;
+    flex: 0 0 auto;
+    height: 24svh;
   }
 }
 
