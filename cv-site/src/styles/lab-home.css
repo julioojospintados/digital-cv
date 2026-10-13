@@ -924,11 +924,12 @@ html[data-lh-armed] .lh-obj {
   }
 }
 
-/* ── La riga delle prove ──────────────────────────────────────────────────
-   Tre fatti per lente, sotto il paragrafo (lab-copy.ts § proof). Solo da
-   desktop: su telefono la scheda deve stare in 100svh, e una riga in più
-   spingerebbe i bottoni sotto la piega. Lì le stesse cose le dice la pagina
-   della lente, un tocco dopo. */
+/* ── La riga AI ──────────────────────────────────────────────────────────
+   Il badge AI e quattro chip, sotto il paragrafo (lab-copy.ts § aiStack):
+   gli stessi componenti della pagina CV, da global.css. Prima era una riga
+   di «prove» in testo mono con dei pallini, bocciata perché non sembrava un
+   componente. Solo da desktop: su telefono la scheda deve stare in 100svh,
+   e una riga in più spingerebbe i bottoni sotto la piega. */
 .lh-section__proof {
   display: none;
 }
@@ -938,7 +939,7 @@ html[data-lh-armed] .lh-obj {
    scheda, a 1440 il 29%. Titolo a 48px e oggetto a 179px erano le misure
    del telefono rimaste uguali su un monitor, cioè un francobollo su un
    tavolo vuoto. Si riempie con quello che c'è già, ingrandito, più la riga
-   delle prove: niente decorazione nuova.
+   AI: niente decorazione nuova.
 
    L'oggetto cresce fino alla sua larghezza nativa (--nat) e non oltre: la
    bussola ha 208px veri, il laptop 524. Oltre quella misura non si
@@ -966,34 +967,30 @@ html[data-lh-armed] .lh-obj {
 
   .lh-section__proof {
     display: flex;
-    flex-wrap: wrap;
-    gap: var(--size-6) var(--size-16);
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    font-family: var(--font-mono);
-    font-size: var(--fs-14);
-    letter-spacing: 0.04em;
-    color: var(--lh-ink);
-  }
-
-  .lh-section__proof li {
-    display: inline-flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: var(--size-8);
   }
 
-  /* Un punto nel colore della lente davanti a OGNI voce, non solo fra una
-     e l'altra. Come separatore («li + li») funzionava finché le tre voci
-     stavano su una riga: a 1440px la terza va a capo, e la seconda riga
-     cominciava con un punto orfano. Con un punto per voce, se va a capo si
-     legge come un elenco ordinato invece che come una riga spezzata. */
-  .lh-section__proof li::before {
-    content: "";
-    width: var(--size-6);
-    height: var(--size-6);
-    border-radius: 50%;
-    background: var(--accent);
+  /* Il badge qui apre la riga invece di seguire un titolo: niente margine a
+     sinistra e niente rialzo, che servono quando sta accanto al testo. */
+  .lh-section__proof .lc-ai {
+    margin-left: 0;
+    transform: none;
+    font-size: var(--fs-12);
+    padding: 0.1875rem var(--size-8);
+  }
+
+  .lh-section__proof .lc-chips {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  /* Chip e badge prendono --color-accent, l'accento della pagina: qui ogni
+     scheda ha il suo, quindi lo si riporta a quello della lente. */
+  .lh-section[data-mode] .lh-section__proof {
+    --color-accent: var(--accent);
   }
 }
 

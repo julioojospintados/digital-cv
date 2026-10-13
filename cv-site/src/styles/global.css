@@ -1413,3 +1413,53 @@ floating-menu {
   background: rgba(0, 0, 0, 0.55);
   outline: none;
 }
+
+/* ── Chip e badge AI — componenti condivisi ──────────────────────────────
+   Nati nella pagina CV (lab-cv.css) e spostati qui il 2026-10-13, quando la
+   home ha cominciato a usarli nella riga AI delle schede. Una copia per
+   pagina si sarebbe scollata al primo ritocco. Le variabili hanno un
+   ripiego dall'una all'altra pagina: --lc-* sulla pagina CV, --lh-* sulla
+   home, con gli stessi valori. Le varianti che servono a una pagina sola
+   (.lc-chip--more, --extra) restano nel suo foglio. */
+.lc-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--size-6);
+  margin-top: 0.875rem;
+}
+
+.lc-chip {
+  padding: 0.1875rem var(--size-8);
+  border: 1px solid color-mix(in srgb, var(--color-accent) 35%, var(--lc-line, var(--lh-line)));
+  border-radius: var(--radius-4);
+  /* muted su tinta 12% = 5,23-6,51:1 a seconda della lente, verificato. */
+  background: color-mix(in srgb, var(--color-accent) 12%, transparent);
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  color: var(--lc-muted, var(--lh-muted));
+}
+
+.lc-ai {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--size-4);
+  margin-left: var(--size-8);
+  padding: 0.0625rem 0.4375rem;
+  border-radius: var(--radius-4);
+  background: var(--color-accent);
+  color: var(--lc-on-accent, var(--color-on-accent));
+  font-family: var(--font-sans);
+  font-size: var(--fs-10);
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  /* Non deve alzare l'interlinea della riga che la ospita. */
+  vertical-align: middle;
+  transform: translateY(-0.1em);
+}
+
+.lc-ai--sm {
+  padding: 0 var(--size-6);
+  letter-spacing: 0.08em;
+}

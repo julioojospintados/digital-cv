@@ -1570,11 +1570,15 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
                       : "By nature I try to solve problems. That professional bias led me to UX/UI and to pairing it with aesthetics."
                   }
                 </p>
-                <ul class="lh-section__proof" role="list" data-ds-part="7">
-                  <li>IBM UX Design Certificate</li>
-                  <li>{it ? "7 interviste utente" : "7 user interviews"}</li>
-                  <li>{it ? "Design system WCAG AA" : "WCAG AA design system"}</li>
-                </ul>
+                <div class="lh-section__proof" data-ds-part="7">
+                  <span class="lc-ai" aria-hidden="true">AI</span>
+                  <ul class="lc-chips" role="list">
+                    <li class="lc-chip">UX Pilot</li>
+                    <li class="lc-chip">Google Stitch</li>
+                    <li class="lc-chip">Visily</li>
+                    <li class="lc-chip">Claude</li>
+                  </ul>
+                </div>
                 <div class="lh-section__actions" data-ds-part="5">
                   <a class="lh-cta" href="#ingresso-sezione-lente">GO to Web & UX Designer</a>
                   <a class="lh-cta lh-cta--ghost" href="#ingresso-sezione-lente">
@@ -1670,8 +1674,8 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
               <span class="ds-anatomy__role"
                 >{
                   it
-                    ? "Tre prove in mono, solo da desktop (56rem in su): fatti con un numero o un nome verificabile, separati da un punto nel colore della lente. Su telefono non compaiono, la scheda deve stare in una schermata."
-                    : "Three proofs in mono, desktop only (56rem and up): facts with a verifiable number or name, separated by a dot in the lens colour. On phones they do not show, the card has to fit one screen."
+                    ? "La riga AI, solo da desktop (56rem in su): il badge AI e quattro chip, gli strumenti AI usati in quella lente. Sono la chip e il badge della pagina CV, spostati in global.css perché li usino tutte e due le pagine. Su telefono non compaiono: la scheda deve stare in una schermata."
+                    : "The AI row, desktop only (56rem and up): the AI badge and four chips, the AI tools used in that lens. They are the CV page's chip and badge, moved to global.css so both pages use them. On phones they do not show: the card has to fit one screen."
                 }</span
               >
             </li>

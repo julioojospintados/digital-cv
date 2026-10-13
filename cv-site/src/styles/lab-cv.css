@@ -1008,31 +1008,6 @@
    un badge posizionato balla a ogni apertura, e questa clip deve restare
    leggibile anche a card chiusa — e' un segnale da scansione. */
 
-.lc-ai {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--size-4);
-  margin-left: var(--size-8);
-  padding: 0.0625rem 0.4375rem;
-  border-radius: var(--radius-4);
-  background: var(--color-accent);
-  color: var(--lc-on-accent);
-  font-family: var(--font-sans);
-  font-size: var(--fs-10);
-  font-weight: 900;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  white-space: nowrap;
-  /* Non deve alzare l'interlinea della riga che la ospita. */
-  vertical-align: middle;
-  transform: translateY(-0.1em);
-}
-
-.lc-ai--sm {
-  padding: 0 var(--size-6);
-  letter-spacing: 0.08em;
-}
-
 /* ─── Incarichi presso clienti ───────────────────────────────────
    ALTEN e' una consulenza: un impiego, quattro clienti. Il nome del cliente
    sta in testa e in grassetto perche' e' il dato che si cerca scorrendo il CV
@@ -1092,23 +1067,9 @@
   color: var(--lc-muted);
 }
 
-.lc-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--size-6);
-  margin-top: 0.875rem;
-}
-
-.lc-chip {
-  padding: 0.1875rem var(--size-8);
-  border: 1px solid color-mix(in srgb, var(--color-accent) 35%, var(--lc-line));
-  border-radius: var(--radius-4);
-  /* muted su tinta 12% = 5,23-6,51:1 a seconda della lente, verificato. */
-  background: color-mix(in srgb, var(--color-accent) 12%, transparent);
-  font-family: var(--font-mono);
-  font-size: var(--fs-12);
-  color: var(--lc-muted);
-}
+/* .lc-chips, .lc-chip, .lc-ai e .lc-ai--sm stanno in global.css dal
+   2026-10-13: li usa anche la home (la riga AI delle schede). Qui restano
+   le varianti che servono solo a questa pagina. */
 
 /* Le tecnologie oltre la soglia. Sono nell'HTML da sempre: sparire è una
    decisione che prende lo script, aggiungendo .is-collapsed alla lista —
