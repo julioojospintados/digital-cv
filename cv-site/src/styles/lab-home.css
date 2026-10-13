@@ -924,6 +924,79 @@ html[data-lh-armed] .lh-obj {
   }
 }
 
+/* ── La riga delle prove ──────────────────────────────────────────────────
+   Tre fatti per lente, sotto il paragrafo (lab-copy.ts § proof). Solo da
+   desktop: su telefono la scheda deve stare in 100svh, e una riga in più
+   spingerebbe i bottoni sotto la piega. Lì le stesse cose le dice la pagina
+   della lente, un tocco dopo. */
+.lh-section__proof {
+  display: none;
+}
+
+/* ── Desktop: la scheda cresce con lo schermo (2026-10-13) ───────────────
+   Misurato prima di toccare: a 1860px il contenuto occupava il 23% della
+   scheda, a 1440 il 29%. Titolo a 48px e oggetto a 179px erano le misure
+   del telefono rimaste uguali su un monitor, cioè un francobollo su un
+   tavolo vuoto. Si riempie con quello che c'è già, ingrandito, più la riga
+   delle prove: niente decorazione nuova.
+
+   L'oggetto cresce fino alla sua larghezza nativa (--nat) e non oltre: la
+   bussola ha 208px veri, il laptop 524. Oltre quella misura non si
+   ingrandisce, si sgrana. Restano di misure diverse, ed è giusto così: un
+   laptop è più grande di una bussola anche sul tavolo. */
+@media (min-width: 56rem) {
+  .lh-section__copy {
+    gap: var(--size-20);
+    max-width: 38rem;
+  }
+
+  .lh-section__title {
+    font-size: clamp(3rem, 4.6vw, 5rem);
+    line-height: 1;
+  }
+
+  .lh-section__text {
+    font-size: var(--fs-18);
+    max-width: 36rem;
+  }
+
+  .lh-section__object {
+    width: min(90%, var(--nat, 22rem));
+  }
+
+  .lh-section__proof {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--size-6) var(--size-16);
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-family: var(--font-mono);
+    font-size: var(--fs-14);
+    letter-spacing: 0.04em;
+    color: var(--lh-ink);
+  }
+
+  .lh-section__proof li {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--size-8);
+  }
+
+  /* Un punto nel colore della lente davanti a OGNI voce, non solo fra una
+     e l'altra. Come separatore («li + li») funzionava finché le tre voci
+     stavano su una riga: a 1440px la terza va a capo, e la seconda riga
+     cominciava con un punto orfano. Con un punto per voce, se va a capo si
+     legge come un elenco ordinato invece che come una riga spezzata. */
+  .lh-section__proof li::before {
+    content: "";
+    width: var(--size-6);
+    height: var(--size-6);
+    border-radius: 50%;
+    background: var(--accent);
+  }
+}
+
 /* ── Mobile ───────────────────────────────────────────────────────────────
    Qui il layout non si stringe: cambia proprio.
 

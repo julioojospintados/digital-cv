@@ -142,6 +142,7 @@ const sections = MODES.map((mode) => ({
   title: PROFILE_TEXT[locale][mode].title,
   eyebrow: t.modeLabels[mode],
   desc: PROFILE_TEXT[locale][mode].desc,
+  proof: PROFILE_TEXT[locale][mode].proof,
 }));
 
 // Fino al 2026-09-11 la CTA del portfolio compariva solo nella sezione
@@ -466,6 +467,14 @@ const sections = MODES.map((mode) => ({
               </h2>
               <p class="lh-section__eyebrow">{s.eyebrow}</p>
               <p class="lh-section__text">{s.desc}</p>
+              {/* Tre prove, solo da desktop: lì la scheda ha spazio, su
+                  telefono allungherebbero una schermata che deve stare in
+                  100svh. Il perché e le regole in lab-copy.ts. */}
+              <ul class="lh-section__proof" role="list">
+                {s.proof.map((p) => (
+                  <li>{p}</li>
+                ))}
+              </ul>
               <div class="lh-section__actions">
                 {/* lensPath e non una stringa: lo slug dell'URL (/design,
                     /tech, /ai) non coincide con la chiave interna del mode,

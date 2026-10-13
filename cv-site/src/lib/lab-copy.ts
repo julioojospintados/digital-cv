@@ -54,6 +54,15 @@ export interface ProfileText {
   title: [string, string];
   /** Il paragrafo lungo. Non va nella fascia dei primi 7 secondi. */
   desc: string;
+  /**
+   * Tre prove, una riga sotto il paragrafo, solo su desktop (2026-10-13).
+   * Sono la cosa che un recruiter scorre in tre secondi, quindi solo fatti
+   * con un numero o un nome verificabile: niente aggettivi, e nessun numero
+   * che non abbia uno strumento o un documento dietro (identity,
+   * writing-style.md § Numeri e percentuali). Tre e non di più: una tupla,
+   * così una quarta voce è un errore di tipo e non un ripensamento.
+   */
+  proof: [string, string, string];
 }
 
 export const PROFILE_TEXT: Record<Locale, Record<Mode, ProfileText>> = {
@@ -61,28 +70,42 @@ export const PROFILE_TEXT: Record<Locale, Record<Mode, ProfileText>> = {
     creative: {
       title: ["Brand,", "estetica e interfacce."],
       desc: `Di natura cerco di risolvere problemi: che siano di un amico, di un passante per strada o di un collega. Questa "deformazione" professionale mi ha portato ad appassionarmi alla UX/UI e a unirla all'estetica. Formazione IBM e SkillUp, con un interesse attento a come la Generative AI sta ridisegnando il settore.`,
+      proof: ["IBM UX Design Certificate", "7 interviste utente", "Design system WCAG AA"],
     },
     tech: {
       title: ["Automazione,", "AI e architetture."],
       desc: `Sviluppo da anni per il mondo enterprise, muovendomi tra TypeScript, Angular e React. Sono passato da team di 30 persone a progetti in solitaria potenziati dall'AI, dove creo workflow e integrazioni MCP su misura. Tutta la lista di tecnologie e sigle la trovi cliccando qua sotto.`,
+      proof: ["100+ componenti Lit per Aruba", "Architetture MCP", "Copertura test oltre l'80%"],
     },
     human: {
       title: ["Storytelling", "e strategia."],
       desc: `L'AI esegue, calcola e velocizza, ma non comprende intrinsecamente le persone. Unisco la progettazione di workflow automatizzati alla sensibilità narrativa che mi arriva dal marketing, dalla scrittura e dal teatro. L'AI fa davvero un gran lavoro, ma senza un pilota potrebbe non farti mai arrivare a Itaca.`,
+      proof: [
+        "Master IED in Comunicazione Digitale",
+        "10 anni da presentatore dal vivo",
+        "Giornalista freelance",
+      ],
     },
   },
   en: {
     creative: {
       title: ["Brand,", "aesthetics and interfaces."],
       desc: "I'm a problem solver by nature—whether it's helping a friend, a stranger on the street, or a colleague. It's almost a force of habit, and it's what naturally led me to UX/UI design and blending function with aesthetics. IBM and SkillUp certified, with a keen eye on how Generative AI is reshaping the industry.",
+      proof: ["IBM UX Design Certificate", "7 user interviews", "WCAG AA design system"],
     },
     tech: {
       title: ["Automation,", "AI and architectures."],
       desc: "I've spent years building for the enterprise world, moving between TypeScript, Angular and React. I went from 30-person teams to solo, AI-powered projects, where I build custom workflows and MCP integrations. Find the full list of technologies and acronyms by clicking below.",
+      proof: ["100+ Lit components for Aruba", "MCP architectures", "Test coverage above 80%"],
     },
     human: {
       title: ["Storytelling", "and strategy."],
       desc: "AI executes, calculates and speeds things up, but it doesn't intrinsically understand people. I combine automated workflow design with a narrative sensibility shaped by marketing, writing and theatre. AI does a great job, but without a pilot at the helm, it might never get you to Ithaca.",
+      proof: [
+        "IED Master's in Digital Communication",
+        "10 years as a live host",
+        "Freelance journalist",
+      ],
     },
   },
 };

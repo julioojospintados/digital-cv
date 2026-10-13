@@ -1570,6 +1570,11 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
                       : "By nature I try to solve problems. That professional bias led me to UX/UI and to pairing it with aesthetics."
                   }
                 </p>
+                <ul class="lh-section__proof" role="list" data-ds-part="7">
+                  <li>IBM UX Design Certificate</li>
+                  <li>{it ? "7 interviste utente" : "7 user interviews"}</li>
+                  <li>{it ? "Design system WCAG AA" : "WCAG AA design system"}</li>
+                </ul>
                 <div class="lh-section__actions" data-ds-part="5">
                   <a class="lh-cta" href="#ingresso-sezione-lente">GO to Web & UX Designer</a>
                   <a class="lh-cta lh-cta--ghost" href="#ingresso-sezione-lente">
@@ -1654,8 +1659,19 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
               <span class="ds-anatomy__role"
                 >{
                   it
-                    ? "L'oggetto knolling, nella seconda colonna della griglia."
-                    : "The knolling object, in the grid's second column."
+                    ? "L'oggetto knolling, nella seconda colonna della griglia. Da desktop cresce fino alla sua larghezza nativa, mai oltre: la bussola ha 208px veri, il laptop 524."
+                    : "The knolling object, in the grid's second column. On desktop it grows up to its native width, never beyond: the compass has 208 real pixels, the laptop 524."
+                }</span
+              >
+            </li>
+            <li class="ds-anatomy__item">
+              <span class="ds-anatomy__n" aria-hidden="true">7</span>
+              <code class="ds-anatomy__cls">lh-section__proof</code>
+              <span class="ds-anatomy__role"
+                >{
+                  it
+                    ? "Tre prove in mono, solo da desktop (56rem in su): fatti con un numero o un nome verificabile, separati da un punto nel colore della lente. Su telefono non compaiono, la scheda deve stare in una schermata."
+                    : "Three proofs in mono, desktop only (56rem and up): facts with a verifiable number or name, separated by a dot in the lens colour. On phones they do not show, the card has to fit one screen."
                 }</span
               >
             </li>
