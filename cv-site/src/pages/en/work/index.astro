@@ -79,4 +79,13 @@ const heroObj = workKnollSize(WORK_INDEX_ICON);
 <script>
   import "../../../islands/GoLogo.lit.ts";
   import "../../../islands/FloatingMenu.lit.ts";
+  import { initStackDepth } from "../../../scripts/stack-depth";
+
+  // La pila delle card: la coperta va fuori fuoco mentre la successiva le
+  // sale sopra. Stesso script della home, misura più leggera: qui le card
+  // sono più piccole e la sfocatura piena le renderebbe una macchia.
+  initStackDepth(
+    Array.from(document.querySelectorAll<HTMLElement>(".work-index-grid > .work-index-card")),
+    { blur: 4, dim: 0.25 },
+  );
 </script>

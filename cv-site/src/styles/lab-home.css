@@ -1278,14 +1278,27 @@ html[data-lh-armed] .lh-obj {
   }
 }
 
-/* ── ANTEPRIMA 2026-10-13 — le sezioni come pila di schede ────────────────
-   Stessa idea dell'indice di /work: ogni sezione è sticky, arrivata in cima
-   si ferma e la successiva le sale sopra. L'hero è la base: resta
-   trasparente sulla stanza e viene coperto. Le schede invece devono essere
-   opache, altrimenti quella coperta trasparirebbe: lo sfondo della stanza
-   (.lh::before, fisso) qui viene rifatto dentro ogni scheda, con la luce del
-   suo accento. La scheda coperta si allontana (scala e luminosità) per mano
-   di lab-home-scroll.ts.
+/* ── Le sezioni come pila di schede sfalsate ─────────────────────────────
+   Stessa pila dell'indice di /work, scelta da Giulio il 2026-10-13 fra
+   dodici alternative: ogni sezione è sticky, arrivata in cima si ferma un
+   gradino più in basso della precedente (--lh-stack-i × 0,8rem), e la
+   successiva le sale sopra. I bordi delle schede già passate restano in
+   vista in alto, come nel raccoglitore dei case study.
+
+   Niente ombra sulla scheda che arriva: la prima versione ne aveva una, e
+   sul bordo alto si leggeva come una macchia. La profondità la dà la scheda
+   coperta, che va fuori fuoco e si spegne (scripts/stack-depth.ts, lo
+   stesso di /work).
+
+   L'hero è la base: resta trasparente sulla stanza e viene coperto. Le
+   schede invece sono opache, altrimenti quella coperta trasparirebbe: lo
+   sfondo della stanza (.lh::before, fisso) qui è rifatto dentro ogni
+   scheda, con la luce del suo accento.
+
+   Ogni scheda è più bassa della finestra di quanto vale il suo gradino:
+   alta 100svh, il gradino ne spingerebbe la coda fuori dallo schermo, e il
+   calcolo che impedisce di nasconderla (lab-home-scroll.ts) la riporterebbe
+   in cima, annullando lo sfalsamento.
 
    È un miglioramento progressivo: la pila la accende lo script
    (data-lh-stack su .lh), quindi senza JavaScript la home resta quella di
@@ -1299,6 +1312,8 @@ html[data-lh-armed] .lh-obj {
   position: sticky;
   top: var(--lh-stack-top, 0);
   z-index: 1;
+  min-height: calc(100svh - var(--lh-stack-i, 0) * 0.8rem);
+  border-top: 1px solid var(--lh-line);
   border-radius: var(--radius-16) var(--radius-16) 0 0;
   max-width: none;
   padding-inline: max(var(--lh-gutter), calc((100% - 82rem) / 2 + var(--lh-gutter)));
@@ -1309,9 +1324,6 @@ html[data-lh-armed] .lh-obj {
       transparent 70%
     ),
     radial-gradient(130% 110% at 50% 118%, rgba(0, 0, 0, 0.45), transparent 56%), var(--color-bg);
-  box-shadow: 0 -1.5rem 3rem rgba(0, 0, 0, 0.45);
-  transform-origin: 50% 0;
-  will-change: transform, filter;
 }
 
 .lh[data-lh-stack] .lh-section--about {

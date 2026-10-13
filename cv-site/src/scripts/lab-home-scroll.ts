@@ -21,11 +21,12 @@
 
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { initStackDepth } from "./stack-depth";
 
 gsap.registerPlugin(ScrollTrigger);
 
 /**
- * ANTEPRIMA pila — il segnaposto di flusso di una scheda.
+ * Il segnaposto di flusso di una scheda della pila.
  *
  * Per un elemento sticky `offsetTop` e getBoundingClientRect restituiscono il
  * punto in cui la scheda è FERMA, non il suo posto nella pagina: scorrendo in
@@ -43,6 +44,8 @@ function flowAnchor(el: HTMLElement): HTMLElement {
   a.setAttribute("aria-hidden", "true");
   a.style.display = "block";
   a.style.height = "0";
+  a.style.pointerEvents = "none";
+  a.style.visibility = "hidden";
   el.before(a);
   return a;
 }
@@ -71,7 +74,7 @@ export function initLabHomeScroll(): void {
     });
   }
 
-  // ── ANTEPRIMA pila: accensione ──
+  // ── La pila: accensione ──
   // Prima dei segnaposto e dell'attributo, niente è sticky: senza questo
   // script la home resta quella di sempre. I segnaposto servono anche allo
   // snap (vedi lab-home.css), quindi si creano anche a movimento ridotto.
@@ -80,6 +83,50 @@ export function initLabHomeScroll(): void {
     .querySelectorAll<HTMLElement>(".lh-hero, .lh-section")
     .forEach((el) => el.getClientRects().length && flowAnchor(el));
   lh?.setAttribute("data-lh-stack", "");
+
+  // ── La pila di schede sfalsate ───────────────────────────────────────
+  // Ogni scheda si ferma un gradino sotto la precedente (0,8rem × indice).
+  // Se però è più alta di quanto resta sotto il gradino, fermarla lì ne
+  // nasconderebbe la coda sotto la scheda dopo, e non si leggerebbe mai: in
+  // quel caso si ferma quando il fondo tocca il fondo della finestra.
+  // La sfocatura della scheda coperta è di stack-depth.ts, lo stesso di /work.
+  const stack = Array.from(document.querySelectorAll<HTMLElement>(".lh-section")).filter(
+    (s) => s.getClientRects().length,
+  );
+  // Ogni segnaposto è alto quanto la sua scheda, con un margine negativo
+  // uguale che lo annulla nel flusso. Serve allo snap: con un segnaposto
+  // alto zero, su una scheda più alta della finestra lo snap saltava dalla
+  // sua cima a quella della successiva, e la coda (misurato a 360×640: gli
+  // ultimi 79px, dove stanno i bottoni) si vedeva solo di passaggio. Con
+  // un'area di aggancio alta quanto la scheda il browser lascia scorrere
+  // liberamente al suo interno, come faceva la home prima della pila.
+  const panels = Array.from(document.querySelectorAll<HTMLElement>(".lh-hero, .lh-section")).filter(
+    (el) => el.getClientRects().length,
+  );
+  const sizeAnchors = () => {
+    for (const el of panels) {
+      const a = flowAnchor(el);
+      a.style.height = `${el.offsetHeight}px`;
+      a.style.marginBottom = `-${el.offsetHeight}px`;
+    }
+  };
+  const fitTops = () => {
+    sizeAnchors();
+    const step = parseFloat(getComputedStyle(document.documentElement).fontSize) * 0.8;
+    stack.forEach((s, i) => {
+      s.style.setProperty("--lh-stack-i", String(i));
+      const top = i * step;
+      const over = s.offsetHeight + top - window.innerHeight;
+      s.style.setProperty("--lh-stack-top", `${over > 0 ? top - over : top}px`);
+    });
+  };
+  fitTops();
+  // Non solo la finestra: anche la scheda cambia altezza quando cambia il
+  // suo contenuto, e una scheda cresciuta oltre la finestra deve passare
+  // subito a fermarsi sul fondo.
+  const ro = new ResizeObserver(fitTops);
+  panels.forEach((s) => ro.observe(s));
+  initStackDepth(stack, { blur: 6, dim: 0.3 });
 
   if (reduced) return;
 
@@ -219,46 +266,6 @@ export function initLabHomeScroll(): void {
     }
   });
 
-  // ── ANTEPRIMA — la pila di schede ────────────────────────────────────
-  // 1. Una scheda più alta della finestra non deve fermarsi con la cima in
-  //    alto: la sua coda resterebbe nascosta sotto la scheda dopo, e non si
-  //    leggerebbe mai. Si ferma invece quando il fondo tocca il fondo della
-  //    finestra: top negativo pari a quanto sfora.
-  // 2. La scheda coperta si allontana mentre la successiva sale: scala e
-  //    luminosità, legate allo scorrimento.
-  const stack = Array.from(sections).filter((s) => s.getClientRects().length);
-  const fitTops = () => {
-    for (const s of stack) {
-      const over = s.offsetHeight - window.innerHeight;
-      s.style.setProperty("--lh-stack-top", over > 0 ? `${-over}px` : "0px");
-    }
-  };
-  fitTops();
-  // Non solo la finestra: anche la scheda cambia altezza (le voci di «Chi
-  // sono» si aprono), e una scheda cresciuta oltre la finestra deve passare
-  // subito a fermarsi sul fondo.
-  const ro = new ResizeObserver(fitTops);
-  stack.forEach((s) => ro.observe(s));
-  stack.forEach((section, i) => {
-    const next = stack[i + 1];
-    if (!next) return;
-    gsap.fromTo(
-      section,
-      { scale: 1, filter: "brightness(1)" },
-      {
-        scale: 0.92,
-        filter: "brightness(0.55)",
-        ease: "none",
-        scrollTrigger: {
-          trigger: flowAnchor(next),
-          start: "top bottom",
-          end: "top top",
-          scrub: true,
-        },
-      },
-    );
-  });
-
   // Le immagini sono lazy: l'altezza della pagina cambia mentre arrivano, e
   // senza questo i trigger resterebbero calcolati su misure vecchie.
   window.addEventListener("load", () => ScrollTrigger.refresh());
@@ -284,7 +291,7 @@ export function initLabHomeMood(): void {
   const panels = document.querySelectorAll<HTMLElement>(".lh-hero, .lh-section");
   if (!root || !panels.length) return;
 
-  // ANTEPRIMA: con la pila le schede coperte restano in vista sotto quella
+  // Con la pila le schede coperte restano in vista sotto quella
   // sopra, quindi un IntersectionObserver non vede più chi esce. La scheda
   // attiva è l'ultima la cui cima ha superato metà finestra, ricalcolata a
   // ogni scorrimento sulla posizione nel flusso.

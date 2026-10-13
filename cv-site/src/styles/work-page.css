@@ -635,7 +635,10 @@
   min-height: min(19rem, 52svh);
   padding: clamp(var(--size-24), 4vw, var(--size-48));
   background: color-mix(in srgb, var(--color-bg) 94%, var(--color-text-primary));
-  box-shadow: 0 -0.75rem 2rem rgba(0, 0, 0, 0.35);
+  /* Niente ombra (tolta il 2026-10-13, insieme a quella della home): sul
+     bordo alto si leggeva come una macchia. La profondità la dà la card
+     coperta, che va fuori fuoco e si spegne: scripts/stack-depth.ts, lo
+     stesso della home. */
 }
 
 .work-index-grid > .work-index-card:hover,
