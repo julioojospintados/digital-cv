@@ -1995,7 +1995,7 @@ export const cvData = {
         "Ricerca — Ho definito i tre lettori reali del CV (recruiter generalista, CTO, art director) e cosa ciascuno deve trovare nei primi 3 secondi: affidabilità e leggibilità, stack e architettura, estetica e storytelling. Ogni scelta successiva risponde a uno di loro: se non è argomentabile in colloquio, non entra.",
         "Concept — Il knolling: ordine e varietà insieme. Le mie competenze sono eterogenee (codice, design, palco, metodo) e il modo più onesto di presentarle è disporle sul tavolo come oggetti in una fotografia knolling: tutto visibile, catalogato, intenzionale, nessun cassetto chiuso.",
         "Architettura dell'informazione — Un solo profilo, tre prospettive: le route /tech /creative /human cambiano enfasi e accento cromatico, mai struttura o contenuto. Chi legge sceglie il proprio punto di vista; le altre anime restano visibili come sussurri a bassa opacità, mai nascoste.",
-        "Design system — Sfondo ottanio fisso con 4 accent per mode, tipografia Lexend + JetBrains Mono, sistema square/glow per i livelli skill al posto delle barre percentuali, animazioni solo su transform/opacity con reduced-motion rispettato. Ho deciso i vincoli prima di scrivere i componenti.",
+        "Design system — Sfondo ottanio fisso con un accento per ciascuna delle tre lenti, tipografia Lexend + JetBrains Mono, animazioni solo su transform/opacity con reduced-motion rispettato. Ho deciso i vincoli prima di scrivere i componenti.",
         "Build AI-augmented — Vibe coding con GitHub Copilot e Claude come pair operativi: architettura, UI, animazioni GSAP, e un server MCP con tool, resource e prompt template che espone il CV come API per agenti AI. Il sito è la controprova del workflow che dichiara.",
       ],
       decisions: [
@@ -2013,7 +2013,7 @@ export const cvData = {
         },
         {
           title: "Accessibilità come vincolo, non rifinitura",
-          body: "Ogni accent dei 4 mode ha una variante muted ricalibrata per contrasto WCAG AA (≥4.5:1) sullo sfondo ottanio. Focus visibile, skip link e prefers-reduced-motion sono regole del design system decise all'inizio, non patch aggiunte a fine progetto.",
+          body: "Ogni accento delle tre lenti ha una variante muted ricalibrata per contrasto WCAG AA (≥4.5:1) sullo sfondo ottanio. Focus visibile, skip link e prefers-reduced-motion sono regole del design system decise all'inizio, non patch aggiunte a fine progetto.",
         },
       ],
       outcomes: [

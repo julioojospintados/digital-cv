@@ -1586,7 +1586,7 @@ export const cvDataEn = {
         "Research — I defined the CV's three real readers (generalist recruiter, CTO, art director) and what each must find within the first 3 seconds: reliability and readability, stack and architecture, aesthetics and storytelling. Every later decision answers to one of them: if it can't be defended in an interview, it doesn't ship.",
         "Concept — Knolling: order and variety at once. My skills are heterogeneous (code, design, stage, method) and the most honest way to present them is to lay them on the table like objects in a knolling photograph: everything visible, catalogued, intentional, no closed drawers.",
         "Information architecture — One profile, three perspectives: the /tech /creative /human routes change emphasis and accent colour, never structure or content. Readers choose their own point of view; the other sides stay visible as low-opacity whispers, never hidden.",
-        "Design system — Fixed teal background with 4 per-mode accents, Lexend + JetBrains Mono typography, a square/glow system for skill levels instead of percentage bars, animations on transform/opacity only with reduced-motion respected. I set the constraints before writing the components.",
+        "Design system — Fixed teal background with one accent for each of the three lenses, Lexend + JetBrains Mono typography, animations on transform/opacity only with reduced-motion respected. I set the constraints before writing the components.",
         "AI-augmented build — Vibe coding with GitHub Copilot and Claude as operational pairs: architecture, UI, GSAP animations, and an MCP server with tools, resources and prompt templates exposing the CV as an API for AI agents. The site is the proof of the workflow it claims.",
       ],
       decisions: [
@@ -1604,7 +1604,7 @@ export const cvDataEn = {
         },
         {
           title: "Accessibility as a constraint, not a polish pass",
-          body: "Every accent across the 4 modes has a muted variant recalibrated for WCAG AA contrast (≥4.5:1) on the teal background. Visible focus, skip link and prefers-reduced-motion are design-system rules set at the start, not patches added at the end.",
+          body: "Every accent across the three lenses has a muted variant recalibrated for WCAG AA contrast (≥4.5:1) on the teal background. Visible focus, skip link and prefers-reduced-motion are design-system rules set at the start, not patches added at the end.",
         },
       ],
       outcomes: [
