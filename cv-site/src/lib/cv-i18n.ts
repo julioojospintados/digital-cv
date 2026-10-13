@@ -131,8 +131,8 @@ export interface LocaleStrings {
     toolsAria: string;
     aiInFlow: string;
     aiInFlowClient: string;
-    /** Etichetta per screen reader della riga AI delle schede in home. */
-    aiStackLabel: string;
+    /** Etichetta per screen reader della riga di badge delle schede in home. */
+    badgesLabel: string;
     /** Il comando +N delle chip: {n} viene sostituito col numero */
     showOtherTech: string;
     hideOtherTech: string;
@@ -250,7 +250,7 @@ const IT: LocaleStrings = {
     toolsAria: "Strumenti e tecnologie",
     aiInFlow: " — lavoro svolto con l'AI nel flusso",
     aiInFlowClient: " — incarico svolto con l'AI nel flusso",
-    aiStackLabel: "Gli strumenti AI che uso in questa lente",
+    badgesLabel: "In breve",
     showOtherTech: " — mostra le altre {n} tecnologie",
     hideOtherTech: " — nascondi le altre {n} tecnologie",
     allRoles: "Tutte le esperienze",
@@ -347,7 +347,7 @@ const EN: LocaleStrings = {
     toolsAria: "Tools and technologies",
     aiInFlow: " — work done with AI in the flow",
     aiInFlowClient: " — engagement done with AI in the flow",
-    aiStackLabel: "The AI tools I use in this lens",
+    badgesLabel: "In short",
     showOtherTech: " — show the other {n} technologies",
     hideOtherTech: " — hide the other {n} technologies",
     allRoles: "Every role",

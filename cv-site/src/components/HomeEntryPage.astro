@@ -142,7 +142,7 @@ const sections = MODES.map((mode) => ({
   title: PROFILE_TEXT[locale][mode].title,
   eyebrow: t.modeLabels[mode],
   desc: PROFILE_TEXT[locale][mode].desc,
-  aiStack: PROFILE_TEXT[locale][mode].aiStack,
+  badges: PROFILE_TEXT[locale][mode].badges,
 }));
 
 // Fino al 2026-09-11 la CTA del portfolio compariva solo nella sezione
@@ -467,19 +467,14 @@ const sections = MODES.map((mode) => ({
               </h2>
               <p class="lh-section__eyebrow">{s.eyebrow}</p>
               <p class="lh-section__text">{s.desc}</p>
-              {/* La riga AI: badge e chip del design system, gli stessi della
-                  pagina CV. Solo da desktop: su telefono allungherebbe una
+              {/* La riga di sintesi: cinque badge del design system, il primo
+                  pieno. Solo da desktop: su telefono allungherebbe una
                   schermata che deve stare in 100svh. Regole in lab-copy.ts. */}
-              <div class="lh-section__proof">
-                <span class="lc-ai" aria-hidden="true">
-                  AI
-                </span>
-                <ul class="lc-chips" role="list" aria-label={t.ui.aiStackLabel}>
-                  {s.aiStack.map((tool) => (
-                    <li class="lc-chip">{tool}</li>
-                  ))}
-                </ul>
-              </div>
+              <ul class="lh-section__proof" role="list" aria-label={t.ui.badgesLabel}>
+                {s.badges.map((b, i) => (
+                  <li class:list={["lc-badge", { "lc-badge--solid": i === 0 }]}>{b}</li>
+                ))}
+              </ul>
               <div class="lh-section__actions">
                 {/* lensPath e non una stringa: lo slug dell'URL (/design,
                     /tech, /ai) non coincide con la chiave interna del mode,

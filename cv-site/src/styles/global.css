@@ -1463,3 +1463,43 @@ floating-menu {
   padding: 0 var(--size-6);
   letter-spacing: 0.08em;
 }
+
+/* ── Badge ───────────────────────────────────────────────────────────────
+   Un titolo in breve: «IBM UX Certificate», «AI Workflow». Nato il
+   2026-10-13 per la riga di sintesi delle schede in home, al posto di una
+   fila di chip: le chip sono etichette da scorrere in un elenco lungo, un
+   badge si legge come un titolo, che è ciò che serve a chi scorre in tre
+   secondi.
+
+   Due pesi, come i bottoni: --solid per la voce più forte (una per riga),
+   il contorno per le altre. Cinque badge pieni nel colore della lente
+   sarebbero rumore.
+
+   Non è il badge AI (.lc-ai): quello ha un significato preciso, «lavoro
+   fatto con l'AI», e su «JavaScript» lo perderebbe.
+
+   Contrasto: il contorno scrive in --color-accent-text, che per l'arancione
+   è schiarito fino a 4,85:1 sull'ottanio (12px bold: serve 4,5). Il pieno
+   scrive in --color-on-accent sull'accento, il 6,87:1 di tutti i bottoni
+   pieni. */
+.lc-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.5rem;
+  padding: 0.1875rem var(--size-8);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-4);
+  background: transparent;
+  color: var(--color-accent-text);
+  font-family: var(--font-sans);
+  font-size: var(--fs-12);
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.lc-badge--solid {
+  background: var(--color-accent);
+  color: var(--lc-on-accent, var(--color-on-accent));
+}

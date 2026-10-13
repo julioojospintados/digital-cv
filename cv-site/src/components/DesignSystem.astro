@@ -1570,15 +1570,13 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
                       : "By nature I try to solve problems. That professional bias led me to UX/UI and to pairing it with aesthetics."
                   }
                 </p>
-                <div class="lh-section__proof" data-ds-part="7">
-                  <span class="lc-ai" aria-hidden="true">AI</span>
-                  <ul class="lc-chips" role="list">
-                    <li class="lc-chip">UX Pilot</li>
-                    <li class="lc-chip">Google Stitch</li>
-                    <li class="lc-chip">Visily</li>
-                    <li class="lc-chip">Claude</li>
-                  </ul>
-                </div>
+                <ul class="lh-section__proof" role="list" data-ds-part="7">
+                  <li class="lc-badge lc-badge--solid">IBM UX Certificate</li>
+                  <li class="lc-badge">Design System</li>
+                  <li class="lc-badge">UX Research</li>
+                  <li class="lc-badge">Figma</li>
+                  <li class="lc-badge">WCAG AA</li>
+                </ul>
                 <div class="lh-section__actions" data-ds-part="5">
                   <a class="lh-cta" href="#ingresso-sezione-lente">GO to Web & UX Designer</a>
                   <a class="lh-cta lh-cta--ghost" href="#ingresso-sezione-lente">
@@ -1674,8 +1672,8 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
               <span class="ds-anatomy__role"
                 >{
                   it
-                    ? "La riga AI, solo da desktop (56rem in su): il badge AI e quattro chip, gli strumenti AI usati in quella lente. Sono la chip e il badge della pagina CV, spostati in global.css perché li usino tutte e due le pagine. Su telefono non compaiono: la scheda deve stare in una schermata."
-                    : "The AI row, desktop only (56rem and up): the AI badge and four chips, the AI tools used in that lens. They are the CV page's chip and badge, moved to global.css so both pages use them. On phones they do not show: the card has to fit one screen."
+                    ? "La riga di sintesi, solo da desktop (56rem in su): cinque badge, il primo pieno. Titoli riconoscibili (una certificazione, un metodo, un linguaggio), non numeri senza contesto. Su telefono non compaiono: la scheda deve stare in una schermata."
+                    : "The summary row, desktop only (56rem and up): five badges, the first one filled. Recognisable titles (a certification, a method, a language), not numbers without context. On phones they do not show: the card has to fit one screen."
                 }</span
               >
             </li>
@@ -3644,8 +3642,8 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
         <p class="ds-sub__note">
           {
             it
-              ? "Due misure, e isolate si distinguono appena — 29×17 contro 26×15px, misurato. La differenza vera non è la loro, è del testo a cui stanno accanto: lc-ai segue un titolo a 18px, lc-ai--sm un nome cliente a 14. Per questo qui sotto compaiono nel loro contesto reale, non da sole."
-              : "Two sizes, and isolated they barely differ — 29×17 versus 26×15px, measured. The real difference is not theirs, it belongs to the text beside them: lc-ai follows an 18px title, lc-ai--sm a 14px client name. That is why they show here in their real context, not on their own."
+              ? "Due misure, e isolate si distinguono appena — 29×17 contro 26×15px, misurato. La differenza vera non è la loro, è del testo a cui stanno accanto: lc-ai segue un titolo a 18px, lc-ai--sm un nome cliente a 14. Per questo qui sotto compaiono nel loro contesto reale, non da sole. Accanto c'è il badge generico (lc-badge, dal 2026-10-13): stessa forma, un altro mestiere. Il badge AI dice «fatto con l'AI»; lc-badge è un titolo in breve, uno pieno e gli altri a contorno, come i bottoni."
+              : "Two sizes, and isolated they barely differ — 29×17 versus 26×15px, measured. The real difference is not theirs, it belongs to the text beside them: lc-ai follows an 18px title, lc-ai--sm a 14px client name. That is why they show here in their real context, not on their own. Beside them sits the generic badge (lc-badge, since 2026-10-13): same shape, a different job. The AI badge says «done with AI»; lc-badge is a short title, one filled and the others outlined, like the buttons."
           }
         </p>
         <div class="ds-stage">
@@ -3688,13 +3686,31 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
                   <span class="lc-client__role">Frontend Developer AI-Augmented</span>
                 </p>
               </div>
+              <div class="ds-case">
+                <p class="ds-label">
+                  {
+                    it
+                      ? "il badge generico, nella riga di sintesi della home"
+                      : "the generic badge, in the home summary row"
+                  }
+                </p>
+                <ul
+                  class="lh-section__proof"
+                  role="list"
+                  style="display:flex;gap:0.5rem;flex-wrap:wrap;margin:0;padding:0;list-style:none;"
+                >
+                  <li class="lc-badge lc-badge--solid" data-ds-snippet>AI Workflow</li>
+                  <li class="lc-badge" data-ds-snippet>Design System</li>
+                  <li class="lc-badge">JavaScript</li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
         <div class="ds-spec">
           <div class="ds-spec__row ds-spec__row--wide">
             <span class="ds-spec__k">{t.specClass}</span>
-            <p class="ds-spec__v"><code>lc-ai · lc-ai--sm</code></p>
+            <p class="ds-spec__v"><code>lc-ai · lc-ai--sm · lc-badge · lc-badge--solid</code></p>
           </div>
           <div class="ds-spec__row">
             <span class="ds-spec__k">{t.specUse}</span>

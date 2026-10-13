@@ -55,15 +55,14 @@ export interface ProfileText {
   /** Il paragrafo lungo. Non va nella fascia dei primi 7 secondi. */
   desc: string;
   /**
-   * La riga AI della scheda, solo su desktop (2026-10-13): il badge AI e
-   * quattro chip, gli strumenti AI che uso davvero in questa lente. Prende
-   * il posto di una riga di «prove» in testo mono, bocciata da Giulio perché
-   * non sembrava un componente: ora sono la chip e il badge del design
-   * system, gli stessi della pagina CV. Solo voci che stanno già fra le
-   * competenze in cv.ts. Quattro e non di più: è una tupla, così una quinta
-   * voce è un errore di tipo e non un ripensamento.
+   * La riga di sintesi della scheda, solo su desktop (2026-10-13): cinque
+   * badge, il primo pieno. Sono per chi scorre in tre secondi, quindi titoli
+   * riconoscibili (una certificazione, un metodo, un linguaggio), non
+   * numeri senza contesto: «7 interviste utente» è stato tolto per questo.
+   * Solo cose che stanno già nei dati in cv.ts. Una tupla di cinque, così
+   * una sesta voce è un errore di tipo e non un ripensamento.
    */
-  aiStack: [string, string, string, string];
+  badges: [string, string, string, string, string];
 }
 
 export const PROFILE_TEXT: Record<Locale, Record<Mode, ProfileText>> = {
@@ -71,34 +70,46 @@ export const PROFILE_TEXT: Record<Locale, Record<Mode, ProfileText>> = {
     creative: {
       title: ["Brand,", "estetica e interfacce."],
       desc: `Di natura cerco di risolvere problemi: che siano di un amico, di un passante per strada o di un collega. Questa "deformazione" professionale mi ha portato ad appassionarmi alla UX/UI e a unirla all'estetica. Formazione IBM e SkillUp, con un interesse attento a come la Generative AI sta ridisegnando il settore.`,
-      aiStack: ["UX Pilot", "Google Stitch", "Visily", "Claude"],
+      badges: ["IBM UX Certificate", "Design System", "UX Research", "Figma", "WCAG AA"],
     },
     tech: {
       title: ["Automazione,", "AI e architetture."],
       desc: `Sviluppo da anni per il mondo enterprise, muovendomi tra TypeScript, Angular e React. Sono passato da team di 30 persone a progetti in solitaria potenziati dall'AI, dove creo workflow e integrazioni MCP su misura. Tutta la lista di tecnologie e sigle la trovi cliccando qua sotto.`,
-      aiStack: ["Claude", "GitHub Copilot", "Cursor", "MCP"],
+      badges: ["AI Workflow", "Design System", "JavaScript", "Agile", "MCP"],
     },
     human: {
       title: ["Storytelling", "e strategia."],
       desc: `L'AI esegue, calcola e velocizza, ma non comprende intrinsecamente le persone. Unisco la progettazione di workflow automatizzati alla sensibilità narrativa che mi arriva dal marketing, dalla scrittura e dal teatro. L'AI fa davvero un gran lavoro, ma senza un pilota potrebbe non farti mai arrivare a Itaca.`,
-      aiStack: ["Prompt Engineering", "Agenti AI", "Workflow automatizzati", "Storytelling"],
+      badges: [
+        "Master IED",
+        "Public Speaking",
+        "Copywriting",
+        "Content Strategy",
+        "Prompt Engineering",
+      ],
     },
   },
   en: {
     creative: {
       title: ["Brand,", "aesthetics and interfaces."],
       desc: "I'm a problem solver by nature—whether it's helping a friend, a stranger on the street, or a colleague. It's almost a force of habit, and it's what naturally led me to UX/UI design and blending function with aesthetics. IBM and SkillUp certified, with a keen eye on how Generative AI is reshaping the industry.",
-      aiStack: ["UX Pilot", "Google Stitch", "Visily", "Claude"],
+      badges: ["IBM UX Certificate", "Design System", "UX Research", "Figma", "WCAG AA"],
     },
     tech: {
       title: ["Automation,", "AI and architectures."],
       desc: "I've spent years building for the enterprise world, moving between TypeScript, Angular and React. I went from 30-person teams to solo, AI-powered projects, where I build custom workflows and MCP integrations. Find the full list of technologies and acronyms by clicking below.",
-      aiStack: ["Claude", "GitHub Copilot", "Cursor", "MCP"],
+      badges: ["AI Workflow", "Design System", "JavaScript", "Agile", "MCP"],
     },
     human: {
       title: ["Storytelling", "and strategy."],
       desc: "AI executes, calculates and speeds things up, but it doesn't intrinsically understand people. I combine automated workflow design with a narrative sensibility shaped by marketing, writing and theatre. AI does a great job, but without a pilot at the helm, it might never get you to Ithaca.",
-      aiStack: ["Prompt Engineering", "AI agents", "Automated workflows", "Storytelling"],
+      badges: [
+        "Master IED",
+        "Public Speaking",
+        "Copywriting",
+        "Content Strategy",
+        "Prompt Engineering",
+      ],
     },
   },
 };
