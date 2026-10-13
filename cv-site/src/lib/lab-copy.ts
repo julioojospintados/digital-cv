@@ -251,6 +251,13 @@ export interface AboutText {
   title: string;
   desc: string;
   chips: readonly string[];
+  /**
+   * La riga di badge sotto «Chi sono» (2026-10-13): la logistica che un
+   * recruiter cerca prima di scrivere — dove, come, in che lingue, se sei
+   * libero. Stessi dati di cv.ts (`personal.location`, `languages`,
+   * `personal.availability`): se cambiano lì, vanno cambiati qui.
+   */
+  badges: readonly string[];
 }
 
 export const ABOUT_TEXT: Record<Locale, AboutText> = {
@@ -266,6 +273,7 @@ export const ABOUT_TEXT: Record<Locale, AboutText> = {
       "Scacchi",
       "Piante d'appartamento",
     ],
+    badges: ["Torino", "Remote", "Inglese B2", "Spagnolo B1", "Disponibile"],
   },
   en: {
     eyebrow: "About me",
@@ -279,6 +287,7 @@ export const ABOUT_TEXT: Record<Locale, AboutText> = {
       "Chess",
       "House plants",
     ],
+    badges: ["Turin", "Remote", "English B2", "Spanish B1", "Available"],
   },
 };
 

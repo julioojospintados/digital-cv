@@ -980,7 +980,7 @@ html[data-lh-armed] .lh-obj {
   /* Il badge prende gli accenti del sistema (--color-accent e
      --color-accent-text), che sono quelli della pagina: qui ogni scheda ha
      la sua lente, quindi li si riporta ai suoi. */
-  .lh-section[data-mode] .lh-section__proof {
+  :is(.lh-section[data-mode], .lh-section--about) .lh-section__proof {
     --color-accent: var(--accent);
     --color-accent-text: var(--accent-text, var(--accent));
   }
@@ -1413,9 +1413,57 @@ html[data-lh-armed] .lh-obj {
     letter-spacing: 0.06em;
   }
 
-  .lh-section[data-mode] .lh-section__proof {
+  :is(.lh-section[data-mode], .lh-section--about) .lh-section__proof {
     --color-accent: var(--accent);
     --color-accent-text: var(--accent-text, var(--accent));
+  }
+}
+
+/* ── «Chi sono» su telefono: stesso scheletro delle lenti ─────────────────
+   Scelta di Giulio il 2026-10-13 (variante 3 di quattro). Titolo · ruolo ·
+   badge · le tre card della bio · i tre cassetti · pianta · «Scrivimi» in
+   fondo, pieno. Prima il bottone stava a metà scheda e sotto la pianta
+   restavano 250px vuoti a 390×844. Stessa tecnica delle lenti qui sopra:
+   la colonna di testo in `display: contents`, il DOM non cambia.
+   Sui telefoni bassi vale la stessa regola delle lenti, più sotto: con i
+   tre cassetti a riquadro la pianta scendeva a 18px a 375×667 e a 0 a
+   360×640, quindi lì «Scrivimi» torna dopo i cassetti e la pianta in coda. */
+@media (max-width: 55.99rem) {
+  .lh-section--about {
+    display: flex;
+    flex-direction: column;
+    gap: var(--size-16);
+    isolation: isolate;
+  }
+
+  .lh-section--about .lh-section__copy {
+    display: contents;
+  }
+
+  .lh-section--about .lh-section__initial {
+    top: calc(clamp(var(--size-32), 7vh, var(--size-48)) - 0.15em);
+    right: max(var(--lh-gutter), calc(100% - var(--lh-gutter) - 32rem));
+    bottom: auto;
+  }
+
+  .lh-section--about .about-cards,
+  .lh-section--about .about-actions {
+    order: 1;
+  }
+
+  .lh-section--about .lh-section__object {
+    order: 2;
+    flex: 1 1 0;
+    min-height: 0;
+    max-height: none;
+    height: auto;
+    align-self: center;
+    margin-block: var(--size-8);
+  }
+
+  .lh-section--about .lh-section__actions {
+    order: 3;
+    align-self: stretch;
   }
 }
 
@@ -1425,11 +1473,11 @@ html[data-lh-armed] .lh-obj {
    testo e l'oggetto va in coda con l'altezza di prima: la scheda si allunga,
    ma l'azione resta in vista. */
 @media (max-width: 55.99rem) and (max-height: 43.75rem) {
-  .lh-section[data-mode] .lh-section__actions {
+  :is(.lh-section[data-mode], .lh-section--about) .lh-section__actions {
     order: 2;
   }
 
-  .lh-section[data-mode] .lh-section__object {
+  :is(.lh-section[data-mode], .lh-section--about) .lh-section__object {
     order: 3;
     flex: 0 0 auto;
     height: 24svh;

@@ -24,8 +24,10 @@
  * 2026-09-02, fatta sapendo questo.
  *
  * ── Perché qui non c'è nemmeno una riga di CSS ──────────────────────────
- * Il bottone è `.lh-cta--ghost`, cioè LO STESSO delle tre sezioni lente
- * ("GO to Web & UX Designer"), non una sua imitazione. `.lh-cta` è una classe
+ * Il bottone è `.lh-cta`, cioè LO STESSO delle tre sezioni lente
+ * ("GO to Web & UX Designer"), non una sua imitazione. Pieno e non a
+ * contorno dal 2026-10-13: è l'unica azione di «Chi sono» e la più
+ * importante della pagina, e nelle lenti l'azione principale è piena. `.lh-cta` è una classe
  * libera in `lab-home.css`, non annidata sotto `.lh`, e la vetrina importa
  * quel foglio: funziona in tutti e due i posti senza copiare niente. Un
  * secondo blocco di regole che rifà lo stesso bottone sarebbe divergito alla
@@ -67,7 +69,7 @@ const t =
           browser), _self sostituirebbe il CV con la pagina di composizione.
           Con il client nativo la scheda transitoria si chiude da sola. */}
       <a
-        class="lh-cta lh-cta--ghost"
+        class="lh-cta"
         href={`${email.url}?subject=${encodeURIComponent(t.subject)}`}
         target="_blank"
         rel="noopener noreferrer"
