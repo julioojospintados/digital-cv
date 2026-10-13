@@ -109,21 +109,6 @@ const KNOLLING = [
   { src: "camera", x: "80%", y: "85%", w: "20vmin", r: "-7deg", depth: 1.25 },
 ];
 
-/* ── I prefissi delle classi ─────────────────────────────────────────────
-   Ogni componente porta in alto a destra un badge tipo `lh-*`, e finora la
-   pagina non diceva da nessuna parte cosa volesse dire. Vale la pena leggere
-   la colonna "cosa significa davvero": i prefissi non descrivono *che cosa
-   è* un componente, ma *da quale prova viene* — ed è un difetto del sistema,
-   non una convenzione. `lab-` per giunta sembra il prefisso di famiglia di
-   tutto /lab e invece è una prova sola. Scritto qui perché la vetrina
-   documenta anche ciò che nel sistema non torna. */
-const PREFIXES = [
-  { p: "lh-*", from: "/", file: "lab-home.css" },
-  { p: "lc-*", from: "/<lente>", file: "lab-cv.css" },
-  { p: "work-*", from: "/work", file: "work-page.css" },
-  { p: "ds-*", from: "questa pagina", file: "design-system.css" },
-];
-
 /* ── Token di base, condivisi da tutto il sistema (global.css). ─────────── */
 const BASE_TOKENS = [
   { name: "--color-bg", value: "rgba(8, 73, 67, 1)" },
@@ -429,14 +414,6 @@ const t = it
         "Vale per gli spazi e per le misure insieme: la larghezza di un riquadro e il padding che ci sta dentro cadono sulla stessa griglia, ed è quello che la fa tornare a occhio. I raggi restano fuori, perché hanno i propri token, e così i corpi del testo: un raggio scritto con questa scala sembrerebbe intercambiabile con una spaziatura, e non lo è.",
       sizeHonest:
         "Copre 275 delle 398 misure del sistema. Le altre 123 sono rem scelti a occhio — 0,35 · 0,6 · 0,85 · 1,15 — cioè lo stesso rumore che la scala tipografica aveva già eliminato per i corpi del testo e mai per gli spazi. Sono rimaste letterali di proposito: portarle sulla griglia cambia il disegno, ed è una decisione, non una sostituzione.",
-      prefixTitle: "I prefissi, e perché non vanno bene",
-      prefixLead:
-        "Ogni componente porta un badge come lh-* accanto al titolo. Dice da dove viene la classe — e conviene sapere subito che dice solo quello.",
-      prefixCol1: "Prefisso",
-      prefixCol2: "Da dove viene",
-      prefixCol3: "Foglio",
-      prefixNote:
-        "Un prefisso dovrebbe dire cosa fa un componente, non in quale file è nato. Questi dicono la seconda cosa: lh-* e lc-* sono i nomi di due prove, non di due mestieri. Rinominarli non varrebbe il diff — ma è il motivo per cui il badge accanto al titolo va letto come «da dove viene», non come «che cos'è».",
       anatomyShow: "Mostra i numeri",
       anatomyHint:
         "Le parti nell'ordine in cui stanno nel markup. Premi il comando per vederle numerate sulla demo qui sopra.",
@@ -512,14 +489,6 @@ const t = it
         "It covers spacing and dimensions together: the width of a box and the padding inside it fall on the same grid, and that is what makes it read right. Radii stay out, because they have their own tokens, and so does type: a radius written with this scale would look interchangeable with a spacing value, and it is not.",
       sizeHonest:
         "It covers 275 of the system's 398 measures. The other 123 are rem values picked by eye — 0.35 · 0.6 · 0.85 · 1.15 — the very noise the type scale had already removed from body text and never from spacing. They were left literal on purpose: snapping them to the grid changes the design, and that is a decision, not a substitution.",
-      prefixTitle: "The prefixes, and why they are wrong",
-      prefixLead:
-        "Every component carries a badge like lh-* beside its title. It says where the class comes from — and it is worth knowing up front that this is all it says.",
-      prefixCol1: "Prefix",
-      prefixCol2: "Where it comes from",
-      prefixCol3: "Stylesheet",
-      prefixNote:
-        "A prefix should say what a component does, not which file it was born in. These say the latter: lh-* and lc-* are the names of two prototypes, not of two crafts. Renaming them would not be worth the diff — but it is why the badge beside each title reads as «where it comes from», not «what it is».",
       anatomyShow: "Show the numbers",
       anatomyHint:
         "The parts in the order they appear in the markup. Press the control to see them numbered on the demo above.",
@@ -700,6 +669,158 @@ const NAV = [
     ],
   },
 ];
+
+/* ── Le categorie: l'indice per funzione ─────────────────────────────────
+   L'indice qui sopra raggruppa per pagina d'origine (ingresso, lente,
+   /work), cioè per come è organizzato il codice. Chi apre la vetrina cerca
+   altro: «com'è fatta la navigazione», «quali comandi esistono». Le card
+   dell'introduzione rispondono a quella domanda, e su telefono sostituiscono
+   un menu chiuso da 56 voci con otto porte d'ingresso. Aggiunte il
+   2026-10-13 su richiesta di Giulio, insieme alla rimozione della legenda
+   dei prefissi.
+
+   Non c'è una categoria «data entry»: il sito non ha moduli. I soli
+   controlli che scelgono un valore sono la tendina di lente e il cambio
+   lingua, e stanno fra i comandi.
+
+   Ogni pannello sta in UNA categoria, e il controllo qui sotto lo impone
+   al build: un pannello nuovo che nessuna categoria nomina ferma la build,
+   invece di restare introvabile da telefono. */
+const CATEGORIES = [
+  {
+    key: "fondamenta",
+    label: it ? "Fondamenta" : "Foundations",
+    desc: it
+      ? "Colore, tipografia, forma, movimento e le regole di accessibilità che valgono ovunque."
+      : "Colour, type, shape, motion and the accessibility rules that apply everywhere.",
+    ids: ["colore", "tipografia", "forma", "movimento", "logo", "accessibilita"],
+  },
+  {
+    key: "layout",
+    label: it ? "Layout e struttura" : "Layout and structure",
+    desc: it
+      ? "Testate, sezioni, occhielli e fondali: come si dispone una pagina, anche a 390px."
+      : "Headers, sections, eyebrows and backdrops: how a page is laid out, down to 390px.",
+    ids: [
+      "ingresso-titolo",
+      "ingresso-sezione-lente",
+      "lente-intestazione",
+      "lente-sezione",
+      "lente-occhiello",
+      "lente-fondale",
+      "work-indice-testata",
+      "work-testata",
+      "work-sezione",
+      "mobile",
+    ],
+  },
+  {
+    key: "navigazione",
+    label: it ? "Navigazione" : "Navigation",
+    desc: it
+      ? "Barre, indicatori e uscite: come ci si sposta da una pagina all'altra."
+      : "Bars, cues and exits: how you move from one page to another.",
+    ids: [
+      "ingresso-barra",
+      "lente-barra",
+      "work-barra",
+      "work-nav",
+      "ingresso-scorri",
+      "salto-al-contenuto",
+      "lente-imbocchi",
+    ],
+  },
+  {
+    key: "comandi",
+    label: it ? "Comandi e input" : "Actions and input",
+    desc: it
+      ? "Bottoni, CTA, tendina e cambio lingua, con la matrice completa degli stati."
+      : "Buttons, CTAs, the dropdown and the language switch, with the full state matrix.",
+    ids: [
+      "ingresso-cta",
+      "lente-bottoni",
+      "stati",
+      "lente-tendina",
+      "cambio-lingua",
+      "ingresso-comandi",
+      "work-cta",
+      "fab",
+    ],
+  },
+  {
+    key: "contenuti",
+    label: it ? "Contenuti" : "Content",
+    desc: it
+      ? "Card, righe espandibili, chip e citazioni: come si presenta un'informazione."
+      : "Cards, expandable rows, chips and quotes: how a piece of information is shown.",
+    ids: [
+      "ingresso-card-chi-sono",
+      "work-card",
+      "lente-esperienza",
+      "lente-chip",
+      "lente-badge-ai",
+      "lente-voci",
+      "lente-clienti",
+      "lente-contatti",
+      "ingresso-email",
+      "work-decisione",
+      "work-learnings",
+    ],
+  },
+  {
+    key: "percorsi",
+    label: it ? "Tempo e percorsi" : "Time and journeys",
+    desc: it
+      ? "Cronologie, corsie e la strada dei case study: i dati che hanno una durata."
+      : "Timelines, lanes and the case-study road: data that has a duration.",
+    ids: [
+      "lente-cronologia",
+      "lente-corsie",
+      "lente-percorso",
+      "lente-fuori-orario",
+      "work-viaggio",
+    ],
+  },
+  {
+    key: "overlay",
+    label: it ? "Overlay e cassetti" : "Overlays and drawers",
+    desc: it
+      ? "Quello che si apre sopra la pagina: modale, cassetti e lightbox."
+      : "What opens on top of the page: modal, drawers and lightbox.",
+    ids: ["ingresso-modale-chi-sono", "ingresso-cassetti", "ingresso-lightbox"],
+  },
+  {
+    key: "immagine",
+    label: it ? "Immagine e movimento" : "Imagery and motion",
+    desc: it
+      ? "Oggetti knolling, parallasse, cursore e transizioni fra pagine."
+      : "Knolling objects, parallax, the cursor and page transitions.",
+    ids: [
+      "ingresso-oggetto",
+      "ingresso-scena",
+      "lente-aureola",
+      "cursore",
+      "transizione-di-pagina",
+      "animazioni",
+    ],
+  },
+];
+
+{
+  // Copertura: ogni pannello dell'indice in una e una sola categoria.
+  const inNav = NAV.flatMap((g) => g.items.map((x) => x.id)).filter((id) => id !== "intro");
+  const inCats = CATEGORIES.flatMap((c) => c.ids);
+  const fuori = inNav.filter((id) => !inCats.includes(id));
+  const doppi = inCats.filter((id, i) => inCats.indexOf(id) !== i);
+  const ignoti = inCats.filter((id) => !inNav.includes(id));
+  if (fuori.length || doppi.length || ignoti.length) {
+    throw new Error(
+      `Categorie della vetrina incoerenti con l'indice. Senza categoria: ${fuori.join(", ") || "nessuno"}. ` +
+        `Doppi: ${doppi.join(", ") || "nessuno"}. Inesistenti: ${ignoti.join(", ") || "nessuno"}.`,
+    );
+  }
+}
+const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] as const)));
 ---
 
 <div class="ds" data-ds-root data-mode="creative">
@@ -817,6 +938,34 @@ const NAV = [
       <section class="ds-panel ds-intro" id="intro" data-ds-panel="intro" aria-labelledby="intro-t">
         <h2 class="ds-head__title" id="intro-t">{t.title}</h2>
         <p class="ds-head__lead">{t.lead}</p>
+
+        <nav class="ds-cats" aria-labelledby="cats-t">
+          <h3 class="ds-sub__title" id="cats-t">
+            {it ? "Sfoglia per funzione" : "Browse by function"}
+          </h3>
+          <ul class="ds-cats__grid">
+            {
+              CATEGORIES.map((c) => (
+                <li class="ds-cat">
+                  <p class="ds-cat__head">
+                    <span class="ds-cat__name">{c.label}</span>
+                    <span class="ds-cat__count">{c.ids.length}</span>
+                  </p>
+                  <p class="ds-cat__desc">{c.desc}</p>
+                  <ul class="ds-cat__list">
+                    {c.ids.map((id) => (
+                      <li>
+                        <a class="ds-cat__link" href={`#${id}`} data-ds-nav={id}>
+                          {NAV_LABEL.get(id)}
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </li>
+              ))
+            }
+          </ul>
+        </nav>
         <div class="ds-intro__why">
           <p>{t.why1}</p>
           <p>{t.why2}</p>
@@ -832,46 +981,6 @@ const NAV = [
             ))
           }
         </ul>
-
-        {
-          /* La legenda dei prefissi sta nell'introduzione e non in un pannello
-            suo: il badge `lh-*` compare già sul primo componente, e una
-            legenda che si trova solo cercandola arriva sempre dopo la
-            domanda. */
-        }
-        <section class="ds-prefix" aria-labelledby="prefix-t">
-          <h3 class="ds-sub__title" id="prefix-t">{t.prefixTitle}</h3>
-          <p class="ds-sub__note">{t.prefixLead}</p>
-          <div class="ds-table-wrap">
-            <table class="ds-table">
-              <thead>
-                <tr>
-                  <th>{t.prefixCol1}</th>
-                  <th>{t.prefixCol2}</th>
-                  <th>{t.prefixCol3}</th>
-                </tr>
-              </thead>
-              <tbody>
-                {
-                  PREFIXES.map((row) => (
-                    <tr>
-                      <td>
-                        <code>{row.p}</code>
-                      </td>
-                      <td>{row.from}</td>
-                      <td>
-                        <code>{row.file}</code>
-                      </td>
-                    </tr>
-                  ))
-                }
-              </tbody>
-            </table>
-          </div>
-          <div class="ds-callout">
-            <p>{t.prefixNote}</p>
-          </div>
-        </section>
 
         <div class="ds-callout">
           <p>{t.why3}</p>
@@ -4729,7 +4838,7 @@ const NAV = [
               <span class="work-tag">Lit</span>
               <span class="work-tag">GSAP</span>
             </div>
-            <a href="#work-testata" class="work-hero__ds-link" data-ds-part="6">
+            <a href="#work-testata" class="work-ds-link" data-ds-part="6">
               {it ? "Esplora il design system" : "Explore the design system"}
               <span class="work-chevron" aria-hidden="true"></span>
             </a>
@@ -4799,12 +4908,12 @@ const NAV = [
             </li>
             <li class="ds-anatomy__item">
               <span class="ds-anatomy__n" aria-hidden="true">6</span>
-              <code class="ds-anatomy__cls">work-hero__ds-link</code>
+              <code class="ds-anatomy__cls">work-ds-link</code>
               <span class="ds-anatomy__role"
                 >{
                   it
-                    ? "L'unica CTA della testata, e solo su questo case study."
-                    : "The header's only CTA, and only on this case study."
+                    ? "Il bottone pieno verso la vetrina, solo sul case study Digital CV. Lo stesso torna nella tappa «Design system» del viaggio."
+                    : "The filled button to the showcase, only on the Digital CV case study. The same one comes back in the «Design system» stop of the journey."
                 }</span
               >
             </li>
@@ -4816,7 +4925,7 @@ const NAV = [
             <p class="ds-spec__v">
               <code
                 >work-hero · work-hero__sigla · work-hero__title · work-hero__tagline ·
-                work-hero__role · work-hero__tags · work-hero__ds-link</code
+                work-hero__role · work-hero__tags · work-ds-link</code
               >
             </p>
           </div>
@@ -4845,8 +4954,8 @@ const NAV = [
             <p class="ds-spec__v">
               {
                 it
-                  ? "La filigrana è aria-hidden, pointer-events: none e user-select: none — decorativa, e non deve né essere letta ad alta voce (due lettere non sono un'informazione) né intercettare un tocco destinato al titolo."
-                  : "The watermark is aria-hidden, pointer-events: none and user-select: none — decorative, so it is neither read aloud (two letters are not information) nor able to intercept a tap meant for the title."
+                  ? "La filigrana è aria-hidden, pointer-events: none e user-select: none — decorativa, e non deve né essere letta ad alta voce (due lettere non sono un'informazione) né intercettare un tocco destinato al titolo. Il bottone verso la vetrina è pieno dal 2026-10-13: l'arancione è il fondo e non il testo, quindi gli basta il 3:1 di una superficie, e l'etichetta in --color-on-accent tiene 6,87:1."
+                  : "The watermark is aria-hidden, pointer-events: none and user-select: none — decorative, so it is neither read aloud (two letters are not information) nor able to intercept a tap meant for the title. The button to the showcase is filled since 2026-10-13: orange is the background and not the text, so a surface's 3:1 is enough, and the label in --color-on-accent holds 6.87:1."
               }
             </p>
           </div>
@@ -5347,6 +5456,10 @@ const NAV = [
                       : "One step of the process: what was done, and why in this order."
                   }
                 </p>
+                <a href="#work-viaggio" class="work-ds-link">
+                  {it ? "Esplora il design system" : "Explore the design system"}
+                  <span class="work-chevron" aria-hidden="true"></span>
+                </a>
               </article>
 
               <article class="journey__panel journey__panel--end">
@@ -5372,7 +5485,7 @@ const NAV = [
                 journey__road · journey__road-base · journey__road-progress · journey__dot
                 (is-passed) · journey__panel (--start/--end) · journey__stop · journey__stop-title ·
                 journey__step-num · journey__eyebrow · journey__text · journey__hint ·
-                journey__outcomes · journey__start-title · journey__end-title</code
+                journey__outcomes · journey__start-title · journey__end-title · work-ds-link</code
               >
             </p>
           </div>

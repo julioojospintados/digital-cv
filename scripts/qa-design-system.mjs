@@ -114,7 +114,12 @@ async function auditPage(browser, { lang, path }) {
   // ── 1. Indice e pannelli si corrispondono ───────────────────────────────
   console.log("\n  [1] Indice ↔ pannelli");
   const panels = await page.$$eval("[data-ds-panel]", (els) => els.map((el) => el.dataset.dsPanel));
-  const navEntries = await page.$$eval("[data-ds-nav]", (els) => els.map((el) => el.dataset.dsNav));
+  // Solo l'indice laterale: dal 2026-10-13 anche le card «Sfoglia per
+  // funzione» dell'introduzione portano data-ds-nav (usano lo stesso script),
+  // ma sono raggruppate per funzione e non seguono l'ordine dei pannelli.
+  const navEntries = await page.$$eval(".ds-side [data-ds-nav]", (els) =>
+    els.map((el) => el.dataset.dsNav),
+  );
   const orphanPanels = panels.filter((id) => !navEntries.includes(id));
   const orphanNav = navEntries.filter((id) => !panels.includes(id));
 
@@ -124,6 +129,21 @@ async function auditPage(browser, { lang, path }) {
     navEntries.join("|") === panels.join("|"),
     "indice e pannelli sono nello stesso ordine",
     `indice: ${navEntries.join(",")} / pannelli: ${panels.join(",")}`,
+  );
+
+  // Le card per funzione: ogni pannello tranne l'introduzione in una e una
+  // sola categoria. Lo stesso vincolo è un throw al build in
+  // DesignSystem.astro; qui si verifica sulla pagina servita.
+  const catEntries = await page.$$eval(".ds-cats [data-ds-nav]", (els) =>
+    els.map((el) => el.dataset.dsNav),
+  );
+  const senzaCategoria = panels.filter((id) => id !== "intro" && !catEntries.includes(id));
+  const doppiCat = catEntries.filter((id, i) => catEntries.indexOf(id) !== i);
+  const catOrfani = catEntries.filter((id) => !panels.includes(id));
+  check(
+    senzaCategoria.length === 0 && doppiCat.length === 0 && catOrfani.length === 0,
+    "ogni pannello sta in una sola card per funzione",
+    `senza: ${senzaCategoria.join(", ")} · doppi: ${doppiCat.join(", ")} · orfani: ${catOrfani.join(", ")}`,
   );
 
   // ── 2. Un pannello per volta ────────────────────────────────────────────

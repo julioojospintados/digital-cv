@@ -105,7 +105,7 @@ const sigla = projectInitials(project.name);
       }
       {
         slug === "digital-cv" && (
-          <a href="/en/design-system" class="work-hero__ds-link">
+          <a href="/en/design-system" class="work-ds-link">
             Explore the design system
             <span class="work-chevron" aria-hidden="true" />
           </a>
@@ -181,6 +181,12 @@ const sigla = projectInitials(project.name);
                 </p>
                 {step.title && <h3 class="journey__stop-title">{step.title}</h3>}
                 <p class="journey__text">{step.body}</p>
+                {slug === "digital-cv" && /design system/i.test(step.title ?? "") && (
+                  <a href="/en/design-system" class="work-ds-link">
+                    Explore the design system
+                    <span class="work-chevron" aria-hidden="true" />
+                  </a>
+                )}
               </article>
             ))}
 

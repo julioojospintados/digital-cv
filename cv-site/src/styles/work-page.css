@@ -67,8 +67,7 @@
    tre) tiene 6,87:1. È esattamente la ricetta del cursore acceso
    dell'interruttore lingua, che gli sta a fianco: due superfici accese sulla
    stessa barra, stesso inchiostro sopra. Da qui in poi `.work-back` e
-   `.work-hero__ds-link` non sono più lo stesso bottone in due misure — quello
-   resta a filo, questo no.
+   `.work-ds-link` oggi sono pieni tutti e due, e si somigliano di proposito.
 
    L'altezza resta 2rem per la ragione di prima: il vicino di banco è
    l'interruttore lingua, alto 30px (24 di contenuto + 2 di passo + 1 di filo
@@ -915,31 +914,26 @@
 
 /* CTA ancorata al Design System — solo sul case study digital-cv */
 /* ── Il comando verso il design system ───────────────────────────────────
-   Era una riga di testo in mono maiuscolo colorata d'accento, cioè una cosa
-   che non somigliava a nessun altro comando del sito. Rifatta il 2026-09-02
-   sul modello di `.lh-cta--ghost`, il bottone a filo delle sezioni lente:
-   stesso carattere (sans, non mono), stesso corpo, stesso peso, stesso
-   raggio, stesso passo interno, stessa risposta alla pressione.
+   Pieno dal 2026-10-13, su richiesta di Giulio: è l'unico invito del case
+   study a uscire verso la prova più concreta del lavoro, e a filo si leggeva
+   come un comando secondario. Compare in due punti del case study Digital
+   CV: nella testata e nella tappa «Design system» del viaggio, che è il
+   momento in cui chi legge si chiede dove sia. Per questo si chiama
+   `.work-ds-link` e non più `.work-hero__ds-link`: un nome che dice
+   «testata» sarebbe falso dentro una tappa.
 
-   Due differenze, e sono tutte e due obbligate.
+   Il contrasto si ribalta rispetto alla versione a filo. L'arancione non è
+   più il colore del testo ma il suo fondo, quindi gli spetta il 3:1 di
+   1.4.11 di una superficie, e l'etichetta è `--color-on-accent`, che
+   sull'arancione della lente design (il peggiore dei tre) tiene 6,87:1. È
+   la stessa ricetta del ritorno al CV nella barra e di `.lc-btn--primary`.
 
-   1. **Non è letteralmente `.lh-cta`.** Quella classe vive in `lab-home.css`,
-      che questa pagina non carica: importarlo qui vorrebbe dire spedire
-      millequattrocento righe di stili della home su ogni case study. La cura
-      vera è promuovere `.lh-cta` in `global.css`, che è caricato ovunque, e
-      allora questa regola sparisce; finché non succede, questo è un doppione
-      dichiarato, e sta scritto qui perché chi tocca uno trovi anche l'altro.
-
-   2. **L'accento sta nel BORDO, non nel testo.** `.lh-cta--ghost` può
-      permetterselo perché sulla home esiste `--accent-text`, il token che
-      schiarisce l'arancione del 50% verso il bianco per portarlo da 3,62:1 a
-      6,03:1. Quel token è definito solo in `lab-home.css`: qui non esiste, e
-      `var(--accent-text, ...)` cadrebbe sull'arancione pieno, cioè sotto il
-      4,5:1 che 1.4.3 chiede al testo. Quindi l'etichetta prende l'inchiostro,
-      che ha contrasto pieno, e l'accento fa il bordo — dove la soglia è il
-      3:1 di 1.4.11 per un contorno che identifica un controllo, e 3,62:1 lo
-      passa. È lo stesso ragionamento del bottone pieno, al contrario. */
-.work-hero__ds-link {
+   Resta un doppione dichiarato di `.lh-cta`: quella classe vive in
+   `lab-home.css`, che questa pagina non carica, e importarla vorrebbe dire
+   spedire millequattrocento righe della home su ogni case study. La cura
+   vera è promuovere `.lh-cta` in `global.css`; finché non succede, chi
+   tocca uno trovi anche l'altro. */
+.work-ds-link {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
@@ -947,8 +941,8 @@
   padding: 0.8rem 1.35rem;
   border: 1px solid var(--color-accent);
   border-radius: var(--radius-4);
-  background: transparent;
-  color: var(--color-text-primary);
+  background: var(--color-accent);
+  color: var(--color-on-accent);
   font-family: var(--font-sans);
   font-size: var(--fs-16);
   font-weight: 600;
@@ -957,29 +951,38 @@
   position: relative;
   z-index: 1;
   transition:
-    background-color var(--duration-state) var(--ease-standard),
+    filter var(--duration-state) var(--ease-standard),
     transform var(--duration-micro) var(--ease-standard);
 }
 
-/* Alla pressione rientra e si incava, come .lh-cta. */
-.work-hero__ds-link:active {
+/* Dentro la tappa la card è una colonna flex: senza align-self il bottone
+   si allargherebbe a tutta la card e smetterebbe di sembrare un bottone. */
+.journey__stop .work-ds-link {
+  align-self: flex-start;
+  margin-top: var(--size-12);
+  /* La card della tappa a 390px è larga 282px: a corpo 16 l'etichetta
+     andava su due righe. A 14, con il passo stretto, ne basta una. */
+  padding: 0.65rem 1rem;
+  font-size: var(--fs-14);
+}
+
+/* Alla pressione rientra e si incava, come .lh-cta. Il riempimento resta
+   identico: è l'ombra a dare l'affondo, così l'etichetta non perde contrasto. */
+.work-ds-link:active {
   transform: scale(0.98);
   box-shadow: inset 0 2px 0.5rem rgba(0, 0, 0, 0.4);
 }
 
-/* Al passaggio si tinge e si solleva, come .lh-cta--ghost. Prima allargava il
-   `gap`, cioè spostava la freccia allontanandola dal testo: un movimento che
-   nessun altro comando del sito fa, e che su un bottone con un bordo si legge
-   come un difetto di allineamento invece che come una risposta. */
 @media (hover: hover) and (pointer: fine) {
-  .work-hero__ds-link:hover {
-    background: color-mix(in srgb, var(--color-accent) 16%, transparent);
+  .work-ds-link:hover {
+    filter: brightness(1.08);
     transform: translateY(-2px);
   }
 }
 
-.work-hero__ds-link:focus-visible {
-  background: color-mix(in srgb, var(--color-accent) 16%, transparent);
+.work-ds-link:focus-visible {
+  outline: 2px solid var(--color-text-primary);
+  outline-offset: 3px;
 }
 
 /* ── /work/[slug] — Journey del case study ────────────────────────────────
