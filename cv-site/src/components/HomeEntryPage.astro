@@ -471,8 +471,8 @@ const sections = MODES.map((mode) => ({
                   pieno. Solo da desktop: su telefono allungherebbe una
                   schermata che deve stare in 100svh. Regole in lab-copy.ts. */}
               <ul class="lh-section__proof" role="list" aria-label={t.ui.badgesLabel}>
-                {s.badges.map((b, i) => (
-                  <li class:list={["lc-badge", { "lc-badge--solid": i === 0 }]}>{b}</li>
+                {s.badges.map((b) => (
+                  <li class="lc-badge lc-badge--solid">{b}</li>
                 ))}
               </ul>
               <div class="lh-section__actions">

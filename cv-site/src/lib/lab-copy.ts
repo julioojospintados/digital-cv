@@ -55,14 +55,14 @@ export interface ProfileText {
   /** Il paragrafo lungo. Non va nella fascia dei primi 7 secondi. */
   desc: string;
   /**
-   * La riga di sintesi della scheda, solo su desktop (2026-10-13): cinque
-   * badge, il primo pieno. Sono per chi scorre in tre secondi, quindi titoli
+   * La riga di sintesi della scheda, solo su desktop (2026-10-13): badge
+   * pieni, tutti uguali. Sono per chi scorre in tre secondi, quindi titoli
    * riconoscibili (una certificazione, un metodo, un linguaggio), non
    * numeri senza contesto: «7 interviste utente» è stato tolto per questo.
-   * Solo cose che stanno già nei dati in cv.ts. Una tupla di cinque, così
-   * una sesta voce è un errore di tipo e non un ripensamento.
+   * Solo cose che stanno già nei dati in cv.ts. Il numero varia per lente
+   * (la lente Dev ne ha di più, scelta di Giulio); la riga va a capo da sé.
    */
-  badges: [string, string, string, string, string];
+  badges: readonly string[];
 }
 
 export const PROFILE_TEXT: Record<Locale, Record<Mode, ProfileText>> = {
@@ -70,12 +70,28 @@ export const PROFILE_TEXT: Record<Locale, Record<Mode, ProfileText>> = {
     creative: {
       title: ["Brand,", "estetica e interfacce."],
       desc: `Di natura cerco di risolvere problemi: che siano di un amico, di un passante per strada o di un collega. Questa "deformazione" professionale mi ha portato ad appassionarmi alla UX/UI e a unirla all'estetica. Formazione IBM e SkillUp, con un interesse attento a come la Generative AI sta ridisegnando il settore.`,
-      badges: ["IBM UX Certificate", "Design System", "UX Research", "Figma", "WCAG AA"],
+      badges: [
+        "IBM UX Certificate",
+        "Design System",
+        "UX Research",
+        "Figma",
+        "WCAG AA",
+        "Fotografia",
+      ],
     },
     tech: {
       title: ["Automazione,", "AI e architetture."],
       desc: `Sviluppo da anni per il mondo enterprise, muovendomi tra TypeScript, Angular e React. Sono passato da team di 30 persone a progetti in solitaria potenziati dall'AI, dove creo workflow e integrazioni MCP su misura. Tutta la lista di tecnologie e sigle la trovi cliccando qua sotto.`,
-      badges: ["AI Workflow", "Design System", "JavaScript", "Agile", "MCP"],
+      badges: [
+        "AI Workflow",
+        "Design System",
+        "JavaScript",
+        "Agile",
+        "MCP",
+        "TypeScript",
+        "Angular",
+        "Lit",
+      ],
     },
     human: {
       title: ["Storytelling", "e strategia."],
@@ -93,12 +109,28 @@ export const PROFILE_TEXT: Record<Locale, Record<Mode, ProfileText>> = {
     creative: {
       title: ["Brand,", "aesthetics and interfaces."],
       desc: "I'm a problem solver by nature—whether it's helping a friend, a stranger on the street, or a colleague. It's almost a force of habit, and it's what naturally led me to UX/UI design and blending function with aesthetics. IBM and SkillUp certified, with a keen eye on how Generative AI is reshaping the industry.",
-      badges: ["IBM UX Certificate", "Design System", "UX Research", "Figma", "WCAG AA"],
+      badges: [
+        "IBM UX Certificate",
+        "Design System",
+        "UX Research",
+        "Figma",
+        "WCAG AA",
+        "Photography",
+      ],
     },
     tech: {
       title: ["Automation,", "AI and architectures."],
       desc: "I've spent years building for the enterprise world, moving between TypeScript, Angular and React. I went from 30-person teams to solo, AI-powered projects, where I build custom workflows and MCP integrations. Find the full list of technologies and acronyms by clicking below.",
-      badges: ["AI Workflow", "Design System", "JavaScript", "Agile", "MCP"],
+      badges: [
+        "AI Workflow",
+        "Design System",
+        "JavaScript",
+        "Agile",
+        "MCP",
+        "TypeScript",
+        "Angular",
+        "Lit",
+      ],
     },
     human: {
       title: ["Storytelling", "and strategy."],
