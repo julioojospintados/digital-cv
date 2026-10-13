@@ -467,9 +467,9 @@ const sections = MODES.map((mode) => ({
               </h2>
               <p class="lh-section__eyebrow">{s.eyebrow}</p>
               <p class="lh-section__text">{s.desc}</p>
-              {/* La riga di sintesi: cinque badge del design system, il primo
-                  pieno. Solo da desktop: su telefono allungherebbe una
-                  schermata che deve stare in 100svh. Regole in lab-copy.ts. */}
+              {/* La riga di sintesi: badge pieni del design system. Su desktop
+                  sta qui, dopo il testo; su telefono il CSS la porta sotto il
+                  ruolo (lab-home.css). Contenuti in lab-copy.ts. */}
               <ul class="lh-section__proof" role="list" aria-label={t.ui.badgesLabel}>
                 {s.badges.map((b) => (
                   <li class="lc-badge lc-badge--solid">{b}</li>
