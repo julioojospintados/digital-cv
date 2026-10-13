@@ -24,6 +24,33 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
+/**
+ * ANTEPRIMA pila — il segnaposto di flusso di una scheda.
+ *
+ * Per un elemento sticky `offsetTop` e getBoundingClientRect restituiscono il
+ * punto in cui la scheda è FERMA, non il suo posto nella pagina: scorrendo in
+ * fondo, tutte le schede risultano alla stessa altezza (misurato: 3376px
+ * per tutte e quattro). Ogni calcolo fatto in quel momento, per esempio su un
+ * resize della barra degli indirizzi di un telefono, sarebbe sbagliato.
+ * Un elemento alto zero e non sticky subito prima della scheda ha invece
+ * sempre la posizione vera: si misura lui. Riusato se esiste già.
+ */
+function flowAnchor(el: HTMLElement): HTMLElement {
+  const prev = el.previousElementSibling as HTMLElement | null;
+  if (prev?.hasAttribute("data-lh-anchor")) return prev;
+  const a = document.createElement("span");
+  a.setAttribute("data-lh-anchor", "");
+  a.setAttribute("aria-hidden", "true");
+  a.style.display = "block";
+  a.style.height = "0";
+  el.before(a);
+  return a;
+}
+
+function flowTop(el: HTMLElement): number {
+  return flowAnchor(el).getBoundingClientRect().top + window.scrollY;
+}
+
 export function initLabHomeScroll(): void {
   const hero = document.querySelector<HTMLElement>(".lh-hero");
   if (!hero) return;
@@ -43,6 +70,16 @@ export function initLabHomeScroll(): void {
       onLeaveBack: () => gsap.to(cue, { autoAlpha: 1, y: 0, duration, overwrite: true }),
     });
   }
+
+  // ── ANTEPRIMA pila: accensione ──
+  // Prima dei segnaposto e dell'attributo, niente è sticky: senza questo
+  // script la home resta quella di sempre. I segnaposto servono anche allo
+  // snap (vedi lab-home.css), quindi si creano anche a movimento ridotto.
+  const lh = document.querySelector<HTMLElement>(".lh");
+  document
+    .querySelectorAll<HTMLElement>(".lh-hero, .lh-section")
+    .forEach((el) => el.getClientRects().length && flowAnchor(el));
+  lh?.setAttribute("data-lh-stack", "");
 
   if (reduced) return;
 
@@ -182,6 +219,46 @@ export function initLabHomeScroll(): void {
     }
   });
 
+  // ── ANTEPRIMA — la pila di schede ────────────────────────────────────
+  // 1. Una scheda più alta della finestra non deve fermarsi con la cima in
+  //    alto: la sua coda resterebbe nascosta sotto la scheda dopo, e non si
+  //    leggerebbe mai. Si ferma invece quando il fondo tocca il fondo della
+  //    finestra: top negativo pari a quanto sfora.
+  // 2. La scheda coperta si allontana mentre la successiva sale: scala e
+  //    luminosità, legate allo scorrimento.
+  const stack = Array.from(sections).filter((s) => s.getClientRects().length);
+  const fitTops = () => {
+    for (const s of stack) {
+      const over = s.offsetHeight - window.innerHeight;
+      s.style.setProperty("--lh-stack-top", over > 0 ? `${-over}px` : "0px");
+    }
+  };
+  fitTops();
+  // Non solo la finestra: anche la scheda cambia altezza (le voci di «Chi
+  // sono» si aprono), e una scheda cresciuta oltre la finestra deve passare
+  // subito a fermarsi sul fondo.
+  const ro = new ResizeObserver(fitTops);
+  stack.forEach((s) => ro.observe(s));
+  stack.forEach((section, i) => {
+    const next = stack[i + 1];
+    if (!next) return;
+    gsap.fromTo(
+      section,
+      { scale: 1, filter: "brightness(1)" },
+      {
+        scale: 0.92,
+        filter: "brightness(0.55)",
+        ease: "none",
+        scrollTrigger: {
+          trigger: flowAnchor(next),
+          start: "top bottom",
+          end: "top top",
+          scrub: true,
+        },
+      },
+    );
+  });
+
   // Le immagini sono lazy: l'altezza della pagina cambia mentre arrivano, e
   // senza questo i trigger resterebbero calcolati su misure vecchie.
   window.addEventListener("load", () => ScrollTrigger.refresh());
@@ -207,18 +284,19 @@ export function initLabHomeMood(): void {
   const panels = document.querySelectorAll<HTMLElement>(".lh-hero, .lh-section");
   if (!root || !panels.length) return;
 
-  const observer = new IntersectionObserver(
-    (entries) => {
-      for (const entry of entries) {
-        if (!entry.isIntersecting) continue;
-        // L'hero non ha data-mode: nessuna modalità scelta, ambiente neutro.
-        const mode = (entry.target as HTMLElement).dataset.mode;
-        if (mode) root.dataset.mood = mode;
-        else delete root.dataset.mood;
-      }
-    },
-    { rootMargin: "-50% 0px -50% 0px", threshold: 0 },
-  );
-
-  panels.forEach((panel) => observer.observe(panel));
+  // ANTEPRIMA: con la pila le schede coperte restano in vista sotto quella
+  // sopra, quindi un IntersectionObserver non vede più chi esce. La scheda
+  // attiva è l'ultima la cui cima ha superato metà finestra, ricalcolata a
+  // ogni scorrimento sulla posizione nel flusso.
+  const list = Array.from(panels);
+  const update = () => {
+    const mid = window.scrollY + window.innerHeight / 2;
+    let active: HTMLElement | undefined;
+    for (const p of list) if (flowTop(p) <= mid) active = p;
+    const mode = active?.dataset.mode;
+    if (mode) root.dataset.mood = mode;
+    else delete root.dataset.mood;
+  };
+  window.addEventListener("scroll", update, { passive: true });
+  update();
 }

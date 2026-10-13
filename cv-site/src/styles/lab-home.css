@@ -1277,3 +1277,59 @@ html[data-lh-armed] .lh-obj {
     transition: none;
   }
 }
+
+/* ── ANTEPRIMA 2026-10-13 — le sezioni come pila di schede ────────────────
+   Stessa idea dell'indice di /work: ogni sezione è sticky, arrivata in cima
+   si ferma e la successiva le sale sopra. L'hero è la base: resta
+   trasparente sulla stanza e viene coperto. Le schede invece devono essere
+   opache, altrimenti quella coperta trasparirebbe: lo sfondo della stanza
+   (.lh::before, fisso) qui viene rifatto dentro ogni scheda, con la luce del
+   suo accento. La scheda coperta si allontana (scala e luminosità) per mano
+   di lab-home-scroll.ts.
+
+   È un miglioramento progressivo: la pila la accende lo script
+   (data-lh-stack su .lh), quindi senza JavaScript la home resta quella di
+   prima, con le sezioni una sotto l'altra. */
+.lh[data-lh-stack] .lh-hero {
+  position: sticky;
+  top: 0;
+}
+
+.lh[data-lh-stack] .lh-section {
+  position: sticky;
+  top: var(--lh-stack-top, 0);
+  z-index: 1;
+  border-radius: var(--radius-16) var(--radius-16) 0 0;
+  max-width: none;
+  padding-inline: max(var(--lh-gutter), calc((100% - 82rem) / 2 + var(--lh-gutter)));
+  background:
+    radial-gradient(
+      120% 90% at 50% 45%,
+      color-mix(in srgb, var(--accent) 7%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(130% 110% at 50% 118%, rgba(0, 0, 0, 0.45), transparent 56%), var(--color-bg);
+  box-shadow: 0 -1.5rem 3rem rgba(0, 0, 0, 0.45);
+  transform-origin: 50% 0;
+  will-change: transform, filter;
+}
+
+.lh[data-lh-stack] .lh-section--about {
+  --accent: var(--lh-ink);
+}
+
+/* Lo snap non può agganciarsi alle schede: per un elemento sticky la
+   posizione che conta per lo snap è quella in cui è FERMO, e in fondo alla
+   pagina tutte le schede risultano allo stesso punto (misurato: 3376px per
+   tutte). Un salto all'inizio veniva riagganciato in fondo e la pagina non
+   si muoveva. Si aggancia invece ai segnaposto alti zero che
+   lab-home-scroll.ts mette prima di ogni scheda, che stanno sempre al posto
+   giusto. Stesso ritmo di prima: una schermata per volta. */
+:root[data-native-snap] .lh[data-lh-stack] :is(.lh-hero, .lh-section) {
+  scroll-snap-align: none;
+}
+
+:root[data-native-snap] [data-lh-anchor] {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
