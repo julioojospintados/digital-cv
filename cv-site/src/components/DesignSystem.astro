@@ -3654,7 +3654,7 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
                   {it ? "su un nome cliente, 14px" : "on a client name, 14px"}
                 </p>
                 <p class="lc-client__who" style="margin:0;">
-                  <b>Aruba</b>
+                  <b>{it ? "Progetto interno" : "Internal project"}</b>
                   <span class="lc-ai lc-ai--sm" data-ds-snippet>
                     AI
                     <span class="lc-sr">
@@ -3665,6 +3665,7 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
                       }
                     </span>
                   </span>
+                  <span class="lc-client__role">Frontend Developer AI-Augmented</span>
                 </p>
               </div>
             </div>
@@ -4281,28 +4282,30 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
             <ul class="lc-clients" role="list" data-ds-snippet>
               <li class="lc-client">
                 <p class="lc-client__who">
-                  <b>Aruba</b>
-                  <span class="lc-client__role"> · Tech Lead &amp; Design System Developer</span>
+                  <b>{it ? "Progetto interno" : "Internal project"}</b>
                   <span class="lc-ai lc-ai--sm">AI</span>
+                  <span class="lc-client__role">Frontend Developer AI-Augmented</span>
+                </p>
+                <p class="lc-client__text">
+                  {
+                    it
+                      ? "Sviluppo con agenti AI e server MCP, test in Playwright e presidio diretto di layout e UX/UI."
+                      : "Development with AI agents and MCP servers, Playwright tests and direct ownership of layout and UX/UI."
+                  }
+                </p>
+              </li>
+              <li class="lc-client">
+                <p class="lc-client__who">
+                  <b>Aruba</b>
+                  <span class="lc-client__role"
+                    >Tech Lead · UX/UI &amp; Design System Developer</span
+                  >
                 </p>
                 <p class="lc-client__text">
                   {
                     it
                       ? "Libreria di oltre 100 Web Components in Lit, adottata cross-prodotto."
                       : "A library of 100+ Lit Web Components, adopted across products."
-                  }
-                </p>
-              </li>
-              <li class="lc-client">
-                <p class="lc-client__who">
-                  <b>Intesa Sanpaolo</b>
-                  <span class="lc-client__role"> · Frontend Developer</span>
-                </p>
-                <p class="lc-client__text">
-                  {
-                    it
-                      ? "Architettura Angular enterprise in un team di oltre 50 persone."
-                      : "Enterprise Angular architecture in a team of 50+."
                   }
                 </p>
               </li>
@@ -4329,8 +4332,8 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
             <p class="ds-spec__v">
               {
                 it
-                  ? "Non affiancarli agli highlight: direbbero le stesse cose due volte."
-                  : "Do not show them alongside the bullets: they would say the same things twice."
+                  ? "Non affiancarli agli highlight: direbbero le stesse cose due volte. E non mettere il badge AI dopo il ruolo: il ruolo va a capo per costruzione, e il badge che lo segue resta da solo su una riga. Sta accanto al nome del cliente."
+                  : "Do not show them alongside the bullets: they would say the same things twice. And do not put the AI badge after the role: the role breaks onto its own line by design, and a badge following it ends up alone on a line. It sits beside the client name."
               }
             </p>
           </div>

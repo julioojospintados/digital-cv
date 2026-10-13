@@ -692,14 +692,17 @@ const markStyle = (nome: string): string | undefined => {
                         {job.clients.map((c) => (
                           <li class="lc-client">
                             <p class="lc-client__who">
+                              {/* Il badge sta accanto al nome, non dopo il ruolo:
+                                il ruolo è display:block, e un badge che lo
+                                segue finiva da solo su una riga sotto. */}
                               <b>{c.client}</b>
-                              <span class="lc-client__role">{c.role}</span>
                               {c.ai && (
                                 <span class="lc-ai lc-ai--sm">
                                   AI
                                   <span class="lc-sr">{t.ui.aiInFlowClient}</span>
                                 </span>
                               )}
+                              <span class="lc-client__role">{c.role}</span>
                             </p>
                             <p class="lc-client__text">{c.description}</p>
                           </li>
