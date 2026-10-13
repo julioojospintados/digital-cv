@@ -12,9 +12,19 @@
 // allineate: è la geometria che si vede.
 //
 // Senza JavaScript non succede niente di rotto: la pila resta, solo senza
-// sfocatura. Il filtro si scrive solo quando serve e si toglie a zero,
-// perché un filter: blur(0) su un elemento a tutto schermo costa comunque
-// un livello di composizione.
+// sfocatura.
+//
+// Ogni scheda tiene `will-change: filter` per tutta la vita della pagina, e
+// non è una pignoleria di prestazioni: è la correzione di un difetto visto
+// su telefono il 2026-10-13. Il filtro si accende nell'istante in cui la
+// scheda successiva entra dal fondo, e accenderlo su un elemento a tutto
+// schermo che non aveva un livello suo obbliga il browser a crearne uno e a
+// ridisegnarlo da capo, mentre lo scroll corre. Per qualche fotogramma si
+// vedevano pezzi non ancora ridisegnati: l'oggetto della scheda tagliato a
+// metà da una riga orizzontale. Con il livello già pronto, cambiare il
+// filtro è lavoro del compositore e non tocca il disegno. Il costo è un
+// livello per scheda: sono quattro o cinque, e il browser tiene in memoria
+// solo le parti vicine alla finestra.
 
 interface StackDepthOptions {
   /** Sfocatura massima della scheda del tutto coperta, in px. */
@@ -31,6 +41,8 @@ export function initStackDepth(
 ): void {
   const list = cards.filter((c) => c.getClientRects().length);
   if (list.length < 2) return;
+
+  for (const card of list) card.style.willChange = "filter";
 
   let raf = 0;
   const paint = () => {

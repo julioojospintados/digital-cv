@@ -235,10 +235,16 @@ export function initLabHomeScroll(): void {
       },
     });
 
+    // `opacity` e non `autoAlpha`: autoAlpha a zero mette anche
+    // visibility: hidden, e un elemento nascosto il browser non lo disegna
+    // proprio. Con lo scatto che riparte a ogni passaggio, l'oggetto doveva
+    // essere ridisegnato da zero proprio mentre ricompariva, durante lo
+    // scroll — una delle due cause dell'oggetto tagliato a metà visto su
+    // telefono (2026-10-13; l'altra è in stack-depth.ts).
     if (object) {
-      gsap.set(object, { autoAlpha: 0, scale: 0.86 });
+      gsap.set(object, { opacity: 0, scale: 0.86 });
       enterObject.to(object, {
-        autoAlpha: 1,
+        opacity: 1,
         scale: 1,
         duration: 0.9,
         ease: "back.out(1.7)",
