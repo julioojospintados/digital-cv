@@ -384,7 +384,9 @@
   font-weight: 800;
   font-size: clamp(2.5rem, 8vw, 5rem);
   line-height: 0.94;
-  letter-spacing: -0.035em;
+  /* −2% e non −3,5% (2026-10-14): stretto quanto basta a un titolo, senza
+     fare da estremo opposto alla spaziatura dei ruoli qui sotto. */
+  letter-spacing: -0.02em;
   text-wrap: balance;
   /* ── Niente ombra dietro al nome, e il perché va scritto ────────────────
      Ce n'era una: 0 0.15rem 2.5rem rgba(4, 34, 31, 0.85), quaranta pixel di
@@ -408,25 +410,28 @@
 
 .lh-tagline {
   font-size: var(--fs-18);
-  /* Dritto, non corsivo (2026-10-14): Lexend non ha un corsivo disegnato e il
-     browser lo simulava inclinando le lettere — si leggeva come un terzo
-     carattere fra il nome e i ruoli. Si stacca dal nome per corpo, peso e
-     colore. */
+  /* Dritto e in crema all'85% (2026-10-14). Il corsivo era simulato (Lexend
+     non lo ha) e il verde attenuato era un terzo inchiostro accanto al crema
+     del nome e a quello dei ruoli: tre colori in una testata si leggevano
+     come tre caratteri. Si stacca dal nome per corpo e peso. */
+  color: color-mix(in srgb, var(--lh-ink) 85%, transparent);
   line-height: 1.5;
-  color: var(--lh-muted);
   max-width: 30rem;
   text-wrap: pretty;
 }
 
-/* La riga dei cinque ruoli. In mono spaziato come nella home vera: è una
-   didascalia, non un titolo, e a questo corpo non deve competere col nome.
-   Era clamp(0.6rem, …): 9,6px al minimo. Ma questi cinque ruoli non sono
-   decorazione — sono il dato che un recruiter cerca per primo, e il criterio
-   della scala guarda la natura del dato, non il nome della classe. */
+/* La riga dei ruoli. Era JetBrains Mono maiuscolo a +16% di spaziatura:
+   una riga di parole che un recruiter legge per prima composta come un dato,
+   accanto al nome a −3,5%. Due tessiture opposte a dieci pixel di distanza
+   — è quello che faceva sembrare la testata fatta con tre caratteri. Ora è
+   Lexend 600 maiuscolo all'8%, dentro il 5–10% indicato per il maiuscolo
+   (skill design-system § Tipografia — regole UX verificate). Il corpo resta
+   --fs-14: sono il dato che un recruiter cerca per primo. */
 .lh-cred {
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: var(--fs-14);
-  letter-spacing: 0.16em;
+  font-weight: 600;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   line-height: 1.9;
   color: var(--lh-muted);
