@@ -429,7 +429,8 @@
   padding-left: 1.4rem;
   font-size: var(--fs-16);
   line-height: 1.7;
-  font-style: italic;
+  /* Dritto: il corsivo di Lexend non esiste, era simulato (vedi body in
+     global.css). */
   color: var(--color-text-muted);
   max-width: 40rem;
 }

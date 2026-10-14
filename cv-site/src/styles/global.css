@@ -537,6 +537,13 @@ body {
   background-color: var(--color-bg);
   color: var(--color-text-primary);
   font-family: var(--font-sans);
+  /* Niente corsivo finto. Lexend esiste solo dritta (400-800), e un
+     font-style: italic su Lexend il browser lo inventa inclinando le
+     lettere: un carattere deformato che si legge come un terzo font accanto
+     a Lexend e JetBrains Mono. Trovato da Giulio il 2026-10-14 sotto il nome
+     dell'ingresso. Con questa riga un corsivo chiesto per sbaglio resta
+     dritto invece di deformarsi. */
+  font-synthesis-style: none;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   /* Niente barra orizzontale da overflow di layout.

@@ -408,7 +408,10 @@
 
 .lh-tagline {
   font-size: var(--fs-18);
-  font-style: italic;
+  /* Dritto, non corsivo (2026-10-14): Lexend non ha un corsivo disegnato e il
+     browser lo simulava inclinando le lettere — si leggeva come un terzo
+     carattere fra il nome e i ruoli. Si stacca dal nome per corpo, peso e
+     colore. */
   line-height: 1.5;
   color: var(--lh-muted);
   max-width: 30rem;

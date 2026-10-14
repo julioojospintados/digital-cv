@@ -221,7 +221,8 @@
   min-width: 0;
   text-align: center;
   font-size: var(--fs-12);
-  font-style: italic;
+  /* Dritto: il corsivo di Lexend non esiste, era simulato (vedi body in
+     global.css). */
   color: var(--lc-muted);
   overflow: hidden;
   text-overflow: ellipsis;
