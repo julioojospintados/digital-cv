@@ -41,7 +41,7 @@
 import WorkIndexCard from "./cards/WorkIndexCard.astro";
 import LangSwitch from "./LangSwitch.astro";
 import EmailCard from "./EmailCard.astro";
-import { LOCALES } from "../lib/cv-i18n";
+import { LOCALES, lensPath } from "../lib/cv-i18n";
 import { WORK_INDEX_ICON, workKnollSize } from "../lib/work-knolling";
 import "../styles/lab-home.css";
 import "../styles/lab-cv.css";
@@ -424,7 +424,6 @@ const t = it
       modeLabel: "Guarda il sistema in:",
       modeHint:
         "Cambia l'accento di tutte le demo, tranne il prototipo hero: quello ha l'accento fissato su Web & UX Designer nel suo stesso foglio di stile, ed è fedele lasciarlo così.",
-      backHome: "Home",
       secFoundations: "Fondamenta",
       secColour: "Colore",
       secType: "Tipografia",
@@ -499,7 +498,6 @@ const t = it
       modeLabel: "View the system in:",
       modeHint:
         "Switches the accent for every demo except the hero prototype: that one pins its accent to Web & UX Designer in its own stylesheet, and leaving it there is the faithful choice.",
-      backHome: "Home",
       secFoundations: "Foundations",
       secColour: "Colour",
       secType: "Typography",
@@ -824,13 +822,24 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
 ---
 
 <div class="ds" data-ds-root data-mode="creative">
+  {
+    /* La barra della vetrina è quella vera di /work: marchio GO (l'isola,
+       non un testo), ritorno al CV pieno d'accento e interruttore di lingua.
+       Fino al 2026-10-14 era una barra sua — «GO» come testo, «Home», «/work»
+       e «EN» come link mono — cioè l'unica pagina del sito che si muoveva
+       con comandi diversi da quelli che documenta. .ds-bar resta solo come
+       guscio: appiccicata in alto e opaca, perché sotto scorrono le demo. */
+  }
   <header class="ds-bar">
-    <a class="ds-mark" href={it ? "/" : "/en"}>GO</a>
-    <nav class="ds-bar__links" aria-label={it ? "Collegamenti" : "Links"}>
-      <a href={it ? "/" : "/en"}>{t.backHome}</a>
-      <a href={it ? "/work" : "/en/work"}>/work</a>
-      <a href={it ? "/en/design-system" : "/design-system"}>{it ? "EN" : "IT"}</a>
-    </nav>
+    <go-logo>GO</go-logo>
+    <div class="work-nav__right">
+      <a href={lensPath("creative", lang)} class="work-back"
+        ><span class="work-chevron work-chevron--left" aria-hidden="true"></span>{
+          it ? "Torna al CV" : "Back to the CV"
+        }</a
+      >
+      <LangSwitch locale={lang} href={it ? "/en/design-system" : "/design-system"} />
+    </div>
   </header>
 
   <div class="ds-shell">
@@ -1547,7 +1556,7 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
           }
         </p>
         <div class="ds-stage ds-stage--watermark">
-          <div class="lh">
+          <div class="lh" data-lh-stack>
             <section
               class="lh-section"
               data-mode="creative"
@@ -2397,24 +2406,26 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
           }
         </p>
         <div class="ds-stage">
-          <div class="lh-section--about">
-            <div class="about-actions" role="group" aria-label={ui.aboutMore} data-ds-snippet>
-              <button class="lc-btn" type="button" data-drawer-open="funfact">
-                <span class="lc-btn__icon" aria-hidden="true">✦</span>
-                {ui.drawerFunFact}
-              </button>
-              <button class="lc-btn" type="button" data-drawer-open="trip">
-                <span class="lc-btn__icon" aria-hidden="true">✦</span>
-                {ui.drawerTrip}
-              </button>
-              <button class="lc-btn" type="button" data-drawer-open="belongings">
-                <span class="lc-btn__icon" aria-hidden="true">✦</span>
-                {ui.drawerBelongings}
-              </button>
-              <a class="lc-btn" href="#ingresso-comandi">
-                {ui.aboutVoices}
-                <span class="lc-btn__arrow" aria-hidden="true"></span>
-              </a>
+          <div class="lh">
+            <div class="lh-section--about">
+              <div class="about-actions" role="group" aria-label={ui.aboutMore} data-ds-snippet>
+                <button class="lc-btn" type="button" data-drawer-open="funfact">
+                  <span class="lc-btn__icon" aria-hidden="true">✦</span>
+                  {ui.drawerFunFact}
+                </button>
+                <button class="lc-btn" type="button" data-drawer-open="trip">
+                  <span class="lc-btn__icon" aria-hidden="true">✦</span>
+                  {ui.drawerTrip}
+                </button>
+                <button class="lc-btn" type="button" data-drawer-open="belongings">
+                  <span class="lc-btn__icon" aria-hidden="true">✦</span>
+                  {ui.drawerBelongings}
+                </button>
+                <button class="lc-btn" type="button" data-drawer-open="voices">
+                  <span class="lc-btn__icon" aria-hidden="true">✦</span>
+                  {ui.aboutVoices}
+                </button>
+              </div>
             </div>
           </div>
         </div>

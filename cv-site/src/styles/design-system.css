@@ -90,38 +90,6 @@
   border-bottom: 1px solid var(--ds-line);
 }
 
-.ds-mark {
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: var(--fs-20);
-  letter-spacing: -0.02em;
-  color: var(--ds-ink);
-  text-decoration: none;
-}
-
-.ds-bar__links {
-  display: flex;
-  align-items: center;
-  gap: var(--size-12);
-  font-size: var(--fs-12);
-  font-family: var(--font-mono);
-}
-
-.ds-bar__links a {
-  color: var(--ds-muted);
-  text-decoration: none;
-  /* 2.5.8: bersaglio da 24px anche quando il testo è alto 12. */
-  min-height: 1.5rem;
-  display: inline-flex;
-  align-items: center;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .ds-bar__links a:hover {
-    color: var(--ds-ink);
-  }
-}
-
 /* ── Intestazione ── */
 
 .ds-head {
@@ -441,6 +409,13 @@
 
 .ds-stage {
   position: relative;
+  /* L'inchiostro delle demo è quello della pagina vera, non quello della
+     vetrina: le pagine /work in lente Web & UX scrivono nel crema caldo di
+     --color-text-primary (255 240 220), e qui sotto .ds le metteva nel crema
+     neutro di --ds-ink (245 240 230). Le demo di ingresso e lente non ne
+     risentono: .lh e .lc dichiarano il proprio. Trovato il 2026-10-14
+     confrontando lo stile calcolato di 180 classi fra sito e vetrina. */
+  color: var(--color-text-primary);
   padding: var(--size-24);
   border: 1px solid var(--ds-line);
   border-radius: var(--radius-16);
@@ -1928,4 +1903,15 @@
 .ds-about-bio {
   display: grid;
   margin-top: var(--size-24);
+}
+
+/* La sezione-lente in vetrina è una scheda della pila, come sulla home: la
+   demo porta data-lh-stack, quindi bordo, raggio e fondo arrivano dal CSS
+   vero (lab-home.css). Qui si spengono solo le due cose che hanno senso
+   nella pagina e non in un riquadro: l'aggancio sticky e l'altezza di una
+   schermata. */
+.ds-stage .lh[data-lh-stack] .lh-section {
+  position: relative;
+  top: auto;
+  min-height: 0;
 }
