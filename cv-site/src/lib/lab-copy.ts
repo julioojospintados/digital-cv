@@ -252,13 +252,12 @@ export interface AboutText {
   desc: string;
   chips: readonly string[];
   /**
-   * La riga di badge sotto «Chi sono» (scelta di Giulio, 2026-10-14): le
-   * quattro lingue in un badge solo, con i livelli di cv.ts (`languages`), e
-   * quattro soft skill che il resto della pagina può dimostrare — pensiero
+   * La riga di badge sotto «Chi sono» (scelta di Giulio, 2026-10-14): quattro
+   * soft skill che il resto della pagina può dimostrare — pensiero
    * critico e laterale (scegliere fra le idee e trovarne di inattese),
    * adattabilità (cv.ts `softSkills`, «Adattabilità culturale»), ascolto
-   * attivo (il teatro d'improvvisazione). Se cambia un livello di lingua in
-   * cv.ts, va cambiato qui.
+   * attivo (il teatro d'improvvisazione). Le lingue c'erano, in un badge
+   * solo, e sono state tolte lo stesso giorno.
    */
   badges: readonly string[];
 }
@@ -276,13 +275,7 @@ export const ABOUT_TEXT: Record<Locale, AboutText> = {
       "Scacchi",
       "Piante d'appartamento",
     ],
-    badges: [
-      "IT · EN B2 · ES B1 · FR A2",
-      "Pensiero critico",
-      "Pensiero laterale",
-      "Adattabilità",
-      "Ascolto attivo",
-    ],
+    badges: ["Pensiero critico", "Pensiero laterale", "Adattabilità", "Ascolto attivo"],
   },
   en: {
     eyebrow: "About me",
@@ -296,13 +289,7 @@ export const ABOUT_TEXT: Record<Locale, AboutText> = {
       "Chess",
       "House plants",
     ],
-    badges: [
-      "IT · EN B2 · ES B1 · FR A2",
-      "Critical thinking",
-      "Lateral thinking",
-      "Adaptability",
-      "Active listening",
-    ],
+    badges: ["Critical thinking", "Lateral thinking", "Adaptability", "Active listening"],
   },
 };
 

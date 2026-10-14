@@ -425,31 +425,39 @@ const sections = MODES.map((mode) => ({
           <div class="about-bio">
             {aboutCards.map((c) => <p class="about-bio__text">{c.text}</p>)}
           </div>
-          <div class="about-actions" role="group" aria-label={t.ui.aboutMore}>
-            <button class="lc-btn" type="button" data-drawer-open="funfact">
-              <span class="lc-btn__icon" aria-hidden="true">✦</span>
-              {t.ui.drawerFunFact}
-            </button>
-            <button class="lc-btn" type="button" data-drawer-open="trip">
-              <span class="lc-btn__icon" aria-hidden="true">✦</span>
-              {t.ui.drawerTrip}
-            </button>
-            <button class="lc-btn" type="button" data-drawer-open="belongings">
-              <span class="lc-btn__icon" aria-hidden="true">✦</span>
-              {t.ui.drawerBelongings}
-            </button>
-          </div>
-
           {
-            /* ── L'indirizzo, qui e non più in fondo ─────────────────────────
-              Fino al 2026-09-02 la home aveva una sesta schermata di congedo
-              che conteneva questa card. È stata tolta, e la card è risalita
-              qui: "Chi sono" arrivava a metà schermo, quindi lo spazio c'era
-              già, ed è dove chi legge sta ancora guardando la persona.
-              Il perché per esteso, e cosa si è perso con la chiusura
-              (LinkedIn, "Tocca a te.", la firma), sta in EmailCard.astro. */
+            /* Cassetti e «Scrivimi» sulla stessa riga su desktop (Giulio,
+               2026-10-14). Su telefono il contenitore sparisce
+               (display: contents) e i due gruppi tornano al loro posto:
+               cassetti dopo la bio, «Scrivimi» in fondo alla scheda. */
           }
-          <EmailCard lang={locale} />
+          <div class="about-row">
+            <div class="about-actions" role="group" aria-label={t.ui.aboutMore}>
+              <button class="lc-btn" type="button" data-drawer-open="funfact">
+                <span class="lc-btn__icon" aria-hidden="true">✦</span>
+                {t.ui.drawerFunFact}
+              </button>
+              <button class="lc-btn" type="button" data-drawer-open="trip">
+                <span class="lc-btn__icon" aria-hidden="true">✦</span>
+                {t.ui.drawerTrip}
+              </button>
+              <button class="lc-btn" type="button" data-drawer-open="belongings">
+                <span class="lc-btn__icon" aria-hidden="true">✦</span>
+                {t.ui.drawerBelongings}
+              </button>
+            </div>
+
+            {
+              /* ── L'indirizzo, qui e non più in fondo ─────────────────────────
+                Fino al 2026-09-02 la home aveva una sesta schermata di congedo
+                che conteneva questa card. È stata tolta, e la card è risalita
+                qui: "Chi sono" arrivava a metà schermo, quindi lo spazio c'era
+                già, ed è dove chi legge sta ancora guardando la persona.
+                Il perché per esteso, e cosa si è perso con la chiusura
+                (LinkedIn, "Tocca a te.", la firma), sta in EmailCard.astro. */
+            }
+            <EmailCard lang={locale} />
+          </div>
         </div>
       </section>
 

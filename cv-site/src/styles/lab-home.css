@@ -718,6 +718,34 @@ html[data-lh-armed] .lh-obj {
   .lh-section--about .lh-section__copy {
     max-width: none;
   }
+
+  /* Stesso corpo del testo delle lenti su desktop (--fs-18): a 16 la bio
+     sembrava scritta in un altro carattere accanto alle altre schede. */
+  .about-bio__text {
+    font-size: var(--fs-18);
+  }
+
+  /* «Scrivimi» e i cassetti su una riga: il primario per primo, come «GO to»
+     nelle lenti. `stretch` porta i cassetti (44px) all'altezza del bottone
+     pieno (51px), così la riga ha un bordo solo sopra e uno sotto. */
+  .about-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    gap: var(--size-8);
+  }
+
+  .about-row > .lh-section__actions {
+    order: -1;
+    /* Il margine sopra serve quando la fascia sta da sola sotto il testo;
+       qui sposterebbe «Scrivimi» 8px più in basso dei cassetti. */
+    margin-top: 0;
+  }
+
+  .about-row .about-actions {
+    gap: var(--size-8);
+    margin-top: 0;
+  }
 }
 
 .about-cards {
@@ -1462,6 +1490,10 @@ html[data-lh-armed] .lh-obj {
   }
 
   .lh-section--about .lh-section__copy {
+    display: contents;
+  }
+
+  .lh-section--about .about-row {
     display: contents;
   }
 
