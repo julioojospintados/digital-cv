@@ -540,3 +540,30 @@
 .about-voices {
   --color-accent: var(--lh-ink, var(--color-text-primary));
 }
+
+/* ── «Dicono di me» come pila di schede (Giulio, 2026-10-14) ─────────────
+   Lo stesso effetto delle sezioni della home e dell'indice del portfolio:
+   ogni testimonianza è una scheda sticky, la successiva le sale sopra e la
+   coperta va fuori fuoco (scripts/stack-depth.ts, con la modale come
+   contenitore di scorrimento). Il gradino di 0.75rem per scheda lascia
+   vedere il bordo di quelle sotto. Fondo opaco obbligatorio: una scheda
+   trasparente lascerebbe leggere il testo di quella che copre.
+
+   Il filo d'accento a sinistra di .lc-voice qui diventa il bordo della
+   scheda: dentro una scheda il filo sarebbe un secondo contorno. */
+.about-voices__card {
+  position: sticky;
+  top: calc(var(--stack-i, 0) * 0.75rem);
+  padding: var(--size-20);
+  border: 1px solid var(--color-border);
+  border-left: 1px solid var(--color-border);
+  border-radius: var(--radius-16);
+  background: var(--color-bg);
+}
+
+.about-voices {
+  /* Il gap fra le schede lascia lo spazio per scorrere da una all'altra;
+     in fondo serve aria perché anche l'ultima arrivi in cima. */
+  gap: var(--size-16);
+  padding-bottom: var(--size-40);
+}

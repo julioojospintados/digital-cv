@@ -31,22 +31,31 @@ interface StackDepthOptions {
   blur?: number;
   /** Quanto si spegne la scheda del tutto coperta, da 0 a 1. */
   dim?: number;
+  /**
+   * Chi scorre, quando non è la pagina: la modale «Dicono di me» impila le
+   * testimonianze dentro il proprio contenitore (.memory-dialog__scroll).
+   */
+  scroller?: HTMLElement;
 }
 
 const clamp = (v: number) => Math.max(0, Math.min(1, v));
 
 export function initStackDepth(
   cards: HTMLElement[],
-  { blur = 6, dim = 0.3 }: StackDepthOptions = {},
+  { blur = 6, dim = 0.3, scroller }: StackDepthOptions = {},
 ): void {
-  const list = cards.filter((c) => c.getClientRects().length);
-  if (list.length < 2) return;
-
-  for (const card of list) card.style.willChange = "filter";
+  if (cards.length < 2) return;
+  // Le schede visibili si contano a ogni disegno e non una volta sola: dentro
+  // una modale chiusa non hanno ancora una geometria, e la avranno quando si
+  // apre. Fuori dalle modali il risultato è lo stesso di prima.
+  const visible = () => cards.filter((c) => c.getClientRects().length);
+  for (const card of cards) card.style.willChange = "filter";
 
   let raf = 0;
   const paint = () => {
     raf = 0;
+    const list = visible();
+    if (list.length < 2) return;
     for (let i = 0; i < list.length - 1; i++) {
       const cur = list[i].getBoundingClientRect();
       const next = list[i + 1].getBoundingClientRect();
@@ -63,7 +72,7 @@ export function initStackDepth(
     if (!raf) raf = requestAnimationFrame(paint);
   };
 
-  window.addEventListener("scroll", schedule, { passive: true });
+  (scroller ?? window).addEventListener("scroll", schedule, { passive: true });
   window.addEventListener("resize", schedule);
   paint();
 }

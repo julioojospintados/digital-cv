@@ -599,8 +599,8 @@ const sections = MODES.map((mode) => ({
         {
           data.feedbacks
             .filter((f) => f.quote)
-            .map((f) => (
-              <li class="lc-voice">
+            .map((f, i) => (
+              <li class="lc-voice about-voices__card" style={`--stack-i:${i}`}>
                 <blockquote class="lc-voice__quote">{f.quote}</blockquote>
                 <p class="lc-voice__who">
                   <span class="lc-badge lc-badge--solid">{f.name}</span>
@@ -638,4 +638,18 @@ const sections = MODES.map((mode) => ({
 <script>
   // Apre/chiude i cassetti, anima lo scatter, gestisce la lightbox.
   import "../scripts/memory-drawer.ts";
+  import { initStackDepth } from "../scripts/stack-depth";
+
+  // «Dicono di me»: le testimonianze sono una pila di schede, come le
+  // sezioni della home e l'indice del portfolio. Qui a scorrere non è la
+  // pagina ma il contenuto della modale, e la misura è quella del portfolio:
+  // schede piccole, sfocatura leggera.
+  const voices = document.querySelector<HTMLElement>("#dialog-voices .memory-dialog__scroll");
+  if (voices) {
+    initStackDepth(Array.from(voices.querySelectorAll<HTMLElement>(".about-voices__card")), {
+      blur: 4,
+      dim: 0.25,
+      scroller: voices,
+    });
+  }
 </script>
