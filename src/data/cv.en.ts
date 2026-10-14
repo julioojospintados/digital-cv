@@ -213,7 +213,7 @@ export const cvDataEn = {
       location: "Turin, Italy",
       remote: false,
       description: "Frontend, UX/UI, Agile method and AI augmentation consulting.",
-      // Four client engagements, one job — see ClientEngagement in cv.ts.
+      // Three client engagements, one job — see ClientEngagement in cv.ts.
       clients: [
         {
           client: "Internal project",
@@ -234,17 +234,11 @@ export const cvDataEn = {
           description:
             "Angular frontend development on complex architectures within a distributed team of 30+ people. Reactive programming with RxJS and close collaboration with backend teams in Agile sprints.",
         },
-        {
-          client: "Rai Pubblicità",
-          role: "Frontend Developer",
-          description:
-            "Angular frontend development for internal applications. Code implementation in close contact with the backend teams.",
-        },
       ],
       highlights: [
         "I led the Aruba Design System team as Tech Lead and Scrum Master, over 3 years and more than 30 people: a library of over 100 WebComponents adopted cross-product.",
         "I worked on the UX/UI side of the Aruba design system: component states, accessibility (WCAG) and visual consistency, aligned with the designers in Figma.",
-        "I developed enterprise Angular architecture for Intesa San Paolo in a team of over 50 people, with shared standards and code review.",
+        "I developed enterprise Angular architecture for Intesa San Paolo in a team of over 30 people, with shared standards and code review.",
         "I introduced systematic unit testing with Jest, with direct impact on release stability and coverage.",
       ],
       skills: [

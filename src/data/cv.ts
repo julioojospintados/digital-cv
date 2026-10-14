@@ -105,9 +105,9 @@ export interface ExperienceFacet {
 /**
  * Un incarico presso un cliente, dentro un unico rapporto di lavoro.
  *
- * Serve alle consulenze: da ALTEN, Giulio è stato su quattro clienti diversi
+ * Serve alle consulenze: da ALTEN, Giulio è stato su più clienti diversi
  * con ruoli diversi, ma è **un solo impiego** con una sola data d'inizio.
- * Modellarli come esperienze separate creerebbe quattro periodi sovrapposti
+ * Modellarli come esperienze separate creerebbe periodi sovrapposti
  * nella cronologia — che è esattamente ciò che fa alzare un sopracciglio a
  * chi legge un CV. Appiattirli in `highlights` perderebbe invece il nome del
  * cliente, che per un consulente è il primo dato cercato.
@@ -394,7 +394,7 @@ export const cvData = {
       location: "Torino, Italia",
       remote: false,
       description: "Consulenza Frontend, UX/UI, Metodo Agile e AI Augmentation.",
-      // Quattro incarichi, un solo impiego: vedi ClientEngagement sopra.
+      // Tre incarichi, un solo impiego: vedi ClientEngagement sopra.
       clients: [
         {
           client: "Progetto interno",
@@ -415,17 +415,11 @@ export const cvData = {
           description:
             "Sviluppo frontend in Angular su architetture complesse all'interno di un team distribuito di +30 persone. Programmazione reattiva con RxJS e collaborazione stretta con il backend in sprint Agile.",
         },
-        {
-          client: "Rai Pubblicità",
-          role: "Frontend Developer",
-          description:
-            "Sviluppo frontend in Angular per applicativi interni. Implementazione del codice a stretto contatto con i team backend.",
-        },
       ],
       highlights: [
         "Ho guidato come Tech Lead e Scrum Master il team Aruba Design System, oltre 3 anni e più di 30 persone: libreria di oltre 100 componenti WebComponents adottata cross-prodotto.",
         "Ho lavorato sul lato UX/UI del design system Aruba: stati, accessibilità (WCAG) e coerenza visiva dei componenti, allineati con i designer su Figma.",
-        "Ho sviluppato architettura Angular enterprise per Intesa San Paolo in un team di oltre 50 persone, con standard condivisi e code review.",
+        "Ho sviluppato architettura Angular enterprise per Intesa San Paolo in un team di oltre 30 persone, con standard condivisi e code review.",
         "Ho introdotto test unitari sistematici con Jest, con impatto diretto su stabilità dei rilasci e coverage.",
       ],
       skills: [
