@@ -417,20 +417,13 @@ const sections = MODES.map((mode) => ({
           }
           {
             /* Su desktop la bio si legge senza aprire niente: gli stessi tre
-               testi delle card qui sopra, in chiaro, ognuno col suo
-               titoletto. Su telefono restano le card (lab-home.css § «La bio
+               testi delle card qui sopra, in chiaro: un testo unico in tre
+               paragrafi, senza titoletti (scelta di Giulio, 2026-10-14). Su telefono restano le card (lab-home.css § «La bio
                in chiaro»): aperti farebbero una scheda di quasi due schermate.
                Le parole sono le stesse, da ABOUT_CARDS: non possono divergere. */
           }
           <div class="about-bio">
-            {
-              aboutCards.map((c) => (
-                <div class="about-bio__item">
-                  <h3 class="about-bio__label">{c.label}</h3>
-                  <p class="about-bio__text">{c.text}</p>
-                </div>
-              ))
-            }
+            {aboutCards.map((c) => <p class="about-bio__text">{c.text}</p>)}
           </div>
           <div class="about-actions" role="group" aria-label={t.ui.aboutMore}>
             <button class="lc-btn" type="button" data-drawer-open="funfact">

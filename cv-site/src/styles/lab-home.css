@@ -678,20 +678,13 @@ html[data-lh-armed] .lh-obj {
    e la pila regge una scheda più alta della finestra. Su telefono no: i
    testi aperti fanno 533px a 390 e la scheda arriva a quasi due schermate,
    cioè il difetto per cui la bio era stata spezzata in card. Lì restano le
-   card con la modale. */
+   card con la modale. Su desktop i tre testi sono un testo unico, senza
+   titoletti (Giulio, 2026-10-14). */
 .about-bio {
   display: none;
-  gap: var(--size-16);
-}
-
-.about-bio__label {
-  margin: 0 0 var(--size-4);
-  font-family: var(--font-mono);
-  font-size: var(--fs-12);
-  font-weight: 500;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--lh-muted);
+  /* Le «leggere spaziature» fra i tre paragrafi: abbastanza per vedere dove
+     finisce un pensiero, non tanto da spezzare il testo in tre blocchi. */
+  gap: var(--size-12);
 }
 
 .about-bio__text {
@@ -713,24 +706,17 @@ html[data-lh-armed] .lh-obj {
 
   /* 30/70 e non la metà delle lenti (scelta di Giulio, 2026-10-14): con la
      bio in chiaro è il testo a reggere la scheda, e la pianta in mezza
-     pagina lasciava una colonna vuota grande quanto quella piena. La
-     colonna di testo si allarga, ma le righe no: --about-measure tiene il
-     paragrafo intorno ai 75 caratteri, oltre i quali l'occhio perde la riga
-     quando torna a capo. */
-  /* Doppia classe: la griglia a metà delle lenti è dichiarata più giù nel
-     file, e a pari specificità vincerebbe lei. */
+     pagina lasciava una colonna vuota grande quanto quella piena. Il testo
+     occupa tutta la colonna, senza un tetto alla riga: anche questa è una
+     scelta di Giulio, che ha voluto il blocco pieno. Doppia classe perché la
+     griglia a metà delle lenti è dichiarata più giù nel file, e a pari
+     specificità vincerebbe lei. */
   .lh-section.lh-section--about {
-    --about-measure: 36rem;
-
     grid-template-columns: minmax(0, 3fr) minmax(0, 7fr);
   }
 
   .lh-section--about .lh-section__copy {
     max-width: none;
-  }
-
-  .lh-section--about .about-bio {
-    max-width: var(--about-measure);
   }
 }
 
