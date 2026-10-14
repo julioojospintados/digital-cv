@@ -625,6 +625,58 @@ togliere il maiuscolo o a stringere il tracking. Alzare il corpo di una riga
 in mono maiuscolo spaziato la rende **più larga** senza renderla molto più
 leggibile — errore commesso il 2026-08-11 su `.lh-cred` nell'ingresso.
 
+### Tipografia — regole UX verificate (2026-10-14)
+
+Raccolte da Giulio dopo che l'ingresso «sembrava fatto con tre font». Il
+difetto non era il numero di famiglie (sono due) ma tre cose che qui sotto
+diventano regole. Ogni numero ha la sua fonte in fondo.
+
+**1. Mai un corsivo o un grassetto che il file non ha.** Lexend esiste solo
+dritta: un `font-style: italic` la fa inclinare dal browser, e un corsivo
+sintetico ha forme diverse da quello disegnato (Google Fonts, glossario
+«faux»). Si legge come un terzo carattere. Il `body` ha
+`font-synthesis-style: none`, quindi il danno non si vede più — ma la regola
+è non chiederlo: per staccare una frase si usano corpo, peso o colore.
+Stessa regola per i pesi: si usano solo quelli installati (tabella sopra).
+
+**2. Una famiglia per voce, al massimo due nel sito.** Una famiglia con più
+pesi basta quasi sempre; se se ne affiancano due devono avere un contrasto
+netto e un ruolo fisso. Qui: Lexend parla, JetBrains Mono etichetta dati
+(date, codici, numeri, sigle). Una riga di parole che un recruiter legge
+(ruoli, titoli di ruolo) è testo, non dato: va in Lexend.
+
+**3. Il tracking va in proporzione, non agli estremi.** Il maiuscolo vuole
+spazio in più, ma fra il 5 e il 10% del corpo (`0.05em`–`0.1em`); il
+tracking largo è per etichette brevi, non per righe intere. Il negativo solo
+ai corpi da titolo. Il nome a `-0.035em` accanto ai ruoli a `+0.16em` faceva
+due tessiture opposte a dieci pixel di distanza: è quello che l'occhio
+leggeva come «font diversi».
+
+**4. Due livelli di inchiostro, non tre.** Crema per ciò che si legge, muted
+per ciò che accompagna. Due grigi/verdi attenuati diversi nella stessa
+testata si leggono come due sistemi.
+
+**5. Gerarchia con almeno due leve.** Fra un livello e l'altro: rapporto di
+corpo ≥ 1,25 *e* almeno una fra peso e colore. Un salto di sola dimensione
+fra 800 e 400 è brusco; fra 800 e 600 è una famiglia.
+
+**6. Misura di riga 50–75 caratteri per il testo continuo**; sotto i 45 il
+ritmo si spezza, sopra gli 80 l'occhio perde la riga a capo. Una scelta
+esplicita di Giulio vince sulla regola (la bio di «Chi sono» su desktop sta
+a ~97), ma va scritta nel commento accanto, non lasciata implicita.
+
+**7. Corpo e contrasto non si scambiano.** Testo sotto i 18px (o 14px
+bold) deve stare a 4,5:1; se un testo piccolo non regge, la dimensione è
+sbagliata, non il colore (vedi § Accessibilità).
+
+Fonti: [Google Fonts — faux, fake, pseudo, synthesized](https://fonts.google.com/knowledge/glossary/faux_fake_pseudo_synthesized),
+[Google Fonts — tracking](https://fonts.google.com/knowledge/glossary/tracking_letter_spacing),
+[A List Apart — Say No to Faux Bold](https://alistapart.com/article/say-no-to-faux-bold),
+[Better Web Typography (5–10% sul maiuscolo)](https://betterwebtype.com/better-web-typography-for-a-better-web-sample.pdf),
+[U.S. Web Design System — Typography](https://designsystem.digital.gov/components/typography/),
+[Cieden — letter spacing e line length](https://cieden.com/book/sub-atomic/typography/letter-spacing-and-line-length),
+[UX Planet — UX typography](https://uxplanet.org/ux-ui-tips-a-guide-to-ux-typography-d297a8e2653d).
+
 ### DO NOT (typography)
 
 - Scrivere un `font-size` in rem/px letterale fuori da un `clamp()` — usa
@@ -635,6 +687,10 @@ leggibile — errore commesso il 2026-08-11 su `.lh-cred` nell'ingresso.
   eccezione è `var(--fs-10)` per badge cortissimi ALL CAPS + bold.
 - Alzare l'opacità/abbassare il contrasto per "far stare" un testo piccolo —
   se il contrasto non regge a quella dimensione, la dimensione è sbagliata.
+- Usare `font-style: italic` o un peso non installato: il browser li
+  simula e il risultato si legge come un altro carattere.
+- Tracking oltre `0.1em` su una riga intera, o mono maiuscolo spaziato per
+  un testo che si legge come frase.
 
 **Font coppia tecnica — self-hosted via Fontsource (nessuna richiesta esterna, GDPR compliant):**
 
