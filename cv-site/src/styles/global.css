@@ -1482,6 +1482,39 @@ floating-menu {
    è schiarito fino a 4,85:1 sull'ottanio (12px bold: serve 4,5). Il pieno
    scrive in --color-on-accent sull'accento, il 6,87:1 di tutti i bottoni
    pieni. */
+/* ── Una testimonianza (.lc-voice) ───────────────────────────────────────
+   Spostata da lab-cv.css il 2026-10-14: la usano la sezione «Le voci» della
+   pagina CV e la modale «Dicono di me» dell'ingresso, e devono restare la
+   stessa cosa. Fuori dalle pagine-lente le --lc-* ripiegano su --lh-*. */
+.lc-voice {
+  padding-left: var(--size-20);
+  border-left: 2px solid var(--lc-accent-line, var(--color-accent));
+}
+
+/* Nessuna virgoletta disegnata e nessun corsivo: il testo è già marcato
+   come citazione dal filo e dal <blockquote>, e il corsivo su cinque righe
+   costa in leggibilità più di quanto renda in stile. */
+.lc-voice__quote {
+  margin: 0;
+  font-size: var(--fs-16);
+  line-height: 1.65;
+  color: var(--lc-ink, var(--lh-ink));
+}
+
+.lc-voice__who {
+  margin: var(--size-12) 0 0;
+  font-size: var(--fs-14);
+  font-weight: 600;
+  color: var(--lc-ink, var(--lh-ink));
+}
+
+/* Il ruolo di chi parla è ciò che dà peso alla frase: sta a --fs-14 come il
+   nome, non al pavimento dei 12. Colore secondario, non corpo piccolo. */
+.lc-voice__role {
+  font-weight: 400;
+  color: var(--lc-muted, var(--lh-muted));
+}
+
 /* ── Bottone del design system (.lc-btn) ─────────────────────────────────
    Spostato da lab-cv.css il 2026-10-14, quando l'ingresso l'ha adottato per
    i cassetti di «Chi sono» (prima erano .about-action, un bottone mono

@@ -423,6 +423,12 @@
 @media (max-width: 40rem) {
   .memory-dialog {
     width: 100vw;
+    /* max-width: none perché il browser dà a ogni <dialog> un tetto di
+       `calc(100% - 6px - 2em)`: a 390px la modale si fermava a 352 e, con il
+       margine a zero, restava appoggiata a sinistra con una striscia di 38px
+       scoperta a destra. Trovato il 2026-10-14, misurando «Dicono di me»;
+       valeva per tutti i cassetti. */
+    max-width: none;
     max-height: 100svh;
     height: 100svh;
     margin: 0;
@@ -514,4 +520,17 @@
   .memory-dialog--about .about-modal img {
     max-height: 42svh;
   }
+}
+
+/* «Dicono di me»: le testimonianze in colonna, una sotto l'altra. Le voci
+   sono .lc-voice (global.css), le stesse della pagina CV; qui solo l'elenco,
+   a una colonna perché la modale di lettura è larga 36rem. */
+.about-voices {
+  display: grid;
+  gap: var(--size-28);
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  text-align: left;
 }

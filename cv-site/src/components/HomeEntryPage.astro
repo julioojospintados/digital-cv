@@ -21,7 +21,7 @@
 import Layout from "../layouts/Layout.astro";
 import { cvData } from "@cv-data";
 import { cvDataEn } from "@cv-data-en";
-import { DEFAULT_MODE, LOCALES, MODES, lensPath, type Locale } from "../lib/cv-i18n";
+import { LOCALES, MODES, lensPath, type Locale } from "../lib/cv-i18n";
 import {
   ABOUT_CARDS,
   ABOUT_CARD_PHOTOS,
@@ -446,14 +446,15 @@ const sections = MODES.map((mode) => ({
                 {t.ui.drawerBelongings}
               </button>
               {
-                /* Il quarto non apre un cassetto: porta alle testimonianze
-                   della pagina CV. Per questo ha la freccia e non la ✦, ed è
-                   un link e non un bottone (Giulio, 2026-10-14). */
+                /* Il quarto cassetto apre le testimonianze in una modale, come
+                   gli altri tre. Per un giorno è stato un link alla pagina CV:
+                   un comando diverso dai suoi vicini, che portava via dalla
+                   pagina mentre gli altri aprivano qui (Giulio, 2026-10-14). */
               }
-              <a class="lc-btn" href={`${lensPath(DEFAULT_MODE, locale)}#voci`}>
+              <button class="lc-btn" type="button" data-drawer-open="voices">
+                <span class="lc-btn__icon" aria-hidden="true">✦</span>
                 {t.ui.aboutVoices}
-                <span class="lc-btn__arrow" aria-hidden="true"></span>
-              </a>
+              </button>
             </div>
 
             {
@@ -570,6 +571,47 @@ const sections = MODES.map((mode) => ({
       </dialog>
     ))
   }
+
+  {
+    /* «Dicono di me»: le testimonianze di cv.ts (`feedbacks`), le stesse della
+       sezione «Le voci» della pagina CV e con lo stesso componente
+       (.lc-voice), dentro la modale di lettura dei cassetti. */
+  }
+  <dialog
+    class="memory-dialog memory-dialog--reading"
+    id="dialog-voices"
+    aria-labelledby="dialog-voices-title"
+    data-lenis-prevent
+  >
+    <div class="memory-dialog__header">
+      <p class="memory-dialog__eyebrow" id="dialog-voices-title">{t.ui.aboutVoices}</p>
+      <button
+        class="memory-dialog__close"
+        type="button"
+        data-drawer-close
+        aria-label={t.ui.closeLabel}
+      >
+        ✕
+      </button>
+    </div>
+    <div class="memory-dialog__scroll">
+      <ul class="about-voices" role="list">
+        {
+          data.feedbacks
+            .filter((f) => f.quote)
+            .map((f) => (
+              <li class="lc-voice">
+                <blockquote class="lc-voice__quote">{f.quote}</blockquote>
+                <p class="lc-voice__who">
+                  {f.name}
+                  {f.role && <span class="lc-voice__role"> · {f.role}</span>}
+                </p>
+              </li>
+            ))
+        }
+      </ul>
+    </div>
+  </dialog>
 
   <MemoryDrawers lang={locale} />
 </Layout>

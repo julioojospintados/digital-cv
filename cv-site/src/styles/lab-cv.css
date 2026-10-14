@@ -1377,34 +1377,8 @@
   }
 }
 
-.lc-voice {
-  padding-left: var(--size-20);
-  border-left: 2px solid var(--lc-accent-line);
-}
-
-/* Nessuna virgoletta disegnata e nessun corsivo: il testo è già marcato
-   come citazione dal filo e dal <blockquote>, e il corsivo su cinque righe
-   costa in leggibilità più di quanto renda in stile. */
-.lc-voice__quote {
-  margin: 0;
-  font-size: var(--fs-16);
-  line-height: 1.65;
-  color: var(--lc-ink);
-}
-
-.lc-voice__who {
-  margin: var(--size-12) 0 0;
-  font-size: var(--fs-14);
-  font-weight: 600;
-  color: var(--lc-ink);
-}
-
-/* Il ruolo di chi parla è ciò che dà peso alla frase: sta a --fs-14 come il
-   nome, non al pavimento dei 12. Colore secondario, non corpo piccolo. */
-.lc-voice__role {
-  font-weight: 400;
-  color: var(--lc-muted);
-}
+/* .lc-voice sta in global.css dal 2026-10-14: la usa anche la modale
+   «Dicono di me» dell'ingresso. */
 
 /* ═══ 2d — Il percorso ════════════════════════════════════════════════════
    Griglia identica a .lc-all__row (binario mono a sinistra, contenuto a
