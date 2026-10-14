@@ -99,7 +99,7 @@ const EN: Locale = {
       ],
     },
     {
-      yr: "2019 — present",
+      yr: "2022 — present",
       loc: "Turin, Italy",
       role: "Frontend Developer &amp; UX/UI Design System",
       org: "ALTEN Italia @ Aruba &amp; Intesa San Paolo",
@@ -294,7 +294,7 @@ const IT: Locale = {
       ],
     },
     {
-      yr: "2019 — oggi",
+      yr: "2022 — oggi",
       loc: "Torino, Italia",
       role: "Frontend Developer &amp; UX/UI Design System",
       org: "ALTEN Italia @ Aruba &amp; Intesa San Paolo",

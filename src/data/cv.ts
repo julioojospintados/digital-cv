@@ -387,7 +387,7 @@ export const cvData = {
     {
       company: "ALTEN Italia",
       role: "Frontend Developer & UX/UI Design System",
-      startDate: "2019-07",
+      startDate: "2022-04",
       endDate: "present",
       location: "Torino, Italia",
       remote: false,
