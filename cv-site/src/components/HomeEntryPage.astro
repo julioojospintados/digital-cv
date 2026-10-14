@@ -21,7 +21,7 @@
 import Layout from "../layouts/Layout.astro";
 import { cvData } from "@cv-data";
 import { cvDataEn } from "@cv-data-en";
-import { LOCALES, MODES, lensPath, type Locale } from "../lib/cv-i18n";
+import { DEFAULT_MODE, LOCALES, MODES, lensPath, type Locale } from "../lib/cv-i18n";
 import {
   ABOUT_CARDS,
   ABOUT_CARD_PHOTOS,
@@ -445,6 +445,15 @@ const sections = MODES.map((mode) => ({
                 <span class="lc-btn__icon" aria-hidden="true">✦</span>
                 {t.ui.drawerBelongings}
               </button>
+              {
+                /* Il quarto non apre un cassetto: porta alle testimonianze
+                   della pagina CV. Per questo ha la freccia e non la ✦, ed è
+                   un link e non un bottone (Giulio, 2026-10-14). */
+              }
+              <a class="lc-btn" href={`${lensPath(DEFAULT_MODE, locale)}#voci`}>
+                {t.ui.aboutVoices}
+                <span class="lc-btn__arrow" aria-hidden="true"></span>
+              </a>
             </div>
 
             {

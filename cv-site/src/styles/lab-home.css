@@ -725,25 +725,30 @@ html[data-lh-armed] .lh-obj {
     font-size: var(--fs-18);
   }
 
-  /* «Scrivimi» e i cassetti su una riga: il primario per primo, come «GO to»
-     nelle lenti. `stretch` porta i cassetti (44px) all'altezza del bottone
-     pieno (51px), così la riga ha un bordo solo sopra e uno sotto. */
+  /* «Scrivimi» e i comandi su una riga: il primario per primo, come «GO to»
+     nelle lenti. Il gruppo dei comandi si scioglie (display: contents) così
+     ogni bottone va a capo da solo e non tutto il blocco insieme: a 1024px
+     prima «Scrivimi» restava solo sulla prima riga. Tutti alti quanto il
+     bottone pieno (3.25rem, 52px), su qualunque riga finiscano. */
   .about-row {
     display: flex;
     flex-wrap: wrap;
-    align-items: stretch;
+    align-items: center;
     gap: var(--size-8);
+  }
+
+  .about-row .about-actions {
+    display: contents;
+  }
+
+  .about-row .lc-btn {
+    min-height: 3.25rem;
   }
 
   .about-row > .lh-section__actions {
     order: -1;
     /* Il margine sopra serve quando la fascia sta da sola sotto il testo;
        qui sposterebbe «Scrivimi» 8px più in basso dei cassetti. */
-    margin-top: 0;
-  }
-
-  .about-row .about-actions {
-    gap: var(--size-8);
     margin-top: 0;
   }
 }
@@ -1090,22 +1095,21 @@ html[data-lh-armed] .lh-obj {
      circa 160px, cioe' piu' di quanto costi una card intera. Fra un'immagine
      che non si vede e un pezzo di bio che si legge, in una schermata sola,
      vince il secondo. */
-  /* ── I tre cassetti riempiono la riga ─────────────────────────────────
-     Fino al 2026-10-14 erano una griglia 2+1 di bottoni mono maiuscoli: tre
-     in riga non ci stavano (99px per bottone a 360 contro i 119 del più
-     largo). Con .lc-btn l'etichetta è in corpo normale e più corta, e a
-     390px stanno tutti e tre su una riga. `flex: 1 1 auto` li allarga fino
-     a riempirla, così il bordo destro resta dritto; a 360 il terzo va a capo
-     e prende la riga intera. Testo centrato per la stessa ragione di
-     `.lh-cta` più sotto: i bottoni sono più larghi del proprio contenuto. */
+  /* ── I quattro comandi in una griglia 2×2 ─────────────────────────────
+     Tre cassetti più «Dicono di me» dal 2026-10-14. Quattro in griglia
+     2×2 non lasciano mai un bottone da solo su una riga, che era il difetto
+     del 2+1 di prima, e non costano una riga in più rispetto ai tre in
+     flex a 360px. Testo centrato perché i bottoni sono più larghi del
+     proprio contenuto, come `.lh-cta` più sotto. */
   .lh .about-actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     justify-self: stretch;
     gap: var(--size-8);
     width: 100%;
   }
 
   .lh .about-actions .lc-btn {
-    flex: 1 1 auto;
     justify-content: center;
   }
 

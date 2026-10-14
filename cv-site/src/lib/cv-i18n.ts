@@ -115,6 +115,8 @@ export interface LocaleStrings {
      *  stessa espressione, non una svista di traduzione. */
     drawerFunFact: string;
     aboutMore: string;
+    /** Il quarto bottone di «Chi sono»: porta alle testimonianze della pagina CV. */
+    aboutVoices: string;
     goTo: string;
     explorePortfolio: string;
     /** Barra e intestazione della pagina CV */
@@ -236,6 +238,7 @@ const IT: LocaleStrings = {
     closeLabel: "Chiudi",
     drawerFunFact: "Fun fact",
     aboutMore: "Scopri di più su di me",
+    aboutVoices: "Dicono di me",
     goTo: "GO to",
     explorePortfolio: "Esplora il portfolio",
     backHome: "Torna alla home",
@@ -333,6 +336,7 @@ const EN: LocaleStrings = {
     closeLabel: "Close",
     drawerFunFact: "Fun fact",
     aboutMore: "Find out more about me",
+    aboutVoices: "What people say",
     goTo: "GO to",
     explorePortfolio: "Explore the portfolio",
     backHome: "Back to the home page",
