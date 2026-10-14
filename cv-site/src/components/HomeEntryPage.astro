@@ -602,9 +602,9 @@ const sections = MODES.map((mode) => ({
             .map((f) => (
               <li class="lc-voice">
                 <blockquote class="lc-voice__quote">{f.quote}</blockquote>
-                <p class="lc-voice__who">
-                  {f.name}
-                  {f.role && <span class="lc-voice__role"> · {f.role}</span>}
+                <p class="lc-voice__who about-voices__who">
+                  <span class="lc-badge lc-badge--solid">{f.name}</span>
+                  {f.role && <span class="lc-voice__role">{f.role}</span>}
                 </p>
               </li>
             ))

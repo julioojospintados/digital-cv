@@ -7,10 +7,13 @@
  * grappolo di certificazioni UX degli ultimi diciotto mesi emerge da solo,
  * senza bisogno di un secondo grafico che lo spieghi.
  *
- * ── Perché solo due loghi ────────────────────────────────────────────────
- * Perché sono gli unici due che esistono. Verificato: IBM sta in Simple Icons,
- * IED pubblica il proprio SVG; SkillUp, Simplilearn, Planet One e B-Teatro non
- * stanno in nessun set mantenuto e non pubblicano un file utilizzabile. Gli
+ * ── Perché solo tre loghi ────────────────────────────────────────────────
+ * Perché sono gli unici tre che esistono. Verificato: IBM sta in Simple Icons,
+ * IED pubblica il proprio SVG; SkillUp, Simplilearn e Planet One non stanno in
+ * nessun set mantenuto e non pubblicano un file utilizzabile. B-Teatro l'ha
+ * fornito Giulio il 2026-10-14 (ci ha studiato sette anni): era un JPG a due
+ * colori, reso PNG con la trasparenza al posto del bianco e l'inchiostro
+ * nero, così funziona come maschera come gli altri due. Gli
  * altri prendono una sigla in mono, allineata alla stessa base: la colonna
  * resta un sistema invece di alternare marchi e riquadri.
  *
@@ -27,7 +30,8 @@
  */
 
 export interface IssuerMark {
-  /** Nome del file in `public/logos/`, senza estensione. */
+  /** Nome del file in `public/logos/`: senza estensione per un .svg, con
+   *  l'estensione per un altro formato (`bteatro.png`). */
   logo?: string;
   /** Il ripiego quando un logo utilizzabile non esiste. Max 8 caratteri. */
   sigla: string;
@@ -60,7 +64,7 @@ const MARKS: readonly (readonly [string, IssuerMark])[] = [
   ["europeo di design", { logo: "ied", sigla: "IED" }],
   ["skillup", { sigla: "SKILLUP" }],
   ["planet one", { sigla: "PLANET1" }],
-  ["b-teatro", { sigla: "B-TEATRO" }],
+  ["b-teatro", { logo: "bteatro.png", sigla: "B-TEATRO", altezza: "2rem" }],
   ["immaginazione", { sigla: "IMM-LAV" }],
   ["boselli", { sigla: "BOSELLI" }],
   ["callan", { sigla: "CALLAN" }],

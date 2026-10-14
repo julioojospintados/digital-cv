@@ -96,9 +96,12 @@ export const PROJ_CARD_META: Record<
     endYear: "2018",
     location: { it: "Torino", en: "Turin" },
   },
-  // Poesia  — nessuna data singola: la card nasconde l'intervallo
+  // Poesia — dal 2011 a oggi (Giulio, 2026-10-14). "present" diventa
+  // «oggi» / «present» in cv-view-model.ts, come per le esperienze in corso.
   10: {
     role: { it: "Poeta", en: "Poet" },
+    startYear: "2011",
+    endYear: "present",
     location: { it: "Italia · Australia", en: "Italy · Australia" },
   },
 };

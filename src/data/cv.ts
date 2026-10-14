@@ -170,6 +170,8 @@ export interface Certification {
   issuer: string;
   /** ISO format: "2023-06" */
   date: string;
+  /** Solo per un percorso durato anni: ISO "2019-12". La riga mostra l'intervallo. */
+  endDate?: string;
   /** URL to credential */
   url?: string;
   /** Credential / certificate ID issued by the provider */
@@ -958,6 +960,7 @@ export const cvData = {
       name: "Corso di improvvisazione teatrale",
       issuer: "B-Teatro",
       date: "2013-01",
+      endDate: "2019-12",
     },
   ] as Certification[],
 

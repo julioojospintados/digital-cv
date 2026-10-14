@@ -534,3 +534,14 @@
   list-style: none;
   text-align: left;
 }
+
+/* Il nome come badge (Giulio, 2026-10-14): la firma si riconosce a colpo
+   d'occhio scorrendo, come i badge delle schede. Il ruolo resta testo, a
+   capo se non ci sta. Il badge pieno prende l'inchiostro della modale. */
+.about-voices__who {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--size-8);
+  --color-accent: var(--lh-ink, var(--color-text-primary));
+}

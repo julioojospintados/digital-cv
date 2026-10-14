@@ -257,7 +257,8 @@ const offLabel = offCluster?.label ?? "";
 const markStyle = (nome: string): string | undefined => {
   const m = issuerMark(nome);
   if (!m.logo) return undefined;
-  return `--lc-mark: url("/logos/${m.logo}.svg")${m.altezza ? `; --lc-mark-h: ${m.altezza}` : ""}`;
+  const file = m.logo.includes(".") ? m.logo : `${m.logo}.svg`;
+  return `--lc-mark: url("/logos/${file}")${m.altezza ? `; --lc-mark-h: ${m.altezza}` : ""}`;
 };
 ---
 

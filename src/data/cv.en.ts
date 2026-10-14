@@ -767,6 +767,7 @@ export const cvDataEn = {
       name: "Theatre Improvisation Course",
       issuer: "B-Teatro",
       date: "2013-01",
+      endDate: "2019-12",
     },
   ] as Certification[],
 

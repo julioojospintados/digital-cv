@@ -355,7 +355,7 @@ export function buildCvViewModel({ data, locale, mode }: BuildOptions) {
         company: p.name,
         role: meta?.role[locale] ?? "",
         startYear: meta?.startYear ?? "",
-        endYear: meta?.endYear ?? meta?.startYear ?? "",
+        endYear: meta?.endYear === "present" ? t.present : (meta?.endYear ?? meta?.startYear ?? ""),
         location: meta?.location?.[locale] ?? "",
         remote: false,
         description: p.description,
@@ -424,8 +424,12 @@ export function buildCvViewModel({ data, locale, mode }: BuildOptions) {
       credentialId: undefined as string | undefined,
     })),
     ...data.certifications.map((c) => ({
-      date: c.date,
-      dateLabel: isoToLabel(c.date),
+      // Un corso durato anni (B-Teatro) ha anche endDate: si ordina sulla
+      // fine, come la formazione, e si mostra l'intervallo in anni.
+      date: c.endDate ?? c.date,
+      dateLabel: c.endDate
+        ? `${c.date.substring(0, 4)} — ${c.endDate.substring(0, 4)}`
+        : isoToLabel(c.date),
       title: c.name,
       institution: c.issuer,
       type: "cert" as const,

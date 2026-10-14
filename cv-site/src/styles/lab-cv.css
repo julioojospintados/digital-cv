@@ -1541,8 +1541,42 @@
   display: flex;
   align-items: baseline;
   gap: var(--size-12);
+  /* Il fondo e il filo dell'hover hanno bisogno di aria intorno al titolo:
+     il margine negativo la toglie fuori, così il testo resta allineato al
+     resto della pagina. */
+  margin-inline: calc(var(--size-12) * -1);
+  padding: var(--size-8) var(--size-12);
+  border-radius: var(--radius-4);
   cursor: pointer;
   list-style: none;
+  transition:
+    background-color var(--duration-micro) var(--ease-standard),
+    box-shadow var(--duration-state) var(--ease-standard);
+}
+
+/* «Fuori orario» si apre, e prima non lo diceva: nessun cambiamento sotto il
+   puntatore (Giulio, 2026-10-14). Stesso idioma delle corsie (.lc-lane):
+   fondo di superficie e filo d'accento a sinistra, la tacca prende
+   l'accento. Premuto, il fondo si scurisce un poco. */
+@media (hover: hover) and (pointer: fine) {
+  .lc-off__head:hover {
+    background: var(--color-surface);
+    box-shadow: inset 3px 0 0 0 var(--lc-accent-line);
+  }
+
+  .lc-off__head:hover .lc-off__tick {
+    color: var(--color-accent);
+  }
+}
+
+.lc-off__head:active {
+  background: color-mix(in srgb, var(--color-accent) 12%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lc-off__head {
+    transition: none;
+  }
 }
 
 .lc-off__head::-webkit-details-marker {
@@ -1552,7 +1586,9 @@
 .lc-off__tick {
   margin-left: auto;
   align-self: center;
-  color: var(--lc-muted);
+  /* Inchiostro pieno e non --lc-muted: la tacca è l'unico segno che la riga
+     si apre, e su telefono, senza hover, deve vedersi da sola. */
+  color: var(--lc-ink);
 }
 
 .lc-off__box[open] .lc-off__tick {
