@@ -1502,6 +1502,13 @@ floating-menu {
 }
 
 .lc-voice__who {
+  /* Il nome è un badge pieno, il ruolo testo accanto (Giulio, 2026-10-14):
+     la firma si riconosce scorrendo. Uguale nella sezione «Le voci» della
+     pagina CV e nella modale «Dicono di me» dell'ingresso. */
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--size-8);
   margin: var(--size-12) 0 0;
   font-size: var(--fs-14);
   font-weight: 600;
