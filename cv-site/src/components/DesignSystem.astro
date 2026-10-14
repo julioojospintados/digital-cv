@@ -1584,6 +1584,10 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
                     {it ? "Esplora il portfolio" : "Explore the portfolio"}
                   </a>
                 </div>
+                <a class="lh-section__more" href="#ingresso-sezione-lente">
+                  {it ? "Esplora il design system" : "Explore the design system"}
+                  <span aria-hidden="true">→</span>
+                </a>
               </div>
               <div class="lh-section__object" data-ds-part="6" style="--nat:12rem">
                 <img class="lh-obj__shadow" src="/knolling/camera.webp" alt="" aria-hidden="true" />
@@ -1673,8 +1677,8 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
               <span class="ds-anatomy__role"
                 >{
                   it
-                    ? "La riga di sintesi: una fila di badge pieni, da cinque a otto secondo la lente, che va a capo da sé. Titoli riconoscibili (una certificazione, un metodo, un linguaggio), non numeri senza contesto. Su desktop sta dopo il testo. Su telefono la scheda cambia ordine: titolo · ruolo · badge (più compatti, 11px) · testo · oggetto · bottoni in fondo, dove arriva il pollice. Sotto i 700px di altezza i bottoni tornano subito dopo il testo, perché in fondo finirebbero fuori dallo schermo."
-                    : "The summary row: a row of filled badges, five to eight depending on the lens, wrapping on its own. Recognisable titles (a certification, a method, a language), not numbers without context. On desktop it sits after the text. On phones the card changes order: title · role · badges (more compact, 11px) · text · object · buttons at the bottom, where the thumb reaches. Below 700px of height the buttons move back right after the text, because at the bottom they would fall off the screen."
+                    ? "La riga di sintesi: una fila di badge pieni, da cinque a otto secondo la lente, che va a capo da sé. Titoli riconoscibili (una certificazione, un metodo, un linguaggio), non numeri senza contesto. Su desktop sta dopo il testo. Su telefono la scheda cambia ordine: titolo · ruolo · badge (più compatti, 11px) · testo · oggetto · bottoni in fondo, dove arriva il pollice. Sotto i 700px di altezza i bottoni tornano subito dopo il testo, perché in fondo finirebbero fuori dallo schermo. Solo nella scheda Web & UX, sotto i due bottoni, c'è un link testuale al design system (lh-section__more): terzo livello, sottolineato nel colore della lente, alto 44px. Non un terzo bottone: tre bottoni dello stesso peso obbligano a scegliere."
+                    : "The summary row: a row of filled badges, five to eight depending on the lens, wrapping on its own. Recognisable titles (a certification, a method, a language), not numbers without context. On desktop it sits after the text. On phones the card changes order: title · role · badges (more compact, 11px) · text · object · buttons at the bottom, where the thumb reaches. Below 700px of height the buttons move back right after the text, because at the bottom they would fall off the screen. Only in the Web & UX card, below the two buttons, a text link leads to the design system (lh-section__more): a third level, underlined in the lens colour, 44px tall. Not a third button: three buttons of equal weight force a choice."
                 }</span
               >
             </li>
@@ -2710,7 +2714,7 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
           <div class="ds-spec__row ds-spec__row--wide">
             <span class="ds-spec__k">{t.specClass}</span>
             <p class="ds-spec__v">
-              <code>lh-section__actions · lh-cta · lh-cta--ghost</code>
+              <code>lh-section__actions · lh-cta · lh-cta--ghost · lh-section__more</code>
             </p>
           </div>
           <div class="ds-spec__row">

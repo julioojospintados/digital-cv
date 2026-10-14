@@ -1399,6 +1399,54 @@ html[data-lh-armed] .lh-obj {
   }
 }
 
+/* ── Il link al design system (scheda Web & UX) ──────────────────────────
+   Terzo livello dopo il bottone pieno e quello a contorno: testo con la
+   sottolineatura nel colore della lente. Il testo è in --accent-text, la
+   variante schiarita che regge 4,5:1 anche sull'arancione. Alto 44px per
+   il pollice, anche se è un link: sta da solo, non dentro una frase. */
+.lh-section__more {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--size-8);
+  min-height: 2.75rem;
+  font-size: var(--fs-14);
+  font-weight: 600;
+  color: var(--accent-text, var(--accent));
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, var(--accent) 50%, transparent);
+  text-underline-offset: 0.3em;
+  transition: text-decoration-color var(--duration-micro) var(--ease-standard);
+}
+
+.lh-section__more span {
+  /* inline-block: la sottolineatura del link non scende sulla freccia, che
+     altrimenti avrebbe un suo trattino staccato. */
+  display: inline-block;
+  transition: transform var(--duration-micro) var(--ease-standard);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .lh-section__more:hover {
+    text-decoration-color: var(--accent);
+  }
+
+  .lh-section__more:hover span {
+    transform: translateX(0.25rem);
+  }
+}
+
+.lh-section__more:focus-visible {
+  outline: 2px solid var(--lh-ink);
+  outline-offset: 3px;
+  border-radius: var(--radius-4);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lh-section__more:hover span {
+    transform: none;
+  }
+}
+
 /* ── Le schede delle lenti su telefono: oggetto in mezzo, bottoni in fondo ──
    Scelta di Giulio il 2026-10-13, dopo sette varianti messe a confronto.
    L'ordine è titolo · ruolo · badge · testo · oggetto · bottoni.
@@ -1458,6 +1506,12 @@ html[data-lh-armed] .lh-obj {
   .lh-section[data-mode] .lh-section__actions {
     order: 3;
     align-self: stretch;
+  }
+
+  /* Il link al design system segue i bottoni, centrato sotto di loro. */
+  .lh-section[data-mode] .lh-section__more {
+    order: 3;
+    align-self: center;
   }
 
   /* I badge: pieni come su desktop, più compatti (11px, gap 4px) perché
@@ -1542,7 +1596,8 @@ html[data-lh-armed] .lh-obj {
    testo e l'oggetto va in coda con l'altezza di prima: la scheda si allunga,
    ma l'azione resta in vista. */
 @media (max-width: 55.99rem) and (max-height: 43.75rem) {
-  :is(.lh-section[data-mode], .lh-section--about) .lh-section__actions {
+  :is(.lh-section[data-mode], .lh-section--about) .lh-section__actions,
+  .lh-section[data-mode] .lh-section__more {
     order: 2;
   }
 

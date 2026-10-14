@@ -49,6 +49,7 @@ const about = ABOUT_TEXT[locale];
 const aboutCards = ABOUT_CARDS[locale];
 // I percorsi cambiano con la lingua: l'inglese vive sotto /en.
 const workHref = locale === "en" ? "/en/work" : "/work";
+const dsHref = locale === "en" ? "/en/design-system" : "/design-system";
 const otherHomeHref = locale === "en" ? "/" : "/en";
 
 // ── La composizione dell'ingresso ────────────────────────────────────────
@@ -517,6 +518,17 @@ const sections = MODES.map((mode) => ({
                   {t.ui.explorePortfolio}
                 </a>
               </div>
+              {/* Solo nella scheda Web & UX (Giulio, 2026-10-14): il design
+                  system è la prova più forte del lavoro UX/UI, e da qui non
+                  c'era modo di saperlo. Link testuale e non terzo bottone:
+                  tre bottoni dello stesso peso obbligano a scegliere, questo
+                  è un'uscita in più. Vale per IT e EN allo stesso modo. */}
+              {s.mode === "creative" && (
+                <a class="lh-section__more" href={dsHref}>
+                  {t.ui.exploreDesignSystem}
+                  <span aria-hidden="true">→</span>
+                </a>
+              )}
             </div>
           </section>
         ))

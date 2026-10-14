@@ -117,6 +117,8 @@ export interface LocaleStrings {
     aboutMore: string;
     /** Il quarto bottone di «Chi sono»: porta alle testimonianze della pagina CV. */
     aboutVoices: string;
+    /** Il link testuale sotto i bottoni della scheda Web & UX. */
+    exploreDesignSystem: string;
     goTo: string;
     explorePortfolio: string;
     /** Barra e intestazione della pagina CV */
@@ -239,6 +241,7 @@ const IT: LocaleStrings = {
     drawerFunFact: "Fun fact",
     aboutMore: "Scopri di più su di me",
     aboutVoices: "Dicono di me",
+    exploreDesignSystem: "Esplora il design system",
     goTo: "GO to",
     explorePortfolio: "Esplora il portfolio",
     backHome: "Torna alla home",
@@ -337,6 +340,7 @@ const EN: LocaleStrings = {
     drawerFunFact: "Fun fact",
     aboutMore: "Find out more about me",
     aboutVoices: "What people say",
+    exploreDesignSystem: "Explore the design system",
     goTo: "GO to",
     explorePortfolio: "Explore the portfolio",
     backHome: "Back to the home page",
