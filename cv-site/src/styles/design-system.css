@@ -283,7 +283,10 @@
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--ds-ink);
+  /* Arancione schiarito dal 2026-10-14 (4,85:1 sull'ottanio, sopra il 4,5
+     del testo a 12px): i titoli di gruppo si staccano dalle voci per colore
+     oltre che per corpo e peso, come le pillole delle schede in testa. */
+  color: var(--color-accent-text);
 }
 
 .ds-side__list {
@@ -1059,6 +1062,39 @@
   border: 1px solid var(--ds-line);
   border-radius: var(--radius-16);
   background: var(--ds-panel);
+  transition:
+    border-color var(--duration-state) var(--ease-standard),
+    background-color var(--duration-state) var(--ease-standard),
+    transform var(--duration-state) var(--ease-standard);
+}
+
+/* ── Le schede si accendono quando ci si entra (2026-10-14) ──────────────
+   Richiesta di Giulio: schede e voci devono dichiarare a colpo d'occhio che
+   si cliccano. La scheda non è un link (ne contiene da 5 a 11), quindi non
+   finge di esserlo: quando il puntatore o il focus ci entrano, si solleva e
+   prende il filo d'accento, e dice «qui dentro si sceglie». :focus-within
+   fa lo stesso da tastiera. */
+@media (hover: hover) and (pointer: fine) {
+  .ds-cat:hover {
+    border-color: var(--color-accent);
+    background: color-mix(in srgb, var(--color-accent) 6%, var(--ds-panel));
+    transform: translateY(-0.125rem) scale(1.01);
+  }
+}
+
+.ds-cat:focus-within {
+  border-color: var(--color-accent);
+  background: color-mix(in srgb, var(--color-accent) 6%, var(--ds-panel));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-cat {
+    transition: none;
+  }
+
+  .ds-cat:hover {
+    transform: none;
+  }
 }
 
 .ds-cat__head {
@@ -1102,36 +1138,65 @@
 }
 
 /* 2.25rem di altezza: sopra i 24px di 2.5.8 con margine, perché qui si
-   tocca col pollice e le voci stanno vicine. */
+   tocca col pollice e le voci stanno vicine.
+
+   Colorate dal 2026-10-14, nell'arancione della lente Web & UX (la vetrina
+   gira in data-mode="creative"): erano pillole grigie identiche alle
+   etichette, e non si capiva che fossero link. I numeri, misurati:
+   - testo in arancione schiarito al 60% sul fondo della scheda: 4,96:1
+     misurato in pagina, sopra il 4,5 richiesto per il testo a 14px; peso 600;
+   - filo in --color-accent pieno: 3,32:1 sul fondo della scheda, sopra
+     il 3:1 di 1.4.11;
+   - al passaggio e alla pressione il fondo si riempie e il testo diventa
+     quasi nero (--color-on-accent): 6,87:1. Il riscontro non è solo il
+     colore (1.4.1): la pillola si ingrandisce, e premuta rientra. */
 .ds-cat__link {
   display: inline-flex;
   align-items: center;
   min-height: 2.25rem;
   padding: 0.3rem 0.75rem;
-  border: 1px solid var(--ds-line);
+  border: 1px solid var(--color-accent);
   border-radius: 999rem;
-  color: var(--ds-ink);
+  /* Niente velo d'accento sotto il testo: misurato, l'8% di arancione
+     portava l'etichetta a 4,27:1, sotto soglia. */
+  background: transparent;
+  /* 60% e non il 70% di --color-accent-text: sul fondo della scheda, che è
+     l'ottanio schiarito del 3%, il 70% si fermava a 4,45:1. */
+  color: color-mix(in srgb, var(--color-accent) 60%, white);
   font-size: var(--fs-14);
+  font-weight: 600;
   text-decoration: none;
   transition:
-    border-color var(--duration-state) var(--ease-standard),
-    background var(--duration-state) var(--ease-standard);
+    color var(--duration-micro) var(--ease-standard),
+    background-color var(--duration-micro) var(--ease-standard),
+    transform var(--duration-micro) var(--ease-standard);
 }
 
 .ds-cat__link:focus-visible {
-  outline: 2px solid var(--color-accent);
+  outline: 2px solid var(--ds-ink);
   outline-offset: 2px;
 }
 
 @media (hover: hover) and (pointer: fine) {
   .ds-cat__link:hover {
-    border-color: var(--ds-line-strong);
-    background: rgba(255, 255, 255, 0.04);
+    background: var(--color-accent);
+    color: var(--color-on-accent);
+    transform: scale(1.05);
   }
 }
 
 .ds-cat__link:active {
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--color-accent);
+  color: var(--color-on-accent);
+  transform: scale(0.97);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-cat__link,
+  .ds-cat__link:hover,
+  .ds-cat__link:active {
+    transform: none;
+  }
 }
 
 .ds-facts {
