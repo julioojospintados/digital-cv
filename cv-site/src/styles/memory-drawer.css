@@ -567,3 +567,14 @@
   gap: var(--size-16);
   padding-bottom: var(--size-40);
 }
+
+/* La modale «Dicono di me» è più bassa delle altre del 20% (Giulio,
+   2026-10-14): min(85vh, 46rem) × 0,8. Con le schede impilate dentro, una
+   finestra alta quasi quanto lo schermo faceva sembrare la pila un muro di
+   testo; più bassa, si legge una scheda alla volta. Solo da 40rem in su: sul
+   telefono la modale resta a schermo intero, come tutti i cassetti. */
+@media (min-width: 40.01rem) {
+  #dialog-voices {
+    max-height: min(68vh, 36.8rem);
+  }
+}
