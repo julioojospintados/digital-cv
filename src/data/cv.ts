@@ -2401,6 +2401,16 @@ export const cvData = {
 
   // ── Feedbacks — testimonianze di chi ha lavorato con Giulio ────────────────
   feedbacks: [
+    // Fabio Cencetti per primo: è la voce più vicina al lavoro che Giulio
+    // cerca (UX/UI, design system), firmata da chi un design system lo
+    // dirige. Testo suo, rivisto nella forma il 2026-10-14.
+    {
+      name: "Fabio Cencetti",
+      role: "Design System Architect & Manager",
+      quote:
+        "Giulio ha moltissime competenze diverse: quando ho avuto bisogno di montare un video l'ha fatto lui, e insieme abbiamo costruito il Design System, facendo un bel pezzo di strada fianco a fianco. Ha qualità umane rare nel mondo del lavoro, ed è proprio questo a renderlo un professionista raro: un unicorno.",
+      keywords: [],
+    },
     {
       name: "Lorenzo Rando",
       role: "Recruiter / Head Hunter",

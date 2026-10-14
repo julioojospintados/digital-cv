@@ -1990,6 +1990,13 @@ export const cvDataEn = {
   // ── Feedbacks — testimonials from people who have worked with Giulio ───────
   feedbacks: [
     {
+      name: "Fabio Cencetti",
+      role: "Design System Architect & Manager",
+      quote:
+        "Giulio has a remarkable range of skills: when I needed a video edited, he did it himself, and together we built the Design System, covering a lot of ground side by side. He has human qualities that are rare in the workplace, and that is exactly what makes him a rare professional: a unicorn.",
+      keywords: [],
+    },
+    {
       name: "Lorenzo Rando",
       role: "Recruiter / Head Hunter",
       quote:
