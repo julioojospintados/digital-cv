@@ -710,6 +710,28 @@ html[data-lh-armed] .lh-obj {
   .about-bio {
     display: grid;
   }
+
+  /* 30/70 e non la metà delle lenti (scelta di Giulio, 2026-10-14): con la
+     bio in chiaro è il testo a reggere la scheda, e la pianta in mezza
+     pagina lasciava una colonna vuota grande quanto quella piena. La
+     colonna di testo si allarga, ma le righe no: --about-measure tiene il
+     paragrafo intorno ai 75 caratteri, oltre i quali l'occhio perde la riga
+     quando torna a capo. */
+  /* Doppia classe: la griglia a metà delle lenti è dichiarata più giù nel
+     file, e a pari specificità vincerebbe lei. */
+  .lh-section.lh-section--about {
+    --about-measure: 36rem;
+
+    grid-template-columns: minmax(0, 3fr) minmax(0, 7fr);
+  }
+
+  .lh-section--about .lh-section__copy {
+    max-width: none;
+  }
+
+  .lh-section--about .about-bio {
+    max-width: var(--about-measure);
+  }
 }
 
 .about-cards {
