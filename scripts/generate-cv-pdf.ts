@@ -698,8 +698,15 @@ async function main(): Promise<void> {
   // CV_PDF_CHANNEL: usa un browser di sistema (es. "chrome") invece del
   // Chromium bundled da Playwright, utile quando quest'ultimo non è
   // installabile (rete ristretta) ma un browser reale è già presente.
+  // PLAYWRIGHT_CHROMIUM_EXECUTABLE: un Chromium già presente, indicato per
+  // percorso — la stessa convenzione di generate-ux-cv.ts e dei controlli qa.
+  const executablePath = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE;
   const browser = await chromium.launch(
-    process.env.CV_PDF_CHANNEL ? { channel: process.env.CV_PDF_CHANNEL } : undefined,
+    process.env.CV_PDF_CHANNEL
+      ? { channel: process.env.CV_PDF_CHANNEL }
+      : executablePath
+        ? { executablePath }
+        : undefined,
   );
   const page = await browser.newPage({
     viewport: { width: 794, height: 1123 },
