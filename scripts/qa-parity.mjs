@@ -27,7 +27,10 @@ const MODE_ATTESO = { design: "creative", tech: "tech", ai: "human" };
 // I conteggi che devono coincidere fra le due lingue.
 const STRUTTURA = ["jobs", "all", "voci", "percorso", "chips", "sezioni"];
 
-const browser = await chromium.launch();
+// Stessa convenzione di qa-design-system.mjs: se la revisione di Chromium
+// che Playwright cerca non è installata, se ne indica una che c'è.
+const EXECUTABLE = process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE;
+const browser = await chromium.launch(EXECUTABLE ? { executablePath: EXECUTABLE } : undefined);
 let falliti = 0;
 const ok = (cond, testo, extra = "") => {
   console.log(`  ${cond ? "✅" : "❌"} ${testo}${cond || !extra ? "" : ` — ${extra}`}`);
