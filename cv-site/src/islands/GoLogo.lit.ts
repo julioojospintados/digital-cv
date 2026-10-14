@@ -53,6 +53,7 @@ class GoLogo extends LitElement {
       line-height: 1;
       transition:
         filter var(--duration-state, 240ms) var(--ease-standard, ease),
+        background-color var(--duration-state, 240ms) var(--ease-standard, ease),
         transform var(--duration-micro, 150ms) var(--ease-standard, ease);
     }
 
@@ -67,9 +68,22 @@ class GoLogo extends LitElement {
        dichiarazione normale nella cascata — un "brightness" scritto lì non si
        vedrebbe mai. Sul genitore i due filtri si compongono invece di
        contendersi la stessa proprietà. */
+    /* Dal 2026-10-14 la risposta si vede davvero (Giulio: «deve far capire
+       che è cliccabile»). La sola luminosità del 22% non bastava: su lettere
+       già chiare si notava appena. Ora sotto il puntatore compare un fondo
+       d'inchiostro all'8% (il riquadro c'è solo lì, a riposo il marchio resta
+       nudo come deciso il 4 settembre) e il marchio cresce del 6%. */
     @media (hover: hover) and (pointer: fine) {
       button:hover {
         filter: brightness(1.22);
+        background: color-mix(in srgb, var(--color-text-primary, rgb(245 240 230)) 8%, transparent);
+        transform: scale(1.06);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      button:hover {
+        transform: none;
       }
     }
 
