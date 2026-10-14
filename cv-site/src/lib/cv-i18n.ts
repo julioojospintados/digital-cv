@@ -119,6 +119,8 @@ export interface LocaleStrings {
     aboutVoices: string;
     /** Il link testuale sotto i bottoni della scheda Web & UX. */
     exploreDesignSystem: string;
+    /** Il ritorno al CV nella barra di /work e della vetrina (WorkNav.astro). */
+    backToCv: string;
     goTo: string;
     explorePortfolio: string;
     /** Barra e intestazione della pagina CV */
@@ -242,6 +244,7 @@ const IT: LocaleStrings = {
     aboutMore: "Scopri di più su di me",
     aboutVoices: "Dicono di me",
     exploreDesignSystem: "Esplora il design system",
+    backToCv: "Torna al CV",
     goTo: "GO to",
     explorePortfolio: "Esplora il portfolio",
     backHome: "Torna alla home",
@@ -341,6 +344,7 @@ const EN: LocaleStrings = {
     aboutMore: "Find out more about me",
     aboutVoices: "What people say",
     exploreDesignSystem: "Explore the design system",
+    backToCv: "Back to CV",
     goTo: "GO to",
     explorePortfolio: "Explore the portfolio",
     backHome: "Back to the home page",

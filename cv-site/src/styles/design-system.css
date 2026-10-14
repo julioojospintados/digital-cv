@@ -90,6 +90,17 @@
   border-bottom: 1px solid var(--ds-line);
 }
 
+/* Dentro il guscio la barra di /work rinuncia alla sua misura e al suo
+   passo: li dà già .ds-bar, che allinea i comandi al bordo della vetrina
+   invece che alla colonna di lettura di un case study. Colori, pesi e
+   comandi restano quelli di WorkNav — è la stessa barra, non una copia. */
+.ds-bar > .work-nav {
+  flex: 1;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
 /* ── Intestazione ── */
 
 .ds-head {

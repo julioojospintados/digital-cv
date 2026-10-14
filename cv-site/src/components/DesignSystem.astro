@@ -40,6 +40,7 @@
  */
 import WorkIndexCard from "./cards/WorkIndexCard.astro";
 import LangSwitch from "./LangSwitch.astro";
+import WorkNav from "./WorkNav.astro";
 import EmailCard from "./EmailCard.astro";
 import { LOCALES, lensPath } from "../lib/cv-i18n";
 import { WORK_INDEX_ICON, workKnollSize } from "../lib/work-knolling";
@@ -827,19 +828,16 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
        non un testo), ritorno al CV pieno d'accento e interruttore di lingua.
        Fino al 2026-10-14 era una barra sua — «GO» come testo, «Home», «/work»
        e «EN» come link mono — cioè l'unica pagina del sito che si muoveva
-       con comandi diversi da quelli che documenta. .ds-bar resta solo come
-       guscio: appiccicata in alto e opaca, perché sotto scorrono le demo. */
+       con comandi diversi da quelli che documenta. Ora è WorkNav, lo stesso
+       componente di /work. .ds-bar resta solo come guscio: appiccicata in
+       alto e opaca, perché sotto scorrono le demo. */
   }
   <header class="ds-bar">
-    <go-logo>GO</go-logo>
-    <div class="work-nav__right">
-      <a href={lensPath("creative", lang)} class="work-back"
-        ><span class="work-chevron work-chevron--left" aria-hidden="true"></span>{
-          it ? "Torna al CV" : "Back to the CV"
-        }</a
-      >
-      <LangSwitch locale={lang} href={it ? "/en/design-system" : "/design-system"} />
-    </div>
+    <WorkNav
+      locale={lang}
+      back={lensPath("creative", lang)}
+      langHref={it ? "/en/design-system" : "/design-system"}
+    />
   </header>
 
   <div class="ds-shell">
@@ -4756,17 +4754,14 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
           }
         </p>
         <div class="ds-stage">
-          <nav class="work-nav" style="position:static;" data-ds-snippet data-ds-drop="style">
-            <go-logo>GO</go-logo>
-            <div class="work-nav__right">
-              <a href="#work-barra" class="work-back"
-                ><span class="work-chevron work-chevron--left" aria-hidden="true"></span>{
-                  it ? "Torna al CV" : "Back to the CV"
-                }</a
-              >
-              <LangSwitch locale={lang} href="#work-barra" />
-            </div>
-          </nav>
+          <WorkNav
+            locale={lang}
+            back="#work-barra"
+            langHref="#work-barra"
+            style="position:static;"
+            data-ds-snippet
+            data-ds-drop="style"
+          />
         </div>
         <div class="ds-spec">
           <div class="ds-spec__row ds-spec__row--wide">
@@ -4780,8 +4775,8 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
             <p class="ds-spec__v">
               {
                 it
-                  ? "In cima a ogni pagina di /work, indice e case study."
-                  : "At the top of every /work page, index and case studies."
+                  ? "In cima a ogni pagina di /work, indice e case study, e in cima a questa vetrina. È un componente solo, WorkNav.astro: le pagine passano la lingua, l'indirizzo del ritorno e quello della stessa pagina nell'altra lingua, e nient'altro. Non si riscrive a mano — sei copie divergevano già."
+                  : "At the top of every /work page, index and case studies, and at the top of this showcase. It is a single component, WorkNav.astro: pages pass the locale, the back address and the address of the same page in the other language, and nothing else. It is not rewritten by hand — six copies had already drifted apart."
               }
             </p>
           </div>

@@ -1,0 +1,44 @@
+---
+/**
+ * WorkNav.astro — la barra di /work e della vetrina del design system.
+ *
+ * Marchio GO a sinistra (l'isola <go-logo>, non un testo), ritorno al CV
+ * pieno d'accento e interruttore di lingua a destra. Prima del 2026-10-14
+ * questo markup era scritto a mano in sei posti: le quattro pagine /work
+ * (IT e EN, indice e case study), la barra della vetrina e la sua demo. La
+ * vetrina, a forza di copie, era finita con una barra sua — «GO» come testo,
+ * «Home», «/work» ed «EN» come link — diversa da quella che documentava.
+ * Un componente solo, e la divergenza non si può più ripetere.
+ *
+ * Cosa cambia da una pagina all'altra sono solo due indirizzi:
+ *   - `back`: dove riporta «Torna al CV». La lente design per l'indice e la
+ *     vetrina (tutta /work parla arancione), la lente del case study per un
+ *     case study. Lo calcola chi chiama, con lensPath: lo slug dell'URL non
+ *     è la chiave interna e quella mappa vive in cv-i18n.ts.
+ *   - `langHref`: la stessa pagina nell'altra lingua.
+ * L'etichetta del ritorno viene dalla tabella delle stringhe (backToCv).
+ */
+import LangSwitch from "./LangSwitch.astro";
+import { LOCALES, type Locale } from "../lib/cv-i18n";
+
+interface Props {
+  locale: Locale;
+  back: string;
+  langHref: string;
+  /** Attributi in più per il contenitore (le demo della vetrina li usano). */
+  [attr: string]: unknown;
+}
+
+const { locale, back, langHref, ...rest } = Astro.props;
+const t = LOCALES[locale];
+---
+
+<nav class="work-nav" {...rest}>
+  <go-logo>GO</go-logo>
+  <div class="work-nav__right">
+    <a href={back} class="work-back"
+      ><span class="work-chevron work-chevron--left" aria-hidden="true"></span>{t.ui.backToCv}</a
+    >
+    <LangSwitch locale={locale} href={langHref} />
+  </div>
+</nav>

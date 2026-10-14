@@ -7,7 +7,7 @@ import Layout from "../../layouts/Layout.astro";
 // c'e'. Sospesa il 2026-08-26 e cancellata lo stesso giorno con il resto del
 // sito storico: vive in julioojospintados/old-digital-cv. La vetrina vera e'
 // /design-system.
-import LangSwitch from "../../components/LangSwitch.astro";
+import WorkNav from "../../components/WorkNav.astro";
 import { cvData } from "@cv-data";
 import { lensPath } from "../../lib/cv-i18n";
 import "../../styles/work-page.css";
@@ -62,15 +62,7 @@ const sigla = projectInitials(project.name);
   mode={mode}
   showFab
 >
-  <nav class="work-nav">
-    <go-logo>GO</go-logo>
-    <div class="work-nav__right">
-      <a href={lensPath(mode)} class="work-back"
-        ><span class="work-chevron work-chevron--left" aria-hidden="true"></span>Torna al CV</a
-      >
-      <LangSwitch locale="it" href={`/en/work/${slug}`} />
-    </div>
-  </nav>
+  <WorkNav locale="it" back={lensPath(mode)} langHref={`/en/work/${slug}`} />
 
   <main class="work-main" id="main-content">
     <header class="work-hero">
