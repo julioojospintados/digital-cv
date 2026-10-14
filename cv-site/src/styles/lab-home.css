@@ -665,20 +665,51 @@ html[data-lh-armed] .lh-obj {
    (~170px per tre bottoni) e la sezione ci sta in una schermata — che era il
    problema da cui si e' partiti. */
 
-/* I cassetti prendono il raggio del resto del sito.
-   `.about-action` nasce a --radius-16, cioe' quattro volte piu' tondo del
-   --radius-4 che il sito usa ovunque per i controlli (31 usi contro 26, e la
-   pagina di lente non usa quasi altro). Finche' quei tre bottoni vivevano da
-   soli non si notava; da quando stanno sotto le card di "Chi sono", che sono
-   a --radius-4, la differenza di forma si legge come un errore.
+/* I cassetti sono .lc-btn (global.css) dal 2026-10-14. Qui solo il colore:
+   in «Chi sono» l'accento è l'inchiostro, come per il resto della scheda. */
+.lh-section--about .about-actions {
+  --color-accent: var(--accent);
+}
 
-   Scoped a `.lh` e non corretto alla fonte perche' memory-drawer.css serviva
-   anche /old-version, che doveva restare com'era. Quella pagina non esiste
-   piu' dal 2026-08-26, quindi lo scavalco si potrebbe portare alla fonte —
-   vale anche per quelli del footer piu' sotto, stesso schema e stessa
-   ragione ormai scaduta. */
-.lh .about-action {
-  border-radius: var(--radius-4);
+/* ── La bio in chiaro ─────────────────────────────────────────────────────
+   Scelta di Giulio il 2026-10-14. Su desktop i tre testi delle card si
+   leggono senza aprire niente: un recruiter non deve indovinare cosa c'è
+   dietro un bottone. Misurato a 1440×900: la scheda passa da 900 a ~1080px,
+   e la pila regge una scheda più alta della finestra. Su telefono no: i
+   testi aperti fanno 533px a 390 e la scheda arriva a quasi due schermate,
+   cioè il difetto per cui la bio era stata spezzata in card. Lì restano le
+   card con la modale. */
+.about-bio {
+  display: none;
+  gap: var(--size-16);
+}
+
+.about-bio__label {
+  margin: 0 0 var(--size-4);
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--lh-muted);
+}
+
+.about-bio__text {
+  margin: 0;
+  font-size: var(--fs-16);
+  line-height: 1.6;
+  color: var(--lh-muted);
+  text-wrap: pretty;
+}
+
+@media (min-width: 56rem) {
+  .lh-section--about .about-cards {
+    display: none;
+  }
+
+  .about-bio {
+    display: grid;
+  }
 }
 
 .about-cards {
@@ -1023,36 +1054,22 @@ html[data-lh-armed] .lh-obj {
      circa 160px, cioe' piu' di quanto costi una card intera. Fra un'immagine
      che non si vede e un pezzo di bio che si legge, in una schermata sola,
      vince il secondo. */
-  /* ── I tre cassetti riempiono il rettangolo ───────────────────────────
-     In riga con `flex-wrap` venivano 119 + 119 su una riga e 111 da solo
-     sotto: due righe con il bordo destro frastagliato, che e' lo stesso
-     difetto gia' corretto piu' sotto per i CTA di sezione.
-
-     Griglia a due colonne con l'ultimo che le occupa entrambe. Le righe
-     restano due, quindi **non costa un pixel di altezza** su una schermata
-     che deve stare in 100svh: cambia solo che adesso sono piene.
-
-     Tre colonne in una riga sarebbero state meglio ancora, e sono state
-     misurate: a 360px la colonna e' 314px, meno due gap fa 298, diviso tre
-     fa 99px per bottone contro i 119 che serve il piu' largo. Non ci sta
-     senza accorciare le etichette o togliere la stelletta, e nessuna delle
-     due cose vale una riga guadagnata.
-
-     Il testo si centra perche' i bottoni ora sono piu' larghi del proprio
-     contenuto: stessa scelta e stessa ragione di `.lh-cta` piu' sotto. */
+  /* ── I tre cassetti riempiono la riga ─────────────────────────────────
+     Fino al 2026-10-14 erano una griglia 2+1 di bottoni mono maiuscoli: tre
+     in riga non ci stavano (99px per bottone a 360 contro i 119 del più
+     largo). Con .lc-btn l'etichetta è in corpo normale e più corta, e a
+     390px stanno tutti e tre su una riga. `flex: 1 1 auto` li allarga fino
+     a riempirla, così il bordo destro resta dritto; a 360 il terzo va a capo
+     e prende la riga intera. Testo centrato per la stessa ragione di
+     `.lh-cta` più sotto: i bottoni sono più larghi del proprio contenuto. */
   .lh .about-actions {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--size-8);
     justify-self: stretch;
+    gap: var(--size-8);
     width: 100%;
   }
 
-  .lh .about-actions > :last-child {
-    grid-column: 1 / -1;
-  }
-
-  .lh .about-action {
+  .lh .about-actions .lc-btn {
+    flex: 1 1 auto;
     justify-content: center;
   }
 

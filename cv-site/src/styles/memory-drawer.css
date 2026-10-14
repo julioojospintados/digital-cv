@@ -8,17 +8,13 @@
    non c'e' un import da ricordarsi a mano.
 
    Contiene tre cose che stanno insieme perche' si usano insieme:
-   i bottoni che aprono (.about-action), il <dialog> con lo scatter
+   il contenitore dei bottoni che aprono (.about-actions), il <dialog> con lo scatter
    fotografico (.memory-*), e la lightbox della singola foto.
    ───────────────────────────────────────────────────────────────────────── */
 
-/* ── About actions — bottoni "Fun fact / Cose mie / Viaggio" ─────────────
-   Badge da raccogliere, non link di navigazione: aprono un <dialog> con lo
-   scatter fotografico, non cambiano pagina. Linguaggio visivo distinto da
-   .profile-cta (che naviga) per non confondere le due azioni. */
 /* ── Chip "fuori dal codice" — etichette d'inventario sotto Chi sono.
-   Bordo dashed e niente hover: si distinguono dai bottoni .about-action
-   (bordo pieno, uppercase, cursore) perché non sono cliccabili. ── */
+   Bordo dashed e niente hover: si distinguono dai bottoni dei cassetti
+   (bordo pieno, cursore) perché non sono cliccabili. ── */
 .about-chips {
   list-style: none;
   display: flex;
@@ -44,48 +40,9 @@
   margin-top: var(--size-8);
 }
 
-.about-action {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--size-8);
-  padding: 0.6rem 1.1rem;
-  font-family: var(--font-mono);
-  font-size: var(--fs-12);
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--color-text-primary);
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-16);
-  cursor: pointer;
-  transition:
-    transform 0.16s var(--ease-standard),
-    border-color 0.2s ease,
-    background 0.2s ease,
-    box-shadow 0.2s ease;
-}
-
-.about-action__icon {
-  color: var(--ps-accent);
-  transition: rotate 0.4s var(--ease-standard);
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .about-action:hover {
-    border-color: var(--ps-accent);
-    background: rgba(255, 255, 255, 0.08);
-    box-shadow: 0 0 1.125rem color-mix(in srgb, var(--ps-accent) 20%, transparent);
-  }
-
-  .about-action:hover .about-action__icon {
-    rotate: 90deg;
-  }
-}
-
-.about-action:active {
-  transform: scale(0.96);
-}
+/* I bottoni dentro (.about-action) non esistono più dal 2026-10-14: i
+   cassetti usano .lc-btn del design system, con il segno ✦ (.lc-btn__icon).
+   Resta qui solo il contenitore. */
 
 /* ── Memory dialog — scatter fotografico stile knolling ───────────────────
    <dialog> nativo: showModal()/close() in memory-drawer.ts, focus trap ed

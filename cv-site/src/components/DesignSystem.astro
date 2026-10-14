@@ -2188,8 +2188,8 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
         <p class="ds-sub__note">
           {
             it
-              ? "La bio non è un paragrafo: è tagliata a fine frase in tre card, e ognuna apre una modale a schermo pieno. Non è una scelta di gusto ma di spazio — il paragrafo intero faceva un pannello da 930px in una finestra da 667, ed è il motivo per cui la sezione era spenta su mobile. Chiuse, le tre card ne misurano 170."
-              : "The bio is not a paragraph: it is cut at sentence boundaries into three cards, each opening a full-screen modal. Not a matter of taste but of space — the whole paragraph made a 930px panel inside a 667px window, which is why the section was switched off on mobile. Closed, the three cards measure 170px."
+              ? "La bio non è un paragrafo: è tagliata a fine frase in tre card, e ognuna apre una modale a schermo pieno. Non è una scelta di gusto ma di spazio — il paragrafo intero faceva un pannello da 930px in una finestra da 667, ed è il motivo per cui la sezione era spenta su mobile. Chiuse, le tre card ne misurano 170. Dal 2026-10-14 questo vale solo su telefono: su desktop gli stessi tre testi stanno in chiaro (about-bio), ognuno col suo titoletto, perché lo spazio c'è e un recruiter non deve indovinare cosa c'è dietro un bottone."
+              : "The bio is not a paragraph: it is cut at sentence boundaries into three cards, each opening a full-screen modal. Not a matter of taste but of space — the whole paragraph made a 930px panel inside a 667px window, which is why the section was switched off on mobile. Closed, the three cards measure 170px. Since 2026-10-14 this holds on phones only: on desktop the same three texts sit in the open (about-bio), each with its small heading, because the room is there and a recruiter should not have to guess what is behind a button."
           }
         </p>
         <div class="ds-stage">
@@ -2211,6 +2211,18 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
                   <span class="about-card__p" aria-hidden="true"></span>
                 </button>
               </div>
+              <div class="about-bio ds-about-bio">
+                <div class="about-bio__item">
+                  <h3 class="about-bio__label">{it ? "Da dove vengo" : "Where I come from"}</h3>
+                  <p class="about-bio__text">
+                    {
+                      it
+                        ? "Tantissimi lavori diversi alle spalle, alcune piante in casa e un passaporto ben timbrato."
+                        : "Countless different jobs behind me, a few plants at home, and a well-stamped passport."
+                    }
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -2218,7 +2230,10 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
           <div class="ds-spec__row ds-spec__row--wide">
             <span class="ds-spec__k">{t.specClass}</span>
             <p class="ds-spec__v">
-              <code>about-cards · about-card__b · about-card__t · about-card__p</code>
+              <code
+                >about-cards · about-card__b · about-card__t · about-card__p · about-bio ·
+                about-bio__item · about-bio__label · about-bio__text</code
+              >
             </p>
           </div>
           <div class="ds-spec__row">
@@ -2369,31 +2384,33 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
         <p class="ds-sub__note">
           {
             it
-              ? "Tre bottoni sotto «Chi sono», uno per cassetto. Non hanno un href e non hanno uno script proprio: portano data-drawer-open con la chiave, e memory-drawer.ts trova il <dialog> corrispondente cercando #dialog-<chiave>. Aggiungere un cassetto vuol dire aggiungere un bottone e un dialog con l'id giusto — niente da registrare da nessuna parte."
-              : "Three buttons under «About me», one per drawer. They have no href and no script of their own: they carry data-drawer-open with the key, and memory-drawer.ts finds the matching <dialog> by looking up #dialog-<key>. Adding a drawer means adding a button and a dialog with the right id — nothing to register anywhere."
+              ? "Dal 2026-10-14 sono .lc-btn, il bottone secondario del sistema, con il segno ✦ (.lc-btn__icon) al posto della freccia: la freccia dice «vai a un'altra pagina», i cassetti si aprono qui. Prima erano .about-action, un bottone mono maiuscolo che esisteva solo qui. Tre bottoni sotto «Chi sono», uno per cassetto. Non hanno un href e non hanno uno script proprio: portano data-drawer-open con la chiave, e memory-drawer.ts trova il <dialog> corrispondente cercando #dialog-<chiave>. Aggiungere un cassetto vuol dire aggiungere un bottone e un dialog con l'id giusto — niente da registrare da nessuna parte."
+              : "Since 2026-10-14 they are .lc-btn, the system's secondary button, with the ✦ mark (.lc-btn__icon) instead of the arrow: the arrow says «go to another page», the drawers open here. They used to be .about-action, an uppercase mono button that only existed here. Three buttons under «About me», one per drawer. They have no href and no script of their own: they carry data-drawer-open with the key, and memory-drawer.ts finds the matching <dialog> by looking up #dialog-<key>. Adding a drawer means adding a button and a dialog with the right id — nothing to register anywhere."
           }
         </p>
         <div class="ds-stage">
-          <div class="about-actions" role="group" aria-label={ui.aboutMore} data-ds-snippet>
-            <button class="about-action" type="button" data-drawer-open="funfact">
-              <span class="about-action__icon" aria-hidden="true">✦</span>
-              {ui.drawerFunFact}
-            </button>
-            <button class="about-action" type="button" data-drawer-open="trip">
-              <span class="about-action__icon" aria-hidden="true">✦</span>
-              {ui.drawerTrip}
-            </button>
-            <button class="about-action" type="button" data-drawer-open="belongings">
-              <span class="about-action__icon" aria-hidden="true">✦</span>
-              {ui.drawerBelongings}
-            </button>
+          <div class="lh-section--about">
+            <div class="about-actions" role="group" aria-label={ui.aboutMore} data-ds-snippet>
+              <button class="lc-btn" type="button" data-drawer-open="funfact">
+                <span class="lc-btn__icon" aria-hidden="true">✦</span>
+                {ui.drawerFunFact}
+              </button>
+              <button class="lc-btn" type="button" data-drawer-open="trip">
+                <span class="lc-btn__icon" aria-hidden="true">✦</span>
+                {ui.drawerTrip}
+              </button>
+              <button class="lc-btn" type="button" data-drawer-open="belongings">
+                <span class="lc-btn__icon" aria-hidden="true">✦</span>
+                {ui.drawerBelongings}
+              </button>
+            </div>
           </div>
         </div>
         <div class="ds-spec">
           <div class="ds-spec__row ds-spec__row--wide">
             <span class="ds-spec__k">{t.specClass}</span>
             <p class="ds-spec__v">
-              <code>about-actions · about-action · about-action__icon</code>
+              <code>about-actions · lc-btn · lc-btn__icon</code>
             </p>
           </div>
           <div class="ds-spec__row">
@@ -2994,13 +3011,19 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
                 <span class="lc-btn__arrow" aria-hidden="true"></span>
               </a>
               <span class="lc-btn" aria-disabled="true">{it ? "Disabilitato" : "Disabled"}</span>
+              <button class="lc-btn" type="button">
+                <span class="lc-btn__icon" aria-hidden="true">✦</span>
+                Fun fact
+              </button>
             </div>
           </div>
         </div>
         <div class="ds-spec">
           <div class="ds-spec__row ds-spec__row--wide">
             <span class="ds-spec__k">{t.specClass}</span>
-            <p class="ds-spec__v"><code>lc-btn · lc-btn--primary · lc-btn__arrow</code></p>
+            <p class="ds-spec__v">
+              <code>lc-btn · lc-btn--primary · lc-btn__arrow · lc-btn__icon</code>
+            </p>
           </div>
           <div class="ds-spec__row">
             <span class="ds-spec__k">{t.specUse}</span>

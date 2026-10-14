@@ -415,17 +415,34 @@ const sections = MODES.map((mode) => ({
               mostrano (foto, racconto). Il markup dei <dialog> arriva da
               <MemoryDrawers lang={locale} />, in fondo alla pagina. */
           }
+          {
+            /* Su desktop la bio si legge senza aprire niente: gli stessi tre
+               testi delle card qui sopra, in chiaro, ognuno col suo
+               titoletto. Su telefono restano le card (lab-home.css § «La bio
+               in chiaro»): aperti farebbero una scheda di quasi due schermate.
+               Le parole sono le stesse, da ABOUT_CARDS: non possono divergere. */
+          }
+          <div class="about-bio">
+            {
+              aboutCards.map((c) => (
+                <div class="about-bio__item">
+                  <h3 class="about-bio__label">{c.label}</h3>
+                  <p class="about-bio__text">{c.text}</p>
+                </div>
+              ))
+            }
+          </div>
           <div class="about-actions" role="group" aria-label={t.ui.aboutMore}>
-            <button class="about-action" type="button" data-drawer-open="funfact">
-              <span class="about-action__icon" aria-hidden="true">✦</span>
+            <button class="lc-btn" type="button" data-drawer-open="funfact">
+              <span class="lc-btn__icon" aria-hidden="true">✦</span>
               {t.ui.drawerFunFact}
             </button>
-            <button class="about-action" type="button" data-drawer-open="trip">
-              <span class="about-action__icon" aria-hidden="true">✦</span>
+            <button class="lc-btn" type="button" data-drawer-open="trip">
+              <span class="lc-btn__icon" aria-hidden="true">✦</span>
               {t.ui.drawerTrip}
             </button>
-            <button class="about-action" type="button" data-drawer-open="belongings">
-              <span class="about-action__icon" aria-hidden="true">✦</span>
+            <button class="lc-btn" type="button" data-drawer-open="belongings">
+              <span class="lc-btn__icon" aria-hidden="true">✦</span>
               {t.ui.drawerBelongings}
             </button>
           </div>

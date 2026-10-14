@@ -252,10 +252,13 @@ export interface AboutText {
   desc: string;
   chips: readonly string[];
   /**
-   * La riga di badge sotto «Chi sono» (2026-10-13): la logistica che un
-   * recruiter cerca prima di scrivere — dove, come, in che lingue, se sei
-   * libero. Stessi dati di cv.ts (`personal.location`, `languages`,
-   * `personal.availability`): se cambiano lì, vanno cambiati qui.
+   * La riga di badge sotto «Chi sono» (scelta di Giulio, 2026-10-14): le
+   * quattro lingue in un badge solo, con i livelli di cv.ts (`languages`), e
+   * quattro soft skill che il resto della pagina può dimostrare — pensiero
+   * critico e laterale (scegliere fra le idee e trovarne di inattese),
+   * adattabilità (cv.ts `softSkills`, «Adattabilità culturale»), ascolto
+   * attivo (il teatro d'improvvisazione). Se cambia un livello di lingua in
+   * cv.ts, va cambiato qui.
    */
   badges: readonly string[];
 }
@@ -273,7 +276,13 @@ export const ABOUT_TEXT: Record<Locale, AboutText> = {
       "Scacchi",
       "Piante d'appartamento",
     ],
-    badges: ["Torino", "Remote", "Inglese B2", "Spagnolo B1", "Disponibile"],
+    badges: [
+      "IT · EN B2 · ES B1 · FR A2",
+      "Pensiero critico",
+      "Pensiero laterale",
+      "Adattabilità",
+      "Ascolto attivo",
+    ],
   },
   en: {
     eyebrow: "About me",
@@ -287,7 +296,13 @@ export const ABOUT_TEXT: Record<Locale, AboutText> = {
       "Chess",
       "House plants",
     ],
-    badges: ["Turin", "Remote", "English B2", "Spanish B1", "Available"],
+    badges: [
+      "IT · EN B2 · ES B1 · FR A2",
+      "Critical thinking",
+      "Lateral thinking",
+      "Adaptability",
+      "Active listening",
+    ],
   },
 };
 

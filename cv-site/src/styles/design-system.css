@@ -1852,3 +1852,15 @@
     animation: none;
   }
 }
+
+/* «Card di Chi sono»: la vetrina mostra le due forme insieme, a ogni
+   larghezza — le card (telefono) e la bio in chiaro (desktop). Sulla home
+   una delle due è sempre spenta, qui servono tutte e due. */
+.ds-stage .lh-section--about .about-cards {
+  display: flex;
+}
+
+.ds-about-bio {
+  display: grid;
+  margin-top: var(--size-24);
+}
