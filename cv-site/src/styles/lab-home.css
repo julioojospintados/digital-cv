@@ -1491,21 +1491,14 @@ html[data-lh-armed] .lh-obj {
     order: 1;
   }
 
-  /* L'oggetto prende lo spazio che avanza fra il testo e i bottoni: nessun
-     tetto in altezza, ci pensa quello in larghezza (min(42vw, --nat)). */
-  .lh-section[data-mode] .lh-section__object {
-    order: 2;
-    flex: 1 1 0;
-    min-height: 0;
-    max-height: none;
-    height: auto;
-    align-self: center;
-    margin-block: var(--size-8);
-  }
-
+  /* I bottoni in fondo alla scheda, dove arriva il pollice. Lo spazio fra
+     testo e bottoni lo apriva l'oggetto; ora che sta dietro al testo (più
+     sotto) lo apre il margine automatico. Sui telefoni bassi, dove spazio
+     non ne avanza, i bottoni seguono il testo da soli. */
   .lh-section[data-mode] .lh-section__actions {
     order: 3;
     align-self: stretch;
+    margin-top: auto;
   }
 
   /* Il link al design system segue i bottoni, centrato sotto di loro. */
@@ -1574,37 +1567,67 @@ html[data-lh-armed] .lh-obj {
     order: 1;
   }
 
-  .lh-section--about .lh-section__object {
-    order: 2;
-    flex: 1 1 0;
-    min-height: 0;
-    max-height: none;
-    height: auto;
-    align-self: center;
-    margin-block: var(--size-8);
-  }
-
   .lh-section--about .lh-section__actions {
     order: 3;
     align-self: stretch;
+    margin-top: auto;
   }
 }
 
-/* Telefoni bassi (sotto i 700px: iPhone SE, Android piccoli). Misurato:
-   con i bottoni in fondo l'oggetto restava a 0px e i bottoni finivano a filo
-   del bordo dello schermo o sotto. Qui i bottoni tornano subito dopo il
-   testo e l'oggetto va in coda con l'altezza di prima: la scheda si allunga,
-   ma l'azione resta in vista. */
-@media (max-width: 55.99rem) and (max-height: 43.75rem) {
-  :is(.lh-section[data-mode], .lh-section--about) .lh-section__actions,
-  .lh-section[data-mode] .lh-section__more {
-    order: 2;
+/* ── L'oggetto dietro al testo, su telefono ──────────────────────────────
+   Scelta di Giulio il 2026-10-15. Prima l'oggetto stava fra il testo e i
+   bottoni e prendeva lo spazio che avanzava: dove il testo è lungo (la
+   scheda Web & UX su un Android da 412×915) non ne avanzava nulla e
+   l'oggetto spariva, altrove usciva tagliato. Dietro al testo c'è sempre.
+
+   La trasparenza sta sull'immagine e non sul riquadro: il riquadro lo anima
+   GSAP (lab-home-scroll.ts, ingresso e parallasse), e un'opacità messa lì
+   verrebbe riscritta a 1 dal primo tween. L'ombra sfocata si spegne: a
+   questa opacità diventava una macchia scura senza forma.
+
+   Il valore non è a occhio. Misurato pixel per pixel sotto ogni scritta, IT
+   ed EN, a 412×915, 390×844, 375×667 e 360×640, prendendo la tinta più chiara
+   che l'oggetto lascia passare (con 40px di margine per la parallasse):
+   a 0.2 il testo scendeva a 3,9:1 sulla bussola e sul laptop, a 0.14
+   l'occhiello oro scendeva a 4,37:1; a 0.12 nessuna scritta va sotto
+   4,5:1. Il punto più stretto resta l'occhiello sulla bussola, a 4,52:1.
+   Alzarlo vuol dire rifare quella misura, non spostare un numero. */
+@media (max-width: 55.99rem) {
+  :is(.lh-section[data-mode], .lh-section--about) .lh-section__object {
+    position: absolute;
+    z-index: -1;
+    inset: 0;
+    /* Flex e non grid: in una griglia la larghezza in percentuale
+       dell'immagine si calcola sulla colonna, che si stringe sul contenuto
+       (misurato: la fotocamera usciva larga 161px invece di 327). */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* stretch e non l'align-self delle regole sopra: su un elemento assoluto
+       dentro un flex l'allineamento vale ancora, e con center o end il
+       riquadro si stringeva all'immagine invece di coprire la scheda — la
+       fotocamera finiva in fondo, sotto i bottoni. */
+    align-self: stretch;
+    justify-self: stretch;
+    width: auto;
+    height: auto;
+    max-height: none;
+    margin: 0;
+    pointer-events: none;
   }
 
-  :is(.lh-section[data-mode], .lh-section--about) .lh-section__object {
-    order: 3;
-    flex: 0 0 auto;
-    height: 24svh;
+  :is(.lh-section[data-mode], .lh-section--about) .lh-section__object img:last-child {
+    /* Mai più largo dei pixel che ha (--nat), come su desktop. */
+    width: min(84%, var(--nat, 20rem));
+    height: auto;
+    max-height: 70%;
+    object-fit: contain;
+    filter: none;
+    opacity: var(--lh-obj-ghost, 0.12);
+  }
+
+  :is(.lh-section[data-mode], .lh-section--about) .lh-section__object .lh-obj__shadow {
+    display: none;
   }
 }
 
