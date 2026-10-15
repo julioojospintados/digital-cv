@@ -1602,7 +1602,12 @@ html[data-lh-armed] .lh-obj {
        (misurato: la fotocamera usciva larga 161px invece di 327). */
     display: flex;
     align-items: center;
-    justify-content: center;
+    /* A centro-destra (Giulio, 2026-10-15): grande e al centro copriva tutta
+       la scheda e si leggeva come un secondo contenuto. Spostato verso il
+       bordo destro, col margine laterale della scheda, resta un oggetto
+       appoggiato accanto al testo e non un fondale. */
+    justify-content: flex-end;
+    padding-inline: var(--lh-gutter);
     /* stretch e non l'align-self delle regole sopra: su un elemento assoluto
        dentro un flex l'allineamento vale ancora, e con center o end il
        riquadro si stringeva all'immagine invece di coprire la scheda — la
@@ -1618,9 +1623,9 @@ html[data-lh-armed] .lh-obj {
 
   :is(.lh-section[data-mode], .lh-section--about) .lh-section__object img:last-child {
     /* Mai più largo dei pixel che ha (--nat), come su desktop. */
-    width: min(84%, var(--nat, 20rem));
+    width: min(48%, var(--nat, 20rem));
     height: auto;
-    max-height: 70%;
+    max-height: 26%;
     object-fit: contain;
     filter: none;
     opacity: var(--lh-obj-ghost, 0.12);
