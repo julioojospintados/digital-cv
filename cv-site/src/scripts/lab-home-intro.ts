@@ -108,7 +108,11 @@ export function initLabHomeIntro(): void {
   let firstOChar: HTMLElement | null = null;
 
   name.querySelectorAll<HTMLElement>(".name-word").forEach((word, wi) => {
-    const text = word.textContent ?? "";
+    // trim: il markup porta gli a capo di Astro dentro lo span, e senza
+    // questo ogni parola cominciava con un carattere di spazio — misurato,
+    // 13px di rientro a sinistra prima della G, e il nome centrato fuori asse
+    // di metà di quello. Lo spazio fra le parole sta fuori dagli span.
+    const text = (word.textContent ?? "").trim();
     word.textContent = "";
     text.split("").forEach((char, ci) => {
       const s = document.createElement("span");
@@ -139,7 +143,9 @@ export function initLabHomeIntro(): void {
   const glowOn = "0 0 28px rgba(255, 255, 255, 0.65), 0 0 12px rgba(255, 255, 255, 0.4)";
 
   // ── Stato iniziale ──────────────────────────────────────────────────────
-  const copyGroup = [".lh-tagline", ".lh-cred", ".lh-bar"];
+  // .lh-index entra col testo: su telefono è il posto degli oggetti, e a
+  // schermo prima del nome sarebbe la sola cosa già ferma.
+  const copyGroup = [".lh-tagline", ".lh-cred", ".lh-bar", ".lh-index"];
   const cue = document.querySelector<HTMLElement>(".lh-scroll");
   // `:not([data-vt-landing])` — tornando da una lente, uno di questi oggetti
   // non sta entrando: sta ATTERRANDO, portato dalla transizione di pagina.

@@ -1926,3 +1926,12 @@
   top: auto;
   min-height: 0;
 }
+
+/* L'indice dell'ingresso vive solo su telefono (display: none sopra i 56rem):
+   qui si accende a ogni misura, dentro un riquadro alto quanto basta a far
+   vedere le due righe come su un telefono da 384px. */
+.ds-stage .lh-index {
+  display: grid;
+  height: 22rem;
+  max-width: 24rem;
+}

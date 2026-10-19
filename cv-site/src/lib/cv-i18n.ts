@@ -121,6 +121,9 @@ export interface LocaleStrings {
     exploreDesignSystem: string;
     /** Il ritorno al CV nella barra di /work e della vetrina (WorkNav.astro). */
     backToCv: string;
+    /** Nome accessibile dell'indice dell'ingresso su telefono (i quattro
+     *  oggetti che portano alle schede). */
+    entryIndexLabel: string;
     goTo: string;
     explorePortfolio: string;
     /** Barra e intestazione della pagina CV */
@@ -245,6 +248,7 @@ const IT: LocaleStrings = {
     aboutVoices: "Dicono di me",
     exploreDesignSystem: "Esplora il design system",
     backToCv: "Torna al CV",
+    entryIndexLabel: "Vai a una sezione",
     goTo: "GO to",
     explorePortfolio: "Esplora il portfolio",
     backHome: "Torna alla home",
@@ -345,6 +349,7 @@ const EN: LocaleStrings = {
     aboutVoices: "What people say",
     exploreDesignSystem: "Explore the design system",
     backToCv: "Back to CV",
+    entryIndexLabel: "Go to a section",
     goTo: "GO to",
     explorePortfolio: "Explore the portfolio",
     backHome: "Back to the home page",

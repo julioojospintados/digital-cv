@@ -369,6 +369,16 @@
   pointer-events: none;
 }
 
+/* L'indice dell'ingresso esiste solo su telefono: vedi più sotto,
+   § "L'indice dell'ingresso". */
+.lh-index {
+  display: none;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: var(--size-12);
+  min-height: 0;
+}
+
 .lh-copy {
   position: relative;
   z-index: 3;
@@ -559,15 +569,17 @@ html[data-lh-armed] .lh-obj {
   --accent: var(--lh-ink);
 }
 
-.lh-section[data-mode="creative"] {
+/* Anche le voci dell'indice dell'ingresso: stesso colore della scheda a cui
+   portano, così l'etichetta e l'occhiello che si trova arrivando coincidono. */
+:is(.lh-section, .lh-index__item)[data-mode="creative"] {
   --accent: var(--lh-mode-creative);
   --accent-text: color-mix(in srgb, var(--lh-mode-creative) 70%, white);
 }
-.lh-section[data-mode="tech"] {
+:is(.lh-section, .lh-index__item)[data-mode="tech"] {
   --accent: var(--lh-mode-tech);
   --accent-text: var(--lh-mode-tech);
 }
-.lh-section[data-mode="human"] {
+:is(.lh-section, .lh-index__item)[data-mode="human"] {
   --accent: var(--lh-mode-human);
   --accent-text: var(--lh-mode-human);
 }
@@ -1634,6 +1646,108 @@ html[data-lh-armed] .lh-obj {
   :is(.lh-section[data-mode], .lh-section--about) .lh-section__object .lh-obj__shadow {
     display: none;
   }
+}
+
+/* ── L'indice dell'ingresso, su telefono ─────────────────────────────────
+   Scelta di Giulio il 2026-10-19 (variante «indice» fra tre). Il tavolo da
+   otto oggetti, ristretto, era una scena a sé: centrata quando tutto il resto
+   sta a sinistra, con oggetti pieni quando nelle schede sono in filigrana, e
+   con quattro oggetti (megafono, torcia, scacchi, multitool) che non
+   tornavano più. Qui restano i quattro delle schede, nel loro ordine, e
+   ognuno porta alla sua: l'ingresso diventa l'indice di quello che segue.
+
+   Il tavolo si spegne (display: none) invece di riusarne gli oggetti: è
+   aria-hidden, e quattro link dentro un contenitore nascosto sarebbero
+   raggiungibili col Tab ma senza nome. Su desktop non cambia niente.
+
+   Testo a sinistra e ruoli in mono, come l'occhiello delle schede: l'asse e
+   la voce sono gli stessi dall'ingresso all'ultima scheda. */
+@media (max-width: 55.99rem) {
+  .lh-hero .lh-stage {
+    display: none;
+  }
+
+  .lh-hero .lh-copy {
+    justify-self: stretch;
+    justify-items: start;
+    text-align: left;
+  }
+
+  .lh-hero .lh-cred {
+    font-family: var(--font-mono);
+    font-weight: 400;
+    font-size: var(--fs-12);
+    letter-spacing: 0.12em;
+  }
+
+  /* Steso sulla riga 1fr dell'ingresso come faceva il tavolo: senza altezza
+     propria le righe minmax(0, 1fr) qui dentro si chiudono a zero, e con
+     loro gli oggetti (misurato: 0px di altezza a tutte e tre le misure). */
+  .lh-index {
+    order: 2;
+    align-self: stretch;
+    height: 100%;
+    display: grid;
+  }
+}
+
+/* Le voci dell'indice: definite fuori dalla media query perché la vetrina
+   le mostra anche su desktop (.ds-stage .lh-index). A decidere dove si
+   vedono è solo il display di .lh-index. */
+/* L'oggetto prende l'altezza che resta sopra l'etichetta (flex 1 1 0) e
+   non supera mai i pixel che ha (--nat). L'etichetta è alta 44px: è il
+   bersaglio del pollice, l'immagine sopra lo allarga ma non lo sostituisce. */
+.lh-index__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--size-4);
+  min-width: 0;
+  min-height: 0;
+  padding-top: var(--size-8);
+  border-radius: var(--radius-16);
+  color: var(--accent-text, var(--accent, var(--lh-ink)));
+  text-decoration: none;
+}
+
+.lh-index__img {
+  flex: 1 1 0;
+  width: min(100%, var(--nat, 14rem));
+  height: 0;
+  min-height: 0;
+  object-fit: contain;
+  filter: drop-shadow(var(--lh-sh-contact));
+}
+
+/* Il flex centra la riga nei 44px; il testo e la freccia stanno in uno
+   span solo, così quando l'etichetta va a capo (a 360px «Comunicazione
+   & AI» non ci sta) la freccia segue l'ultima parola invece di restare
+   sola sul bordo. 0.08em e non lo 0.2em degli occhielli: a 384px tiene
+   le quattro etichette su una riga. */
+.lh-index__label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-align: center;
+  text-wrap: balance;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, currentColor 50%, transparent);
+  text-underline-offset: 0.3em;
+}
+
+.lh-index__arrow {
+  /* inline-block: la sottolineatura non scende sulla freccia. */
+  display: inline-block;
+}
+
+.lh-index__item:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
 }
 
 @media (prefers-reduced-motion: reduce) {

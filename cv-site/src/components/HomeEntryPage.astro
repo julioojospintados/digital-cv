@@ -21,7 +21,7 @@
 import Layout from "../layouts/Layout.astro";
 import { cvData } from "@cv-data";
 import { cvDataEn } from "@cv-data-en";
-import { LOCALES, MODES, lensPath, type Locale } from "../lib/cv-i18n";
+import { LENS_SLUGS, LOCALES, MODES, lensPath, type Locale } from "../lib/cv-i18n";
 import {
   ABOUT_CARDS,
   ABOUT_CARD_PHOTOS,
@@ -137,6 +137,9 @@ const ATTERRAGGI: Record<string, string> = Object.fromEntries(
 
 const sections = MODES.map((mode) => ({
   mode,
+  // L'id è lo slug della lente (design, tech, ai), lo stesso dell'URL: è il
+  // bersaglio dell'indice dell'ingresso su telefono, qui sotto.
+  id: LENS_SLUGS[mode],
   initial: initials[mode],
   object: sectionObject[mode],
   nativeRem: NATIVE_REM[sectionObject[mode]],
@@ -145,6 +148,27 @@ const sections = MODES.map((mode) => ({
   desc: PROFILE_TEXT[locale][mode].desc,
   badges: PROFILE_TEXT[locale][mode].badges,
 }));
+
+// L'indice dell'ingresso su telefono: le quattro schede nel loro ordine,
+// ognuna col suo oggetto e il suo occhiello. Si costruisce dagli stessi dati
+// che disegnano le schede, così etichetta e oggetto non possono divergere da
+// quelli che si trovano scorrendo.
+const indexItems = [
+  {
+    id: "about",
+    mode: undefined,
+    object: ABOUT_OBJECT.object,
+    nativeRem: ABOUT_NATIVE_REM,
+    label: about.eyebrow,
+  },
+  ...sections.map((s) => ({
+    id: s.id,
+    mode: s.mode,
+    object: s.object,
+    nativeRem: s.nativeRem,
+    label: s.eyebrow,
+  })),
+];
 
 // Fino al 2026-09-11 la CTA del portfolio compariva solo nella sezione
 // design (un campo `portfolio: mode === "creative"` su ogni riga sopra).
@@ -347,6 +371,46 @@ const sections = MODES.map((mode) => ({
         <p class="lh-cred">{t.ui.entryRoles}</p>
       </div>
 
+      {
+        /* L'indice dell'ingresso, solo su telefono (Giulio, 2026-10-19). Lì il
+          tavolo con otto oggetti era una scena a sé, scollegata dalle schede
+          che seguono: quattro di quegli oggetti non tornavano più. Qui restano
+          i quattro delle schede, nel loro ordine, ognuno con l'occhiello della
+          sua scheda e un link che ci porta. Su desktop è nascosto e il tavolo
+          resta quello di sempre (lab-home.css).
+
+          È un <nav> a sé e non il tavolo reso cliccabile: il tavolo è
+          aria-hidden, e un link dentro un contenitore nascosto agli screen
+          reader si raggiunge col Tab ma non ha nome. */
+      }
+      <nav class="lh-index" aria-label={t.ui.entryIndexLabel}>
+        {
+          indexItems.map((it) => (
+            <a
+              class="lh-index__item"
+              href={`#${it.id}`}
+              data-mode={it.mode}
+              style={`--nat:${it.nativeRem}rem`}
+            >
+              <img
+                class="lh-index__img"
+                src={`/knolling/${it.object}.webp`}
+                alt=""
+                decoding="async"
+              />
+              <span class="lh-index__label">
+                <span>
+                  {it.label}{" "}
+                  <span class="lh-index__arrow" aria-hidden="true">
+                    ↓
+                  </span>
+                </span>
+              </span>
+            </a>
+          ))
+        }
+      </nav>
+
       <a class="lh-scroll" href="#main-content">
         <span>{t.ui.scrollHint}</span>
         <span class="lh-scroll__line" aria-hidden="true"></span>
@@ -474,7 +538,7 @@ const sections = MODES.map((mode) => ({
 
       {
         sections.map((s) => (
-          <section class="lh-section" data-mode={s.mode}>
+          <section class="lh-section" data-mode={s.mode} id={s.id}>
             <div class="lh-section__object" style={`--nat:${s.nativeRem}rem`}>
               <img
                 class="lh-obj__shadow"

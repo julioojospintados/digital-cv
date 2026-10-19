@@ -43,6 +43,7 @@ import LangSwitch from "./LangSwitch.astro";
 import WorkNav from "./WorkNav.astro";
 import EmailCard from "./EmailCard.astro";
 import { LOCALES, lensPath } from "../lib/cv-i18n";
+import { ABOUT_TEXT } from "../lib/lab-copy";
 import { WORK_INDEX_ICON, workKnollSize } from "../lib/work-knolling";
 import "../styles/lab-home.css";
 import "../styles/lab-cv.css";
@@ -61,6 +62,14 @@ const heroObj = workKnollSize(WORK_INDEX_ICON);
 // Le etichette dei comandi dei cassetti arrivano dalla tabella vera, non
 // ricopiate: una demo che le ripete a mano diverge alla prima riscrittura.
 const ui = LOCALES[lang].ui;
+// La demo dell'indice d'ingresso: stessi dati di HomeEntryPage (occhiello di
+// «Chi sono» e delle tre lenti, stesso oggetto per scheda), non ricopiati.
+const DS_INDEX = [
+  { mode: undefined, object: "plant", nat: 226 / 16, label: ABOUT_TEXT[lang].eyebrow },
+  { mode: "creative", object: "camera", nat: 327 / 16, label: LOCALES[lang].modeLabels.creative },
+  { mode: "tech", object: "laptop", nat: 524 / 16, label: LOCALES[lang].modeLabels.tech },
+  { mode: "human", object: "compass", nat: 208 / 16, label: LOCALES[lang].modeLabels.human },
+];
 
 /* ── I quattro accenti. Unica fonte per tutte le tabelle colore. ────────── */
 const FACTS = [
@@ -597,6 +606,7 @@ const NAV = [
       },
       { id: "ingresso-barra", label: it ? "Barra d'ingresso" : "Entry bar" },
       { id: "ingresso-scorri", label: it ? "Indicatore di scorrimento" : "Scroll cue" },
+      { id: "ingresso-indice", label: it ? "Indice d'ingresso (telefono)" : "Entry index (phone)" },
       { id: "ingresso-card-chi-sono", label: it ? "Card di Chi sono" : "About cards" },
       { id: "ingresso-modale-chi-sono", label: it ? "Modale di Chi sono" : "About modal" },
       { id: "ingresso-comandi", label: it ? "Comandi dei cassetti" : "Drawer controls" },
@@ -725,6 +735,7 @@ const CATEGORIES = [
       "work-barra",
       "work-nav",
       "ingresso-scorri",
+      "ingresso-indice",
       "salto-al-contenuto",
       "lente-imbocchi",
     ],
@@ -2175,6 +2186,94 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
                 it
                   ? "La stanghetta è aria-hidden — la parola accanto porta già tutto il significato."
                   : "The rule is aria-hidden — the adjacent word already carries all the meaning."
+              }
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="ds-panel"
+        id="ingresso-indice"
+        data-ds-panel="ingresso-indice"
+        aria-labelledby="ingresso-indice-t"
+      >
+        <div class="ds-panel__head">
+          <h2 class="ds-section__title" id="ingresso-indice-t">
+            {it ? "Indice d'ingresso (telefono)" : "Entry index (phone)"}
+          </h2>
+          <span class="ds-panel__group">{t.secHome}<span class="ds-origin">lh-index</span></span>
+        </div>
+
+        <p class="ds-sub__note">
+          {
+            it
+              ? "Su telefono, dal 2026-10-19, prende il posto del tavolo da otto oggetti. Quel tavolo, ristretto, era una scena a sé: centrata quando tutte le schede stanno a sinistra, con oggetti pieni quando nelle schede sono in filigrana, e con quattro oggetti (megafono, torcia, scacchi, multitool) che non tornavano più. Qui restano i quattro delle schede, nel loro ordine, ognuno con l'occhiello della sua scheda e nel suo colore, e toccarlo porta alla scheda. L'ingresso diventa l'indice di quello che segue. Su desktop è nascosto e il tavolo resta quello di sempre."
+              : "On phones, since 2026-10-19, it replaces the eight-object table. That table, narrowed, was a scene of its own: centred while every card sits left, with full-colour objects while the cards show them as watermarks, and with four objects (megaphone, torch, chess, multitool) that never came back. Here only the four card objects remain, in card order, each with its card's eyebrow in its colour, and tapping one takes you to that card. The entry becomes the index of what follows. On desktop it is hidden and the table stays as it was."
+          }
+        </p>
+        <div class="ds-stage">
+          <div class="lh">
+            <nav class="lh-index" aria-label={ui.entryIndexLabel} data-ds-snippet>
+              {
+                DS_INDEX.map((o) => (
+                  <a
+                    class="lh-index__item"
+                    href="#ingresso-indice"
+                    data-mode={o.mode}
+                    style={`--nat:${o.nat}rem`}
+                  >
+                    <img class="lh-index__img" src={`/knolling/${o.object}.webp`} alt="" />
+                    <span class="lh-index__label">
+                      <span>
+                        {o.label}{" "}
+                        <span class="lh-index__arrow" aria-hidden="true">
+                          ↓
+                        </span>
+                      </span>
+                    </span>
+                  </a>
+                ))
+              }
+            </nav>
+          </div>
+        </div>
+        <div class="ds-spec">
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specClass}</span>
+            <p class="ds-spec__v">
+              <code
+                >lh-index · lh-index__item · lh-index__img · lh-index__label · lh-index__arrow</code
+              >
+            </p>
+          </div>
+          <div class="ds-spec__row">
+            <span class="ds-spec__k">{t.specUse}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Solo nell'ingresso, solo sotto i 56rem, dopo nome, slogan e ruoli. Voci e oggetti vengono dagli stessi dati delle schede, quindi non possono divergere da quello che si trova scorrendo."
+                  : "Only in the entry, only below 56rem, after name, tagline and roles. Labels and objects come from the same data as the cards, so they cannot drift from what you find by scrolling."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--dont">
+            <span class="ds-spec__k">{t.specDont}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Non rendere cliccabili gli oggetti del tavolo: il tavolo è aria-hidden, e un link lì dentro si raggiunge col Tab ma non ha nome. Non usare un'ancora nuda verso la scheda: in una pila sticky il browser la cerca dove la scheda è ferma, non dove sta nel flusso — lo script scorre al segnaposto."
+                  : "Do not make the table's objects clickable: the table is aria-hidden, and a link inside it can be tabbed to but has no name. Do not rely on a bare anchor to the card: in a sticky stack the browser looks for the card where it is stuck, not where it sits in the flow — the script scrolls to the placeholder."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specA11y}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "È un <nav> con nome proprio («Vai a una sezione»). L'etichetta è alta 44px, il bersaglio del pollice; l'oggetto sopra allarga l'area ma non la sostituisce. Contrasto misurato sul fondo vero a 384px: da 4,58:1 (Web & UX, il più debole) a 8,52:1 (Chi sono). Dopo il tocco il fuoco passa al titolo della scheda, a scorrimento finito: prima il titolo è ancora nascosto dall'animazione d'ingresso e non prenderebbe il fuoco. La freccia è aria-hidden."
+                  : "It is a <nav> with its own name («Go to a section»). The label is 44px tall, the thumb target; the object above enlarges the area but does not replace it. Contrast measured on the real background at 384px: from 4.58:1 (Web & UX, the weakest) to 8.52:1 (About me). After the tap, focus moves to the card's heading once scrolling ends: before that the heading is still hidden by the entrance animation and would not take focus. The arrow is aria-hidden."
               }
             </p>
           </div>

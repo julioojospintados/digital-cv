@@ -84,6 +84,38 @@ export function initLabHomeScroll(): void {
     .forEach((el) => el.getClientRects().length && flowAnchor(el));
   lh?.setAttribute("data-lh-stack", "");
 
+  // ── L'indice dell'ingresso (solo su telefono) ──
+  // Un'ancora verso una scheda sticky non basta: il browser la cerca dove
+  // la scheda è ferma, non dove sta nel flusso, e in una pila sono due punti
+  // diversi. Si scorre allora al suo segnaposto, che sta sempre al posto
+  // giusto (lo stesso che usa lo snap). Il fuoco passa al titolo della
+  // scheda, così chi usa tastiera o lettore di schermo arriva dove è andato
+  // lo sguardo. Senza JavaScript l'ancora resta un'ancora e funziona: senza
+  // questo script la pila non c'è.
+  document.querySelectorAll<HTMLAnchorElement>(".lh-index__item").forEach((link) => {
+    link.addEventListener("click", (e) => {
+      const target = document.getElementById(link.hash.slice(1));
+      if (!target) return;
+      e.preventDefault();
+      const top = flowTop(target);
+      // Il fuoco va dato a scorrimento finito, non al clic: fino a quando la
+      // scheda non entra, il suo testo è nascosto dall'animazione d'ingresso
+      // (autoAlpha, più sotto), e un elemento invisibile non prende il fuoco.
+      // Misurato: dato subito, il fuoco restava sul link.
+      const heading = target.querySelector<HTMLElement>("h2");
+      const focusHeading = () => {
+        if (!heading) return;
+        heading.setAttribute("tabindex", "-1");
+        heading.focus({ preventScroll: true });
+      };
+      if (Math.abs(window.scrollY - top) < 2) focusHeading();
+      else if ("onscrollend" in window)
+        window.addEventListener("scrollend", focusHeading, { once: true });
+      else setTimeout(focusHeading, 900);
+      window.scrollTo({ top, behavior: reduced ? "auto" : "smooth" });
+    });
+  });
+
   // ── La pila di schede sfalsate ───────────────────────────────────────
   // Ogni scheda si ferma un gradino sotto la precedente (0,8rem × indice).
   // Se però è più alta di quanto resta sotto il gradino, fermarla lì ne
