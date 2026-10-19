@@ -448,8 +448,8 @@ const indexItems = [
           <p class="lh-section__initial" aria-hidden="true">IO</p>
           <h2 class="lh-section__title">{about.title}</h2>
           <p class="lh-section__eyebrow">{about.eyebrow}</p>
-          <ul class="lh-section__proof" role="list" aria-label={t.ui.badgesLabel}>
-            {about.badges.map((b) => <li class="lc-badge lc-badge--solid">{b}</li>)}
+          <ul class="lh-section__proof lc-dots" role="list" aria-label={t.ui.badgesLabel}>
+            {about.badges.map((b) => <li class="lc-dot">{b}</li>)}
           </ul>
           {
             /* La bio non è più un paragrafo: è tagliata a fine frase in tre
@@ -566,9 +566,9 @@ const indexItems = [
               {/* La riga di sintesi: badge pieni del design system. Su desktop
                   sta qui, dopo il testo; su telefono il CSS la porta sotto il
                   ruolo (lab-home.css). Contenuti in lab-copy.ts. */}
-              <ul class="lh-section__proof" role="list" aria-label={t.ui.badgesLabel}>
+              <ul class="lh-section__proof lc-dots" role="list" aria-label={t.ui.badgesLabel}>
                 {s.badges.map((b) => (
-                  <li class="lc-badge lc-badge--solid">{b}</li>
+                  <li class="lc-dot">{b}</li>
                 ))}
               </ul>
               <div class="lh-section__actions">
@@ -679,7 +679,7 @@ const indexItems = [
               <li class="lc-voice about-voices__card" style={`--stack-i:${i}`}>
                 <blockquote class="lc-voice__quote">{f.quote}</blockquote>
                 <p class="lc-voice__who">
-                  <span class="lc-badge lc-badge--solid">{f.name}</span>
+                  <span class="lc-dot">{f.name}</span>
                   {f.role && <span class="lc-voice__role">{f.role}</span>}
                 </p>
               </li>

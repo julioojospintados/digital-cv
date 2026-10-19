@@ -1509,9 +1509,10 @@ floating-menu {
 }
 
 .lc-voice__who {
-  /* Il nome è un badge pieno, il ruolo testo accanto (Giulio, 2026-10-14):
-     la firma si riconosce scorrendo. Uguale nella sezione «Le voci» della
-     pagina CV e nella modale «Dicono di me» dell'ingresso. */
+  /* Il nome col quadratino dell'elenco (lc-dot), il ruolo testo accanto:
+     la firma si riconosce scorrendo. Era un badge pieno dal 2026-10-14 al
+     2026-10-19, tolto con gli altri perché sembrava un bottone. Uguale
+     nella sezione «Le voci» della pagina CV e nella modale «Dicono di me». */
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -1520,6 +1521,12 @@ floating-menu {
   font-size: var(--fs-14);
   font-weight: 600;
   color: var(--lc-ink, var(--lh-ink));
+}
+
+/* Nella firma il nome resta nel carattere della firma (Lexend, 14px, 600),
+   non nel mono dell'elenco: è un nome, non una voce di elenco. */
+.lc-voice__who .lc-dot {
+  font: inherit;
 }
 
 /* Il ruolo di chi parla è ciò che dà peso alla frase: sta a --fs-14 come il
@@ -1645,24 +1652,41 @@ floating-menu {
   }
 }
 
-.lc-badge {
-  display: inline-flex;
-  align-items: center;
-  min-height: 1.5rem;
-  padding: 0.1875rem var(--size-8);
-  border: 1px solid var(--color-accent);
-  border-radius: var(--radius-4);
-  background: transparent;
-  color: var(--color-accent-text);
-  font-family: var(--font-sans);
-  font-size: var(--fs-12);
-  font-weight: 800;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  white-space: nowrap;
+/* ── L'elenco col punto (lc-dots, lc-dot) ─────────────────────────────────
+   Dal 2026-10-19 al posto dei badge pieni (lc-badge, lc-badge--solid), che
+   la gente provava a toccare: avevano lo stesso trattamento del bottone
+   principale (fondo nell'accento, testo scuro, grassetto) e a un metro di
+   distanza non si distinguevano. Regola che ne discende, per tutto il sito:
+   il pieno nel colore della lente spetta solo a ciò che si tocca.
+
+   Qui non c'è contenitore — né fondo, né bordo, né angoli — e quindi niente
+   che dica «toccami». Il quadratino è un segno da elenco, nel colore della
+   lente; il testo è nel crema della pagina, mono come gli occhielli.
+   Il quadratino è decorazione: il significato sta tutto nella parola. */
+.lc-dots {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: var(--size-16);
+  row-gap: var(--size-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
-.lc-badge--solid {
+.lc-dot {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--size-6);
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  line-height: 1.5;
+  color: var(--lc-ink, var(--lh-ink, var(--color-text-primary)));
+}
+
+.lc-dot::before {
+  content: "";
+  flex: none;
+  width: var(--size-6);
+  height: var(--size-6);
   background: var(--color-accent);
-  color: var(--lc-on-accent, var(--color-on-accent));
 }

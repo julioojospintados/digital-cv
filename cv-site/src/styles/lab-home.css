@@ -1017,9 +1017,9 @@ html[data-lh-armed] .lh-obj {
 }
 
 /* ── La riga di sintesi ──────────────────────────────────────────────────
-   Una fila di badge pieni sotto il paragrafo (lab-copy.ts § badges): il
-   componente .lc-badge--solid di global.css. Fino al 2026-10-13 solo il
-   primo era pieno e gli altri a contorno; Giulio li ha voluti tutti pieni. Prima è stata una riga di «prove»
+   Un elenco col punto sotto il paragrafo (lab-copy.ts § badges): il
+   componente .lc-dots di global.css, dal 2026-10-19. Prima era una fila di
+   badge pieni, che venivano scambiati per bottoni: vedi global.css. Prima è stata una riga di «prove»
    in testo mono e poi una fila di chip, bocciate tutte e due: la prima non
    sembrava un componente, la seconda si leggeva come un elenco da scorrere.
    Su telefono la riga c'è, più compatta e sotto il ruolo: vedi § «Le schede
@@ -1061,15 +1061,9 @@ html[data-lh-armed] .lh-obj {
 
   .lh-section__proof {
     display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: var(--size-8);
-    margin: 0;
-    padding: 0;
-    list-style: none;
   }
 
-  /* Il badge prende gli accenti del sistema (--color-accent e
+  /* Il quadratino prende gli accenti del sistema (--color-accent e
      --color-accent-text), che sono quelli della pagina: qui ogni scheda ha
      la sua lente, quindi li si riporta ai suoi. */
   :is(.lh-section[data-mode], .lh-section--about) .lh-section__proof {
@@ -1519,22 +1513,9 @@ html[data-lh-armed] .lh-obj {
     align-self: center;
   }
 
-  /* I badge: pieni come su desktop, più compatti (11px, gap 4px) perché
-     anche gli otto della lente Dev stiano in due righe a 390px. */
+  /* La riga di sintesi sotto il ruolo: l'elenco col punto va a capo da sé. */
   .lh-section__proof {
     display: flex;
-    flex-wrap: wrap;
-    gap: var(--size-4);
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  .lh-section__proof .lc-badge {
-    min-height: var(--size-20);
-    padding: 0.125rem var(--size-6);
-    font-size: 0.6875rem;
-    letter-spacing: 0.06em;
   }
 
   :is(.lh-section[data-mode], .lh-section--about) .lh-section__proof {

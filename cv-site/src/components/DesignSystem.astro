@@ -633,6 +633,7 @@ const NAV = [
       },
       { id: "lente-chip", label: it ? "Chip e il comando +N" : "Chips and the +N control" },
       { id: "lente-badge-ai", label: it ? "Badge AI" : "AI badge" },
+      { id: "elenco-punto", label: it ? "Elenco col punto" : "Dot list" },
       { id: "lente-cronologia", label: it ? "Cronologia completa" : "Full timeline" },
       { id: "lente-corsie", label: it ? "Corsie e barre" : "Lanes and bars" },
       { id: "lente-voci", label: it ? "Le voci" : "The voices" },
@@ -769,6 +770,7 @@ const CATEGORIES = [
       "lente-esperienza",
       "lente-chip",
       "lente-badge-ai",
+      "elenco-punto",
       "lente-voci",
       "lente-clienti",
       "lente-contatti",
@@ -1588,13 +1590,13 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
                       : "By nature I try to solve problems. That professional bias led me to UX/UI and to pairing it with aesthetics."
                   }
                 </p>
-                <ul class="lh-section__proof" role="list" data-ds-part="7">
-                  <li class="lc-badge lc-badge--solid">IBM UX Certificate</li>
-                  <li class="lc-badge lc-badge--solid">Design System</li>
-                  <li class="lc-badge lc-badge--solid">UX Research</li>
-                  <li class="lc-badge lc-badge--solid">Figma</li>
-                  <li class="lc-badge lc-badge--solid">WCAG AA</li>
-                  <li class="lc-badge lc-badge--solid">{it ? "Fotografia" : "Photography"}</li>
+                <ul class="lh-section__proof lc-dots" role="list" data-ds-part="7">
+                  <li class="lc-dot">IBM UX Certificate</li>
+                  <li class="lc-dot">Design System</li>
+                  <li class="lc-dot">UX Research</li>
+                  <li class="lc-dot">Figma</li>
+                  <li class="lc-dot">WCAG AA</li>
+                  <li class="lc-dot">{it ? "Fotografia" : "Photography"}</li>
                 </ul>
                 <div class="lh-section__actions" data-ds-part="5">
                   <a class="lh-cta" href="#ingresso-sezione-lente">GO to Web & UX Designer</a>
@@ -1695,8 +1697,8 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
               <span class="ds-anatomy__role"
                 >{
                   it
-                    ? "La riga di sintesi: una fila di badge pieni, da cinque a otto secondo la lente, che va a capo da sé. Titoli riconoscibili (una certificazione, un metodo, un linguaggio), non numeri senza contesto. Su desktop sta dopo il testo. Su telefono la scheda cambia ordine: titolo · ruolo · badge (più compatti, 11px) · testo · bottoni in fondo, dove arriva il pollice. L'oggetto, dal 2026-10-15, sta dietro al testo al 12%, piccolo (metà della larghezza al massimo) e a centro-destra, perché grande e al centro si leggeva come un secondo contenuto: fra testo e bottoni prendeva solo lo spazio che avanzava, e dove il testo è lungo spariva. 12% e non di più perché è il massimo misurato a cui nessuna scritta scende sotto 4,5:1. Sui telefoni bassi i bottoni seguono il testo da soli, senza una regola a parte. Solo nella scheda Web & UX, sotto i due bottoni, c'è un link testuale al design system (lh-section__more): terzo livello, sottolineato nel colore della lente, alto 44px. Non un terzo bottone: tre bottoni dello stesso peso obbligano a scegliere."
-                    : "The summary row: a row of filled badges, five to eight depending on the lens, wrapping on its own. Recognisable titles (a certification, a method, a language), not numbers without context. On desktop it sits after the text. On phones the card changes order: title · role · badges (more compact, 11px) · text · buttons at the bottom, where the thumb reaches. Since 2026-10-15 the object sits behind the text at 12%, small (half the width at most) and centre-right, because large and centred it read as a second piece of content: between text and buttons it only got the space left over, and where the text is long it disappeared. 12% and no more because it is the highest value measured at which no text drops below 4.5:1. On short phones the buttons follow the text on their own, with no separate rule. Only in the Web & UX card, below the two buttons, a text link leads to the design system (lh-section__more): a third level, underlined in the lens colour, 44px tall. Not a third button: three buttons of equal weight force a choice."
+                    ? "La riga di sintesi: un elenco col punto (lc-dots), da quattro a otto voci secondo la scheda, che va a capo da sé. Fino al 2026-10-19 era una fila di badge pieni, che la gente provava a toccare. Titoli riconoscibili (una certificazione, un metodo, un linguaggio), non numeri senza contesto. Su desktop sta dopo il testo. Su telefono la scheda cambia ordine: titolo · ruolo · badge (mono, 12px) · testo · bottoni in fondo, dove arriva il pollice. L'oggetto, dal 2026-10-15, sta dietro al testo al 12%, piccolo (metà della larghezza al massimo) e a centro-destra, perché grande e al centro si leggeva come un secondo contenuto: fra testo e bottoni prendeva solo lo spazio che avanzava, e dove il testo è lungo spariva. 12% e non di più perché è il massimo misurato a cui nessuna scritta scende sotto 4,5:1. Sui telefoni bassi i bottoni seguono il testo da soli, senza una regola a parte. Solo nella scheda Web & UX, sotto i due bottoni, c'è un link testuale al design system (lh-section__more): terzo livello, sottolineato nel colore della lente, alto 44px. Non un terzo bottone: tre bottoni dello stesso peso obbligano a scegliere."
+                    : "The summary row: a dot list (lc-dots), four to eight items depending on the card, wrapping on its own. Until 2026-10-19 it was a row of filled badges, which people tried to tap. Recognisable titles (a certification, a method, a language), not numbers without context. On desktop it sits after the text. On phones the card changes order: title · role · badges (mono, 12px) · text · buttons at the bottom, where the thumb reaches. Since 2026-10-15 the object sits behind the text at 12%, small (half the width at most) and centre-right, because large and centred it read as a second piece of content: between text and buttons it only got the space left over, and where the text is long it disappeared. 12% and no more because it is the highest value measured at which no text drops below 4.5:1. On short phones the buttons follow the text on their own, with no separate rule. Only in the Web & UX card, below the two buttons, a text link leads to the design system (lh-section__more): a third level, underlined in the lens colour, 44px tall. Not a third button: three buttons of equal weight force a choice."
                 }</span
               >
             </li>
@@ -3786,8 +3788,8 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
         <p class="ds-sub__note">
           {
             it
-              ? "Due misure, e isolate si distinguono appena — 29×17 contro 26×15px, misurato. La differenza vera non è la loro, è del testo a cui stanno accanto: lc-ai segue un titolo a 18px, lc-ai--sm un nome cliente a 14. Per questo qui sotto compaiono nel loro contesto reale, non da sole. Accanto c'è il badge generico (lc-badge, dal 2026-10-13): stessa forma, un altro mestiere. Il badge AI dice «fatto con l'AI»; lc-badge è un titolo in breve. Nelle schede dell'ingresso sono tutti pieni (scelta di Giulio, 2026-10-13): competenze nelle lenti, logistica in «Chi sono» (città, modalità, lingue, disponibilità); la variante a contorno resta per quando serve una gerarchia, come fra i bottoni."
-              : "Two sizes, and isolated they barely differ — 29×17 versus 26×15px, measured. The real difference is not theirs, it belongs to the text beside them: lc-ai follows an 18px title, lc-ai--sm a 14px client name. That is why they show here in their real context, not on their own. Beside them sits the generic badge (lc-badge, since 2026-10-13): same shape, a different job. The AI badge says «done with AI»; lc-badge is a short title. On the entry cards they are all filled (Giulio's call, 2026-10-13): skills in the lenses, logistics in «About me» (city, work mode, languages, availability); the outlined variant stays for when a hierarchy is needed, as between the buttons."
+              ? "Due misure, e isolate si distinguono appena — 29×17 contro 26×15px, misurato. La differenza vera non è la loro, è del testo a cui stanno accanto: lc-ai segue un titolo a 18px, lc-ai--sm un nome cliente a 14. Per questo qui sotto compaiono nel loro contesto reale, non da sole. Qui accanto c'era il badge generico (lc-badge, lc-badge--solid): tolto il 2026-10-19, perché pieno com'era la gente lo scambiava per un bottone. Al suo posto c'è l'elenco col punto (pannello «Elenco col punto»). Da lì viene la regola che il pieno nel colore della lente spetta a ciò che si tocca, e lc-ai è l'unica eccezione rimasta: è una sigla di due lettere attaccata a un titolo, non una fila di voci, ma è ancora pieno ed è una decisione aperta."
+              : "Two sizes, and isolated they barely differ — 29×17 versus 26×15px, measured. The real difference is not theirs, it belongs to the text beside them: lc-ai follows an 18px title, lc-ai--sm a 14px client name. That is why they show here in their real context, not on their own. The generic badge used to sit here too (lc-badge, lc-badge--solid): removed on 2026-10-19 because, filled as it was, people took it for a button. The dot list replaces it (panel «Dot list»). That is where the rule comes from that the lens-coloured fill belongs to what can be tapped, and lc-ai is the one exception left: a two-letter tag stuck to a title, not a row of items, but still filled, and an open decision."
           }
         </p>
         <div class="ds-stage">
@@ -3830,31 +3832,13 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
                   <span class="lc-client__role">Frontend Developer AI-Augmented</span>
                 </p>
               </div>
-              <div class="ds-case">
-                <p class="ds-label">
-                  {
-                    it
-                      ? "il badge generico, nella riga di sintesi della home"
-                      : "the generic badge, in the home summary row"
-                  }
-                </p>
-                <ul
-                  class="lh-section__proof"
-                  role="list"
-                  style="display:flex;gap:0.5rem;flex-wrap:wrap;margin:0;padding:0;list-style:none;"
-                >
-                  <li class="lc-badge lc-badge--solid" data-ds-snippet>AI Workflow</li>
-                  <li class="lc-badge" data-ds-snippet>Design System</li>
-                  <li class="lc-badge">JavaScript</li>
-                </ul>
-              </div>
             </div>
           </div>
         </div>
         <div class="ds-spec">
           <div class="ds-spec__row ds-spec__row--wide">
             <span class="ds-spec__k">{t.specClass}</span>
-            <p class="ds-spec__v"><code>lc-ai · lc-ai--sm · lc-badge · lc-badge--solid</code></p>
+            <p class="ds-spec__v"><code>lc-ai · lc-ai--sm</code></p>
           </div>
           <div class="ds-spec__row">
             <span class="ds-spec__k">{t.specUse}</span>
@@ -3883,6 +3867,95 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
                 it
                   ? "Porta un testo per screen reader che spiega la sigla; due lettere da sole non bastano."
                   : "It carries screen-reader text explaining the acronym; two letters alone are not enough."
+              }
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="ds-panel"
+        data-ds-accent
+        id="elenco-punto"
+        data-ds-panel="elenco-punto"
+        aria-labelledby="elenco-punto-t"
+      >
+        <div class="ds-panel__head">
+          <h2 class="ds-section__title" id="elenco-punto-t">
+            {it ? "Elenco col punto" : "Dot list"}
+          </h2>
+          <span class="ds-panel__group"
+            >{t.secLens}<span class="ds-origin">lc-dots · lc-dot</span></span
+          >
+        </div>
+
+        <p class="ds-sub__note">
+          {
+            it
+              ? "Dal 2026-10-19 al posto dei badge pieni, che la gente provava a toccare: avevano lo stesso trattamento del bottone principale — fondo nell'accento, testo scuro, grassetto — e a un metro di distanza non si distinguevano. Qui non c'è contenitore: né fondo, né bordo, né angoli, quindi niente che dica «toccami». Il quadratino è un segno da elenco nel colore della scheda, il testo è nel crema della pagina e in mono, come gli occhielli. Ne discende una regola per tutto il sito: il pieno nel colore della lente spetta solo a ciò che si tocca."
+              : "Since 2026-10-19 it replaces the filled badges, which people tried to tap: they had the same treatment as the primary button — accent fill, dark text, bold — and from a metre away they could not be told apart. Here there is no container: no fill, no border, no corners, so nothing that says «tap me». The square is a list mark in the card's colour, the text is in the page's cream and in mono, like the eyebrows. A site-wide rule follows: the lens-coloured fill belongs only to what can be tapped."
+          }
+        </p>
+        <div class="ds-stage">
+          <div class="lh">
+            <div class="ds-stage__col">
+              <div class="ds-case">
+                <p class="ds-label">
+                  {it ? "riga di sintesi di una scheda" : "a card's summary row"}
+                </p>
+                <ul class="lc-dots" role="list" data-ds-snippet>
+                  <li class="lc-dot">IBM UX Certificate</li>
+                  <li class="lc-dot">Design System</li>
+                  <li class="lc-dot">UX Research</li>
+                  <li class="lc-dot">Figma</li>
+                  <li class="lc-dot">WCAG AA</li>
+                  <li class="lc-dot">{it ? "Fotografia" : "Photography"}</li>
+                </ul>
+              </div>
+              <div class="ds-case">
+                <p class="ds-label">
+                  {it ? "nella firma di una testimonianza" : "in a testimonial's signature"}
+                </p>
+                <p class="lc-voice__who" style="margin:0;">
+                  <span class="lc-dot">{it ? "Nome Cognome" : "Full Name"}</span>
+                  <span class="lc-voice__role">Product Owner</span>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="ds-spec">
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specClass}</span>
+            <p class="ds-spec__v"><code>lc-dots · lc-dot</code></p>
+          </div>
+          <div class="ds-spec__row">
+            <span class="ds-spec__k">{t.specUse}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Per una fila di voci brevi che non portano da nessuna parte: competenze, soft skill, il nome in una firma. Il colore del quadratino arriva da --color-accent, che ogni scheda riporta al suo."
+                  : "For a row of short items that lead nowhere: skills, soft skills, the name in a signature. The square's colour comes from --color-accent, which each card maps to its own."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--dont">
+            <span class="ds-spec__k">{t.specDont}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Non dargli fondo, bordo o angoli arrotondati: tornerebbe a sembrare un bottone, che è il difetto da cui nasce. Non metterlo su qualcosa che si tocca: per quello ci sono lc-btn e lh-cta."
+                  : "Do not give it a fill, border or rounded corners: it would look like a button again, which is the defect it was born from. Do not use it on something tappable: that is what lc-btn and lh-cta are for."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specA11y}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "È un <ul> con role=list (Safari toglie la semantica di elenco quando list-style è none) e un nome proprio dove serve. Il quadratino è uno pseudo-elemento senza contenuto, quindi non viene letto: il significato sta tutto nella parola. Il testo è nel crema della pagina, sopra 6:1 sul fondo ottanio."
+                  : "It is a <ul> with role=list (Safari drops list semantics when list-style is none) and its own name where needed. The square is a contentless pseudo-element, so it is not read: the meaning is all in the word. The text is in the page's cream, above 6:1 on the teal background."
               }
             </p>
           </div>
@@ -4155,8 +4228,8 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
         <p class="ds-sub__note">
           {
             it
-              ? "L'unico pezzo di pagina che un candidato non può scriversi da solo. Sta dopo le esperienze e non prima: una testimonianza letta senza sapere che cosa ha fatto è un complimento, letta dopo è una conferma. Il testo qui sotto è di esempio — le citazioni vere stanno in cv.ts. Le stesse voci (.lc-voice) compaiono anche nella modale «Dicono di me» dell'ingresso, dentro .about-voices, dove ogni voce è una scheda sticky (.about-voices__card) che si impila sulla precedente e la sfoca, come le sezioni della home e l'indice del portfolio (stack-depth.ts con la modale come contenitore). In tutti e due i posti il nome è un badge pieno (lc-badge--solid dentro .lc-voice__who), per farsi trovare scorrendo."
-              : "The only part of the page a candidate cannot write for himself. It comes after the roles, not before: a testimonial read before knowing what he did is a compliment; read after, it is a confirmation. The text below is a placeholder — the real quotes live in cv.ts. The same voices (.lc-voice) also appear in the entry's «What people say» modal, inside .about-voices, where each voice is a sticky card (.about-voices__card) that stacks on the previous one and blurs it, like the entry sections and the portfolio index (stack-depth.ts with the modal as the scroller). In both places the name is a filled badge (lc-badge--solid inside .lc-voice__who), so it can be found while scanning."
+              ? "L'unico pezzo di pagina che un candidato non può scriversi da solo. Sta dopo le esperienze e non prima: una testimonianza letta senza sapere che cosa ha fatto è un complimento, letta dopo è una conferma. Il testo qui sotto è di esempio — le citazioni vere stanno in cv.ts. Le stesse voci (.lc-voice) compaiono anche nella modale «Dicono di me» dell'ingresso, dentro .about-voices, dove ogni voce è una scheda sticky (.about-voices__card) che si impila sulla precedente e la sfoca, come le sezioni della home e l'indice del portfolio (stack-depth.ts con la modale come contenitore). In tutti e due i posti il nome porta il quadratino dell'elenco (lc-dot dentro .lc-voice__who), nel carattere della firma, per farsi trovare scorrendo. Era un badge pieno fino al 2026-10-19, tolto con gli altri perché sembrava un bottone."
+              : "The only part of the page a candidate cannot write for himself. It comes after the roles, not before: a testimonial read before knowing what he did is a compliment; read after, it is a confirmation. The text below is a placeholder — the real quotes live in cv.ts. The same voices (.lc-voice) also appear in the entry's «What people say» modal, inside .about-voices, where each voice is a sticky card (.about-voices__card) that stacks on the previous one and blurs it, like the entry sections and the portfolio index (stack-depth.ts with the modal as the scroller). In both places the name carries the dot-list square (lc-dot inside .lc-voice__who), in the signature's typeface, so it can be found while scanning. It was a filled badge until 2026-10-19, removed with the others because it looked like a button."
           }
         </p>
         <div class="ds-stage">
@@ -4171,7 +4244,7 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
                   }
                 </blockquote>
                 <p class="lc-voice__who">
-                  <span class="lc-badge lc-badge--solid">{it ? "Nome Cognome" : "Full Name"}</span>
+                  <span class="lc-dot">{it ? "Nome Cognome" : "Full Name"}</span>
                   <span class="lc-voice__role">Product Owner</span>
                 </p>
               </li>
@@ -4184,7 +4257,7 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
                   }
                 </blockquote>
                 <p class="lc-voice__who">
-                  <span class="lc-badge lc-badge--solid">{it ? "Nome Cognome" : "Full Name"}</span>
+                  <span class="lc-dot">{it ? "Nome Cognome" : "Full Name"}</span>
                 </p>
               </li>
             </ul>
