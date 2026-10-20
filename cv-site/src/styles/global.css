@@ -314,6 +314,11 @@ button {
   --line-3: 3px; /* barre d'accento laterali (testimonianze, righe aperte) */
   --focus-ring: 2px; /* spessore dell'anello di fuoco */
   --focus-offset: 3px; /* stacco dell'anello dal bordo dell'elemento */
+  /* Il bersaglio del dito: 44px, la misura di Apple e di WCAG 2.5.5. Il
+     minimo di legge (2.5.8, AA) è 24 e il sito lo rispetta ovunque; questa è
+     la soglia a cui si tocca senza mirare. Usata solo sui puntatori grossi,
+     vedi § "Bersagli da 44px" in fondo. */
+  --hit: 2.75rem;
   /* Il volo dell'oggetto condiviso. Quando parte non lo decide il CSS: lo
      decide la pagina, quando ha finito di nascere — vedi Layout.astro,
      § "L'oggetto in volo aspetta che la pagina sia in piedi". */
@@ -1645,4 +1650,80 @@ body::after {
   width: var(--size-6);
   height: var(--size-6);
   background: var(--color-accent);
+}
+
+/* ── Bersagli da 44px sul touch (2026-10-20) ─────────────────────────────
+   L'agente ux-reviewer ha trovato sui telefoni una dozzina di comandi fra
+   24 e 41px: la chiusura delle modali (36), il cambio lingua (36×24), il
+   «+N» delle competenze (32×26), il GO (31×30), la chiusura della foto
+   ingrandita (40), le voci dell'indice del design system (36). Passavano
+   tutti il minimo di 24px, ma sotto il pollice sono da mirare.
+
+   Due mosse, la stessa per tutti, e solo dove il puntatore è un dito:
+   - i comandi piccoli e isolati tengono il loro disegno e allargano l'area
+     che risponde al tocco con un ::after trasparente, centrato, alto e
+     largo almeno 44px. `:where()` per la posizione: chi è già posizionato
+     (assoluto, fisso) resta com'è, chi non lo è diventa il riferimento;
+   - le voci in colonna (indici del design system, menu delle lenti) crescono
+     davvero fino a 44px: lì un'area allargata finirebbe sulla voce accanto.
+     `:root` davanti alza la specificità sopra le regole dei singoli fogli,
+     che dichiarano già un'altezza minima loro (36px) e arrivano dopo.
+   Il GO sta in uno shadow root e lo stesso ::after lo porta GoLogo.lit.ts.
+   Su desktop col mouse non cambia niente. */
+@media (pointer: coarse) {
+  :where(
+    .lh-mark,
+    .lang-switch__opt,
+    .lh-scroll,
+    .memory-dialog__close,
+    .memory-photo-btn,
+    .photo-lightbox__close,
+    .lc-chip--more,
+    .lc-contacts a,
+    .lc-bar__home,
+    .work-cta__link,
+    .work-back
+  ) {
+    position: relative;
+  }
+
+  :is(
+    .lh-mark,
+    .lang-switch__opt,
+    .lh-scroll,
+    .memory-dialog__close,
+    .memory-photo-btn,
+    .photo-lightbox__close,
+    .lc-chip--more,
+    .lc-contacts a,
+    .lc-bar__home,
+    .work-cta__link,
+    .work-back
+  )::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: max(100%, var(--hit));
+    height: max(100%, var(--hit));
+    translate: -50% -50%;
+  }
+
+  /* Le due lingue stanno attaccate: il bersaglio cresce in altezza, non
+     in larghezza, altrimenti ognuna coprirebbe metà dell'altra. */
+  .lang-switch__opt::after {
+    width: 100%;
+  }
+
+  :root :is(.ds-side__link, .ds-cat__link, .lc-lens__trigger, .lc-lens__opt) {
+    min-height: var(--hit);
+  }
+
+  /* «Approfondisci» in fondo alla lente: link uno per riga, non dentro
+     una frase. */
+  :root .lc-more__list a {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--hit);
+  }
 }

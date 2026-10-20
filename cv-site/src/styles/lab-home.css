@@ -675,13 +675,25 @@ html[data-lh-armed] .lh-obj {
 }
 
 /* Il nome del ruolo ("Project Manager", "Web & UX Designer"): è un nome
-   proprio, non un'etichetta di sistema — sale a 14, non resta al pavimento. */
+   proprio, non un'etichetta di sistema.
+
+   Accento pieno, non --accent-text, e per questo è grande (2026-10-20,
+   scelta di Giulio). A 14px l'arancione schiarito al 70% scendeva fra 4,33
+   e 4,45:1, perché dietro c'è l'alone della scheda; schiarirlo ancora lo
+   spegneva verso il salmone. A 20px in grassetto è testo grande per la
+   WCAG (soglia 18,66px bold, 3:1), e l'arancione del design system ci
+   passa intero: 3,23:1 nel punto peggiore, misurato a 1920×1080. Margine
+   stretto, quindi lo controlla qa:viewports prima di ogni push. Uguale
+   su tutte le schede: una lente con l'occhiello più grande delle altre
+   cambierebbe la gerarchia da una scheda all'altra. Non scendere sotto
+   --fs-20 né sotto il peso 700: si esce dalla soglia del testo grande. */
 .lh-section__eyebrow {
   font-family: var(--font-mono);
-  font-size: var(--fs-14);
-  letter-spacing: 0.2em;
+  font-size: var(--fs-20);
+  font-weight: 700;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--accent-text, var(--accent));
+  color: var(--accent);
   margin-top: -0.25rem;
 }
 
@@ -1138,29 +1150,36 @@ html[data-lh-armed] .lh-obj {
   }
 }
 
+/* Finestra bassa e anche stretta (sotto i 75rem): la colonna di testo a
+   metà larghezza era 448px a 1030, e i due bottoni (466px in italiano, 483
+   in inglese) andavano su due righe. Era quella seconda riga a spingere il
+   link al design system della scheda Web & UX sotto il bordo: 599px su 560
+   in inglese. Il testo prende i tre quinti e l'oggetto i due rimanenti, su
+   tutte e tre le lenti: i bottoni tornano su una riga e il testo si accorcia
+   di qualche riga. La colonna che si allarga segue l'alternanza delle
+   schede: l'oggetto sta a destra nelle dispari (vedi sopra). */
+@media (min-width: 56rem) and (max-width: 74.99rem) and (max-height: 48rem) {
+  .lh-section[data-mode] {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+  }
+
+  .lh-section[data-mode]:nth-child(odd) {
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  }
+}
+
 /* ── Mobile ───────────────────────────────────────────────────────────────
    Qui il layout non si stringe: cambia proprio.
 
    Su desktop gli otto oggetti stanno **attorno** al nome, e il centro resta
-   libero apposta. Su un telefono quel centro libero non esiste — la
-   composizione e il testo occupano la stessa area e si sovrappongono. Non è
-   un problema di misure, è che la disposizione sparsa presuppone una tela
-   larga.
-
-   Quindi su mobile la still-life diventa un vero knolling: gli oggetti
-   scendono **sotto** il testo, in griglia, allineati.
-
-   **La griglia è quella della home vera** (`index-page.css` § .knolling-mob):
-   15 colonne × 2 righe, e la dimensione di ogni oggetto è il numero di
-   colonne che occupa, non una larghezza in vmin. È il motivo per cui lì la
-   composizione funziona e il primo tentativo qui no: con celle uguali il
-   laptop e gli scacchi ricevono lo stesso spazio, e gli scacchi — che sono
-   due pezzi alti — sembrano enormi accanto a tutto il resto.
-
-   Le colonne, i padding di rifinitura e la torcia a 135° sono copiati da lì
-   uno a uno. L'aggancio è `data-obj`, non `nth-child`: la composizione di
-   questa pagina ha un ordine diverso da quello della home, e legare la
-   posizione all'indice significherebbe rompersi al primo riordino. */
+   libero apposta. Su un telefono quel centro libero non esiste. Fino al
+   2026-10-19 la scena diventava una griglia di knolling sotto il testo (15
+   colonne × 2 righe, copiata dalla home di allora); dal 2026-10-19 sul
+   telefono la scena è spenta (`.lh-hero .lh-stage { display: none }`, più
+   sotto) e al suo posto c'è l'indice delle quattro schede (.lh-index). Le
+   regole di quella griglia sono state tolte il 2026-10-20: non le vedeva più
+   nessuno. Sono nella storia di git: il commit dbdbfe0, che ha introdotto
+   l'indice, le ha ancora. */
 
 @media (max-width: 55.99rem) {
   /* ── "Chi sono" e' tornata ───────────────────────────────────
@@ -1248,9 +1267,9 @@ html[data-lh-armed] .lh-obj {
   }
 
   .lh-hero {
-    /* Testo (auto) · oggetti (quello che resta) · invito a scorrere (auto).
-       La riga 1fr è ciò che tiene l'ingresso dentro una schermata: sono gli
-       oggetti a cedere spazio al testo, mai il contrario. */
+    /* Testo (auto) · indice (quello che resta) · invito a scorrere (auto).
+       La riga 1fr è ciò che tiene l'ingresso dentro una schermata: è
+       l'indice a cedere spazio al testo, mai il contrario. */
     grid-template-rows: auto minmax(0, 1fr) auto;
     gap: clamp(var(--size-12), 3vw, var(--size-24));
   }
@@ -1259,129 +1278,9 @@ html[data-lh-armed] .lh-obj {
     order: 1;
   }
 
-  .lh-stage {
-    order: 2;
-    position: static;
-    display: grid;
-    grid-template-columns: repeat(15, 1fr);
-    grid-template-rows: 1fr 1fr;
-    gap: 3px;
-    width: 100%;
-    height: 100%;
-    min-height: 0;
-    align-self: stretch;
-  }
-
-  .lh-obj {
-    /* relative e non static: l'ombra è assoluta e ha bisogno di questo come
-       riferimento, altrimenti si aggancia alla sezione e schizza via. */
-    position: relative;
-    left: auto;
-    top: auto;
-    width: auto;
-    /* Le variabili a 0 invece di `translate: none`: la griglia posiziona già
-       la cella, ma l'atterraggio dell'ingresso continua a poterci sommare il
-       proprio salto (vedi il commento su --lh-tx sopra). */
-    --lh-tx: 0;
-    --lh-ty: 0;
-    /* La parallasse c'è anche qui, ma con una corsa di un ordine di
-       grandezza più corta: 0,375rem contro i 3rem del desktop. Il motivo è
-       geometrico e non estetico — in griglia gli oggetti sono a contatto, e
-       qualche rem li farebbe accavallare, cioè esattamente il difetto che
-       questa disposizione risolve. Sei pixel invece li fanno sembrare
-       appoggiati su un piano che si inclina, che è quello che succede
-       davvero: la sorgente qui è il giroscopio (lab-hero.ts), non il
-       puntatore.
-
-       Niente `rotate` nella formula, a differenza del desktop: in griglia le
-       rotazioni sono spente e la torcia ruota per conto suo, sull'immagine.
-
-       Niente termine `--sy`: lo scroll qui è ad aggancio, salta da una
-       scheda all'altra invece di scorrere, e non c'è un progresso continuo
-       da cui prendere un movimento. */
-    --lh-par-x: 0.375rem;
-    --lh-par-y: 0.3rem;
-    transform: translate3d(
-      calc(var(--mx, 0) * var(--depth) * var(--lh-par-x) * -1),
-      calc(var(--my, 0) * var(--depth) * var(--lh-par-y) * -1),
-      0
-    );
-    /* Come .knoll-wrap nella home: senza questi reset la cella non può
-       scendere sotto il min-content dell'immagine e le righe sforano. */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 0;
-    min-height: 0;
-    /* `will-change` resta spento anche ora che una trasformazione c'è:
-       promuovere otto livelli costa memoria proprio sul dispositivo che ne
-       ha meno, e per sei pixel di corsa il compositore se la cava lo stesso
-       (una `transform` non tocca layout né pittura). Se un giorno si vedrà
-       scattare, questa è la prima leva da provare — non l'ampiezza. */
-    will-change: auto;
-  }
-
-  .lh-obj__img,
-  .lh-obj__shadow {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-  }
-
-  /* Riga 1 — 4+7+4 = 15: il laptop domina il centro */
-  .lh-obj[data-obj="megaphone"] {
-    grid-column: 1 / 5;
-    grid-row: 1;
-  }
-  .lh-obj[data-obj="laptop"] {
-    grid-column: 5 / 12;
-    grid-row: 1;
-  }
-  .lh-obj[data-obj="compass"] {
-    grid-column: 12 / 16;
-    grid-row: 1;
-    padding: 0 10%;
-  }
-
-  /* Riga 2 — torcia dominante, scacchi e pianta piccoli.
-     Pianta e torcia condividono la colonna 3: la pianta sta sopra. */
-  .lh-obj[data-obj="plant"] {
-    grid-column: 1 / 4;
-    grid-row: 2;
-    z-index: 2;
-  }
-  .lh-obj[data-obj="flashlight"] {
-    grid-column: 3 / 8;
-    grid-row: 2;
-    z-index: 1;
-    padding-bottom: 5%;
-  }
-  .lh-obj[data-obj="chess"] {
-    grid-column: 7 / 9;
-    grid-row: 2;
-    padding: 4%;
-  }
-  .lh-obj[data-obj="camera"] {
-    grid-column: 9 / 13;
-    grid-row: 2;
-    padding: 0 8%;
-  }
-  .lh-obj[data-obj="multitool"] {
-    grid-column: 13 / 16;
-    grid-row: 2;
-  }
-
-  /* `rotate` come proprietà a sé, non dentro `transform`: così resta
-     composta con l'eventuale transform e non se lo contende. Stessa scelta
-     della home vera. L'ombra ruota insieme, o si stacca dalla sagoma. */
-  .lh-obj[data-obj="flashlight"] .lh-obj__img,
-  .lh-obj[data-obj="flashlight"] .lh-obj__shadow {
-    rotate: 135deg;
-  }
-
   /* L'invito a scorrere si riduce alla sola parola. La linea verticale è
      un'indicazione di direzione che su un telefono non serve — lì si scorre
-     comunque — e si mangiava spazio che serve agli oggetti. */
+     comunque — e si mangiava spazio che serve all'indice. */
   .lh-scroll {
     order: 3;
     position: static;
@@ -1650,7 +1549,13 @@ html[data-lh-armed] .lh-obj {
    a 0.2 il testo scendeva a 3,9:1 sulla bussola e sul laptop, a 0.14
    l'occhiello oro scendeva a 4,37:1; a 0.12 nessuna scritta va sotto
    4,5:1. Il punto più stretto resta l'occhiello sulla bussola, a 4,52:1.
-   Alzarlo vuol dire rifare quella misura, non spostare un numero. */
+   Alzarlo vuol dire rifare quella misura, non spostare un numero.
+
+   Rifatta il 2026-10-20, ora che la misura è in qa:viewports e guarda il
+   paragrafo intero, non solo le scritte dove l'oggetto cade di solito: a
+   0.12 il testo grigio delle schede Software Developer e AI scendeva a
+   4,48–4,49:1 a 412×800, 390×844 e 384×732. A 0.1 passa ovunque. Stessa
+   opacità per tutte e quattro le schede, e per la bussola di /work. */
 @media (max-width: 55.99rem) {
   :is(.lh-section[data-mode], .lh-section--about) .lh-section__object {
     position: absolute;
@@ -1687,7 +1592,7 @@ html[data-lh-armed] .lh-obj {
     max-height: 26%;
     object-fit: contain;
     filter: none;
-    opacity: var(--lh-obj-ghost, 0.12);
+    opacity: var(--lh-obj-ghost, 0.1);
   }
 
   :is(.lh-section[data-mode], .lh-section--about) .lh-section__object .lh-obj__shadow {
@@ -1869,4 +1774,43 @@ html[data-lh-armed] .lh-obj {
 :root[data-native-snap] [data-lh-anchor] {
   scroll-snap-align: start;
   scroll-snap-stop: always;
+}
+
+/* ── Telefoni bassi: le azioni nella prima schermata (2026-10-20) ─────────
+   Sotto i 700px di altezza (360×640, 320×568, l'iPhone SE da 375×667) le
+   schede delle lenti erano più alte della finestra e i bottoni, in fondo,
+   restavano sotto il bordo: a 320×568 fra 594 e 709px, la Web & UX con il
+   link al design system ancora più giù. Su un telefono basso il pollice non
+   arriva in fondo a una scheda che non c'è ancora.
+
+   Qui, e solo qui, i bottoni salgono subito dopo l'elenco col punto: titolo
+   · ruolo · punti · bottoni · testo. Lo stesso ordine su tutte e tre le
+   lenti, perché la scheda che cambia struttura da sola si legge come un
+   errore. Il testo resta intero e segue: la scheda si ferma col fondo
+   quando è più alta della finestra (vedi la pila, più sotto), quindi si
+   legge scorrendo. «Chi sono» tiene «Scrivimi» in fondo, dopo bio e
+   cassetti: è un contatto, non una porta verso un'altra pagina, e ci sta
+   già con i margini stretti. Margini e spazi si stringono per tutte e
+   quattro. Lo controlla qa:viewports a 360×640 e 320×568. */
+@media (max-width: 55.99rem) and (max-height: 43.75rem) {
+  :is(.lh-section[data-mode], .lh-section--about) {
+    padding-block: var(--size-16);
+    gap: var(--size-12);
+  }
+
+  .lh-section[data-mode] .lh-section__actions {
+    order: 0;
+    margin-top: 0;
+  }
+
+  .lh-section[data-mode] .lh-section__more {
+    order: 0;
+  }
+
+  /* La sigla segue il margine che si è stretto: lasciata al suo posto
+     scendeva fino al ruolo, e il filo della «D» passava dietro le ultime
+     lettere di «WEB & UX DESIGNER» (2,6:1 nel punto peggiore). */
+  :is(.lh-section[data-mode], .lh-section--about) .lh-section__initial {
+    top: calc(var(--size-16) - 0.15em);
+  }
 }

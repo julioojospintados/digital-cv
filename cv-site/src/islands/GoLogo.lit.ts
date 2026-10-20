@@ -39,6 +39,25 @@ class GoLogo extends LitElement {
        Il passo interno resta e non è decorazione: è ciò che tiene l'area
        premibile sopra i 24×24 di 2.5.8 ora che non c'è più un bordo a
        disegnarla. */
+    /* Sul touch l'area che risponde arriva a 44px senza cambiare il
+       disegno: lo stesso ::after trasparente di global.css § "Bersagli da
+       44px", qui perché il bottone sta nello shadow root. */
+    @media (pointer: coarse) {
+      button {
+        position: relative;
+      }
+
+      button::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: max(100%, var(--hit, 2.75rem));
+        height: max(100%, var(--hit, 2.75rem));
+        translate: -50% -50%;
+      }
+    }
+
     button {
       background: transparent;
       border: 0;

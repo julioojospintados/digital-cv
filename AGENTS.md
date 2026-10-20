@@ -502,7 +502,7 @@ scripts/                  ← Root utility scripts (Node)
   qa-design-system.mjs    ← Deterministic gauntlet for /design-system, IT+EN (npm run qa:ds) — see § Verification loop
   qa-parity.mjs           ← IT ↔ EN structural parity on the real pages (npm run qa:parity)
   qa-links.mjs            ← No broken internal links, no page without its counterpart (npm run qa:links)
-  qa-viewports.mjs        ← Real visitor screen sizes (PostHog): entry-card buttons in the first screen, no sideways scroll (npm run qa:viewports)
+  qa-viewports.mjs        ← Real visitor screen sizes (PostHog) + short phones: actions in the first screen, contrast on the real background, 44px touch targets, no sideways scroll (npm run qa:viewports)
   qa-prepush.mjs          ← Builds, serves the build, runs the browser checks above (npm run qa:prepush) — called by .husky/pre-push
   qa-units.mjs            ← No px outside 1/2/3 across cv-site/src (npm run qa:units) — see § Units
   record-demo-playwright.js ← Record the site demo video
@@ -790,7 +790,16 @@ AGENTS.md                 ← This file — tool-agnostic project guide
     on the most common laptop window the entry cards were taller than the
     window and their buttons sat below the edge — every other check measured
     at 1280×900 or 1440×900, where the problem does not exist. When the
-    visitor data changes, update its list.
+    visitor data changes, update its list. Since the second review of
+    2026-10-20 it also measures: the first /work card's invitation, IT/EN,
+    desktop and phones; the eyebrow and paragraph of every entry card
+    against the brightest pixel behind them (3:1 for large text, 4.5:1
+    otherwise — the orange eyebrow passes only because it is 20px bold);
+    that every testimonial fits the «Dicono di me» modal; and, on phones,
+    that every control answers the finger on 44×44px (`--hit`, the
+    `::after` hit areas in global.css). Short phones (375×667, 360×640,
+    320×568) are in its list: there the entry cards and the /work card put
+    their actions before the text.
 
 → `qa:prepush` serves the build on an **ephemeral port bound to 127.0.0.1**, not
   a fixed one. With a fixed port a leftover process from an earlier session can

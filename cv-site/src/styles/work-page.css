@@ -709,6 +709,58 @@
   }
 }
 
+/* ── /work su telefono (2026-10-20) ──────────────────────────────────────
+   Anche qui l'invito della prima card stava sotto il bordo: a 384×732, il
+   telefono più comune nei dati, 773px in inglese. La bussola resta dov'è,
+   intera accanto al paragrafo (è una scelta del 2026-09-04, vedi sopra):
+   - la card perde il minimo in altezza, che su telefono era aria fra il
+     ruolo e l'invito (come su desktop con la finestra bassa);
+   - sui telefoni bassi (sotto i 700px) l'invito sale sotto il nome, prima
+     del ruolo, e la testata si stringe (spazi, interlinea, bussola a 3rem): lo stesso ordine «azioni prima del
+     testo» delle schede dell'ingresso a quelle misure.
+   Lo verifica qa:viewports, ora anche sui telefoni. */
+@media (max-width: 39.99rem) {
+  .work-index-grid > .work-index-card {
+    min-height: 0;
+  }
+}
+
+@media (max-width: 39.99rem) and (max-height: 43.75rem) {
+  .work-main {
+    padding-top: var(--size-8);
+    gap: var(--size-24);
+  }
+
+  .work-index-hero {
+    padding-top: var(--size-8);
+    padding-bottom: var(--size-8);
+  }
+
+  /* Il paragrafo è la parte alta della testata: a 320px, accanto alla
+     bussola, andava su otto righe. Interlinea un po' più stretta e bussola
+     a 3rem (intera, sempre accanto al testo) gliene tolgono una. */
+  .work-index-hero .work-section__text {
+    line-height: 1.55;
+  }
+
+  .work-index-hero__obj {
+    width: 3rem;
+  }
+
+  .work-index-hero__title {
+    margin-bottom: var(--size-8);
+  }
+
+  .work-index-grid > .work-index-card .work-index-card__cta {
+    order: 1;
+    margin-top: 0;
+  }
+
+  .work-index-grid > .work-index-card .work-index-card__role {
+    order: 2;
+  }
+}
+
 .work-index-card {
   position: relative;
   display: flex;

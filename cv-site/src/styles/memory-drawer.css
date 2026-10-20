@@ -578,3 +578,28 @@
     max-height: min(68vh, 36.8rem);
   }
 }
+
+/* Ma non sulle finestre basse (2026-10-20). Al 68% di una finestra da 610px
+   l'area che scorre era alta 313px, e la scheda più lunga anche: a 1030×560
+   restavano 279px per una scheda da 313. Una scheda sticky più alta del suo
+   contenitore non si legge intera, perché la successiva le sale sopra prima
+   che se ne veda il fondo. Sotto i 48rem di altezza la modale torna alta
+   come gli altri cassetti, e ogni scheda ci sta con il suo gradino. Lo
+   controlla qa:viewports. */
+@media (min-width: 40.01rem) and (max-height: 48rem) {
+  #dialog-voices {
+    max-height: min(85vh, 46rem);
+  }
+}
+
+/* Telefoni bassi (sotto i 640px di altezza): niente pila. A 320×568 la
+   testimonianza più lunga è alta 617px in un'area di 466, e una scheda
+   sticky più alta del contenitore viene coperta dalla successiva prima che
+   se ne legga il fondo. Qui le schede scorrono una dopo l'altra come un
+   elenco; stack-depth.ts misura la sovrapposizione dalla geometria, quindi
+   senza sovrapposizione non sfoca niente. */
+@media (max-width: 40rem) and (max-height: 40rem) {
+  .about-voices__card {
+    position: static;
+  }
+}
