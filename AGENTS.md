@@ -502,7 +502,8 @@ scripts/                  ← Root utility scripts (Node)
   qa-design-system.mjs    ← Deterministic gauntlet for /design-system, IT+EN (npm run qa:ds) — see § Verification loop
   qa-parity.mjs           ← IT ↔ EN structural parity on the real pages (npm run qa:parity)
   qa-links.mjs            ← No broken internal links, no page without its counterpart (npm run qa:links)
-  qa-prepush.mjs          ← Builds, serves the build, runs the three above (npm run qa:prepush) — called by .husky/pre-push
+  qa-viewports.mjs        ← Real visitor screen sizes (PostHog): entry-card buttons in the first screen, no sideways scroll (npm run qa:viewports)
+  qa-prepush.mjs          ← Builds, serves the build, runs the browser checks above (npm run qa:prepush) — called by .husky/pre-push
   qa-units.mjs            ← No px outside 1/2/3 across cv-site/src (npm run qa:units) — see § Units
   record-demo-playwright.js ← Record the site demo video
 
@@ -520,6 +521,7 @@ scripts/                  ← Root utility scripts (Node)
 .claude/
   agents/
     cv-recruiter.md       ← Subagent: audits + tailors a CV against a real job description (match %, gaps, salary estimate), generates a targeted CV variant (see scripts/generate-targeted-cv.ts)
+    ux-reviewer.md        ← Subagent: read-only UX/UI review of the built site at real visitor screen sizes (PostHog), IT and EN — triaged report with measured evidence
   skills/                 ← Claude Code skills — mirrors .github/skills, loaded on demand
     knolling-cv/SKILL.md         ← Global project context — load FIRST for any request
     design-system/SKILL.md       ← UI, animations (Emil Kowalski rules), knolling, GSAP, CSS custom properties
@@ -746,7 +748,8 @@ AGENTS.md                 ← This file — tool-agnostic project guide
   | `npm run format:check`          | `npm run qa:prepush`, which builds |
   | `npm test`                      | the site, serves the **real build**|
   | `npm run qa:units`              | and runs `qa:ds` + `qa:showcase` + |
-  | `cd cv-site && npx astro build` | `qa:parity` + `qa:links` on it     |
+  | `cd cv-site && npx astro build` | `qa:parity` + `qa:links` +         |
+  |                                 | `qa:viewports` on it               |
 
   **`qa:ds` is not to be run during ordinary work** — not even after touching
   the showcase. It costs a browser and a server; the pre-push hook is where it
@@ -770,6 +773,15 @@ AGENTS.md                 ← This file — tool-agnostic project guide
     page is named in the built `/design-system`. No browser either. It is the
     enforcement of § "Ogni componente sta in vetrina", and on its first run it
     found 91 undocumented classes across nine components.
+  - `qa:viewports` (`qa-viewports.mjs`) — the screen sizes real visitors use,
+    taken from PostHog, not the comfortable ones: 1366×610 and 1030×560
+    laptop windows, 900×700, 1536×740, ultrawide, plus phones. On every entry
+    card (IT and EN) the buttons must sit inside the first screen, and no main
+    page may scroll sideways. It exists because of a real defect (2026-10-20):
+    on the most common laptop window the entry cards were taller than the
+    window and their buttons sat below the edge — every other check measured
+    at 1280×900 or 1440×900, where the problem does not exist. When the
+    visitor data changes, update its list.
 
 → `qa:prepush` serves the build on an **ephemeral port bound to 127.0.0.1**, not
   a fixed one. With a fixed port a leftover process from an earlier session can

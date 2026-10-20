@@ -20,6 +20,15 @@ Poi carica la skill specializzata pertinente alla richiesta (i puntatori complet
 | `.claude/skills/mcp-architecture/SKILL.md` | backend, MCP tools, Hono, test, cv.ts |
 | `.claude/skills/partnership-strategy/SKILL.md` | offerta Fractional, bio servizi, tono per le aziende, posizionamento |
 
+Agenti (`.claude/agents/`):
+
+- `ux-reviewer` — revisione UX/UI in sola lettura, alle misure di schermo dei
+  visitatori veri (PostHog), IT ed EN, con report Blocker/High/Medium/Nit.
+  Si usa quando Giulio chiede una review UX e **prima di portare su `main`
+  una modifica al layout di una pagina pubblica**. Nato il 2026-10-20: i
+  bottoni delle schede dell'ingresso erano sotto il bordo sul portatile più
+  comune, e nessun controllo misurava a quelle finestre.
+
 Skill di utilità (non di dominio):
 
 - `.claude/skills/verification-loop/SKILL.md` — il gauntlet loop del progetto. **Solo su richiesta esplicita**: caricala quando l'utente la nomina ("gauntlet", "fai il loop", "verifica a fondo", `/verification-loop`), mai di tua iniziativa e mai perché ha detto "verifica" o "controlla". Costa molti token e serve per interventi ampi.

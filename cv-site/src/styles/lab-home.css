@@ -1072,6 +1072,56 @@ html[data-lh-armed] .lh-obj {
   }
 }
 
+/* ── Desktop con la finestra bassa (2026-10-20) ──────────────────────────
+   Il portatile 1366×768 è, nei dati di PostHog, il desktop più comune dopo
+   il 1920×1080, e con le barre del browser la finestra resta alta 560-610px.
+   Lì le schede erano più alte della finestra e i bottoni restavano sotto il
+   bordo: misurato, «Chi sono» a 642px su 610, e a 1030×560 tutte e quattro
+   fra 595 e 673px su 560. Si arrivava ai bottoni scorrendo dentro la
+   scheda, ma la prima schermata di ogni scheda non aveva un'azione.
+
+   Due gradini, perché uno solo non bastava. Il primo tentativo valeva solo
+   sotto i 640px e qa:viewports ha trovato subito altri due casi: 900×700
+   (colonna stretta, testo su più righe) e 1536×740 in inglese, dove «About
+   me» è più lunga e arrivava a 3px dal bordo.
+   - Sotto i 48rem (768px): margini, spaziature e testi compatti (16px), e
+     il titolo segue anche l'altezza, al 9% della finestra.
+   - Sotto i 40rem (640px): il titolo scende al 7%.
+   Sopra i 768px non cambia niente. Lo tiene fermo qa:viewports
+   (scripts/qa-viewports.mjs), nel pre-push, alle misure reali dei visitatori. */
+@media (min-width: 56rem) and (max-height: 48rem) {
+  .lh-section {
+    padding-block: clamp(var(--size-32), 6vh, var(--size-64));
+  }
+
+  .lh-section__copy {
+    gap: var(--size-12);
+  }
+
+  .lh-section__title {
+    font-size: clamp(2.25rem, min(4.6vw, 9vh), 5rem);
+  }
+
+  .lh-section__text,
+  .lh-section--about .about-bio__text {
+    font-size: var(--fs-16);
+  }
+
+  .lh-section--about .about-bio {
+    gap: var(--size-6);
+  }
+
+  .lh-section--about .about-bio__text {
+    line-height: 1.5;
+  }
+}
+
+@media (min-width: 56rem) and (max-height: 40rem) {
+  .lh-section__title {
+    font-size: clamp(2.25rem, min(4.6vw, 7vh), 5rem);
+  }
+}
+
 /* ── Mobile ───────────────────────────────────────────────────────────────
    Qui il layout non si stringe: cambia proprio.
 

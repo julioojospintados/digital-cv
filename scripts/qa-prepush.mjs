@@ -121,6 +121,7 @@ for (const [nome, script] of [
   ["copertura della vetrina", "scripts/qa-showcase-coverage.mjs"],
   ["parità IT ↔ EN", "scripts/qa-parity.mjs"],
   ["link interni", "scripts/qa-links.mjs"],
+  ["misure reali dei visitatori", "scripts/qa-viewports.mjs"],
 ]) {
   console.log(`\n  ── ${nome} ──`);
   const code = await run("node", [join(ROOT, script)], { cwd: ROOT, env });
