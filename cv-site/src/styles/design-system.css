@@ -33,6 +33,8 @@
   --ds-panel: rgba(255, 255, 255, 0.03);
   --ds-gutter: clamp(1.25rem, 4vw, 3rem);
   --ds-maxw: 76rem;
+  /* Altezza della barra in cima: la legge l'indice laterale (.ds-side). */
+  --ds-bar-h: 4rem;
 
   min-height: 100vh;
   background: var(--color-bg);
@@ -76,6 +78,10 @@
 }
 
 .ds-bar {
+  /* Altezza dichiarata, non quella che viene dal contenuto: la usa l'indice
+     laterale per fermarsi sotto la barra (vedi .ds-side). 4rem tiene il logo
+     GO (2.375rem) col suo passo verticale, bordo compreso. */
+  min-height: var(--ds-bar-h);
   position: sticky;
   top: 0;
   z-index: 20;
@@ -153,11 +159,14 @@
 @media (min-width: 60rem) {
   .ds-side {
     position: sticky;
-    /* 3.5rem = altezza della barra in cima: l'indice si ferma sotto di lei
-       invece di scorrerci dietro. Il padding sopra gli dà lo stesso respiro
-       che ha il pannello accanto, che parte più in basso. */
-    top: 3.5rem;
-    max-height: calc(100vh - 5.5rem);
+    /* Si ferma sotto la barra, non dietro: per questo legge la sua altezza
+       da --ds-bar-h invece di avere un numero suo. Era 3.5rem scritto a mano,
+       giusto per la barra di prima; quando la barra è diventata WorkNav
+       (2026-10-14) è salita a 62,6px e l'indice finiva 7px sotto di lei —
+       qa:ds lo vedeva solo quando la pagina partiva dall'alto. Il padding
+       sopra gli dà lo stesso respiro che ha il pannello accanto. */
+    top: var(--ds-bar-h);
+    max-height: calc(100vh - var(--ds-bar-h) - var(--size-32));
     overflow-y: auto;
     overscroll-behavior: contain;
     padding-top: var(--size-32);
