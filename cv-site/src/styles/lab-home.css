@@ -169,7 +169,7 @@
    l'unica cosa che dice a chi naviga da tastiera dove si trova. */
 .lh :focus-visible,
 .lh .is-focus {
-  outline: 2px solid var(--lh-ink);
+  outline: var(--focus-ring) solid var(--lh-ink);
   outline-offset: var(--size-4);
 }
 
@@ -527,7 +527,7 @@ html[data-lh-armed] .lh-obj {
 }
 
 .lh-scroll__line {
-  width: 1px;
+  width: var(--line-1);
   height: 2.5rem;
   background: linear-gradient(var(--lh-accent), transparent);
 }
@@ -609,7 +609,7 @@ html[data-lh-armed] .lh-obj {
   line-height: 0.8;
   letter-spacing: -0.05em;
   color: transparent;
-  -webkit-text-stroke: 1px color-mix(in srgb, var(--accent) 32%, transparent);
+  -webkit-text-stroke: var(--line-1) color-mix(in srgb, var(--accent) 32%, transparent);
   pointer-events: none;
   user-select: none;
 }
@@ -791,7 +791,7 @@ html[data-lh-armed] .lh-obj {
   gap: var(--size-12);
   width: 100%;
   padding: var(--size-12) var(--size-16);
-  border: 1px solid var(--color-border);
+  border: var(--line-1) solid var(--color-border);
   border-radius: var(--radius-4);
   background: rgba(255, 255, 255, 0.04);
   color: inherit;
@@ -808,8 +808,8 @@ html[data-lh-armed] .lh-obj {
 }
 
 .about-card__b:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 2px;
+  outline: var(--focus-ring) solid var(--accent);
+  outline-offset: var(--line-2);
 }
 
 .about-card__t {
@@ -882,7 +882,7 @@ html[data-lh-armed] .lh-obj {
   padding: 0.8rem 1.35rem;
   background: var(--accent);
   color: rgba(10, 38, 34, 1);
-  border: 1px solid var(--accent);
+  border: var(--line-1) solid var(--accent);
   transition:
     filter var(--duration-state) var(--ease-standard),
     transform var(--duration-micro) var(--ease-standard);
@@ -1492,8 +1492,8 @@ html[data-lh-armed] .lh-obj {
 }
 
 .lh-section__more:focus-visible {
-  outline: 2px solid var(--lh-ink);
-  outline-offset: 3px;
+  outline: var(--focus-ring) solid var(--lh-ink);
+  outline-offset: var(--focus-offset);
   border-radius: var(--radius-4);
 }
 
@@ -1777,8 +1777,8 @@ html[data-lh-armed] .lh-obj {
 }
 
 .lh-index__item:focus-visible {
-  outline: 2px solid currentColor;
-  outline-offset: 2px;
+  outline: var(--focus-ring) solid currentColor;
+  outline-offset: var(--line-2);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1822,7 +1822,7 @@ html[data-lh-armed] .lh-obj {
   top: var(--lh-stack-top, 0);
   z-index: 1;
   min-height: calc(100svh - var(--lh-stack-i, 0) * 0.8rem);
-  border-top: 1px solid var(--lh-line);
+  border-top: var(--line-1) solid var(--lh-line);
   border-radius: var(--radius-16) var(--radius-16) 0 0;
   max-width: none;
   padding-inline: max(var(--lh-gutter), calc((100% - 82rem) / 2 + var(--lh-gutter)));

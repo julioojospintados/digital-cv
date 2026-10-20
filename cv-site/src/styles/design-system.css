@@ -87,7 +87,7 @@
   /* Opaca: sotto ci scorrono le demo, e una barra translucida sopra dei
      componenti in dimostrazione ne falsa i colori. */
   background: var(--color-bg);
-  border-bottom: 1px solid var(--ds-line);
+  border-bottom: var(--line-1) solid var(--ds-line);
 }
 
 /* Dentro il guscio la barra di /work rinuncia alla sua misura e al suo
@@ -135,7 +135,7 @@
   font-family: var(--font-mono);
   font-size: var(--fs-12);
   padding: var(--size-4) 0.6rem;
-  border: 1px solid var(--ds-line-strong);
+  border: var(--line-1) solid var(--ds-line-strong);
   border-radius: 999rem;
   color: var(--ds-muted);
 }
@@ -163,7 +163,7 @@
     padding-top: var(--size-32);
     padding-right: var(--size-16);
     padding-bottom: var(--size-32);
-    border-right: 1px solid var(--ds-line);
+    border-right: var(--line-1) solid var(--ds-line);
     /* La colonna è alta il doppio abbondante del riquadro che la contiene, e
        le barre a sovrapposizione di Chrome su Linux sono invisibili finché
        non la si tocca: senza queste due righe l'indice sembrava un elenco
@@ -202,7 +202,7 @@
   gap: var(--size-12);
   min-height: 2.75rem;
   padding: 0 0.9rem;
-  border: 1px solid var(--ds-line-strong);
+  border: var(--line-1) solid var(--ds-line-strong);
   border-radius: var(--radius-4);
   background: var(--ds-panel);
   color: var(--ds-ink);
@@ -241,7 +241,7 @@
      Il divisore sopra fa il resto del lavoro. */
   margin-top: var(--size-32);
   padding-top: var(--size-20);
-  border-top: 1px solid var(--ds-line);
+  border-top: var(--line-1) solid var(--ds-line);
 }
 
 .ds-side__group:first-of-type {
@@ -285,7 +285,7 @@
   min-height: 2.25rem;
   padding: 0.4rem 0.7rem;
   border: 0;
-  border-left: 2px solid transparent;
+  border-left: var(--line-2) solid transparent;
   border-radius: 0 var(--radius-4) var(--radius-4) 0;
   background: transparent;
   color: var(--ds-muted);
@@ -339,7 +339,7 @@
   gap: 0.35rem;
   padding-bottom: 0.85rem;
   margin-bottom: var(--size-24);
-  border-bottom: 1px solid var(--ds-line);
+  border-bottom: var(--line-1) solid var(--ds-line);
 }
 
 @media (min-width: 48rem) {
@@ -363,7 +363,7 @@
 
 .ds-section {
   padding-block: clamp(var(--size-32), 6vh, 3.5rem);
-  border-top: 1px solid var(--ds-line);
+  border-top: var(--line-1) solid var(--ds-line);
 }
 
 .ds-section__title {
@@ -409,7 +409,7 @@
   font-family: var(--font-mono);
   font-size: var(--fs-12);
   color: var(--ds-muted);
-  border: 1px solid var(--ds-line);
+  border: var(--line-1) solid var(--ds-line);
   border-radius: var(--radius-4);
   padding: 0.1rem 0.4rem;
   margin-left: var(--size-8);
@@ -428,7 +428,7 @@
      confrontando lo stile calcolato di 180 classi fra sito e vetrina. */
   color: var(--color-text-primary);
   padding: var(--size-24);
-  border: 1px solid var(--ds-line);
+  border: var(--line-1) solid var(--ds-line);
   border-radius: var(--radius-16);
   background: var(--ds-panel);
   /* Le demo larghe scorrono dentro il proprio riquadro: la pagina non deve
@@ -555,7 +555,7 @@
 }
 
 .ds-swatch {
-  border: 1px solid var(--ds-line);
+  border: var(--line-1) solid var(--ds-line);
   border-radius: var(--radius-4);
   overflow: hidden;
   background: rgba(0, 0, 0, 0.15);
@@ -611,7 +611,7 @@
 
 .ds-table-wrap {
   overflow-x: auto;
-  border: 1px solid var(--ds-line);
+  border: var(--line-1) solid var(--ds-line);
   border-radius: var(--radius-16);
 }
 
@@ -628,7 +628,7 @@
 .ds-table td {
   text-align: left;
   padding: 0.6rem 0.85rem;
-  border-bottom: 1px solid var(--ds-line);
+  border-bottom: var(--line-1) solid var(--ds-line);
   vertical-align: top;
 }
 
@@ -682,7 +682,7 @@
   gap: var(--size-16);
   align-items: baseline;
   padding-bottom: 0.85rem;
-  border-bottom: 1px solid var(--ds-line);
+  border-bottom: var(--line-1) solid var(--ds-line);
 }
 
 .ds-type__meta {
@@ -712,7 +712,7 @@
 .ds-callout {
   margin-top: var(--size-16);
   padding: 0.9rem 1.1rem;
-  border-left: 3px solid var(--color-accent);
+  border-left: var(--line-3) solid var(--color-accent);
   border-radius: 0 var(--radius-4) var(--radius-4) 0;
   background: rgba(255, 255, 255, 0.04);
   font-size: var(--fs-14);
@@ -749,7 +749,7 @@
   /* 2.75rem = 44px: sopra la soglia di 2.5.8 con margine. */
   min-height: 2.75rem;
   padding: 0 0.9rem;
-  border: 1px solid var(--ds-line-strong);
+  border: var(--line-1) solid var(--ds-line-strong);
   border-radius: 999rem;
   background: transparent;
   color: var(--ds-ink);
@@ -829,7 +829,7 @@
 .ds-phone {
   width: 100%;
   max-width: 20rem;
-  border: 1px solid var(--ds-line-strong);
+  border: var(--line-1) solid var(--ds-line-strong);
   border-radius: var(--radius-16);
   padding: var(--size-16);
   background: rgba(0, 0, 0, 0.12);
@@ -856,7 +856,7 @@
 .ds-lensbar {
   margin-bottom: var(--size-32);
   padding-bottom: var(--size-20);
-  border-bottom: 1px solid var(--ds-line);
+  border-bottom: var(--line-1) solid var(--ds-line);
 }
 
 .ds-lensbar[hidden] {
@@ -892,7 +892,7 @@
 .ds-intro__why {
   margin-top: var(--size-32);
   padding-top: var(--size-24);
-  border-top: 1px solid var(--ds-line);
+  border-top: var(--line-1) solid var(--ds-line);
   max-width: 60rem;
 }
 
@@ -1045,7 +1045,7 @@
   flex-direction: column;
   gap: var(--size-8);
   padding: var(--size-16) var(--size-20);
-  border: 1px solid var(--ds-line);
+  border: var(--line-1) solid var(--ds-line);
   border-radius: var(--radius-16);
   background: var(--ds-panel);
   transition:
@@ -1141,7 +1141,7 @@
   align-items: center;
   min-height: 2.25rem;
   padding: 0.3rem 0.75rem;
-  border: 1px solid var(--color-accent);
+  border: var(--line-1) solid var(--color-accent);
   border-radius: 999rem;
   /* Niente velo d'accento sotto il testo: misurato, l'8% di arancione
      portava l'etichetta a 4,27:1, sotto soglia. */
@@ -1159,8 +1159,8 @@
 }
 
 .ds-cat__link:focus-visible {
-  outline: 2px solid var(--ds-ink);
-  outline-offset: 2px;
+  outline: var(--focus-ring) solid var(--ds-ink);
+  outline-offset: var(--line-2);
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -1196,7 +1196,7 @@
 
 .ds-fact {
   padding: 0.9rem var(--size-16);
-  border: 1px solid var(--ds-line);
+  border: var(--line-1) solid var(--ds-line);
   border-radius: var(--radius-16);
   background: var(--ds-panel);
 }
@@ -1254,7 +1254,7 @@
   gap: 0.85rem;
   margin-top: var(--size-20);
   padding: var(--size-16) 1.15rem;
-  border: 1px solid var(--ds-line);
+  border: var(--line-1) solid var(--ds-line);
   border-radius: var(--radius-16);
   background: rgba(0, 0, 0, 0.12);
 }
@@ -1297,7 +1297,7 @@
   font-family: var(--font-mono);
   font-size: var(--fs-12);
   padding: 0.1rem 0.35rem;
-  border: 1px solid var(--ds-line);
+  border: var(--line-1) solid var(--ds-line);
   border-radius: var(--radius-4);
   background: rgba(255, 255, 255, 0.04);
   white-space: nowrap;
@@ -1322,7 +1322,7 @@
 
 .ds-code {
   margin-top: var(--size-20);
-  border: 1px solid var(--ds-line);
+  border: var(--line-1) solid var(--ds-line);
   border-radius: var(--radius-16);
   background: rgba(0, 0, 0, 0.22);
   overflow: hidden;
@@ -1334,7 +1334,7 @@
   justify-content: space-between;
   gap: var(--size-16);
   padding: 0.6rem var(--size-12) 0.6rem 1.15rem;
-  border-bottom: 1px solid var(--ds-line);
+  border-bottom: var(--line-1) solid var(--ds-line);
 }
 
 .ds-code__label {
@@ -1351,7 +1351,7 @@
 .ds-code__copy {
   flex: none;
   padding: 0.35rem 0.8rem;
-  border: 1px solid var(--ds-line-strong);
+  border: var(--line-1) solid var(--ds-line-strong);
   border-radius: var(--radius-4);
   background: transparent;
   color: var(--ds-ink);
@@ -1417,7 +1417,7 @@
 .ds-anatomy {
   margin-top: var(--size-20);
   padding: var(--size-16) 1.15rem;
-  border: 1px solid var(--ds-line);
+  border: var(--line-1) solid var(--ds-line);
   border-radius: var(--radius-16);
   background: rgba(0, 0, 0, 0.12);
 }
@@ -1443,7 +1443,7 @@
 .ds-anatomy__toggle {
   flex: none;
   padding: 0.35rem 0.8rem;
-  border: 1px solid var(--ds-line-strong);
+  border: var(--line-1) solid var(--ds-line-strong);
   border-radius: var(--radius-4);
   background: transparent;
   color: var(--ds-ink);
@@ -1521,7 +1521,7 @@
   justify-content: center;
   width: 1.5rem;
   height: 1.5rem;
-  border: 1px solid var(--ds-line-strong);
+  border: var(--line-1) solid var(--ds-line-strong);
   border-radius: 999rem;
   font-family: var(--font-mono);
   font-size: var(--fs-10);
@@ -1550,8 +1550,8 @@
    per un bordo del componente. */
 .ds-panel[data-anatomy] .ds-stage [data-ds-part] {
   position: relative;
-  outline: 1px dashed var(--ds-line-strong);
-  outline-offset: 3px;
+  outline: var(--line-1) dashed var(--ds-line-strong);
+  outline-offset: var(--focus-offset);
 }
 
 .ds-anatomy__badge {
@@ -1570,7 +1570,7 @@
      sopra qualunque componente, compresi quelli che l'accento ce l'hanno
      già addosso. */
   background: rgba(8, 40, 36, 1);
-  border: 1px solid var(--ds-line-strong);
+  border: var(--line-1) solid var(--ds-line-strong);
   color: var(--ds-ink);
   font-family: var(--font-mono);
   font-size: var(--fs-10);
@@ -1616,7 +1616,7 @@
 }
 
 .ds-matrix thead th {
-  border-bottom: 1px solid var(--ds-line);
+  border-bottom: var(--line-1) solid var(--ds-line);
 }
 
 .ds-matrix tbody th {
@@ -1674,7 +1674,7 @@
   display: block;
   height: 1.5rem;
   border-radius: var(--radius-4);
-  border: 1px solid var(--ds-line);
+  border: var(--line-1) solid var(--ds-line);
   background: rgba(0, 0, 0, 0.14);
   overflow: hidden;
 }
@@ -1858,7 +1858,7 @@
   /* Ritaglia: su schermi stretti il punto di partenza esce dal riquadro, e
      deve uscire dal riquadro — non dalla pagina. */
   overflow: hidden;
-  border: 1px solid var(--ds-line);
+  border: var(--line-1) solid var(--ds-line);
   border-radius: var(--radius-16);
 }
 
@@ -1870,7 +1870,7 @@
   left: 4%;
   width: 26%;
   aspect-ratio: 327 / 221;
-  border: 1px dashed color-mix(in srgb, var(--color-accent) 45%, transparent);
+  border: var(--line-1) dashed color-mix(in srgb, var(--color-accent) 45%, transparent);
   border-radius: var(--radius-4);
 }
 

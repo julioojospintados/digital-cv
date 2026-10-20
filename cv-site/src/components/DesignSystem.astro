@@ -579,6 +579,7 @@ const NAV = [
       { id: "colore", label: t.secColour },
       { id: "tipografia", label: t.secType },
       { id: "forma", label: t.secShape },
+      { id: "spessori", label: it ? "Spessori" : "Line widths" },
       { id: "movimento", label: t.secMotionTok },
       { id: "logo", label: it ? "Il logo" : "The logo" },
     ],
@@ -703,7 +704,7 @@ const CATEGORIES = [
     desc: it
       ? "Colore, tipografia, forma, movimento e le regole di accessibilità che valgono ovunque."
       : "Colour, type, shape, motion and the accessibility rules that apply everywhere.",
-    ids: ["colore", "tipografia", "forma", "movimento", "logo", "accessibilita"],
+    ids: ["colore", "tipografia", "forma", "spessori", "movimento", "logo", "accessibilita"],
   },
   {
     key: "layout",
@@ -1318,6 +1319,82 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
                 : "On a rectangular element 50% yields an ellipse that deforms as the proportions change; a huge radius (999rem) is clamped to half the short side and yields a stadium, correct at any size. 50% is right only where the element is square — in this system that is lens dots and markers, 7 occurrences; the pill appears twice."
             }
           </p>
+        </div>
+      </section>
+
+      <section class="ds-panel" id="spessori" data-ds-panel="spessori" aria-labelledby="spessori-t">
+        <div class="ds-panel__head">
+          <h2 class="ds-section__title" id="spessori-t">{it ? "Spessori" : "Line widths"}</h2>
+          <span class="ds-panel__group">{t.secFoundations}</span>
+        </div>
+
+        <p class="ds-sub__note">
+          {
+            it
+              ? "Gli unici px del sistema, e restano px di proposito: un filo non deve crescere col testo, o a 200% diventa una barra. Dal 2026-10-20 hanno un nome per ruolo, definito in global.css: cambiare lo spessore dell'anello di fuoco è una riga, non una caccia a tutti i 2px del sito. Il 3 non è la somma di 1 e 2: è un valore suo, con due mestieri suoi. qa:units ferma il push se un bordo o un anello è scritto a mano in px."
+              : "The only px in the system, and px on purpose: a hairline must not grow with the text, or at 200% it becomes a bar. Since 2026-10-20 they are named by role, in global.css: changing the focus ring's width is one line, not a hunt for every 2px on the site. The 3 is not 1 plus 2: it is a value of its own, with two jobs of its own. qa:units stops the push if a border or ring is written by hand in px."
+          }
+        </p>
+        <div class="ds-stage">
+          <div class="ds-shapes">
+            <div class="ds-shape">
+              <div style="width:7rem;height:2.5rem;display:flex;align-items:center;">
+                <div style="width:100%;border-top:var(--line-1) solid var(--color-accent);"></div>
+              </div>
+              <code>--line-1 · 1px</code>
+              <span class="ds-shape__role">
+                {
+                  it
+                    ? "Bordi, divisori, fili, contorno delle sigle."
+                    : "Borders, dividers, hairlines, outlined initials."
+                }
+              </span>
+            </div>
+            <div class="ds-shape">
+              <div style="width:7rem;height:2.5rem;display:flex;align-items:center;">
+                <div style="width:100%;border-top:var(--line-2) solid var(--color-accent);"></div>
+              </div>
+              <code>--line-2 · 2px</code>
+              <span class="ds-shape__role">
+                {
+                  it
+                    ? "Linee spesse, bordi d’accento, il cursore."
+                    : "Thick lines, accent borders, the cursor."
+                }
+              </span>
+            </div>
+            <div class="ds-shape">
+              <div style="width:7rem;height:2.5rem;display:flex;align-items:center;">
+                <div style="width:100%;border-top:var(--line-3) solid var(--color-accent);"></div>
+              </div>
+              <code>--line-3 · 3px</code>
+              <span class="ds-shape__role">
+                {
+                  it
+                    ? "Barre d’accento laterali: testimonianze, righe aperte."
+                    : "Side accent bars: testimonials, open rows."
+                }
+              </span>
+            </div>
+            <div class="ds-shape">
+              <div
+                style="width:7rem;height:2.5rem;display:flex;align-items:center;justify-content:center;"
+              >
+                <span
+                  style="display:inline-block;padding:0.375rem 0.875rem;border-radius:var(--radius-4);outline:var(--focus-ring) solid var(--color-accent);outline-offset:var(--focus-offset);font-family:var(--font-mono);font-size:var(--fs-12);"
+                  >Tab</span
+                >
+              </div>
+              <code>--focus-ring · 2px / --focus-offset · 3px</code>
+              <span class="ds-shape__role">
+                {
+                  it
+                    ? "L'anello di fuoco: spessore e stacco dal bordo."
+                    : "The focus ring: width and gap from the edge."
+                }
+              </span>
+            </div>
+          </div>
         </div>
       </section>
 

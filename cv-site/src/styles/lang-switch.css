@@ -47,7 +47,7 @@
   grid-template-columns: repeat(2, 1fr);
   align-items: stretch;
   padding: var(--size-2);
-  border: 1px solid var(--ls-line);
+  border: var(--line-1) solid var(--ls-line);
   border-radius: 999rem;
 }
 

@@ -241,7 +241,7 @@
   gap: clamp(var(--size-24), 4vw, 3.5rem);
   align-items: center;
   padding-block: var(--size-24) var(--size-48);
-  border-bottom: 1px solid var(--lc-line);
+  border-bottom: var(--line-1) solid var(--lc-line);
 }
 
 /* L'alone della lente. Confinato alla metà destra, sotto la decorazione:
@@ -447,7 +447,7 @@
      pavimento di 24px che chiede 2.5.8, che qui e' il vincolo vero. */
   min-height: 1.875rem;
   padding: 0 var(--size-8);
-  border: 1px solid var(--lc-line-strong);
+  border: var(--line-1) solid var(--lc-line-strong);
   border-radius: 999rem;
   color: var(--lc-muted);
   font-size: var(--fs-12);
@@ -515,7 +515,7 @@
      lettera. `max-content` la lega a ciò che ci sta scritto dentro. */
   width: max-content;
   padding: var(--size-4);
-  border: 1px solid var(--lc-line-strong);
+  border: var(--line-1) solid var(--lc-line-strong);
   /* --radius-4 (quello dei bottoni) accanto al trigger a pillola (999rem)
      era un salto secco — due raggi agli estremi opposti della scala, uno
      dentro l'altro. --radius-16 è l'altro raggio che il progetto si è dato
@@ -682,7 +682,7 @@
 .lc-eyebrow::before {
   content: "";
   width: 1.25rem;
-  height: 2px;
+  height: var(--line-2);
   background: var(--color-accent);
   flex: 0 0 auto;
 }
@@ -724,10 +724,10 @@
 
 .lc-job {
   position: relative;
-  border-top: 1px solid var(--lc-line);
+  border-top: var(--line-1) solid var(--lc-line);
   /* Il filo di sinistra: trasparente da chiuso, accent quando la riga è
      aperta o sotto il puntatore. È il colore che segna "dove sono". */
-  border-left: 3px solid transparent;
+  border-left: var(--line-3) solid transparent;
   border-radius: 0 var(--radius-4) var(--radius-4) 0;
   transition:
     border-left-color var(--duration-state) var(--ease-standard),
@@ -882,7 +882,7 @@
    non trovava dove finiva uno e cominciava il successivo. Stessa riga da 1px
    che separa i clienti qui sotto, stesso motivo. */
 .lc-job__points li + li {
-  border-top: 1px solid var(--lc-line);
+  border-top: var(--line-1) solid var(--lc-line);
   padding-top: var(--size-8);
 }
 
@@ -944,7 +944,7 @@
   gap: var(--size-12);
   align-items: baseline;
   padding-block: 0.625rem;
-  border-top: 1px solid var(--lc-line);
+  border-top: var(--line-1) solid var(--lc-line);
 }
 
 .lc-client:first-child {
@@ -1055,7 +1055,7 @@
 
 .lc-all {
   padding-block: var(--size-40);
-  border-top: 1px solid var(--lc-line);
+  border-top: var(--line-1) solid var(--lc-line);
 }
 
 /* ── La cronologia a corsie ─────────────────────────────────────────────
@@ -1099,7 +1099,7 @@
   position: relative;
   grid-column: 4;
   height: var(--size-16);
-  border-bottom: 1px solid var(--lc-line);
+  border-bottom: var(--line-1) solid var(--lc-line);
 }
 
 .lc-tl__tick {
@@ -1149,7 +1149,7 @@
 /* ── Le teste di corsia ──────────────────────────────────────────────── */
 
 .lc-lane {
-  border-top: 1px solid var(--lc-line);
+  border-top: var(--line-1) solid var(--lc-line);
   /* Padding esterno della corsia, non un inset decorativo: dal 2026-09-10,
      su richiesta esplicita di Giulio dopo un giro di prove (vedi cronologia
      nella vetrina). var(--size-16) = 1rem. */
@@ -1164,7 +1164,7 @@
      all'angolo — un uncino al posto di una riga dritta. Era il difetto
      vero del tentativo precedente, non la copertura parziale che sembrava. */
   border-radius: 0 var(--radius-4) var(--radius-4) 0;
-  box-shadow: inset 3px 0 0 0 transparent;
+  box-shadow: inset var(--line-3) 0 0 0 transparent;
   transition:
     background-color var(--duration-micro) var(--ease-standard),
     box-shadow var(--duration-state) var(--ease-standard);
@@ -1173,13 +1173,13 @@
 @media (hover: hover) and (pointer: fine) {
   .lc-lane:hover {
     background: var(--color-surface);
-    box-shadow: inset 3px 0 0 0 var(--lc-accent-line);
+    box-shadow: inset var(--line-3) 0 0 0 var(--lc-accent-line);
   }
 }
 
 .lc-lane[open] {
   background: var(--color-surface);
-  box-shadow: inset 3px 0 0 0 var(--lc-accent-line);
+  box-shadow: inset var(--line-3) 0 0 0 var(--lc-accent-line);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -1361,7 +1361,7 @@
 
 .lc-voices {
   padding-block: var(--size-40);
-  border-top: 1px solid var(--lc-line);
+  border-top: var(--line-1) solid var(--lc-line);
 }
 
 .lc-voices__list {
@@ -1390,7 +1390,7 @@
 
 .lc-path {
   padding-block: var(--size-40);
-  border-top: 1px solid var(--lc-line);
+  border-top: var(--line-1) solid var(--lc-line);
 }
 
 .lc-path__group + .lc-path__group {
@@ -1535,7 +1535,7 @@
    [open] in global.css. */
 .lc-off {
   padding-block: var(--size-40);
-  border-top: 1px solid var(--lc-line);
+  border-top: var(--line-1) solid var(--lc-line);
 }
 
 .lc-off__head {
@@ -1562,7 +1562,7 @@
 @media (hover: hover) and (pointer: fine) {
   .lc-off__head:hover {
     background: var(--color-surface);
-    box-shadow: inset 3px 0 0 0 var(--lc-accent-line);
+    box-shadow: inset var(--line-3) 0 0 0 var(--lc-accent-line);
   }
 
   .lc-off__head:hover .lc-off__tick {
@@ -1612,7 +1612,7 @@
 
 .lc-more {
   padding-block: var(--size-40);
-  border-top: 1px solid var(--lc-line);
+  border-top: var(--line-1) solid var(--lc-line);
 }
 
 .lc-more__list {
@@ -1644,8 +1644,8 @@
 .lc a:focus-visible,
 .lc button:focus-visible,
 .lc summary:focus-visible {
-  outline: 2px solid var(--lc-ink);
-  outline-offset: 3px;
+  outline: var(--focus-ring) solid var(--lc-ink);
+  outline-offset: var(--focus-offset);
   border-radius: var(--radius-4);
 }
 
@@ -1849,7 +1849,7 @@
 
   .lc-all__row {
     padding-block: var(--size-8);
-    border-bottom: 1px solid rgba(245, 240, 230, 0.07);
+    border-bottom: var(--line-1) solid rgba(245, 240, 230, 0.07);
   }
 
   .lc-all__row.is-lens {

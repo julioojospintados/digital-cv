@@ -28,7 +28,7 @@
   font-family: var(--font-mono);
   font-size: var(--fs-12);
   color: var(--color-text-muted);
-  border: 1px dashed rgba(255 255 255 / 0.22);
+  border: var(--line-1) dashed rgba(255 255 255 / 0.22);
   border-radius: 999rem;
   padding: 0.22rem 0.7rem;
 }
@@ -57,7 +57,7 @@
   margin: auto;
   background: var(--color-bg);
   color: var(--color-text-primary);
-  border: 1px solid var(--color-border);
+  border: var(--line-1) solid var(--color-border);
   border-radius: var(--radius-16);
   /* overflow-y viveva qui prima, sullo stesso elemento del border-radius:
      la scrollbar nativa (soprattutto quella "classica" di Windows) è un
@@ -165,7 +165,7 @@
   font-size: var(--fs-16);
   color: var(--color-text-muted);
   background: rgba(255, 255, 255, 0.06);
-  border: 1px solid var(--color-border);
+  border: var(--line-1) solid var(--color-border);
   border-radius: 50%;
   cursor: pointer;
   transition:
@@ -256,7 +256,7 @@
   object-fit: cover;
   padding: var(--size-8) var(--size-8) var(--size-20);
   background: rgba(245, 240, 230, 0.96);
-  border-radius: 2px;
+  border-radius: var(--radius-4);
   box-shadow: 0 0.625rem 1.5rem rgba(0, 0, 0, 0.4);
   transform: rotate(var(--mr, 0deg));
   transition: transform 0.25s var(--ease-standard);
@@ -324,7 +324,7 @@
   font-size: var(--fs-18);
   color: var(--color-text-primary);
   background: rgba(255, 255, 255, 0.08);
-  border: 1px solid var(--color-border);
+  border: var(--line-1) solid var(--color-border);
   border-radius: 50%;
   cursor: pointer;
   transition:
@@ -366,7 +366,7 @@
   line-height: 1.55;
   color: rgba(8, 73, 67, 1);
   background: rgba(245, 240, 230, 0.96);
-  border-radius: 2px;
+  border-radius: var(--radius-4);
   box-shadow: 0 0.625rem 1.5rem rgba(0, 0, 0, 0.4);
   transform: rotate(var(--mr, 0deg));
   transition: transform 0.25s var(--ease-standard);
@@ -555,8 +555,8 @@
   position: sticky;
   top: calc(var(--stack-i, 0) * 0.75rem);
   padding: var(--size-20);
-  border: 1px solid var(--color-border);
-  border-left: 1px solid var(--color-border);
+  border: var(--line-1) solid var(--color-border);
+  border-left: var(--line-1) solid var(--color-border);
   border-radius: var(--radius-16);
   background: var(--color-bg);
 }

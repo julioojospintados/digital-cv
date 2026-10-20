@@ -117,7 +117,7 @@ html.cursor-down #cursor-core {
    seleziona". E' l'unico posto in cui il nucleo smette di essere un punto,
    perche' e' l'unico in cui la forma porta un'informazione diversa. */
 html.cursor-text #cursor-core {
-  width: 2px;
+  width: var(--line-2);
   height: 1.125rem;
   margin: -0.5625rem 0 0 -1px;
   border-radius: 1px;

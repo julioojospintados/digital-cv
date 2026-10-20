@@ -303,6 +303,17 @@ button {
   --radius-16: 1rem;
   /* Raggio unico per buttons (decisione 2026-07-10) */
   --radius-4: 0.25rem;
+  /* ── Spessori (2026-10-20) ──────────────────────────────────────────────
+     Gli unici px del sistema, e restano px di proposito: un filo non deve
+     crescere col testo, o a 200% diventa una barra (vedi AGENTS.md § Units).
+     Hanno un nome perché ognuno ha un ruolo: cambiare lo spessore dell'anello
+     di fuoco è una riga qui, non una caccia a tutti i «2px» del sito.
+     Il 3 non è 1+2: è un valore suo, con due mestieri suoi. */
+  --line-1: 1px; /* bordi, divisori, fili, contorno delle sigle */
+  --line-2: 2px; /* linee spesse, bordi d'accento, cursore */
+  --line-3: 3px; /* barre d'accento laterali (testimonianze, righe aperte) */
+  --focus-ring: 2px; /* spessore dell'anello di fuoco */
+  --focus-offset: 3px; /* stacco dell'anello dal bordo dell'elemento */
   /* Il volo dell'oggetto condiviso. Quando parte non lo decide il CSS: lo
      decide la pagina, quando ha finito di nascere — vedi Layout.astro,
      § "L'oggetto in volo aspetta che la pagina sia in piedi". */
@@ -411,7 +422,7 @@ button {
   left: 0;
   top: 50%;
   width: 100%;
-  height: 2px;
+  height: var(--line-2);
   margin-top: -1px;
   background: currentColor;
   transition: transform var(--duration-micro, 0.18s) var(--ease-standard, ease);
@@ -606,8 +617,8 @@ body {
 
 .skip-link:focus-visible {
   top: var(--size-16);
-  outline: 2px solid var(--color-accent);
-  outline-offset: 2px;
+  outline: var(--focus-ring) solid var(--color-accent);
+  outline-offset: var(--line-2);
 }
 
 /* ─── Selection ─── */
@@ -625,8 +636,8 @@ body {
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-accent);
-  outline-offset: 3px;
+  outline: var(--focus-ring) solid var(--color-accent);
+  outline-offset: var(--focus-offset);
   border-radius: var(--radius-4);
 }
 
@@ -659,7 +670,7 @@ body {
   height: 0.5rem;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.25);
-  border: 1px solid rgba(255, 255, 255, 0.35);
+  border: var(--line-1) solid rgba(255, 255, 255, 0.35);
   transition:
     transform 0.16s var(--ease-standard),
     background 0.2s ease,
@@ -703,7 +714,7 @@ body {
   /* fallback: Safari < 16.2 / Firefox < 113 non supportano color-mix() */
   background: color-mix(in srgb, var(--color-bg) 92%, transparent);
   padding: var(--size-4) 0.55rem;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: var(--line-1) solid rgba(255, 255, 255, 0.12);
   border-radius: var(--radius-4);
   opacity: 0;
   pointer-events: none;
@@ -1124,7 +1135,7 @@ body::after {
 /* Mobile: bordo sinistro luminoso sulla card attiva */
 @media (max-width: 39.9375rem) {
   .cv-card[data-state="active"] {
-    border-left-width: 3px;
+    border-left-width: var(--line-3);
     border-left-color: var(--color-accent);
     box-shadow: -0.25rem 0 1.25rem rgba(255, 255, 255, 0.18);
     /* fallback: Safari < 16.2 / Firefox < 113 non supportano color-mix() */
@@ -1160,7 +1171,7 @@ body::after {
   position: fixed;
   top: 0;
   left: 0;
-  height: 2px;
+  height: var(--line-2);
   background: var(--color-accent);
   z-index: 9997;
   width: 0%;
@@ -1256,7 +1267,7 @@ floating-menu {
 
 #preloader .pre-bar {
   width: 7.5rem;
-  height: 1px;
+  height: var(--line-1);
   background: var(--color-border);
   position: relative;
   overflow: hidden;
@@ -1396,7 +1407,7 @@ floating-menu {
   color: var(--color-text-muted);
   background: rgba(0, 0, 0, 0.35);
   backdrop-filter: blur(0.5rem);
-  border: 1px dashed rgba(255, 255, 255, 0.25);
+  border: var(--line-1) dashed rgba(255, 255, 255, 0.25);
   border-radius: 2rem;
   padding: 0.3rem var(--size-12);
   text-decoration: none;
@@ -1437,7 +1448,8 @@ floating-menu {
 
 .lc-chip {
   padding: 0.1875rem var(--size-8);
-  border: 1px solid color-mix(in srgb, var(--color-accent) 35%, var(--lc-line, var(--lh-line)));
+  border: var(--line-1) solid
+    color-mix(in srgb, var(--color-accent) 35%, var(--lc-line, var(--lh-line)));
   border-radius: var(--radius-4);
   /* muted su tinta 12% = 5,23-6,51:1 a seconda della lente, verificato. */
   background: color-mix(in srgb, var(--color-accent) 12%, transparent);
@@ -1495,7 +1507,7 @@ floating-menu {
    stessa cosa. Fuori dalle pagine-lente le --lc-* ripiegano su --lh-*. */
 .lc-voice {
   padding-left: var(--size-20);
-  border-left: 2px solid var(--lc-accent-line, var(--color-accent));
+  border-left: var(--line-2) solid var(--lc-accent-line, var(--color-accent));
 }
 
 /* Nessuna virgoletta disegnata e nessun corsivo: il testo è già marcato
@@ -1558,7 +1570,7 @@ floating-menu {
      tre, tiene 3,62:1 sull'ottanio. L'etichetta resta inchiostro: se un
      giorno diventasse arancione anche lei, quel conto salterebbe.
      --primary lo sovrascrive col pieno, :disabled col filo tenue. */
-  border: 1px solid var(--lc-accent-line, var(--color-accent));
+  border: var(--line-1) solid var(--lc-accent-line, var(--color-accent));
   border-radius: var(--radius-4);
   color: var(--lc-ink, var(--lh-ink));
   font-size: var(--fs-14);
@@ -1577,8 +1589,8 @@ floating-menu {
      vale la stessa soglia del bordo (3:1). Da qui il currentColor
      ridefinito, invece che ereditato dal testo. */
   color: var(--lc-accent-line, var(--color-accent));
-  border-top: 2px solid currentColor;
-  border-right: 2px solid currentColor;
+  border-top: var(--line-2) solid currentColor;
+  border-right: var(--line-2) solid currentColor;
   transform: rotate(45deg);
   transition: transform var(--duration-micro) var(--ease-standard);
 }

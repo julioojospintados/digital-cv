@@ -101,8 +101,8 @@ class GoLogo extends LitElement {
        .lc a:focus-visible. Ed è l'unico contorno rimasto: da fermo il marchio
        è nudo, ma sotto il fuoco da tastiera deve dichiararsi comando. */
     button:focus-visible {
-      outline: 2px solid var(--color-text-primary, rgba(245, 240, 230, 1));
-      outline-offset: 3px;
+      outline: var(--focus-ring, 2px) solid var(--color-text-primary, rgba(245, 240, 230, 1));
+      outline-offset: var(--focus-offset, 3px);
     }
 
     .go-g,

@@ -131,7 +131,7 @@ class FloatingMenu extends LitElement {
       padding: 0.42rem 1.05rem;
       border-radius: 6.25rem;
       background: rgba(8, 73, 67, 0.96);
-      border: 1px solid
+      border: var(--line-1, 1px) solid
         color-mix(in srgb, var(--color-accent, rgba(0, 255, 200, 1)) 40%, transparent);
       color: var(--color-text-primary, rgba(245, 240, 230, 1));
       font-family: "Lexend", ui-sans-serif, sans-serif;

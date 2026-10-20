@@ -620,6 +620,15 @@ AGENTS.md                 ← This file — tool-agnostic project guide
   typographic measures. A border that grows with the text becomes a bar.
   Everything else in px is a measure that does not grow with the text it sits
   next to at 200% zoom, which is where the layout breaks.
+→ **The 1/2/3px have names (2026-10-20).** In `global.css`: `--line-1`,
+  `--line-2`, `--line-3`, `--focus-ring` (2px) and `--focus-offset` (3px).
+  Inside the properties that draw a hairline — `border*`, `outline*`,
+  `-webkit-text-stroke`, `text-underline-offset`,
+  `text-decoration-thickness` — the width goes through them, never typed
+  by hand: changing the focus ring is one line, not a hunt for every `2px`.
+  Lit components write `var(--line-1, 1px)` with a fallback. Movements
+  (`translateY(-2px)`), depth shadows and the 1×1 visually-hidden clip stay
+  literal on purpose. `qa:units` checks both rules.
 → `scripts/qa-units.mjs` (`npm run qa:units`) enforces it over the whole
   `cv-site/src` tree in about a second — no browser needed. There is
   deliberately **no exemption list**: a suspended page's stylesheet is checked

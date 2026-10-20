@@ -42,6 +42,7 @@ const REFERENCE_PANELS = new Set([
   "colore",
   "tipografia",
   "forma",
+  "spessori",
   "movimento",
   "cursore",
   "stati",
