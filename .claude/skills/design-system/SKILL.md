@@ -276,7 +276,7 @@ Tutti con `alt=""` — sono decorativi, il knolling-stage ha `aria-hidden="true"
 - **Leggi della Gestalt:** Usa la prossimità degli oggetti nel Knolling per far percepire i servizi come un unico ecosistema armonico.
 - **Social Proof Visiva:** Le card devono mostrare "dati di impatto" (es. -80% tempo) accanto al design, unendo l'estetica alla prova concreta.
 - **F-Pattern:** Disponi le informazioni nelle card seguendo la lettura naturale dell'utente per massimizzare la ritenzione dei messaggi chiave.
-- **Il pieno spetta a ciò che si tocca (regola, 2026-10-19).** Un fondo pieno nel colore della lente, con testo scuro e grassetto, è il trattamento del bottone (`lh-cta`, `lc-btn--primary`). Nessun elemento passivo lo usa: i badge pieni delle schede venivano scambiati per bottoni e la gente provava a toccarli. Una fila di voci che non porta da nessuna parte è un elenco col punto (`lc-dots` / `lc-dot`): niente fondo, bordo o angoli, un quadratino nel colore della lente e testo crema. Eccezione aperta, da decidere: `lc-ai`, la sigla «AI» accanto ai titoli, è ancora piena.
+- **Il pieno spetta a ciò che si tocca (regola, 2026-10-19).** Un fondo pieno nel colore della lente, con testo scuro e grassetto, è il trattamento del bottone (`lh-cta`, `lc-btn--primary`). Nessun elemento passivo lo usa: i badge pieni delle schede venivano scambiati per bottoni e la gente provava a toccarli. Una fila di voci che non porta da nessuna parte è un elenco col punto (`lc-dots` / `lc-dot`): niente fondo, bordo o angoli, un quadratino nel colore della lente e testo crema. Unica eccezione, decisa da Giulio il 2026-10-20: `lc-ai`, la sigla «AI» accanto ai titoli delle esperienze, resta piena — è una sigla di due lettere attaccata a un titolo, non una fila di voci.
 
 ---
 
