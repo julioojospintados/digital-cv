@@ -1179,62 +1179,6 @@ body::after {
      A CSS transition would add lag and prevent reaching 100% at exact bottom. */
 }
 
-/* ─── FloatingMenu — posizionamento nel light DOM (più affidabile del Shadow DOM :host) ─── */
-/* Lit shadow DOM position:fixed può essere interrotto da GSAP transforms su ancestors.    */
-/* Applicare qui garantisce il corretto ancoraggio al viewport su tutti i browser/device.  */
-/*                                                                                          */
-/* NOTA env(safe-area-inset-bottom): rimosso perché senza viewport-fit=cover nel meta      */
-/* viewport, alcuni browser desktop restituiscono valori inattesi, spostando il FAB         */
-/* troppo in alto rispetto al bottom. Il padding safe-area si aggiunge solo su mobile       */
-/* via @supports condizionale.                                                              */
-
-floating-menu {
-  position: fixed !important;
-  /* --fab-lift: alzato da ConsentBanner.astro (script) all'altezza del banner
-     quando è visibile, così il FAB non ci si sovrappone mai in scroll — a
-     banner chiuso la var è assente e bottom torna al valore base. */
-  bottom: calc(var(--size-24) + var(--fab-lift, 0));
-  right: var(--size-24);
-  /* z-index sopra preloader (99997), scroll-progress (9997), nav (100) e qualsiasi overlay */
-  z-index: 99999;
-  display: flex;
-  flex-direction: column-reverse;
-  align-items: flex-end;
-  gap: 0.65rem;
-  pointer-events: none;
-  /* Base transition for preloader entrance — bottom aggiunta per il lift sopra il banner di consenso */
-  transition:
-    opacity 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
-    transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
-    bottom 0.3s var(--ease-standard);
-}
-
-/* FAB visibile solo dopo il primo scroll: l'attributo è nel markup SSR di
-   Layout.astro e viene tolto/rimesso da un listener scroll (Layout). */
-[data-fab-scrollwait] floating-menu {
-  opacity: 0;
-  transform: scale(0.6) translateY(1rem);
-  pointer-events: none !important;
-}
-
-@media (max-width: 40rem) {
-  floating-menu {
-    bottom: calc(var(--size-20) + var(--fab-lift, 0));
-    right: var(--size-16);
-  }
-}
-
-/* Safe-area padding solo quando viewport-fit=cover è attivo (iOS notch/home-indicator) */
-@supports (bottom: env(safe-area-inset-bottom)) {
-  @media (max-width: 40rem) {
-    floating-menu {
-      bottom: calc(
-        max(var(--size-20), env(safe-area-inset-bottom) + var(--size-12)) + var(--fab-lift, 0)
-      );
-    }
-  }
-}
-
 /* ─── Preloader ─── */
 
 #preloader {

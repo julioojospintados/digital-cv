@@ -60,7 +60,6 @@ const sigla = projectInitials(project.name);
   title={`${project.name} — Case Study — Giulio Occhipinti`}
   description={project.description}
   mode={mode}
-  showFab
 >
   <WorkNav locale="it" back={lensPath(mode)} langHref={`/en/work/${slug}`} />
 
@@ -247,6 +246,5 @@ const sigla = projectInitials(project.name);
 
 <script>
   import "../../islands/GoLogo.lit.ts";
-  import "../../islands/FloatingMenu.lit.ts";
   import "../../scripts/work-journey.ts";
 </script>

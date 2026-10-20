@@ -137,7 +137,7 @@ Quando leggi il file `.todo.md` depenna i punti completati, ma non sentirti obbl
 Il **sito principale** (`cv-site/`) usa:
 
 - **Astro** (shell statica, una rotta per lente)
-- **Lit** (web components interattivi — 2 islands: GoLogo, FloatingMenu)
+- **Lit** (web components interattivi — 1 island: GoLogo)
 - **NanoStores** (stato globale mode: tech / creative / human)
 - **GSAP** + **ScrollTrigger** (intro dell'ingresso, parallasse, aggancio delle sezioni)
 - **View Transitions** fra documenti (l'oggetto knolling che attraversa da una pagina all'altra)
@@ -212,7 +212,7 @@ cv-site/                  ← Sito Astro (il CV vero e proprio)
     components/           ← HomeEntryPage.astro (ingresso) e CvLensPage.astro (lente),
                             ognuno rende IT ed EN ricevendo `locale`
     components/cards/     ← WorkIndexCard.astro — l'unica card rimasta
-    islands/              ← Lit web components (GoLogo, FloatingMenu)
+    islands/              ← Lit web components (GoLogo)
     islands/stores/       ← NanoStore modeStore
     scripts/              ← Logica client condivisa (lab-home-intro, lab-home-scroll,
                             lens-transition, memory-drawer, work-journey…)

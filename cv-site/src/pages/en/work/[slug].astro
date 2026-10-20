@@ -61,7 +61,6 @@ const sigla = projectInitials(project.name);
   description={project.description}
   mode={mode}
   lang="en"
-  showFab
 >
   <WorkNav locale="en" back={lensPath(mode, "en")} langHref={`/work/${slug}`} />
 
@@ -250,6 +249,5 @@ const sigla = projectInitials(project.name);
 
 <script>
   import "../../../islands/GoLogo.lit.ts";
-  import "../../../islands/FloatingMenu.lit.ts";
   import "../../../scripts/work-journey.ts";
 </script>

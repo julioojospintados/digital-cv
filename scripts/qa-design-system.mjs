@@ -112,6 +112,17 @@ async function auditPage(browser, { lang, path }) {
   const response = await page.goto(`${BASE_URL}${path}`, { waitUntil: "networkidle" });
   check(response?.ok(), `la pagina risponde`, `HTTP ${response?.status()}`);
 
+  // Il primo Tab dopo il caricamento va al link «Vai al contenuto». Fino al
+  // 2026-10-20 finiva sulla seconda voce dell'indice: lo scrollIntoView che
+  // allinea la voce attiva spostava anche il punto di partenza del Tab.
+  await page.keyboard.press("Tab");
+  const primoTab = await page.evaluate(() => ({
+    skip: document.activeElement?.classList.contains("skip-link"),
+    testo: document.activeElement?.textContent?.trim().slice(0, 40),
+  }));
+  check(primoTab.skip, "il primo Tab va al link «Vai al contenuto»", primoTab.testo);
+  await page.keyboard.press("Shift+Tab");
+
   // ── 1. Indice e pannelli si corrispondono ───────────────────────────────
   console.log("\n  [1] Indice ↔ pannelli");
   const panels = await page.$$eval("[data-ds-panel]", (els) => els.map((el) => el.dataset.dsPanel));

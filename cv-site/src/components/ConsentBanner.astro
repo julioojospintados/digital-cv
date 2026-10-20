@@ -243,23 +243,6 @@ const t = copy[lang];
   const banner = document.getElementById("consent-banner");
   const acceptBtn = document.getElementById("consent-accept");
   const rejectBtn = document.getElementById("consent-reject");
-  // Il FAB (floating-menu, z-index 99999) sta sopra il banner (99998) per
-  // costruzione — deve restare sopra qualsiasi overlay del sito. A banner
-  // visibile però le due cose si sovrappongono in scroll: invece di
-  // abbassare lo z-index del FAB (che gli servirebbe altrove), lo si alza
-  // dell'altezza del banner via --fab-lift, così restano entrambi visibili
-  // senza toccarsi. Richiesta esplicita 2026-07-30.
-  const fab = document.querySelector<HTMLElement>("floating-menu");
-
-  function syncFabLift() {
-    if (!fab || !banner) return;
-    if (banner.getAttribute("data-visible") === "true") {
-      fab.style.setProperty("--fab-lift", `${banner.offsetHeight + 12}px`);
-    } else {
-      fab.style.removeProperty("--fab-lift");
-    }
-  }
-
   function getConsent(): string | null {
     try {
       return localStorage.getItem(KEY);
@@ -280,7 +263,6 @@ const t = copy[lang];
   function hideBanner() {
     if (!banner) return;
     banner.removeAttribute("data-visible");
-    syncFabLift();
     setTimeout(() => {
       banner.hidden = true;
     }, 320);
@@ -292,17 +274,9 @@ const t = copy[lang];
       banner.hidden = false;
       requestAnimationFrame(() => {
         banner.setAttribute("data-visible", "true");
-        syncFabLift();
       });
     }
   }
-
-  // Il banner può andare a capo su più righe se la finestra si ridimensiona
-  // (rotazione mobile, resize desktop) mentre è aperto — ricalcola il lift
-  // solo in quel caso, non c'è nulla da fare se è già chiuso.
-  window.addEventListener("resize", () => {
-    if (banner?.getAttribute("data-visible") === "true") syncFabLift();
-  });
 
   if (banner?.dataset.waitForWip === "true") {
     // Sparato dalla timeline GSAP del preloader (index-init.ts) nello stesso

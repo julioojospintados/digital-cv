@@ -96,7 +96,6 @@ mostrarlo, si deploya quel repo.
 | File | Custom element | Scopo |
 |---|---|---|
 | `GoLogo.lit.ts` | `<go-logo>` | Logo animato, click = reset a `/`, colore mode-reactive |
-| `FloatingMenu.lit.ts` | `<floating-menu>` | FAB: contatti, feedback |
 
 
 ### Parità IT ↔ EN — non solo i testi

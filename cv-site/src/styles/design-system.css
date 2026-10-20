@@ -985,9 +985,7 @@
    e qui devono invece stare dentro il riquadro. Sono override della SOLA
    posizione: forma, colori e stati restano quelli del foglio vero, altrimenti
    la demo smetterebbe di essere la cosa che documenta.
-
-   Il FAB non è in questo elenco: quello resta fisso in basso a destra, dove
-   sta davvero. È l'unico dei quattro il cui posto È la sua definizione. */
+ */
 
 /* La lightbox è fixed e inset:0 — a schermo intero coprirebbe la vetrina. */
 .ds-stage--lightbox .photo-lightbox {

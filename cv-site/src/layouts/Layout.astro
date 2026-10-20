@@ -15,8 +15,6 @@ interface Props {
   description?: string;
   mode?: "tech" | "creative" | "human";
   lang?: "it" | "en";
-  /** FAB contatti — pagine CV ([mode], en/cv), home (index, en/index) e /work */
-  showFab?: boolean;
   /** true sulle home (index/en/index): il ConsentBanner aspetta l'evento
    * "cv:wip-badge-shown" del preloader invece di comparire subito — vedi
    * ConsentBanner.astro. */
@@ -48,7 +46,6 @@ const {
   description = "CV interattivo di Giulio Occhipinti: UX/UI & Web Designer certificato IBM, Creative Technologist, AI & Digital Specialist e Project Manager Agile.",
   mode,
   lang = "it",
-  showFab = false,
   // Prop tenuta (i chiamanti la passano ancora) ma non letta finché il
   // ConsentBanner resta disattivato più sotto — prefisso _ per l'unused-vars
   // di eslint. Rinominarla in consentBannerWaitForWip quando si riattiva.
@@ -118,12 +115,7 @@ const jsonLd = {
 ---
 
 <!doctype html>
-<html
-  lang={lang}
-  data-mode={mode ?? "tech"}
-  data-fab-scrollwait
-  data-native-snap={nativeSnap ? "" : undefined}
->
+<html lang={lang} data-mode={mode ?? "tech"} data-native-snap={nativeSnap ? "" : undefined}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -724,11 +716,6 @@ const jsonLd = {
 
     <slot />
 
-    <!-- FAB contatti (showFab) — la definizione dell'island è importata
-         dalla pagina ospite (script inline in CvLensPage.astro sulle tre
-         lenti, in work/index.astro e work/[slug].astro su /work) -->
-    {showFab && <floating-menu />}
-
     {/* <ConsentBanner lang={lang} waitForWipBadge={consentBannerWaitForWip} /> */}
 
     <SpeedInsights />
@@ -809,16 +796,6 @@ const jsonLd = {
         // Expose for pages that need direct access
         window.__lenis = lenis;
       });
-    </script>
-
-    <!-- FAB visibile solo dopo il primo scroll — attributo SSR su <html>,
-         tolto oltre gli 80px e rimesso quando si torna in cima -->
-    <script>
-      const fabSync = () => {
-        document.documentElement.toggleAttribute("data-fab-scrollwait", window.scrollY <= 80);
-      };
-      fabSync();
-      window.addEventListener("scroll", fabSync, { passive: true });
     </script>
 
     <!-- ── Cursore e luce di scena ──────────────────────────────────────

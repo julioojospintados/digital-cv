@@ -20,7 +20,11 @@
 //    bottoni interi dentro la finestra, con 16px di margine: è la corsa
 //    della parallasse del testo (lab-home-scroll.ts), che a movimento
 //    normale li sposta fino a 14px.
-// 2. Nessuna pagina principale scorre in orizzontale.
+// 2. Su desktop, l'invito della prima card di /work («Leggi il Case
+//    study») sta nella prima schermata, IT ed EN: stesso difetto, trovato
+//    dall'agente ux-reviewer lo stesso giorno (659-692px su 610).
+//    Sui telefoni non ancora: è segnato, non corretto (seconda fascia).
+// 3. Nessuna pagina principale scorre in orizzontale.
 //
 // ── Le misure ─────────────────────────────────────────────────────────────
 // Prese dalle finestre desktop reali (PostHog, 2026-10-20), più i telefoni
@@ -120,6 +124,24 @@ for (const [w, h] of [...DESKTOP, ...TELEFONI]) {
       tagliate.length === 0,
       `${path} — i bottoni di ogni scheda stanno nella prima schermata`,
       tagliate.join(", "),
+    );
+  }
+
+  if (w >= 900) {
+    const sotto = [];
+    for (const path of ["/work/", "/en/work/"]) {
+      await page.goto(BASE + path, { waitUntil: "networkidle" });
+      await page.waitForTimeout(250);
+      const r = await page.evaluate(() => {
+        const b = document.querySelector(".work-index-card__cta").getBoundingClientRect();
+        return { bottom: Math.round(b.bottom), h: window.innerHeight };
+      });
+      if (r.bottom > r.h - MARGINE) sotto.push(`${path} ${r.bottom}/${r.h}`);
+    }
+    ok(
+      sotto.length === 0,
+      "/work — l'invito della prima card sta nella prima schermata",
+      sotto.join(", "),
     );
   }
 

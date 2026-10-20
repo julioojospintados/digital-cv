@@ -468,7 +468,6 @@ cv-site/                  ← Astro site (the actual CV)
                               to the old CV page and went with it on 2026-08-26.
     islands/              ← Lit interactive web components
       GoLogo.lit.ts       ← <go-logo>: animated logo, click = reset to /, mode-reactive color
-      FloatingMenu.lit.ts ← <floating-menu>: FAB with contact/feedback links
       stores/modeStore.ts ← NanoStore for global mode state (tech/creative/human)
     lib/
       cv-i18n.ts          ← Locale + Mode types, LENS_SLUGS/MODE_BY_SLUG/lensPath (URL ↔ key),
@@ -486,7 +485,7 @@ cv-site/                  ← Astro site (the actual CV)
       lab-cv.css          ← CV page styles (`lc-*`) — CvLensPage.astro
       lab-home.css        ← Entry page styles (`lh-*`) — HomeEntryPage.astro
       work-page.css       ← /work page styles (`work-*`)
-    layouts/Layout.astro  ← Base layout (head/SEO/JSON-LD, fonts, Lenis, custom cursor, FAB)
+    layouts/Layout.astro  ← Base layout (head/SEO/JSON-LD, fonts, Lenis, custom cursor)
 
 scripts/                  ← Root utility scripts (Node)
   parse-cv.ts             ← Parse source CV data
@@ -907,6 +906,17 @@ for nothing.
   and the five `lab-*` panels that documented it in `/design-system` were
   deleted together. `scripts/lab-hero.ts` is **not** part of that: despite the
   name, the live home imports it for the pointer parallax. Keep it.
+
+→ **The contact FAB is gone** (2026-10-20, Giulio's call). `<floating-menu>`
+  (`FloatingMenu.lit.ts`), the `showFab` layout prop, its CSS and its
+  showcase panel were deleted. A UX review found it had been invisible on
+  every page for two months: `calc(var(--size-24) + var(--fab-lift, 0))`
+  — a unitless `0` fallback inside `calc()` invalidates the whole value, so
+  `bottom` fell back to `auto` and the button sat at the end of the body,
+  off screen, while still taking keyboard focus. Nobody missed it: contacts
+  are in the open at the top of each lens page, in «Scrivimi» and in the
+  footer. Do not re-add a floating contact button; if reachability
+  mid-scroll ever becomes a need, measure it first.
 
 → **Do not recreate `/old-version`.** It was deliberately unlinked while it
   existed, and then deleted outright. If the previous design has to be shown

@@ -667,7 +667,6 @@ const NAV = [
     items: [
       { id: "cambio-lingua", label: it ? "Cambio lingua" : "Language switch" },
       { id: "cursore", label: it ? "Il cursore-lampada" : "The lamp cursor" },
-      { id: "fab", label: it ? "Il FAB dei contatti" : "The contact FAB" },
       { id: "salto-al-contenuto", label: it ? "Salto al contenuto" : "Skip to content" },
       { id: "stati", label: t.secStates },
       { id: "mobile", label: t.secMobile },
@@ -756,7 +755,6 @@ const CATEGORIES = [
       "cambio-lingua",
       "ingresso-comandi",
       "work-cta",
-      "fab",
     ],
   },
   {
@@ -4920,8 +4918,8 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
         <p class="ds-sub__note">
           {
             it
-              ? "In chiaro, non solo nel FAB: dal 2026-09-10 un FAB esiste anche qui (vedi il pannello del FAB più giù), ma questi restano il primo strato di contatto, non un ripiego dietro un tap in più."
-              : "In the open, not only inside the FAB: since 2026-09-10 a FAB exists here too (see the FAB panel further down), but these remain the first layer of contact, not a fallback behind an extra tap."
+              ? "In chiaro, nel primo strato, non un ripiego dietro un tap in più. Dal 2026-10-20 sono gli unici contatti in cima alla pagina: il FAB dei contatti è stato tolto, dopo due mesi in cui per un errore di calcolo non compariva e nessuno se n'era accorto."
+              : "In the open, in the first layer, not a fallback behind an extra tap. Since 2026-10-20 they are the only contacts at the top of the page: the contact FAB was removed, after two months in which a calculation error kept it hidden and nobody noticed."
           }
         </p>
         <div class="ds-stage">
@@ -4963,8 +4961,8 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
             <p class="ds-spec__v">
               {
                 it
-                  ? "Non toglierli ora che il FAB è acceso anche qui (2026-09-10): il FAB copre la raggiungibilità a metà scroll, ma il primo contatto resta questo — l'indirizzo è il motivo per cui la pagina esiste, non un dettaglio da cercare."
-                  : "Do not remove them now that the FAB is on here too (2026-09-10): the FAB covers reachability mid-scroll, but this remains the first contact — the address is why the page exists, not a detail to hunt for."
+                  ? "Non toglierli: l'indirizzo è il motivo per cui la pagina esiste, non un dettaglio da cercare. Il FAB che li ripeteva a metà scorrimento non c'è più (2026-10-20), e questi restano il contatto in alto; in fondo c'è il piè di pagina."
+                  : "Do not remove them: the address is why the page exists, not a detail to hunt for. The FAB that repeated them mid-scroll is gone (2026-10-20), and these remain the contact at the top; the footer holds them at the bottom."
               }
             </p>
           </div>
@@ -5069,8 +5067,8 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
         <p class="ds-sub__note">
           {
             it
-              ? "Apre /work. Occhiello, titolo, una riga che dice cosa aspettarsi — e la bussola, tornata il 2026-09-04 su richiesta di Giulio. Non è il ritorno della filigrana tolta due giorni prima: quella stava dietro al testo, tagliata dall'angolo e al 12%, ed era una texture. Questa ha una colonna sua, è intera e piena, e sta accanto al testo — che è quello che il knolling fa, mettere le cose sul tavolo. La bussola in particolare dice la cosa giusta per un indice: orientarsi fra quattro progetti prima di sceglierne uno. Le disposizioni sono due e non una stretta: su schermo largo l'oggetto sta a destra di tutta la testata, sul telefono accanto al solo paragrafo — il titolo resta a riga piena in entrambe. Per questo la griglia usa nomi di area e il testo non ha un contenitore: dentro un wrapper, oggetto e paragrafo non potrebbero mai stare sulla stessa riga."
-              : "It opens /work. Eyebrow, title, one line saying what to expect — and the compass, back on 2026-09-04 at Giulio's request. This is not the watermark removed two days earlier: that one sat behind the text, clipped by the corner at 12%, and was a texture. This one has a column of its own, whole and at full opacity, beside the text — which is what knolling does, put things on the table. The compass in particular says the right thing for an index: getting your bearings across four projects before picking one. There are two layouts, not one narrowed: on a wide screen the object sits to the right of the whole header, on a phone beside the paragraph alone — the title keeps a full line in both. That is why the grid uses named areas and the text has no wrapper: inside one, object and paragraph could never share a row."
+              ? "Apre /work. Occhiello, titolo, una riga che dice cosa aspettarsi — e la bussola, tornata il 2026-09-04 su richiesta di Giulio. Non è il ritorno della filigrana tolta due giorni prima: quella stava dietro al testo, tagliata dall'angolo e al 12%, ed era una texture. Questa ha una colonna sua, è intera e piena, e sta accanto al testo — che è quello che il knolling fa, mettere le cose sul tavolo. La bussola in particolare dice la cosa giusta per un indice: orientarsi fra quattro progetti prima di sceglierne uno. Le disposizioni sono due e non una stretta: su schermo largo l'oggetto sta a destra di tutta la testata, sul telefono accanto al solo paragrafo — il titolo resta a riga piena in entrambe. Per questo la griglia usa nomi di area e il testo non ha un contenitore: dentro un wrapper, oggetto e paragrafo non potrebbero mai stare sulla stessa riga. Su desktop con la finestra bassa (sotto i 768px di altezza, il portatile 1366×768) titolo e bussola seguono anche l'altezza e la prima card perde il minimo in altezza: dal 2026-10-20, perché «Leggi il Case study» della prima card finiva sotto il bordo. Lo verifica qa:viewports."
+              : "It opens /work. Eyebrow, title, one line saying what to expect — and the compass, back on 2026-09-04 at Giulio's request. This is not the watermark removed two days earlier: that one sat behind the text, clipped by the corner at 12%, and was a texture. This one has a column of its own, whole and at full opacity, beside the text — which is what knolling does, put things on the table. The compass in particular says the right thing for an index: getting your bearings across four projects before picking one. There are two layouts, not one narrowed: on a wide screen the object sits to the right of the whole header, on a phone beside the paragraph alone — the title keeps a full line in both. That is why the grid uses named areas and the text has no wrapper: inside one, object and paragraph could never share a row. On desktop with a short window (under 768px tall, the 1366×768 laptop) title and compass also follow the height and the first card loses its minimum height: since 2026-10-20, because the first card's «Read the case study» ended below the edge. qa:viewports checks it."
           }
         </p>
         <div class="ds-stage">
@@ -6060,66 +6058,6 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
         </p>
       </section>
 
-      <section class="ds-panel" id="fab" data-ds-panel="fab" aria-labelledby="fab-t">
-        <div class="ds-panel__head">
-          <h2 class="ds-section__title" id="fab-t">
-            {it ? "Il FAB dei contatti" : "The contact FAB"}
-          </h2>
-          <span class="ds-panel__group"
-            >{it ? "Sistema" : "System"}<span class="ds-origin">floating-menu</span></span
-          >
-        </div>
-
-        <p class="ds-sub__note">
-          {
-            it
-              ? "Una delle tre island Lit vive, e l'unica presente su quasi ogni pagina. Il markup è una riga e basta: posizione, z-index e comportamento stanno dentro il componente e in una regola di global.css. Quello qui sotto è il FAB vero, non una copia — guarda in basso a destra: è lì che sta, ed è lì che deve stare. Sparisce quando lasci questo pannello, perché il pannello nascosto lo porta via con sé."
-              : "One of the three live Lit islands, and the only one present on nearly every page. The markup is a single line: position, z-index and behaviour live inside the component and in one rule in global.css. What follows is the real FAB, not a copy — look at the bottom right: that is where it sits, and where it must sit. It disappears when you leave this panel, because a hidden panel takes it with it."
-          }
-        </p>
-        <div class="ds-stage">
-          <floating-menu data-ds-snippet></floating-menu>
-        </div>
-        <div class="ds-spec">
-          <div class="ds-spec__row ds-spec__row--wide">
-            <span class="ds-spec__k">{t.specClass}</span>
-            <p class="ds-spec__v">
-              <code>floating-menu · fab-trigger · fab-items · fab-item (shadow DOM)</code>
-            </p>
-          </div>
-          <div class="ds-spec__row">
-            <span class="ds-spec__k">{t.specUse}</span>
-            <p class="ds-spec__v">
-              {
-                it
-                  ? "Si accende dal layout con showFab, mai scrivendo il tag a mano. Acceso su home, /work, /privacy e — dal 2026-09-10 — anche sulle tre lenti: fino ad allora ne erano escluse di proposito («i contatti stanno già in chiaro, un FAB sarebbe una caccia al tesoro»), ma su quelle pagine si scorrono 24 esperienze, e Giulio ha scelto la raggiungibilità a metà lettura sopra la purezza della regola. I contatti in chiaro (pannello «Contatti in chiaro» più su) restano comunque: il FAB si aggiunge, non li sostituisce."
-                  : 'Turned on from the layout with showFab. On since home, /work, /privacy and — as of 2026-09-10 — the three lenses too: until then they were deliberately excluded ("the contacts are already in the open, a FAB would be a treasure hunt"), but those pages scroll through 24 experiences, and Giulio chose reachability mid-read over the purity of the rule. The in-the-open contacts (the "Contacts in the open" panel above) still stay: the FAB adds to them, it does not replace them.'
-              }
-            </p>
-          </div>
-          <div class="ds-spec__row ds-spec__row--dont">
-            <span class="ds-spec__k">{t.specDont}</span>
-            <p class="ds-spec__v">
-              {
-                it
-                  ? "Non aggiungerci voci: due sono il massimo che un pollice raggiunge senza guardare, e un FAB che diventa un menu è un menu messo nel posto sbagliato."
-                  : "Do not add entries: two is the most a thumb reaches without looking, and a FAB that becomes a menu is a menu put in the wrong place."
-              }
-            </p>
-          </div>
-          <div class="ds-spec__row ds-spec__row--wide">
-            <span class="ds-spec__k">{t.specA11y}</span>
-            <p class="ds-spec__v">
-              {
-                it
-                  ? "È il componente che 2.4.11 tiene d'occhio: sta fisso in basso a destra e può coprire l'elemento che riceve il focus. Chiuso, le voci sono inert e aria-hidden — quindi non sono un buco nella tabulazione. E --fab-lift esiste perché il banner di consenso, quando c'era, lo alzava invece di sovrapporglisi."
-                  : "This is the component 2.4.11 watches: it is pinned bottom right and can cover the element receiving focus. Closed, its entries are inert and aria-hidden — so they are not a hole in the tab order. And --fab-lift exists because the consent banner, back when it was live, raised it instead of overlapping it."
-              }
-            </p>
-          </div>
-        </div>
-      </section>
-
       <section
         class="ds-panel"
         id="salto-al-contenuto"
@@ -6521,7 +6459,6 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
   // Il logo è un web component, non una classe: va registrato o la vetrina
   // mostrerebbe un elemento vuoto dove dovrebbe esserci il componente.
   import "../islands/GoLogo.lit";
-  import "../islands/FloatingMenu.lit";
   import { initLensDropdownAutoClose } from "../scripts/lens-dropdown";
 
   // .ds-stage esclude la demo statica del pannello "Tendina di lente":
@@ -6578,7 +6515,17 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
       // diceva più dove ci si trovava. `nearest` perché muova il riquadro solo
       // se serve — e non è scrollIntoView sulla pagina, che porterebbe via
       // anche il pannello appena scelto.
-      navLinks.find((a) => a.dataset.dsNav === target)?.scrollIntoView({ block: "nearest" });
+      // A mano e non con scrollIntoView: scrollIntoView sposta anche il punto
+      // da cui parte il Tab, e il primo Tab dopo il caricamento saltava il
+      // link «Vai al contenuto», la barra e la lingua per finire su «Colore»
+      // (ux-reviewer, 2026-10-20). Spostare scrollTop non tocca il focus.
+      const voce = navLinks.find((a) => a.dataset.dsNav === target);
+      if (voce && side) {
+        const box = side.getBoundingClientRect();
+        const r = voce.getBoundingClientRect();
+        if (r.top < box.top) side.scrollTop += r.top - box.top;
+        else if (r.bottom > box.bottom) side.scrollTop += r.bottom - box.bottom;
+      }
       if (push && location.hash.slice(1) !== target) {
         history.replaceState(null, "", `#${target}`);
       }

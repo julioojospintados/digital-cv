@@ -122,6 +122,6 @@ La sezione "AI-Enhanced Workflow" mostra il badge `MCP` come **firma del metodo*
 6. modeStore logic (`cv-site/src/islands/stores/modeStore.ts`)
 
 ### NON Testare
-- Componenti Lit (GoLogo, FloatingMenu) — dipendono dal browser reale
+- Componenti Lit (GoLogo) — dipendono dal browser reale
 - Pagine Astro (HomeEntryPage, CvLensPage e i loro gusci) — dipendono dal build Astro
 - Animazioni GSAP — impossibili da testare in unit test

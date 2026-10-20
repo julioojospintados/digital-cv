@@ -73,7 +73,6 @@ Never write `bg-black`, `text-white` etc. directly.
 | File | Custom element | Purpose |
 |---|---|---|
 | `GoLogo.lit.ts` | `<go-logo>` | Animated logo, click = `/`, mode-reactive color |
-| `FloatingMenu.lit.ts` | `<floating-menu>` | FAB: contact, feedback, AI-section link |
 | `SkillForceGraph.lit.ts` | `<skill-force-graph>` | D3 force-directed skill network |
 
 **DO NOT reference** `ModeSwitcher.ts`, `EduItem.astro`, `EntryPortal.ts`, `KnollingGrid.ts`,

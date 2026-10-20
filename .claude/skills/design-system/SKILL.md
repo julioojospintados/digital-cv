@@ -175,7 +175,7 @@ Quello che la norma richiede davvero sul testo è:
 
 Ogni bersaglio toccabile almeno **24×24 px CSS**, salvo eccezioni (link
 inline nel testo, spaziatura equivalente). Vale per i toggle delle pagine
-`tools/`, per lo switch di mode e di lingua, per il FAB.
+`tools/`, per lo switch di mode e di lingua.
 
 ### Focus — tre criteri, non uno
 

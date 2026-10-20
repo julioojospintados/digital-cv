@@ -669,6 +669,46 @@
   font-size: clamp(5rem, 18vw, 10rem);
 }
 
+/* ── Desktop con la finestra bassa (2026-10-20) ──────────────────────────
+   Stesso problema delle schede dell'ingresso (lab-home.css): sul portatile
+   1366×768, con la finestra alta 560-610px, la prima card della pila aveva
+   «Leggi il Case study» sotto il bordo — 659-692px su 610, 650-683 su 560.
+   La card era tutta un link e il titolo si vedeva, ma l'unico invito scritto
+   no. Si stringe la testata (il titolo segue anche l'altezza) e la card
+   perde il minimo in altezza, che qui era aria fra il ruolo e l'invito.
+   Sopra i 768px di altezza non cambia niente. Lo verifica qa:viewports. */
+@media (min-width: 56rem) and (max-height: 48rem) {
+  .work-index-hero {
+    padding-bottom: var(--size-16);
+  }
+
+  .work-index-hero__title {
+    font-size: clamp(2.75rem, min(9vw, 9vh), 6rem);
+    margin-bottom: var(--size-12);
+  }
+
+  .work-index-grid > .work-index-card {
+    min-height: 0;
+    padding-block: var(--size-32);
+  }
+}
+
+@media (min-width: 56rem) and (max-height: 40rem) {
+  .work-index-hero {
+    padding-top: var(--size-12);
+  }
+
+  /* Qui l'altezza della testata la decide la bussola (197px a 120 di
+     larghezza), non il testo accanto: segue anche lei l'altezza. */
+  .work-index-hero__obj {
+    width: clamp(3.5rem, min(14vw, 15vh), 7.5rem);
+  }
+
+  .work-index-hero__title {
+    font-size: clamp(2.75rem, min(9vw, 7vh), 6rem);
+  }
+}
+
 .work-index-card {
   position: relative;
   display: flex;

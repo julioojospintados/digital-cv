@@ -362,7 +362,6 @@ components/
 
 islands/                     ← Lit web components
   GoLogo.lit.ts               ← <go-logo>: logo animato, click = reset a /
-  FloatingMenu.lit.ts         ← <floating-menu>: FAB contatti/feedback
   SkillForceGraph.lit.ts      ← <skill-force-graph>: rete D3 (lazy, §5)
   stores/modeStore.ts         ← NanoStore stato mode globale
 ```
