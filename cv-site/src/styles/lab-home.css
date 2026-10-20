@@ -474,6 +474,22 @@ html[data-lh-armed] .lh-obj {
 
 /* Le parole restano in linea, non una per riga come in .entry-name: la
    composizione di questo ingresso ha il nome su una riga sola. */
+/* Schermi grandi (2026-10-20, richiesta di Giulio): il tetto di 5rem fermava
+   il nome a 80px anche su 2400 e 2560, dove si perdeva in mezzo alla stanza.
+   Da 100rem in su riprende a crescere fino a 8rem, legato anche all'altezza
+   (11vh) perché su un ultrawide basso non spinga ruoli e «Scorri» fuori dalla
+   prima schermata. La colonna si allarga con lui: a 38rem «Occhipinti» a
+   128px non ci stava. Misurato: 106px a 1920×1080, 119 a 2560×1080, 128 a
+   2400×1200, nessun oggetto del tavolo sopra il testo. */
+@media (min-width: 100rem) and (min-height: 50rem) {
+  .lh-copy {
+    max-width: 52rem;
+  }
+  .lh-name {
+    font-size: clamp(5rem, min(5.5vw, 11vh), 8rem);
+  }
+}
+
 .lh-name .name-word {
   display: inline-block;
 }

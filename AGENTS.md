@@ -476,6 +476,7 @@ cv-site/                  ← Astro site (the actual CV)
       lab-copy.ts         ← Voice copy in both languages: PROFILE_TEXT, ABOUT_TEXT, TAGLINE
       exp-clusters.ts     ← Shared experience-cluster definitions (IT/EN labels, exp+proj refs)
       work-knolling.ts    ← Which knolling object each case study gets, keyed by slug
+      flags.ts            ← Site switches: parts that exist in code but are off today (PRIVACY_BACK_LINK), each with why and when
     scripts/              ← Shared client-side logic (vanilla TS + GSAP)
       work-journey.ts     ← /work page animations
       memory-drawer.ts    ← "About me" photo/story drawer (3D page-flip)

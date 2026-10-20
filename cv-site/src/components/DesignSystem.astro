@@ -1579,6 +1579,14 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
           <span class="ds-panel__group">{t.secHome}<span class="ds-origin">lh-*</span></span>
         </div>
 
+        <p class="ds-sub__note">
+          {
+            it
+              ? "Il nome cresce con la larghezza fino a 5rem. Da 100rem di schermo (e almeno 50rem di altezza) riparte fino a 8rem, legato anche all'altezza della finestra, e la colonna passa da 38 a 52rem perché «Occhipinti» ci stia: su un 2560 a 80px si perdeva in mezzo agli oggetti."
+              : "The name grows with the width up to 5rem. From a 100rem screen (and at least 50rem tall) it grows again up to 8rem, tied to the window height too, and the column widens from 38 to 52rem so that “Occhipinti” fits: on a 2560 screen, at 80px, it got lost among the objects."
+          }
+        </p>
+
         <div class="ds-stage ds-stage--center">
           <div class="lh">
             <div class="lh-copy" data-ds-snippet>

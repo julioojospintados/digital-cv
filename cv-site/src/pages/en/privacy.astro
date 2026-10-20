@@ -1,6 +1,7 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import { DEFAULT_MODE, lensPath } from "../../lib/cv-i18n";
+import { PRIVACY_BACK_LINK } from "../../lib/flags";
 
 // Il ritorno va alla lente predefinita, costruito e non scritto a mano: la
 // versione italiana puntava ancora a /tech, la predefinita di prima.
@@ -14,7 +15,13 @@ const back = lensPath(DEFAULT_MODE, "en");
 >
   <nav class="privacy-nav">
     <go-logo>GO</go-logo>
-    <a href={back} class="privacy-back">← Back to CV</a>
+    {
+      PRIVACY_BACK_LINK && (
+        <a href={back} class="privacy-back">
+          ← Back to CV
+        </a>
+      )
+    }
   </nav>
 
   <main class="privacy-main" id="main-content">
