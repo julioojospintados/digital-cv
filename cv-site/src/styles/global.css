@@ -1469,31 +1469,37 @@ body::after {
   color: var(--lc-ink, var(--lh-ink));
 }
 
+/* La firma è il titolo della scheda (Giulio, 2026-10-21): nome e ruolo in
+   cima, poi la citazione. Prima chiudeva la scheda, col quadratino
+   dell'elenco davanti al nome, e chi scorreva leggeva la frase senza sapere
+   di chi fosse. È un <h3>: sulla pagina CV sta sotto il titolo «Le voci», e
+   un lettore di schermo può saltare da una voce all'altra per nome. */
 .lc-voice__who {
-  /* Il nome col quadratino dell'elenco (lc-dot), il ruolo testo accanto:
-     la firma si riconosce scorrendo. Era un badge pieno dal 2026-10-14 al
-     2026-10-19, tolto con gli altri perché sembrava un bottone. Uguale
-     nella sezione «Le voci» della pagina CV e nella modale «Dicono di me». */
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--size-8);
-  margin: var(--size-12) 0 0;
-  font-size: var(--fs-14);
-  font-weight: 600;
-  color: var(--lc-ink, var(--lh-ink));
+  flex-direction: column;
+  gap: var(--size-2);
+  margin: 0 0 var(--size-12);
+  font-family: var(--font-display);
+  font-size: var(--fs-18);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.3;
 }
 
-/* Nella firma il nome resta nel carattere della firma (Lexend, 14px, 600),
-   non nel mono dell'elenco: è un nome, non una voce di elenco. */
-.lc-voice__who .lc-dot {
-  font: inherit;
+/* Il nome nel colore della lente, nella sua variante da testo: per
+   l'arancione è --color-accent-text, 4,85:1 sull'ottanio. Fuori dalle
+   lenti chi lo ospita sceglie con --lc-voice-accent (la modale di «Chi
+   sono», memory-drawer.css). */
+.lc-voice__name {
+  color: var(--lc-voice-accent, var(--color-accent-text));
 }
 
-/* Il ruolo di chi parla è ciò che dà peso alla frase: sta a --fs-14 come il
-   nome, non al pavimento dei 12. Colore secondario, non corpo piccolo. */
+/* Il ruolo di chi parla è ciò che dà peso alla frase: sotto il nome, a 14px,
+   nel colore secondario. */
 .lc-voice__role {
+  font-size: var(--fs-14);
   font-weight: 400;
+  letter-spacing: 0;
   color: var(--lc-muted, var(--lh-muted));
 }
 

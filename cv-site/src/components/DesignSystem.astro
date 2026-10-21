@@ -4004,15 +4004,6 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
                   <li class="lc-dot">{it ? "Fotografia" : "Photography"}</li>
                 </ul>
               </div>
-              <div class="ds-case">
-                <p class="ds-label">
-                  {it ? "nella firma di una testimonianza" : "in a testimonial's signature"}
-                </p>
-                <p class="lc-voice__who" style="margin:0;">
-                  <span class="lc-dot">{it ? "Nome Cognome" : "Full Name"}</span>
-                  <span class="lc-voice__role">Product Owner</span>
-                </p>
-              </div>
             </div>
           </div>
         </div>
@@ -4026,8 +4017,8 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
             <p class="ds-spec__v">
               {
                 it
-                  ? "Per una fila di voci brevi che non portano da nessuna parte: competenze, soft skill, il nome in una firma. Il colore del quadratino arriva da --color-accent, che ogni scheda riporta al suo."
-                  : "For a row of short items that lead nowhere: skills, soft skills, the name in a signature. The square's colour comes from --color-accent, which each card maps to its own."
+                  ? "Per una fila di voci brevi che non portano da nessuna parte: competenze e soft skill. Il colore del quadratino arriva da --color-accent, che ogni scheda riporta al suo."
+                  : "For a row of short items that lead nowhere: skills and soft skills. The square's colour comes from --color-accent, which each card maps to its own."
               }
             </p>
           </div>
@@ -4320,14 +4311,18 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
         <p class="ds-sub__note">
           {
             it
-              ? "L'unico pezzo di pagina che un candidato non può scriversi da solo. Sta dopo le esperienze e non prima: una testimonianza letta senza sapere che cosa ha fatto è un complimento, letta dopo è una conferma. Il testo qui sotto è di esempio — le citazioni vere stanno in cv.ts. Le stesse voci (.lc-voice) compaiono anche nella modale «Dicono di me» dell'ingresso, dentro .about-voices, dove ogni voce è una scheda sticky (.about-voices__card) che si impila sulla precedente e la sfoca, come le sezioni della home e l'indice del portfolio (stack-depth.ts con la modale come contenitore). In tutti e due i posti il nome porta il quadratino dell'elenco (lc-dot dentro .lc-voice__who), nel carattere della firma, per farsi trovare scorrendo. Era un badge pieno fino al 2026-10-19, tolto con gli altri perché sembrava un bottone."
-              : "The only part of the page a candidate cannot write for himself. It comes after the roles, not before: a testimonial read before knowing what he did is a compliment; read after, it is a confirmation. The text below is a placeholder — the real quotes live in cv.ts. The same voices (.lc-voice) also appear in the entry's «What people say» modal, inside .about-voices, where each voice is a sticky card (.about-voices__card) that stacks on the previous one and blurs it, like the entry sections and the portfolio index (stack-depth.ts with the modal as the scroller). In both places the name carries the dot-list square (lc-dot inside .lc-voice__who), in the signature's typeface, so it can be found while scanning. It was a filled badge until 2026-10-19, removed with the others because it looked like a button."
+              ? "L'unico pezzo di pagina che un candidato non può scriversi da solo. Sta dopo le esperienze e non prima: una testimonianza letta senza sapere che cosa ha fatto è un complimento, letta dopo è una conferma. Il testo qui sotto è di esempio — le citazioni vere stanno in cv.ts. Le stesse voci (.lc-voice) compaiono anche nella modale «Dicono di me» dell'ingresso, dentro .about-voices, dove ogni voce è una scheda sticky (.about-voices__card) che si impila sulla precedente e la sfoca, come le sezioni della home e l'indice del portfolio (stack-depth.ts con la modale come contenitore). In tutti e due i posti la firma è il titolo della scheda (.lc-voice__who, un <h3>): il nome nel colore della lente (.lc-voice__name, nella variante da testo; nella modale l'arancione della lente predefinita) e il ruolo sotto, poi la citazione. Dal 2026-10-21: prima la firma chiudeva la scheda, e si leggeva la frase senza sapere di chi fosse."
+              : "The only part of the page a candidate cannot write for himself. It comes after the roles, not before: a testimonial read before knowing what he did is a compliment; read after, it is a confirmation. The text below is a placeholder — the real quotes live in cv.ts. The same voices (.lc-voice) also appear in the entry's «What people say» modal, inside .about-voices, where each voice is a sticky card (.about-voices__card) that stacks on the previous one and blurs it, like the entry sections and the portfolio index (stack-depth.ts with the modal as the scroller). In both places the signature is the card's title (.lc-voice__who, an <h3>): the name in the lens colour (.lc-voice__name, in its text variant; in the modal the default lens's orange) and the role below it, then the quote. Since 2026-10-21: the signature used to close the card, and the sentence was read before knowing whose it was."
           }
         </p>
         <div class="ds-stage">
           <div class="lc">
             <ul class="lc-voices__list" role="list" data-ds-snippet>
               <li class="lc-voice">
+                <h3 class="lc-voice__who">
+                  <span class="lc-voice__name">{it ? "Nome Cognome" : "Full Name"}</span>
+                  <span class="lc-voice__role">Product Owner</span>
+                </h3>
                 <blockquote class="lc-voice__quote">
                   {
                     it
@@ -4335,12 +4330,11 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
                       : "He brought order where there was a list of requests, and from then on we knew what we were building."
                   }
                 </blockquote>
-                <p class="lc-voice__who">
-                  <span class="lc-dot">{it ? "Nome Cognome" : "Full Name"}</span>
-                  <span class="lc-voice__role">Product Owner</span>
-                </p>
               </li>
               <li class="lc-voice">
+                <h3 class="lc-voice__who">
+                  <span class="lc-voice__name">{it ? "Nome Cognome" : "Full Name"}</span>
+                </h3>
                 <blockquote class="lc-voice__quote">
                   {
                     it
@@ -4348,9 +4342,6 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
                       : "He talks to the people who design and the people who build without switching language twice."
                   }
                 </blockquote>
-                <p class="lc-voice__who">
-                  <span class="lc-dot">{it ? "Nome Cognome" : "Full Name"}</span>
-                </p>
               </li>
             </ul>
           </div>
@@ -4360,8 +4351,8 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
             <span class="ds-spec__k">{t.specClass}</span>
             <p class="ds-spec__v">
               <code
-                >lc-voices · lc-voices__list · lc-voice · lc-voice__quote · lc-voice__who ·
-                lc-voice__role</code
+                >lc-voices · lc-voices__list · lc-voice · lc-voice__who · lc-voice__name ·
+                lc-voice__role · lc-voice__quote</code
               >
             </p>
           </div>

@@ -677,11 +677,11 @@ const indexItems = [
             .filter((f) => f.quote)
             .map((f, i) => (
               <li class="lc-voice about-voices__card" style={`--stack-i:${i}`}>
-                <blockquote class="lc-voice__quote">{f.quote}</blockquote>
-                <p class="lc-voice__who">
-                  <span class="lc-dot">{f.name}</span>
+                <h3 class="lc-voice__who">
+                  <span class="lc-voice__name">{f.name}</span>
                   {f.role && <span class="lc-voice__role">{f.role}</span>}
-                </p>
+                </h3>
+                <blockquote class="lc-voice__quote">{f.quote}</blockquote>
               </li>
             ))
         }
