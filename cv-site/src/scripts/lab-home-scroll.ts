@@ -122,7 +122,9 @@ export function initLabHomeScroll(): void {
   // Se però è più alta di quanto resta sotto il gradino, fermarla lì ne
   // nasconderebbe la coda sotto la scheda dopo, e non si leggerebbe mai: in
   // quel caso si ferma quando il fondo tocca il fondo della finestra.
-  // La sfocatura della scheda coperta è di stack-depth.ts, lo stesso di /work.
+  // La profondità della scheda coperta è di stack-depth.ts, lo stesso di /work,
+  // ma qui senza sfocatura: su una scheda a tutto schermo faceva tremare lo
+  // scroll (misura e perché in stack-depth.ts, 2026-10-21).
   const stack = Array.from(document.querySelectorAll<HTMLElement>(".lh-section")).filter(
     (s) => s.getClientRects().length,
   );
@@ -159,7 +161,7 @@ export function initLabHomeScroll(): void {
   // subito a fermarsi sul fondo.
   const ro = new ResizeObserver(fitTops);
   panels.forEach((s) => ro.observe(s));
-  initStackDepth(stack, { blur: 6, dim: 0.3 });
+  initStackDepth(stack, { blur: 0, dim: 0.3 });
 
   if (reduced) return;
 

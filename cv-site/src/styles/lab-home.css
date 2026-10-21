@@ -1714,8 +1714,9 @@ html[data-lh-armed] .lh-obj {
 
    Niente ombra sulla scheda che arriva: la prima versione ne aveva una, e
    sul bordo alto si leggeva come una macchia. La profondità la dà la scheda
-   coperta, che va fuori fuoco e si spegne (scripts/stack-depth.ts, lo
-   stesso di /work).
+   coperta, che si spegne (scripts/stack-depth.ts, lo stesso di /work).
+   Fino al 2026-10-21 andava anche fuori fuoco, come su /work: su una scheda
+   grande quanto la finestra la sfocatura faceva tremare lo scroll.
 
    L'hero è la base: resta trasparente sulla stanza e viene coperto. Le
    schede invece sono opache, altrimenti quella coperta trasparirebbe: lo

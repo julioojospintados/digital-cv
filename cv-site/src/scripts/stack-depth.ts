@@ -25,9 +25,21 @@
 // filtro è lavoro del compositore e non tocca il disegno. Il costo è un
 // livello per scheda: sono quattro o cinque, e il browser tiene in memoria
 // solo le parti vicine alla finestra.
+//
+// La sfocatura invece no, non è lavoro del compositore: a ogni fotogramma il
+// browser rifà il filtro su tutta la scheda, e sulla home la scheda è grande
+// quanto la finestra. Era il tremolio che Giulio vedeva dalla seconda scheda
+// in poi, cioè da quando la prima scheda della pila, «Chi sono», viene
+// coperta. Misurato il 2026-10-21 (Chromium senza GPU, CPU rallentata 4×,
+// 1900×965), fotogramma mediano scorrendo da «Chi sono» a Web & UX e da Web
+// & UX alla scheda dopo: con sfocatura 100 e 150ms, solo oscuramento 80 e
+// 105ms, nessun filtro 68 e 82ms. Su una GPU vera l'oscuramento è una
+// matrice di colore e costa ancora meno; la sfocatura resta il pezzo caro.
+// Per questo la home passa `blur: 0`; /work e la modale «Dicono di me»
+// hanno schede piccole e la tengono.
 
 interface StackDepthOptions {
-  /** Sfocatura massima della scheda del tutto coperta, in px. */
+  /** Sfocatura massima della scheda del tutto coperta, in px. 0 = niente. */
   blur?: number;
   /** Quanto si spegne la scheda del tutto coperta, da 0 a 1. */
   dim?: number;
@@ -62,10 +74,9 @@ export function initStackDepth(
       // In vista resta la striscia fra la cima di questa e quella della
       // successiva. Coperta del tutto quando ne resta solo il gradino.
       const covered = clamp((cur.height - (next.top - cur.top)) / (cur.height * 0.9));
+      const fog = blur ? `blur(${(covered * blur).toFixed(2)}px) ` : "";
       list[i].style.filter =
-        covered > 0.01
-          ? `blur(${(covered * blur).toFixed(2)}px) brightness(${(1 - covered * dim).toFixed(3)})`
-          : "";
+        covered > 0.01 ? `${fog}brightness(${(1 - covered * dim).toFixed(3)})` : "";
     }
   };
   const schedule = () => {
