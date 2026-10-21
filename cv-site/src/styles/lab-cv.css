@@ -1871,6 +1871,25 @@
   }
 }
 
+/* Sotto i 368px la barra non ci sta su una riga (2026-10-21): GO, il
+   selettore di lente con «Comunicazione & AI» e il cambio lingua chiedono
+   circa 360px più i margini. A 320 il selettore finiva sotto il cambio
+   lingua di 52px e «IT» copriva la fine del nome; a 360 si toccavano di 3, e
+   sulle pagine inglesi un tocco sul bordo del selettore riportava in
+   italiano. Qui il selettore scende su una riga sua, sotto il marchio:
+   intero, e senza un vicino da coprire. */
+@media (max-width: 23rem) {
+  .lc-bar {
+    flex-wrap: wrap;
+    row-gap: var(--size-8);
+  }
+
+  .lc-lens {
+    order: 3;
+    flex-basis: 100%;
+  }
+}
+
 @media (max-width: 40rem) {
   .lc-bar__tagline {
     /* A 375px la frase non ci sta accanto a logo e badge, e troncata a due

@@ -11,7 +11,8 @@ import { markIntroSeen } from "../scripts/intro-seen.ts";
  *  - HUMAN      → G e O con glow gold
  *  - MANAGEMENT → G e O con glow violet
  *
- * Click → Master Reset: torna alla landing / con gli oggetti knolling in stato neutro.
+ * Click → Master Reset: torna all'ingresso (/ o /en/, secondo la lingua della
+ * pagina) con gli oggetti knolling in stato neutro.
  */
 class GoLogo extends LitElement {
   static styles = css`
@@ -43,11 +44,11 @@ class GoLogo extends LitElement {
        disegno: lo stesso ::after trasparente di global.css § "Bersagli da
        44px", qui perché il bottone sta nello shadow root. */
     @media (pointer: coarse) {
-      button {
+      .go {
         position: relative;
       }
 
-      button::after {
+      .go::after {
         content: "";
         position: absolute;
         top: 50%;
@@ -58,7 +59,7 @@ class GoLogo extends LitElement {
       }
     }
 
-    button {
+    .go {
       background: transparent;
       border: 0;
       border-radius: var(--radius-4, 0.25rem);
@@ -93,7 +94,7 @@ class GoLogo extends LitElement {
        d'inchiostro all'8% (il riquadro c'è solo lì, a riposo il marchio resta
        nudo come deciso il 4 settembre) e il marchio cresce del 6%. */
     @media (hover: hover) and (pointer: fine) {
-      button:hover {
+      .go:hover {
         filter: brightness(1.22);
         background: color-mix(in srgb, var(--color-text-primary, rgb(245 240 230)) 8%, transparent);
         transform: scale(1.06);
@@ -101,7 +102,7 @@ class GoLogo extends LitElement {
     }
 
     @media (prefers-reduced-motion: reduce) {
-      button:hover {
+      .go:hover {
         transform: none;
       }
     }
@@ -111,7 +112,7 @@ class GoLogo extends LitElement {
        questo bottone non ne ha una. E lo scatto è 0,96 invece di 0,98 perché
        senza riquadro manca il riferimento fermo che rende leggibile uno
        scarto del 2%. */
-    button:active {
+    .go:active {
       transform: scale(0.96);
     }
 
@@ -119,14 +120,14 @@ class GoLogo extends LitElement {
        confina con la pagina e non col riquadro. Stessa regola di
        .lc a:focus-visible. Ed è l'unico contorno rimasto: da fermo il marchio
        è nudo, ma sotto il fuoco da tastiera deve dichiararsi comando. */
-    button:focus-visible {
+    .go:focus-visible {
       outline: var(--focus-ring, 2px) solid var(--color-text-primary, rgba(245, 240, 230, 1));
       outline-offset: var(--focus-offset, 3px);
     }
 
     .go-g,
     .go-o {
-      /* Sopra la banda del flusso — vedi button::before. */
+      /* Sopra la banda del flusso — vedi .go::before. */
       position: relative;
       z-index: 1;
       display: inline-block;
@@ -196,7 +197,7 @@ class GoLogo extends LitElement {
        root — fino al 3 settembre il gradiente della lente design pulsava
        anche a chi aveva chiesto di non vedere animazioni. */
     @media (prefers-reduced-motion: reduce) {
-      button:active {
+      .go:active {
         transform: none;
       }
 
@@ -215,6 +216,11 @@ class GoLogo extends LitElement {
     // Imposta data-mode sull'host subito (prima del render) per evitare flash
     this.setAttribute("data-mode", this._mode);
 
+    // Anche quando a navigare è il link che lo avvolge (vedi render): il
+    // clic arriva qui prima che il link parta, e l'intro va segnata come
+    // vista come per il bottone.
+    this.addEventListener("click", markIntroSeen);
+
     this._unsub = modeStore.subscribe((m) => {
       this._mode = m;
       this.setAttribute("data-mode", m);
@@ -224,6 +230,7 @@ class GoLogo extends LitElement {
 
   disconnectedCallback() {
     super.disconnectedCallback();
+    this.removeEventListener("click", markIntroSeen);
     this._unsub?.();
   }
 
@@ -247,17 +254,31 @@ class GoLogo extends LitElement {
     // e' lo script inline in HomeEntryPage.astro, che al risveglio della
     // pagina d'arrivo da' il nome condiviso all'oggetto giusto. Qui non
     // serve fare niente: il nome sulla pagina che parte c'e' gia'.
-    window.location.href = "/";
+    window.location.href = this._en() ? "/en/" : "/";
+  }
+
+  /** La lingua è quella della pagina (<html lang>): l'isola non riceve
+      la locale come proprietà, e due stringhe non valgono l'import di
+      tutto cv-i18n su ogni pagina (stessa scelta di modeStore.ts). */
+  private _en() {
+    return document.documentElement.lang === "en";
   }
 
   render() {
+    const mark = html`<span class="go-g">G</span><span class="go-o">O</span>`;
+    // Dentro un link (la barra delle lenti, che lo avvolge per chi non ha
+    // JavaScript) il comando è già il link: un secondo <button> dentro
+    // sarebbe un comando annidato e una seconda fermata del Tab con un
+    // altro nome. Lì l'isola disegna solo il marchio.
+    if (this.closest("a")) return html`<span class="go">${mark}</span>`;
     return html`
       <button
+        class="go"
         @click=${this._handleClick}
-        aria-label="GO — Torna all'ingresso"
-        title="Master Reset — torna alla landing"
+        aria-label=${this._en() ? "GO — Back to the entry" : "GO — Torna all'ingresso"}
+        title=${this._en() ? "Master Reset — back to the landing" : "Master Reset — torna alla landing"}
       >
-        <span class="go-g">G</span><span class="go-o">O</span>
+        ${mark}
       </button>
     `;
   }

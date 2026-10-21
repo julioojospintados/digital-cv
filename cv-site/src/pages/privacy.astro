@@ -1,5 +1,6 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import LangSwitch from "../components/LangSwitch.astro";
 import { DEFAULT_MODE, lensPath } from "../lib/cv-i18n";
 import { PRIVACY_BACK_LINK } from "../lib/flags";
 
@@ -14,13 +15,16 @@ const back = lensPath(DEFAULT_MODE, "it");
 >
   <nav class="privacy-nav">
     <go-logo>GO</go-logo>
-    {
-      PRIVACY_BACK_LINK && (
-        <a href={back} class="privacy-back">
-          ← Torna al CV
-        </a>
-      )
-    }
+    <div class="privacy-nav__right">
+      {
+        PRIVACY_BACK_LINK && (
+          <a href={back} class="privacy-back">
+            ← Torna al CV
+          </a>
+        )
+      }
+      <LangSwitch locale="it" href="/en/privacy" />
+    </div>
   </nav>
 
   <main class="privacy-main" id="main-content">
@@ -101,6 +105,15 @@ const back = lensPath(DEFAULT_MODE, "it");
     padding: 1.5rem 1.25rem;
     max-width: 48rem;
     margin: 0 auto;
+  }
+
+  /* A destra il ritorno al CV (spento da PRIVACY_BACK_LINK, lib/flags.ts) e
+     il cambio lingua: le due pagine sono una la traduzione dell'altra, e il
+     cambio è lo stesso di ogni altra pagina del sito (2026-10-21). */
+  .privacy-nav__right {
+    display: flex;
+    align-items: center;
+    gap: var(--size-16);
   }
 
   .privacy-back {

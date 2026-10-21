@@ -621,7 +621,9 @@ const markStyle = (nome: string): string | undefined => {
                           hidden
                         >
                           <span class="lc-more__sign">+{oltre.length}</span>
-                          <span class="lc-sr"> — mostra le altre {oltre.length} tecnologie</span>
+                          <span class="lc-sr">
+                            {t.ui.showOtherTech.replace("{n}", String(oltre.length))}
+                          </span>
                         </button>
                       </li>
                     )}

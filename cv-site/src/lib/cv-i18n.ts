@@ -128,6 +128,8 @@ export interface LocaleStrings {
     explorePortfolio: string;
     /** Barra e intestazione della pagina CV */
     backHome: string;
+    /** Il primo link della pagina, per chi naviga da tastiera (Layout.astro). */
+    skipToContent: string;
     headerAria: string;
     availableRemote: string;
     nowAria: string;
@@ -252,6 +254,7 @@ const IT: LocaleStrings = {
     goTo: "GO to",
     explorePortfolio: "Esplora il portfolio",
     backHome: "Torna alla home",
+    skipToContent: "Vai al contenuto principale",
     headerAria: "Intestazione",
     availableRemote: "Disponibile da remoto",
     nowAria: "Dove lavora ora, e prima",
@@ -353,6 +356,7 @@ const EN: LocaleStrings = {
     goTo: "GO to",
     explorePortfolio: "Explore the portfolio",
     backHome: "Back to the home page",
+    skipToContent: "Skip to main content",
     headerAria: "Header",
     availableRemote: "Available remotely",
     nowAria: "Where he works now, and before",

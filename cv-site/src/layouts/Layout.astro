@@ -1,6 +1,7 @@
 ---
 import "../styles/global.css";
 import cursorCssUrl from "../styles/cursor.css?url";
+import { LOCALES } from "../lib/cv-i18n";
 import SpeedInsights from "@vercel/speed-insights/astro";
 import Analytics from "@vercel/analytics/astro";
 // ConsentBanner disattivato il 2026-08-04 (richiesta esplicita, responsabilità
@@ -705,7 +706,7 @@ const jsonLd = {
 
   <body>
     <!-- Skip to main content — keyboard/screen reader accessibility -->
-    <a href="#main-content" class="skip-link">Vai al contenuto principale</a>
+    <a href="#main-content" class="skip-link">{LOCALES[lang].ui.skipToContent}</a>
 
     <!-- Il nucleo del cursore: il punto che dice dove sei. aria-hidden e
          pointer-events:none — non esiste per chi naviga da tastiera o con uno
