@@ -41,7 +41,11 @@
 //    tastiera. Un'eccezione sola, dichiarata in STRETTI. E il tocco al
 //    centro di ogni comando deve arrivare a lui: un'area allargata non può
 //    finire sopra un altro comando.
-// 6. Nessuna pagina principale scorre in orizzontale.
+// 6. Da tastiera, con il movimento normale, il Tab raggiunge i bottoni di
+//    tutte e tre le schede delle lenti (IT ed EN). Fino al 2026-10-21 le
+//    parole entravano con autoAlpha, cioè visibility: hidden, e il Tab le
+//    saltava finché non ci si arrivava scorrendo.
+// 7. Nessuna pagina principale scorre in orizzontale.
 //
 // ── Le misure ─────────────────────────────────────────────────────────────
 // Prese dalle finestre desktop reali (PostHog, 2026-10-20), più i telefoni
@@ -70,8 +74,12 @@ const TELEFONI = [
   // in una schermata, e l'agente ux-reviewer li misura (2026-10-20).
   [375, 667],
   [360, 640],
-  [320, 568],
 ];
+// Sotto il minimo (AGENTS.md § "Decisions already taken", 2026-10-21): i
+// telefoni più piccoli di 360×640, come l'iPhone SE del 2016. Lì non si
+// promette che le azioni stiano nella prima schermata; si controlla solo che
+// niente si rompa: nessuno scorrimento laterale, contrasto, bersagli da 44px.
+const MINIMI = [[320, 568]];
 
 const INGRESSI = ["/", "/en/"];
 const PAGINE = [
@@ -112,7 +120,8 @@ const ok = (cond, testo, extra = "") => {
   if (!cond) falliti++;
 };
 
-for (const [w, h] of [...DESKTOP, ...TELEFONI]) {
+for (const [w, h] of [...DESKTOP, ...TELEFONI, ...MINIMI]) {
+  const minimo = MINIMI.some(([a, b]) => a === w && b === h);
   // Movimento ridotto: niente parallasse né ingressi animati, quindi la
   // misura è la posizione di riposo e non un fotogramma a caso. La corsa
   // che a movimento normale si aggiunge è il MARGINE qui sopra.
@@ -133,7 +142,9 @@ for (const [w, h] of [...DESKTOP, ...TELEFONI]) {
   // Una pagina vuota per leggere i pixel delle schermate: about:blank non ha
   // la CSP del sito, quindi un'immagine data: si decodifica in un canvas.
   const lettore = await ctx.newPage();
-  console.log(`\n  ${w}×${h}`);
+  console.log(
+    `\n  ${w}×${h}${minimo ? " — sotto il minimo, solo i controlli che non dipendono dallo spazio" : ""}`,
+  );
 
   const bassi = [];
   for (const path of INGRESSI) {
@@ -235,11 +246,12 @@ for (const [w, h] of [...DESKTOP, ...TELEFONI]) {
         );
       }
     }
-    ok(
-      tagliate.length === 0,
-      `${path} — i bottoni di ogni scheda stanno nella prima schermata`,
-      tagliate.join(", "),
-    );
+    if (!minimo)
+      ok(
+        tagliate.length === 0,
+        `${path} — i bottoni di ogni scheda stanno nella prima schermata`,
+        tagliate.join(", "),
+      );
   }
 
   const lunghe = [];
@@ -275,11 +287,12 @@ for (const [w, h] of [...DESKTOP, ...TELEFONI]) {
     });
     if (r.serve > r.area) lunghe.push(`${path} ${r.serve}/${r.area}`);
   }
-  ok(
-    lunghe.length === 0,
-    "«Dicono di me»: ogni testimonianza sta intera nella modale",
-    lunghe.join(", "),
-  );
+  if (!minimo)
+    ok(
+      lunghe.length === 0,
+      "«Dicono di me»: ogni testimonianza sta intera nella modale",
+      lunghe.join(", "),
+    );
 
   ok(
     bassi.length === 0,
@@ -287,7 +300,7 @@ for (const [w, h] of [...DESKTOP, ...TELEFONI]) {
     bassi.join(", "),
   );
 
-  {
+  if (!minimo) {
     const sotto = [];
     for (const path of ["/work/", "/en/work/"]) {
       await page.goto(BASE + path, { waitUntil: "networkidle" });
@@ -381,6 +394,40 @@ for (const [w, h] of [...DESKTOP, ...TELEFONI]) {
     if (extra > 0) larghe.push(`${path} +${extra}px`);
   }
   ok(larghe.length === 0, "nessuna pagina scorre in orizzontale", larghe.join(", "));
+  await ctx.close();
+}
+
+{
+  // Movimento normale, a differenza del resto: è con le animazioni accese
+  // che le parole delle schede partono trasparenti.
+  const ctx = await browser.newContext({ viewport: { width: 1366, height: 610 } });
+  await ctx.addInitScript(() => {
+    try {
+      sessionStorage.setItem("go-intro-seen", "1");
+    } catch {
+      // storage bloccato: l'intro gira compressa, il Tab no
+    }
+  });
+  const page = await ctx.newPage();
+  console.log("\n  tastiera, movimento normale");
+  for (const path of INGRESSI) {
+    await page.goto(BASE + path, { waitUntil: "networkidle" });
+    const raggiunte = new Set();
+    for (let i = 0; i < 60; i++) {
+      await page.keyboard.press("Tab");
+      const id = await page.evaluate(
+        () => document.activeElement?.closest(".lh-section[data-mode]")?.id ?? null,
+      );
+      if (id) raggiunte.add(id);
+    }
+    const lenti = await page.$$eval(".lh-section[data-mode]", (els) => els.map((e) => e.id));
+    const mancanti = lenti.filter((id) => !raggiunte.has(id));
+    ok(
+      mancanti.length === 0,
+      `${path} — il Tab arriva ai bottoni di ogni lente`,
+      `mai raggiunte: ${mancanti.join(", ")}`,
+    );
+  }
   await ctx.close();
 }
 

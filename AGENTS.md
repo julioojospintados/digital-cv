@@ -797,9 +797,13 @@ AGENTS.md                 ← This file — tool-agnostic project guide
     otherwise — the orange eyebrow passes only because it is 20px bold);
     that every testimonial fits the «Dicono di me» modal; and, on phones,
     that every control answers the finger on 44×44px (`--hit`, the
-    `::after` hit areas in global.css). Short phones (375×667, 360×640,
-    320×568) are in its list: there the entry cards and the /work card put
-    their actions before the text.
+    `::after` hit areas in global.css), and that the area a tap lands on
+    belongs to the control under it. Short phones (375×667, 360×640) are in
+    its list: there the entry cards and the /work card put their actions
+    before the text. 320×568 is checked only for what does not depend on
+    space (sideways scroll, contrast, touch targets) — see the 360×640
+    floor under § "Decisions already taken". Keyboard: with normal motion,
+    Tab must reach the buttons of every lens card.
 
 → `qa:prepush` serves the build on an **ephemeral port bound to 127.0.0.1**, not
   a fixed one. With a fixed port a leftover process from an earlier session can
@@ -927,6 +931,18 @@ for nothing.
   are in the open at the top of each lens page, in «Scrivimi» and in the
   footer. Do not re-add a floating contact button; if reachability
   mid-scroll ever becomes a need, measure it first.
+
+→ **The smallest phone the site is designed for is 360×640** (Giulio,
+  2026-10-21). Below it — 320px wide, the 2016 iPhone SE and its kind — the
+  site must not break (no sideways scroll, nothing clipped, contrast and
+  touch targets hold, everything reachable by scrolling), but it does not
+  promise that a card's actions sit in the first screen, and no rule is
+  written only to make that happen. `qa:viewports` reflects this: 320×568
+  is in its list with the space-dependent checks off. A rule below the
+  floor is fine when it stops something from looking broken (the /work
+  back button wrapping onto two lines at 320px is fixed); a rule whose only
+  purpose is to fit the first screen there is not. If real visitor data ever shows those phones,
+  revisit the floor first.
 
 → **Do not recreate `/old-version`.** It was deliberately unlinked while it
   existed, and then deleted outright. If the previous design has to be shown

@@ -98,10 +98,11 @@ export function initLabHomeScroll(): void {
       if (!target) return;
       e.preventDefault();
       const top = flowTop(target);
-      // Il fuoco va dato a scorrimento finito, non al clic: fino a quando la
-      // scheda non entra, il suo testo è nascosto dall'animazione d'ingresso
-      // (autoAlpha, più sotto), e un elemento invisibile non prende il fuoco.
-      // Misurato: dato subito, il fuoco restava sul link.
+      // Il fuoco va dato a scorrimento finito, non al clic: dato subito,
+      // chiuderebbe l'ingresso della scheda (vedi focusin, più sotto) mentre
+      // la pagina sta ancora scorrendo verso di lei, e le parole
+      // comparirebbero prima di arrivare. Fino al 2026-10-21 l'ingresso usava
+      // autoAlpha, e il fuoco dato subito restava proprio sul link.
       const heading = target.querySelector<HTMLElement>("h2");
       const focusHeading = () => {
         if (!heading) return;
@@ -188,7 +189,7 @@ export function initLabHomeScroll(): void {
 
   sections.forEach((section) => {
     // Sezione non disegnata ("Chi sono" sotto i 56rem): si salta. Non è solo
-    // lavoro sprecato — è il `gsap.set(..., autoAlpha: 0)` qui sotto che non
+    // lavoro sprecato — è il `gsap.set(..., opacity: 0)` qui sotto che non
     // deve partire, altrimenti resterebbe applicato e, tornando sopra il
     // breakpoint, la sezione ricomparirebbe vuota. Saltandola il contenuto
     // resta visibile, che è il verso giusto in cui rompersi (vedi l'intestazione
@@ -283,12 +284,19 @@ export function initLabHomeScroll(): void {
       });
     }
 
+    // Anche qui `opacity` e non `autoAlpha` (2026-10-21): con visibility
+    // hidden i bottoni di una scheda non ancora raggiunta scorrendo non
+    // prendevano il fuoco, e il Tab li saltava — da tastiera le tre lenti
+    // non si aprivano mai — e uno screen reader non leggeva le parole.
+    // Trasparenti restano nell'ordine del Tab; e quando il fuoco entra nella
+    // scheda, l'ingresso si chiude subito, così quello che ha il fuoco si vede.
     if (copyChildren.length) {
-      gsap.set(copyChildren, { autoAlpha: 0, scale: 0.98 });
+      gsap.set(copyChildren, { opacity: 0, scale: 0.98 });
+      section.addEventListener("focusin", () => enterCopy.progress(1), { once: true });
       enterCopy.to(
         copyChildren,
         {
-          autoAlpha: 1,
+          opacity: 1,
           scale: 1,
           duration: 0.6,
           stagger: 0.08,

@@ -46,6 +46,23 @@
   gap: var(--size-16);
 }
 
+/* Sotto i 360px la barra non ci stava: marchio, ritorno e lingua chiedevano
+   291px su 272, e «Back to CV» andava su due righe (2026-10-21). Margini e
+   spazio fra i comandi si stringono, e il ritorno resta su una riga. */
+@media (max-width: 22.49rem) {
+  .work-nav {
+    padding-inline: var(--size-16);
+  }
+
+  .work-nav__right {
+    gap: var(--size-8);
+  }
+
+  .work-back {
+    white-space: nowrap;
+  }
+}
+
 /* ── Il ritorno al CV ─────────────────────────────────────────────────────
    Rifatto due volte in due giorni. Il 3 settembre era diventato il bottone a
    filo del sistema, perché prima era mono a 12px maiuscolo e attenuato: su
@@ -716,7 +733,7 @@
    - la card perde il minimo in altezza, che su telefono era aria fra il
      ruolo e l'invito (come su desktop con la finestra bassa);
    - sui telefoni bassi (sotto i 700px) l'invito sale sotto il nome, prima
-     del ruolo, e la testata si stringe (spazi, interlinea, bussola a 3rem): lo stesso ordine «azioni prima del
+     del ruolo, e la testata si stringe: lo stesso ordine «azioni prima del
      testo» delle schede dell'ingresso a quelle misure.
    Lo verifica qa:viewports, ora anche sui telefoni. */
 @media (max-width: 39.99rem) {
@@ -734,17 +751,6 @@
   .work-index-hero {
     padding-top: var(--size-8);
     padding-bottom: var(--size-8);
-  }
-
-  /* Il paragrafo è la parte alta della testata: a 320px, accanto alla
-     bussola, andava su otto righe. Interlinea un po' più stretta e bussola
-     a 3rem (intera, sempre accanto al testo) gliene tolgono una. */
-  .work-index-hero .work-section__text {
-    line-height: 1.55;
-  }
-
-  .work-index-hero__obj {
-    width: 3rem;
   }
 
   .work-index-hero__title {

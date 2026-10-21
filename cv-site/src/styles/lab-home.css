@@ -1026,21 +1026,17 @@ html[data-lh-armed] .lh-obj {
   }
 }
 
-/* ── Desktop: sezioni su due colonne, alternate ── */
+/* ── Desktop: sezioni su due colonne, oggetto a sinistra ──────────────────
+   Qui c'era un'alternanza: l'oggetto a destra nelle sezioni dispari, con
+   «Chi sono» a fare da prima. Non è mai scattata — ogni sezione è preceduta
+   dal suo segnaposto nel flusso ([data-lh-anchor], lab-home-scroll.ts), quindi
+   le schede sono i figli pari e :nth-child(odd) non ne prendeva nessuna. Il
+   sito si è sempre visto con l'oggetto a sinistra in tutte, e così resta
+   (Giulio, 2026-10-21): regola e commento tolti. */
 
 @media (min-width: 56rem) {
   .lh-section {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  }
-
-  /* L'oggetto passa a destra nelle sezioni DISPARI, non nelle pari: la
-     prima sezione di <main> e' "Chi sono", e deve avere il testo a
-     sinistra. Da li' l'alternanza scende da sola — chi sono a sinistra,
-     poi destra, sinistra, destra, sinistra.
-     Nota per il futuro: il conteggio e' su nth-child, quindi inserire una
-     sezione in mezzo ribalta tutte quelle dopo. */
-  .lh-section:nth-child(odd) .lh-section__object {
-    order: 2;
   }
 }
 
@@ -1156,15 +1152,10 @@ html[data-lh-armed] .lh-obj {
    link al design system della scheda Web & UX sotto il bordo: 599px su 560
    in inglese. Il testo prende i tre quinti e l'oggetto i due rimanenti, su
    tutte e tre le lenti: i bottoni tornano su una riga e il testo si accorcia
-   di qualche riga. La colonna che si allarga segue l'alternanza delle
-   schede: l'oggetto sta a destra nelle dispari (vedi sopra). */
+   di qualche riga. */
 @media (min-width: 56rem) and (max-width: 74.99rem) and (max-height: 48rem) {
   .lh-section[data-mode] {
     grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
-  }
-
-  .lh-section[data-mode]:nth-child(odd) {
-    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
   }
 }
 
@@ -1797,7 +1788,8 @@ html[data-lh-armed] .lh-obj {
    legge scorrendo. «Chi sono» tiene «Scrivimi» in fondo, dopo bio e
    cassetti: è un contatto, non una porta verso un'altra pagina, e ci sta
    già con i margini stretti. Margini e spazi si stringono per tutte e
-   quattro. Lo controlla qa:viewports a 360×640 e 320×568. */
+   quattro. Lo controlla qa:viewports a 375×667 e 360×640, il minimo
+   promesso (AGENTS.md); sotto, la regola vale ma non è un impegno. */
 @media (max-width: 55.99rem) and (max-height: 43.75rem) {
   :is(.lh-section[data-mode], .lh-section--about) {
     padding-block: var(--size-16);
