@@ -1,4 +1,5 @@
 import { Type, type Schema } from "@google/genai";
+import { CASE_STUDY_SLUGS, type CaseStudySlug } from "@cv-pdf-template";
 
 /**
  * Schema di output strutturato per la chiamata Gemini "di sintesi" (call 2 —
@@ -116,9 +117,14 @@ export const RESPONSE_SCHEMA: Schema = {
               title: { type: Type.STRING },
               desc: { type: Type.STRING },
               outcome: { type: Type.STRING },
-              url: { type: Type.STRING },
+              // Lo slug del case study, scelto da una lista chiusa. Fino al
+              // 2026-10-21 qui c'era `url`, testo libero: un CV inglese è
+              // uscito con /work/cHJvZHVjdC invece di /work/product-discovery.
+              // L'indirizzo, nella lingua del CV, lo costruisce il template
+              // (resolveWorkUrl in scripts/cv-pdf-template.ts).
+              slug: { type: Type.STRING, enum: [...CASE_STUDY_SLUGS] },
             },
-            required: ["title", "desc", "outcome", "url"],
+            required: ["title", "desc", "outcome", "slug"],
           },
         },
         skills: {
@@ -255,7 +261,7 @@ export interface CvContent {
   profile: string;
   earlier: string;
   experiences: Array<{ yr: string; loc: string; role: string; org: string; bullets: string[] }>;
-  works: Array<{ title: string; desc: string; outcome: string; url: string }>;
+  works: Array<{ title: string; desc: string; outcome: string; slug: CaseStudySlug }>;
   skills: Array<{ label: string; chips: string[]; key?: boolean }>;
   certs: Array<{ by: string; name: string; strong?: boolean }>;
   edu: Array<{ yr: string; title: string; sub: string }>;

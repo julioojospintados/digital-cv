@@ -36,6 +36,7 @@ const jb = (root: string, weight: number): string =>
 export function loadPdfAssets(root: string): PdfAssets {
   return {
     qr: b64(resolve(root, "cv-site/public/qr/site-qr-dark.png"), "image/png"),
+    qrEn: b64(resolve(root, "cv-site/public/qr/site-qr-dark-en.png"), "image/png"),
     lex400: lex(root, 400),
     lex600: lex(root, 600),
     lex700: lex(root, 700),

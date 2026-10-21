@@ -49,8 +49,6 @@ export type { Locale };
 
 // ── Locale content ───────────────────────────────────────────────────────────
 
-const SITE = "https://giulio-occhipinti.com";
-
 const EN: Locale = {
   lang: "en",
   file: "Giulio_Occhipinti_UX_Designer_CV_EN.pdf",
@@ -145,19 +143,19 @@ const EN: Locale = {
       title: "Product Discovery — UX Research",
       desc: "With a technical partner: a behavioural needs map, user interviews and competitor analysis to validate real demand before a single line of code.",
       outcome: "17 concepts → 1, user-validated",
-      url: `${SITE}/work/product-discovery`,
+      slug: "product-discovery",
     },
     {
       title: "Interactive Digital CV",
       desc: "Research-led IA (one profile, three lenses), a WCAG-AA design system and an AI-augmented build. The live twin of this document.",
       outcome: "Design system · WCAG AA · &gt;80% coverage",
-      url: `${SITE}/work/digital-cv`,
+      slug: "digital-cv",
     },
     {
       title: "trip-runway — Travel Budget Yield App",
       desc: "Turned a personal flight-price script into a web app that crosses flight cost with cost of living to calculate the maximum sustainable trip length on a fixed budget.",
       outcome: "Next.js · Supabase · anti-abuse API architecture",
-      url: `${SITE}/work/trip-runway`,
+      slug: "trip-runway",
     },
   ],
   skills: [
@@ -340,19 +338,19 @@ const IT: Locale = {
       title: "Product Discovery — UX Research",
       desc: "Con un socio tecnico: mappa dei bisogni comportamentali, interviste utente e analisi dei competitor per validare la domanda reale prima di una riga di codice.",
       outcome: "17 concept → 1, validati con gli utenti",
-      url: `${SITE}/work/product-discovery`,
+      slug: "product-discovery",
     },
     {
       title: "CV Digitale Interattivo",
       desc: "IA guidata dalla ricerca (un profilo, tre lenti), design system WCAG-AA e build AI-augmented. Il gemello live di questo documento.",
       outcome: "Design system · WCAG AA · &gt;80% copertura",
-      url: `${SITE}/work/digital-cv`,
+      slug: "digital-cv",
     },
     {
       title: "trip-runway — Travel Budget Yield App",
       desc: "Ho trasformato uno script personale di ricerca voli in una web app che incrocia il costo del volo con il costo della vita per calcolare i giorni massimi di viaggio sostenibili con un budget fisso.",
       outcome: "Next.js · Supabase · architettura API anti-abuso",
-      url: `${SITE}/work/trip-runway`,
+      slug: "trip-runway",
     },
   ],
   skills: [

@@ -172,7 +172,7 @@ Nessun campo oltre a questi. `gdprFooter` e `_meta` sono gli unici opzionali. `_
   "secSkills": "...", "skillsEyebrow": "...",
   "secCerts": "...", "secEdu": "...", "secLangs": "...",
   "experiences": [{ "yr": "...", "loc": "...", "role": "...", "org": "...", "bullets": ["..."] }],
-  "works": [{ "title": "...", "desc": "...", "outcome": "...", "url": "..." }],
+  "works": [{ "title": "...", "desc": "...", "outcome": "...", "slug": "product-discovery" }],
   "skills": [{ "label": "...", "chips": ["..."], "key": true }],
   "certs": [{ "by": "...", "name": "...", "strong": true }],
   "edu": [{ "yr": "...", "title": "...", "sub": "..." }],
@@ -181,6 +181,8 @@ Nessun campo oltre a questi. `gdprFooter` e `_meta` sono gli unici opzionali. `_
   "gdprFooter": "solo se bucket == italia"
 }
 ```
+
+In `works`, `slug` è uno fra `digital-cv`, `trip-runway`, `product-discovery`, `music-agency`: mai un indirizzo. Il link, nella lingua del CV (`/work/…` in italiano, `/en/work/…` in inglese), lo costruisce il template; uno slug sconosciuto ripiega sull'indice dei lavori.
 
 `bullets`, `title`, `sub` ed `earlier` accettano `<b>...</b>` inline per il grassetto (coerente col resto del template).
 

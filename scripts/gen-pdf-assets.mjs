@@ -56,6 +56,7 @@ const jb = (weight) =>
 
 const assets = {
   qr: b64(resolve(ROOT, "cv-site/public/qr/site-qr-dark.png"), "image/png"),
+  qrEn: b64(resolve(ROOT, "cv-site/public/qr/site-qr-dark-en.png"), "image/png"),
   lex400: lex(400),
   lex600: lex(600),
   lex700: lex(700),

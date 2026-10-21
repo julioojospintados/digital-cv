@@ -10,6 +10,66 @@
 
 export const SITE = "https://giulio-occhipinti.com";
 
+// ── I link del CV ────────────────────────────────────────────────────────────
+// Ogni indirizzo che un CV stampa passa da qui, e segue la lingua del CV: un
+// PDF italiano porta a giulio-occhipinti.com e /work, uno inglese a /en e
+// /en/work (Giulio, 2026-10-21). Fino a quel giorno tutti i PDF puntavano alle
+// pagine italiane, anche quelli in inglese.
+//
+// I case study si indicano per slug, mai per indirizzo scritto a mano: il
+// generatore da telefono faceva scrivere l'URL a Gemini, e il 21 ottobre un
+// CV mirato inglese è uscito con /work/cHJvZHVjdC («product» in base64) al
+// posto di /work/product-discovery. Due persone l'hanno aperto da Slack e
+// hanno trovato la pagina d'errore. Qui un link che non porta a un case study
+// vero non viene stampato: si ripiega sull'indice dei lavori.
+
+/**
+ * Gli slug delle pagine /work/[slug]. Copia voluta di `slug` in
+ * src/data/cv.ts (projects): questo modulo è importato anche dalla funzione
+ * serverless e resta senza dipendenze. src/data/cv-links.test.ts fallisce se
+ * le due liste divergono.
+ */
+export const CASE_STUDY_SLUGS = [
+  "digital-cv",
+  "trip-runway",
+  "product-discovery",
+  "music-agency",
+] as const;
+export type CaseStudySlug = (typeof CASE_STUDY_SLUGS)[number];
+
+const isSlug = (v: string): v is CaseStudySlug =>
+  (CASE_STUDY_SLUGS as readonly string[]).includes(v);
+
+/** La home del sito nella lingua del CV. */
+export const siteUrl = (lang: "it" | "en"): string => (lang === "en" ? `${SITE}/en` : SITE);
+
+/** L'indice dei case study nella lingua del CV. */
+export const workIndexUrl = (lang: "it" | "en"): string => `${siteUrl(lang)}/work`;
+
+/** Un case study nella lingua del CV. */
+export const caseStudyUrl = (slug: CaseStudySlug, lang: "it" | "en"): string =>
+  `${workIndexUrl(lang)}/${slug}`;
+
+/**
+ * Il link vero di una voce «Lavori». In ordine: lo slug dichiarato; lo slug
+ * dentro un vecchio `url` (i JSON scritti prima del 2026-10-21 hanno
+ * l'indirizzo intero, a volte nella lingua sbagliata); il titolo, se nomina
+ * un case study («Product Discovery» → product-discovery). Se niente porta a
+ * un case study esistente, l'indice dei lavori: mai un indirizzo inventato.
+ */
+export function resolveWorkUrl(w: Work, lang: "it" | "en"): string {
+  if (w.slug && isSlug(w.slug)) return caseStudyUrl(w.slug, lang);
+  const dalUrl = w.url?.match(/\/work\/([a-z0-9-]+)/)?.[1];
+  if (dalUrl && isSlug(dalUrl)) return caseStudyUrl(dalUrl, lang);
+  const titolo = w.title
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[^a-z0-9]+/g, "-");
+  const dalTitolo = CASE_STUDY_SLUGS.find((s) => titolo.includes(s));
+  if (dalTitolo) return caseStudyUrl(dalTitolo, lang);
+  return workIndexUrl(lang);
+}
+
 /**
  * Firma di chiusura, ultima riga di contenuto del CV (designed e bozza ATS,
  * non la lettera di presentazione).
@@ -116,7 +176,12 @@ export interface Work {
   title: string;
   desc: string;
   outcome: string;
-  url: string;
+  /** Il case study a cui la voce porta. È il campo da usare: l'indirizzo lo
+      costruisce resolveWorkUrl, nella lingua del CV. */
+  slug?: CaseStudySlug;
+  /** Solo per i JSON scritti prima del 2026-10-21: se ne prende lo slug, il
+      resto dell'indirizzo è ignorato. */
+  url?: string;
 }
 export interface SkillGroup {
   label: string;
@@ -194,7 +259,11 @@ export interface CoverLetterMeta {
 
 /** Font/QR pre-caricati come data: URI — vedi i chiamanti per come li ottengono. */
 export interface PdfAssets {
+  /** QR verso la home italiana (giulio-occhipinti.com). */
   qr: string;
+  /** QR verso la home inglese (/en), per i CV in inglese — stesso disegno,
+      generato da scripts/gen-site-qr.mjs. */
+  qrEn: string;
   lex400: string;
   lex600: string;
   lex700: string;
@@ -214,12 +283,12 @@ const expHtml = (e: Experience): string => `
     </div>
   </div>`;
 
-const workHtml = (w: Work, linkLabel: string): string => `
+const workHtml = (w: Work, linkLabel: string, lang: "it" | "en"): string => `
     <article class="wcard">
       <div class="wt">${w.title}</div>
       <div class="wd">${w.desc}</div>
       <div class="wo">${w.outcome}</div>
-      <div class="wl"><a class="lnk" href="${w.url}">${linkLabel}</a></div>
+      <div class="wl"><a class="lnk" href="${resolveWorkUrl(w, lang)}">${linkLabel}</a></div>
     </article>`;
 
 const skillHtml = (g: SkillGroup): string => `
@@ -392,14 +461,14 @@ section{margin-top:4mm;}
     <div class="contacts">
       <span class="ct"><span class="lab">Email</span> <a class="on-dark" href="mailto:giulio.occhipinti.g@gmail.com">giulio.occhipinti.g@gmail.com</a></span>
       <span class="ct"><span class="lab">LinkedIn</span> <a class="on-dark" href="${L.linkedinUrl}">in/giulio-occhipinti</a></span>
-      <span class="ct"><span class="lab">${L.siteLabel}</span> <a class="on-dark" href="${SITE}">giulio-occhipinti.com</a></span>
+      <span class="ct"><span class="lab">${L.siteLabel}</span> <a class="on-dark" href="${siteUrl(L.lang)}">giulio-occhipinti.com</a></span>
       <span class="ct plain">${L.location}</span>
     </div>
   </div>
   <figure class="qcol">
-    <a href="${SITE}"><img src="${assets.qr}" alt="QR code — ${SITE}"></a>
+    <a href="${siteUrl(L.lang)}"><img src="${L.lang === "en" ? assets.qrEn : assets.qr}" alt="QR code — ${siteUrl(L.lang)}"></a>
     <div class="cap">${L.qrCap}</div>
-    <a class="btn" href="${SITE}">${L.visitBtn}</a>
+    <a class="btn" href="${siteUrl(L.lang)}">${L.visitBtn}</a>
   </figure>
 </header>
 
@@ -418,8 +487,8 @@ section{margin-top:4mm;}
 
 <div class="sheet">
 <section>
-  <div class="sec-h"><h2>${L.secWork}</h2><span>${L.workEyebrow}</span><a class="lnk sec-h__link" href="${SITE}/work">${L.portfolioBtn}</a></div>
-  <div class="work">${L.works.map((w) => workHtml(w, L.workLinkLabel)).join("\n")}</div>
+  <div class="sec-h"><h2>${L.secWork}</h2><span>${L.workEyebrow}</span><a class="lnk sec-h__link" href="${workIndexUrl(L.lang)}">${L.portfolioBtn}</a></div>
+  <div class="work">${L.works.map((w) => workHtml(w, L.workLinkLabel, L.lang)).join("\n")}</div>
 </section>
 
 <section>
@@ -447,7 +516,7 @@ section{margin-top:4mm;}
     <div class="cta__t">${L.ctaTitle}</div>
     <div class="cta__s">${L.ctaSub}</div>
   </div>
-  <a class="btn" href="${SITE}/work">${L.portfolioBtn}</a>
+  <a class="btn" href="${workIndexUrl(L.lang)}">${L.portfolioBtn}</a>
 </div>
 <div class="sign">${SIGNATURE[L.lang]}</div>
 ${L.gdprFooter ? `<div class="gdpr">${L.gdprFooter}</div>` : ""}
@@ -480,7 +549,7 @@ export function buildHtmlAts(L: Locale, assets: PdfAssets): string {
       <div class="entry__head">${w.title}</div>
       <div>${w.desc}</div>
       <div class="meta">${w.outcome}</div>
-      <div><a href="${w.url}">${linkLabel}</a></div>
+      <div><a href="${resolveWorkUrl(w, L.lang)}">${linkLabel}</a></div>
     </div>`;
 
   const certAts = (c: Cert): string => `<li>${c.by} — ${c.name}</li>`;
@@ -511,7 +580,7 @@ li{margin-bottom:1mm;}
 <h1>Giulio Occhipinti</h1>
 <p class="posit">${L.positioning}</p>
 <p class="creds">${L.creds}</p>
-<p class="contacts">Email: giulio.occhipinti.g@gmail.com — LinkedIn: ${L.linkedinUrl} — ${L.siteLabel}: ${SITE} — ${L.location}</p>
+<p class="contacts">Email: giulio.occhipinti.g@gmail.com — LinkedIn: ${L.linkedinUrl} — ${L.siteLabel}: ${siteUrl(L.lang)} — ${L.location}</p>
 
 <h2>${L.profileLead}</h2>
 <p>${L.profile}</p>
@@ -522,7 +591,7 @@ ${L.experiences.map(expAts).join("\n")}
 
 <h2>${L.secWork}</h2>
 ${L.works.map((w) => workAts(w, L.workLinkLabel)).join("\n")}
-<p><a href="${SITE}/work">${L.portfolioBtn}</a></p>
+<p><a href="${workIndexUrl(L.lang)}">${L.portfolioBtn}</a></p>
 
 <h2>${L.secSkills}</h2>
 ${L.skills.map((g) => `<div class="skill-list"><b>${g.label}</b>${g.chips.join(", ")}</div>`).join("\n")}

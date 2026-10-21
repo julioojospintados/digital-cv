@@ -179,6 +179,21 @@ behaviour, not the logic that computes them.
 → The subagent also logs each job description's key signals to
   `cv-output/jd-insights/<usa-canada|europa|italia>.md` so later variants for
   the same region get calibrated against real, accumulated patterns.
+→ **Every link a CV prints follows the CV's language, and case studies are
+  referenced by slug** (2026-10-21). An Italian PDF links to
+  `giulio-occhipinti.com`, `/work` and `/work/<slug>`; an English one to
+  `/en`, `/en/work` and `/en/work/<slug>`, and carries a QR to `/en`
+  (`cv-site/public/qr/site-qr-dark-en.png`, drawn by
+  `scripts/gen-site-qr.mjs` in the same style as the Italian one — always
+  check a regenerated QR with a real reader). In `works`, write `slug`
+  (one of `CASE_STUDY_SLUGS` in `scripts/cv-pdf-template.ts`), never a URL:
+  `resolveWorkUrl` builds it, and anything that does not lead to an existing
+  case study falls back to the work index. Why: the Gemini tool let the model
+  write `works[].url` as free text, and on 2026-10-21 an English CV went out
+  with `/work/cHJvZHVjdC` («product» in base64) instead of
+  `/work/product-discovery` — two people opened it and found the 404. The
+  Gemini schema now offers `slug` as a closed enum, and
+  `src/data/cv-links.test.ts` fails if the slug list drifts from `cv.ts`.
 → `cv-output/` is gitignored — these are personal application documents, never commit them.
 
 ### Same thing, from a phone — the Gemini-powered web tool
@@ -497,6 +512,7 @@ scripts/                  ← Root utility scripts (Node)
   generate-targeted-cv.ts ← Renders one job-application-specific Locale JSON (npm run pdf:targeted -- <path>) — consumer of .claude/agents/cv-recruiter.md's output
   generate-full-cv.ts     ← Full-history ATS CV, every role (npm run pdf:full)
   gen-pdf-assets.mjs      ← Regenerates generated/pdf-assets.json (rerun only if fonts/QR change — see AGENTS.md § "from a phone")
+  gen-site-qr.mjs         ← Draws the styled site QR for a URL (node scripts/gen-site-qr.mjs <url> <out.png>) — made for the /en QR of English CVs
   gen-og-image.mjs        ← Generate the Open Graph image
   qa-mobile.js            ← Responsive QA via Playwright (npm run qa:mobile)
   qa-design-system.mjs    ← Deterministic gauntlet for /design-system, IT+EN (npm run qa:ds) — see § Verification loop

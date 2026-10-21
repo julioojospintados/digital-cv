@@ -35,6 +35,7 @@ import {
   type Locale,
   type Experience,
   type Work,
+  type CaseStudySlug,
 } from "./cv-pdf-template.js";
 import { loadPdfAssets } from "./load-pdf-assets.js";
 import { locales as uxLocales } from "./generate-ux-cv.js";
@@ -45,8 +46,6 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, "..");
 const OUT_DIR = resolve(ROOT, "cv-output");
 const ASSETS = loadPdfAssets(ROOT);
-
-const SITE = "https://giulio-occhipinti.com";
 
 // Tipo strutturale (non `typeof cvData`, che pinnerebbe i literal string IT
 // e romperebbe il passaggio di cvDataEn): entrambe le fonti condividono gli
@@ -84,7 +83,7 @@ function toWorks(data: SourceData): Work[] {
       title: p.name,
       desc: p.description,
       outcome: p.outcomes?.[0] ?? "",
-      url: `${SITE}/work/${p.slug}`,
+      slug: p.slug as CaseStudySlug,
     }));
 }
 
