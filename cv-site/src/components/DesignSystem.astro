@@ -666,6 +666,7 @@ const NAV = [
       { id: "work-learnings", label: it ? "Cosa ho imparato" : "What I learned" },
       { id: "work-sezione", label: it ? "Sezione di Case study" : "Case-study section" },
       { id: "work-decisione", label: it ? "Decisione di progetto" : "Project decision" },
+      { id: "work-automazioni", label: it ? "Tabella delle automazioni" : "Automations table" },
       { id: "work-viaggio", label: it ? "Il viaggio" : "The journey" },
     ],
   },
@@ -782,6 +783,7 @@ const CATEGORIES = [
       "lente-contatti",
       "ingresso-email",
       "work-decisione",
+      "work-automazioni",
       "work-learnings",
     ],
   },
@@ -5710,6 +5712,112 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
                 it
                   ? "Il bordo sinistro passa da neutro ad accento sull'hover — segnala che il blocco è esaminabile, ma non porta informazione: chi non vede l'hover non perde niente."
                   : "The left border goes from neutral to accent on hover — it signals the block is examinable, but carries no information: not seeing the hover costs nothing."
+              }
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="ds-panel"
+        data-ds-accent
+        id="work-automazioni"
+        data-ds-panel="work-automazioni"
+        aria-labelledby="work-automazioni-t"
+      >
+        <div class="ds-panel__head">
+          <h2 class="ds-section__title" id="work-automazioni-t">
+            {it ? "Tabella delle automazioni" : "Automations table"}
+          </h2>
+          <span class="ds-panel__group">{t.secWork}<span class="ds-origin">work-*</span></span>
+        </div>
+
+        <div class="ds-stage">
+          <table class="work-auto" data-ds-snippet>
+            <caption class="work-auto__intro">
+              {
+                it
+                  ? "Gli strumenti costruiti per il progetto. Le righe con il badge AI usano un modello di linguaggio."
+                  : "The tools built for the project. Rows with the AI badge use a language model."
+              }
+            </caption>
+            <thead>
+              <tr>
+                <th scope="col">{it ? "Cosa" : "Name"}</th>
+                <th scope="col">{it ? "Tipo" : "Type"}</th>
+                <th scope="col">{it ? "A cosa serve" : "What it does"}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="work-auto__row work-auto__row--ai">
+                <th scope="row" class="work-auto__name">
+                  {it ? "Agente ux-reviewer" : "ux-reviewer agent"}
+                  <span class="lc-ai lc-ai--sm">AI</span>
+                </th>
+                <td class="work-auto__kind"
+                  >{it ? "Agente AI · Claude Code" : "AI agent · Claude Code"}</td
+                >
+                <td class="work-auto__what">
+                  {
+                    it
+                      ? "Rivede il sito alle misure di schermo dei visitatori veri."
+                      : "Reviews the site at the screen sizes real visitors use."
+                  }
+                </td>
+              </tr>
+              <tr class="work-auto__row">
+                <th scope="row" class="work-auto__name">
+                  {it ? "Controlli prima di ogni push" : "Checks before every push"}
+                </th>
+                <td class="work-auto__kind">Husky · Playwright</td>
+                <td class="work-auto__what">
+                  {
+                    it
+                      ? "Lint, build e cinque controlli in un browser vero."
+                      : "Lint, build and five checks in a real browser."
+                  }
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="ds-spec">
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specClass}</span>
+            <p class="ds-spec__v">
+              <code
+                >work-auto · work-auto__intro · work-auto__row · work-auto__row--ai ·
+                work-auto__name · work-auto__kind · work-auto__what · lc-ai</code
+              >
+            </p>
+          </div>
+          <div class="ds-spec__row">
+            <span class="ds-spec__k">{t.specUse}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Nel case study Digital CV, dopo le decisioni: gli strumenti costruiti, confrontabili per colonna. I dati stanno in cv.ts (automations, automationsIntro)."
+                  : "In the Digital CV case study, after the decisions: the tools that were built, comparable by column. The data lives in cv.ts (automations, automationsIntro)."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--dont">
+            <span class="ds-spec__k">{t.specDont}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Non usarla per un elenco senza colonne da confrontare: lì bastano le decisioni o i learnings. E non far reagire le righe al mouse: non sono comandi."
+                  : "Do not use it for a list with no columns to compare: decisions or learnings are enough there. And do not make rows react to the mouse: they are not controls."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specA11y}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Tabella vera, con <caption> visibile come nome accessibile e intestazioni di riga e di colonna. Le righe AI si riconoscono dal badge, non solo dal filo d'accento (1.4.1). Su telefono la tabella diventa un elenco: le intestazioni di colonna spariscono alla vista ma restano per i lettori di schermo."
+                  : "A real table, with a visible <caption> as its accessible name and row and column headers. AI rows are told apart by the badge, not only by the accent stripe (1.4.1). On phones the table becomes a list: the column headers disappear from view but stay for screen readers."
               }
             </p>
           </div>

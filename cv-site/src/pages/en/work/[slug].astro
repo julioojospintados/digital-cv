@@ -216,6 +216,40 @@ const sigla = projectInitials(project.name);
     }
 
     {
+      project.automations && project.automations.length > 0 && (
+        <section class="work-section" aria-labelledby="work-auto-title">
+          <h2 class="work-section__title" id="work-auto-title">
+            Automations
+          </h2>
+          <table class="work-auto">
+            {project.automationsIntro && (
+              <caption class="work-auto__intro">{project.automationsIntro}</caption>
+            )}
+            <thead>
+              <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Type</th>
+                <th scope="col">What it does</th>
+              </tr>
+            </thead>
+            <tbody>
+              {project.automations.map((a) => (
+                <tr class:list={["work-auto__row", { "work-auto__row--ai": a.ai }]}>
+                  <th scope="row" class="work-auto__name">
+                    {a.name}
+                    {a.ai && <span class="lc-ai lc-ai--sm">AI</span>}
+                  </th>
+                  <td class="work-auto__kind">{a.kind}</td>
+                  <td class="work-auto__what">{a.what}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </section>
+      )
+    }
+
+    {
       project.learnings && project.learnings.length > 0 && (
         <section class="work-section" aria-labelledby="work-learnings-title">
           <h2 class="work-section__title" id="work-learnings-title">

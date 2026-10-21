@@ -219,6 +219,21 @@ export interface Project {
   outcomes?: string[];
   /** Cosa ho imparato — riflessioni finali, 2-3 righe ciascuna */
   learnings?: string[];
+  /** Le automazioni costruite per il progetto, in tabella sul case study.
+   *  `ai: true` le segna col badge AI e le mette in evidenza. */
+  automations?: Automation[];
+  /** Frase d'apertura della tabella: è anche la sua didascalia accessibile. */
+  automationsIntro?: string;
+}
+
+export interface Automation {
+  /** Il nome con cui la si riconosce. */
+  name: string;
+  /** Che cos'è e con cosa è fatta, in breve. */
+  kind: string;
+  /** A cosa serve, in una frase. */
+  what: string;
+  ai: boolean;
 }
 
 export interface AiWorkflowItem {
@@ -2022,6 +2037,64 @@ export const cvData = {
         "L'AI accelera davvero solo dentro vincoli decisi prima: con token, regole di animazione e DO NOT espliciti il vibe coding produce; senza, produce caos da rifare.",
         'Ogni dettaglio deve sopravvivere alla domanda "perché?": se una scelta visiva non ha una risposta da colloquio, è decorazione.',
         'Le certezze vanno testate presto: le idee più "wow", il grafo come vista unica e lo scroll a step, sono le prime che ho ridimensionato davanti all\'uso reale.',
+      ],
+      automationsIntro:
+        "Il sito è anche il mio banco di prova per l'automazione: sei strumenti di intelligenza artificiale, fra agenti, skill e un server MCP, e i controlli che fermano un difetto prima che vada online. Le righe con il badge AI usano un modello di linguaggio.",
+      automations: [
+        {
+          name: "Agente cv-recruiter",
+          kind: "Agente AI · Claude Code",
+          what: "Legge un annuncio, mi segnala cosa manca, calcola quanto sono compatibile e genera il CV mirato in PDF, grafico e per ATS.",
+          ai: true,
+        },
+        {
+          name: "Agente ux-reviewer",
+          kind: "Agente AI · Claude Code",
+          what: "Rivede il sito senza toccarlo, alle misure di schermo dei visitatori veri, in italiano e in inglese, e mi consegna i problemi in ordine di gravità.",
+          ai: true,
+        },
+        {
+          name: "Generatore di CV da telefono",
+          kind: "AI · Gemini API",
+          what: "Dall'annuncio, anche da uno screenshot, al CV mirato, alla lettera di presentazione e a una stima di stipendio, con i PDF creati sul server.",
+          ai: true,
+        },
+        {
+          name: "Server MCP",
+          kind: "AI · Model Context Protocol",
+          what: "Espone il mio CV come API per agenti AI: tool, resource e prompt, compresi la generazione del CV e il registro delle candidature.",
+          ai: true,
+        },
+        {
+          name: "Otto skill di progetto",
+          kind: "AI · Claude Code e GitHub Copilot",
+          what: "Istruzioni che l'AI carica quando servono: contesto del progetto, design system, tono di voce, metodo, architettura, posizionamento.",
+          ai: true,
+        },
+        {
+          name: "Verification loop",
+          kind: "Skill AI",
+          what: "Costruisci, misura, critica: il lavoro lo giudica un revisore che non l'ha fatto, mai chi l'ha scritto.",
+          ai: true,
+        },
+        {
+          name: "Registro candidature",
+          kind: "Vercel Blob",
+          what: "Lo stato di ogni candidatura, aggiornabile dal telefono o da un agente: inviata, risposta, conferma del CV, esito.",
+          ai: false,
+        },
+        {
+          name: "Controlli prima di ogni push",
+          kind: "Husky · Playwright",
+          what: "Lint, build e cinque controlli in un browser vero: vetrina dei componenti, parità fra italiano e inglese, link, contrasto e misure di schermo reali.",
+          ai: false,
+        },
+        {
+          name: "Generatori di CV in PDF",
+          kind: "Node · Playwright",
+          what: "Quattro versioni dagli stessi dati, con i link nella lingua del documento. Nessuna esperienza viene tagliata per farla stare nella pagina.",
+          ai: false,
+        },
       ],
     },
     {

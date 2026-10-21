@@ -1612,6 +1612,64 @@ export const cvDataEn = {
         'Every detail must survive the question "why?": if a visual choice has no interview-ready answer, it\'s decoration.',
         'Test your certainties early: the most "wow" ideas, the graph as the only view and the stepped scroll, were the first I scaled back in front of real use.',
       ],
+      automationsIntro:
+        "The site is also my testing ground for automation: six artificial intelligence tools, across agents, skills and an MCP server, plus the checks that stop a defect before it goes live. Rows with the AI badge use a language model.",
+      automations: [
+        {
+          name: "cv-recruiter agent",
+          kind: "AI agent · Claude Code",
+          what: "Reads a job posting, tells me what is missing, works out how good a match I am and generates the tailored CV as a PDF, designed and ATS-ready.",
+          ai: true,
+        },
+        {
+          name: "ux-reviewer agent",
+          kind: "AI agent · Claude Code",
+          what: "Reviews the site without touching it, at the screen sizes real visitors use, in Italian and English, and hands me the problems ordered by severity.",
+          ai: true,
+        },
+        {
+          name: "CV generator from a phone",
+          kind: "AI · Gemini API",
+          what: "From the job posting, even a screenshot of it, to a tailored CV, a cover letter and a salary estimate, with the PDFs created on the server.",
+          ai: true,
+        },
+        {
+          name: "MCP server",
+          kind: "AI · Model Context Protocol",
+          what: "Exposes my CV as an API for AI agents: tools, resources and prompts, including CV generation and the applications log.",
+          ai: true,
+        },
+        {
+          name: "Eight project skills",
+          kind: "AI · Claude Code and GitHub Copilot",
+          what: "Instructions the AI loads when it needs them: project context, design system, tone of voice, method, architecture, positioning.",
+          ai: true,
+        },
+        {
+          name: "Verification loop",
+          kind: "AI skill",
+          what: "Build, measure, critique: the work is judged by a reviewer who did not do it, never by whoever wrote it.",
+          ai: true,
+        },
+        {
+          name: "Applications log",
+          kind: "Vercel Blob",
+          what: "The status of every application, updatable from my phone or by an agent: sent, reply, CV confirmation, outcome.",
+          ai: false,
+        },
+        {
+          name: "Checks before every push",
+          kind: "Husky · Playwright",
+          what: "Lint, build and five checks in a real browser: component showcase, Italian and English parity, links, contrast and real screen sizes.",
+          ai: false,
+        },
+        {
+          name: "PDF CV generators",
+          kind: "Node · Playwright",
+          what: "Four versions from the same data, with links in the document's language. No experience is ever cut to make it fit the page.",
+          ai: false,
+        },
+      ],
     },
     {
       name: "Trip-Runway — Travel Budget Yield App",
