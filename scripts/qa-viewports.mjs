@@ -38,7 +38,9 @@
 //    in global.css): il bordo dell'elemento o, dove il disegno resta
 //    piccolo, il suo ::after trasparente. Sono esclusi i link dentro una
 //    frase (2.5.8 li esenta) e il «Vai al contenuto», che si vede solo da
-//    tastiera. Un'eccezione sola, dichiarata in STRETTI.
+//    tastiera. Un'eccezione sola, dichiarata in STRETTI. E il tocco al
+//    centro di ogni comando deve arrivare a lui: un'area allargata non può
+//    finire sopra un altro comando.
 // 6. Nessuna pagina principale scorre in orizzontale.
 //
 // ── Le misure ─────────────────────────────────────────────────────────────
@@ -320,6 +322,9 @@ for (const [w, h] of [...DESKTOP, ...TELEFONI]) {
           const r = e.getBoundingClientRect();
           if (!r.width || !r.height || r.bottom <= 0) continue;
           if (e.classList.contains("skip-link")) continue;
+          // Dentro un cassetto chiuso (l'indice del design system su
+          // telefono) un comando ha un riquadro ma non si vede né si tocca.
+          if (!e.checkVisibility({ visibilityProperty: true, opacityProperty: false })) continue;
           const cs = getComputedStyle(e);
           if (cs.display === "inline" && e.closest("p, li")) continue;
           let w = r.width;
@@ -345,6 +350,20 @@ for (const [w, h] of [...DESKTOP, ...TELEFONI]) {
           const soloAltezza = STRETTI[nome] === "altezza";
           if (h < 43.5 || (!soloAltezza && w < 43.5))
             out.push(`${nome} ${Math.round(w)}×${Math.round(h)}`);
+          // E il tocco al centro arriva a lui, non a un'area allargata di
+          // un altro comando (2026-10-21: il ::after di «Scorri», su un
+          // elemento non posizionato, copriva tutto l'indice d'ingresso).
+          const cx = r.left + r.width / 2;
+          const cy = r.top + r.height / 2;
+          if (cx > 0 && cy > 0 && cx < innerWidth && cy < innerHeight) {
+            const radice = e.getRootNode();
+            const sopra = (radice.elementFromPoint ? radice : document).elementFromPoint(cx, cy);
+            const comando = sopra?.closest(sel);
+            if (sopra && comando && comando !== e && !e.contains(comando) && !comando.contains(e))
+              out.push(
+                `${nome} coperto da ${[...comando.classList][0] ?? comando.tagName.toLowerCase()}`,
+              );
+          }
         }
         return out;
       }, STRETTI);

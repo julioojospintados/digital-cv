@@ -1711,7 +1711,9 @@ body::after {
 
   /* Le due lingue stanno attaccate: il bersaglio cresce in altezza, non
      in larghezza, altrimenti ognuna coprirebbe metà dell'altra. */
-  .lang-switch__opt::after {
+  /* :root davanti: senza, la regola qui sopra (che con «.lc-contacts a»
+     pesa una classe e due elementi) vinceva e il ::after restava largo 44. */
+  :root .lang-switch__opt::after {
     width: 100%;
   }
 

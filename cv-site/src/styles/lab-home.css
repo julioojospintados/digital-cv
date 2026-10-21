@@ -1281,9 +1281,15 @@ html[data-lh-armed] .lh-obj {
   /* L'invito a scorrere si riduce alla sola parola. La linea verticale è
      un'indicazione di direzione che su un telefono non serve — lì si scorre
      comunque — e si mangiava spazio che serve all'indice. */
+  /* relative e non static (2026-10-21): l'area da 44px del touch è un
+     ::after assoluto (global.css § "Bersagli da 44px"), e su un elemento
+     static si agganciava a tutto l'ingresso — copriva l'indice e ogni tocco
+     andava a «Scorri». bottom e left a auto annullano l'aggancio desktop. */
   .lh-scroll {
     order: 3;
-    position: static;
+    position: relative;
+    bottom: auto;
+    left: auto;
     translate: none;
     gap: 0;
   }
