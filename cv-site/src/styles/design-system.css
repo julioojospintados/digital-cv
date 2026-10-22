@@ -271,7 +271,7 @@
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  /* Arancione schiarito dal 2026-10-14 (4,85:1 sull'ottanio, sopra il 4,5
+  /* Arancione schiarito dal 2026-10-14 (5,14:1 sull'ottanio dal 2026-10-22, sopra il 4,5
      del testo a 12px): i titoli di gruppo si staccano dalle voci per colore
      oltre che per corpo e peso, come le pillole delle schede in testa. */
   color: var(--color-accent-text);

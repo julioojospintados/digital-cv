@@ -159,8 +159,8 @@ const NEW_TOKENS = [
     name: "--accent-text",
     where: "lab-home.css",
     why: it
-      ? "L'accento schiarito quel tanto che basta a reggere come testo. Delle tre lenti solo l'arancione non ci arriva puro: 3,62:1, sotto il 4,5:1 richiesto. Schiarito del 30% fa 4,85:1 — il minimo vero, verificato l'8 settembre 2026: al 20% si scende a 4,40 e si esce."
-      : "The accent lightened just enough to work as text. Of the three lenses only orange falls short when pure: 3.62:1, below the required 4.5:1. Lightened by 30% it reaches 4.85:1 — the real floor, verified on 8 September 2026: at 20% it drops to 4.40 and fails.",
+      ? "L'accento schiarito quel tanto che basta a reggere come testo. Delle tre lenti solo l'arancione non ci arriva puro: 3,62:1, sotto il 4,5:1 richiesto. Schiarito del 30% fa 4,85:1, al 20% si scende a 4,40 e si esce (8 settembre 2026). Dal 2026-10-22 è al 35%, 5,14:1: al 30% sul punto più chiaro della pagina restava un centesimo di margine."
+      : "The accent lightened just enough to work as text. Of the three lenses only orange falls short when pure: 3.62:1, below the required 4.5:1. Lightened by 30% it reaches 4.85:1, at 20% it drops to 4.40 and fails (8 September 2026). Since 2026-10-22 it is at 35%, 5.14:1: at 30% the lightest spot on the page left a margin of one hundredth.",
   },
   {
     name: "--hit",
@@ -173,8 +173,8 @@ const NEW_TOKENS = [
     name: "--color-accent-text",
     where: "global.css",
     why: it
-      ? "Lo stesso concetto di --accent-text, ma per tutto il sistema: serviva anche fuori dall'ingresso, da quando l'indice di /work accende la lente design. Fuori dalla lente arancione vale esattamente --color-accent, quindi sostituirlo non cambia niente su tech e human. Il valore è lo stesso dei due: 70% arancione, 30% bianco. Che i due nomi convivano è un debito, non una scelta — e finché durano vanno cambiati insieme, altrimenti il sito ha due arancioni-testo diversi."
-      : "The same idea as --accent-text, but system-wide: it was needed outside the entry page too, since /work's index turns on the design lens. Outside the orange lens it equals --color-accent exactly, so swapping it changes nothing on tech and human. The value is the same as the other one: 70% orange, 30% white. The two names coexisting is a debt, not a choice — and while they last they must change together, or the site ends up with two different accent-texts.",
+      ? "Lo stesso concetto di --accent-text, ma per tutto il sistema: serviva anche fuori dall'ingresso, da quando l'indice di /work accende la lente design. Fuori dalla lente arancione vale esattamente --color-accent, quindi sostituirlo non cambia niente su tech e human. Il valore è lo stesso dei due: 65% arancione, 35% bianco. Che i due nomi convivano è un debito, non una scelta — e finché durano vanno cambiati insieme, altrimenti il sito ha due arancioni-testo diversi."
+      : "The same idea as --accent-text, but system-wide: it was needed outside the entry page too, since /work's index turns on the design lens. Outside the orange lens it equals --color-accent exactly, so swapping it changes nothing on tech and human. The value is the same as the other one: 65% orange, 35% white. The two names coexisting is a debt, not a choice — and while they last they must change together, or the site ends up with two different accent-texts.",
   },
   {
     name: "--color-on-accent",
@@ -5135,8 +5135,8 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
             <p class="ds-spec__v">
               {
                 it
-                  ? "L'occhiello è accento su ottanio, quindi prende --color-accent-text e non --color-accent: dal 2026-09-04 l'indice accende la lente design, e l'arancione pieno a 12px fa 3,62:1, mentre il token schiarito fa 4,85:1. Qui c'era scritto che il maiuscoletto mono a peso 700 bastava a tenerlo: non è vero, la soglia del testo grande è 18,66px in grassetto. Il titolo è l'unico h1 della pagina. La bussola ha alt vuoto: è un oggetto sul tavolo, non un'informazione — «bussola» letto ad alta voce non aiuta chi sta scegliendo fra quattro case study. Porta però width e height veri (208×341, da work-knolling.ts), che riservano il posto e impediscono al titolo di saltare quando il file arriva."
-                  : "The eyebrow is accent on teal, so it takes --color-accent-text and not --color-accent: since 2026-09-04 the index turns on the design lens, and full orange at 12px is 3.62:1, while the lightened token reaches 4.85:1. This row used to claim that uppercase mono at weight 700 was enough to hold it: it is not — the large-text threshold is 18.66px bold. The title is the page's only h1. The compass has an empty alt: it is an object on the table, not information — «compass» read aloud does not help someone choosing between four case studies. It does carry real width and height though (208×341, from work-knolling.ts), which reserve the space and stop the title from jumping when the file lands."
+                  ? "L'occhiello è accento su ottanio, quindi prende --color-accent-text e non --color-accent: dal 2026-09-04 l'indice accende la lente design, e l'arancione pieno a 12px fa 3,62:1, mentre il token schiarito fa 5,14:1. Qui c'era scritto che il maiuscoletto mono a peso 700 bastava a tenerlo: non è vero, la soglia del testo grande è 18,66px in grassetto. Il titolo è l'unico h1 della pagina. La bussola ha alt vuoto: è un oggetto sul tavolo, non un'informazione — «bussola» letto ad alta voce non aiuta chi sta scegliendo fra quattro case study. Porta però width e height veri (208×341, da work-knolling.ts), che riservano il posto e impediscono al titolo di saltare quando il file arriva."
+                  : "The eyebrow is accent on teal, so it takes --color-accent-text and not --color-accent: since 2026-09-04 the index turns on the design lens, and full orange at 12px is 3.62:1, while the lightened token reaches 5.14:1. This row used to claim that uppercase mono at weight 700 was enough to hold it: it is not — the large-text threshold is 18.66px bold. The title is the page's only h1. The compass has an empty alt: it is an object on the table, not information — «compass» read aloud does not help someone choosing between four case studies. It does carry real width and height though (208×341, from work-knolling.ts), which reserve the space and stop the title from jumping when the file lands."
               }
             </p>
           </div>
@@ -5283,8 +5283,8 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
             <p class="ds-spec__v">
               {
                 it
-                  ? "Non riempire la sigla: il filo al 26% è un fondale, un glifo pieno comincia a contendere la lettura al titolo che gli sta sopra. E non toglierle il tetto in rem del clamp: dentro un contenitore i vw guardano comunque la finestra, e su uno schermo largo uscirebbe dal riquadro invece di appoggiarcisi."
-                  : "Do not fill the initials: the 26% outline is a backdrop, a solid glyph starts competing with the title above it. And do not remove the clamp's rem ceiling: inside a container, vw still measures the window, so on a wide screen it would run out of the box instead of resting against it."
+                  ? "Non riempire la sigla: il filo al 26% (14% sotto i 48rem, dove il nome ci passa sopra) è un fondale, un glifo pieno comincia a contendere la lettura al titolo che gli sta sopra. E non toglierle il tetto in rem del clamp: dentro un contenitore i vw guardano comunque la finestra, e su uno schermo largo uscirebbe dal riquadro invece di appoggiarcisi."
+                  : "Do not fill the initials: the 26% outline (14% below 48rem, where the name runs over it) is a backdrop, a solid glyph starts competing with the title above it. And do not remove the clamp's rem ceiling: inside a container, vw still measures the window, so on a wide screen it would run out of the box instead of resting against it."
               }
             </p>
           </div>

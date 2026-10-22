@@ -514,8 +514,14 @@ button {
      legge dorata. La tinta non c'entra — resta 16° a ogni miscela, identica
      all'accento pieno; a cambiare è solo quanta luce ci si mette dentro.
      Il 4,70:1 che stava scritto qui e in altri tre punti era sbagliato: non
-     tornava con nessuna delle due formule. */
-  --color-accent-text: color-mix(in srgb, rgba(255, 107, 53, 1) 70%, white);
+     tornava con nessuna delle due formule.
+     Dal 2026-10-22 è schiarito del 35%: 5,14:1 sull'ottanio. Al 30% il
+     margine era di un centesimo sul punto più chiaro misurato (4,51:1), e
+     sul bagliore del primo step del viaggio di /work si scendeva a 4,32:1.
+     Al 35% sono 4,78 e 4,57. Lo stesso valore in lab-home.css (--accent-text)
+     e in memory-drawer.css (--lc-voice-accent): cambiarne uno è cambiarli
+     tutti e tre. */
+  --color-accent-text: color-mix(in srgb, rgba(255, 107, 53, 1) 65%, white);
   --card-opacity-passive: 0.2;
   --card-scale-passive: 0.95;
 }
@@ -1450,7 +1456,7 @@ body::after {
    fatto con l'AI», e su «JavaScript» lo perderebbe.
 
    Contrasto: il contorno scrive in --color-accent-text, che per l'arancione
-   è schiarito fino a 4,85:1 sull'ottanio (12px bold: serve 4,5). Il pieno
+   è schiarito fino a 5,14:1 sull'ottanio (12px bold: serve 4,5). Il pieno
    scrive in --color-on-accent sull'accento, il 6,87:1 di tutti i bottoni
    pieni. */
 /* ── Una testimonianza (.lc-voice) ───────────────────────────────────────
@@ -1490,7 +1496,7 @@ body::after {
 }
 
 /* Il nome nel colore della lente, nella sua variante da testo: per
-   l'arancione è --color-accent-text, 4,85:1 sull'ottanio. Fuori dalle
+   l'arancione è --color-accent-text, 5,14:1 sull'ottanio. Fuori dalle
    lenti chi lo ospita sceglie con --lc-voice-accent (la modale di «Chi
    sono», memory-drawer.css). */
 .lc-voice__name {

@@ -300,6 +300,16 @@
   user-select: none;
 }
 
+/* Sotto i 48rem il nome va a capo e passa sopra la filigrana: dove il filo
+   al 26% attraversa le lettere, l'arancione del nome scendeva a 2,7:1
+   (Music Agency, Trip-Runway, Looking for Flights a 360 e 390px; review UX
+   del 2026-10-22). Al 14% il filo resta visibile e il nome tiene 3,26:1. */
+@media (max-width: 48rem) {
+  .work-hero__sigla {
+    -webkit-text-stroke-color: color-mix(in srgb, var(--color-accent) 14%, transparent);
+  }
+}
+
 .work-hero__tagline {
   font-family: var(--font-display);
   font-size: clamp(1.0625rem, 2.2vw, 1.5rem);
@@ -645,7 +655,10 @@
 }
 
 .work-cta__link--primary {
-  color: rgba(8, 73, 67, 1);
+  /* L'inchiostro scuro dei bottoni pieni, non l'ottanio scritto a mano: su
+     arancione l'ottanio stava a 3,56:1, --color-on-accent a 6,87:1 (review
+     UX del 2026-10-22). */
+  color: var(--color-on-accent);
   background: var(--color-accent);
   border: var(--line-1) solid var(--color-accent);
 }
@@ -799,7 +812,13 @@
      che si leggeva come un difetto. */
   min-height: min(19rem, 52svh);
   padding: clamp(var(--size-24), 4vw, var(--size-48));
-  background: color-mix(in srgb, var(--color-bg) 94%, var(--color-text-primary));
+  /* Un poco più scura della pagina, non più chiara. Fino al 2026-10-22 era
+     l'ottanio schiarito del 6% verso il crema, e su quella superficie il
+     nome in arancione pieno scendeva a 2,9:1, il ruolo a 4,3:1 e l'invito a
+     3,9:1, tutti sotto soglia (review UX). Più scura, la card tiene i
+     contrasti dell'ottanio e qualcosa in più; il filo del bordo la stacca
+     dalla pagina come prima. */
+  background: color-mix(in srgb, var(--color-bg) 88%, black);
   /* Niente ombra (tolta il 2026-10-13, insieme a quella della home): sul
      bordo alto si leggeva come una macchia. La profondità la dà la card
      coperta, che va fuori fuoco e si spegne: scripts/stack-depth.ts, lo
@@ -808,7 +827,9 @@
 
 .work-index-grid > .work-index-card:hover,
 .work-index-grid > .work-index-card:focus-visible {
-  background: color-mix(in srgb, var(--color-bg) 91%, var(--color-text-primary));
+  /* All'hover si schiarisce fino all'ottanio della pagina, e non oltre: è
+     il fondo su cui sono misurati tutti i contrasti di /work. */
+  background: var(--color-bg);
 }
 
 .work-index-grid > .work-index-card:focus-visible {
@@ -940,9 +961,12 @@
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease;
+  /* 10% e non 16%: il bagliore sta in fondo alla card, dove c'è l'invito
+     «Leggi il case study», e al 16% all'hover lo portava a 4,46:1, sotto il
+     4,5 dei 14px (2026-10-22). */
   background: radial-gradient(
     ellipse at 50% 120%,
-    color-mix(in srgb, var(--color-accent) 16%, transparent) 0%,
+    color-mix(in srgb, var(--color-accent) 10%, transparent) 0%,
     transparent 70%
   );
 }
@@ -1072,7 +1096,10 @@
   line-height: 0.8;
   letter-spacing: -0.05em;
   color: transparent;
-  -webkit-text-stroke: var(--line-1) color-mix(in srgb, var(--color-accent) 30%, transparent);
+  /* 14% e non 30%: il nome della card, in arancione pieno, passa sopra la
+     sigla, e dove il filo al 30% attraversava le lettere il nome scendeva a
+     2,9:1 (2,6:1 all'hover). Misurato il 2026-10-22. */
+  -webkit-text-stroke: var(--line-1) color-mix(in srgb, var(--color-accent) 14%, transparent);
   pointer-events: none;
   user-select: none;
 }
