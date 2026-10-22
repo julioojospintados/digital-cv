@@ -1672,6 +1672,160 @@ export const cvDataEn = {
       ],
     },
     {
+      name: "Bambagia — UX/UI Design for a B2B Cosmetics Brand",
+      description:
+        "With Bambagia Design Lab I designed the website of a cosmetics brand that sells to professionals, from wireframe to design system. The studio works in Wix Studio, so I used AI to build an environment whose rules make every page rebuildable in Wix: instructions for the agent, Figma and Wix MCPs, and a Figma ⇄ code handoff that leaves the client able to edit the site on their own.",
+      date: "2026-05",
+      tags: [
+        "UX/UI Design",
+        "Wireframing",
+        "Prototyping",
+        "Design System",
+        "Figma",
+        "Wix Studio",
+        "MCP",
+        "GitHub Copilot",
+        "HTML5",
+        "CSS",
+      ],
+      slug: "bambagia",
+      primaryMode: "creative",
+      role: "UX/UI Designer & AI Workflow Designer, collaboration with Bambagia Design Lab (2026).",
+      problem:
+        "Bambagia Design Lab asked me to design the website of a cosmetics brand that sells to professionals: beauticians, wellness centres, pharmacies. A showcase site, not an e-commerce, with product lines on three levels, courses and personalisation requests. The real constraint came after delivery. The studio would maintain the site, and the studio works in Wix Studio: a design that cannot be rebuilt in Wix, or that lands there as a static block, is a design nobody can touch again without me.",
+      process: [
+        "Research — I studied the client and its competitors before drawing anything: who buys, what a professional looks for on a cosmetics site, how the product lines are organised. The result was a brief with the pages, the features and the products on three levels: lines, sub-lines, products.",
+        "Wireframes — I hand-wrote the low-fi prototype of nine pages in HTML and CSS, with a sitemap as the entry point. It opens in the browser with no server, so the studio browses it like a real site rather than a sequence of screens.",
+        "Visual direction — I designed three different home pages on the same content, one of them Minimal Luxury and one Nature Professional. Nature Professional won. On that one I built the design of every page, desktop and mobile, with the brand's colours and fonts in place of mine.",
+        "Wix-friendly rules — I wrote twelve rules every page follows so it moves into Wix Studio without translation. Each section is a self-contained block that becomes a Section, only simple Flexbox and Grid are allowed, spacing sits on the 8-point grid, colours come from variables that become the theme colours, repeated components are marked to become Master Sections.",
+        "AI environment — I built a reusable environment in VS Code for the studio: GitHub Copilot instructions that switch on per client, an agent that knows the flow from brief to site, and the Figma, Wix and Playwright MCPs. The design rules and the Wix rules are written once, and the agent applies them to every page.",
+      ],
+      decisions: [
+        {
+          title: "The Figma → Wix plugin, not the Wix MCP",
+          body: "The Wix MCP got the design into the site faster, but it got there as a static frame: good-looking, and impossible to edit for anyone who does not write code. I chose the Figma export plugin, which creates native Wix Studio sections, containers and theme styles. It costs me one extra step, and it saves the studio one on every future change.",
+        },
+        {
+          title: "A design made to be rebuilt",
+          body: "The HTML design is not the site, it is the guide the studio rebuilds the pages from in Wix. That is why I gave up what Wix cannot redo: complex absolute positioning, masks, animation libraries like GSAP. Animations use three standard classes and become native interactions in Wix. Forms and menus stay drawn and non-functional, because in Wix they are rebuilt with its own components.",
+        },
+        {
+          title: "Three home pages, not one",
+          body: "With a single proposal, the review turns into a list of corrections. With three directions on the same content, the client picks an atmosphere, and the corrections come later, on a base already agreed. The two that lost stayed in the brief's internal folder, which the client never sees: for the client, only the prototype exists.",
+        },
+        {
+          title: "The atmosphere yes, the colours no",
+          body: "Nature Professional used a gold accent and two Google Fonts. The brand already had its own palette, terracotta, beige and sage, and the client had chosen an atmosphere, not a colour. I kept the proposal's structure, rhythm and animations and replaced palette and fonts with the brand's, loaded locally because Wix imports them as custom fonts.",
+        },
+      ],
+      outcomes: [
+        "Three home pages proposed, one chosen, and on it the design of nine pages in desktop and mobile versions.",
+        "Twelve Wix-friendly rules written once and applied by the agent to every page.",
+        "A reusable environment: every new client of the studio starts from the same folder structure, the same rules and the same agent.",
+        "Eleonora D'Agostino, who runs the studio, wrote a recommendation about this work: it is among the voices on my CV.",
+      ],
+      learnings: [
+        "The most important constraint of a website is not in the design: it is in whoever edits it after delivery. I designed for Wix from the first wireframe, not at the end.",
+        "Written down as instructions, a project's rules hold for every page and every session with the agent. I do not have to remember them, and neither does the studio.",
+        "The fastest tool for me was not the right one for whoever stays: the Wix MCP saved me a step and took one away from the client.",
+      ],
+      automationsIntro:
+        "The environment I built for the studio, so that AI works inside Wix's rules instead of inventing its own. Rows with the AI badge use a language model.",
+      automations: [
+        {
+          name: "Wix Builder agent",
+          kind: "AI agent · GitHub Copilot",
+          what: "Knows the flow from brief to site: reads the brief, updates the prototype, checks it in the browser and asks for confirmation before touching a published Wix site.",
+          ai: true,
+        },
+        {
+          name: "Per-client instructions",
+          kind: "AI · GitHub Copilot",
+          what: "Switch on only for that client's files: audience, preferences, product structure. The next client has its own, and they never mix.",
+          ai: true,
+        },
+        {
+          name: "Wix and Velo rules",
+          kind: "AI · GitHub Copilot",
+          what: "The twelve Wix-friendly rules and the constraints of the Figma export, applied by the agent to every page it writes.",
+          ai: true,
+        },
+        {
+          name: "Figma and Wix MCPs",
+          kind: "AI · Model Context Protocol",
+          what: "Give the agent access to the Figma files and to the Wix and Velo documentation, to keep code and design aligned.",
+          ai: true,
+        },
+        {
+          name: "Browser review",
+          kind: "Playwright · MCP",
+          what: "Screenshots every revision of the prototype before the client sees it.",
+          ai: false,
+        },
+      ],
+    },
+    {
+      name: "Looking for Flights — Flight Price Monitor",
+      description:
+        "I built a flight price monitor for my September 2026 trip, which ended up in Sri Lanka. Twice a week a GitHub Action looks for the cheapest flight, works out how many days I can stay on the ground with my budget and writes to me on Telegram only when there is something to know. The whole trip lives in one configuration file, and the budget stays private even with the repository public.",
+      url: "https://github.com/julioojospintados/looking-for-flights",
+      repoUrl: "https://github.com/julioojospintados/looking-for-flights",
+      date: "2026-07",
+      tags: [
+        "Node.js",
+        "GitHub Actions",
+        "Telegram Bot API",
+        "Cloudflare Workers",
+        "SerpApi",
+        "Claude Code",
+      ],
+      slug: "looking-for-flights",
+      primaryMode: "tech",
+      role: "Developer and only user, personal project written with Claude Code (2026).",
+      problem:
+        "For September 2026 I had a fixed budget and one precise question: where can I go, and for how many days, without going over it. The cheapest flight was not the answer, because every country costs something different on the ground. And I did not want to spend the summer opening Google Flights every morning to find out nothing had changed.",
+      process: [
+        "The maths — For each destination the program takes the cheapest return flight, subtracts the flight and the fixed costs from the budget, divides what is left by the daily spend at the destination and caps the result at the trip's maximum length. The ranking goes by days, then by total cost. With the prices of 31 July the cheapest flight was to Jakarta, but India came first: it cost 7 euros a day less on the ground.",
+        "Engine and configuration — All the domain logic lives in one file: dates, length, departure airports, destinations with their daily spend. Changing trip does not touch the code. Destinations are added from a text file, one line each, and a script syncs them.",
+        "Notifications — The system stays quiet on purpose. It writes on Telegram on the first run, when the top destination changes or when a flight drops by at least 15 euros. Each destination arrives as a table with airline, times, door-to-door duration and layovers, including the layover that runs through the night: two flights at the same price can be two different trips.",
+        "On demand — With /cerca the bot runs the same search whenever I want. At first a workflow checked messages every 15 minutes, and measured, GitHub ran it every 26 to 42. I replaced it with a Cloudflare Worker that receives the message from Telegram the instant it arrives and starts the search.",
+        "Sri Lanka — The list started with five destinations in Asia. On 2 August I added Sri Lanka, then narrowed the search to it alone, leaving between 12 and 15 September and back by the end of the month. On 12 September, with the departure window open, I stopped the monitor.",
+      ],
+      decisions: [
+        {
+          title: "The budget is not in the repository",
+          body: "The repository is public, my budget is not. It arrives at runtime from a GitHub secret, and neither the notifications nor the history show the uncapped days or the margin left over: together with the daily spend and the flight price, which are public, they would reveal the exact budget.",
+        },
+        {
+          title: "225 searches out of 250 in two days",
+          body: "The SerpApi plan gives 250 searches a month. Each run cost 60, the cron ran twice a day, and /cerca, freshly made instant, I launched three times in an hour. A warning email told me. I added a cap that spans runs, over a rolling 30-day window, with a reserve the cron cannot touch: the cron can skip a round without anyone noticing, a /cerca is a person waiting. The cost per run dropped from 60 to 15 searches.",
+        },
+        {
+          title: "Turin next to Milan",
+          body: "The ranking uses the lowest price, which almost always departs from Malpensa or Orio. Every notification still shows the best price from Turin, to decide whether the saving is worth the trip to Milan. It costs no extra searches: the prices of the single airports are already in the same response.",
+        },
+        {
+          title: "A missing secret degrades, it does not switch off",
+          body: "GitHub passes a secret that does not exist as an empty string, and the budget check read it as a wrong value: four failed runs in a row. Now empty and missing are the same thing, and without a budget the monitor ranks by flight price only, with the warning at the top of the notification. A mistyped value still stops everything: that is a typo, not a choice.",
+        },
+        {
+          title: "Zero dependencies, with one exception",
+          body: "The project uses only Node's standard library: no install step in CI, no supply chain to watch. The Cloudflare Worker is the only piece outside GitHub, and it was the road I had ruled out at the start. «No external dependencies» and «instant» did not fit together, and use decided, not architecture.",
+        },
+      ],
+      outcomes: [
+        "From 31 July to 12 September the monitor ran on its own twice a week, and the GitHub Action saved the price history in 18 automatic commits.",
+        "Cost per run down from 60 to 15 searches, with a monthly cap that keeps scheduled monitoring apart from on-demand searches.",
+        "Sri Lanka joined the list on 2 August, and that is where I went in September.",
+        "The calculation engine became the base of trip-runway, the web app that asks the same question for anyone who travels.",
+      ],
+      learnings: [
+        "Silence is a feature: a message that arrives only when something changes gets read, ten identical messages get muted.",
+        "Free quotas are a design constraint, not a configuration detail. They needed counting before writing the cron, and I counted them after a warning email.",
+        "A failure you cannot see is worse than a failure. Every failed run now writes on Telegram with the link to the logs, because a monitor stopped in silence looks like a price that has not changed.",
+      ],
+    },
+    {
       name: "Trip-Runway — Travel Budget Yield App",
       description:
         "I turned looking-for-flights, my personal flight price monitoring script, into trip-runway: a web app that crosses the flight cost with the cost of living at the destination to calculate the maximum sustainable trip length on a fixed budget. Next.js, Supabase and Prisma, with an anti-abuse architecture that deduplicates API calls per route instead of per user, and monetization from flight affiliate links.",

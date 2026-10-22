@@ -2098,6 +2098,160 @@ export const cvData = {
       ],
     },
     {
+      name: "Bambagia — UX/UI Design for a B2B Cosmetics Brand",
+      description:
+        "Ho progettato con Bambagia Design Lab il sito di un brand cosmetico che vende ai professionisti, dal wireframe al design system. Lo studio lavora su Wix Studio, quindi ho costruito con l'AI un ambiente le cui regole rendono ogni pagina ricostruibile in Wix: istruzioni per l'agente, MCP di Figma e Wix, un passaggio Figma ⇄ codice che lascia al cliente il sito modificabile da solo.",
+      date: "2026-05",
+      tags: [
+        "UX/UI Design",
+        "Wireframing",
+        "Prototipazione",
+        "Design System",
+        "Figma",
+        "Wix Studio",
+        "MCP",
+        "GitHub Copilot",
+        "HTML5",
+        "CSS",
+      ],
+      slug: "bambagia",
+      primaryMode: "creative",
+      role: "UX/UI Designer & AI Workflow Designer, collaborazione con Bambagia Design Lab (2026).",
+      problem:
+        "Bambagia Design Lab mi ha chiesto di progettare il sito di un brand cosmetico che vende ai professionisti: estetiste, centri benessere, farmacie. Un sito vetrina e non un e-commerce, con le linee di prodotto su tre livelli, i corsi e le richieste di personalizzazione. Il vincolo vero arrivava dopo la consegna. Il sito l'avrebbe mantenuto lo studio, che lavora su Wix Studio, e un design che in Wix non si ricostruisce, o che ci arriva come un blocco statico, è un design che nessuno può più toccare senza di me.",
+      process: [
+        "Ricerca — Ho studiato il cliente e i concorrenti prima di disegnare: chi compra, che cosa cerca un professionista in un sito di cosmetica, come sono organizzate le linee. Ne è uscito un brief con le pagine, le funzioni e i prodotti su tre livelli: linee, sotto-linee, prodotti.",
+        "Wireframe — Ho scritto a mano in HTML e CSS il prototipo low-fi di nove pagine, con una mappa del sito come ingresso. Si apre dal browser senza server, così lo studio lo naviga come un sito vero e non come una sequenza di schermate.",
+        "Direzione visiva — Ho disegnato tre home diverse sullo stesso contenuto, una delle quali Lusso Minimale e una Nature Professional. È passata Nature Professional. Su quella ho costruito il design di tutte le pagine, desktop e mobile, con i colori e i font del brand al posto dei miei.",
+        "Regole Wix-friendly — Ho scritto dodici regole che ogni pagina rispetta per passare in Wix Studio senza traduzioni. Ogni sezione è un blocco autonomo che diventa una Section, si usano solo Flexbox e Grid semplici, le spaziature stanno sulla griglia da 8 punti, i colori escono da variabili che diventano i colori del tema, i componenti ripetuti sono marcati per diventare Master Section.",
+        "Ambiente AI — Ho costruito su VS Code un ambiente riutilizzabile per lo studio: istruzioni per GitHub Copilot che si attivano per cliente, un agente che conosce il flusso dal brief al sito, gli MCP di Figma, Wix e Playwright. Le regole grafiche e quelle di Wix sono scritte una volta, e l'agente le applica a ogni pagina.",
+      ],
+      decisions: [
+        {
+          title: "Il plugin Figma → Wix, non l'MCP di Wix",
+          body: "L'MCP di Wix portava il design nel sito più in fretta, ma lo portava come una cornice statica: bella, e immodificabile per chi non scrive codice. Ho scelto il plugin di esportazione da Figma, che crea sezioni, contenitori e stili del tema nativi di Wix Studio. A me costa un passaggio in più, allo studio ne toglie uno a ogni modifica futura.",
+        },
+        {
+          title: "Un design fatto per essere ricostruito",
+          body: "Il design in HTML non è il sito, è la guida da cui lo studio ricostruisce le pagine in Wix. Per questo ho rinunciato a quello che Wix non sa rifare: posizionamenti assoluti complessi, maschere, librerie di animazione come GSAP. Le animazioni usano tre classi standard e in Wix diventano interazioni native. Moduli e menu restano disegnati e non funzionanti, perché in Wix si rifanno con i componenti suoi.",
+        },
+        {
+          title: "Tre home, non una",
+          body: "Con una sola proposta la revisione diventa un elenco di correzioni. Con tre direzioni sullo stesso contenuto il cliente sceglie un'atmosfera, e le correzioni arrivano dopo, su una base già condivisa. Le due scartate sono rimaste nella cartella interna del brief, che il cliente non vede: per lui esiste solo il prototipo.",
+        },
+        {
+          title: "L'atmosfera sì, i colori no",
+          body: "Nature Professional usava un oro come accento e due Google Fonts. Il brand aveva già una palette sua, terracotta, beige e salvia, e il cliente aveva scelto un'atmosfera, non un colore. Ho tenuto struttura, ritmo e animazioni della proposta e ho sostituito palette e font con quelli del brand, caricati in locale perché in Wix si importano come font personalizzati.",
+        },
+      ],
+      outcomes: [
+        "Tre home proposte, una scelta, e su quella il design di nove pagine in versione desktop e mobile.",
+        "Dodici regole Wix-friendly scritte una volta e applicate dall'agente a ogni pagina.",
+        "Un ambiente riutilizzabile: ogni nuovo cliente dello studio parte dalla stessa struttura di cartelle, dalle stesse regole e dallo stesso agente.",
+        "Eleonora D'Agostino, titolare dello studio, ha scritto una raccomandazione su questo lavoro: è tra le voci del mio CV.",
+      ],
+      learnings: [
+        "Il vincolo più importante di un sito non sta nel design: sta in chi lo modificherà dopo la consegna. Ho progettato per Wix dal primo wireframe, non alla fine.",
+        "Scritte come istruzioni, le regole di un progetto valgono per ogni pagina e per ogni sessione con l'agente. Non devo ricordarle io, e non deve ricordarle lo studio.",
+        "Lo strumento più veloce per me non era quello giusto per chi resta: l'MCP di Wix risparmiava un passaggio a me e lo toglieva al cliente.",
+      ],
+      automationsIntro:
+        "L'ambiente che ho costruito per lo studio, perché l'AI lavori dentro le regole di Wix invece di inventarne di sue. Le righe con il badge AI usano un modello di linguaggio.",
+      automations: [
+        {
+          name: "Agente Wix Builder",
+          kind: "Agente AI · GitHub Copilot",
+          what: "Conosce il flusso dal brief al sito: legge il brief, aggiorna il prototipo, lo controlla nel browser e chiede conferma prima di toccare un sito Wix pubblicato.",
+          ai: true,
+        },
+        {
+          name: "Istruzioni per cliente",
+          kind: "AI · GitHub Copilot",
+          what: "Si attivano solo sui file di quel cliente: pubblico, preferenze, struttura dei prodotti. Il cliente successivo ha le sue, e non si mescolano.",
+          ai: true,
+        },
+        {
+          name: "Regole Wix e Velo",
+          kind: "AI · GitHub Copilot",
+          what: "Le dodici regole Wix-friendly e i vincoli dell'esportazione da Figma, applicati dall'agente a ogni pagina che scrive.",
+          ai: true,
+        },
+        {
+          name: "MCP di Figma e Wix",
+          kind: "AI · Model Context Protocol",
+          what: "Danno all'agente accesso ai file di Figma e alla documentazione di Wix e Velo, per tenere allineati codice e design.",
+          ai: true,
+        },
+        {
+          name: "Revisione nel browser",
+          kind: "Playwright · MCP",
+          what: "Fotografa ogni revisione del prototipo prima che la veda il cliente.",
+          ai: false,
+        },
+      ],
+    },
+    {
+      name: "Looking for Flights — Flight Price Monitor",
+      description:
+        "Ho costruito un monitor dei prezzi dei voli per il mio viaggio di settembre 2026, finito in Sri Lanka. Due volte a settimana una GitHub Action cerca il volo più economico, calcola quanti giorni posso restare a terra con il budget e mi scrive su Telegram solo quando c'è qualcosa da sapere. Il viaggio sta tutto in un file di configurazione, e il budget resta privato anche con il repository pubblico.",
+      url: "https://github.com/julioojospintados/looking-for-flights",
+      repoUrl: "https://github.com/julioojospintados/looking-for-flights",
+      date: "2026-07",
+      tags: [
+        "Node.js",
+        "GitHub Actions",
+        "Telegram Bot API",
+        "Cloudflare Workers",
+        "SerpApi",
+        "Claude Code",
+      ],
+      slug: "looking-for-flights",
+      primaryMode: "tech",
+      role: "Sviluppatore e unico utente, progetto personale scritto con Claude Code (2026).",
+      problem:
+        "Per settembre 2026 avevo un budget fisso e una domanda precisa: dove posso andare, e per quanti giorni, senza sforarlo. Il volo più economico non era la risposta, perché a terra ogni paese costa diverso. E non volevo passare l'estate ad aprire Google Flights ogni mattina per scoprire che non era cambiato niente.",
+      process: [
+        "Il calcolo — Per ogni meta il programma prende il volo andata e ritorno più economico, toglie dal budget il volo e i costi fissi, divide il resto per la spesa giornaliera a destinazione e taglia il risultato alla durata massima del viaggio. La classifica va per giorni, poi per costo totale. Con i prezzi del 31 luglio il volo più economico era per Giacarta, ma in testa c'era l'India: a terra costava 7 euro al giorno in meno.",
+        "Motore e configurazione — Tutta la logica di dominio sta in un file: date, durata, aeroporti di partenza, mete con la loro spesa giornaliera. Per cambiare viaggio non si tocca il codice. Le mete si aggiungono da un file di testo, una riga per meta, e uno script le sincronizza.",
+        "Le notifiche — Il sistema tace per scelta. Scrive su Telegram alla prima esecuzione, quando cambia la meta in testa o quando un volo scende di almeno 15 euro. Ogni meta arriva in una tabella con compagnia, orari, durata porta a porta e scali, compreso lo scalo che scavalca la notte: due voli allo stesso prezzo possono essere due viaggi diversi.",
+        "Su richiesta — Con /cerca il bot lancia la stessa ricerca quando voglio io. All'inizio un workflow controllava i messaggi ogni 15 minuti, e misurato GitHub lo eseguiva ogni 26-42. L'ho sostituito con un Cloudflare Worker che riceve il messaggio da Telegram nell'istante in cui arriva e fa partire la ricerca.",
+        "Sri Lanka — La lista è partita da cinque mete in Asia. Il 2 agosto ho aggiunto lo Sri Lanka, poi ho ristretto la ricerca a lui solo, con partenza fra il 12 e il 15 settembre e rientro entro fine mese. Il 12 settembre, aperta la finestra di partenza, ho fermato il monitoraggio.",
+      ],
+      decisions: [
+        {
+          title: "Il budget non sta nel repository",
+          body: "Il repository è pubblico, il mio budget no. Arriva a runtime da una secret di GitHub, e né le notifiche né lo storico mostrano i giorni non tagliati o il margine che avanza: insieme alla spesa giornaliera e al prezzo del volo, che sono pubblici, rivelerebbero il budget esatto.",
+        },
+        {
+          title: "225 ricerche su 250 in due giorni",
+          body: "Il piano di SerpApi dà 250 ricerche al mese. Ogni esecuzione ne costava 60, il cron girava due volte al giorno, e /cerca, appena diventato istantaneo, l'ho lanciato tre volte in un'ora. Me l'ha detto una email di avviso. Ho aggiunto un tetto che attraversa le esecuzioni, su una finestra mobile di 30 giorni, con una riserva che il cron non può toccare: il cron può saltare un giro senza che nessuno se ne accorga, un /cerca è una persona che aspetta. Il costo per esecuzione è sceso da 60 a 15 ricerche.",
+        },
+        {
+          title: "Torino accanto a Milano",
+          body: "La classifica usa il prezzo più basso, che è quasi sempre da Malpensa o da Orio. Ogni notifica mostra comunque il miglior prezzo da Torino, per decidere se lo sconto vale il viaggio fino a Milano. Non costa ricerche in più: i prezzi dei singoli aeroporti sono già nella stessa risposta.",
+        },
+        {
+          title: "Una secret mancante degrada, non spegne",
+          body: "GitHub passa una secret che non esiste come stringa vuota, e il controllo sul budget la leggeva come un valore sbagliato: quattro esecuzioni fallite di fila. Ora vuoto e assente sono la stessa cosa, e senza budget il monitor classifica per solo prezzo del volo, con l'avviso in cima alla notifica. Un valore scritto male invece ferma ancora tutto: quello è un refuso, non una scelta.",
+        },
+        {
+          title: "Zero dipendenze, con un'eccezione",
+          body: "Il progetto usa solo la libreria standard di Node: niente installazione in CI, nessuna catena di fornitura da sorvegliare. Il Cloudflare Worker è l'unico pezzo fuori da GitHub, ed era la strada che avevo scartato all'inizio. «Senza dipendenze esterne» e «istantaneo» non stavano insieme, e ha deciso l'uso, non l'architettura.",
+        },
+      ],
+      outcomes: [
+        "Dal 31 luglio al 12 settembre il monitor ha girato da solo due volte a settimana, e la GitHub Action ha salvato lo storico dei prezzi in 18 commit automatici.",
+        "Costo per esecuzione sceso da 60 a 15 ricerche, con un tetto mensile che separa il monitoraggio programmato dalle ricerche su richiesta.",
+        "Lo Sri Lanka è entrato nella lista il 2 agosto, ed è lì che sono andato a settembre.",
+        "Il motore di calcolo è diventato la base di trip-runway, la web app che fa la stessa domanda per chiunque viaggi.",
+      ],
+      learnings: [
+        "Il silenzio è una funzione: un messaggio che arriva solo quando cambia qualcosa si legge, dieci messaggi uguali si silenziano.",
+        "Le quote gratuite sono un vincolo di progetto, non un dettaglio di configurazione. Andavano contate prima di scrivere il cron, e le ho contate dopo una email di avviso.",
+        "Un fallimento che non si vede è peggio di un fallimento. Ogni esecuzione fallita ora scrive su Telegram con il link ai log, perché un monitor fermo in silenzio sembra un prezzo che non è cambiato.",
+      ],
+    },
+    {
       name: "Trip-Runway — Travel Budget Yield App",
       description:
         "Ho trasformato looking-for-flights, il mio script personale di monitoraggio prezzi voli, in trip-runway: una web app che incrocia il costo del volo con il costo della vita a destinazione per calcolare i giorni massimi di viaggio sostenibili con un budget fisso. Next.js, Supabase e Prisma, con un'architettura anti-abuso che deduplica le chiamate API per rotta invece che per utente, e monetizzazione da affiliazione voli.",

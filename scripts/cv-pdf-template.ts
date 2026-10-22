@@ -31,6 +31,8 @@ export const SITE = "https://giulio-occhipinti.com";
  */
 export const CASE_STUDY_SLUGS = [
   "digital-cv",
+  "bambagia",
+  "looking-for-flights",
   "trip-runway",
   "product-discovery",
   "music-agency",

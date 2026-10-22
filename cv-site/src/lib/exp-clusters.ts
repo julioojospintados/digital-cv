@@ -65,6 +65,9 @@ export interface ExpClusterDef {
  * cluster `personal` non era reso da nessuna pagina — l'errore aspettava il
  * giorno in cui qualcuno lo riaccendeva. Corretto il 2026-08-27 (3→4, 7→8,
  * 9→10) insieme ai refs qui sotto, che avevano lo stesso sfasamento.
+ * Spostati di nuovo il 2026-10-22 (4→6, 8→10, 10→12), questa volta di
+ * proposito: i case study Bambagia e Looking for Flights sono entrati prima
+ * di Trip-Runway, perché l'ordine di cvData.projects è l'ordine di /work.
  *
  * Il controllo che impedisce il bis è in cv-view-model.test.ts: verifica per
  * NOME che ogni chiave punti al progetto giusto. Se sposti un progetto in
@@ -80,7 +83,7 @@ export const PROJ_CARD_META: Record<
   }
 > = {
   // Film "Double" — prodotto a Torino da Filmine, proiettato a San Francisco
-  4: {
+  6: {
     role: {
       it: "Attore deuteragonista, produzione Filmine",
       en: "Deuteragonist actor, produced by Filmine",
@@ -90,7 +93,7 @@ export const PROJ_CARD_META: Record<
     location: { it: "Torino · San Francisco", en: "Turin · San Francisco" },
   },
   // Veni Vidi Vinyl
-  8: {
+  10: {
     role: { it: "Co-ideatore della serata", en: "Co-creator of the night" },
     startYear: "2017",
     endYear: "2018",
@@ -98,7 +101,7 @@ export const PROJ_CARD_META: Record<
   },
   // Poesia — dal 2011 a oggi (Giulio, 2026-10-14). "present" diventa
   // «oggi» / «present» in cv-view-model.ts, come per le esperienze in corso.
-  10: {
+  12: {
     role: { it: "Poeta", en: "Poet" },
     startYear: "2011",
     endYear: "present",
@@ -198,9 +201,9 @@ export const EXP_CLUSTER_DEFS: ExpClusterDef[] = [
     openForModes: [],
     refs: [
       { exp: 8 }, // Presentatore & Live Host
-      { proj: 4 }, // Film "Double" — era 3, vedi l'avviso su PROJ_CARD_META
-      { proj: 8 }, // Veni Vidi Vinyl — era 7
-      { proj: 10 }, // Poesia — era 9
+      { proj: 6 }, // Film "Double" — era 4, vedi l'avviso su PROJ_CARD_META
+      { proj: 10 }, // Veni Vidi Vinyl — era 8
+      { proj: 12 }, // Poesia — era 10
       { exp: 23 }, // B-Teatro — attore e improvvisatore (2013–2019)
       { exp: 15 }, // B-Teatro — tecnico audio-visivo (2014–2018)
       { exp: 14 }, // None Teatro — insegnante di impro

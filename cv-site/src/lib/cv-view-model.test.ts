@@ -221,9 +221,9 @@ describe("orderSkillsForMode", () => {
 // progetto: sposta un progetto nell'array e il test cade prima del push.
 describe("PROJ_CARD_META — le chiavi puntano ai progetti giusti", () => {
   const ATTESI: Record<number, { it: string; en: string }> = {
-    4: { it: 'Film "Double"', en: 'Film "Double"' },
-    8: { it: "Veni Vidi Vinyl", en: "Veni Vidi Vinyl" },
-    10: { it: "Poesia", en: "Poetry" },
+    6: { it: 'Film "Double"', en: 'Film "Double"' },
+    10: { it: "Veni Vidi Vinyl", en: "Veni Vidi Vinyl" },
+    12: { it: "Poesia", en: "Poetry" },
   };
 
   for (const [chiave, nome] of Object.entries(ATTESI)) {

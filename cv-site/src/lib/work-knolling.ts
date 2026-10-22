@@ -18,6 +18,12 @@
  */
 export const WORK_KNOLL_ICON: Record<string, string> = {
   "digital-cv": "laptop.webp", // il lavoro digitale, il codice
+  // Il brand è cosmetica naturale e la direzione scelta si chiama Nature
+  // Professional: la pianta è il prodotto e l'atmosfera insieme.
+  bambagia: "plant.webp",
+  // Una mossa scelta fra molte con risorse contate (budget, quota API): è
+  // il gioco del motore, che classifica le mete invece di indovinarle.
+  "looking-for-flights": "chess.webp",
   "trip-runway": "multitool.webp", // uno script personale diventato prodotto
   "product-discovery": "flashlight.webp", // illuminare problemi complessi
   "music-agency": "megaphone.webp", // palco, voce, filiera
