@@ -430,11 +430,12 @@
 .ds-stage {
   position: relative;
   /* L'inchiostro delle demo è quello della pagina vera, non quello della
-     vetrina: le pagine /work in lente Web & UX scrivono nel crema caldo di
-     --color-text-primary (255 240 220), e qui sotto .ds le metteva nel crema
-     neutro di --ds-ink (245 240 230). Le demo di ingresso e lente non ne
-     risentono: .lh e .lc dichiarano il proprio. Trovato il 2026-10-14
-     confrontando lo stile calcolato di 180 classi fra sito e vetrina. */
+     vetrina: --color-text-primary, lo stesso che leggono le pagine /work.
+     Trovato il 2026-10-14 confrontando lo stile calcolato di 180 classi
+     fra sito e vetrina, quando /work scriveva in un crema caldo diverso da
+     --ds-ink. Dal 2026-10-22 i due coincidono (245 240 230): le lenti non
+     ridefiniscono più il colore del testo. La regola resta, perché è la
+     pagina vera a decidere l'inchiostro, non la vetrina. */
   color: var(--color-text-primary);
   padding: var(--size-24);
   border: var(--line-1) solid var(--ds-line);
