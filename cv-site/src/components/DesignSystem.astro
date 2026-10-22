@@ -126,6 +126,7 @@ const BASE_TOKENS = [
   { name: "--color-border", value: "rgba(255, 255, 255, 0.12)" },
   { name: "--color-text-primary", value: "rgba(245, 240, 230, 1)" },
   { name: "--color-text-muted", value: "rgba(192, 220, 215, 1)" },
+  { name: "--color-text-quiet", value: "rgba(160, 196, 190, 1)" },
   { name: "--color-accent", value: "rgba(255, 255, 255, 0.9)" },
   { name: "--color-accent-text", value: "= --color-accent" },
   { name: "--color-on-accent", value: "rgba(16, 12, 8, 1)" },
@@ -5292,8 +5293,8 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
             <p class="ds-spec__v">
               {
                 it
-                  ? "La filigrana è aria-hidden, pointer-events: none e user-select: none — decorativa, e non deve né essere letta ad alta voce (due lettere non sono un'informazione) né intercettare un tocco destinato al titolo. Il bottone verso la vetrina è pieno dal 2026-10-13: l'arancione è il fondo e non il testo, quindi gli basta il 3:1 di una superficie, e l'etichetta in --color-on-accent tiene 6,87:1."
-                  : "The watermark is aria-hidden, pointer-events: none and user-select: none — decorative, so it is neither read aloud (two letters are not information) nor able to intercept a tap meant for the title. The button to the showcase is filled since 2026-10-13: orange is the background and not the text, so a surface's 3:1 is enough, and the label in --color-on-accent holds 6.87:1."
+                  ? "La filigrana è aria-hidden, pointer-events: none e user-select: none — decorativa, e non deve né essere letta ad alta voce (due lettere non sono un'informazione) né intercettare un tocco destinato al titolo. Il bottone verso la vetrina è pieno dal 2026-10-13: l'arancione è il fondo e non il testo, quindi gli basta il 3:1 di una superficie, e l'etichetta in --color-on-accent tiene 6,87:1. Il nome è in arancione pieno, 3,62:1: vale perché è testo grande, dove basta 3:1. Lo stesso colore su un testo piccolo non passerebbe."
+                  : "The watermark is aria-hidden, pointer-events: none and user-select: none — decorative, so it is neither read aloud (two letters are not information) nor able to intercept a tap meant for the title. The button to the showcase is filled since 2026-10-13: orange is the background and not the text, so a surface's 3:1 is enough, and the label in --color-on-accent holds 6.87:1. The name is in full orange, 3.62:1: it holds because it is large text, where 3:1 is enough. The same colour on small text would not pass."
               }
             </p>
           </div>

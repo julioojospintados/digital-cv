@@ -278,6 +278,11 @@ button {
      sulle altre pagine: con l'alpha si spegneva verso lo sfondo. */
   --color-text-primary: rgba(245, 240, 230, 1);
   --color-text-muted: rgba(192, 220, 215, 1);
+  /* Un gradino sotto il muted, per il testo lungo di /work: 5,45:1
+     sull'ottanio, 5,06:1 sul punto più chiaro misurato. Con il muted a 7:1
+     e i titoli a 9:1 la pagina si leggeva tutta chiara («troppo bianco»,
+     Giulio, 2026-10-22): fra titolo e testo serve un salto che si veda. */
+  --color-text-quiet: rgba(160, 196, 190, 1);
   --color-accent: rgba(255, 255, 255, 0.9);
   /* L'accento quando fa da TESTO. Due token per lo stesso colore, e la
      differenza non è stilistica: `--color-accent` riempie, borda, traccia —
