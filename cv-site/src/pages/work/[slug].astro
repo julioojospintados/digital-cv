@@ -9,7 +9,7 @@ import Layout from "../../layouts/Layout.astro";
 // /design-system.
 import WorkNav from "../../components/WorkNav.astro";
 import { cvData } from "@cv-data";
-import { lensPath } from "../../lib/cv-i18n";
+import { LOCALES, lensPath } from "../../lib/cv-i18n";
 import "../../styles/work-page.css";
 import { projectInitials, splitProjectName } from "../../lib/project-name";
 
@@ -61,7 +61,12 @@ const sigla = projectInitials(project.name);
   description={project.description}
   mode={mode}
 >
-  <WorkNav locale="it" back={lensPath(mode)} langHref={`/en/work/${slug}`} />
+  <WorkNav
+    locale="it"
+    back="/work"
+    backLabel={LOCALES.it.ui.backToWork}
+    langHref={`/en/work/${slug}`}
+  />
 
   <main class="work-main" id="main-content">
     <header class="work-hero">

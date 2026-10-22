@@ -121,6 +121,12 @@ export interface LocaleStrings {
     exploreDesignSystem: string;
     /** Il ritorno al CV nella barra di /work e della vetrina (WorkNav.astro). */
     backToCv: string;
+    /** Il ritorno all'indice dei case study nella barra di un case study:
+     *  ci si arriva dall'indice, e il ritorno sale di un livello. È il nome
+     *  della destinazione, come il titolo dell'indice, e non «Torna ai case
+     *  study»: con 179px di etichetta, a 320 e 360 il selettore di lingua
+     *  usciva dallo schermo (misurato il 2026-10-22). */
+    backToWork: string;
     /** Nome accessibile dell'indice dell'ingresso su telefono (i quattro
      *  oggetti che portano alle schede). */
     entryIndexLabel: string;
@@ -250,6 +256,7 @@ const IT: LocaleStrings = {
     aboutVoices: "Dicono di me",
     exploreDesignSystem: "Esplora il design system",
     backToCv: "Torna al CV",
+    backToWork: "Case study",
     entryIndexLabel: "Vai a una sezione",
     goTo: "GO to",
     explorePortfolio: "Esplora il portfolio",
@@ -352,6 +359,7 @@ const EN: LocaleStrings = {
     aboutVoices: "What people say",
     exploreDesignSystem: "Explore the design system",
     backToCv: "Back to CV",
+    backToWork: "Case studies",
     entryIndexLabel: "Go to a section",
     goTo: "GO to",
     explorePortfolio: "Explore the portfolio",

@@ -10,13 +10,17 @@
  * «Home», «/work» ed «EN» come link — diversa da quella che documentava.
  * Un componente solo, e la divergenza non si può più ripetere.
  *
- * Cosa cambia da una pagina all'altra sono solo due indirizzi:
- *   - `back`: dove riporta «Torna al CV». La lente design per l'indice e la
- *     vetrina (tutta /work parla arancione), la lente del case study per un
- *     case study. Lo calcola chi chiama, con lensPath: lo slug dell'URL non
- *     è la chiave interna e quella mappa vive in cv-i18n.ts.
+ * Cosa cambia da una pagina all'altra:
+ *   - `back`: dove riporta il ritorno. Sale di un livello: dall'indice e
+ *     dalla vetrina alla lente design (tutta /work parla arancione, lo
+ *     calcola chi chiama con lensPath, perché lo slug dell'URL non è la
+ *     chiave interna), da un case study all'indice /work.
+ *   - `backLabel`: l'etichetta del ritorno, dalla tabella delle stringhe.
+ *     «Torna al CV» se non la passa nessuno, «Case study» sui case study,
+ *     cioè il nome dell'indice a cui porta. Fino al 2026-10-22 anche il case study diceva «Torna al CV», e
+ *     chi arrivava dall'indice, cioè quasi tutti, perdeva la strada per gli
+ *     altri progetti (Giulio). Il CV resta a un clic dal fondo della pagina.
  *   - `langHref`: la stessa pagina nell'altra lingua.
- * L'etichetta del ritorno viene dalla tabella delle stringhe (backToCv).
  */
 import LangSwitch from "./LangSwitch.astro";
 import { LOCALES, type Locale } from "../lib/cv-i18n";
@@ -24,12 +28,13 @@ import { LOCALES, type Locale } from "../lib/cv-i18n";
 interface Props {
   locale: Locale;
   back: string;
+  backLabel?: string;
   langHref: string;
   /** Attributi in più per il contenitore (le demo della vetrina li usano). */
   [attr: string]: unknown;
 }
 
-const { locale, back, langHref, ...rest } = Astro.props;
+const { locale, back, backLabel, langHref, ...rest } = Astro.props;
 const t = LOCALES[locale];
 ---
 
@@ -37,7 +42,9 @@ const t = LOCALES[locale];
   <go-logo>GO</go-logo>
   <div class="work-nav__right">
     <a href={back} class="work-back"
-      ><span class="work-chevron work-chevron--left" aria-hidden="true"></span>{t.ui.backToCv}</a
+      ><span class="work-chevron work-chevron--left" aria-hidden="true"></span>{
+        backLabel ?? t.ui.backToCv
+      }</a
     >
     <LangSwitch locale={locale} href={langHref} />
   </div>
