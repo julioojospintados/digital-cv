@@ -24,35 +24,44 @@ disposti in una fotografia knolling reale. È la **referenza visiva assoluta** p
 
 ## Colori — Sistema Fisso
 
-Lo sfondo è **sempre ottanio** `rgba(8,73,67,1)` in tutti e 4 i mode — è l'unico token
-davvero invariante. **Tutti gli altri 4 token** (`--color-surface`, `--color-border`,
-`--color-text-primary`, `--color-text-muted`, oltre ad `--color-accent`) **cambiano per mode**:
-non sono valori fissi, sono ridefiniti dentro ogni blocco `[data-mode="..."]` in `global.css`.
-Un componente/doc che li mostra come costanti (es. sempre gli stessi valori `:root`) mostra
-dati sbagliati ogni volta che gira in un mode diverso dal default — bug reale trovato e
-corretto il 2026-07-23 in `WorkDesignSystem.astro`, che leggeva `:root` invece del mode
-attivo. Quel componente è stato cancellato il 2026-08-26 con il resto del sito storico:
-la lezione resta, il file no.
+Lo sfondo è **sempre ottanio** `rgba(8,73,67,1)` in tutte e 3 le lenti. **Anche il testo è lo
+stesso in tutte le lenti** (dal 2026-10-22): `--color-text-primary` e `--color-text-muted` stanno
+solo in `:root` e nessun blocco `[data-mode]` li ridefinisce. Prima ogni lente tingeva il
+testo (crema caldo e pesca in design, ciano in tech, giallo in AI), e le pagine che leggono i
+token globali, /work per prima, si leggevano colorate da cima a fondo mentre ingresso e CV
+scrivevano in neutro. **La lente cambia l'accento e basta**: `--color-accent`,
+`--color-accent-text`, `--color-surface`, `--color-border`.
 **Mai colori hardcoded — sempre CSS custom properties.**
 
 ```css
-/* Token attivi in global.css — NON aggiungere altri senza usarli.
-   Questi sono i valori :root (nessun mode attivo) — vedi tabella sotto
-   per i valori reali per mode, diversi da questi per 4 token su 5. */
---color-bg: rgba(8, 73, 67, 1) /* ottanio — invariabile, unico fisso */
-  --color-surface: rgba(12, 95, 87, 0.5)
-  --color-border: rgba(255, 255, 255, 0.12)
-  --color-text-primary: rgba(245, 240, 230, 1)
-  --color-text-muted: rgba(192, 220, 215, 0.85)
-  /* WCAG AA ~5.7:1 su bg ottanio */ --color-accent: rgba(255, 255, 255, 0.9);
+/* Token del testo, uguali in ogni lente (global.css, :root). Contrasto
+   sull'ottanio; fra parentesi sul punto più chiaro misurato, rgb(14,78,71). */
+--color-bg: rgba(8, 73, 67, 1) /* ottanio */
+  --color-text-primary: rgba(245, 240, 230, 1) /* 9,04:1 (8,41) — titoli, nomi */
+  --color-text-muted: rgba(192, 220, 215, 1) /* 7,07:1 (6,57) — testo secondario */
+  --color-text-quiet: rgba(160, 196, 190, 1) /* 5,45:1 (5,06) — testo lungo di /work */
+  --color-accent: rgba(255, 255, 255, 0.9); /* ridefinito da ogni lente, sotto */
 ```
 
-| Mode         | `--color-accent`        | `--color-text-muted` (WCAG AA verificato) | `--color-surface`      | `--color-border`        | `--color-text-primary`  | Target                      |
-| ------------ | ----------------------- | ----------------------------------------- | ----------------------- | ------------------------ | ------------------------ | ---------------------------- |
-| default      | `rgba(255,255,255,0.9)` | `rgba(192,220,215,0.85)` — ~5.7:1 ✅      | `rgba(12,95,87,0.5)`   | `rgba(255,255,255,0.12)` | `rgba(245,240,230,1)`   | nessun mode attivo          |
-| `tech`       | `rgba(0,255,200,1)`     | `rgba(0,255,200,0.70)` — ~4.8:1 ✅        | `rgba(5,50,45,0.6)`    | `rgba(0,255,200,0.2)`    | `rgba(220,255,245,1)`   | CTO, recruiter tecnico      |
-| `creative`   | `rgba(255,107,53,1)`    | `rgba(255,195,155,0.82)` — ~4.9:1 ✅      | `rgba(40,20,5,0.5)`    | `rgba(255,107,53,0.25)`  | `rgba(255,240,220,1)`   | Art director, agenzia       |
-| `human`      | `rgba(240,200,127,1)`   | `rgba(240,210,148,0.75)` — ~4.6:1 ✅      | `rgba(20,60,30,0.4)`   | `rgba(240,200,127,0.25)` | `rgba(250,240,215,1)`   | HR, fondatore, no-profit    |
+| Lente      | `--color-accent`      | `--color-accent-text` (accento come testo piccolo) | `--color-surface`    | `--color-border`         |
+| ---------- | --------------------- | --------------------------------------------------- | -------------------- | ------------------------ |
+| default    | `rgba(255,255,255,0.9)` | uguale all'accento                                | `rgba(12,95,87,0.5)` | `rgba(255,255,255,0.12)` |
+| `tech`     | `rgba(0,255,200,1)`   | uguale all'accento — 7,89:1                         | `rgba(5,50,45,0.6)`  | `rgba(0,255,200,0.2)`    |
+| `creative` | `rgba(255,107,53,1)`  | arancione 65% + bianco 35% — 5,14:1 (4,78)          | `rgba(40,20,5,0.5)`  | `rgba(255,107,53,0.25)`  |
+| `human`    | `rgba(240,200,127,1)` | uguale all'accento — 6,49:1                         | `rgba(20,60,30,0.4)` | `rgba(240,200,127,0.25)` |
+
+**Arancione pieno solo come testo grande.** L'arancione pieno sta a 3,62:1 sull'ottanio
+(3,37:1 sul punto più chiaro): passa solo dove 1.4.3 chiede 3:1, cioè testo da 24px in su o
+da 18,66px in su in grassetto. Lo usano il nome del progetto e i titoli di sezione di /work e
+l'occhiello a 20px bold dell'ingresso. Sotto quella misura (occhielli mono, risultati,
+inviti, nomi nelle testimonianze a 18px) si usa `--color-accent-text`.
+
+**Il contrasto si misura sul fondo vero, non sull'ottanio.** Una card più chiara, un alone,
+la filigrana di una sigla sotto le lettere abbassano il contrasto: il 2026-10-22 il nome
+arancione delle card di /work scendeva a 2,9:1 sulla card schiarita e a 2,7:1 sopra il filo
+della sigla. Si nasconde il testo e si prende il pixel più chiaro dietro di lui: è il metodo
+di `qa:viewports` e dell'agente `ux-reviewer`. Le superfici sotto testo colorato restano
+uguali o più scure dell'ottanio; le filigrane sotto un titolo stanno al 14%.
 Nota storica: il quarto mode `management` (viola) è stato rimosso il
 2026-08-16. Il suo muted era dichiarato "~4.6:1 ✅" senza essere mai
 ricalcolato — in realtà 3.76:1. La lezione resta: un valore in tabella non è

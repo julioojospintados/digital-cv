@@ -1349,6 +1349,17 @@
   overflow: visible;
 }
 
+/* Sui telefoni la colonna è stretta e il cruscotto, a riposo, stava sulla
+   stessa riga dell'occhiello della partenza: «PARTENZA» coperto per tre
+   quarti a 390px, quasi tutto a 360 (review UX del 2026-10-22). Qui la
+   prima tappa scende di quanto è alta la pillola, così a riposo ognuno ha
+   la sua riga; scorrendo, il cruscotto passa sopra le tappe come prima. */
+@media (max-width: 48rem) {
+  .journey.is-active .journey__track {
+    padding-top: var(--size-32);
+  }
+}
+
 /* ── Strada SVG ── */
 .journey__road-base {
   fill: none;

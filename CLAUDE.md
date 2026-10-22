@@ -58,6 +58,13 @@ falli solo se servono a decidere qualcosa che dai numeri non si vede, o se
 l'utente li chiede. Vale anche per i dump lunghi — `console.table` su decine di
 righe si riassume in una riga di conteggi.
 
+**I controlli da browser girano solo quando Giulio chiede il push** (regola
+del 2026-10-22). `.husky/pre-push` li lancia da solo se il push porta qualcosa
+su `main`; sul ramo di lavoro, quando è lui a chiedere il push, usa
+`QA=1 git push`. Un push di salvataggio fa solo lint e format. I controlli
+girano su tutte le pagine del build: l'elenco lo legge `scripts/qa-pages.mjs`,
+non si scrive a mano.
+
 Se dopo questo resta un dubbio che nessuno script scioglie, **chiedi** invece di
 aprire il ciclo completo: «questo non lo decido da solo, vuoi che passi il
 gauntlet?».

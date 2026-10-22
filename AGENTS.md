@@ -501,6 +501,8 @@ cv-site/                  ← Astro site (the actual CV)
       lab-cv.css          ← CV page styles (`lc-*`) — CvLensPage.astro
       lab-home.css        ← Entry page styles (`lh-*`) — HomeEntryPage.astro
       work-page.css       ← /work page styles (`work-*`)
+      privacy-page.css    ← /privacy and /en/privacy (`privacy-*`), shared by both pages and the showcase
+      not-found.css       ← the 404 page (`nf-*`), shared with the showcase
     layouts/Layout.astro  ← Base layout (head/SEO/JSON-LD, fonts, Lenis, custom cursor)
 
 scripts/                  ← Root utility scripts (Node)
@@ -519,7 +521,8 @@ scripts/                  ← Root utility scripts (Node)
   qa-parity.mjs           ← IT ↔ EN structural parity on the real pages (npm run qa:parity)
   qa-links.mjs            ← No broken internal links, no page without its counterpart (npm run qa:links)
   qa-viewports.mjs        ← Real visitor screen sizes (PostHog) + short phones: actions in the first screen, contrast on the real background, 44px touch targets, no sideways scroll (npm run qa:viewports)
-  qa-prepush.mjs          ← Builds, serves the build, runs the browser checks above (npm run qa:prepush) — called by .husky/pre-push
+  qa-prepush.mjs          ← Builds, serves the build, runs the browser checks above (npm run qa:prepush) — called by .husky/pre-push on pushes to main, or with QA=1
+  qa-pages.mjs            ← Every page of the build as a URL list, plus IT↔EN pairs — the one page list every check uses
   qa-units.mjs            ← No px outside 1/2/3 across cv-site/src (npm run qa:units) — see § Units
   record-demo-playwright.js ← Record the site demo video
 
@@ -686,10 +689,15 @@ AGENTS.md                 ← This file — tool-agnostic project guide
   lamp cursor, the FAB. Eight pushes had left it behind one piece at a time.
   A rule nobody can verify is not a rule, it is an intention.
 
-→ **Scope.** The pages the showcase declares it covers: the entry (`lh-*`),
-  the three lenses (`lc-*`) and `/work` (`work-*`), case studies discovered
-  automatically. `/privacy` is outside it — the showcase says so in its own
-  header.
+→ **Scope.** Every page in the build, in both languages, discovered from
+  `cv-site/dist/client` by `scripts/qa-pages.mjs` (Giulio's rule, 2026-10-22:
+  every check runs on every page). Two groups stay out, each declared in
+  `PAGINE_FUORI` with its reason: the showcase itself, and the private tools
+  under `/tools/` (unlinked, noindex, passphrase-gated). The 404 and the
+  privacy notice used to be outside without anyone deciding it; since
+  2026-10-22 they have their panels (`pagina-404`, `pagina-privacy`) and
+  their styles live in shared sheets (`not-found.css`, `privacy-page.css`)
+  instead of scoped `<style>` blocks the showcase could not load.
 
 → **The exclusion list is a declaration, not a mute button.** `FUORI` in that
   script holds one entry today, with its reason in writing: Astro's scoping
@@ -763,11 +771,17 @@ AGENTS.md                 ← This file — tool-agnostic project guide
   the project's adaptation of the Gauntlet Loop technique. **It is loaded only
   when explicitly asked for by name.**
 
-→ **When each check runs — project rule, decided 2026-08-20.** There are two
-  tiers, and the split is deliberate: the cheap tier is text-only and runs
-  constantly, the expensive tier opens a browser and runs **only before a push**.
+→ **When each check runs — project rule, decided 2026-08-20, narrowed
+  2026-10-22.** There are two tiers, and the split is deliberate: the cheap
+  tier is text-only and runs constantly, the expensive tier opens a browser
+  and runs **only when a push is actually asked for**. Since 2026-10-22
+  (Giulio: «fallo solo quando ti chiedo di pushare, non ogni volta») the hook
+  runs it on its own only when the push carries something to `main`; on a
+  work branch it runs only with `QA=1 git push`. A save-point push to a work
+  branch does lint and format only. Whoever works for Giulio passes `QA=1`
+  every time he is the one asking for the push.
 
-  | While working, after any change | Before pushing (`.husky/pre-push`) |
+  | While working, after any change | Before an asked-for push (`.husky/pre-push`) |
   | ------------------------------- | ---------------------------------- |
   | `npm run lint`                  | the same lint + format, then:      |
   | `npm run format:check`          | `npm run qa:prepush`, which builds |
@@ -779,17 +793,25 @@ AGENTS.md                 ← This file — tool-agnostic project guide
   **`qa:ds` is not to be run during ordinary work** — not even after touching
   the showcase. It costs a browser and a server; the pre-push hook is where it
   belongs, because that is the last moment a defect is still only yours.
-  Escape hatch for an urgent push on a work branch: `SKIP_QA=1 git push`.
+  Escape hatch for an urgent push: `SKIP_QA=1 git push` (never on `main`).
+
+→ **Every check runs on every page** (Giulio, 2026-10-22). The page list is
+  not written by hand anywhere: `scripts/qa-pages.mjs` reads it from the
+  build, so a new page or case study enters every check without anyone
+  remembering. Before that date `qa:viewports` looked at one case study out
+  of six and no `/en/work` page, and three contrast defects on the new case
+  studies passed the pre-push.
 
 → The checks that run before a push, and what each one is for:
   - `qa:ds` (`qa-design-system.mjs`) — the showcase: index ↔ panel, spec cards,
     snippets, clean console, no horizontal scrollbar at 390px, IT/EN parity of
     the panels.
-  - `qa:parity` (`qa-parity.mjs`) — IT ↔ EN on the real pages. Compares
-    **counts**, not text: same number of jobs, timeline rows, testimonials,
-    education rows and chips in both languages, plus the lens reaching
-    `data-mode` and hreflang being present. It found `data-mode` missing on
-    every `/en/<lens>` page the first time it ran.
+  - `qa:parity` (`qa-parity.mjs`) — IT ↔ EN on every pair of pages that
+    exists in the build. Compares **structure**, not text: how many times
+    each class appears, the lens on `data-mode`, the language switch pointing
+    at the twin, the hreflang links, and no console error on any page (the
+    unpaired ones included). It found `data-mode` missing on every
+    `/en/<lens>` page the first time it ran.
   - `qa:links` (`qa-links.mjs`) — no broken internal link anywhere in the built
     output, and no public page without its counterpart in the other language.
     No browser needed; it reads the HTML. It found five dead `/en/cv` links on
@@ -798,7 +820,7 @@ AGENTS.md                 ← This file — tool-agnostic project guide
     page is named in the built `/design-system`. No browser either. It is the
     enforcement of § "Ogni componente sta in vetrina", and on its first run it
     found 91 undocumented classes across nine components.
-  - `qa:viewports` (`qa-viewports.mjs`) — the screen sizes real visitors use,
+  - `qa:viewports` (`qa-viewports.mjs`) — on every page, the screen sizes real visitors use,
     taken from PostHog, not the comfortable ones: 1366×610 and 1030×560
     laptop windows, 900×700, 1536×740, ultrawide, plus phones. On every entry
     card (IT and EN) the buttons must sit inside the first screen, and no main
@@ -819,7 +841,12 @@ AGENTS.md                 ← This file — tool-agnostic project guide
     before the text. 320×568 is checked only for what does not depend on
     space (sideways scroll, contrast, touch targets) — see the 360×640
     floor under § "Decisions already taken". Keyboard: with normal motion,
-    Tab must reach the buttons of every lens card.
+    Tab must reach the buttons of every lens card. Since 2026-10-22 sideways
+    scroll and touch targets are checked on every page, and **every visible
+    text of every page** is measured against the brightest pixel behind its
+    lines (at 1366×610, 1920×1080, 390×844, 360×640 and 320×568), scrolling
+    each page top to bottom so stacked cards are measured when they are on
+    top.
 
 → `qa:prepush` serves the build on an **ephemeral port bound to 127.0.0.1**, not
   a fixed one. With a fixed port a leftover process from an earlier session can
@@ -847,12 +874,13 @@ AGENTS.md                 ← This file — tool-agnostic project guide
 → Assumes `cv-site/node_modules` is already installed (root ESLint config
   covers `cv-site/src/**` too, so the Astro parser needs it resolvable) —
   normal on a dev machine, not auto-installed by the hook to keep pushes fast.
-→ Since 2026-08-20 the hook also runs `npm run qa:prepush` (build + the three
-  browser checks — see § Verification loop). It adds roughly a minute and a
-  half to a push, and that is the intended trade: those checks exist to catch
-  what lint cannot see, and a check nobody runs is a check that was not
-  written. `SKIP_QA=1 git push` skips them for an urgent push on a work
-  branch — not on `main`.
+→ The hook also runs `npm run qa:prepush` (build + the browser checks, on
+  every page — see § Verification loop), but only when the push carries
+  something to `main` or is run with `QA=1` (since 2026-10-22; before that
+  it ran on every push). It takes several minutes, and that is the intended
+  trade: those checks exist to catch what lint cannot see, and a check
+  nobody runs is a check that was not written. `SKIP_QA=1 git push` skips
+  them for an urgent push — not on `main`.
 → **`format:check` gira con `--cache`, e non è un'ottimizzazione.** Prettier
   apre tutti i `.astro` del repo in un processo solo, e per ognuno istanzia il
   compilatore Astro, che è un WASM con una sua memoria lineare che **non si

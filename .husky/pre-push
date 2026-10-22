@@ -7,10 +7,15 @@
 #
 # 2. I controlli da browser — `npm run qa:prepush`: build vera, server statico
 #    su quella build, poi vetrina (qa:ds), copertura della vetrina
-#    (qa:showcase), parità IT ↔ EN e link interni.
-#    Costa circa un minuto e mezzo, ed è per questo che sta QUI e non altrove:
-#    regola di progetto (Giulio, 2026-08-20), `qa:ds` si esegue solo prima di
-#    un push. Durante il lavoro bastano lint, format, test, qa:units e la build.
+#    (qa:showcase), parità IT ↔ EN, link interni e misure reali dei visitatori
+#    (qa:viewports), tutti su TUTTE le pagine del build.
+#    Costano parecchi minuti, e girano solo quando il push lo chiede davvero
+#    (regola di Giulio, 2026-10-22: «solo quando ti chiedo di pushare, non
+#    ogni volta»):
+#      - sempre, se il push porta qualcosa su main;
+#      - su un ramo di lavoro, solo con QA=1:  QA=1 git push
+#    Un push di salvataggio su un ramo di lavoro fa solo lint e format. Chi
+#    lavora per Giulio usa QA=1 ogni volta che è lui a chiedere il push.
 #
 #    Perché sulla build e non su un dev server: la cache delle dipendenze di un
 #    dev server rimasto aperto ha già prodotto falsi negativi (404 su chunk
@@ -26,16 +31,23 @@
 # Richiede cv-site/node_modules già installato — normale su una macchina di
 # sviluppo, non lo installiamo qui per non rallentare ogni push.
 #
-# Scorciatoia consapevole, per un push urgente su un ramo di lavoro:
-#   SKIP_QA=1 git push        (non usarla su main)
+# Scorciatoia consapevole, per un push urgente: SKIP_QA=1 git push (mai su main).
 npm run lint && npm run format:check || exit 1
+
+# Git passa sullo stdin una riga per ogni ref che parte:
+#   <ref locale> <sha locale> <ref remoto> <sha remoto>
+VERSO_MAIN=0
+while read -r _ _ REMOTO _; do
+  [ "$REMOTO" = "refs/heads/main" ] && VERSO_MAIN=1
+done
 
 if [ "$SKIP_QA" = "1" ]; then
   echo "SKIP_QA=1 — controlli da browser saltati. Non farlo su main."
-  exit 0
+elif [ "$VERSO_MAIN" = "1" ] || [ "$QA" = "1" ]; then
+  npm run qa:prepush || exit 1
+else
+  echo "Ramo di lavoro: solo lint e format. I controlli da browser girano verso main, o con QA=1."
 fi
-
-npm run qa:prepush || exit 1
 
 # ── Promemoria analisi.md (mai bloccante) ─────────────────────────────────
 # Confronta ciò che sta per partire con l'upstream; al primo push di un ramo

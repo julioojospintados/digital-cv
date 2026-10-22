@@ -51,7 +51,9 @@ import "../../styles/global.css";
       label .optional {
         text-transform: none;
         font-weight: 400;
-        opacity: 0.7;
+        /* 0.85 e non 0.7: al 70% la nota stava a 4,1:1, sotto il 4,5 del
+           testo piccolo (qa:viewports, 2026-10-22). */
+        opacity: 0.85;
       }
       .field {
         display: flex;
@@ -66,6 +68,9 @@ import "../../styles/global.css";
         padding: 0.75rem 0.9rem;
         font-size: var(--fs-16);
         width: 100%;
+        /* Il bersaglio per il dito, come ogni comando del sito: senza, il
+           campo a una riga era alto 43px (qa:viewports, 2026-10-22). */
+        min-height: var(--hit);
       }
       input[type="file"] {
         padding: 0.6rem 0.7rem;

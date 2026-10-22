@@ -49,6 +49,8 @@ import "../styles/lab-home.css";
 import "../styles/lab-cv.css";
 import "../styles/memory-drawer.css";
 import "../styles/work-page.css";
+import "../styles/privacy-page.css";
+import "../styles/not-found.css";
 import "../styles/design-system.css";
 
 interface Props {
@@ -672,6 +674,13 @@ const NAV = [
     ],
   },
   {
+    label: it ? "Pagine di servizio" : "Service pages",
+    items: [
+      { id: "pagina-404", label: it ? "Pagina non trovata" : "Page not found" },
+      { id: "pagina-privacy", label: it ? "Informativa privacy" : "Privacy notice" },
+    ],
+  },
+  {
     label: it ? "Sistema" : "System",
     items: [
       { id: "cambio-lingua", label: it ? "Cambio lingua" : "Language switch" },
@@ -730,6 +739,8 @@ const CATEGORIES = [
       "work-indice-testata",
       "work-testata",
       "work-sezione",
+      "pagina-404",
+      "pagina-privacy",
       "mobile",
     ],
   },
@@ -5939,8 +5950,8 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
             <p class="ds-spec__v">
               {
                 it
-                  ? "Una per case study, e solo se il progetto ha davvero delle tappe di processo: con meno di due la sezione non viene resa affatto. Sta nella colonna di .work-main: la corsia della strada (--j-lane) è presa dal padding sinistro della traccia, non da un margine fuori colonna."
-                  : "One per case study, and only when the project really has process steps: with fewer than two the section is not rendered at all. It sits in the .work-main column: the road's lane (--j-lane) comes out of the track's left padding, not from a margin outside the column."
+                  ? "Una per case study, e solo se il progetto ha davvero delle tappe di processo: con meno di due la sezione non viene resa affatto. Sta nella colonna di .work-main: la corsia della strada (--j-lane) è presa dal padding sinistro della traccia, non da un margine fuori colonna. Sotto i 48rem la traccia ha anche un padding in alto: a riposo il cruscotto STEP sta sulla sua riga, sopra l'occhiello della partenza, che prima copriva."
+                  : "One per case study, and only when the project really has process steps: with fewer than two the section is not rendered at all. It sits in the .work-main column: the road's lane (--j-lane) comes out of the track's left padding, not from a margin outside the column. Below 48rem the track also has top padding: at rest the STEP dashboard sits on its own line, above the departure eyebrow it used to cover."
               }
             </p>
           </div>
@@ -5971,6 +5982,185 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
                 it
                   ? "La sezione porta un aria-label che dice dove porta il percorso, perché il titolo vero è dentro la prima tappa. HUD, bussola e strada sono aria-hidden: sono la resa grafica di un avanzamento già scritto negli occhielli. La bussola cammina nella corsia, fuori dal testo, e comunque sta sotto le tappe (z-index 1 contro 2). Senza pin, focus da tastiera e ricerca nella pagina tornano a portare la tappa in vista da soli: con la strada orizzontale serviva uno script apposta."
                   : "The section carries an aria-label saying where the journey leads, because the real heading lives inside the first stop. HUD, compass and road are aria-hidden: they are the graphic rendering of a progress already written in the eyebrows. The compass walks in the lane, clear of the text, and sits below the stops anyway (z-index 1 against 2). With no pin, keyboard focus and find-in-page bring a stop into view on their own again: with the horizontal road that took a dedicated script."
+              }
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="ds-panel"
+        id="pagina-404"
+        data-ds-panel="pagina-404"
+        aria-labelledby="pagina-404-t"
+      >
+        <div class="ds-panel__head">
+          <h2 class="ds-section__title" id="pagina-404-t">
+            {it ? "Pagina non trovata" : "Page not found"}
+          </h2>
+          <span class="ds-panel__group"
+            >{it ? "Pagine di servizio" : "Service pages"}<span class="ds-origin">nf-*</span></span
+          >
+        </div>
+        <p class="ds-sub__note">
+          {
+            it
+              ? "La 404: una frase che dice cosa è successo e tre uscite, con la home come primaria. È un file statico perché Vercel la serve per ogni indirizzo che non esiste; la lingua la sceglie uno script che legge /en/ nell'URL, e senza JavaScript resta l'italiano."
+              : "The 404: one sentence saying what happened and three exits, with the home page as the primary one. It is a static file because Vercel serves it for every address that does not exist; a script picks the language by reading /en/ in the URL, and without JavaScript Italian stays."
+          }
+        </p>
+        <div class="ds-stage">
+          <div class="nf-copy" data-ds-snippet>
+            <p class="nf-eyebrow">404</p>
+            <p class="nf-title">{it ? "Qui non c'è niente." : "There's nothing here."}</p>
+            <p class="nf-text">
+              {
+                it
+                  ? "Il link è rotto o la pagina si è spostata. Da qui torni dove volevi andare."
+                  : "The link is broken, or the page moved. From here you can get back on track."
+              }
+            </p>
+            <div class="nf-links">
+              <a class="nf-link nf-link--primary" href="#pagina-404"
+                >{it ? "Vai alla home" : "Go to the homepage"}</a
+              >
+              <a class="nf-link" href="#pagina-404">{it ? "Apri il CV" : "Open the CV"}</a>
+              <a class="nf-link" href="#pagina-404">{it ? "Guarda i lavori" : "See the work"}</a>
+            </div>
+          </div>
+        </div>
+        <div class="ds-spec">
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specClass}</span>
+            <p class="ds-spec__v">
+              <code
+                >nf-nav · nf-main · nf-copy · nf-eyebrow · nf-title · nf-text · nf-links · nf-link ·
+                nf-link--primary</code
+              >
+            </p>
+          </div>
+          <div class="ds-spec__row">
+            <span class="ds-spec__k">{t.specUse}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Solo sulla 404, una per tutto il sito."
+                  : "Only on the 404, one for the whole site."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--dont">
+            <span class="ds-spec__k">{t.specDont}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Non mandare il CV a una lente diversa nelle due lingue: fino al 2026-10-22 l'italiano apriva /tech e l'inglese /en/design. Entrambe aprono la lente predefinita."
+                  : "Do not send the CV link to a different lens in each language: until 2026-10-22 Italian opened /tech and English /en/design. Both open the default lens."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specA11y}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "L'occhiello è testo piccolo, 12px: prende --color-accent-text, mai l'accento pieno. Il blocco inglese porta lang=\"en\", e lo script cambia anche la lingua del documento."
+                  : 'The eyebrow is small text, 12px: it takes --color-accent-text, never the full accent. The English block carries lang="en", and the script also switches the document language.'
+              }
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="ds-panel"
+        id="pagina-privacy"
+        data-ds-panel="pagina-privacy"
+        aria-labelledby="pagina-privacy-t"
+      >
+        <div class="ds-panel__head">
+          <h2 class="ds-section__title" id="pagina-privacy-t">
+            {it ? "Informativa privacy" : "Privacy notice"}
+          </h2>
+          <span class="ds-panel__group"
+            >{it ? "Pagine di servizio" : "Service pages"}<span class="ds-origin">privacy-*</span
+            ></span
+          >
+        </div>
+        <p class="ds-sub__note">
+          {
+            it
+              ? "Poche righe in chiaro invece di un documento legale: chi tratta i dati, cosa raccolgo e con quali strumenti, perché, per quanto, e come esercitare i propri diritti. Una pagina per lingua, con lo stesso foglio di stile (privacy-page.css)."
+              : "A few plain lines instead of a legal document: who handles the data, what I collect and with which tools, why, for how long, and how to exercise your rights. One page per language, sharing one stylesheet (privacy-page.css)."
+          }
+        </p>
+        <div class="ds-stage">
+          <div class="privacy-main" data-ds-snippet>
+            <div class="privacy-hero">
+              <p class="privacy-hero__eyebrow">Privacy</p>
+              <p class="privacy-hero__title">
+                {it ? "Cosa raccoglie questo sito." : "What this site collects."}
+              </p>
+            </div>
+            <div class="privacy-section">
+              <p class="privacy-section__title">
+                {it ? "Cosa raccolgo e con cosa" : "What I collect and with what"}
+              </p>
+              <ul class="privacy-list">
+                <li>
+                  <strong>PostHog</strong>
+                  {
+                    it
+                      ? "statistiche di navigazione e registrazione delle sessioni."
+                      : "browsing stats and session recording."
+                  }
+                </li>
+              </ul>
+              <p class="privacy-section__text">
+                {it ? "Per scrivermi:" : "To write to me:"}
+                <a class="privacy-link" href="#pagina-privacy">giulio.occhipinti.g@gmail.com</a>.
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="ds-spec">
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specClass}</span>
+            <p class="ds-spec__v">
+              <code
+                >privacy-nav · privacy-nav__right · privacy-back · privacy-main · privacy-hero ·
+                privacy-hero__eyebrow · privacy-hero__title · privacy-section ·
+                privacy-section__title · privacy-section__text · privacy-list · privacy-link</code
+              >
+            </p>
+          </div>
+          <div class="ds-spec__row">
+            <span class="ds-spec__k">{t.specUse}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Solo su /privacy e /en/privacy. Il ritorno al CV (privacy-back) esiste ma è spento da un interruttore, PRIVACY_BACK_LINK in lib/flags.ts."
+                  : "Only on /privacy and /en/privacy. The back-to-CV link (privacy-back) exists but is switched off by a flag, PRIVACY_BACK_LINK in lib/flags.ts."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--dont">
+            <span class="ds-spec__k">{t.specDont}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Non riscrivere gli stili dentro la pagina: erano copiati identici in due file, ed è così che due lingue divergono. Stanno in privacy-page.css."
+                  : "Do not write the styles inside the page again: they were copied identically into two files, which is how two languages drift apart. They live in privacy-page.css."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specA11y}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Occhiello e link sono testo piccolo: prendono --color-accent-text. Fino al 2026-10-22 usavano l'accento pieno, che in lente design sarebbe stato a 3,62:1."
+                  : "The eyebrow and links are small text: they take --color-accent-text. Until 2026-10-22 they used the full accent, which in the design lens would have been 3.62:1."
               }
             </p>
           </div>

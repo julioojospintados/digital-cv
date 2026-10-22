@@ -73,10 +73,10 @@ Il mode **non cambia mai template o layout**, solo enfasi visiva:
   di mode, mai 0, mai `display:none`) — sono "sussurri", restano leggibili e
   utilizzabili da tastiera/screen reader.
 
-Lo sfondo ottanio `rgba(8,73,67,1)` **non cambia mai**. Cambiano invece — per ogni mode,
-non solo l'accent — questi 4 token: `--color-surface`, `--color-border`,
-`--color-text-primary`, `--color-text-muted`, oltre a `--color-accent` stesso. Vedi
-tabella completa in §9.
+Lo sfondo ottanio `rgba(8,73,67,1)` **non cambia mai**, e dal 2026-10-22 non cambia
+nemmeno il testo: `--color-text-primary` e `--color-text-muted` sono gli stessi in tutte le
+lenti. Per mode cambiano `--color-accent`, `--color-accent-text`, `--color-surface` e
+`--color-border`. Tabella completa in §9.
 
 | Mode | Persona | Target | Oggetto knolling |
 |---|---|---|---|
@@ -250,19 +250,34 @@ Regola completa: `.claude/skills/design-system/SKILL.md` → "Typography Scale".
 
 ## 9. Palette colori per mode
 
-**Un solo token è davvero invariante**: `--color-bg` (ottanio, `rgba(8,73,67,1)`
-in ogni mode, ogni pagina). Tutti gli altri 4 token cambiano per mode — un
-componente o un documento che li mostra come costanti fisse (es. sempre gli
-stessi valori `:root`) mostra dati sbagliati appena gira in un mode diverso dal
-default. Bug reale trovato e corretto il 2026-07-23 in `WorkDesignSystem.astro`
-(leggeva `:root` invece del mode attivo della pagina che lo ospitava).
+Invarianti in ogni lente: `--color-bg` (ottanio) e i tre token del testo, in `:root`.
+Fino al 2026-10-22 ogni lente ridefiniva anche `--color-text-primary` e
+`--color-text-muted` (crema caldo e pesca in design, ciano in tech, giallo in AI), e /work,
+che legge i token globali, si leggeva tinta da cima a fondo accanto a ingresso e CV in
+neutro. Ora la lente cambia l'accento e basta.
 
-| Mode | `--color-accent` | `--color-text-muted` (WCAG AA) | `--color-surface` | `--color-border` | `--color-text-primary` |
-|---|---|---|---|---|---|
-| default (`:root`) | `rgba(255,255,255,0.9)` | `rgba(192,220,215,0.85)` — ~5.7:1 ✅ | `rgba(12,95,87,0.5)` | `rgba(255,255,255,0.12)` | `rgba(245,240,230,1)` |
-| `tech` | `rgba(0,255,200,1)` | `rgba(0,255,200,0.70)` — ~4.8:1 ✅ | `rgba(5,50,45,0.6)` | `rgba(0,255,200,0.2)` | `rgba(220,255,245,1)` |
-| `creative` | `rgba(255,107,53,1)` | `rgba(255,195,155,0.82)` — ~4.9:1 ✅ | `rgba(40,20,5,0.5)` | `rgba(255,107,53,0.25)` | `rgba(255,240,220,1)` |
-| `human` | `rgba(240,200,127,1)` | `rgba(240,210,148,0.75)` — ~4.6:1 ✅ | `rgba(20,60,30,0.4)` | `rgba(240,200,127,0.25)` | `rgba(250,240,215,1)` |
+| Token | Valore | Contrasto sull'ottanio (punto più chiaro) | Uso |
+|---|---|---|---|
+| `--color-text-primary` | `rgba(245,240,230,1)` | 9,04:1 (8,41) | titoli, nomi |
+| `--color-text-muted` | `rgba(192,220,215,1)` | 7,07:1 (6,57) | testo secondario |
+| `--color-text-quiet` | `rgba(160,196,190,1)` | 5,45:1 (5,06) | testo lungo di /work, un gradino sotto |
+
+| Mode | `--color-accent` | `--color-accent-text` | `--color-surface` | `--color-border` |
+|---|---|---|---|---|
+| default (`:root`) | `rgba(255,255,255,0.9)` | uguale all'accento | `rgba(12,95,87,0.5)` | `rgba(255,255,255,0.12)` |
+| `tech` | `rgba(0,255,200,1)` | uguale all'accento, 7,89:1 | `rgba(5,50,45,0.6)` | `rgba(0,255,200,0.2)` |
+| `creative` | `rgba(255,107,53,1)` | 65% arancione + 35% bianco, 5,14:1 (4,78) | `rgba(40,20,5,0.5)` | `rgba(255,107,53,0.25)` |
+| `human` | `rgba(240,200,127,1)` | uguale all'accento, 6,49:1 | `rgba(20,60,30,0.4)` | `rgba(240,200,127,0.25)` |
+
+**Arancione pieno solo come testo grande** (≥ 24px, o ≥ 18,66px in grassetto): 3,62:1, che
+passa solo dove basta 3:1. Nome del progetto e titoli di sezione di /work, occhiello a 20px
+bold dell'ingresso. Il testo arancione piccolo usa `--color-accent-text`.
+
+**Il contrasto si misura sul pixel più chiaro dietro il testo**, non sull'ottanio: card
+schiarite, aloni e filigrane lo abbassano (il 2026-10-22 il nome delle card di /work era a
+2,9:1). Superfici sotto testo colorato uguali o più scure dell'ottanio; filigrane sotto un
+titolo al 14%.
+
 > Nota storica: fino al 2026-08-16 esisteva un quarto mode `management` (viola),
 > il cui `--color-text-muted` era dichiarato "~4.6:1 ✅" per anni senza essere mai
 > ricalcolato — in realtà 3.76:1, sotto il 4.5:1 di 1.4.3. Scoperto il 2026-07-31

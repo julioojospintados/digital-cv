@@ -32,18 +32,27 @@ The `data-mode` attribute is set on `<html>` — CSS custom properties handle al
 
 ### CSS accent tokens per mode
 
-| Mode | `--color-accent` | `--color-text-muted` |
+| Mode | `--color-accent` | `--color-accent-text` (accent as small text) |
 |---|---|---|
-| `tech` | `rgba(0,255,200,1)` | `rgba(0,255,200,0.70)` |
-| `creative` | `rgba(255,107,53,1)` | `rgba(255,195,155,0.82)` |
-| `human` | `rgba(240,200,127,1)` | `rgba(240,210,148,0.75)` |
-Background is always ottanio `rgba(8,73,67,1)` in every mode.
+| `tech` | `rgba(0,255,200,1)` | same as accent, 7.89:1 |
+| `creative` | `rgba(255,107,53,1)` | 65% orange + 35% white, 5.14:1 |
+| `human` | `rgba(240,200,127,1)` | same as accent, 6.49:1 |
+
+Background is always ottanio `rgba(8,73,67,1)` in every mode, and since 2026-10-22 so is the
+text: `--color-text-primary` `rgba(245,240,230,1)`, `--color-text-muted`
+`rgba(192,220,215,1)` and `--color-text-quiet` `rgba(160,196,190,1)` (secondary text on
+/work) are defined in `:root` only. A lens changes the accent, never the text colour.
+
+Full orange as text only when large (≥ 24px, or ≥ 18.66px bold): it is 3.62:1 on ottanio.
+Smaller orange text uses `--color-accent-text`. Measure contrast on the lightest pixel behind
+the text, not on ottanio: lighter cards, glows and watermarks lower it.
 
 ## CSS tokens — never hardcode colors
 
 Use CSS custom properties from `src/styles/global.css`:
 - `--color-bg`, `--color-surface`, `--color-border`
-- `--color-text-primary`, `--color-text-muted`
+- `--color-text-primary`, `--color-text-muted`, `--color-text-quiet`
+- `--color-accent-text` (accent as small text)
 - `--color-accent`
 - `--card-opacity-active`, `--card-opacity-passive`, `--card-scale-passive`
 

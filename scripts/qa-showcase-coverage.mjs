@@ -30,10 +30,11 @@
 // del lavoro resta di chi legge il diff — vedi
 // .claude/skills/verification-loop/SKILL.md.
 
-import { readFile, readdir } from "node:fs/promises";
+import { readFile } from "node:fs/promises";
 import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { tuttePagine, fileDi, PRIVATE_PREFIX } from "./qa-pages.mjs";
 
 const ROOT = fileURLToPath(new URL("..", import.meta.url));
 const DIST = join(ROOT, "cv-site/dist/client");
@@ -44,15 +45,22 @@ const DIST = join(ROOT, "cv-site/dist/client");
 // delle altre. Nell'HTML reso ci sono, insieme alle schede di specifica.
 const VETRINA = join(DIST, "design-system/index.html");
 
-// Le pagine che la vetrina dichiara di coprire, in testa a DesignSystem.astro:
-// l'ingresso (lh-*), le tre lenti (lc-*) e /work (work-*). Una lingua sola:
-// le classi non cambiano con la lingua, e la parità IT/EN la verifica qa:ds.
-const PAGINE = [
-  "index.html",
-  "design/index.html",
-  "tech/index.html",
-  "ai/index.html",
-  "work/index.html",
+// Tutte le pagine del build, in tutte e due le lingue (regola di Giulio,
+// 2026-10-22: ogni controllo su tutte le pagine). Fino a quel giorno erano
+// cinque pagine italiane più i case study, e la 404 e l'informativa privacy
+// restavano fuori senza che nessuno lo decidesse. Ne restano fuori due
+// gruppi, ognuno per iscritto:
+//   - la vetrina stessa, che non documenta sé stessa;
+//   - gli strumenti privati sotto /tools/: non linkati, noindex, protetti da
+//     passphrase, usati solo da Giulio. Non fanno parte del sito che la
+//     vetrina descrive, e documentarli in una pagina pubblica non serve a
+//     nessuno dei suoi lettori.
+const PAGINE_FUORI = [
+  { test: (p) => p.includes("design-system"), perche: "La vetrina non documenta sé stessa." },
+  {
+    test: (p) => p.startsWith(PRIVATE_PREFIX),
+    perche: "Strumenti privati: non linkati, noindex, fuori dal sito pubblico.",
+  },
 ];
 
 // Fuori perimetro, e ognuna con la sua ragione scritta. Questa lista è il
@@ -77,15 +85,8 @@ const FUORI = [
 // con ottantasei nomi in elenco. E' il promemoria migliore che potesse
 // avere, e non costa niente tenerlo.
 
-// Le pagine di /work sono tante quante i case study: le scopre da sé, così
-// un progetto nuovo entra nel controllo senza che nessuno se ne ricordi.
-async function paginePubbliche() {
-  const elenco = [...PAGINE];
-  const dir = join(DIST, "work");
-  for (const voce of await readdir(dir, { withFileTypes: true })) {
-    if (voce.isDirectory()) elenco.push(`work/${voce.name}/index.html`);
-  }
-  return elenco;
+function paginePubbliche() {
+  return tuttePagine().filter((p) => !PAGINE_FUORI.some((r) => r.test(p)));
 }
 
 function classiDi(html) {
@@ -107,12 +108,12 @@ const nominata = (c) =>
     vetrina,
   );
 
-const pagine = await paginePubbliche();
+const pagine = paginePubbliche();
 const vive = new Map(); // classe → prima pagina in cui compare
 
-for (const rel of pagine) {
-  const html = await readFile(join(DIST, rel), "utf8");
-  for (const c of classiDi(html)) if (!vive.has(c)) vive.set(c, rel);
+for (const path of pagine) {
+  const html = await readFile(fileDi(path), "utf8");
+  for (const c of classiDi(html)) if (!vive.has(c)) vive.set(c, path);
 }
 
 const escluse = [];
@@ -130,6 +131,7 @@ const coperte = vive.size - escluse.length - mancanti.length;
 const perimetro = vive.size - escluse.length;
 
 console.log(`\n  Vetrina — ${pagine.length} pagine, ${perimetro} classi nel perimetro\n`);
+for (const r of PAGINE_FUORI) console.log(`  ·  fuori: ${r.perche}`);
 
 if (mancanti.length === 0) {
   console.log(`  ✅ ogni componente vivo è nominato in /design-system (${coperte}/${perimetro})`);
@@ -149,7 +151,7 @@ for (const { classe, dove } of mancanti) {
   famiglie.get(fam).classi.push(classe);
 }
 for (const [fam, { dove, classi }] of famiglie) {
-  console.error(`     ${fam}  (${classi.length})  →  /${dove.replace("/index.html", "")}`);
+  console.error(`     ${fam}  (${classi.length})  →  ${dove}`);
   console.error(`        ${classi.join(" · ")}`);
 }
 

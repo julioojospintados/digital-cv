@@ -1,0 +1,99 @@
+/* not-found.css — la pagina 404 (pages/404.astro).
+   Era un <style> dentro la pagina, quindi con lo scope di Astro, e la vetrina
+   non poteva mostrarla con i suoi stili veri. Dal 2026-10-22 sta qui, in un
+   foglio condiviso, perché anche la 404 è nel perimetro di /design-system:
+   ogni pagina pubblica lo è. Le classi hanno tutte il prefisso nf-, quindi
+   tolto lo scope non toccano niente fuori dalla pagina. */
+
+.nf-nav {
+  display: flex;
+  align-items: center;
+  padding: 1.5rem 1.25rem;
+  max-width: 48rem;
+  margin: 0 auto;
+}
+
+.nf-main {
+  max-width: 48rem;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 4rem;
+}
+
+/* Italiano è il default del markup: l'inglese resta nascosto finché lo
+   script inline non trova /en/ nell'URL. Se lo script non gira (JS off),
+   resta visibile l'italiano — lingua di default del sito. */
+.nf-copy[data-nf="en"] {
+  display: none;
+}
+
+.nf-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+[data-nf-lang="en"] .nf-copy[data-nf="it"] {
+  display: none;
+}
+
+[data-nf-lang="en"] .nf-copy[data-nf="en"] {
+  display: flex;
+}
+
+.nf-eyebrow {
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: var(--color-accent-text);
+}
+
+.nf-title {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 7vw, 3rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  color: var(--color-text-primary);
+  text-wrap: balance;
+}
+
+.nf-text {
+  font-size: var(--fs-16);
+  line-height: 1.6;
+  color: var(--color-text-muted);
+  max-width: 34rem;
+}
+
+.nf-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+.nf-link {
+  font-family: var(--font-mono);
+  font-size: var(--fs-14);
+  font-weight: 600;
+  text-decoration: none;
+  padding: 0.7rem 1.1rem;
+  border-radius: var(--radius-4);
+  border: var(--line-1) solid var(--color-border);
+  color: var(--color-text-primary);
+  transition:
+    border-color var(--duration-micro) var(--ease-standard),
+    color var(--duration-micro) var(--ease-standard);
+}
+
+.nf-link--primary {
+  border-color: var(--color-accent);
+  color: var(--color-accent-text);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .nf-link:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent-text);
+  }
+}
