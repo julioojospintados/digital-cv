@@ -557,7 +557,7 @@ for (const [w, h] of [...DESKTOP, ...TELEFONI, ...MINIMI]) {
           // Ritagliato a 1×1px per i lettori di schermo o per i gestori di
           // password (il campo utente nascosto di /tools/cv-recruiter): non
           // si vede e nessuno ci mette il dito.
-          if (r.width <= 1 && r.height <= 1) continue;
+          if (r.width <= 1 || r.height <= 1) continue;
           // Dentro un cassetto chiuso (l'indice del design system su
           // telefono) un comando ha un riquadro ma non si vede né si tocca.
           if (!e.checkVisibility({ visibilityProperty: true, opacityProperty: false })) continue;
