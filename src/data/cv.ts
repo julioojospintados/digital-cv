@@ -2100,7 +2100,7 @@ export const cvData = {
     {
       name: "Bambagia — UX/UI Design for a B2B Cosmetics Brand",
       description:
-        "Ho progettato con Bambagia Design Lab il sito di un brand cosmetico che vende ai professionisti, dal wireframe al design system. Lo studio lavora su Wix Studio, quindi ho costruito con l'AI un ambiente le cui regole rendono ogni pagina ricostruibile in Wix: istruzioni per l'agente, MCP di Figma e Wix, un passaggio Figma ⇄ codice che lascia al cliente il sito modificabile da solo.",
+        "Ho progettato con Bambagia Design Lab il sito di un brand cosmetico che vende ai professionisti, dal wireframe al design system. Dopo la consegna l'avrebbe mantenuto lo studio, che lavora su Wix Studio. Per questo ho preparato con l'AI un ambiente di lavoro che produce solo pagine ricostruibili in Wix, con le istruzioni per l'agente e gli MCP di Figma e Wix.",
       date: "2026-05",
       tags: [
         "UX/UI Design",
@@ -2118,42 +2118,40 @@ export const cvData = {
       primaryMode: "creative",
       role: "UX/UI Designer & AI Workflow Designer, collaborazione con Bambagia Design Lab (2026).",
       problem:
-        "Bambagia Design Lab mi ha chiesto di progettare il sito di un brand cosmetico che vende ai professionisti: estetiste, centri benessere, farmacie. Un sito vetrina e non un e-commerce, con le linee di prodotto su tre livelli, i corsi e le richieste di personalizzazione. Il vincolo vero arrivava dopo la consegna. Il sito l'avrebbe mantenuto lo studio, che lavora su Wix Studio, e un design che in Wix non si ricostruisce, o che ci arriva come un blocco statico, è un design che nessuno può più toccare senza di me.",
+        "Bambagia Design Lab mi ha chiesto di progettare il sito di un brand cosmetico che vende ai professionisti: estetiste, centri benessere, farmacie. Un sito vetrina e non un e-commerce, con le linee di prodotto su tre livelli, i corsi e le richieste di personalizzazione. Il vincolo vero arrivava dopo la consegna: il sito l'avrebbe mantenuto lo studio, su Wix Studio. Se una pagina in Wix non si ricostruisce, o ci arriva come un blocco statico, a ogni modifica serve di nuovo qualcuno che scriva codice. Cioè io.",
       process: [
         "Ricerca — Ho studiato il cliente e i concorrenti prima di disegnare: chi compra, che cosa cerca un professionista in un sito di cosmetica, come sono organizzate le linee. Ne è uscito un brief con le pagine, le funzioni e i prodotti su tre livelli: linee, sotto-linee, prodotti.",
-        "Wireframe — Ho scritto a mano in HTML e CSS il prototipo low-fi di nove pagine, con una mappa del sito come ingresso. Si apre dal browser senza server, così lo studio lo naviga come un sito vero e non come una sequenza di schermate.",
-        "Direzione visiva — Ho disegnato tre home diverse sullo stesso contenuto, una delle quali Lusso Minimale e una Nature Professional. È passata Nature Professional. Su quella ho costruito il design di tutte le pagine, desktop e mobile, con i colori e i font del brand al posto dei miei.",
-        "Regole Wix-friendly — Ho scritto dodici regole che ogni pagina rispetta per passare in Wix Studio senza traduzioni. Ogni sezione è un blocco autonomo che diventa una Section, si usano solo Flexbox e Grid semplici, le spaziature stanno sulla griglia da 8 punti, i colori escono da variabili che diventano i colori del tema, i componenti ripetuti sono marcati per diventare Master Section.",
-        "Ambiente AI — Ho costruito su VS Code un ambiente riutilizzabile per lo studio: istruzioni per GitHub Copilot che si attivano per cliente, un agente che conosce il flusso dal brief al sito, gli MCP di Figma, Wix e Playwright. Le regole grafiche e quelle di Wix sono scritte una volta, e l'agente le applica a ogni pagina.",
+        "Wireframe — Ho scritto a mano in HTML e CSS il prototipo low-fi di nove pagine, con una mappa del sito come ingresso. Si apre dal browser senza server, così lo studio ci clicca dentro come in un sito vero.",
+        "Direzione visiva — Ho disegnato tre home sullo stesso contenuto, ed è passata quella che chiamavo Nature Professional. Su quella ho costruito tutte le pagine, desktop e mobile.",
+        "Regole Wix-friendly — Ho scritto dodici regole perché ogni pagina passi in Wix Studio così com'è. Qualche esempio: ogni sezione è un blocco autonomo e in Wix diventa una Section, le spaziature stanno sulla griglia da 8 punti che usa Wix, i colori escono da variabili che diventano i colori del tema.",
+        "Ambiente AI — Ho costruito su VS Code un ambiente riutilizzabile per lo studio: istruzioni per GitHub Copilot che si attivano per cliente, un agente che conosce il flusso dal brief al sito, gli MCP di Figma, Wix e Playwright. Le regole grafiche e quelle di Wix le ho scritte una volta sola, e l'agente le applica a ogni pagina.",
       ],
       decisions: [
         {
           title: "Il plugin Figma → Wix, non l'MCP di Wix",
-          body: "L'MCP di Wix portava il design nel sito più in fretta, ma lo portava come una cornice statica: bella, e immodificabile per chi non scrive codice. Ho scelto il plugin di esportazione da Figma, che crea sezioni, contenitori e stili del tema nativi di Wix Studio. A me costa un passaggio in più, allo studio ne toglie uno a ogni modifica futura.",
+          body: "L'MCP di Wix portava il design nel sito più in fretta, ma come una cornice statica: bella, e immodificabile per chi non scrive codice. Ho scelto il plugin di esportazione da Figma, che crea sezioni, contenitori e stili del tema nativi di Wix Studio. Per me è un passaggio in più. Per lo studio vuol dire cambiare un testo senza chiamarmi.",
         },
         {
           title: "Un design fatto per essere ricostruito",
-          body: "Il design in HTML non è il sito, è la guida da cui lo studio ricostruisce le pagine in Wix. Per questo ho rinunciato a quello che Wix non sa rifare: posizionamenti assoluti complessi, maschere, librerie di animazione come GSAP. Le animazioni usano tre classi standard e in Wix diventano interazioni native. Moduli e menu restano disegnati e non funzionanti, perché in Wix si rifanno con i componenti suoi.",
+          body: "Il design in HTML fa da guida: le pagine vere le ricostruisce lo studio in Wix. Così ho lasciato fuori quello che Wix non sa rifare: posizionamenti assoluti complessi, maschere, librerie di animazione come GSAP. Le animazioni usano tre classi standard e in Wix diventano interazioni native. Moduli e menu sono solo disegnati: in Wix si rifanno con i componenti suoi.",
         },
         {
-          title: "Tre home, non una",
-          body: "Con una sola proposta la revisione diventa un elenco di correzioni. Con tre direzioni sullo stesso contenuto il cliente sceglie un'atmosfera, e le correzioni arrivano dopo, su una base già condivisa. Le due scartate sono rimaste nella cartella interna del brief, che il cliente non vede: per lui esiste solo il prototipo.",
+          title: "Tre home sullo stesso contenuto",
+          body: "Con una proposta sola la revisione diventa un elenco di correzioni. Con tre, il cliente sceglie prima l'atmosfera e corregge dopo. Le due scartate sono rimaste nella cartella interna del brief: al cliente arriva solo il prototipo.",
         },
         {
           title: "L'atmosfera sì, i colori no",
-          body: "Nature Professional usava un oro come accento e due Google Fonts. Il brand aveva già una palette sua, terracotta, beige e salvia, e il cliente aveva scelto un'atmosfera, non un colore. Ho tenuto struttura, ritmo e animazioni della proposta e ho sostituito palette e font con quelli del brand, caricati in locale perché in Wix si importano come font personalizzati.",
+          body: "Nature Professional usava un oro come accento e due Google Fonts. Il brand aveva già una palette sua, terracotta, beige e salvia. Della proposta ho tenuto struttura, ritmo e animazioni, e ci ho messo palette e font del brand, caricati in locale perché Wix li importa come font personalizzati.",
         },
       ],
       outcomes: [
         "Tre home proposte, una scelta, e su quella il design di nove pagine in versione desktop e mobile.",
-        "Dodici regole Wix-friendly scritte una volta e applicate dall'agente a ogni pagina.",
         "Un ambiente riutilizzabile: ogni nuovo cliente dello studio parte dalla stessa struttura di cartelle, dalle stesse regole e dallo stesso agente.",
         "Eleonora D'Agostino, titolare dello studio, ha scritto una raccomandazione su questo lavoro: è tra le voci del mio CV.",
       ],
       learnings: [
-        "Il vincolo più importante di un sito non sta nel design: sta in chi lo modificherà dopo la consegna. Ho progettato per Wix dal primo wireframe, non alla fine.",
-        "Scritte come istruzioni, le regole di un progetto valgono per ogni pagina e per ogni sessione con l'agente. Non devo ricordarle io, e non deve ricordarle lo studio.",
-        "Lo strumento più veloce per me non era quello giusto per chi resta: l'MCP di Wix risparmiava un passaggio a me e lo toglieva al cliente.",
+        "La domanda giusta, all'inizio, era chi avrebbe modificato il sito dopo di me. Da lì è venuto tutto il resto, a partire dal primo wireframe.",
+        "Le regole scritte per l'agente le rispetta a ogni pagina e a ogni sessione. Quelle che tenevo a mente le rispettavo quando me ne ricordavo.",
       ],
       automationsIntro:
         "L'ambiente che ho costruito per lo studio, perché l'AI lavori dentro le regole di Wix invece di inventarne di sue. Le righe con il badge AI usano un modello di linguaggio.",
@@ -2207,7 +2205,7 @@ export const cvData = {
       ],
       slug: "looking-for-flights",
       primaryMode: "tech",
-      role: "Sviluppatore e unico utente, progetto personale scritto con Claude Code (2026).",
+      role: "Ideatore e unico utente, progetto personale costruito in collaborazione con Claude Code (2026).",
       problem:
         "Per settembre 2026 avevo un budget fisso e una domanda precisa: dove posso andare, e per quanti giorni, senza sforarlo. Il volo più economico non era la risposta, perché a terra ogni paese costa diverso. E non volevo passare l'estate ad aprire Google Flights ogni mattina per scoprire che non era cambiato niente.",
       process: [
@@ -2231,12 +2229,12 @@ export const cvData = {
           body: "La classifica usa il prezzo più basso, che è quasi sempre da Malpensa o da Orio. Ogni notifica mostra comunque il miglior prezzo da Torino, per decidere se lo sconto vale il viaggio fino a Milano. Non costa ricerche in più: i prezzi dei singoli aeroporti sono già nella stessa risposta.",
         },
         {
-          title: "Una secret mancante degrada, non spegne",
-          body: "GitHub passa una secret che non esiste come stringa vuota, e il controllo sul budget la leggeva come un valore sbagliato: quattro esecuzioni fallite di fila. Ora vuoto e assente sono la stessa cosa, e senza budget il monitor classifica per solo prezzo del volo, con l'avviso in cima alla notifica. Un valore scritto male invece ferma ancora tutto: quello è un refuso, non una scelta.",
+          title: "Senza budget, restano i prezzi",
+          body: "GitHub passa una secret che non esiste come stringa vuota, e il controllo sul budget la leggeva come un valore sbagliato: quattro esecuzioni fallite di fila. Ora vuoto e assente sono la stessa cosa, e senza budget il monitor classifica per solo prezzo del volo, con l'avviso in cima alla notifica. Un valore scritto male, tipo «1500 EUR», invece ferma ancora tutto.",
         },
         {
           title: "Zero dipendenze, con un'eccezione",
-          body: "Il progetto usa solo la libreria standard di Node: niente installazione in CI, nessuna catena di fornitura da sorvegliare. Il Cloudflare Worker è l'unico pezzo fuori da GitHub, ed era la strada che avevo scartato all'inizio. «Senza dipendenze esterne» e «istantaneo» non stavano insieme, e ha deciso l'uso, non l'architettura.",
+          body: "Il progetto usa solo la libreria standard di Node: niente installazione in CI, nessuna catena di fornitura da sorvegliare. Il Cloudflare Worker è l'unico pezzo fuori da GitHub, ed era la strada che avevo scartato all'inizio. Poi ho misurato quanto aspettava una risposta a /cerca: anche quaranta minuti. Quello non era «su richiesta», era un cron travestito, e ho ceduto.",
         },
       ],
       outcomes: [
@@ -2246,9 +2244,9 @@ export const cvData = {
         "Il motore di calcolo è diventato la base di trip-runway, la web app che fa la stessa domanda per chiunque viaggi.",
       ],
       learnings: [
-        "Il silenzio è una funzione: un messaggio che arriva solo quando cambia qualcosa si legge, dieci messaggi uguali si silenziano.",
-        "Le quote gratuite sono un vincolo di progetto, non un dettaglio di configurazione. Andavano contate prima di scrivere il cron, e le ho contate dopo una email di avviso.",
-        "Un fallimento che non si vede è peggio di un fallimento. Ogni esecuzione fallita ora scrive su Telegram con il link ai log, perché un monitor fermo in silenzio sembra un prezzo che non è cambiato.",
+        "Ho deciso prima quando il bot doveva tacere, e poi quando scrivere. Le tre condizioni della notifica sono la parte di UX del progetto, anche se nessuno le vede.",
+        "Le quote gratuite andavano contate prima di scrivere il cron. Le ho contate dopo, perché me l'ha chiesto una email di avviso.",
+        "Un monitor fermo in silenzio sembra un prezzo che non è cambiato. Per questo ogni esecuzione fallita ora mi scrive su Telegram, con il link ai log.",
       ],
     },
     {
