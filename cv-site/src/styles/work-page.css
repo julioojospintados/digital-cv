@@ -440,9 +440,15 @@
    scorrendo, e il badge le dice anche a chi non distingue il colore.
    Nessuna riga reagisce al passaggio del mouse: non sono comandi.
    Su telefono la tabella diventa un elenco: nome e badge, poi tipo, poi
-   descrizione, senza intestazioni di colonna (le nasconde solo alla vista). */
+   descrizione, senza intestazioni di colonna (le nasconde solo alla vista).
+   64rem di larghezza al massimo: senza, a 1920 la colonna «A cosa serve»
+   arrivava a 890px e a 2400 a 1148, una descrizione su una riga sola di
+   148 caratteri, mentre ogni altro testo del case study si ferma a 40rem.
+   Con 64rem quella colonna resta intorno ai 40rem, la misura degli altri
+   paragrafi, e a 1366 non cambia niente (review UX del 2026-10-22). */
 .work-auto {
   width: 100%;
+  max-width: 64rem;
   border-collapse: collapse;
   text-align: left;
 }

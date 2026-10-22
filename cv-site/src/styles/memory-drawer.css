@@ -539,10 +539,15 @@
    di «Chi sono»; il nome che fa da titolo prende l'arancione della lente
    predefinita, nella variante da testo (4,85:1 sull'ottanio), così la
    firma si vede prima della frase (2026-10-21). Sulla pagina CV il nome
-   prende l'accento della lente aperta. */
+   prende l'accento della lente aperta. Il ruolo, sotto, è il grigio delle
+   pagine CV (--lc-muted di lab-cv.css, lo stesso --lh-muted della home):
+   la modale sta fuori da .lh e da .lc, nessuna delle due variabili ci
+   arriva, e senza questa riga il ruolo aveva l'inchiostro della citazione
+   e le due righe si confondevano (review UX del 2026-10-22). */
 .about-voices {
   --color-accent: var(--lh-ink, var(--color-text-primary));
   --lc-voice-accent: color-mix(in srgb, var(--color-lens-creative) 70%, white);
+  --lc-muted: rgba(192, 220, 215, 1);
 }
 
 /* ── «Dicono di me» come pila di schede (Giulio, 2026-10-14) ─────────────
