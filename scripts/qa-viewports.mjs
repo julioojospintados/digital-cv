@@ -139,6 +139,14 @@ const ok = (cond, testo, extra = "") => {
 // contenuto» che si vede solo da tastiera, il testo trasparente.
 const NASCONDI_TESTO = `*{color:transparent!important;-webkit-text-fill-color:transparent!important;text-shadow:none!important}`;
 
+// Eccezioni dichiarate, una per riga e con il motivo. Non è un interruttore:
+// aggiungerne una è una decisione che si difende in un diff.
+// - lh-section__more sotto i 360px: senza fondo, sopra l'oggetto della
+//   scheda Web & UX, a 320px fa 4,44:1. Giulio ha scelto il link semplice
+//   (2026-10-23): 320 è sotto il pavimento dei 360×640, e lì un fondo
+//   dietro al link pesava più dei sei centesimi che recuperava.
+const ECCEZIONI_CONTRASTO = [{ classe: "lh-section__more", sotto: 360 }];
+
 async function contrastoTesti(page, lettore) {
   const quanti = await page.evaluate(() => {
     // Lo snap fermerebbe lo scorrimento sui segnaposto: qui serve libero.
@@ -606,7 +614,10 @@ for (const [w, h] of [...DESKTOP, ...TELEFONI, ...MINIMI]) {
       for (const t of trovati) piccoli.add(`${path} ${t}`);
     }
 
-    if (contrasto) for (const t of await contrastoTesti(page, lettore)) scuri.push(`${path} ${t}`);
+    if (contrasto)
+      for (const t of await contrastoTesti(page, lettore))
+        if (!ECCEZIONI_CONTRASTO.some((e) => w < e.sotto && t.startsWith(e.classe)))
+          scuri.push(`${path} ${t}`);
   }
   if (telefono)
     ok(piccoli.size === 0, "ogni comando risponde al dito su 44×44px", [...piccoli].join(", "));
