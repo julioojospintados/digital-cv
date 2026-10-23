@@ -1436,9 +1436,11 @@
   background: var(--color-accent);
 }
 
+/* Niente opacità: era al 75% e portava i metri a 3,47:1 sul fondo della
+   pillola (axe, 2026-10-23). Il colore tenue del cruscotto basta a farlo
+   stare un passo indietro, e da solo fa circa 4,9:1. */
 .journey__hud-km {
   font-size: var(--fs-12);
-  opacity: 0.75;
 }
 
 /* ── Bussola viaggiatrice — cammina lungo la corsia, all'altezza di chi
