@@ -14,6 +14,15 @@ cv-pdf-preview/
 # astro check su questa macchina (vedi il commento in quello script).
 generated/
 
+# Skill di terze parti importate da agents-environment (2026-10-23): codice e
+# dati di altri, si tengono come li ha scritti l'autore per poterli aggiornare.
+.claude/skills/impeccable/
+.claude/skills/diagram-design/
+.claude/skills/humanizer/
+.claude/skills/ponytail/
+.claude/skills/ponytail-review/
+.claude/skills/ponytail-audit/
+
 # File di macchina: gitignorato e riscritto da Claude Code ogni volta che
 # concedi un permesso. Non è sorgente del progetto, ma finiva sotto
 # `prettier --check .` e faceva fallire l'hook pre-push senza alcuna colpa

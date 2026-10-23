@@ -32,6 +32,20 @@ Agenti (`.claude/agents/`):
 Skill di utilità (non di dominio):
 
 - `.claude/skills/verification-loop/SKILL.md` — il gauntlet loop del progetto. **Solo su richiesta esplicita**: caricala quando l'utente la nomina ("gauntlet", "fai il loop", "verifica a fondo", `/verification-loop`), mai di tua iniziativa e mai perché ha detto "verifica" o "controlla". Costa molti token e serve per interventi ampi.
+- `.claude/skills/humanizer/SKILL.md` — toglie i tic da AI da un testo.
+  Lavora sotto `identity/writing-style.md` e i campioni di
+  `identity/voice-samples.md`, che hanno la precedenza.
+- `.claude/skills/impeccable/SKILL.md` — critica e audit di interfaccia
+  (`critique`, `audit`, `polish`…). Solo per valutare: non scrive un suo
+  `DESIGN.md` né hook, il sistema vero resta quello del progetto.
+- `.claude/skills/ponytail/`, `ponytail-review/`, `ponytail-audit/` — codice:
+  la modifica minima, la review di un diff, l'audit del repo (solo report).
+- `.claude/skills/diagram-design/SKILL.md` — diagrammi in SVG, già con i token
+  del sito. Per un diagramma che va sul sito: due lingue, contrasto sul fondo
+  vero, pannello in vetrina.
+- Le sei skill qui sopra vengono da `julioojospintados/agents-environment`
+  (2026-10-23), ognuna con la sua licenza in `LICENSE.upstream`; in testa a
+  ognuna c'è una sezione «Nel Digital CV» con le regole del progetto.
 - `.claude/skills/caveman/SKILL.md` — modalità di risposta ultra-compressa. Invocabile con `/caveman` (livelli: lite/full/ultra/wenyan-*) quando l'utente chiede di ridurre i token o "parlare da caveman". Torna a prosa normale con "stop caveman".
 
 ## MCP

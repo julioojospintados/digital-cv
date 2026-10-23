@@ -128,3 +128,23 @@ Modelli già presenti nei dati e più credibili di qualunque percentuale:
 > "Ho reso il team autonomo sui flussi nuovi: la conoscenza resta in azienda, non nel consulente."
 - Prima persona sempre (vedi memoria `prima-persona-sempre`): mai terza persona nei testi del sito.
 - Il termine "PMI" non si usa più nei testi del sito (decisione 2026-07-12): sostituire con "realtà" (con un qualificatore naturale, es. "piccole e grandi realtà", "realtà che vogliono scalare") o "aziende". In inglese "SMB/SME" diventa "businesses" o "businesses of all sizes".
+
+## Campioni e humanizer (2026-10-23)
+
+- **I campioni della voce** stanno in `voice-samples.md`, accanto a questo file:
+  la bio «Chi sono» e il testo della scheda Web & UX della home, scritti da
+  Giulio. Si leggono prima di scrivere con la sua voce: mostrano il tono, queste
+  regole ne fissano la disciplina.
+- **La skill `humanizer`** (`.claude/skills/humanizer/`) è lo strumento per il
+  «Passo 3» del protocollo di umanizzazione: trova i tic da modello (contrasti
+  «non X ma Y» ripetuti, chiuse a effetto, triadi, trattini, parole gonfie).
+- **Ordine di precedenza**, quando dicono cose diverse:
+  1. queste regole (`writing-style.md`);
+  2. i campioni (`voice-samples.md`);
+  3. `humanizer`.
+  Due casi concreti: la negazione secca è la struttura di Giulio, quindi
+  `humanizer` la toglie solo quando si ripete (ieri, nei case study, era usata
+  più di dieci volte); i trattini restano vietati nei testi discorsivi anche
+  dove `humanizer` li tollererebbe.
+- **I campioni non si riscrivono mai**, nemmeno con `humanizer`: sono il metro,
+  non un testo da migliorare.

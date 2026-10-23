@@ -22,6 +22,8 @@ export default tseslint.config(
       "cv-site/public/**",
       "cv-output/**",
       "cv-pdf-preview/**",
+      // Skill di terze parti (agents-environment, 2026-10-23): codice altrui.
+      ".claude/skills/**",
     ],
   },
 
