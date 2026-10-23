@@ -427,6 +427,15 @@
 
 /* ═══ Il palco delle demo ═════════════════════════════════════════════════ */
 
+/* Le pagine di servizio (404, informativa privacy) non hanno una lente: il
+   loro accento è il bianco neutro, non l'arancione della vetrina. Questo
+   palco glielo rimette, così la demo mostra la pagina com'è (scelta del
+   2026-10-23: le pagine di servizio restano neutre). */
+.ds-stage--neutro {
+  --color-accent: var(--color-accent-neutral);
+  --color-accent-text: var(--color-accent-neutral);
+}
+
 .ds-stage {
   position: relative;
   /* L'inchiostro delle demo è quello della pagina vera, non quello della

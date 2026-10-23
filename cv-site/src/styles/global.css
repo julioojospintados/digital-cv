@@ -283,7 +283,11 @@ button {
      e i titoli a 9:1 la pagina si leggeva tutta chiara («troppo bianco»,
      Giulio, 2026-10-22): fra titolo e testo serve un salto che si veda. */
   --color-text-quiet: rgba(160, 196, 190, 1);
-  --color-accent: rgba(255, 255, 255, 0.9);
+  /* L'accento di una pagina senza lente: 404, informativa privacy. Ha un nome
+     perché la vetrina deve poterlo rimettere sulle loro demo, che altrimenti
+     prenderebbero l'arancione della lente della vetrina (2026-10-23). */
+  --color-accent-neutral: rgba(255, 255, 255, 0.9);
+  --color-accent: var(--color-accent-neutral);
   /* L'accento quando fa da TESTO. Due token per lo stesso colore, e la
      differenza non è stilistica: `--color-accent` riempie, borda, traccia —
      cose a cui basta il 3:1 di 1.4.11 — mentre un testo colorato su ottanio

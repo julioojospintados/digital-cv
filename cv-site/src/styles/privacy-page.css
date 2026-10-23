@@ -1,8 +1,9 @@
 /* privacy-page.css — l'informativa, /privacy e /en/privacy.
-   L'arancione dei testi è --color-accent-text e non --color-accent: qui è
-   tutto testo piccolo (occhiello a 12px, link a 16px), dove l'arancione
-   pieno sta a 3,62:1 e servono 4,5. Corretto il 2026-10-22, insieme al
-   trasloco qui sotto.
+   La pagina non ha una lente: il suo accento è il bianco neutro
+   (--color-accent-neutral in global.css), e resta così per scelta
+   (2026-10-23). I testi d'accento passano comunque da --color-accent-text:
+   sono piccoli (occhiello a 12px, link a 16px), e se la pagina prendesse una
+   lente non userebbero l'arancione pieno.
    Era un <style> copiato identico nelle due pagine, con lo scope di Astro, e
    la vetrina non poteva mostrarla. Dal 2026-10-22 sta qui: un foglio solo per
    le due lingue, e la pagina entra nel perimetro di /design-system come ogni

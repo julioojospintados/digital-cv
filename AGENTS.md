@@ -550,7 +550,7 @@ scripts/                  ← Root utility scripts (Node)
     mcp-architecture/SKILL.md    ← MCP tools, Hono, cv.ts, tests, AI workflow
     partnership-strategy/SKILL.md ← Fractional partner, SMB consulting positioning
     caveman/SKILL.md             ← Utility skill — ultra-compressed response mode (/caveman)
-    identity/voice-samples.md    ← Giulio's own texts (bio, Web & UX card), verbatim: the tone reference for any writing
+    identity/voice-samples.md    ← Giulio's own texts (bio and the three home cards), verbatim: the tone reference for any writing
     humanizer/                   ← Imported (agents-environment): removes AI writing tics, under identity/writing-style.md
     impeccable/                  ← Imported: UI critique/audit — evaluation only, never writes its own DESIGN.md or hooks
     ponytail/ · ponytail-review/ · ponytail-audit/ ← Imported: minimal change, diff review, repo audit (report only)

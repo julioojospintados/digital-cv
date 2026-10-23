@@ -6009,7 +6009,7 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
               : "The 404: one sentence saying what happened and three exits, with the home page as the primary one. It is a static file because Vercel serves it for every address that does not exist; a script picks the language by reading /en/ in the URL, and without JavaScript Italian stays."
           }
         </p>
-        <div class="ds-stage">
+        <div class="ds-stage ds-stage--neutro">
           <div class="nf-copy" data-ds-snippet>
             <p class="nf-eyebrow">404</p>
             <p class="nf-title">{it ? "Qui non c'è niente." : "There's nothing here."}</p>
@@ -6064,8 +6064,8 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
             <p class="ds-spec__v">
               {
                 it
-                  ? "L'occhiello è testo piccolo, 12px: prende --color-accent-text, mai l'accento pieno. Il blocco inglese porta lang=\"en\", e lo script cambia anche la lingua del documento."
-                  : 'The eyebrow is small text, 12px: it takes --color-accent-text, never the full accent. The English block carries lang="en", and the script also switches the document language.'
+                  ? "La pagina non ha una lente: l'accento è il bianco neutro (--color-accent-neutral), 10,27:1, e questa demo lo rimette con .ds-stage--neutro. Se un giorno la pagina prendesse una lente, l'occhiello è testo piccolo, 12px: --color-accent-text, mai l'accento pieno. Il blocco inglese porta lang=\"en\", e lo script cambia anche la lingua del documento."
+                  : 'The page has no lens: its accent is the neutral white (--color-accent-neutral), 10.27:1, and this demo puts it back with .ds-stage--neutro. Should the page ever take a lens, the eyebrow is small text, 12px: --color-accent-text, never the full accent. The English block carries lang="en", and the script also switches the document language.'
               }
             </p>
           </div>
@@ -6094,7 +6094,7 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
               : "A few plain lines instead of a legal document: who handles the data, what I collect and with which tools, why, for how long, and how to exercise your rights. One page per language, sharing one stylesheet (privacy-page.css)."
           }
         </p>
-        <div class="ds-stage">
+        <div class="ds-stage ds-stage--neutro">
           <div class="privacy-main" data-ds-snippet>
             <div class="privacy-hero">
               <p class="privacy-hero__eyebrow">Privacy</p>
@@ -6159,8 +6159,8 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
             <p class="ds-spec__v">
               {
                 it
-                  ? "Occhiello e link sono testo piccolo: prendono --color-accent-text. Fino al 2026-10-22 usavano l'accento pieno, che in lente design sarebbe stato a 3,62:1."
-                  : "The eyebrow and links are small text: they take --color-accent-text. Until 2026-10-22 they used the full accent, which in the design lens would have been 3.62:1."
+                  ? "La pagina non ha una lente: occhiello e link sono nel bianco neutro, 10,27:1, e la demo lo rimette con .ds-stage--neutro. Sono testo piccolo, quindi passano da --color-accent-text: se la pagina prendesse una lente, non userebbero l'arancione pieno."
+                  : "The page has no lens: eyebrow and links are in the neutral white, 10.27:1, and the demo puts it back with .ds-stage--neutro. They are small text, so they go through --color-accent-text: should the page ever take a lens, they would not use the full orange."
               }
             </p>
           </div>

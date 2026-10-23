@@ -132,8 +132,7 @@ Modelli già presenti nei dati e più credibili di qualunque percentuale:
 ## Campioni e humanizer (2026-10-23)
 
 - **I campioni della voce** stanno in `voice-samples.md`, accanto a questo file:
-  la bio «Chi sono» e il testo della scheda Web & UX della home, scritti da
-  Giulio. Si leggono prima di scrivere con la sua voce: mostrano il tono, queste
+  la bio «Chi sono» e le tre schede della home, scritti da Giulio. Si leggono prima di scrivere con la sua voce: mostrano il tono, queste
   regole ne fissano la disciplina.
 - **La skill `humanizer`** (`.claude/skills/humanizer/`) è lo strumento per il
   «Passo 3» del protocollo di umanizzazione: trova i tic da modello (contrasti

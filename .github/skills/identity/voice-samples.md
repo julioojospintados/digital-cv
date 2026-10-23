@@ -1,7 +1,7 @@
 # Campioni della voce di Giulio Occhipinti
 
 > Testi scritti da Giulio, non da un modello. Indicati da lui il 2026-10-23
-> come esempio di come scrive. Copiati alla lettera da
+> come esempio di come scrive: la bio e le tre schede della home. Copiati alla lettera da
 > `cv-site/src/lib/lab-copy.ts`: se lì cambiano, si aggiornano qui.
 > Vanno letti **prima** di scrivere o riscrivere un testo con la sua voce, e
 > prima di usare la skill `humanizer` (vedi `writing-style.md` § «Campioni e
@@ -48,6 +48,21 @@ Come ragiono:
 > SkillUp, con un interesse attento a come la Generative AI sta ridisegnando il
 > settore.
 
+## La home — scheda Software Developer
+
+> Sviluppo da anni per il mondo enterprise, muovendomi tra TypeScript, Angular
+> e React. Sono passato da team di 30 persone a progetti in solitaria potenziati
+> dall'AI, dove creo workflow e integrazioni MCP su misura. Tutta la lista di
+> tecnologie e sigle la trovi cliccando qua sotto.
+
+## La home — scheda Comunicazione & AI
+
+> L'AI esegue, calcola e velocizza, ma non comprende intrinsecamente le
+> persone. Unisco la progettazione di workflow automatizzati alla sensibilità
+> narrativa che mi arriva dal marketing, dalla scrittura e dal teatro. L'AI fa
+> davvero un gran lavoro, ma senza un pilota potrebbe non farti mai arrivare a
+> Itaca.
+
 ## Cosa si legge in questi testi
 
 Osservazioni su questi campioni, da usare come guida e non come regole nuove:
@@ -65,10 +80,10 @@ Osservazioni su questi campioni, da usare come guida e non come regole nuove:
   dell'improvvisazione. Mai metafore da manuale aziendale.
 - **Una parola fra virgolette per prenderne le distanze**: «"deformazione"
   professionale». È uno strumento suo; un uso ogni tanto, non in ogni testo.
+  **Si scrive con i doppi apici dritti, `"deformazione"`, e basta** (Giulio,
+  2026-10-23): non si trasforma in «», né in “”, né in altro. In Lexend il
+  doppio apice ha un disegno che somiglia a un doppio primo: è il carattere,
+  non un errore da correggere.
+- **Il riferimento colto arriva alla fine, senza spiegazione**: «senza un
+  pilota potrebbe non farti mai arrivare a Itaca». Chi lo coglie lo coglie.
 - **La prima persona, sempre.** Mai la terza persona, mai «Giulio è…».
-
-## Da chiarire
-
-Le altre due schede della home, Software Developer e Comunicazione & AI, non
-sono qui: Giulio ha indicato come sue la bio e il testo della scheda Web & UX.
-Se anche quelle sono sue, vanno aggiunte con la stessa regola.
