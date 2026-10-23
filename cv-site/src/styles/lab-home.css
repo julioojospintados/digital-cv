@@ -1390,17 +1390,6 @@ html[data-lh-armed] .lh-obj {
   transition: text-decoration-color var(--duration-micro) var(--ease-standard);
 }
 
-/* Sotto i 25rem il link passa sopra l'oggetto della scheda, e a 320px
-   l'arancione da testo scendeva a 4,44:1 (qa:viewports, 2026-10-22). Un
-   fondo ottanio quasi pieno, come il bottone vuoto qui sopra, lo stacca. */
-@media (max-width: 25rem) {
-  .lh-section__more {
-    background: color-mix(in srgb, var(--color-bg) 88%, transparent);
-    padding-inline: var(--size-4);
-    border-radius: var(--radius-4);
-  }
-}
-
 .lh-section__more span {
   /* inline-block: la sottolineatura del link non scende sulla freccia, che
      altrimenti avrebbe un suo trattino staccato. */
