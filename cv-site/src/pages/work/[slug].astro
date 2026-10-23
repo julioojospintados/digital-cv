@@ -110,7 +110,7 @@ const sigla = projectInitials(project.name);
 
     <!-- Journey: la spina temporale del progetto è la strada, e scende con
          la pagina — Problema (partenza) → step del processo (tappe) →
-         Risultato misurabile (arrivo). Senza JS o con reduced-motion restano
+         Com'è andata (arrivo). Senza JS o con reduced-motion restano
          le tappe impilate, senza strada. -->
     {
       processSteps.length > 0 && (
@@ -188,7 +188,7 @@ const sigla = projectInitials(project.name);
             {project.outcomes && project.outcomes.length > 0 && (
               <article class="journey__panel journey__panel--end">
                 <p class="journey__eyebrow">Arrivo</p>
-                <h2 class="journey__end-title">Risultato misurabile</h2>
+                <h2 class="journey__end-title">Com'è andata</h2>
                 <ul class="journey__outcomes">
                   {project.outcomes.map((o) => (
                     <li>{o}</li>
@@ -205,7 +205,7 @@ const sigla = projectInitials(project.name);
       project.decisions && project.decisions.length > 0 && (
         <section class="work-section" aria-labelledby="work-decisions-title">
           <h2 class="work-section__title" id="work-decisions-title">
-            Decisioni chiave
+            Le scelte, e perché
           </h2>
           <div class="work-decisions">
             {project.decisions.map((d) => (
@@ -269,7 +269,7 @@ const sigla = projectInitials(project.name);
     }
 
     <footer class="work-cta">
-      <p class="work-cta__text">Ti interessa lavorare insieme?</p>
+      <p class="work-cta__text">Hai un problema da risolvere? Parliamone.</p>
       <div class="work-cta__actions">
         <a
           href={email}

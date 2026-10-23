@@ -3586,8 +3586,8 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
                     <li>
                       {
                         it
-                          ? "Ho sviluppato il server HTTP con Hono, spec OpenAPI e test: copertura oltre l'80%."
-                          : "I built the HTTP server with Hono, an OpenAPI spec and tests: coverage above 80%."
+                          ? "Ho sviluppato il server HTTP con Hono, spec OpenAPI e validazione Zod."
+                          : "I built the HTTP server with Hono, an OpenAPI spec and Zod validation."
                       }
                     </li>
                   </ul>
@@ -5484,7 +5484,11 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
         <div class="ds-stage">
           <div class="work-cta" data-ds-snippet>
             <p class="work-cta__text">
-              {it ? "Ti serve qualcosa di simile?" : "Need something similar?"}
+              {
+                it
+                  ? "Hai un problema da risolvere? Parliamone."
+                  : "Got a problem to solve? Let's talk."
+              }
             </p>
             <div class="work-cta__actions">
               <a class="work-cta__link work-cta__link--primary" href="#work-cta"
@@ -5610,7 +5614,7 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
         <div class="ds-stage">
           <section class="work-section" aria-labelledby="ds-work-sec" data-ds-snippet>
             <h3 class="work-section__title" id="ds-work-sec">
-              {it ? "Decisioni chiave" : "Key decisions"}
+              {it ? "Le scelte, e perché" : "The choices, and why"}
             </h3>
             <p class="work-section__text">
               {
@@ -5921,7 +5925,7 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
               <article class="journey__panel journey__panel--end">
                 <p class="journey__eyebrow">{it ? "Arrivo" : "Arrival"}</p>
                 <h2 class="journey__end-title">
-                  {it ? "Risultato misurabile" : "Measurable outcome"}
+                  {it ? "Com'è andata" : "How it went"}
                 </h2>
                 <ul class="journey__outcomes">
                   <li>{it ? "Un numero, non un aggettivo." : "A number, not an adjective."}</li>

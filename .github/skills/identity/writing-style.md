@@ -111,8 +111,9 @@ progetto in corso"` dice al lettore attento che il numero è una proiezione.
 
 **Ammessi:**
 
-- Dati che uno strumento misura davvero: `copertura test oltre l'80%` (Vitest),
-  conteggi da PostHog o GSC quando ci sono.
+- Dati che uno strumento misura davvero: conteggi da PostHog o GSC quando ci
+  sono. Non la copertura dei test, che nei testi non si cita (Giulio,
+  2026-10-23): era scritta «oltre l'80%» e misurata era al 24%.
 - Soglie decise **prima** del lancio: le percentuali del PPoC descrivono un
   metodo di validazione, non vantano un risultato.
 - Fatti contabili: numero di sprint, durata degli sprint, anni, paesi, ruoli.

@@ -93,7 +93,7 @@ const EN: Locale = {
       org: "Digital CV — self-initiated open-source project",
       bullets: [
         "Research-led: defined the <b>3 real readers</b> (recruiter, CTO, art director) and their 3-second needs; every choice defensible in an interview.",
-        "Knolling information architecture (one profile, three lenses) and a <b>WCAG-AA design system</b>; built AI-augmented (Copilot, Claude) with <b>&gt;80% test coverage</b>.",
+        "Knolling information architecture (one profile, three lenses) and a <b>WCAG-AA design system</b>; built AI-augmented (Copilot, Claude).",
       ],
     },
     {
@@ -148,7 +148,7 @@ const EN: Locale = {
     {
       title: "Interactive Digital CV",
       desc: "Research-led IA (one profile, three lenses), a WCAG-AA design system and an AI-augmented build. The live twin of this document.",
-      outcome: "Design system · WCAG AA · &gt;80% coverage",
+      outcome: "Design system · WCAG AA · MCP server",
       slug: "digital-cv",
     },
     {
@@ -288,7 +288,7 @@ const IT: Locale = {
       org: "Digital CV, progetto open-source personale",
       bullets: [
         "Guidato dalla ricerca: ho definito i <b>3 lettori reali</b> (recruiter, CTO, art director) e i loro bisogni in 3 secondi; ogni scelta difendibile in un colloquio.",
-        "Architettura dell'informazione knolling (un profilo, tre lenti) e un <b>design system WCAG-AA</b>; costruito AI-augmented (Copilot, Claude) con <b>oltre 80% di copertura test</b>.",
+        "Architettura dell'informazione knolling (un profilo, tre lenti) e un <b>design system WCAG-AA</b>; costruito AI-augmented (Copilot, Claude).",
       ],
     },
     {
@@ -343,7 +343,7 @@ const IT: Locale = {
     {
       title: "CV Digitale Interattivo",
       desc: "IA guidata dalla ricerca (un profilo, tre lenti), design system WCAG-AA e build AI-augmented. Il gemello live di questo documento.",
-      outcome: "Design system · WCAG AA · &gt;80% copertura",
+      outcome: "Design system · WCAG AA · server MCP",
       slug: "digital-cv",
     },
     {

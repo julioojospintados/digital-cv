@@ -110,8 +110,8 @@ const sigla = projectInitials(project.name);
     </header>
 
     <!-- Journey: the project's timeline is the road, and it runs down with
-         the page — Problem (departure) → process steps (stops) → Measurable
-         outcome (arrival). Without JS or with reduced-motion the stops stay
+         the page — Problem (departure) → process steps (stops) → How it
+         went (arrival). Without JS or with reduced-motion the stops stay
          stacked, with no road. -->
     {
       processSteps.length > 0 && (
@@ -189,7 +189,7 @@ const sigla = projectInitials(project.name);
             {project.outcomes && project.outcomes.length > 0 && (
               <article class="journey__panel journey__panel--end">
                 <p class="journey__eyebrow">Arrival</p>
-                <h2 class="journey__end-title">Measurable outcome</h2>
+                <h2 class="journey__end-title">How it went</h2>
                 <ul class="journey__outcomes">
                   {project.outcomes.map((o) => (
                     <li>{o}</li>
@@ -206,7 +206,7 @@ const sigla = projectInitials(project.name);
       project.decisions && project.decisions.length > 0 && (
         <section class="work-section" aria-labelledby="work-decisions-title">
           <h2 class="work-section__title" id="work-decisions-title">
-            Key decisions
+            The choices, and why
           </h2>
           <div class="work-decisions">
             {project.decisions.map((d) => (
@@ -270,7 +270,7 @@ const sigla = projectInitials(project.name);
     }
 
     <footer class="work-cta">
-      <p class="work-cta__text">Interested in working together?</p>
+      <p class="work-cta__text">Got a problem to solve? Let's talk.</p>
       <div class="work-cta__actions">
         <a
           href={email}

@@ -370,7 +370,7 @@ export const cvData = {
       highlights: [
         "Ho sviluppato un server MCP con tool, resource e prompt template che espone i dati del CV ad agenti AI (VS Code Copilot, Claude Desktop).",
         "Ho sviluppato il sito con Astro, Lit e animazioni GSAP: preloader narrativo, wave hold effect SVG, distortion filter via feTurbulence.",
-        "Ho sviluppato il server HTTP con Hono, spec OpenAPI, validazione Zod e test Vitest: copertura oltre l'80%.",
+        "Ho sviluppato il server HTTP con Hono, spec OpenAPI, validazione Zod e test Vitest.",
       ],
       skills: [
         "MCP Protocol",
@@ -435,7 +435,7 @@ export const cvData = {
         "Ho guidato come Tech Lead e Scrum Master il team Aruba Design System, oltre 3 anni e più di 30 persone: libreria di oltre 100 componenti WebComponents adottata cross-prodotto.",
         "Ho lavorato sul lato UX/UI del design system Aruba: stati, accessibilità (WCAG) e coerenza visiva dei componenti, allineati con i designer su Figma.",
         "Ho sviluppato architettura Angular enterprise per Intesa San Paolo in un team di oltre 30 persone, con standard condivisi e code review.",
-        "Ho introdotto test unitari sistematici con Jest, con impatto diretto su stabilità dei rilasci e coverage.",
+        "Ho introdotto test unitari sistematici con Jest, per rendere più stabili i rilasci.",
       ],
       skills: [
         "Angular",
@@ -450,7 +450,6 @@ export const cvData = {
         "Playwright",
         "Jest",
         "Vitest",
-        "Code Coverage",
         "Testing Cross-Device",
         "Test di Usabilità",
         "WCAG (Accessibilità)",
@@ -1984,7 +1983,7 @@ export const cvData = {
     {
       name: "Digital CV — Progetto Open Source AI-Augmented",
       description:
-        "Ho costruito da solo questo CV, open source, lavorando con GitHub Copilot e Claude. Sono due pezzi: il sito, in Astro e Lit con le animazioni in GSAP, e un server MCP che espone i dati del CV agli agenti AI. Con PostHog guardo come lo usano le persone vere, e quando i numeri smentiscono una mia idea cambio l'idea.",
+        "Ho costruito da solo questo CV, open source, lavorando con GitHub Copilot e Claude. È fatto di due pezzi, il sito in Astro e Lit con le animazioni in GSAP e un server MCP che espone i dati del CV agli agenti AI. Con PostHog guardo come lo usano le persone vere, e quando i numeri smentiscono una mia idea cambio l'idea.",
       url: "https://github.com/julioojospintados/digital-cv",
       repoUrl: "https://github.com/julioojospintados/digital-cv",
       date: "2026-04",
@@ -2008,20 +2007,20 @@ export const cvData = {
         "Concept — Il knolling, la foto dall'alto in cui gli oggetti stanno in ordine sul tavolo, uno accanto all'altro. Le mie competenze sono molto diverse fra loro, codice, design, palco, metodo, e metterle sul tavolo così mi sembrava il modo più onesto di mostrarle: tutto in vista, niente nei cassetti.",
         "Architettura dell'informazione — Un profilo solo, letto con tre lenti: /design, /tech e /ai. La lente cambia l'accento di colore e quello che viene in primo piano, mai la struttura o il contenuto, e quello che non la riguarda resta sul tavolo con meno luce addosso.",
         "Design system — Le regole le ho decise prima dei componenti: lo sfondo ottanio che non cambia mai, un accento per ogni lente, Lexend e JetBrains Mono, animazioni solo su transform e opacity, ferme per chi chiede meno movimento. Ogni componente del sito sta in una vetrina, e se ne manca uno un controllo ferma il push verso main.",
-        "Build AI-augmented — Ho scritto il codice in coppia con GitHub Copilot e Claude: architettura, interfaccia, animazioni GSAP e un server MCP con tool, resource e prompt che espone il CV agli agenti AI. Se il sito dice che lavoro così, deve esserne la prova.",
+        "Build AI-augmented — Ho scritto il codice in coppia con GitHub Copilot e Claude, dall'architettura all'interfaccia, dalle animazioni GSAP al server MCP con tool, resource e prompt che espone il CV agli agenti AI. Se il sito dice che lavoro così, deve esserne la prova.",
       ],
       decisions: [
         {
           title: "Il grafo era bello, l'ho tolto",
-          body: "Le competenze erano un force graph in D3, la parte più spettacolare del sito. Su telefono l'avevo già messo dopo le card, perché un grafo si guarda e non si legge in fretta. Poi l'ho tolto del tutto: ora una competenza compare dentro il lavoro in cui l'ho usata, e dice molto più di un logo sospeso in mezzo agli altri.",
+          body: "Le competenze erano un force graph in D3, la parte più spettacolare del sito. Su telefono l'avevo già messo dopo le card, perché un grafo si guarda e non si legge in fretta. Poi l'ho tolto del tutto, e adesso una competenza compare dentro il lavoro in cui l'ho usata, che dice molto più di un logo sospeso in mezzo agli altri.",
         },
         {
           title: "Sussurri, non silenzi",
-          body: "Quando scegli una lente, quello che non la riguarda non sparisce: si abbassa di tono e resta leggibile, anche da tastiera e da screen reader. Nasconderlo avrebbe smentito il knolling, dove sul tavolo c'è tutto.",
+          body: "Quando scegli una lente, quello che non la riguarda non sparisce, si abbassa di tono e resta leggibile, anche da tastiera e da screen reader. Nasconderlo avrebbe smentito il knolling, dove sul tavolo c'è tutto.",
         },
         {
           title: "Misurare sugli schermi veri",
-          body: "Controllavo il sito su finestre comode, 1280 per 900. PostHog diceva che il portatile più comune fra i visitatori apre una finestra di 1366 per 610, e lì i bottoni delle schede d'ingresso finivano sotto il bordo: chi arrivava non vedeva dove cliccare. Ora ogni pagina viene misurata alle dimensioni che usano davvero i visitatori, telefoni compresi, prima che una modifica vada online.",
+          body: "Controllavo il sito su finestre comode, 1280 per 900. PostHog diceva che il portatile più comune fra i visitatori apre una finestra di 1366 per 610, e lì i bottoni delle schede d'ingresso finivano sotto il bordo, e chi arrivava non vedeva dove cliccare. Ora ogni pagina viene misurata alle dimensioni che usano davvero i visitatori, telefoni compresi, prima che una modifica vada online.",
         },
         {
           title: "L'accessibilità decisa all'inizio",
@@ -2029,7 +2028,7 @@ export const cvData = {
         },
       ],
       outcomes: [
-        "Un server MCP con tool, resource e prompt: un agente AI legge il mio CV come un'API.",
+        "Un server MCP con tool, resource e prompt, che permette a un agente AI di leggere il mio CV come un'API.",
         "PostHog e Vercel Analytics misurano come si usa il sito, e da quei numeri sono venute modifiche vere, come le schede d'ingresso rifatte per stare nella finestra del portatile più comune.",
         "Controlli sul sito costruito prima di ogni push verso main, su tutte le pagine e in tutte e due le lingue. Il primo giro della vetrina ha trovato 91 classi vive che nessuno aveva documentato.",
       ],
@@ -2100,7 +2099,7 @@ export const cvData = {
     {
       name: "Bambagia — UX/UI Design for a B2B Cosmetics Brand",
       description:
-        "Con Bambagia Design Lab ho progettato il sito di un brand cosmetico che vende ai professionisti, dal wireframe al design system. Dopo la consegna il sito lo avrebbe mantenuto lo studio, su Wix Studio, quindi ho preparato con l'AI un ambiente di lavoro che produce solo pagine ricostruibili in Wix, con le istruzioni per l'agente e gli MCP di Figma e Wix.",
+        "Per Bambagia Design Lab ho progettato il sito di un brand cosmetico che vende ai professionisti, dal wireframe al design system. Il sito poi l'avrebbe mantenuto lo studio, che lavora su Wix Studio, e così ho preparato con l'AI un ambiente di lavoro che produce soltanto pagine che in Wix si possono ricostruire, con le istruzioni per l'agente e gli MCP di Figma e di Wix.",
       date: "2026-05",
       tags: [
         "UX/UI Design",
@@ -2118,72 +2117,72 @@ export const cvData = {
       primaryMode: "creative",
       role: "UX/UI Designer & AI Workflow Designer, collaborazione con Bambagia Design Lab (2026).",
       problem:
-        "Bambagia Design Lab mi ha chiesto di progettare il sito di un brand cosmetico che vende ai professionisti: estetiste, centri benessere, farmacie. Un sito vetrina, senza e-commerce, con le linee di prodotto su tre livelli, i corsi e le richieste di personalizzazione. Il vincolo vero arrivava dopo la consegna: il sito l'avrebbe mantenuto lo studio, su Wix Studio. Se una pagina in Wix non si ricostruisce, o ci arriva come un blocco statico, a ogni modifica serve di nuovo qualcuno che scriva codice. Cioè io.",
+        "Bambagia Design Lab mi ha chiesto il sito di un brand cosmetico che vende a estetiste, centri benessere e farmacie, un sito vetrina senza carrello, con le linee di prodotto su tre livelli, i corsi e le richieste di personalizzazione. Il vincolo vero però arrivava dopo la consegna, perché a mantenere il sito sarebbe stato lo studio, su Wix Studio, e se una pagina in Wix non si ricostruisce, o ci arriva come un blocco statico, per ogni modifica serve di nuovo qualcuno che scriva codice. Cioè io.",
       process: [
-        "Ricerca — Prima di disegnare ho studiato il cliente e i concorrenti: chi compra, cosa cerca un professionista in un sito di cosmetica, come sono organizzate le linee. Ne è uscito un brief con le pagine, le funzioni e i prodotti su tre livelli: linee, sotto-linee, prodotti.",
-        "Wireframe — Ho scritto a mano, in HTML e CSS, il prototipo low-fi di nove pagine, con una mappa del sito come ingresso. Si apre dal browser senza server, così lo studio ci clicca dentro come in un sito vero.",
-        "Direzione visiva — Ho disegnato tre home sullo stesso contenuto, ed è passata quella che chiamavo Nature Professional. Su quella ho costruito tutte le pagine, desktop e mobile.",
-        "Regole Wix-friendly — Ho scritto dodici regole perché ogni pagina passi in Wix Studio così com'è. Ogni sezione è un blocco autonomo, che in Wix diventa una Section; le spaziature stanno sulla griglia da 8 punti di Wix; i colori escono da variabili che diventano quelli del tema.",
-        "Ambiente AI — Su VS Code ho costruito per lo studio un ambiente da riusare: istruzioni per GitHub Copilot che si attivano per cliente, un agente che conosce il flusso dal brief al sito, gli MCP di Figma, Wix e Playwright. Le regole grafiche e quelle di Wix le ho scritte una volta sola, e l'agente le applica a ogni pagina.",
+        "Ricerca — Prima di disegnare qualsiasi cosa ho studiato il cliente e i suoi concorrenti, chi compra, cosa cerca un professionista quando apre il sito di un marchio di cosmetica, come sono organizzate le linee. Ne è uscito un brief con le pagine, le funzioni e i prodotti divisi in linee, sotto-linee e singoli prodotti.",
+        "Wireframe — Il prototipo low-fi l'ho scritto a mano in HTML e CSS, nove pagine con una mappa del sito come ingresso. Si apre direttamente dal browser, senza server, così lo studio ci clicca dentro come farebbe con un sito vero.",
+        "Direzione visiva — Sullo stesso contenuto ho disegnato tre home diverse, ed è passata quella che io chiamavo Nature Professional. Su quella ho costruito tutte le altre pagine, in versione desktop e mobile.",
+        "Regole Wix-friendly — Ho scritto dodici regole perché ogni pagina passi in Wix Studio così com'è. Ogni sezione è un blocco a sé, che in Wix diventa una Section, le spaziature seguono la griglia da 8 punti che usa Wix e i colori escono da variabili che diventano i colori del tema.",
+        "Ambiente AI — Su VS Code ho messo in piedi per lo studio un ambiente da riusare con ogni cliente, con le istruzioni per GitHub Copilot che si attivano cliente per cliente, un agente che conosce il percorso dal brief al sito e gli MCP di Figma, Wix e Playwright. Le regole grafiche e quelle di Wix le ho scritte una volta, e da lì le applica l'agente a ogni pagina.",
       ],
       decisions: [
         {
           title: "Il plugin Figma → Wix, non l'MCP di Wix",
-          body: "L'MCP di Wix portava il design nel sito più in fretta, ma come una cornice statica: bella, e immodificabile per chi non scrive codice. Ho scelto il plugin di esportazione da Figma, che crea sezioni, contenitori e stili del tema nativi di Wix Studio. Per me è un passaggio in più. Per lo studio vuol dire cambiare un testo senza chiamarmi.",
+          body: "Con l'MCP di Wix il design arrivava nel sito più in fretta, ma come una cornice statica, bella da vedere e impossibile da modificare per chi non scrive codice. Ho preferito il plugin che esporta da Figma e crea sezioni, contenitori e stili del tema nativi di Wix Studio. A me costa un passaggio in più, allo studio risparmia una telefonata ogni volta che deve cambiare un testo.",
         },
         {
-          title: "Un design fatto per essere ricostruito",
-          body: "Il design in HTML fa da guida, le pagine vere le ricostruisce lo studio in Wix. Così ho lasciato fuori quello che Wix non sa rifare: posizionamenti assoluti complessi, maschere, librerie di animazione come GSAP. Le animazioni usano tre classi standard e in Wix diventano interazioni native. Moduli e menu sono solo disegnati, in Wix si rifanno con i suoi componenti.",
+          title: "Un design fatto per essere rifatto",
+          body: "Il design in HTML è una guida, perché le pagine vere le ricostruisce lo studio dentro Wix, e allora ho lasciato fuori tutto quello che Wix non sa rifare, come i posizionamenti assoluti complicati, le maschere o le librerie di animazione tipo GSAP. Le animazioni usano tre classi standard che in Wix diventano interazioni native, mentre moduli e menu li ho solo disegnati, visto che in Wix si rifanno con i suoi componenti.",
         },
         {
           title: "Tre home sullo stesso contenuto",
-          body: "Con una proposta sola la revisione diventa un elenco di correzioni. Con tre, il cliente sceglie prima l'atmosfera e corregge dopo. Le due scartate sono rimaste nella cartella interna del brief, al cliente arriva solo il prototipo.",
+          body: "Quando la proposta è una sola, la revisione diventa un elenco di correzioni. Con tre proposte il cliente sceglie prima l'atmosfera e corregge dopo. Le due scartate sono rimaste nella cartella interna del brief, al cliente è arrivato solo il prototipo.",
         },
         {
           title: "L'atmosfera sì, i colori no",
-          body: "Nature Professional usava un oro come accento e due Google Fonts. Il brand aveva già una palette sua, terracotta, beige e salvia. Della proposta ho tenuto struttura, ritmo e animazioni, e ci ho messo palette e font del brand, caricati in locale perché Wix li importa come font personalizzati.",
+          body: "Nature Professional aveva un oro come accento e due Google Fonts, ma il brand una palette ce l'aveva già, terracotta, beige e salvia. Della mia proposta ho tenuto la struttura, il ritmo e le animazioni, e ci ho messo dentro i colori e i font del brand, caricati in locale perché Wix li importa come font personalizzati.",
         },
       ],
       outcomes: [
-        "Tre home proposte, una scelta, e su quella il design di nove pagine in versione desktop e mobile.",
-        "Un ambiente da riusare: ogni nuovo cliente dello studio parte dalla stessa struttura di cartelle, dalle stesse regole e dallo stesso agente.",
-        "Eleonora D'Agostino, titolare dello studio, ha scritto una raccomandazione su questo lavoro: è tra le voci del mio CV.",
+        "Tre home proposte, una scelta, e su quella nove pagine disegnate per desktop e mobile.",
+        "Un ambiente da riusare, dove ogni nuovo cliente dello studio parte dalla stessa struttura di cartelle, dalle stesse regole e dallo stesso agente.",
+        "Eleonora D'Agostino, titolare dello studio, ha scritto una raccomandazione su questo lavoro, e la trovi fra le voci del mio CV.",
       ],
       learnings: [
-        "La domanda giusta, all'inizio, era chi avrebbe modificato il sito dopo di me. Da lì è venuto tutto il resto, a partire dal primo wireframe.",
-        "Le regole scritte per l'agente le rispetta a ogni pagina e a ogni sessione. Quelle che tenevo a mente le rispettavo quando me ne ricordavo.",
+        "La domanda da farsi all'inizio era chi avrebbe messo le mani sul sito dopo di me, e da quella risposta è venuto tutto il resto, a partire dal primo wireframe.",
+        "Le regole scritte per l'agente lui le rispetta a ogni pagina e a ogni sessione. Quelle che tenevo a mente io le rispettavo quando me ne ricordavo.",
       ],
       automationsIntro:
-        "L'ambiente che ho costruito per lo studio, perché l'AI lavori dentro le regole di Wix invece di inventarne di sue. Le righe con il badge AI usano un modello di linguaggio.",
+        "L'ambiente che ho costruito per lo studio, perché l'AI lavori dentro le regole di Wix invece di inventarsene di sue. Le righe con il badge AI usano un modello di linguaggio.",
       automations: [
         {
           name: "Agente Wix Builder",
           kind: "Agente AI · GitHub Copilot",
-          what: "Conosce il flusso dal brief al sito: legge il brief, aggiorna il prototipo, lo controlla nel browser e chiede conferma prima di toccare un sito Wix pubblicato.",
+          what: "Conosce il percorso dal brief al sito, legge il brief, aggiorna il prototipo, lo controlla nel browser e chiede conferma prima di toccare un sito Wix già pubblicato.",
           ai: true,
         },
         {
           name: "Istruzioni per cliente",
           kind: "AI · GitHub Copilot",
-          what: "Si attivano solo sui file di quel cliente: pubblico, preferenze, struttura dei prodotti. Il cliente successivo ha le sue, e non si mescolano.",
+          what: "Si attivano solo sui file di quel cliente, con il suo pubblico, le sue preferenze e la struttura dei suoi prodotti. Il cliente dopo ha le sue, e non si mescolano.",
           ai: true,
         },
         {
           name: "Regole Wix e Velo",
           kind: "AI · GitHub Copilot",
-          what: "Le dodici regole Wix-friendly e i vincoli dell'esportazione da Figma, applicati dall'agente a ogni pagina che scrive.",
+          what: "Le dodici regole Wix-friendly e i limiti dell'esportazione da Figma, che l'agente applica a ogni pagina che scrive.",
           ai: true,
         },
         {
           name: "MCP di Figma e Wix",
           kind: "AI · Model Context Protocol",
-          what: "Danno all'agente accesso ai file di Figma e alla documentazione di Wix e Velo, così codice e design restano allineati.",
+          what: "Danno all'agente i file di Figma e la documentazione di Wix e Velo, così codice e design non si separano.",
           ai: true,
         },
         {
           name: "Revisione nel browser",
           kind: "Playwright · MCP",
-          what: "Fotografa ogni revisione del prototipo prima che la veda il cliente.",
+          what: "Fotografa ogni versione del prototipo prima che la veda il cliente.",
           ai: false,
         },
       ],
@@ -2191,7 +2190,7 @@ export const cvData = {
     {
       name: "Looking for Flights — Flight Price Monitor",
       description:
-        "Ho costruito un monitor dei prezzi dei voli per il mio viaggio di settembre 2026, finito in Sri Lanka. Due volte a settimana una GitHub Action cerca il volo più economico, calcola quanti giorni posso restare a terra con il budget e mi scrive su Telegram solo quando c'è qualcosa da sapere. Il viaggio sta tutto in un file di configurazione, e il budget resta privato anche con il repository pubblico.",
+        "Per il mio viaggio di settembre 2026, finito poi in Sri Lanka, ho costruito un programma che tiene d'occhio i prezzi dei voli al posto mio. Due volte a settimana una GitHub Action cerca il volo più economico, calcola quanti giorni posso restare a terra con il budget che ho e mi scrive su Telegram solo quando c'è qualcosa da sapere. Tutto il viaggio sta in un file di configurazione, e il budget resta privato anche se il repository è pubblico.",
       url: "https://github.com/julioojospintados/looking-for-flights",
       repoUrl: "https://github.com/julioojospintados/looking-for-flights",
       date: "2026-07",
@@ -2205,48 +2204,48 @@ export const cvData = {
       ],
       slug: "looking-for-flights",
       primaryMode: "tech",
-      role: "Ideatore e unico utente, progetto personale costruito in collaborazione con Claude Code (2026).",
+      role: "Ideatore e unico utente, progetto personale costruito con Claude Code (2026).",
       problem:
-        "Per settembre 2026 avevo un budget fisso e una domanda precisa: dove posso andare, e per quanti giorni, senza sforarlo. Il volo più economico non era la risposta, perché a terra ogni paese costa diverso. E non volevo passare l'estate ad aprire Google Flights ogni mattina per scoprire che non era cambiato niente.",
+        "Per settembre 2026 avevo un budget fisso e una domanda precisa, dove posso andare e per quanti giorni senza sforarlo. Il volo più economico non bastava a rispondere, perché a terra ogni paese ha un costo diverso, e non avevo nessuna voglia di passare l'estate ad aprire Google Flights ogni mattina per scoprire che non era cambiato niente.",
       process: [
-        "Il calcolo — Per ogni meta il programma prende il volo andata e ritorno più economico, toglie dal budget il volo e i costi fissi, divide il resto per la spesa giornaliera a destinazione e taglia il risultato alla durata massima del viaggio. La classifica va per giorni, poi per costo totale. Con i prezzi del 31 luglio il volo più economico era per Giacarta, ma in testa c'era l'India: a terra costava 7 euro al giorno in meno.",
-        "Motore e configurazione — Tutta la logica di dominio sta in un file: date, durata, aeroporti di partenza, mete con la loro spesa giornaliera. Per cambiare viaggio non si tocca il codice. Le mete si aggiungono da un file di testo, una riga per meta, e uno script le sincronizza.",
-        "Le notifiche — Il sistema tace per scelta. Scrive su Telegram alla prima esecuzione, quando cambia la meta in testa o quando un volo scende di almeno 15 euro. Ogni meta arriva in una tabella con compagnia, orari, durata porta a porta e scali, compreso lo scalo che scavalca la notte: due voli allo stesso prezzo possono essere due viaggi diversi.",
-        "Su richiesta — Con /cerca il bot lancia la stessa ricerca quando voglio io. All'inizio un workflow controllava i messaggi ogni 15 minuti, ma a misurarlo GitHub lo eseguiva ogni 26, a volte 42. L'ho sostituito con un Cloudflare Worker che riceve il messaggio da Telegram nell'istante in cui arriva e fa partire la ricerca.",
-        "Sri Lanka — La lista è partita da cinque mete in Asia. Il 2 agosto ho aggiunto lo Sri Lanka, poi ho ristretto la ricerca a lui solo, con partenza fra il 12 e il 15 settembre e rientro entro fine mese. Il 12 settembre, aperta la finestra di partenza, ho fermato il monitoraggio.",
+        "Il calcolo — Per ogni meta il programma prende il volo di andata e ritorno più economico, toglie dal budget il volo e le spese fisse, divide quello che resta per quanto si spende in un giorno a destinazione e taglia il risultato alla durata massima del viaggio. In classifica contano prima i giorni, poi il costo totale. Con i prezzi del 31 luglio il volo più economico era per Giacarta, eppure in testa c'era l'India, dove a terra si spendevano 7 euro al giorno in meno.",
+        "Motore e configurazione — La logica del viaggio sta tutta in un file, con le date, la durata, gli aeroporti di partenza e le mete con la loro spesa giornaliera, così per cambiare viaggio non si tocca il codice. Le mete nuove si scrivono in un file di testo, una per riga, e uno script le sincronizza.",
+        "Le notifiche — Il bot tace finché non ha qualcosa da dire. Scrive su Telegram la prima volta che gira, quando cambia la meta in testa alla classifica o quando un volo scende di almeno 15 euro, e per ogni meta manda una tabella con compagnia, orari, durata da porta a porta e scali, compreso quello che si mangia una notte. Due voli allo stesso prezzo possono essere due viaggi molto diversi.",
+        "Su richiesta — Con il comando /cerca il bot fa la stessa ricerca quando lo decido io. All'inizio un workflow controllava i messaggi ogni 15 minuti, almeno sulla carta, perché a misurarlo GitHub lo faceva girare ogni 26 minuti, a volte 42. L'ho sostituito con un Cloudflare Worker, che riceve il messaggio da Telegram appena arriva e fa partire subito la ricerca.",
+        "Sri Lanka — La lista è partita da cinque mete in Asia. Il 2 agosto ci ho aggiunto lo Sri Lanka, poi ho ristretto la ricerca a lui solo, con partenza fra il 12 e il 15 settembre e ritorno entro la fine del mese, e il 12 settembre, con la finestra di partenza ormai aperta, ho spento il monitoraggio.",
       ],
       decisions: [
         {
           title: "Il budget non sta nel repository",
-          body: "Il repository è pubblico, il mio budget no. Arriva a runtime da una secret di GitHub, e né le notifiche né lo storico mostrano i giorni non tagliati o il margine che avanza: insieme alla spesa giornaliera e al prezzo del volo, che sono pubblici, rivelerebbero il budget esatto.",
+          body: "Il repository è pubblico, il mio budget no. Arriva al programma mentre gira, da una secret di GitHub, e né le notifiche né lo storico mostrano i giorni prima del taglio o i soldi che avanzano, perché messi accanto alla spesa giornaliera e al prezzo del volo, che sono pubblici, basterebbe una sottrazione per ricavare il budget esatto.",
         },
         {
           title: "225 ricerche su 250 in due giorni",
-          body: "Il piano di SerpApi dà 250 ricerche al mese. Ogni esecuzione ne costava 60, il cron girava due volte al giorno, e /cerca, appena diventato istantaneo, l'ho lanciato tre volte in un'ora. Me l'ha detto una email di avviso. Ho aggiunto un tetto che attraversa le esecuzioni, su una finestra mobile di 30 giorni, con una riserva che il cron non può toccare: il cron può saltare un giro senza che nessuno se ne accorga, un /cerca è una persona che aspetta. Il costo per esecuzione è sceso da 60 a 15 ricerche.",
+          body: "Il piano di SerpApi dà 250 ricerche al mese. Ogni giro ne consumava 60, il cron partiva due volte al giorno, e appena /cerca è diventato istantaneo l'ho lanciato tre volte in un'ora. Me ne sono accorto da una email di avviso. Adesso c'è un tetto che vale per tutte le esecuzioni insieme, su una finestra mobile di 30 giorni, con una riserva che il cron non può toccare, perché se il cron salta un giro non se ne accorge nessuno, mentre dietro un /cerca c'è una persona che aspetta. Ogni giro adesso costa 15 ricerche invece di 60.",
         },
         {
           title: "Torino accanto a Milano",
-          body: "La classifica usa il prezzo più basso, che è quasi sempre da Malpensa o da Orio. Ogni notifica mostra comunque il miglior prezzo da Torino, per decidere se lo sconto vale il viaggio fino a Milano. Non costa ricerche in più: i prezzi dei singoli aeroporti sono già nella stessa risposta.",
+          body: "La classifica usa il prezzo più basso, che parte quasi sempre da Malpensa o da Orio. In ogni notifica però c'è anche il prezzo migliore da Torino, così decido se il risparmio vale il viaggio fino a Milano, e non costa ricerche in più, perché i prezzi dei singoli aeroporti arrivano già nella stessa risposta.",
         },
         {
           title: "Senza budget, restano i prezzi",
-          body: "GitHub passa una secret che non esiste come stringa vuota, e il controllo sul budget la leggeva come un valore sbagliato: quattro esecuzioni fallite di fila. Ora vuoto e assente sono la stessa cosa, e senza budget il monitor classifica per solo prezzo del volo, con l'avviso in cima alla notifica. Un valore scritto male, tipo «1500 EUR», invece ferma ancora tutto.",
+          body: "Quando una secret non esiste, GitHub la passa come stringa vuota, e il controllo sul budget la scambiava per un valore sbagliato. Quattro esecuzioni fallite di fila. Adesso vuoto e assente valgono la stessa cosa, e senza budget il programma ordina le mete solo per prezzo del volo, con un avviso in cima alla notifica. Un valore scritto male, tipo «1500 EUR», invece blocca ancora tutto, ed è giusto così.",
         },
         {
           title: "Zero dipendenze, con un'eccezione",
-          body: "Il progetto usa solo la libreria standard di Node: niente installazione in CI, nessuna catena di fornitura da sorvegliare. Il Cloudflare Worker è l'unico pezzo fuori da GitHub, ed era la strada che avevo scartato all'inizio. Poi ho misurato quanto aspettava una risposta a /cerca: anche quaranta minuti. Quello non era «su richiesta», era un cron travestito, e ho ceduto.",
+          body: "Il progetto usa solo la libreria standard di Node, quindi niente installazioni in CI e nessuna catena di fornitura da tenere d'occhio. L'unico pezzo fuori da GitHub è il Cloudflare Worker, cioè proprio la strada che all'inizio avevo scartato. Poi ho misurato quanto aspettava una risposta a /cerca, fino a quaranta minuti, e ho dovuto ammettere che non era «su richiesta», era un cron travestito. Ho ceduto.",
         },
       ],
       outcomes: [
         "Dal 31 luglio al 12 settembre il monitor ha girato da solo due volte a settimana, e la GitHub Action ha salvato lo storico dei prezzi in 18 commit automatici.",
-        "Costo per esecuzione sceso da 60 a 15 ricerche, con un tetto mensile che separa il monitoraggio programmato dalle ricerche su richiesta.",
-        "Lo Sri Lanka è entrato nella lista il 2 agosto, ed è lì che sono andato a settembre.",
+        "Ogni esecuzione è passata da 60 a 15 ricerche, con un tetto mensile che tiene separati i controlli programmati da quelli che lancio io.",
+        "Lo Sri Lanka è entrato nella lista il 2 agosto, ed è lì che sono partito a settembre.",
         "Il motore di calcolo è diventato la base di trip-runway, la web app che fa la stessa domanda per chiunque viaggi.",
       ],
       learnings: [
-        "Ho deciso prima quando il bot doveva tacere, e poi quando scrivere. Le tre condizioni della notifica sono la parte di UX del progetto, anche se nessuno le vede.",
-        "Le quote gratuite andavano contate prima di scrivere il cron. Le ho contate dopo, perché me l'ha chiesto una email di avviso.",
-        "Un monitor fermo in silenzio sembra un prezzo che non è cambiato. Per questo ogni esecuzione fallita ora mi scrive su Telegram, con il link ai log.",
+        "Ho deciso prima quando il bot doveva stare zitto, e solo dopo quando doveva scrivere. Quelle tre condizioni sono la parte di UX del progetto, anche se nessuno le vede.",
+        "Le quote gratuite andavano contate prima di scrivere il cron. Le ho contate dopo, su gentile richiesta di una email di avviso.",
+        "Un monitor fermo e silenzioso sembra un prezzo che non è cambiato. Per questo adesso ogni esecuzione fallita mi scrive su Telegram, con il link ai log.",
       ],
     },
     {
@@ -2273,14 +2272,14 @@ export const cvData = {
         "looking-for-flights funzionava, ma lo usavo solo io. La domanda a cui risponde, quanti giorni posso permettermi con questo budget, se la fa chiunque viaggi con un tetto di spesa. Ho deciso di farne un prodotto, gratuito per chi prova il calcolo e pagato dall'affiliazione quando qualcuno prenota, senza riscrivere il motore che già funzionava.",
       process: [
         "Origine — Il calcolo l'ho portato da looking-for-flights così com'era: il budget meno il volo, diviso la spesa giornaliera, tagliato alla durata massima del viaggio. L'avevo già provato su un viaggio vero, il mio. Il lavoro nuovo stava tutto intorno.",
-        "Modello di business — Freemium, con il guadagno dall'affiliazione sui voli attraverso Travelpayouts e la rete Aviasales. Per ora niente abbonamento: entrare non costa nulla, e intanto scopro se la domanda esiste anche fuori dalla mia cerchia.",
+        "Modello di business — Freemium, con il guadagno dall'affiliazione sui voli attraverso Travelpayouts e la rete Aviasales. Per ora niente abbonamento, così entrare non costa nulla e intanto scopro se la domanda esiste anche fuori dalla mia cerchia.",
         "Architettura anti-abuso — Il frontend non chiama mai l'API dei voli. Chi usa l'app salva una rotta, di notte un cron prende le rotte salvate, fa una chiamata sola per ognuna e aggiorna il prezzo per tutti quelli che la seguono. Le quote gratuite sono basse, e questa deduplicazione l'ho progettata prima della prima funzione, non dopo il primo blocco.",
         "Stack e sicurezza — Next.js con l'App Router, PostgreSQL su Supabase attraverso Prisma, login con Clerk. Ogni Server Action che modifica o cancella dati controlla che chi la chiama sia il proprietario del record. Senza quel controllo un utente potrebbe cambiare le rotte salvate da un altro.",
       ],
       decisions: [
         {
           title: "Una chiamata per rotta",
-          body: "Una chiamata in tempo reale per ogni utente avrebbe finito la quota gratuita in poche ore. Le rotte stanno nel database, deduplicate: parte una chiamata per ogni rotta, che la segua una persona sola o molte.",
+          body: "Una chiamata in tempo reale per ogni utente avrebbe finito la quota gratuita in poche ore. Le rotte stanno nel database senza doppioni, e parte una chiamata per ogni rotta, che la segua una persona sola o molte.",
         },
         {
           title: "Amadeus escluso, non per scelta",
