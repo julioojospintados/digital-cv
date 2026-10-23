@@ -1984,7 +1984,7 @@ export const cvData = {
     {
       name: "Digital CV — Progetto Open Source AI-Augmented",
       description:
-        "Ho costruito questo CV interattivo open source con un workflow AI-augmented (GitHub Copilot e Claude). Sistema a due livelli: sito Astro e Lit con animazioni GSAP e wave effect SVG, più un server MCP che espone i dati del CV come API per agenti AI. Ho integrato PostHog per misurare come le persone usano davvero il sito. È la dimostrazione live del metodo: da solo ho prodotto in giorni ciò che un team produrrebbe in mesi.",
+        "Ho costruito da solo questo CV, open source, lavorando con GitHub Copilot e Claude. Sono due pezzi: il sito, in Astro e Lit con le animazioni in GSAP, e un server MCP che espone i dati del CV agli agenti AI. Con PostHog guardo come lo usano le persone vere, e quando i numeri smentiscono una mia idea cambio l'idea.",
       url: "https://github.com/julioojospintados/digital-cv",
       repoUrl: "https://github.com/julioojospintados/digital-cv",
       date: "2026-04",
@@ -2000,99 +2000,99 @@ export const cvData = {
       ],
       slug: "digital-cv",
       primaryMode: "tech",
-      role: "AI Workflow Designer & Full-Stack Developer. Ideazione, UX/UI e sviluppo in solitaria.",
+      role: "AI Workflow Designer & Full-Stack Developer. Idea, UX/UI e sviluppo, da solo.",
       problem:
-        "Avevo iniziato a lavorare con AI, MCP e vibe coding e mi serviva un banco di prova reale, non un tutorial. Allo stesso tempo il mio CV in PDF non dimostrava un profilo T-shaped: elencava competenze senza farle vedere in azione, e costringeva tre lettori molto diversi, recruiter, CTO e art director, nello stesso formato piatto. Ho unito le due esigenze: costruire lo strumento che mi mancava, usando proprio il metodo che volevo dimostrare.",
+        "Avevo iniziato a lavorare con l'AI, gli MCP e il vibe coding, e mi serviva un progetto vero su cui provarli, non l'ennesimo tutorial. Intanto il mio CV in PDF faceva il contrario di quello che volevo: elencava competenze senza mostrarle, e dava lo stesso foglio a un recruiter, a un CTO e a un art director, che cercano tre cose diverse. Ho messo insieme le due esigenze e ho costruito il CV che mi mancava con il metodo che volevo dimostrare.",
       process: [
-        "Ricerca — Ho definito i tre lettori reali del CV (recruiter generalista, CTO, art director) e cosa ciascuno deve trovare nei primi 3 secondi: affidabilità e leggibilità, stack e architettura, estetica e storytelling. Ogni scelta successiva risponde a uno di loro: se non è argomentabile in colloquio, non entra.",
-        "Concept — Il knolling: ordine e varietà insieme. Le mie competenze sono eterogenee (codice, design, palco, metodo) e il modo più onesto di presentarle è disporle sul tavolo come oggetti in una fotografia knolling: tutto visibile, catalogato, intenzionale, nessun cassetto chiuso.",
-        "Architettura dell'informazione — Un solo profilo, tre prospettive: le route /tech /creative /human cambiano enfasi e accento cromatico, mai struttura o contenuto. Chi legge sceglie il proprio punto di vista; le altre anime restano visibili come sussurri a bassa opacità, mai nascoste.",
-        "Design system — Sfondo ottanio fisso con un accento per ciascuna delle tre lenti, tipografia Lexend + JetBrains Mono, animazioni solo su transform/opacity con reduced-motion rispettato. Ho deciso i vincoli prima di scrivere i componenti.",
-        "Build AI-augmented — Vibe coding con GitHub Copilot e Claude come pair operativi: architettura, UI, animazioni GSAP, e un server MCP con tool, resource e prompt template che espone il CV come API per agenti AI. Il sito è la controprova del workflow che dichiara.",
+        "Ricerca — Sono partito da chi legge. Un recruiter vuole capire in fretta chi sono, un CTO guarda lo stack e l'architettura, un art director guarda l'estetica e come racconto le cose. Da lì in poi ogni scelta doveva servire almeno a uno dei tre, e dovevo saperla spiegare in un colloquio.",
+        "Concept — Il knolling, la foto dall'alto in cui gli oggetti stanno in ordine sul tavolo, uno accanto all'altro. Le mie competenze sono molto diverse fra loro, codice, design, palco, metodo, e metterle sul tavolo così mi sembrava il modo più onesto di mostrarle: tutto in vista, niente nei cassetti.",
+        "Architettura dell'informazione — Un profilo solo, letto con tre lenti: /design, /tech e /ai. La lente cambia l'accento di colore e quello che viene in primo piano, mai la struttura o il contenuto, e quello che non la riguarda resta sul tavolo con meno luce addosso.",
+        "Design system — Le regole le ho decise prima dei componenti: lo sfondo ottanio che non cambia mai, un accento per ogni lente, Lexend e JetBrains Mono, animazioni solo su transform e opacity, ferme per chi chiede meno movimento. Ogni componente del sito sta in una vetrina, e se ne manca uno un controllo ferma il push verso main.",
+        "Build AI-augmented — Ho scritto il codice in coppia con GitHub Copilot e Claude: architettura, interfaccia, animazioni GSAP e un server MCP con tool, resource e prompt che espone il CV agli agenti AI. Se il sito dice che lavoro così, deve esserne la prova.",
       ],
       decisions: [
         {
-          title: "Il grafo dove c'è spazio, le card dove c'è fretta",
-          body: "La vista skills più spettacolare è un force graph D3, ma i grafi si guardano, non si scansionano. Su mobile il default è la vista card, leggibile in 5 secondi, e D3 (~130KB) si carica solo per chi apre il grafo davvero. Su desktop, dove ci sono spazio e mouse per esplorarlo, il grafo accoglie per primo.",
+          title: "Il grafo era bello, l'ho tolto",
+          body: "Le competenze erano un force graph in D3, la parte più spettacolare del sito. Su telefono l'avevo già messo dopo le card, perché un grafo si guarda e non si legge in fretta. Poi l'ho tolto del tutto: ora una competenza compare dentro il lavoro in cui l'ho usata, e dice molto più di un logo sospeso in mezzo agli altri.",
         },
         {
           title: "Sussurri, non silenzi",
-          body: "Quando scegli un mode, le card fuori tema non spariscono: scendono a bassa opacità. Nasconderle avrebbe contraddetto la tesi del sito. Il knolling è trasparenza radicale.",
+          body: "Quando scegli una lente, quello che non la riguarda non sparisce: si abbassa di tono e resta leggibile, anche da tastiera e da screen reader. Nasconderlo avrebbe smentito il knolling, dove sul tavolo c'è tutto.",
         },
         {
-          title: "Convenzioni dove l'utente ha fretta",
-          body: 'Le esperienze extra si rivelano con "Leggi altre 3", il pattern di LinkedIn e Medium, al posto di un CTA brandizzato che avevo provato prima. Per lo stesso motivo il ruolo attuale sta in cima al cluster esperienze: i recruiter leggono in reverse-chronological e cercano "dove lavora ora".',
+          title: "Misurare sugli schermi veri",
+          body: "Controllavo il sito su finestre comode, 1280 per 900. PostHog diceva che il portatile più comune fra i visitatori apre una finestra di 1366 per 610, e lì i bottoni delle schede d'ingresso finivano sotto il bordo: chi arrivava non vedeva dove cliccare. Ora ogni pagina viene misurata alle dimensioni che usano davvero i visitatori, telefoni compresi, prima che una modifica vada online.",
         },
         {
-          title: "Accessibilità come vincolo, non rifinitura",
-          body: "Ogni accento delle tre lenti ha una variante muted ricalibrata per contrasto WCAG AA (≥4.5:1) sullo sfondo ottanio. Focus visibile, skip link e prefers-reduced-motion sono regole del design system decise all'inizio, non patch aggiunte a fine progetto.",
+          title: "L'accessibilità decisa all'inizio",
+          body: "Il contrasto lo misuro sul pixel più chiaro dietro ogni riga di testo, perché sopra un'immagine il colore di fondo scritto nel CSS dice poco. Ogni accento ha una versione per il testo piccolo che supera 4,5:1 sull'ottanio. Focus visibile, skip link e movimento ridotto sono regole del design system dal primo giorno, le aree di tocco da 44 pixel sono arrivate dopo, insieme al controllo che le misura su ogni pagina.",
         },
       ],
       outcomes: [
-        "Copertura test >80% (Vitest) sul layer MCP/HTTP.",
-        "Server MCP con tool, resource e prompt template: API dei dati CV per agenti AI, dimostrazione live.",
-        "Osservabilità di prodotto con PostHog (funnel, retention, session replay, feature flag) e Vercel Analytics: il sito non è solo costruito, è misurato e iterato con dati reali.",
+        "Un server MCP con tool, resource e prompt: un agente AI legge il mio CV come un'API.",
+        "PostHog e Vercel Analytics misurano come si usa il sito, e da quei numeri sono venute modifiche vere, come le schede d'ingresso rifatte per stare nella finestra del portatile più comune.",
+        "Controlli sul sito costruito prima di ogni push verso main, su tutte le pagine e in tutte e due le lingue. Il primo giro della vetrina ha trovato 91 classi vive che nessuno aveva documentato.",
       ],
       learnings: [
-        "L'AI accelera davvero solo dentro vincoli decisi prima: con token, regole di animazione e DO NOT espliciti il vibe coding produce; senza, produce caos da rifare.",
-        'Ogni dettaglio deve sopravvivere alla domanda "perché?": se una scelta visiva non ha una risposta da colloquio, è decorazione.',
-        'Le certezze vanno testate presto: le idee più "wow", il grafo come vista unica e lo scroll a step, sono le prime che ho ridimensionato davanti all\'uso reale.',
+        "L'AI va veloce solo dentro regole decise prima: i token, come si anima, cosa non si fa, scritti nero su bianco. Senza, produce in fretta lavoro da rifare.",
+        "Ogni dettaglio deve reggere la domanda «perché?». Se una scelta visiva non ha una risposta da colloquio, è decorazione.",
+        "Le idee che mi piacevano di più, il grafo e lo scroll a step, sono state le prime che ho dovuto ridimensionare davanti all'uso reale. Conviene metterle alla prova presto, quando cambiarle costa poco.",
       ],
       automationsIntro:
-        "Il sito è anche il mio banco di prova per l'automazione: sei strumenti di intelligenza artificiale, fra agenti, skill e un server MCP, e i controlli che fermano un difetto prima che vada online. Le righe con il badge AI usano un modello di linguaggio.",
+        "Il sito è anche il posto dove provo l'automazione: agenti, skill e un server MCP, più i controlli che fermano un difetto prima che vada online. Le righe con il badge AI usano un modello di linguaggio.",
       automations: [
         {
           name: "Agente cv-recruiter",
           kind: "Agente AI · Claude Code",
-          what: "Legge un annuncio, mi segnala cosa manca, calcola quanto sono compatibile e genera il CV mirato in PDF, grafico e per ATS.",
+          what: "Legge un annuncio, mi dice cosa manca nel mio profilo, calcola quanto sono compatibile e genera il CV mirato in PDF, in versione grafica e per gli ATS.",
           ai: true,
         },
         {
           name: "Agente ux-reviewer",
           kind: "Agente AI · Claude Code",
-          what: "Rivede il sito senza toccarlo, alle misure di schermo dei visitatori veri, in italiano e in inglese, e mi consegna i problemi in ordine di gravità.",
+          what: "Rivede il sito senza toccarlo, alle dimensioni di schermo dei visitatori veri, in italiano e in inglese, e mi consegna i problemi in ordine di gravità.",
           ai: true,
         },
         {
           name: "Generatore di CV da telefono",
           kind: "AI · Gemini API",
-          what: "Dall'annuncio, anche da uno screenshot, al CV mirato, alla lettera di presentazione e a una stima di stipendio, con i PDF creati sul server.",
+          what: "Dall'annuncio, anche fotografato, al CV mirato, alla lettera di presentazione e a una stima di stipendio, con i PDF generati sul server.",
           ai: true,
         },
         {
           name: "Server MCP",
           kind: "AI · Model Context Protocol",
-          what: "Espone il mio CV come API per agenti AI: tool, resource e prompt, compresi la generazione del CV e il registro delle candidature.",
+          what: "Espone il mio CV agli agenti AI con tool, resource e prompt, compresi la generazione del CV e il registro delle candidature.",
           ai: true,
         },
         {
           name: "Otto skill di progetto",
           kind: "AI · Claude Code e GitHub Copilot",
-          what: "Istruzioni che l'AI carica quando servono: contesto del progetto, design system, tono di voce, metodo, architettura, posizionamento.",
+          what: "Istruzioni che l'AI carica quando servono: il contesto del progetto, il design system, il mio modo di scrivere, il metodo, l'architettura, il posizionamento.",
           ai: true,
         },
         {
           name: "Verification loop",
           kind: "Skill AI",
-          what: "Costruisci, misura, critica: il lavoro lo giudica un revisore che non l'ha fatto, mai chi l'ha scritto.",
+          what: "Costruire, misurare, criticare. Il lavoro lo giudica un revisore che non l'ha fatto, mai chi l'ha scritto.",
           ai: true,
         },
         {
           name: "Registro candidature",
           kind: "Vercel Blob",
-          what: "Lo stato di ogni candidatura, aggiornabile dal telefono o da un agente: inviata, risposta, conferma del CV, esito.",
+          what: "Lo stato di ogni candidatura, che aggiorno dal telefono o da un agente: inviata, risposta ricevuta, CV confermato, esito.",
           ai: false,
         },
         {
-          name: "Controlli prima di ogni push",
+          name: "Controlli prima del push",
           kind: "Husky · Playwright",
-          what: "Lint, build e cinque controlli in un browser vero: vetrina dei componenti, parità fra italiano e inglese, link, contrasto e misure di schermo reali.",
+          what: "Prima di ogni push verso main: lint, build e cinque controlli sul sito costruito, cioè vetrina dei componenti, parità fra italiano e inglese, link, contrasto e dimensioni di schermo reali.",
           ai: false,
         },
         {
           name: "Generatori di CV in PDF",
           kind: "Node · Playwright",
-          what: "Quattro versioni dagli stessi dati, con i link nella lingua del documento. Nessuna esperienza viene tagliata per farla stare nella pagina.",
+          what: "Quattro versioni dagli stessi dati, con i link nella lingua del documento. Un'esperienza che non sta nella pagina passa alla successiva, intera.",
           ai: false,
         },
       ],
@@ -2100,7 +2100,7 @@ export const cvData = {
     {
       name: "Bambagia — UX/UI Design for a B2B Cosmetics Brand",
       description:
-        "Ho progettato con Bambagia Design Lab il sito di un brand cosmetico che vende ai professionisti, dal wireframe al design system. Dopo la consegna l'avrebbe mantenuto lo studio, che lavora su Wix Studio. Per questo ho preparato con l'AI un ambiente di lavoro che produce solo pagine ricostruibili in Wix, con le istruzioni per l'agente e gli MCP di Figma e Wix.",
+        "Con Bambagia Design Lab ho progettato il sito di un brand cosmetico che vende ai professionisti, dal wireframe al design system. Dopo la consegna il sito lo avrebbe mantenuto lo studio, su Wix Studio, quindi ho preparato con l'AI un ambiente di lavoro che produce solo pagine ricostruibili in Wix, con le istruzioni per l'agente e gli MCP di Figma e Wix.",
       date: "2026-05",
       tags: [
         "UX/UI Design",
@@ -2118,13 +2118,13 @@ export const cvData = {
       primaryMode: "creative",
       role: "UX/UI Designer & AI Workflow Designer, collaborazione con Bambagia Design Lab (2026).",
       problem:
-        "Bambagia Design Lab mi ha chiesto di progettare il sito di un brand cosmetico che vende ai professionisti: estetiste, centri benessere, farmacie. Un sito vetrina e non un e-commerce, con le linee di prodotto su tre livelli, i corsi e le richieste di personalizzazione. Il vincolo vero arrivava dopo la consegna: il sito l'avrebbe mantenuto lo studio, su Wix Studio. Se una pagina in Wix non si ricostruisce, o ci arriva come un blocco statico, a ogni modifica serve di nuovo qualcuno che scriva codice. Cioè io.",
+        "Bambagia Design Lab mi ha chiesto di progettare il sito di un brand cosmetico che vende ai professionisti: estetiste, centri benessere, farmacie. Un sito vetrina, senza e-commerce, con le linee di prodotto su tre livelli, i corsi e le richieste di personalizzazione. Il vincolo vero arrivava dopo la consegna: il sito l'avrebbe mantenuto lo studio, su Wix Studio. Se una pagina in Wix non si ricostruisce, o ci arriva come un blocco statico, a ogni modifica serve di nuovo qualcuno che scriva codice. Cioè io.",
       process: [
-        "Ricerca — Ho studiato il cliente e i concorrenti prima di disegnare: chi compra, che cosa cerca un professionista in un sito di cosmetica, come sono organizzate le linee. Ne è uscito un brief con le pagine, le funzioni e i prodotti su tre livelli: linee, sotto-linee, prodotti.",
-        "Wireframe — Ho scritto a mano in HTML e CSS il prototipo low-fi di nove pagine, con una mappa del sito come ingresso. Si apre dal browser senza server, così lo studio ci clicca dentro come in un sito vero.",
+        "Ricerca — Prima di disegnare ho studiato il cliente e i concorrenti: chi compra, cosa cerca un professionista in un sito di cosmetica, come sono organizzate le linee. Ne è uscito un brief con le pagine, le funzioni e i prodotti su tre livelli: linee, sotto-linee, prodotti.",
+        "Wireframe — Ho scritto a mano, in HTML e CSS, il prototipo low-fi di nove pagine, con una mappa del sito come ingresso. Si apre dal browser senza server, così lo studio ci clicca dentro come in un sito vero.",
         "Direzione visiva — Ho disegnato tre home sullo stesso contenuto, ed è passata quella che chiamavo Nature Professional. Su quella ho costruito tutte le pagine, desktop e mobile.",
-        "Regole Wix-friendly — Ho scritto dodici regole perché ogni pagina passi in Wix Studio così com'è. Qualche esempio: ogni sezione è un blocco autonomo e in Wix diventa una Section, le spaziature stanno sulla griglia da 8 punti che usa Wix, i colori escono da variabili che diventano i colori del tema.",
-        "Ambiente AI — Ho costruito su VS Code un ambiente riutilizzabile per lo studio: istruzioni per GitHub Copilot che si attivano per cliente, un agente che conosce il flusso dal brief al sito, gli MCP di Figma, Wix e Playwright. Le regole grafiche e quelle di Wix le ho scritte una volta sola, e l'agente le applica a ogni pagina.",
+        "Regole Wix-friendly — Ho scritto dodici regole perché ogni pagina passi in Wix Studio così com'è. Ogni sezione è un blocco autonomo, che in Wix diventa una Section; le spaziature stanno sulla griglia da 8 punti di Wix; i colori escono da variabili che diventano quelli del tema.",
+        "Ambiente AI — Su VS Code ho costruito per lo studio un ambiente da riusare: istruzioni per GitHub Copilot che si attivano per cliente, un agente che conosce il flusso dal brief al sito, gli MCP di Figma, Wix e Playwright. Le regole grafiche e quelle di Wix le ho scritte una volta sola, e l'agente le applica a ogni pagina.",
       ],
       decisions: [
         {
@@ -2133,11 +2133,11 @@ export const cvData = {
         },
         {
           title: "Un design fatto per essere ricostruito",
-          body: "Il design in HTML fa da guida: le pagine vere le ricostruisce lo studio in Wix. Così ho lasciato fuori quello che Wix non sa rifare: posizionamenti assoluti complessi, maschere, librerie di animazione come GSAP. Le animazioni usano tre classi standard e in Wix diventano interazioni native. Moduli e menu sono solo disegnati: in Wix si rifanno con i componenti suoi.",
+          body: "Il design in HTML fa da guida, le pagine vere le ricostruisce lo studio in Wix. Così ho lasciato fuori quello che Wix non sa rifare: posizionamenti assoluti complessi, maschere, librerie di animazione come GSAP. Le animazioni usano tre classi standard e in Wix diventano interazioni native. Moduli e menu sono solo disegnati, in Wix si rifanno con i suoi componenti.",
         },
         {
           title: "Tre home sullo stesso contenuto",
-          body: "Con una proposta sola la revisione diventa un elenco di correzioni. Con tre, il cliente sceglie prima l'atmosfera e corregge dopo. Le due scartate sono rimaste nella cartella interna del brief: al cliente arriva solo il prototipo.",
+          body: "Con una proposta sola la revisione diventa un elenco di correzioni. Con tre, il cliente sceglie prima l'atmosfera e corregge dopo. Le due scartate sono rimaste nella cartella interna del brief, al cliente arriva solo il prototipo.",
         },
         {
           title: "L'atmosfera sì, i colori no",
@@ -2146,7 +2146,7 @@ export const cvData = {
       ],
       outcomes: [
         "Tre home proposte, una scelta, e su quella il design di nove pagine in versione desktop e mobile.",
-        "Un ambiente riutilizzabile: ogni nuovo cliente dello studio parte dalla stessa struttura di cartelle, dalle stesse regole e dallo stesso agente.",
+        "Un ambiente da riusare: ogni nuovo cliente dello studio parte dalla stessa struttura di cartelle, dalle stesse regole e dallo stesso agente.",
         "Eleonora D'Agostino, titolare dello studio, ha scritto una raccomandazione su questo lavoro: è tra le voci del mio CV.",
       ],
       learnings: [
@@ -2177,7 +2177,7 @@ export const cvData = {
         {
           name: "MCP di Figma e Wix",
           kind: "AI · Model Context Protocol",
-          what: "Danno all'agente accesso ai file di Figma e alla documentazione di Wix e Velo, per tenere allineati codice e design.",
+          what: "Danno all'agente accesso ai file di Figma e alla documentazione di Wix e Velo, così codice e design restano allineati.",
           ai: true,
         },
         {
@@ -2212,7 +2212,7 @@ export const cvData = {
         "Il calcolo — Per ogni meta il programma prende il volo andata e ritorno più economico, toglie dal budget il volo e i costi fissi, divide il resto per la spesa giornaliera a destinazione e taglia il risultato alla durata massima del viaggio. La classifica va per giorni, poi per costo totale. Con i prezzi del 31 luglio il volo più economico era per Giacarta, ma in testa c'era l'India: a terra costava 7 euro al giorno in meno.",
         "Motore e configurazione — Tutta la logica di dominio sta in un file: date, durata, aeroporti di partenza, mete con la loro spesa giornaliera. Per cambiare viaggio non si tocca il codice. Le mete si aggiungono da un file di testo, una riga per meta, e uno script le sincronizza.",
         "Le notifiche — Il sistema tace per scelta. Scrive su Telegram alla prima esecuzione, quando cambia la meta in testa o quando un volo scende di almeno 15 euro. Ogni meta arriva in una tabella con compagnia, orari, durata porta a porta e scali, compreso lo scalo che scavalca la notte: due voli allo stesso prezzo possono essere due viaggi diversi.",
-        "Su richiesta — Con /cerca il bot lancia la stessa ricerca quando voglio io. All'inizio un workflow controllava i messaggi ogni 15 minuti, e misurato GitHub lo eseguiva ogni 26-42. L'ho sostituito con un Cloudflare Worker che riceve il messaggio da Telegram nell'istante in cui arriva e fa partire la ricerca.",
+        "Su richiesta — Con /cerca il bot lancia la stessa ricerca quando voglio io. All'inizio un workflow controllava i messaggi ogni 15 minuti, ma a misurarlo GitHub lo eseguiva ogni 26, a volte 42. L'ho sostituito con un Cloudflare Worker che riceve il messaggio da Telegram nell'istante in cui arriva e fa partire la ricerca.",
         "Sri Lanka — La lista è partita da cinque mete in Asia. Il 2 agosto ho aggiunto lo Sri Lanka, poi ho ristretto la ricerca a lui solo, con partenza fra il 12 e il 15 settembre e rientro entro fine mese. Il 12 settembre, aperta la finestra di partenza, ho fermato il monitoraggio.",
       ],
       decisions: [
@@ -2252,7 +2252,7 @@ export const cvData = {
     {
       name: "Trip-Runway — Travel Budget Yield App",
       description:
-        "Ho trasformato looking-for-flights, il mio script personale di monitoraggio prezzi voli, in trip-runway: una web app che incrocia il costo del volo con il costo della vita a destinazione per calcolare i giorni massimi di viaggio sostenibili con un budget fisso. Next.js, Supabase e Prisma, con un'architettura anti-abuso che deduplica le chiamate API per rotta invece che per utente, e monetizzazione da affiliazione voli.",
+        "Ho trasformato looking-for-flights, il mio script per tenere d'occhio i prezzi dei voli, in trip-runway: una web app che mette insieme il costo del volo e quanto costa vivere a destinazione, e calcola per quanti giorni si può viaggiare con un budget fisso. È fatta con Next.js, Supabase e Prisma. I prezzi si aggiornano una volta per rotta, qualunque sia il numero di utenti che la seguono, e il guadagno arriva dall'affiliazione sui voli.",
       url: "https://trip-runway.vercel.app",
       repoUrl: "https://github.com/julioojospintados/trip-runway",
       date: "2026-08",
@@ -2270,46 +2270,45 @@ export const cvData = {
       primaryMode: "tech",
       role: "Full-Stack Developer & Product Owner, progetto personale in sviluppo (2026).",
       problem:
-        "Avevo già uno script personale, looking-for-flights, che cercava voli e mi scriveva su Telegram quando conveniva partire con un budget fisso. Funzionava, ma restava un tool per me. La stessa domanda, quanti giorni posso permettermi con questo budget, se la fanno molti viaggiatori, non solo io. Ho deciso di trasformare lo script in un prodotto: da tool a uso personale a web app con modello freemium e monetizzazione da affiliazione, senza riscrivere il motore di calcolo che già funzionava.",
+        "looking-for-flights funzionava, ma lo usavo solo io. La domanda a cui risponde, quanti giorni posso permettermi con questo budget, se la fa chiunque viaggi con un tetto di spesa. Ho deciso di farne un prodotto, gratuito per chi prova il calcolo e pagato dall'affiliazione quando qualcuno prenota, senza riscrivere il motore che già funzionava.",
       process: [
-        "Origine — Il motore di calcolo, giorni sostenibili uguale budget residuo diviso spesa giornaliera, tagliato alla durata massima del viaggio, esisteva già in looking-for-flights. L'ho portato in trip-runway invariato: la logica di dominio era già validata su viaggi reali, il lavoro nuovo era tutto nel prodotto attorno.",
-        "Modello di business — Ho scelto un modello freemium con monetizzazione da affiliazione sui voli (Travelpayouts, rete Aviasales) invece di un abbonamento fin da subito. Abbassa la barriera d'ingresso mentre valido se la domanda esiste davvero fuori dalla mia cerchia.",
-        "Architettura anti-abuso — Il frontend non chiama mai le API dei voli on-demand. L'utente salva una rotta, un cronjob notturno prende le rotte uniche salvate dagli utenti, fa una sola chiamata API per rotta e aggiorna i prezzi per tutti gli interessati. Le quote gratuite delle API voli sono basse: ho progettato la deduplicazione prima di scrivere la prima feature, non dopo il primo blocco.",
-        "Stack e sicurezza — Next.js con App Router, PostgreSQL su Supabase gestito con Prisma, autenticazione con Clerk. Ogni Server Action che modifica o cancella dati verifica che l'utente autenticato sia il reale proprietario del record: senza quel controllo, un utente potrebbe modificare le rotte salvate da un altro.",
+        "Origine — Il calcolo l'ho portato da looking-for-flights così com'era: il budget meno il volo, diviso la spesa giornaliera, tagliato alla durata massima del viaggio. L'avevo già provato su un viaggio vero, il mio. Il lavoro nuovo stava tutto intorno.",
+        "Modello di business — Freemium, con il guadagno dall'affiliazione sui voli attraverso Travelpayouts e la rete Aviasales. Per ora niente abbonamento: entrare non costa nulla, e intanto scopro se la domanda esiste anche fuori dalla mia cerchia.",
+        "Architettura anti-abuso — Il frontend non chiama mai l'API dei voli. Chi usa l'app salva una rotta, di notte un cron prende le rotte salvate, fa una chiamata sola per ognuna e aggiorna il prezzo per tutti quelli che la seguono. Le quote gratuite sono basse, e questa deduplicazione l'ho progettata prima della prima funzione, non dopo il primo blocco.",
+        "Stack e sicurezza — Next.js con l'App Router, PostgreSQL su Supabase attraverso Prisma, login con Clerk. Ogni Server Action che modifica o cancella dati controlla che chi la chiama sia il proprietario del record. Senza quel controllo un utente potrebbe cambiare le rotte salvate da un altro.",
       ],
       decisions: [
         {
-          title: "Rotte condivise, non chiamate per utente",
-          body: "Ogni chiamata all'API voli in tempo reale, moltiplicata per ogni utente, avrebbe esaurito la quota gratuita in poche ore. Ho salvato le rotte nel database e le ho deduplicate: una chiamata per rotta unica, non una per ogni utente che la guarda.",
+          title: "Una chiamata per rotta",
+          body: "Una chiamata in tempo reale per ogni utente avrebbe finito la quota gratuita in poche ore. Le rotte stanno nel database, deduplicate: parte una chiamata per ogni rotta, che la segua una persona sola o molte.",
         },
         {
           title: "Amadeus escluso, non per scelta",
-          body: "Avevo valutato Amadeus per i prezzi voli, ma il portale self-service per sviluppatori è stato chiuso a metà 2026: resta solo un canale Enterprise, non percorribile in fase di bootstrap. Ho scelto Travelpayouts, gratuito e con deeplink affiliati già integrati nel modello di monetizzazione, con Duffel come piano B se in futuro servirà un prezzo live da GDS.",
+          body: "Volevo i prezzi di Amadeus, ma a metà 2026 ha chiuso il portale self-service per sviluppatori ed è rimasto solo il canale Enterprise, che per un progetto appena nato non è una strada. Ho preso Travelpayouts, gratuito e con i link di affiliazione già pronti, e tengo Duffel come piano B se un giorno servirà un prezzo live da GDS.",
         },
         {
-          title: "Freemium prima dell'abbonamento",
-          body: "Un abbonamento fin dal lancio avrebbe chiuso la porta a chi vuole solo provare il calcolo. L'affiliazione sui voli monetizza chi prenota, senza chiedere una carta di credito a chi sta ancora guardando.",
+          title: "Prima il calcolo gratis",
+          body: "Un abbonamento dal primo giorno avrebbe chiuso fuori chi vuole solo provare il calcolo. Con l'affiliazione guadagno quando qualcuno prenota, e a chi sta ancora guardando non chiedo la carta di credito.",
         },
         {
-          title: "Il controllo di autorizzazione non è un dettaglio da fase 2",
-          body: "Ho scritto la regola di autorizzazione, verificare che l'utente sia il proprietario del record, come vincolo architetturale fin dalla prima Server Action, non come task di sicurezza da aggiungere prima del lancio.",
+          title: "L'autorizzazione dalla prima Server Action",
+          body: "Il controllo sul proprietario del record è una regola dell'architettura da subito. Lasciarlo per ultimo, come compito di sicurezza da fare prima del lancio, voleva dire ripassare a mano ogni azione già scritta.",
         },
       ],
       outcomes: [
-        "App live e deployata su Vercel (trip-runway.vercel.app), evoluzione diretta di un tool personale già funzionante.",
-        "Motore di calcolo riutilizzato da looking-for-flights senza riscriverlo: la logica di dominio era già validata su viaggi reali.",
-        "Architettura anti-abuso (deduplicazione API per rotta) e controllo di autorizzazione su ogni Server Action decisi prima di scrivere le prime feature.",
+        "L'app è online su Vercel, a trip-runway.vercel.app, e nasce da uno strumento personale che funzionava già.",
+        "Il motore di calcolo viene da looking-for-flights senza essere stato riscritto.",
+        "Deduplicazione delle chiamate per rotta e controllo del proprietario su ogni Server Action, decisi prima di scrivere le prime funzioni.",
       ],
       learnings: [
-        "Un tool personale che risolve un problema vero è la validazione di mercato più economica che esista: il bisogno c'era già, prima ancora di pensare al prodotto.",
-        "I vincoli esterni cambiano l'architettura più delle preferenze tecniche: la chiusura del portale Amadeus ha deciso il provider al posto mio, non un confronto tra feature.",
-        "La sicurezza sui dati va decisa come regola architetturale all'inizio: rimandarla a dopo il lancio significa riscrivere ogni Server Action già fatta.",
+        "Uno strumento che uso io per un problema vero è la verifica di mercato più economica che conosca: il bisogno c'era prima del prodotto.",
+        "Il fornitore dei prezzi l'ha scelto la chiusura del portale Amadeus, non un confronto fra funzioni. I vincoli che arrivano da fuori decidono l'architettura più dei miei gusti.",
       ],
     },
     {
       name: "Product Discovery — UX Research & Product Strategy",
       description:
-        "Con un socio tecnico ho rovesciato il processo di ideazione di un prodotto digitale con Design Thinking ed Effectuation: prima la ricerca sui bisogni reali delle persone, poi l'idea. Mappa comportamentale su Miro con la lente delle Four Forces, interviste, analisi dei competitor: da 17 concept ne è rimasto uno, ora in sviluppo, che valideremo con il pPoC Engine prima di scrivere codice.",
+        "Con un socio tecnico ho rovesciato il modo in cui di solito nasce un prodotto digitale: prima la ricerca su cosa serve davvero alle persone, poi l'idea. Design Thinking ed Effectuation, una mappa dei comportamenti su Miro letta con le Four Forces, interviste, analisi dei concorrenti. Da 17 idee ne è rimasta una, ora in sviluppo, che valideremo con il pPoC Engine prima di scrivere codice.",
       date: "2026-05",
       tags: [
         "UX Research",
@@ -2328,51 +2327,50 @@ export const cvData = {
       primaryMode: "creative",
       role: "UX Researcher & Product Strategist, progetto in corso con un socio tecnico (2026).",
       problem:
-        "La maggior parte delle app fallisce perché risolve problemi che le persone non sentono, o prova a fabbricare bisogni che non esistono. Con un socio tecnico ho rovesciato il processo classico di ideazione: nessuna idea di partenza da difendere, prima lo studio dei comportamenti, delle ansie e dei desideri quotidiani che i prodotti digitali non intercettano. L'obiettivo: validare l'interesse reale per un prodotto prima di scrivere una riga di codice.",
+        "Tante app risolvono problemi che nessuno sente, o provano a inventarne uno. Con il mio socio abbiamo fatto il contrario del solito: nessuna idea di partenza da difendere, prima lo studio dei comportamenti, delle ansie e dei desideri di tutti i giorni che i prodotti digitali non intercettano. Volevamo sapere se a qualcuno interessa un prodotto prima di scriverne una riga.",
       process: [
-        "Ricerca — Ho mappato su Miro i comportamenti e i bisogni profondi delle persone attraverso la lente delle Four Forces (Jobs to Be Done): spinta della situazione, attrattiva della soluzione, ansia del cambiamento, abitudine attuale. Bisogni organizzati in macro-aree — identità e status, paura di invecchiare, bisogno di controllo, relazioni — e classificati per gravità, diffusione e area culturale, con basi di psicologia comportamentale al posto della classica segmentazione demografica.",
-        "Validazione — Una mappa teorica è una camera dell'eco: ci si dà ragione da soli. Ho verificato i bisogni con 7 interviste rapide a persone nel target, chiacchierate informali di un quarto d'ora, e con l'analisi dei competitor che già provano a rispondere a quei bisogni, studiando cosa funziona e cosa no nei loro flussi.",
-        "Ideazione — Dalla mappa ho generato con il socio 17 idee di prodotto, ognuna agganciata a un bisogno preciso, con una logica di effectuation: partire dai mezzi e dai bisogni già in mano, non da un obiettivo fisso da difendere a ogni costo. Ho destrutturato le più promettenti con il Value Proposition Canvas e le ho stressate con l'AI in ruolo avversariale: un venture capitalist scettico che attacca la sostenibilità economica, un analista che cerca i blocchi tecnici e legali.",
-        "Prioritizzazione — Con una matrice Valore/Sforzo ho incrociato il valore per l'utente con lo sforzo di progettazione: delle 17 idee ne sono rimaste 4, e tutte le risorse sono andate su una sola, ora in sviluppo.",
-        "pPoC Engine — Il test finale è il nostro pPoC Engine: un Probabilistic Proof of Concept, un prototipo Figma ad alta fedeltà che sembra un'app vera e funzionante, mostrato agli utenti per misurare comportamenti, non opinioni. Le soglie di successo sono decise prima del lancio: oltre l'8% di conversione all'onboarding, oltre il 2% di clic sul pre-ordine.",
+        "Ricerca — Ho mappato su Miro comportamenti e bisogni delle persone con le Four Forces del Jobs to Be Done: cosa spinge a cambiare, cosa attira della soluzione nuova, l'ansia del cambiamento, la forza dell'abitudine. Ho raggruppato i bisogni in aree, dall'identità alla paura di invecchiare, dal bisogno di controllo alle relazioni, e li ho pesati per gravità, diffusione e area culturale. Al posto delle fasce d'età ho usato la psicologia comportamentale.",
+        "Validazione — Una mappa fatta a tavolino dà ragione a chi l'ha fatta. I bisogni li ho messi alla prova con 7 chiacchierate informali di un quarto d'ora con persone nel target, e con i concorrenti che provano già a rispondere a quei bisogni, guardando dove i loro flussi funzionano e dove no.",
+        "Ideazione — Dalla mappa, con il socio, sono uscite 17 idee, ognuna legata a un bisogno preciso. La logica è quella dell'effectuation: si parte dai mezzi e dai bisogni che hai già in mano, invece che da un obiettivo fisso da difendere a ogni costo. Le più promettenti le ho smontate con il Value Proposition Canvas e poi le ho date in pasto all'AI in un ruolo avversario: un venture capitalist scettico sui conti, un analista a caccia di blocchi tecnici e legali.",
+        "Prioritizzazione — Una matrice Valore/Sforzo ha incrociato quanto vale un'idea per chi la usa con quanto costa progettarla. Delle 17 ne sono rimaste 4, e abbiamo messo tutto su una, quella in sviluppo adesso.",
+        "pPoC Engine — L'ultimo test è il nostro pPoC Engine, un Probabilistic Proof of Concept: un prototipo Figma ad alta fedeltà che sembra un'app vera, messo davanti alle persone per misurare cosa fanno, non cosa dicono. Le soglie le abbiamo fissate prima: oltre l'8% di conversione all'onboarding, oltre il 2% di clic sul pre-ordine.",
       ],
       decisions: [
         {
           title: "Prima i bisogni, poi l'idea",
-          body: "Il processo classico parte da un'idea e cerca conferme. Noi siamo partiti dai bisogni e abbiamo lasciato che le idee emergessero dalla mappa. Costa più tempo all'inizio, ma elimina il rischio peggiore: innamorarsi di un prodotto che piace solo a chi lo ha inventato.",
+          body: "Di solito si parte da un'idea e si cercano conferme. Noi siamo partiti dai bisogni e abbiamo lasciato che le idee uscissero dalla mappa. All'inizio ci vuole più tempo, in cambio si evita di innamorarsi di un prodotto che piace solo a chi l'ha inventato.",
         },
         {
-          title: "Interviste vere contro la camera dell'eco",
-          body: "La desk research era più comoda, ma conferma quello che pensi già. Parlare con persone nel target ha ribaltato il quadro: molte idee che sulla lavagna sembravano forti non reggevano una chiacchierata di un quarto d'ora. Il taglio da 17 a 4 idee arriva quasi tutto da lì.",
+          title: "La lavagna contro un quarto d'ora di chiacchiere",
+          body: "Studiare dalla scrivania era più comodo, e conferma quello che pensi già. Le chiacchierate con le persone nel target hanno ribaltato il quadro: tante idee che sulla lavagna sembravano forti non hanno retto un quarto d'ora di conversazione. Il taglio da 17 a 4 viene quasi tutto da lì.",
         },
         {
-          title: "L'AI come avvocato del diavolo, non come oracolo",
-          body: "Non ho chiesto all'AI di generare idee: le idee erano nostre. L'ho istruita per attaccarle, nei panni di un venture capitalist scettico e di un analista tecnico e legale. Un'AI compiacente conferma qualsiasi cosa; una avversariale trova in poche ore i buchi che avremmo scoperto dopo il lancio.",
+          title: "L'AI come avvocato del diavolo",
+          body: "Le idee erano nostre, all'AI non ne ho chieste. L'ho istruita per attaccarle, nei panni di un venture capitalist scettico e di un analista tecnico e legale. Un'AI accomodante ti dà ragione su tutto, messa contro ha trovato in poche ore i buchi che avremmo scoperto dopo il lancio.",
         },
         {
           title: "Un esempio finto per proteggere l'idea vera",
-          body: "L'idea in sviluppo resta riservata, quindi racconto il metodo su un esempio volutamente sciocco: CheCaspitaMangio, un'app che decide cosa mangi a cena facendo girare una ruota. Il bisogno è l'ansia da decisione. Il Value Proposition Canvas regge lo stesso: l'utente deve scegliere la cena senza perdere mezz'ora, i suoi dolori sono le discussioni di coppia e la stanchezza mentale, la soluzione gli toglie il peso della scelta, la ruota decide e non si discute. Se il framework funziona su un'idea stupida, funziona.",
+          body: "L'idea in sviluppo è riservata, quindi racconto il metodo su un esempio volutamente sciocco: CheCaspitaMangio, un'app che decide la cena facendo girare una ruota. Il bisogno è l'ansia da decisione, e il Value Proposition Canvas regge lo stesso: l'utente vuole scegliere la cena senza perderci mezz'ora, i suoi dolori sono le discussioni di coppia e la stanchezza mentale, la ruota gli toglie il peso della scelta, e quello che decide la ruota non si discute. Se il metodo funziona su un'idea stupida, funziona.",
         },
         {
           title: "Misurare i clic, non i complimenti",
-          body: "Una landing page che raccoglie email misura l'intento dichiarato, e le persone dichiarano una cosa e poi ne fanno un'altra. Il PPoC misura comportamenti che costano: completare la configurazione delle preferenze, cliccare su un abbonamento a 0,99€ al mese che non preleva nulla ma registra la volontà di pagare. Se nessuno clicca, il backend non si scrive.",
+          body: "Una landing page che raccoglie email misura quello che le persone dichiarano, e le persone dichiarano una cosa e ne fanno un'altra. Il pPoC misura gesti che costano qualcosa: completare la configurazione delle preferenze, cliccare su un abbonamento da 0,99€ al mese che non addebita niente ma registra la volontà di pagare. Se nessuno clicca, il backend non lo scriviamo.",
         },
       ],
       outcomes: [
-        "Da 17 idee di prodotto a una sola, filtrata con interviste, analisi competitor e matrice Valore/Sforzo, ora in sviluppo.",
-        "7 interviste con persone nel target prima di disegnare qualsiasi schermata.",
-        "Soglie di validazione definite prima del lancio del PPoC: oltre l'8% di conversione all'onboarding, oltre il 2% di clic sul pre-ordine.",
+        "Da 17 idee a una, passata per interviste, analisi dei concorrenti e matrice Valore/Sforzo, ora in sviluppo.",
+        "7 interviste con persone nel target prima di disegnare una sola schermata.",
+        "Soglie di validazione fissate prima del lancio del pPoC: oltre l'8% di conversione all'onboarding, oltre il 2% di clic sul pre-ordine.",
       ],
       learnings: [
-        "La UX viene prima del codice: un software tecnicamente perfetto che non risolve un bisogno reale è solo un costo scritto bene.",
-        "L'AI accelera davvero solo se le assegni un ruolo scomodo: da avvocato del diavolo ha trovato in ore i punti deboli che avremmo scoperto a prodotto finito.",
-        "Parlare presto con persone vere costa poco e taglia tanto: la maggior parte delle idee che piacevano a noi non aveva mercato, e l'abbiamo scoperto prima di scrivere una riga di codice, non dopo.",
+        "La UX viene prima del codice. Un software perfetto che non risolve un bisogno vero è solo un costo scritto bene.",
+        "Parlare presto con persone vere costa poco e taglia molto. La maggior parte delle idee che piacevano a noi non aveva mercato, e l'abbiamo scoperto prima di scrivere codice.",
       ],
     },
     {
       name: "Music Agency — Tour Management & Digital Strategy",
       description:
-        "Ho organizzato booking e tour per gli artisti del roster di un'agenzia musicale italiana e ho progettato la comunicazione digitale: dalla trattativa con i promoter alla crescita organica dei canali social verso un pubblico di settore.",
+        "Ho organizzato booking e tour per gli artisti di un'agenzia musicale italiana e ho progettato la sua comunicazione online: dalle trattative con i promoter ai canali social, fatti crescere verso chi lavora nella musica invece che verso il pubblico generico.",
       date: "2023-01",
       tags: [
         "Tour management",
@@ -2385,35 +2383,35 @@ export const cvData = {
       primaryMode: "creative",
       role: "Tour Manager & Digital Strategist, collaborazione remota (2023–2024).",
       problem:
-        "Il roster dell'agenzia aveva bisogno di due cose insieme: date live organizzate bene, tra venue, promoter e contratti, e una presenza digitale che parlasse alla filiera del settore, non solo al pubblico generico. I canali social crescevano di volume ma non aprivano contatti: follower e lavoro reale dell'agenzia erano due mondi scollegati.",
+        "Il roster dell'agenzia aveva bisogno di due cose insieme: date dal vivo organizzate bene, fra locali, promoter e contratti, e una presenza online che parlasse a chi lavora nella musica. I social crescevano, ma i follower e il lavoro vero dell'agenzia non si incontravano mai.",
       process: [
-        "Ricerca — Ho intervistato le persone dell'agenzia per capire il lavoro dall'interno: come nascono le date, chi sono gli interlocutori che contano davvero, dove si inceppa il contatto con musicisti, produttori ed etichette.",
-        'Insight — Il problema non era "più follower", ma follower giusti: la comunicazione doveva funzionare da canale di contatto con la filiera, non da vetrina per il pubblico generico. Ogni contenuto andava ripensato come un\'occasione di relazione professionale.',
-        "Ideazione — Ho proposto una playlist curata di artisti emergenti come strumento di networking: ogni inserimento apre un contatto diretto con musicisti, produttori ed etichette, la scoperta reciproca al posto del follow passivo. Sulla stessa logica ho proposto un format radiofonico per estendere l'idea oltre le piattaforme streaming.",
-        "Esecuzione — Ho definito la content strategy dei canali, ho scritto il copy per la serata di compleanno dell'agenzia e ho portato avanti il lavoro operativo di booking e tour management: ricerca venue, trattativa con i promoter, contratti, fino all'evento live all'Arci Bellezza di Milano, seguito end-to-end.",
+        "Ricerca — Prima di proporre qualcosa ho intervistato le persone dell'agenzia: come nasce una data, chi conta davvero fra gli interlocutori, dove si blocca il contatto con musicisti, produttori ed etichette.",
+        "Insight — Servivano i follower giusti, più che tanti follower. I canali dovevano diventare un modo per entrare in contatto con la filiera, e ogni contenuto un'occasione per aprire una relazione di lavoro.",
+        "Ideazione — Ho proposto una playlist di artisti emergenti come strumento per conoscere gente: ogni artista inserito è un contatto diretto con un musicista, un produttore o un'etichetta, e ci si scopre a vicenda invece di seguirsi e basta. Con la stessa logica ho proposto un format radiofonico, per portare l'idea fuori dalle piattaforme di streaming.",
+        "Esecuzione — Ho scritto la strategia dei contenuti e i testi per la festa di compleanno dell'agenzia, e intanto ho fatto il lavoro di booking e di tour management: cercare i locali, trattare con i promoter, chiudere i contratti. Fino alla serata all'Arci Bellezza di Milano, che ho seguito dall'inizio alla fine.",
       ],
       decisions: [
         {
           title: "Prima ascoltare, poi proporre",
-          body: "Nessuna proposta è arrivata prima delle interviste con chi in agenzia ci lavora ogni giorno. Le idee poi accolte, playlist e format radio, sono nate da bisogni ascoltati, non da un playbook di marketing applicato dall'esterno: è lo stesso principio della user research, portato fuori dal software.",
+          body: "Nessuna proposta è arrivata prima delle interviste con chi in agenzia ci lavora ogni giorno. La playlist e il format radio, le idee poi accolte, vengono da lì e non da un manuale di marketing. È quello che faccio con gli utenti di un software, solo fuori dal software.",
         },
         {
-          title: "La playlist come strumento, non come contenuto",
-          body: "Una playlist di artisti emergenti non è un post da pubblicare: è un motivo di contatto. Ogni inserimento apre una conversazione concreta con un musicista, un produttore o un'etichetta, scoperta reciproca al posto del follow passivo. La proposta del format radiofonico estendeva la stessa logica oltre le piattaforme streaming.",
+          title: "La playlist come scusa per scriversi",
+          body: "Una playlist di emergenti l'ho pensata come un motivo per contattare qualcuno, prima che come un contenuto da pubblicare. Ogni inserimento apre una conversazione con chi quella musica la fa o la produce, e il format radio portava la stessa idea dove lo streaming non arriva.",
         },
         {
-          title: "Parlare alla filiera, non al pubblico",
-          body: "Crescere di volume sarebbe stato facile e inutile. Ho ripensato i contenuti per interlocutori professionali specifici, mirati alla filiera del settore: musicisti, produttori, etichette, promoter.",
+          title: "Parlare alla filiera",
+          body: "Far crescere i numeri sarebbe stato facile, e inutile. Ho riscritto i contenuti per chi lavora nel settore: musicisti, produttori, etichette, promoter.",
         },
       ],
       outcomes: [
-        "+100% follower: crescita organica, audience mirata (musicisti, etichette, promoter), non volume puro.",
-        "Evento live all'Arci Bellezza di Milano, dal booking alla comunicazione.",
-        "Booking e coordinamento concerti su tutto il roster, in autonomia.",
+        "Follower raddoppiati senza pubblicità, verso un pubblico di settore: musicisti, etichette, promoter.",
+        "La serata all'Arci Bellezza di Milano, dal booking alla comunicazione.",
+        "Booking e coordinamento dei concerti per tutto il roster, in autonomia.",
       ],
       learnings: [
-        "La ricerca qualitativa funziona anche fuori dal software: intervistare l'agenzia come si intervistano gli utenti ha reso le proposte pertinenti al primo colpo.",
-        "Il valore di un canale non si misura in follower ma in conversazioni aperte con le persone giuste.",
+        "La ricerca qualitativa funziona anche fuori dal software. Ho intervistato l'agenzia come si intervistano gli utenti, e le proposte sono andate a segno al primo colpo.",
+        "Un canale vale per le conversazioni che apre con le persone giuste. I follower vengono dopo.",
       ],
     },
     {
