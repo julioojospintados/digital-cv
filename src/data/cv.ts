@@ -224,7 +224,44 @@ export interface Project {
   automations?: Automation[];
   /** Frase d'apertura della tabella: è anche la sua didascalia accessibile. */
   automationsIntro?: string;
+  /** Grafici e diagrammi del case study, sotto il percorso. Solo dati
+   *  misurati: un numero stimato non entra in un grafico più di quanto
+   *  entri nel testo (identity/writing-style.md § Numeri). */
+  figures?: ProjectFigure[];
 }
+
+/** Un grafico di case study. I testi sono nella lingua del file. */
+export type ProjectFigure =
+  | {
+      /** Barre orizzontali a due segmenti, con il totale in coda. */
+      kind: "bars";
+      title: string;
+      caption: string;
+      source?: string;
+      /** Intestazioni: riga, segmento A, segmento B, totale. */
+      columns: [string, string, string, string];
+      rows: { label: string; a: number; b: number; note?: string }[];
+    }
+  | {
+      /** Imbuto: quanti elementi restano a ogni passaggio. */
+      kind: "funnel";
+      title: string;
+      caption: string;
+      steps: { value: number; label: string }[];
+    }
+  | {
+      /** Diagramma di flusso: molti a sinistra, pochi al centro, uno a destra. */
+      kind: "flow";
+      title: string;
+      caption: string;
+      /** Etichette delle tre colonne. */
+      columns: [string, string, string];
+      /** Quanti elementi a sinistra, e verso quale nodo centrale va ognuno. */
+      links: number[];
+      nodes: string[];
+      target: string;
+      targetNote: string;
+    };
 
 export interface Automation {
   /** Il nome con cui la si riconosce. */
@@ -2204,6 +2241,23 @@ export const cvData = {
       ],
       slug: "looking-for-flights",
       primaryMode: "tech",
+      figures: [
+        {
+          kind: "bars",
+          title: "Il volo più economico non vince",
+          caption:
+            "Quanto costano 21 giorni con i prezzi del 31 luglio. Il volo più basso era per Giacarta, ma in testa c'era l'India, dove a terra si spendevano 7 euro al giorno in meno.",
+          source: "Prezzi della ricerca del 31 luglio 2026, dal README del progetto.",
+          columns: ["Meta", "Volo andata e ritorno", "21 giorni a terra e spese fisse", "Totale"],
+          rows: [
+            { label: "India", a: 506.4, b: 420, note: "totale più basso" },
+            { label: "Indonesia", a: 468.8, b: 637, note: "volo più economico" },
+            { label: "Vietnam", a: 502.95, b: 627 },
+            { label: "Malesia", a: 512.53, b: 693 },
+            { label: "Thailandia", a: 546.43, b: 685 },
+          ],
+        },
+      ],
       role: "Ideatore e unico utente, progetto personale costruito con Claude Code (2026).",
       problem:
         "Per settembre 2026 avevo un budget fisso e una domanda precisa, dove posso andare e per quanti giorni senza sforarlo. Il volo più economico non bastava a rispondere, perché a terra ogni paese ha un costo diverso, e non avevo nessuna voglia di passare l'estate ad aprire Google Flights ogni mattina per scoprire che non era cambiato niente.",
@@ -2267,6 +2321,19 @@ export const cvData = {
       ],
       slug: "trip-runway",
       primaryMode: "tech",
+      figures: [
+        {
+          kind: "flow",
+          title: "Una chiamata per rotta",
+          caption:
+            "Sei utenti salvano tre rotte, e di notte partono tre chiamate all'API dei voli invece di sei. Utenti e rotte sono un esempio, il meccanismo è quello vero.",
+          columns: ["Utenti", "Rotte salvate", "API dei voli"],
+          links: [0, 0, 1, 1, 1, 2],
+          nodes: ["MXP → CMB", "MXP → DEL", "TRN → BKK"],
+          target: "API dei voli",
+          targetNote: "3 chiamate",
+        },
+      ],
       role: "Full-Stack Developer & Product Owner, progetto personale in sviluppo (2026).",
       problem:
         "looking-for-flights funzionava, ma lo usavo solo io. La domanda a cui risponde, quanti giorni posso permettermi con questo budget, se la fa chiunque viaggi con un tetto di spesa. Ho deciso di farne un prodotto, gratuito per chi prova il calcolo e pagato dall'affiliazione quando qualcuno prenota, senza riscrivere il motore che già funzionava.",
@@ -2324,6 +2391,19 @@ export const cvData = {
       ],
       slug: "product-discovery",
       primaryMode: "creative",
+      figures: [
+        {
+          kind: "funnel",
+          title: "Da 17 idee a una",
+          caption:
+            "Ogni passaggio ha tolto idee con un filtro diverso: prima la mappa dei bisogni, poi le interviste e i concorrenti, infine la matrice Valore/Sforzo.",
+          steps: [
+            { value: 17, label: "idee uscite dalla mappa dei bisogni" },
+            { value: 4, label: "rimaste dopo interviste e concorrenti" },
+            { value: 1, label: "in sviluppo" },
+          ],
+        },
+      ],
       role: "UX Researcher & Product Strategist, progetto in corso con un socio tecnico (2026).",
       problem:
         "Tante app risolvono problemi che nessuno sente, o provano a inventarne uno. Con il mio socio abbiamo fatto il contrario del solito: nessuna idea di partenza da difendere, prima lo studio dei comportamenti, delle ansie e dei desideri di tutti i giorni che i prodotti digitali non intercettano. Volevamo sapere se a qualcuno interessa un prodotto prima di scriverne una riga.",

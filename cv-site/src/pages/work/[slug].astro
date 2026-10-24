@@ -8,6 +8,7 @@ import Layout from "../../layouts/Layout.astro";
 // sito storico: vive in julioojospintados/old-digital-cv. La vetrina vera e'
 // /design-system.
 import WorkNav from "../../components/WorkNav.astro";
+import WorkFigure from "../../components/WorkFigure.astro";
 import { cvData } from "@cv-data";
 import { LOCALES, lensPath } from "../../lib/cv-i18n";
 import "../../styles/work-page.css";
@@ -199,6 +200,17 @@ const sigla = projectInitials(project.name);
           </div>
         </section>
       )
+    }
+
+    {
+      /* I grafici stanno fra il percorso e le decisioni: mostrano un dato del
+         progetto, e le decisioni che seguono spiegano cosa ne ho fatto. */
+      project.figures?.map((fig) => (
+        <section class="work-section">
+          <h2 class="work-section__title">{fig.title}</h2>
+          <WorkFigure fig={fig} locale="it" />
+        </section>
+      ))
     }
 
     {

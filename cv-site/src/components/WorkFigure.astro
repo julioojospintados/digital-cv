@@ -1,0 +1,166 @@
+---
+// Un grafico di case study, dai dati di cv.ts / cv.en.ts (`figures`).
+// Tre forme, scelte per il lavoro che fa il dato e non per varietà:
+//   bars   → una tabella vera, con le barre disegnate dentro le celle: chi
+//            legge con uno screen reader trova righe e colonne, chi guarda
+//            trova il confronto. Nessun doppione nascosto da tenere allineato.
+//   funnel → un elenco numerato: l'ordine è l'informazione.
+//   flow   → un diagramma; il disegno è aria-hidden e la didascalia dice in
+//            parole quello che mostra.
+// I testi visibili stanno nei colori del testo, mai in quello di una serie:
+// il colore dice a quale segmento appartiene una barra, l'etichetta lo ripete.
+import type { ProjectFigure } from "@cv-data";
+
+interface Props {
+  fig: ProjectFigure;
+  locale: "it" | "en";
+}
+const { fig, locale } = Astro.props;
+
+const euro = new Intl.NumberFormat(locale === "it" ? "it-IT" : "en-GB", {
+  style: "currency",
+  currency: "EUR",
+  maximumFractionDigits: 0,
+});
+
+// Barre: il totale più alto occupa il 70% della corsia, il resto serve al
+// numero in coda, che segue l'ultimo segmento e non esce dalla colonna.
+const maxTot = fig.kind === "bars" ? Math.max(...fig.rows.map((r) => r.a + r.b)) : 1;
+const pct = (v: number) => `${((v / maxTot) * 70).toFixed(2)}%`;
+
+const maxStep = fig.kind === "funnel" ? Math.max(...fig.steps.map((s) => s.value)) : 1;
+
+// Diagramma: sei righe a sinistra, i nodi al centro su due righe ciascuno.
+// Le linee stanno in un SVG senza proporzioni fisse (viewBox 100×60,
+// preserveAspectRatio none): si allungano con la colonna, e lo spessore
+// resta di 2px grazie a vector-effect.
+const flow =
+  fig.kind === "flow"
+    ? (() => {
+        const n = fig.links.length;
+        const rowH = 60 / n;
+        const nodeH = 60 / fig.nodes.length;
+        const userY = (i: number) => rowH * i + rowH / 2;
+        const nodeY = (j: number) => nodeH * j + nodeH / 2;
+        return {
+          left: fig.links.map(
+            (j, i) => `M10 ${userY(i)} C 25 ${userY(i)}, 25 ${nodeY(j)}, 42 ${nodeY(j)}`,
+          ),
+          right: fig.nodes.map((_, j) => `M42 ${nodeY(j)} C 60 ${nodeY(j)}, 64 30, 80 30`),
+          users: n,
+        };
+      })()
+    : null;
+---
+
+<figure class="work-fig">
+  {
+    fig.kind === "bars" && (
+      <>
+        <div class="work-fig__legend" aria-hidden="true">
+          <span>
+            <i class="work-fig__key work-fig__key--a" />
+            {fig.columns[1]}
+          </span>
+          <span>
+            <i class="work-fig__key work-fig__key--b" />
+            {fig.columns[2]}
+          </span>
+        </div>
+        <table class="work-fig__table">
+          <thead class="work-fig__sr">
+            <tr>
+              {fig.columns.map((c) => (
+                <th scope="col">{c}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {fig.rows.map((r) => (
+              <tr>
+                <th scope="row" class="work-fig__label">
+                  {r.label}
+                  {r.note && <span class="work-fig__note">{r.note}</span>}
+                </th>
+                <td class="work-fig__sr">{euro.format(r.a)}</td>
+                <td class="work-fig__sr">{euro.format(r.b)}</td>
+                <td class="work-fig__cell">
+                  <span class="work-fig__track">
+                    <span
+                      class="work-fig__seg work-fig__seg--a"
+                      aria-hidden="true"
+                      style={`inline-size: ${pct(r.a)}`}
+                    />
+                    <span
+                      class="work-fig__seg work-fig__seg--b"
+                      aria-hidden="true"
+                      style={`inline-size: ${pct(r.b)}`}
+                    />
+                    <span class="work-fig__total">{euro.format(r.a + r.b)}</span>
+                  </span>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </>
+    )
+  }
+
+  {
+    fig.kind === "funnel" && (
+      <ol class="work-fig__funnel">
+        {fig.steps.map((s, i) => (
+          <li
+            class:list={["work-fig__step", { "work-fig__step--last": i === fig.steps.length - 1 }]}
+          >
+            <span
+              class="work-fig__bar"
+              aria-hidden="true"
+              style={`inline-size: max(${((s.value / maxStep) * 45).toFixed(2)}%, var(--size-12))`}
+            />
+            <b class="work-fig__value">{s.value}</b>
+            <span class="work-fig__step-label">{s.label}</span>
+          </li>
+        ))}
+      </ol>
+    )
+  }
+
+  {
+    fig.kind === "flow" && flow && (
+      <div class="work-fig__flow" aria-hidden="true" style={`--flow-rows: ${flow.users}`}>
+        <svg class="work-fig__lines" viewBox="0 0 100 60" preserveAspectRatio="none">
+          {flow.left.map((d) => (
+            <path class="work-fig__line" d={d} />
+          ))}
+          {flow.right.map((d) => (
+            <path class="work-fig__line work-fig__line--out" d={d} />
+          ))}
+        </svg>
+        {fig.links.map((_, i) => (
+          <span class="work-fig__user" style={`grid-row: ${i + 1}`} />
+        ))}
+        {fig.nodes.map((n, j) => (
+          <span
+            class="work-fig__node"
+            style={`grid-row: ${j * (flow.users / fig.nodes.length) + 1} / span ${flow.users / fig.nodes.length}`}
+          >
+            {n}
+          </span>
+        ))}
+        <span class="work-fig__target">
+          <b>{fig.target}</b>
+          {fig.targetNote}
+        </span>
+        <span class="work-fig__col work-fig__col--1">{fig.columns[0]}</span>
+        <span class="work-fig__col work-fig__col--2">{fig.columns[1]}</span>
+      </div>
+    )
+  }
+
+  <figcaption class="work-fig__caption">
+    {fig.caption}
+    {fig.kind === "bars" && fig.source && <span class="work-fig__source">{fig.source}</span>}
+  </figcaption>
+</figure>

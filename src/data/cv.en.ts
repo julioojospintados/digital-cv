@@ -1778,6 +1778,28 @@ export const cvDataEn = {
       ],
       slug: "looking-for-flights",
       primaryMode: "tech",
+      figures: [
+        {
+          kind: "bars",
+          title: "The cheapest flight does not win",
+          caption:
+            "What 21 days cost with the prices of 31 July. The lowest flight was to Jakarta, but India came first, where a day on the ground cost 7 euros less.",
+          source: "Prices from the search of 31 July 2026, from the project README.",
+          columns: [
+            "Destination",
+            "Return flight",
+            "21 days on the ground and fixed costs",
+            "Total",
+          ],
+          rows: [
+            { label: "India", a: 506.4, b: 420, note: "lowest total" },
+            { label: "Indonesia", a: 468.8, b: 637, note: "cheapest flight" },
+            { label: "Vietnam", a: 502.95, b: 627 },
+            { label: "Malaysia", a: 512.53, b: 693 },
+            { label: "Thailand", a: 546.43, b: 685 },
+          ],
+        },
+      ],
       role: "Creator and only user, personal project built with Claude Code (2026).",
       problem:
         "For September 2026 I had a fixed budget and one precise question, where can I go and for how many days without going over it. The cheapest flight was not enough to answer it, because on the ground every country costs something different, and I had no wish to spend the summer opening Google Flights every morning to find out nothing had changed.",
@@ -1841,6 +1863,19 @@ export const cvDataEn = {
       ],
       slug: "trip-runway",
       primaryMode: "tech",
+      figures: [
+        {
+          kind: "flow",
+          title: "One call per route",
+          caption:
+            "Six users save three routes, and at night three calls go to the flights API instead of six. Users and routes are an example, the mechanism is the real one.",
+          columns: ["Users", "Saved routes", "Flights API"],
+          links: [0, 0, 1, 1, 1, 2],
+          nodes: ["MXP → CMB", "MXP → DEL", "TRN → BKK"],
+          target: "Flights API",
+          targetNote: "3 calls",
+        },
+      ],
       role: "Full-Stack Developer & Product Owner, personal project in development (2026).",
       problem:
         "looking-for-flights worked, but I was the only one using it. The question it answers, how many days can I afford on this budget, is one anybody asks when they travel with a spending cap. I decided to make it a product, free for whoever tries the calculation and paid by affiliate links when someone books, without rewriting the engine that already worked.",
@@ -1898,6 +1933,19 @@ export const cvDataEn = {
       ],
       slug: "product-discovery",
       primaryMode: "creative",
+      figures: [
+        {
+          kind: "funnel",
+          title: "From 17 ideas to one",
+          caption:
+            "Each step removed ideas with a different filter: first the map of needs, then the interviews and the competitors, finally the Value/Effort matrix.",
+          steps: [
+            { value: 17, label: "ideas out of the map of needs" },
+            { value: 4, label: "left after interviews and competitors" },
+            { value: 1, label: "in development" },
+          ],
+        },
+      ],
       role: "UX Researcher & Product Strategist, ongoing project with a technical partner (2026).",
       problem:
         "Plenty of apps solve problems nobody feels, or try to invent one. My partner and I did the opposite of the usual: no starting idea to defend, first the study of everyday behaviours, anxieties and wishes that digital products miss. We wanted to know whether anyone is interested in a product before writing a line of it.",

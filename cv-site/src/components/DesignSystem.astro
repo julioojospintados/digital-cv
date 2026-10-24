@@ -49,6 +49,7 @@ import "../styles/lab-home.css";
 import "../styles/lab-cv.css";
 import "../styles/memory-drawer.css";
 import "../styles/work-page.css";
+import WorkFigure from "./WorkFigure.astro";
 import "../styles/privacy-page.css";
 import "../styles/not-found.css";
 import "../styles/design-system.css";
@@ -670,6 +671,7 @@ const NAV = [
       { id: "work-sezione", label: it ? "Sezione di Case study" : "Case-study section" },
       { id: "work-decisione", label: it ? "Decisione di progetto" : "Project decision" },
       { id: "work-automazioni", label: it ? "Tabella delle automazioni" : "Automations table" },
+      { id: "work-grafico", label: it ? "Grafico di case study" : "Case-study chart" },
       { id: "work-viaggio", label: it ? "Il viaggio" : "The journey" },
     ],
   },
@@ -796,6 +798,7 @@ const CATEGORIES = [
       "ingresso-email",
       "work-decisione",
       "work-automazioni",
+      "work-grafico",
       "work-learnings",
     ],
   },
@@ -5825,6 +5828,141 @@ const NAV_LABEL = new Map(NAV.flatMap((g) => g.items.map((x) => [x.id, x.label] 
                 it
                   ? "Tabella vera, con <caption> visibile come nome accessibile e intestazioni di riga e di colonna. Le righe AI si riconoscono dal badge, non solo dal filo d'accento (1.4.1). Su telefono la tabella diventa un elenco: le intestazioni di colonna spariscono alla vista ma restano per i lettori di schermo."
                   : "A real table, with a visible <caption> as its accessible name and row and column headers. AI rows are told apart by the badge, not only by the accent stripe (1.4.1). On phones the table becomes a list: the column headers disappear from view but stay for screen readers."
+              }
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="ds-panel"
+        data-ds-accent
+        id="work-grafico"
+        data-ds-panel="work-grafico"
+        aria-labelledby="work-grafico-t"
+      >
+        <div class="ds-panel__head">
+          <h2 class="ds-section__title" id="work-grafico-t">
+            {it ? "Grafico di case study" : "Case-study chart"}
+          </h2>
+          <span class="ds-panel__group">{t.secWork}<span class="ds-origin">work-*</span></span>
+        </div>
+
+        <div class="ds-stage">
+          <div data-ds-snippet>
+            <WorkFigure
+              locale={it ? "it" : "en"}
+              fig={{
+                kind: "bars",
+                title: "",
+                caption: it
+                  ? "Due mete dalla ricerca del 31 luglio: il volo più basso non dà il totale più basso."
+                  : "Two destinations from the search of 31 July: the lowest flight does not give the lowest total.",
+                columns: it
+                  ? ["Meta", "Volo andata e ritorno", "21 giorni a terra e spese fisse", "Totale"]
+                  : [
+                      "Destination",
+                      "Return flight",
+                      "21 days on the ground and fixed costs",
+                      "Total",
+                    ],
+                rows: [
+                  {
+                    label: "India",
+                    a: 506.4,
+                    b: 420,
+                    note: it ? "totale più basso" : "lowest total",
+                  },
+                  {
+                    label: "Indonesia",
+                    a: 468.8,
+                    b: 637,
+                    note: it ? "volo più economico" : "cheapest flight",
+                  },
+                ],
+              }}
+            />
+          </div>
+          <div style="margin-top: var(--size-32)">
+            <WorkFigure
+              locale={it ? "it" : "en"}
+              fig={{
+                kind: "funnel",
+                title: "",
+                caption: it
+                  ? "L'imbuto: un elenco numerato, l'ordine è l'informazione."
+                  : "The funnel: a numbered list, the order is the information.",
+                steps: [
+                  { value: 17, label: it ? "idee" : "ideas" },
+                  { value: 4, label: it ? "rimaste" : "left" },
+                  { value: 1, label: it ? "in sviluppo" : "in development" },
+                ],
+              }}
+            />
+          </div>
+          <div style="margin-top: var(--size-32)">
+            <WorkFigure
+              locale={it ? "it" : "en"}
+              fig={{
+                kind: "flow",
+                title: "",
+                caption: it
+                  ? "Il diagramma: il disegno è nascosto agli screen reader, la didascalia dice cosa mostra."
+                  : "The diagram: the drawing is hidden from screen readers, the caption says what it shows.",
+                columns: it
+                  ? ["Utenti", "Rotte salvate", "API dei voli"]
+                  : ["Users", "Saved routes", "Flights API"],
+                links: [0, 0, 1, 1],
+                nodes: ["MXP → CMB", "TRN → BKK"],
+                target: it ? "API dei voli" : "Flights API",
+                targetNote: it ? "2 chiamate" : "2 calls",
+              }}
+            />
+          </div>
+        </div>
+        <div class="ds-spec">
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specClass}</span>
+            <p class="ds-spec__v">
+              <code
+                >work-fig · work-fig__legend · work-fig__key · work-fig__key--a · work-fig__key--b ·
+                work-fig__table · work-fig__label · work-fig__note · work-fig__cell ·
+                work-fig__track · work-fig__seg · work-fig__seg--a · work-fig__seg--b ·
+                work-fig__total · work-fig__sr · work-fig__caption · work-fig__source ·
+                work-fig__funnel · work-fig__step · work-fig__step--last · work-fig__bar ·
+                work-fig__value · work-fig__step-label · work-fig__flow · work-fig__lines ·
+                work-fig__line · work-fig__line--out · work-fig__user · work-fig__node ·
+                work-fig__target · work-fig__col · work-fig__col--1 · work-fig__col--2</code
+              >
+            </p>
+          </div>
+          <div class="ds-spec__row">
+            <span class="ds-spec__k">{t.specUse}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "In un case study, fra il percorso e le decisioni, quando un dato misurato mostra qualcosa che il testo dice solo a parole. Dati in cv.ts e cv.en.ts, campo figures: barre (due segmenti e il totale), imbuto, flusso."
+                  : "In a case study, between the journey and the decisions, when a measured figure shows something the text can only say in words. Data in cv.ts and cv.en.ts, field figures: bars (two segments and the total), funnel, flow."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--dont">
+            <span class="ds-spec__k">{t.specDont}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Non metterci un numero stimato: vale la regola del testo, un numero si scrive solo se uno strumento l'ha misurato. Non farne uno per tre punti che una frase dice meglio, ed è per questo che lo storico dei prezzi dello Sri Lanka (quattro punti, 25 euro) non c'è. Mai due assi, mai un colore che porta da solo l'informazione."
+                  : "Do not put an estimated number in it: the text rule applies, a number is written only if a tool measured it. Do not make one for three points a sentence says better, which is why the Sri Lanka price history (four points, 25 euros) is not there. Never two axes, never a colour that carries the information alone."
+              }
+            </p>
+          </div>
+          <div class="ds-spec__row ds-spec__row--wide">
+            <span class="ds-spec__k">{t.specA11y}</span>
+            <p class="ds-spec__v">
+              {
+                it
+                  ? "Le barre sono una tabella vera: lo screen reader legge meta, volo, giorni a terra e totale, con le intestazioni nascoste a vista ma non all'ascolto. L'imbuto è un elenco numerato. Il diagramma è aria-hidden, e la didascalia lo descrive per intero, compreso il fatto che utenti e rotte sono un esempio. Arancione da testo e verde tenue si separano anche per i daltonismi più comuni (ΔE 9,4 protan), e accanto a ogni colore c'è un'etichetta. I testi stanno nei colori del testo, mai in quello di una serie."
+                  : "The bars are a real table: a screen reader reads destination, flight, days on the ground and total, with the headers hidden from sight but not from hearing. The funnel is a numbered list. The diagram is aria-hidden, and the caption describes it in full, including the fact that users and routes are an example. Text orange and quiet green stay apart for the most common colour blindness too (ΔE 9.4 protan), and every colour has a label next to it. Text wears text colours, never a series colour."
               }
             </p>
           </div>
