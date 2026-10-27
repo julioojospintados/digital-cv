@@ -1,5 +1,77 @@
 # Digital CV — Claude Code Instructions
 
+## ⚠️ RAMO DI PROVA `test/new-layout` — leggere prima di tutto il resto
+
+Questo ramo serve a provare un design tutto nuovo per il sito (Giulio,
+2026-10-27). **Non si fonde mai su `main` così com'è**: porterebbe con sé
+queste regole sospese. Se la prova convince, il sistema nuovo arriva su `main`
+per intero, con le sue regole scritte, in un lavoro a parte.
+
+Qui sotto, quando una regola del resto di questo file, di `AGENTS.md` o di una
+skill contraddice questa sezione, **vince questa sezione**.
+
+### Sospeso su questo ramo
+
+- La skill `design-system`, `cv-site/DESIGN.md` e la parte visiva di
+  `knolling-cv`: fondo ottanio, knolling, Square/Glow, i tre accenti. Si
+  leggono solo per sapere da cosa ci si allontana, mai per seguirli. Niente vie
+  di mezzo fra il look vecchio e il nuovo.
+- La regola «ogni componente sta in vetrina» e `/design-system`: la vetrina
+  non si aggiorna.
+- La parità IT ↔ EN: **la prova è solo in italiano**. Le pagine `/en` restano
+  col design attuale e non si toccano. Il guscio IT (`index.astro`,
+  `[lens].astro`, `work/`) può puntare a un componente nuovo mentre quello EN
+  resta sul vecchio: è l'unico caso in cui un guscio diverge, e solo qui.
+- `analisi.md`, `qa:units`, `QA=1` sul push. Un push su questo ramo è un
+  `git push` normale (lint e format), mai `QA=1`: la vetrina e la parità
+  fallirebbero per costruzione.
+- La regola sugli screenshot si allenta: per giudicare un design servono.
+  Si fanno a giro di modifiche, non dopo ogni ritocco.
+
+### Resta valido
+
+- **Dati solo da `src/data/cv.ts`.** Niente numeri, clienti, testimonianze o
+  risultati inventati. I testi sono quelli che ci sono già (`cv.ts`,
+  `lab-copy.ts`, `cv-i18n.ts`); se il design chiede un testo nuovo, si scrive
+  con `identity/writing-style.md` e si segnala a Giulio come bozza.
+- Vocabolario e posizionamento di `knolling-cv` e `identity`.
+- Le lenti `/design` `/tech` `/ai` restano come **struttura dei contenuti**:
+  il design nuovo decide come mostrarle, non se esistono. Toglierle è una
+  decisione di posizionamento, da chiedere a Giulio.
+- Non si tocca: `src/` (server MCP e API), `cv-site/src/pages/api/`,
+  `cv-site/src/pages/tools/`, i generatori di PDF.
+- **Non si cancella il vecchio.** I componenti e i fogli nuovi stanno in
+  `cv-site/src/components/prova/` e `cv-site/src/styles/prova/`; i vecchi
+  restano, perché li usano ancora le pagine EN e `/design-system`.
+- Verifica dopo una modifica: `npm run lint && npm run format:check && npm
+  test`, poi `cd cv-site && npx astro check && npx astro build`.
+- Leggibilità prima dell'effetto: chi apre il sito è spesso un recruiter su un
+  portatile da 1366×610 (PostHog). L'effetto non deve nascondere il contenuto,
+  e il primo schermo deve dire chi è Giulio.
+
+### Skill e agenti per la prova, in quest'ordine
+
+1. `taste` sui siti di riferimento (sotto), con il Playwright MCP di
+   `.mcp.json`. I file che produce vanno in `prova/riferimenti/`, non nella
+   root.
+2. `hallmark`: `study` sui riferimenti, poi la direzione e il design. Vale la
+   conferma di Giulio a rifare tutto lo strato visivo, entro i confini sopra.
+3. `impeccable` (`critique`, `audit`) e l'agente `ux-reviewer` per criticare.
+   Chi ha costruito il design non lo giudica da solo.
+
+### Riferimenti scelti da Giulio (da Awwwards, categoria portfolio)
+
+- https://www.sebg.ch/ — l'idea di un personaggio che accompagna e spiega.
+  Per Giulio potrebbe essere GO; è la parte più costosa (animazione vera), va
+  dopo la direzione visiva.
+- https://ingrassiadaniel.it/ — impatto.
+- https://vanessacosta.com.br/
+- https://david-estrada.dev/
+- Escluso: `vantra-studio.webflow.io`, demo di un template Webflow in vendita
+  con uno studio inventato. `hallmark study` rifiuta i template marketplace.
+
+---
+
 @AGENTS.md
 
 ---

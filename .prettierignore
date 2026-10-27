@@ -22,6 +22,8 @@ generated/
 .claude/skills/ponytail/
 .claude/skills/ponytail-review/
 .claude/skills/ponytail-audit/
+.claude/skills/hallmark/
+.claude/skills/taste/
 
 # File di macchina: gitignorato e riscritto da Claude Code ogni volta che
 # concedi un permesso. Non è sorgente del progetto, ma finiva sotto
