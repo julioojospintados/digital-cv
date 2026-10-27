@@ -4,7 +4,7 @@ Giulio Occhipinti, 2026-10-27. Ramo `test/new-layout`.
 
 ## Come è stata fatta
 
-- **33 portfolio** dalla categoria Portfolio di Awwwards (prima e seconda pagina
+- **36 portfolio** dalla categoria Portfolio di Awwwards (prima e seconda pagina
   delle nomination, più i Siti del Giorno recenti). Soprattutto persone singole
   con un profilo vicino al mio: product designer, design engineer, AI product
   manager, sviluppatori creativi. Qualche studio, per i pezzi utili.
@@ -16,14 +16,13 @@ Giulio Occhipinti, 2026-10-27. Ramo `test/new-layout`.
   primo schermo a ogni istante, presenza di email, CV e LinkedIn.
 - Limiti: il WebGL gira in software, quindi qualche effetto 3D è più lento che
   su un computer vero. Un sito (seitaro) non ha mostrato niente in headless ed è
-  escluso; altri quattro (allanleone, urbik, jesperlandberg, emotion-agency)
-  andavano in timeout. Le nomination di Awwwards misurano il giudizio di
+  escluso, emotion-agency è andato sempre in timeout. Le nomination di Awwwards misurano il giudizio di
   designer, **non** quanto un sito fa assumere chi lo possiede: nessuno di
   questi dati dice chi ha trovato lavoro.
 
 ## Il dato che pesa più di tutti
 
-**17 siti su 33 non dicono chi sei né cosa fai nei primi 3 secondi**: un
+**19 siti su 36 non dicono chi sei né cosa fai nei primi 3 secondi**: un
 contatore di caricamento (0→100), uno schermo vuoto, un «click to enter», una
 finestra sul suono. Fra questi c'è ingrassiadaniel.it: a 1366×610 restano
 6 secondi di schermo scuro prima delle particelle, e il ruolo è scritto in un
@@ -239,7 +238,9 @@ traduce per me, quanto costa.
 - **Il telefono bloccato** («9 years of work deserves more screen space»,
   jithinrp.com; nesilnoble.com). Chi arriva da LinkedIn arriva spesso dal
   telefono.
-- **Il peso**: ingrassiadaniel.it 44 MB, mathiasadolfsson.dev e
+- **Il peso**: allanleone.com 108 MB (6 secondi di caricamento, Senior
+  Product Designer: il profilo più vicino a un recruiter è anche il più
+  lento), jesperlandberg.com 36 MB, ingrassiadaniel.it 44 MB, mathiasadolfsson.dev e
   brandonyasin.com 26 MB. samgoddard.co.uk fa un ottimo primo schermo con
   90 KB.
 - **Il reduced motion ignorato**: quasi tutti mostrano lo stesso caricamento.
