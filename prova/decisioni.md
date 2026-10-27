@@ -32,3 +32,15 @@ su 5 dicano ruolo e disponibilità senza aiuto, e GO non abbassi il punteggio.
   ha.
 - **«Chiedi a GO»: domande da cliccare**, nessun campo di testo.
 - **Tempi di risposta** nella chiusura: testo nuovo, da confermare con Giulio.
+
+## 2026-10-27 — tono e primo schermo
+
+- **Tono: editoriale chiaro**, con WCAG 2.2 AA come vincolo. Carta chiara,
+  inchiostro scuro, un solo accento vermiglio. Contrasti misurati: testo
+  16,2:1, testo secondario 8,4:1, accento 6,5:1, testo del bottone 6,7:1.
+- **Primo schermo sulla home «/»** (solo IT): `components/prova/ProvaHome.astro`.
+  Nome, ruolo a rotazione, la frase di `cv.ts` («So costruire quello che
+  disegno…»), le aziende, «Disponibile · Torino», Scarica il CV / Scrivimi /
+  LinkedIn, i tre ruoli come link alle lenti. Nessun caricamento.
+- **Testi nuovi in bozza** (`lib/prova-copy.ts`): «Disponibile», «Scarica il
+  CV», «Scrivimi», «Leggi il CV come», «Case study».

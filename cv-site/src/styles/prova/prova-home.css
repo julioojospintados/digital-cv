@@ -1,0 +1,235 @@
+/* Hallmark · macrostructure: Letter (editorial, typographic hero) · tone: editorial chiaro · anchor hue: 35 (vermiglio)
+ * theme: custom · paper oklch(97% 0.012 85) · accent oklch(48% 0.17 35) · Fraunces + Instrument Sans
+ * axes: light / high-contrast-serif / warm · enrichment: none (typography only)
+ * Ramo di prova test/new-layout. Contrasti: testo su carta ≥ 4.5:1, verificati in qa.
+ */
+
+:root {
+  --ph-paper: oklch(97% 0.012 85);
+  --ph-paper-2: oklch(93% 0.014 85);
+  --ph-ink: oklch(21% 0.02 260);
+  --ph-ink-2: oklch(40% 0.02 260);
+  --ph-rule: oklch(82% 0.015 85);
+  --ph-accent: oklch(48% 0.17 35);
+  --ph-accent-ink: oklch(98% 0.01 85);
+  --ph-ok: oklch(52% 0.13 150);
+  --ph-focus: oklch(48% 0.17 35);
+
+  --ph-font-display: "Fraunces", Georgia, serif;
+  --ph-font-body: "Instrument Sans", system-ui, sans-serif;
+
+  --ph-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ph-dur: 220ms;
+}
+
+html:has(.ph),
+body:has(.ph) {
+  background-color: var(--ph-paper);
+  color: var(--ph-ink);
+  overflow-x: clip;
+}
+
+.ph {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  padding: var(--size-16) clamp(var(--size-16), 5vw, var(--size-80));
+  font-family: var(--ph-font-body);
+  background: var(--ph-paper);
+  color: var(--ph-ink);
+}
+
+/* ── Barra ─────────────────────────────────────────────────────────── */
+.ph-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--size-8) var(--size-24);
+  padding-bottom: var(--size-12);
+  border-bottom: var(--line-1) solid var(--ph-rule);
+  font-size: var(--fs-14, 0.875rem);
+}
+.ph-bar__name {
+  font-weight: 600;
+}
+.ph-status {
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--size-8);
+  padding: var(--size-4) var(--size-12);
+  border: var(--line-1) solid var(--ph-rule);
+  border-radius: 999rem;
+  background: var(--ph-paper-2);
+}
+.ph-status__dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 50%;
+  background: var(--ph-ok);
+}
+.ph-bar__link {
+  margin-left: auto;
+  color: var(--ph-ink);
+  text-underline-offset: var(--line-3);
+}
+
+/* ── Primo schermo ─────────────────────────────────────────────────── */
+.ph-hero {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: clamp(var(--size-12), 2.4vh, var(--size-24));
+  max-width: 62rem;
+  padding-block: clamp(var(--size-16), 4vh, var(--size-48));
+}
+
+.ph-title {
+  margin: 0;
+  font-family: var(--ph-font-display);
+  font-weight: 600;
+  font-style: normal;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  display: flex;
+  flex-direction: column;
+  gap: var(--size-8);
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.ph-title__name {
+  font-size: clamp(2.5rem, min(7vw, 11vh), 5.5rem);
+}
+.ph-title__role {
+  font-size: clamp(1.5rem, min(3.4vw, 5.5vh), 2.75rem);
+  font-weight: 400;
+  color: var(--ph-accent);
+}
+.ph-rotator {
+  display: inline-block;
+  transition:
+    opacity var(--ph-dur) var(--ph-ease-out),
+    transform var(--ph-dur) var(--ph-ease-out);
+}
+.ph-rotator.is-out {
+  opacity: 0;
+  transform: translateY(0.25em);
+}
+
+.ph-statement {
+  margin: 0;
+  max-width: 34ch;
+  font-family: var(--ph-font-display);
+  font-size: clamp(1.25rem, min(2.4vw, 3.8vh), 1.875rem);
+  line-height: 1.25;
+}
+
+.ph-proof {
+  margin: 0;
+  max-width: 60ch;
+  font-size: var(--fs-16, 1rem);
+  line-height: 1.5;
+  color: var(--ph-ink-2);
+}
+.ph-proof strong {
+  color: var(--ph-ink);
+  font-weight: 600;
+}
+/* La virgola fra le aziende sta nel CSS: nel markup Prettier spezzerebbe la
+   riga e lascerebbe uno spazio prima della virgola. */
+.ph-co:not(:last-of-type)::after {
+  content: ", ";
+  font-weight: 400;
+  color: var(--ph-ink-2);
+}
+
+/* ── Azioni ────────────────────────────────────────────────────────── */
+.ph-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--size-12);
+}
+.ph-btn {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  padding: 0 var(--size-20);
+  border: var(--line-1) solid var(--ph-ink);
+  border-radius: 999rem;
+  color: var(--ph-ink);
+  background: transparent;
+  font-weight: 500;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color var(--ph-dur) var(--ph-ease-out);
+}
+.ph-btn:hover {
+  background: var(--ph-paper-2);
+}
+.ph-btn:active {
+  transform: translateY(1px);
+}
+.ph-btn--primary {
+  background: var(--ph-accent);
+  border-color: var(--ph-accent);
+  color: var(--ph-accent-ink);
+}
+.ph-btn--primary:hover {
+  background: var(--ph-ink);
+  border-color: var(--ph-ink);
+}
+.ph a:focus-visible {
+  outline: var(--focus-ring, 2px) solid var(--ph-focus);
+  outline-offset: var(--focus-offset, 3px);
+}
+
+/* ── Lenti ─────────────────────────────────────────────────────────── */
+.ph-lenses {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--size-8) var(--size-16);
+  font-size: var(--fs-14, 0.875rem);
+  color: var(--ph-ink-2);
+}
+.ph-lenses ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--size-4) var(--size-16);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.ph-lenses a {
+  display: inline-block;
+  padding-block: var(--size-8);
+  color: var(--ph-ink);
+  font-weight: 500;
+  text-underline-offset: var(--line-3);
+}
+
+.ph-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ph-rotator,
+  .ph-btn {
+    transition: none;
+  }
+}
+
+@media (max-width: 40rem) {
+  .ph-bar__link {
+    margin-left: 0;
+  }
+  .ph-hero {
+    justify-content: flex-start;
+  }
+}

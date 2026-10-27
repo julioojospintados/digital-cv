@@ -1,11 +1,11 @@
 ---
 // "/" — l'ingresso, in italiano.
 //
-// Il corpo sta in components/HomeEntryPage.astro, che rende **anche**
-// l'inglese (en/index.astro). Stessa scelta della pagina CV: una sola
-// implementazione per due lingue, perché la divergenza IT/EN è il difetto
-// che questo repo paga più spesso (AGENTS.md § "IT ↔ EN parity").
-import HomeEntryPage from "../components/HomeEntryPage.astro";
+// RAMO DI PROVA `test/new-layout`: qui il guscio IT punta al redesign
+// (components/prova/ProvaHome.astro), mentre en/index.astro resta su
+// HomeEntryPage. È l'unica divergenza IT/EN ammessa, e solo su questo ramo
+// (vedi la sezione in testa a CLAUDE.md). Non va portata su main così.
+import ProvaHome from "../components/prova/ProvaHome.astro";
 ---
 
-<HomeEntryPage locale="it" />
+<ProvaHome />

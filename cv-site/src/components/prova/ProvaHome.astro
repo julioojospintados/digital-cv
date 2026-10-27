@@ -1,0 +1,111 @@
+---
+// "/" sul ramo di prova `test/new-layout`: il primo schermo del redesign.
+//
+// Lettore: chi assume, spesso su un portatile da 1366×610 o dal telefono.
+// Nel primo schermo, senza attese: nome, ruolo, la frase di posizionamento,
+// le aziende, la disponibilità e le tre azioni. Il ruolo ruota fra i tre
+// delle lenti, ma l'HTML statico contiene già il primo: senza JS e con
+// reduced motion resta quello, e un lettore di schermo sente tutti e tre.
+import Layout from "../../layouts/Layout.astro";
+import { cvData } from "@cv-data";
+import { lensPath } from "../../lib/cv-i18n";
+import { PROVA_HOME as t, PROVA_ROLES } from "../../lib/prova-copy";
+import "../../styles/prova/prova-home.css";
+
+const { name, location } = cvData.personal;
+const mail = cvData.social.find((s) => s.platform === "Email")?.url ?? "";
+const linkedin = cvData.social.find((s) => s.platform === "LinkedIn")?.url ?? "";
+const roles = PROVA_ROLES.map((r) => ({ ...r, href: lensPath(r.mode, "it") }));
+---
+
+<Layout
+  title={`${name} — ${PROVA_ROLES.map((r) => r.label).join(" · ")}`}
+  description={t.statement}
+  mode="creative"
+  lang="it"
+>
+  <link slot="head" rel="preconnect" href="https://fonts.googleapis.com" />
+  <link slot="head" rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    slot="head"
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Instrument+Sans:wght@400;500;600&display=swap"
+  />
+
+  <main class="ph">
+    <header class="ph-bar">
+      <span class="ph-bar__name">{name}</span>
+      <p class="ph-status">
+        <span class="ph-status__dot" aria-hidden="true"></span>
+        {t.available} · {location}
+      </p>
+      <a class="ph-bar__link" href="/work">{t.work}</a>
+    </header>
+
+    <section class="ph-hero" aria-labelledby="ph-title">
+      <h1 id="ph-title" class="ph-title">
+        <span class="ph-title__name">{name}</span>
+        <span class="ph-title__role">
+          <span
+            class="ph-rotator"
+            aria-hidden="true"
+            data-roles={JSON.stringify(PROVA_ROLES.map((r) => r.label))}
+            >{PROVA_ROLES[0].label}</span
+          >
+          <span class="ph-sr">{t.rolesSr}</span>
+        </span>
+      </h1>
+
+      <p class="ph-statement">{t.statement}</p>
+
+      <p class="ph-proof">
+        {t.proofEnterprise}: {t.proofCompanies.map((c) => <strong class="ph-co">{c}</strong>)}. Con {
+          t.proofCerts
+        }.
+      </p>
+
+      <div class="ph-actions">
+        <a class="ph-btn ph-btn--primary" href="/cv/Giulio_Occhipinti_CV.pdf" download>{t.ctaCv}</a>
+        <a class="ph-btn" href={mail}>{t.ctaMail}</a>
+        <a class="ph-btn" href={linkedin} rel="noopener" target="_blank">{t.ctaLinkedin}</a>
+      </div>
+
+      <nav class="ph-lenses" aria-label={t.lensIntro}>
+        <span class="ph-lenses__intro">{t.lensIntro}</span>
+        <ul>
+          {
+            roles.map((r) => (
+              <li>
+                <a href={r.href}>{r.label}</a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+    </section>
+  </main>
+</Layout>
+
+<script>
+  // La rotazione del ruolo. Parte solo se l'utente non chiede movimento
+  // ridotto, si ferma col mouse sopra o col focus dentro il titolo.
+  const el = document.querySelector<HTMLElement>(".ph-rotator");
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+  if (el && !reduce.matches) {
+    const roles: string[] = JSON.parse(el.dataset.roles ?? "[]");
+    const hero = el.closest(".ph-title");
+    let i = 0;
+    let paused = false;
+    hero?.addEventListener("pointerenter", () => (paused = true));
+    hero?.addEventListener("pointerleave", () => (paused = false));
+    window.setInterval(() => {
+      if (paused || document.hidden || roles.length < 2) return;
+      el.classList.add("is-out");
+      window.setTimeout(() => {
+        i = (i + 1) % roles.length;
+        el.textContent = roles[i];
+        el.classList.remove("is-out");
+      }, 220);
+    }, 2600);
+  }
+</script>
