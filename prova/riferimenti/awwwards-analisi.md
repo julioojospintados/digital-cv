@@ -284,3 +284,52 @@ reduced motion con lo stato finale, telefono completo, un budget di peso.
 
 Le schermate di ogni sito sono fuori dal repository (il repo è pubblico e non
 sono nostre).
+
+## Classifica per l'obiettivo (2026-10-27)
+
+Voto su 10: chiarezza nei primi 3 secondi (3), prova di competenza (3), calore
+e memorabilità (2), affinità con il profilo di Giulio (2), con penalità per
+caricamenti, cancelli e telefono bloccato. Lettore: recruiter o responsabile
+italiano, spesso da telefono via LinkedIn.
+
+| # | Sito | Voto | Da prendere |
+|---|---|---|---|
+| 1 | jithinrp.com | 9 | Frase con il risultato, ruolo/durata/strumenti per progetto, chiusura che chiede |
+| 2 | sebg.ch | 9 | Personaggio guida (GO) |
+| 3 | gianlucaboccia.me | 8 | Carriera come linea sola, racconto onesto |
+| 4 | sankar.work | 8 | «Chiedi al gemello», disponibilità, «cosa ti porta qui» |
+| 5 | samgoddard.co.uk | 8 | Ruolo e missione in una frase, 90 KB |
+| 6 | francescanoemimarconi.it | 7 | Mappa delle esperienze, guida allo scroll |
+| 7 | raomuhammadhamza.tech | 7 | Progetti in quattro voci |
+| 8 | nesilnoble.com | 7 | «Open to roles» fisso, designer che sviluppa |
+| 9 | david-estrada.dev | 7 | Una persona sola, tempi di risposta |
+| 10 | vanessacosta.com.br | 6 | Titoli con l'esito, testimonianze |
+| 11 | mikewilcockdesign.com | 6 | Per chi lavora, frase che si riempie |
+| 12 | stefanobg.com | 6 | Ruolo a rotazione |
+| 13 | dejiajetomobi.com | 6 | Tutto nel primo schermo |
+| 14 | dopaminestudio.io | 6 | «Ask me anything» |
+| 15 | shelbykho.com | 6 | Disponibilità in barra, mascotte |
+| 16 | anthracitestudio.be | 5 | Frase netta |
+| 17 | kigo.studio | 5 | Servizi a rotazione |
+| 18 | two26.studio | 5 | Testo che si riempie |
+| 19 | huyml.co | 5 | Rivelazione del nome |
+| 20 | giordanobetti.com | 4 | Ruolo per ogni lavoro |
+| 21 | carterogunsola.com | 4 | Presenza dal vivo |
+| 22 | righthemisphere.studio | 4 | Tipografia cinetica |
+| 23 | mariavasilyeva.com | 4 | Progetti su timeline |
+| 24 | a24.raviklaassens.com | 4 | Oggetti fisici |
+| 25 | zarcerog.com | 4 | Metafora memorabile |
+| 26 | ingrassiadaniel.it | 3 | Ritratto a particelle come momento |
+| 27 | allanleone.com | 3 | Griglia della versione ridotta |
+| 28 | brandonyasin.com | 3 | — |
+| 29 | mathiasadolfsson.dev | 3 | — |
+| 30 | jesperlandberg.com | 3 | — |
+| 31 | houmahani.com | 3 | — |
+| 32 | cagdascecen.com | 2 | — |
+| 33 | tommybiglow.com | 2 | — |
+| 34 | format.obys.agency | 2 | — |
+| 35 | aengel.io | 1 | — |
+
+Base consigliata: i primi cinque. In Italia nomi di aziende e certificazioni
+(Intesa Sanpaolo, Aruba, Rai Pubblicità, IBM) pesano più che altrove (effetto
+alone): vanno nel primo schermo o subito sotto.
