@@ -44,3 +44,18 @@ su 5 dicano ruolo e disponibilità senza aiuto, e GO non abbassi il punteggio.
   LinkedIn, i tre ruoli come link alle lenti. Nessun caricamento.
 - **Testi nuovi in bozza** (`lib/prova-copy.ts`): «Disponibile», «Scarica il
   CV», «Scrivimi», «Leggi il CV come», «Case study».
+
+## 2026-10-27 — dopo la review UX e la critica di design
+
+- **Rotazione del ruolo: resta**, con un bottone «Tutti i ruoli» che la ferma
+  e li mostra insieme (WCAG 2.2.2). Si ferma anche col mouse sopra; un lettore
+  di schermo sente sempre i tre ruoli.
+- **GO provvisorio a destra** nel primo schermo (sagoma SVG), sotto i bottoni
+  su telefono.
+- **«Disponibile» tolto**: non serve.
+- **«Intesa San Paolo» resta com'è** in `cv.ts`.
+- Correzioni della review: cursore di sistema al posto di quello crema
+  (invisibile sulla carta chiara), link di salto funzionante, bersagli da
+  44px su telefono, niente preload dei font vecchi (prop
+  `preloadLegacyFonts` del Layout, default invariato per le altre pagine),
+  nome una volta sola, bottoni e lenti in colonna su telefono.

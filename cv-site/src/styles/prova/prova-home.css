@@ -1,7 +1,7 @@
-/* Hallmark · macrostructure: Letter (editorial, typographic hero) · tone: editorial chiaro · anchor hue: 35 (vermiglio)
+/* Hallmark · macrostructure: Letter (editorial, typographic hero + figura) · tone: editoriale chiaro · anchor hue: 35 (vermiglio)
  * theme: custom · paper oklch(97% 0.012 85) · accent oklch(48% 0.17 35) · Fraunces + Instrument Sans
- * axes: light / high-contrast-serif / warm · enrichment: none (typography only)
- * Ramo di prova test/new-layout. Contrasti: testo su carta ≥ 4.5:1, verificati in qa.
+ * axes: light / high-contrast-serif / warm · enrichment: Tier B hand-built SVG (GO provvisorio)
+ * Ramo di prova test/new-layout. Contrasti misurati: testo 16,2:1, secondario 8,4:1, accento 6,5:1.
  */
 
 :root {
@@ -12,7 +12,6 @@
   --ph-rule: oklch(82% 0.015 85);
   --ph-accent: oklch(48% 0.17 35);
   --ph-accent-ink: oklch(98% 0.01 85);
-  --ph-ok: oklch(52% 0.13 150);
   --ph-focus: oklch(48% 0.17 35);
 
   --ph-font-display: "Fraunces", Georgia, serif;
@@ -20,6 +19,7 @@
 
   --ph-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ph-dur: 220ms;
+  --ph-hit: 2.75rem;
 }
 
 html:has(.ph),
@@ -29,11 +29,25 @@ body:has(.ph) {
   overflow-x: clip;
 }
 
+/* Il cursore personalizzato del Layout è color crema: sulla carta chiara
+   sparisce (1,00:1, review UX del 2026-10-27). Qui torna quello di sistema. */
+html:has(.ph) * {
+  cursor: auto !important;
+}
+html:has(.ph) a,
+html:has(.ph) button {
+  cursor: pointer !important;
+}
+html:has(.ph) #cursor-core,
+html:has(.ph) #cursor-lamp {
+  display: none !important;
+}
+
 .ph {
   min-height: 100svh;
   display: flex;
   flex-direction: column;
-  padding: var(--size-16) clamp(var(--size-16), 5vw, var(--size-80));
+  padding: var(--size-8) clamp(var(--size-16), 5vw, var(--size-80)) var(--size-16);
   font-family: var(--ph-font-body);
   background: var(--ph-paper);
   color: var(--ph-ink);
@@ -42,47 +56,39 @@ body:has(.ph) {
 /* ── Barra ─────────────────────────────────────────────────────────── */
 .ph-bar {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--size-8) var(--size-24);
-  padding-bottom: var(--size-12);
+  justify-content: flex-end;
   border-bottom: var(--line-1) solid var(--ph-rule);
-  font-size: var(--fs-14, 0.875rem);
-}
-.ph-bar__name {
-  font-weight: 600;
-}
-.ph-status {
-  margin: 0;
-  display: inline-flex;
-  align-items: center;
-  gap: var(--size-8);
-  padding: var(--size-4) var(--size-12);
-  border: var(--line-1) solid var(--ph-rule);
-  border-radius: 999rem;
-  background: var(--ph-paper-2);
-}
-.ph-status__dot {
-  width: 0.5rem;
-  height: 0.5rem;
-  border-radius: 50%;
-  background: var(--ph-ok);
+  font-size: var(--fs-16, 1rem);
 }
 .ph-bar__link {
-  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--ph-hit);
   color: var(--ph-ink);
+  font-weight: 500;
   text-underline-offset: var(--line-3);
 }
 
 /* ── Primo schermo ─────────────────────────────────────────────────── */
 .ph-hero {
   flex: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  align-items: center;
+  gap: var(--size-32);
+  padding-block: clamp(var(--size-16), 4vh, var(--size-48));
+}
+@media (min-width: 56rem) {
+  .ph-hero {
+    grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  }
+}
+
+.ph-hero__text {
   display: flex;
   flex-direction: column;
-  justify-content: center;
   gap: clamp(var(--size-12), 2.4vh, var(--size-24));
-  max-width: 62rem;
-  padding-block: clamp(var(--size-16), 4vh, var(--size-48));
+  min-width: 0;
 }
 
 .ph-title {
@@ -115,6 +121,32 @@ body:has(.ph) {
 .ph-rotator.is-out {
   opacity: 0;
   transform: translateY(0.25em);
+}
+.ph-all {
+  display: none;
+}
+.ph-title.is-all .ph-rotator {
+  display: none;
+}
+.ph-title.is-all .ph-all {
+  display: inline;
+}
+
+.ph-roles-toggle {
+  align-self: flex-start;
+  min-height: var(--ph-hit);
+  margin-top: calc(var(--size-8) * -1);
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--ph-ink-2);
+  font: inherit;
+  font-size: var(--fs-14, 0.875rem);
+  text-decoration: underline;
+  text-underline-offset: var(--line-3);
+}
+.ph-roles-toggle[aria-pressed="true"] {
+  color: var(--ph-ink);
 }
 
 .ph-statement {
@@ -153,7 +185,8 @@ body:has(.ph) {
 .ph-btn {
   display: inline-flex;
   align-items: center;
-  min-height: 2.75rem;
+  justify-content: center;
+  min-height: var(--ph-hit);
   padding: 0 var(--size-20);
   border: var(--line-1) solid var(--ph-ink);
   border-radius: 999rem;
@@ -179,7 +212,8 @@ body:has(.ph) {
   background: var(--ph-ink);
   border-color: var(--ph-ink);
 }
-.ph a:focus-visible {
+.ph a:focus-visible,
+.ph button:focus-visible {
   outline: var(--focus-ring, 2px) solid var(--ph-focus);
   outline-offset: var(--focus-offset, 3px);
 }
@@ -188,25 +222,73 @@ body:has(.ph) {
 .ph-lenses {
   display: flex;
   flex-wrap: wrap;
-  align-items: baseline;
-  gap: var(--size-8) var(--size-16);
-  font-size: var(--fs-14, 0.875rem);
+  align-items: center;
+  gap: 0 var(--size-16);
+  font-size: var(--fs-16, 1rem);
   color: var(--ph-ink-2);
 }
 .ph-lenses ul {
   display: flex;
   flex-wrap: wrap;
-  gap: var(--size-4) var(--size-16);
+  gap: 0 var(--size-20);
   margin: 0;
   padding: 0;
   list-style: none;
 }
 .ph-lenses a {
-  display: inline-block;
-  padding-block: var(--size-8);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--size-6);
+  min-height: var(--ph-hit);
   color: var(--ph-ink);
   font-weight: 500;
   text-underline-offset: var(--line-3);
+}
+
+/* ── GO provvisorio ────────────────────────────────────────────────── */
+.ph-go {
+  margin: 0;
+  justify-self: center;
+  width: min(100%, 22rem);
+}
+.ph-go svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 70vh;
+}
+.ph-go__body {
+  fill: var(--ph-accent);
+}
+.ph-go__head {
+  fill: var(--ph-paper-2);
+  stroke: var(--ph-ink);
+  stroke-width: 3;
+}
+.ph-go__eye {
+  fill: var(--ph-ink);
+}
+.ph-go__smile,
+.ph-go__arm {
+  fill: none;
+  stroke: var(--ph-ink);
+  stroke-width: 4;
+  stroke-linecap: round;
+}
+.ph-go__arm {
+  stroke: var(--ph-accent);
+  stroke-width: 16;
+}
+.ph-go__hand {
+  fill: var(--ph-paper-2);
+  stroke: var(--ph-ink);
+  stroke-width: 3;
+}
+.ph-go__mark {
+  fill: var(--ph-accent-ink);
+  font-family: var(--ph-font-display);
+  font-weight: 600;
+  font-size: 2.5rem;
 }
 
 .ph-sr {
@@ -225,11 +307,23 @@ body:has(.ph) {
   }
 }
 
+/* ── Telefono ──────────────────────────────────────────────────────── */
 @media (max-width: 40rem) {
-  .ph-bar__link {
-    margin-left: 0;
+  .ph-actions {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   }
-  .ph-hero {
-    justify-content: flex-start;
+  .ph-btn--primary {
+    grid-column: 1 / -1;
+  }
+  .ph-lenses {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .ph-lenses ul {
+    flex-direction: column;
+  }
+  .ph-go {
+    width: min(60%, 12rem);
   }
 }

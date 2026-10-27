@@ -20,7 +20,7 @@ export const PROVA_HOME = {
   proofCompanies: ["Intesa San Paolo", "Aruba", "Rai Pubblicità"],
   proofCerts: "certificazioni IBM e SkillUp in UX/UI",
   // BOZZA: testi nuovi, da confermare.
-  available: "Disponibile",
+  rolesAll: "Tutti i ruoli",
   ctaCv: "Scarica il CV",
   ctaMail: "Scrivimi",
   ctaLinkedin: "LinkedIn",

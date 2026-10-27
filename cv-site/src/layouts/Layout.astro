@@ -40,6 +40,9 @@ interface Props {
    * cui la home sta su questo binario — vedi lab-home.css § "L'aggancio".
    */
   nativeSnap?: boolean;
+  /** Ramo di prova `test/new-layout`: false sulla home ridisegnata, che non
+   * usa Lexend né JetBrains Mono e non deve precaricarli. */
+  preloadLegacyFonts?: boolean;
 }
 
 const {
@@ -53,6 +56,7 @@ const {
   consentBannerWaitForWip: _consentBannerWaitForWip = false,
   noindex = false,
   nativeSnap = false,
+  preloadLegacyFonts = true,
 } = Astro.props;
 
 const siteUrl = "https://giulio-occhipinti.com";
@@ -636,34 +640,40 @@ const jsonLd = {
          2026-08-27 (prefetch verso una copia, @fontsource verso un'altra).
          Da @fontsource resta solo JetBrains Mono, che al primo disegno non
          serve. -->
-    <link
-      rel="preload"
-      as="font"
-      type="font/woff2"
-      href="/fonts/Lexend/lexend-latin-400-normal.woff2"
-      crossorigin
-    />
-    <link
-      rel="preload"
-      as="font"
-      type="font/woff2"
-      href="/fonts/Lexend/lexend-latin-800-normal.woff2"
-      crossorigin
-    />
-    <link
-      rel="preload"
-      as="font"
-      type="font/woff2"
-      href="/fonts/Lexend/lexend-latin-600-normal.woff2"
-      crossorigin
-    />
-    <link
-      rel="preload"
-      as="font"
-      type="font/woff2"
-      href="/fonts/Lexend/lexend-latin-700-normal.woff2"
-      crossorigin
-    />
+    {
+      preloadLegacyFonts && (
+        <>
+          <link
+            rel="preload"
+            as="font"
+            type="font/woff2"
+            href="/fonts/Lexend/lexend-latin-400-normal.woff2"
+            crossorigin
+          />
+          <link
+            rel="preload"
+            as="font"
+            type="font/woff2"
+            href="/fonts/Lexend/lexend-latin-800-normal.woff2"
+            crossorigin
+          />
+          <link
+            rel="preload"
+            as="font"
+            type="font/woff2"
+            href="/fonts/Lexend/lexend-latin-600-normal.woff2"
+            crossorigin
+          />
+          <link
+            rel="preload"
+            as="font"
+            type="font/woff2"
+            href="/fonts/Lexend/lexend-latin-700-normal.woff2"
+            crossorigin
+          />
+        </>
+      )
+    }
 
     <!-- E i tre pesi del monospaziato. Con `optional` un carattere che arriva
          dopo la scadenza non viene usato affatto per quella vista: senza
@@ -671,27 +681,33 @@ const jsonLd = {
          monospaziato di sistema per tutta la prima pagina (misurato: chip a
          51px invece di 54). Non sono byte in piu' — questi file scendevano
          gia' su ogni pagina — e' solo la priorita' che cambia. -->
-    <link
-      rel="preload"
-      as="font"
-      type="font/woff2"
-      href="/fonts/JetBrainsMono/jetbrains-mono-latin-400-normal.woff2"
-      crossorigin
-    />
-    <link
-      rel="preload"
-      as="font"
-      type="font/woff2"
-      href="/fonts/JetBrainsMono/jetbrains-mono-latin-600-normal.woff2"
-      crossorigin
-    />
-    <link
-      rel="preload"
-      as="font"
-      type="font/woff2"
-      href="/fonts/JetBrainsMono/jetbrains-mono-latin-700-normal.woff2"
-      crossorigin
-    />
+    {
+      preloadLegacyFonts && (
+        <>
+          <link
+            rel="preload"
+            as="font"
+            type="font/woff2"
+            href="/fonts/JetBrainsMono/jetbrains-mono-latin-400-normal.woff2"
+            crossorigin
+          />
+          <link
+            rel="preload"
+            as="font"
+            type="font/woff2"
+            href="/fonts/JetBrainsMono/jetbrains-mono-latin-600-normal.woff2"
+            crossorigin
+          />
+          <link
+            rel="preload"
+            as="font"
+            type="font/woff2"
+            href="/fonts/JetBrainsMono/jetbrains-mono-latin-700-normal.woff2"
+            crossorigin
+          />
+        </>
+      )
+    }
 
     <!-- Favicon GO rasterizzati con Lexend reale (favicon-render): l'SVG con
          <text> non è affidabile fuori dal browser (i bot di anteprima non
