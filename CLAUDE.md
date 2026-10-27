@@ -54,10 +54,18 @@ skill contraddice questa sezione, **vince questa sezione**.
 1. `taste` sui siti di riferimento (sotto), con il Playwright MCP di
    `.mcp.json`. I file che produce vanno in `prova/riferimenti/`, non nella
    root.
-2. `hallmark`: `study` sui riferimenti, poi la direzione e il design. Vale la
+2. L'agente `devils-advocate` sulla direzione scelta, **prima** di costruirla:
+   un pre-mortem rispetto allo scopo del sito, cioè far trovare lavoro a
+   Giulio.
+3. `hallmark`: `study` sui riferimenti, poi la direzione e il design. Vale la
    conferma di Giulio a rifare tutto lo strato visivo, entro i confini sopra.
-3. `impeccable` (`critique`, `audit`) e l'agente `ux-reviewer` per criticare.
+4. `impeccable` (`critique`, `audit`) e l'agente `ux-reviewer` per criticare.
    Chi ha costruito il design non lo giudica da solo.
+5. La skill `esperimento` prima di portare online il design nuovo: soglie
+   fissate prima, test dei cinque secondi sul vecchio e sul nuovo. Schede ed
+   esiti in `prova/decisioni.md`.
+
+`devils-advocate` ed `esperimento` vengono da `eventy`, riscritti per il CV.
 
 ### Riferimenti scelti da Giulio (da Awwwards, categoria portfolio)
 
