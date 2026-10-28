@@ -69,3 +69,8 @@ su 5 dicano ruolo e disponibilità senza aiuto, e GO non abbassi il punteggio.
 - **Fuori orario compatto**: una riga sola per esperienza, più piccola.
 - **GO scende con lo scroll** nella colonna di sinistra (sticky, niente JS).
   Su telefono una colonna sola, con il nome della corsia su ogni scheda.
+
+## 2026-10-28 — GO guida, senza AI
+
+- **Niente Gemini.** GO fa da guida con domande da cliccare e risposte
+  scritte da `cv.ts`, ognuna con il case study giusto. Nessuna API.
