@@ -67,16 +67,18 @@ skill contraddice questa sezione, **vince questa sezione**.
 
 `devils-advocate` ed `esperimento` vengono da `eventy`, riscritti per il CV.
 
-### Riferimenti scelti da Giulio (da Awwwards, categoria portfolio)
+### Riferimenti scelti da Giulio (2026-10-28)
 
-- https://www.sebg.ch/ — l'idea di un personaggio che accompagna e spiega.
-  Per Giulio potrebbe essere GO; è la parte più costosa (animazione vera), va
-  dopo la direzione visiva.
-- https://ingrassiadaniel.it/ — impatto.
-- https://vanessacosta.com.br/
-- https://david-estrada.dev/
-- Escluso: `vantra-studio.webflow.io`, demo di un template Webflow in vendita
-  con uno studio inventato. `hallmark study` rifiuta i template marketplace.
+I primi cinque della classifica in `prova/riferimenti/awwwards-analisi.md`
+(35 portfolio Awwwards analizzati; galleria privata con le schermate:
+https://claude.ai/artifact/9RGpdMU68wbhNRUJzuLMiS):
+
+- https://jithinrp.com/ — frase col risultato nel primo schermo, ruolo e
+  strumenti per progetto, chiusura che chiede una cosa sola.
+- https://www.sebg.ch/ — il personaggio guida: per Giulio è GO.
+- https://www.gianlucaboccia.me/ — la carriera come una linea sola.
+- https://sankar.work/ — «Chiedi a GO» (qui come domande da cliccare).
+- https://samgoddard.co.uk/ — chiarezza e leggerezza (90 KB).
 
 ---
 
