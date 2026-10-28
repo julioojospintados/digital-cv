@@ -59,3 +59,13 @@ su 5 dicano ruolo e disponibilità senza aiuto, e GO non abbassi il punteggio.
   44px su telefono, niente preload dei font vecchi (prop
   `preloadLegacyFonts` del Layout, default invariato per le altre pagine),
   nome una volta sola, bottoni e lenti in colonna su telefono.
+
+## 2026-10-28 — la carriera
+
+- **Tre linee che diventano una**, con le corsie esistenti (`exp-lanes.ts`):
+  sviluppo, design e comunicazione, fuori orario. Tutte e 24 le esperienze.
+- **Dalla più recente**: in alto «oggi», una linea che si apre nelle corsie
+  ancora vive. Chi assume legge prima ciò che conta.
+- **Fuori orario compatto**: una riga sola per esperienza, più piccola.
+- **GO scende con lo scroll** nella colonna di sinistra (sticky, niente JS).
+  Su telefono una colonna sola, con il nome della corsia su ogni scheda.

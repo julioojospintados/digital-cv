@@ -1,0 +1,219 @@
+/* Ramo di prova test/new-layout · la carriera: tre linee che diventano una.
+ * Usa i token di prova-home.css. Le corsie: sviluppo in inchiostro, design in
+ * vermiglio, fuori orario in inchiostro secondario tratteggiato (il colore non
+ * è mai l'unico segnale: c'è anche il nome della corsia).
+ */
+
+.pc {
+  display: flex;
+  flex-direction: column;
+  gap: var(--size-24);
+  padding-block: var(--size-64) var(--size-48);
+  border-top: var(--line-1) solid var(--ph-rule);
+}
+
+.pc-title {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--size-8) var(--size-16);
+  font-family: var(--ph-font-display);
+  font-weight: 600;
+  font-size: clamp(1.75rem, 3.4vw, 2.75rem);
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+.pc-count {
+  font-family: var(--ph-font-body);
+  font-size: var(--fs-16, 1rem);
+  font-weight: 500;
+  color: var(--ph-ink-2);
+  letter-spacing: 0;
+}
+
+/* ── La mappa: colonna degli anni + tre corsie ─────────────────────── */
+.pc-map {
+  display: grid;
+  grid-template-columns: 3.5rem repeat(3, minmax(0, 1fr));
+  column-gap: var(--size-16);
+  position: relative;
+}
+.pc-list {
+  display: contents;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pc-head {
+  display: contents;
+}
+.pc-head__lane {
+  grid-row: 1;
+  justify-self: center;
+  padding-bottom: var(--size-16);
+  font-size: var(--fs-14, 0.875rem);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.pc-k--tech {
+  --lane: var(--ph-ink);
+  --lane-style: solid;
+}
+.pc-k--design {
+  --lane: var(--ph-accent);
+  --lane-style: solid;
+}
+.pc-k--off {
+  --lane: var(--ph-ink-2);
+  --lane-style: dashed;
+}
+.pc-head__lane {
+  color: var(--lane);
+}
+
+.pc-seg {
+  justify-self: center;
+  width: 0;
+  border-left: var(--line-3) var(--lane-style) var(--lane);
+  z-index: 0;
+}
+
+.pc-item {
+  position: relative;
+  z-index: 1;
+  align-self: center;
+  margin-block: var(--size-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--size-2);
+  min-width: 0;
+  padding: var(--size-8) var(--size-12);
+  border: var(--line-1) solid var(--ph-rule);
+  border-left: var(--line-3) var(--lane-style) var(--lane);
+  border-radius: var(--radius-4, 0.25rem);
+  background: var(--ph-paper);
+}
+.pc-year {
+  display: none;
+}
+.pc-role {
+  font-weight: 600;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+.pc-company {
+  font-size: var(--fs-14, 0.875rem);
+  color: var(--ph-ink-2);
+  overflow-wrap: anywhere;
+}
+.pc-years {
+  font-size: var(--fs-14, 0.875rem);
+  color: var(--ph-ink-2);
+  font-variant-numeric: tabular-nums;
+}
+.pc-lane-name {
+  display: none;
+}
+.pc-k--off.pc-item {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 var(--size-8);
+  margin-block: var(--size-2);
+  padding-block: var(--size-4);
+  font-size: var(--fs-14, 0.875rem);
+}
+.pc-k--off.pc-item .pc-role {
+  font-weight: 500;
+}
+.pc-k--off.pc-item .pc-company::before,
+.pc-k--off.pc-item .pc-years::before {
+  content: "· ";
+}
+
+/* GO scende con lo scroll: sticky nella colonna degli anni, niente JS. */
+.pc-axis {
+  grid-column: 1;
+  position: relative;
+  border-right: var(--line-1) solid var(--ph-rule);
+}
+.pc-go {
+  position: sticky;
+  top: 45svh;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 50%;
+  background: var(--ph-accent);
+  color: var(--ph-accent-ink);
+  font-family: var(--ph-font-display);
+  font-weight: 600;
+  font-size: var(--fs-16, 1rem);
+}
+
+.pc-merge {
+  grid-column: 2 / 5;
+  height: var(--size-80);
+}
+.pc-merge svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.pc-merge__line {
+  fill: none;
+  stroke: var(--lane);
+  stroke-width: 3;
+  vector-effect: non-scaling-stroke;
+}
+
+.pc-today {
+  grid-column: 3;
+  justify-self: center;
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--size-8);
+  font-family: var(--ph-font-display);
+  font-weight: 600;
+  font-size: clamp(1.25rem, 2.4vw, 1.75rem);
+}
+.pc-today__dot {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 50%;
+  background: var(--ph-accent);
+}
+
+/* ── Telefono e finestre strette: una colonna sola ─────────────────── */
+@media (max-width: 56rem) {
+  .pc-map {
+    display: flex;
+    flex-direction: column;
+    gap: var(--size-8);
+  }
+  .pc-head,
+  .pc-seg,
+  .pc-axis,
+  .pc-merge {
+    display: none;
+  }
+  .pc-item {
+    align-self: stretch;
+    margin-block: 0;
+  }
+  .pc-lane-name {
+    display: inline;
+  }
+  .pc-today {
+    align-self: flex-start;
+    margin-top: var(--size-8);
+  }
+}

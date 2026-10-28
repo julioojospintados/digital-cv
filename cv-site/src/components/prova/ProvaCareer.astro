@@ -1,0 +1,135 @@
+---
+// La carriera sul ramo di prova: tre linee che diventano una.
+//
+// Le tre corsie sono quelle che esistono già (lib/exp-lanes.ts): sviluppo,
+// design e comunicazione, fuori orario. Una riga per esperienza, tutte e 24
+// (regola: un CV non taglia mai un'esperienza), **dalla più recente**: chi
+// assume legge prima ciò che conta (decisione di Giulio, 2026-10-28). In
+// alto «oggi» è una linea sola che scendendo si apre nelle corsie ancora
+// vive; ogni corsia c'è solo dove c'era davvero lavoro, buchi compresi.
+// Le esperienze «fuori orario» stanno su una riga sola, più piccole.
+//
+// GO sta nella colonna degli anni con `position: sticky`: scende con lo
+// scroll senza una riga di JS, quindi non c'è niente da fermare con reduced
+// motion. Il DOM è una lista in ordine cronologico: è anche l'ordine di
+// lettura per uno screen reader.
+import { cvData } from "@cv-data";
+import { LOCALES } from "../../lib/cv-i18n";
+import "../../styles/prova/prova-career.css";
+import { EXP_LANES, LANE_DEFS, isoToYear, mergeSpans, type LaneKey } from "../../lib/exp-lanes";
+
+const ui = LOCALES.it.ui;
+const present = LOCALES.it.present;
+const now = isoToYear(new Date().toISOString().slice(0, 7), true);
+
+const rows = cvData.experience
+  .map((e, i) => ({
+    lane: EXP_LANES[i] as LaneKey,
+    role: e.role,
+    company: e.company,
+    start: e.startDate,
+    da: isoToYear(e.startDate),
+    a: e.endDate === "present" ? now : isoToYear(e.endDate, true),
+    years: `${e.startDate.slice(0, 4)} – ${e.endDate === "present" ? present : e.endDate.slice(0, 4)}`,
+    live: e.endDate === "present",
+  }))
+  .sort((x, y) => y.start.localeCompare(x.start));
+
+const col: Record<LaneKey, number> = { tech: 2, design: 3, off: 4 };
+
+// Le righe della griglia: 1 intestazione, 2 «oggi», 3 la diramazione, poi
+// una per esperienza (riga k + 4). Un segmento di corsia parte dalla prima
+// riga che inizia prima della sua fine (o dalla diramazione, se arriva a
+// oggi) e scende fino alla riga del suo ruolo più vecchio.
+const FIRST = 4;
+const segments = LANE_DEFS.flatMap((def) =>
+  mergeSpans(rows.filter((r) => r.lane === def.key).map((r) => [r.da, r.a] as const)).map(
+    ([da, a]) => {
+      const live = a >= now - 1 / 12;
+      const top = live ? FIRST : rows.findIndex((r) => r.da <= a) + FIRST;
+      let bottom = top;
+      rows.forEach((r, k) => {
+        if (r.lane === def.key && r.da >= da - 1e-6 && r.da <= a) bottom = k + FIRST;
+      });
+      return { lane: def.key, from: top, to: bottom + 1, live };
+    },
+  ),
+);
+
+const liveLanes = LANE_DEFS.filter((d) => segments.some((s) => s.lane === d.key && s.live));
+const centers: Record<LaneKey, number> = { tech: 50, design: 150, off: 250 };
+---
+
+<section class="pc" aria-labelledby="pc-title">
+  <h2 class="pc-title" id="pc-title">
+    {ui.allRoles}
+    <span class="pc-count">{ui.sinceCount.replace("{n}", String(rows.length))}</span>
+  </h2>
+
+  <div class="pc-map">
+    <div class="pc-head" aria-hidden="true">
+      {
+        LANE_DEFS.map((d) => (
+          <span class={`pc-head__lane pc-k--${d.key}`} style={`grid-column:${col[d.key]}`}>
+            {d.labels.it}
+          </span>
+        ))
+      }
+    </div>
+
+    <p class="pc-today" style="grid-row:2">
+      <span class="pc-today__dot" aria-hidden="true"></span>
+      {present}
+    </p>
+    <div class="pc-merge" aria-hidden="true" style="grid-row:3">
+      <svg viewBox="0 0 300 100" preserveAspectRatio="none" focusable="false">
+        {
+          liveLanes.map((d) => (
+            <path
+              class={`pc-merge__line pc-k--${d.key}`}
+              d={`M150 0 C 150 55, ${centers[d.key]} 45, ${centers[d.key]} 100`}
+            />
+          ))
+        }
+      </svg>
+    </div>
+
+    <div class="pc-axis" aria-hidden="true" style={`grid-row:2 / ${rows.length + FIRST}`}>
+      <span class="pc-go">GO</span>
+    </div>
+
+    {
+      segments.map((s) => (
+        <span
+          class={`pc-seg pc-k--${s.lane}`}
+          aria-hidden="true"
+          style={`grid-column:${col[s.lane]};grid-row:${s.from} / ${s.to}`}
+        />
+      ))
+    }
+
+    <ol class="pc-list" role="list">
+      {
+        rows.map((r, k) => (
+          <li
+            class={`pc-item pc-k--${r.lane}`}
+            style={`grid-column:${col[r.lane]};grid-row:${k + FIRST}`}
+          >
+            <span class="pc-year" aria-hidden="true">
+              {r.start.slice(0, 4)}
+            </span>
+            <span class="pc-role">{r.role}</span>
+            <span class="pc-company">{r.company}</span>
+            <span class="pc-years">
+              {r.years}
+              <span class="pc-lane-name">
+                {" "}
+                · {LANE_DEFS.find((d) => d.key === r.lane)?.labels.it}
+              </span>
+            </span>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>

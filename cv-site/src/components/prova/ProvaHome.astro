@@ -13,6 +13,7 @@ import Layout from "../../layouts/Layout.astro";
 import { cvData } from "@cv-data";
 import { lensPath } from "../../lib/cv-i18n";
 import { PROVA_HOME as t, PROVA_ROLES } from "../../lib/prova-copy";
+import ProvaCareer from "./ProvaCareer.astro";
 import "../../styles/prova/prova-home.css";
 
 const { name } = cvData.personal;
@@ -104,6 +105,8 @@ const roles = PROVA_ROLES.map((r) => ({ ...r, href: lensPath(r.mode, "it") }));
         </svg>
       </figure>
     </section>
+
+    <ProvaCareer />
   </main>
 </Layout>
 
