@@ -50,7 +50,13 @@ Skill di utilità (non di dominio):
 
 ## MCP
 
-Server MCP di progetto dichiarati in `.mcp.json` (root, letto da Claude Code): `mcp-base-template` (server locale che espone i dati di `cv.ts` come tool/resource) e `sequential-thinking`.
+Server MCP di progetto dichiarati in `.mcp.json` (root, letto da Claude Code):
+- `mcp-base-template`: server locale che espone i dati di `cv.ts` come tool/resource;
+- `gsc`: Google Search Console (`suganthan-gsc-mcp@2.5.1`), in sola lettura con `GSC_SCOPES=readonly`; la chiave del service account sta fuori dal repo (`${GSC}`);
+- `playwright`: browser automatico (`@playwright/mcp@0.0.83`);
+- `github`, `vercel`, `posthog`: server remoti ufficiali con accesso tramite login.
+
+Le versioni dei pacchetti sono fissate: si aggiornano solo dopo un controllo. `.claude/settings.json` chiede conferma prima di ogni uso di `github`, `vercel`, `posthog` e `gsc`, perché possono scrivere sull'account o leggere dati dei visitatori.
 `.vscode/mcp.json` è l'equivalente per Copilot/VS Code e include un set più ampio di server — non è letto da Claude Code.
 
 ## Verifica dopo una modifica — livello base
