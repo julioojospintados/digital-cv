@@ -51,9 +51,9 @@ skill contraddice questa sezione, **vince questa sezione**.
 
 ### Skill e agenti per la prova, in quest'ordine
 
-1. `taste` sui siti di riferimento (sotto), con il Playwright MCP di
-   `.mcp.json`. I file che produce vanno in `prova/riferimenti/`, non nella
-   root.
+1. `hallmark study` sui siti di riferimento (sotto). I file che produce vanno
+   in `prova/riferimenti/`, non nella root. (`taste` è stata tolta il
+   2026-10-30: non ha licenza.)
 2. L'agente `devils-advocate` sulla direzione scelta, **prima** di costruirla:
    un pre-mortem rispetto allo scopo del sito, cioè far trovare lavoro a
    Giulio.
