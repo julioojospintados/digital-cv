@@ -14,6 +14,12 @@ se un'idea è debole dimmelo, non assecondarmi.
   niente caricamenti lunghi né schermate da cliccare per entrare.
 - Ruoli, a rotazione: UX/UI Designer · Creative Developer · AI Product Engineer.
 
+## Dove si lavora
+
+- **Si lavora nel repo `julioojospintados/new-cv`**, che parte da zero.
+- Gli altri due repo servono solo da fonte: in `digital-cv` non si scrive
+  niente.
+
 ## Fonti
 
 - `julioojospintados/digital-cv`: tutte le mie esperienze in `src/data/cv.ts`
@@ -25,11 +31,17 @@ se un'idea è debole dimmelo, non assecondarmi.
   - `prova/riferimenti/awwwards-tecniche.md` (come sono fatti 9 siti premiati
     e i voti della giuria);
   - la galleria con le schermate: https://claude.ai/artifact/9RGpdMU68wbhNRUJzuLMiS
-- `julioojospintados/agents-environment`: skill e agenti utili (`hallmark`,
-  `taste`, `impeccable`, `ui-ux-pro-max`, `reverse-engineer-anything`,
-  `scrapling`, `humanizer`).
-- `julioojospintados/eventy`: gli agenti `devils-advocate`, `user-research`,
-  `ux-accessibility` e le skill `ppoc-score` ed `esperimento`.
+- `digital-cv` ha anche l'agente `ux-reviewer` (`.claude/agents/`), che
+  misura un sito alle misure dei visitatori veri: copialo in `new-cv` e
+  adattalo.
+- `julioojospintados/agents-environment`: la libreria di skill e agenti.
+  - Per il metodo: `ppoc-score`, `esperimento` e l'agente `devils-advocate`.
+  - Per il design: `hallmark` (anche `hallmark study` per studiare un sito),
+    `impeccable`, `ui-ux-pro-max`.
+  - Per studiare come sono fatti i siti: `reverse-engineer-anything`,
+    `scrapling`, `playwright-cli`.
+  - Per i testi: `humanizer`.
+  - Copia in `new-cv` solo quelle che servono, con la loro licenza.
 
 ## Cosa ho già imparato (non ripetere)
 
@@ -51,11 +63,14 @@ se un'idea è debole dimmelo, non assecondarmi.
 
 ## Come lavorare
 
-1. **Prepara gli strumenti.** Porta nel repo `digital-cv`, su un ramo nuovo
-   (te lo dico io), `ppoc-score` ed `esperimento` da `eventy`, riscritti per
-   questo progetto: Desiderabilità = quanto aiuta a farmi assumere,
-   Fattibilità = quanto è realizzabile da me con l'AI, Viabilità = tempo e
-   costi. `devils-advocate` è già nel ramo `test/new-layout`.
+1. **Prepara gli strumenti in `new-cv`.**
+   - Scrivi un `CLAUDE.md` con obiettivo, lettore e regole di questo prompt.
+   - Copia da `agents-environment` `ppoc-score`, `esperimento` e
+     `devils-advocate`.
+   - Definisci nel `CLAUDE.md` cosa sono D, F e V per questo progetto:
+     - Desiderabilità: quanto aiuta a farmi assumere;
+     - Fattibilità: quanto è realizzabile da me con l'AI;
+     - Viabilità: tempo e costi.
 2. **Ogni proposta passa dal filtro prima di essere costruita.**
    - Calcola il pPoC con l'evidenza a supporto: sotto 0,6 la scarti, fra 0,6 e
      0,79 fai prima un test economico, da 0,8 si costruisce.
@@ -72,7 +87,7 @@ se un'idea è debole dimmelo, non assecondarmi.
    - Contrasto WCAG 2.2 AA, telefono completo, reduced motion.
 5. **Prima di andare online**, test dei cinque secondi (skill `esperimento`):
    almeno 4 persone su 5 devono capire cosa faccio e che sono disponibile.
-6. **Registra ogni decisione** in un file `decisioni.md` nel ramo, e mandami
+6. **Registra ogni decisione** in `docs/decisioni.md` di `new-cv`, e mandami
    ogni file da leggere direttamente, non solo il percorso.
 
 Comincia leggendo le fonti, poi fammi le prime domande.
