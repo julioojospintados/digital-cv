@@ -7,12 +7,13 @@
     },
     "gsc": {
       "type": "stdio",
-      "command": "node",
-      "args": ["C:/nvm4w/nodejs/node_modules/suganthan-gsc-mcp/dist/index.js"],
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "suganthan-gsc-mcp@2.5.1"],
       "env": {
         "GSC_KEY_FILE": "${GSC}",
         "GSC_AUTH_MODE": "service_account",
-        "GSC_SITE_URL": "sc-domain:giulio-occhipinti.com"
+        "GSC_SITE_URL": "sc-domain:giulio-occhipinti.com",
+        "GSC_SCOPES": "readonly"
       }
     },
     "vercel": {
@@ -21,8 +22,8 @@
     },
     "playwright": {
       "type": "stdio",
-      "command": "node",
-      "args": ["C:/nvm4w/nodejs/node_modules/@playwright/mcp/cli.js"]
+      "command": "cmd",
+      "args": ["/c", "npx", "-y", "@playwright/mcp@0.0.83"]
     },
     "github": {
       "type": "http",

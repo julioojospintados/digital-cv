@@ -562,7 +562,7 @@ scripts/                  ← Root utility scripts (Node)
 generated/
   pdf-assets.json         ← Font/QR precomputed base64 for the serverless PDF renderer — committed, regenerate via scripts/gen-pdf-assets.mjs. Deliberately outside cv-site/, see AGENTS.md § "from a phone"
 
-.mcp.json                 ← Project-scoped MCP servers for Claude Code (mcp-base-template, sequential-thinking)
+.mcp.json                 ← Project-scoped MCP servers for Claude Code (mcp-base-template, gsc, playwright, github, vercel, posthog)
 CLAUDE.md                 ← Claude Code entry point (imports this file, adds skill-loading + MCP notes)
 AGENTS.md                 ← This file — tool-agnostic project guide
 ```

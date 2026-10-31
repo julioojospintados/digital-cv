@@ -1,0 +1,5 @@
+{
+  "permissions": {
+    "ask": ["mcp__github", "mcp__vercel", "mcp__posthog", "mcp__gsc"]
+  }
+}
