@@ -1903,6 +1903,14 @@
     flex: 1 1 100%;
     justify-content: center;
   }
+
+  .lc-client {
+    /* Nome sopra, testo sotto. Con 11rem fissi per il nome, su un telefono
+       al testo restavano otto rem: una parola per riga, una colonna lunga
+       quanto tre schermate. */
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--size-4);
+  }
 }
 
 /* ── L'oggetto che arriva dalla home ──────────────────────────────────────
